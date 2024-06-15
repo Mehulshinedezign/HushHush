@@ -1,0 +1,93 @@
+.tox-notifications-container{
+    display:none !important;
+}
+.toggle-password,.copy-address{
+    cursor: pointer;
+}
+
+.icon i{
+    color:#929292;
+}
+
+.riewright span a{
+    color: black;
+}
+
+/* Rating css */
+.rating {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.stars {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+}
+
+.stars input {
+    display: none;
+}
+
+.stars label {
+    margin: 0 5px 0 0;
+    color: #DCDCE6;
+}
+
+.stars :checked ~ label {
+    color: #f6be00 !important;
+}
+
+.star-ratings {
+    unicode-bidi: bidi-override;
+    color: #dcdce6;
+    font-size: 14px;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+.star-ratings .fill-ratings {
+    color: #FFD747;
+    padding: 0;
+    position: absolute;
+    z-index: 1;
+    display: block;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+.empty-ratings {
+    padding: 0;
+    display: block;
+    z-index: 0;
+}
+/* End */
+
+.cards {
+    display: flex;
+  }  
+  .card.is-loading {
+    .image,
+    h2,
+    p {
+      background: #eee;
+      background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+      border-radius: 5px;
+      background-size: 200% 100%;
+      animation: 1.5s shine linear infinite;
+    }
+  
+    .image {
+      height: 200px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+  
+  @keyframes shine {
+    to {
+      background-position-x: -200%;
+    }
+  }

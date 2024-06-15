@@ -1,0 +1,197 @@
+/* .product-pic-gallery {
+    background: #F5F5F5;
+    border: 1px solid #FFFFFF;
+    border-radius: 6px;
+    padding: 25px;
+} */
+
+.multi-file-upload {
+    position: relative;
+    background: #FFFFFF;
+    border: 1px dashed #9F9FA0;
+    border-radius: 5px;
+    padding: 26px 20px;
+    display: flex;
+    align-items: center;
+}
+
+.multi-file-upload input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.product-img-preview,
+.dispute-img-preview {
+    display: flex;
+    overflow-x: auto;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+.multi-file-upload span {
+    margin-right: 15px;
+}
+
+.medFont {
+    font-size: 16px;
+}
+
+.smallFont {
+    font-size: 12px;
+}
+
+span.uploaded-file-name,
+span.dispute-uploaded-file-name {
+    font-size: 14px;
+    color: var(--dark-black);
+}
+
+ul.product-img-preview {
+    gap: 15px;
+}
+
+.product-img-preview li,
+.dispute-img-preview li {
+    border-radius: 5px;
+    overflow: hidden;
+    min-width: 122px;
+    max-width: 122px;
+    position: relative;
+    background-color: #fff;
+}
+
+.custom-radios {
+    display: inline-block;
+    position: absolute;
+    top: -4px;
+    right: 2px;
+    width: 16px;
+    height: 16px;
+}
+
+.custom-radios input[type=radio] {
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    position: absolute;
+    z-index: 9;
+    margin-top: 5px;
+    opacity: 0;
+}
+
+.custom-radios .circle-outer {
+    position: relative;
+    cursor: pointer;
+}
+
+.custom-radios .circle-outer:before {
+    content: '';
+    -webkit-appearance: none;
+    background-color: #ffffff;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #777777;
+}
+
+.custom-radios input[type="radio"]:checked+.circle-outer:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 9px;
+    left: 6px;
+    width: 5px;
+    height: 9px;
+    border: solid #FFFFFF;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.product-img-preview li img,
+.dispute-img-preview li img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    max-height: 140px;
+}
+
+.img-preview-desc {
+    background-color: var(--white);
+}
+
+.img-preview-desc p {
+    font-size: 12px;
+    line-height: 14px;
+    margin-bottom: 0;
+    padding: 3px 0;
+    color: var(--dark-black);
+    text-align: center;
+}
+
+.product-img-preview li:hover .remove-product {
+    bottom: 0;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.remove-product {
+    display: inline-block;
+    padding: 4px;
+    width: 100%;
+    text-align: center;
+    background-color: #FF0404;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 18px;
+    color: #F5F5F5;
+    position: absolute;
+    z-index: 1;
+    bottom: -50px;
+    transition: all .3s ease-in-out;
+}
+
+.hidden {
+    display: none;
+}
+
+.map-location {
+    padding: 24px;
+    background-color: #F5F5F5;
+    border: 1px solid #9F9FA0;
+    border-radius: 6px;
+}
+
+span.add-more-location {
+    cursor: pointer;
+}
+
+.green-text {
+    color: #75b43c;
+}
+
+/* Google map Api for Modal */
+div.pac-container {
+    z-index: 99999999999 !important;
+}
+
+form#imageForm .smallFont {
+    font-family: var(--font-light);
+}
+
+.product-pic-gallery.gallery-upload ul.product-img-preview {
+    margin-bottom: 0;
+}
+
+.select_box.cstm-select .select-option .form-select {
+    padding: 18px;
+    line-height: normal;
+}

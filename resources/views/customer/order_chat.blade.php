@@ -1,0 +1,89 @@
+@extends('layouts.front')
+
+@section('title', 'Chat')
+
+@section('content')
+    {{-- <section>
+    @include('category')
+</section> --}}
+
+    <!--Chat customer Service-->
+    <section>
+        <div class="container">
+            <div class="wrap_profile customer_chat">
+                <div class="message-wrap d-flex w-100">
+                    <div class="chat_people">
+                        <h3>Messages</h3>
+                        <form class="" id="searchmember" role="search">
+                            <div class="input-group">
+                                <span class="input-group-icon border-0" id="search-addon">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                                <input type="search" class="form-control" placeholder="Search..." aria-label="Search"
+                                    aria-describedby="search-addon" name="search" autocomplete="off">
+                            </div>
+                        </form>
+                        <div class="cht_people" id="chatlist">
+                            @include('chatlist', [
+                                'chatlist' => $chatlist,
+                                'order' => $order,
+                                'type' => 'customer',
+                            ])
+                        </div>
+                    </div>
+                    <div class="chat_area">
+                        <div class="wrapcht">
+                            <div class="boxcht" id="chatUser"></div>
+                            <div class="message_area">
+                                <div class="msg_wrap" id="chatWindow"></div>
+                                <form id="chatForm">
+                                    <div class="tying_area d-flex">
+                                        <div class="left_type_sec">
+                                            <textarea class="commentarea" id="message" placeholder="Type a Message...."></textarea>
+                                            <label class="custom-file-upload icon_type" for="attachment">
+                                                <input type="file" id="attachment" />
+                                                <img src="{{ asset('front/images/media_msg.svg') }}">
+                                            </label>
+                                        </div>
+                                        <div class="right_type_sec">
+                                            <button type="submit" id="sendMessage" class="send_btn btn"><i
+                                                    class="fa-solid fa-paper-plane"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--End -->
+@endsection
+
+@push('scripts')
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "{{ env('APIKEY') }}",
+            authDomain: "{{ env('AUTHDOMAIN') }}",
+            databaseURL: "{{ env('DATABASEURL') }}",
+            projectId: "{{ env('PROJECTID') }}",
+            storageBucket: "{{ env('STORAGEBUCKET') }}",
+            messagingSenderId: "{{ env('MESSAGINGSENDERID') }}",
+            appId: "{{ env('APPID') }}",
+            measurementId: "{{ env('MEASUREMENTID') }}"
+        };
+        var senderId = "{{ auth()->user()->id }}";
+        var userImage = "{{ route('userimage') }}";
+        var imagePath = "{{ asset('storage/') }}";
+        var chat_store_url = "{{ route('store.chat') }}";
+        var get_chat_url = APP_URL + '/chat/messages';
+        var get_user_names = APP_URL + '/getuser/names';
+        var last_msg_update_url = APP_URL + '/lastchat/update';
+        var search_url = APP_URL + '/chat/search/';
+        var chat_image_store_url = APP_URL + '/chat/image';
+    </script>
+    <script defer src="{{ asset('js/custom/chat.js') }}"></script>
+@endpush

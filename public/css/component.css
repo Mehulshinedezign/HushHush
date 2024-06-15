@@ -1,0 +1,92 @@
+
+.row{ 
+    display: -webkit-box; 
+    display: -webkit-flex; 
+    display: -ms-flexbox; 
+    display: flex; 
+    -webkit-flex-wrap: wrap; 
+    -ms-flex-wrap: wrap; 
+    flex-wrap: wrap; 
+} 
+.row:before, .row:after{
+    display:inline-block;
+}
+figure {
+    margin-bottom: 0;
+}
+img {
+    max-width: 100%;
+}
+
+.input-group-text {
+    background-color: transparent;
+    color: #afb2b6;
+    border-color: #e0e1e2;
+    border-left: 0;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px 0px rgba(0,0,0,.09);
+    cursor: pointer;
+}
+.input-group>.custom-select:not(:last-child),
+.input-group>.form-control:not(:last-child) {
+    border-right: 0;
+}
+.form-label{
+    font-size: 14px;
+    line-height: 16px;
+    color: var(--pri-color);
+    font-family: var(--text-bold-font);
+    opacity: 80%;
+}
+.section-space {
+    padding: 40px 0;
+}
+.banner {
+    position: relative;
+    padding: 100px 0 0;
+    background-color: var(--pri-color);
+}
+.section-heading-box {
+    margin-bottom: 50px;
+}
+.section-heading {
+    font-size: 48px;
+    line-height: 48px;
+    margin-bottom: 18px;
+}
+.section-desc {
+    font-size: 18px;
+    line-height: 28px;
+    margin: 0;
+}
+.section-heading-box.text-center .section-desc {
+    max-width: 656px;
+    margin: 0 auto;
+}
+.card-item {
+    background-color: #ffff;
+    padding: 48px;
+    border: 1px solid#d2eaf1;
+    border-radius: 7px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.09);
+    transition: .4s ease all;
+    height: 100%;
+}
+.card-item:hover {
+    box-shadow: 0 0 35px 20px rgba(0,0,0,.07);
+    border-color: transparent;
+}
+.card-title {
+    font-size: 22px;
+    line-height: 28px;
+    color: var(--pri-color);
+    margin-bottom: 10px;
+}
+.card-desc{
+    font-size: 16px;
+    line-height: 26px;
+    margin-bottom: 25px;
+}
+.grey-bg{
+    background-color: #f7f8f7;
+}
