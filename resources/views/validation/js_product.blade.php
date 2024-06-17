@@ -70,6 +70,7 @@
         'min_rent_days':{
             required:true,
             regex:minDaysItemRegex,
+            range: [3, 7],
         }
     }
     const messages = {
@@ -130,6 +131,7 @@
         min_rent_days:{
             required: `{{ __('customvalidation.product.min_rent_days.required') }}`,
             regex: `{{ __('customvalidation.product.min_rent_days.regex', ['regex' => '${minDaysItemRegex}']) }}`,
+            range: `{{ __('customvalidation.product.min_rent_days.range', ['min' => 3, 'max' => 7]) }}`
         },
     };
 

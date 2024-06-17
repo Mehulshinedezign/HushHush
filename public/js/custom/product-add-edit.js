@@ -484,7 +484,7 @@ jQuery(document).ready(function () {
         var ImageformData = new FormData();
         for (var i = 0; i < this.files.length; i++) {
             fileName = this.files[i].name;
-            console.log("the file name are :  ",fileName);
+            // console.log("the file name are :  ",fileName);
             fileType = fileName.substring(fileName.lastIndexOf('.') + 1)
             fileName = fileName.length > fileNameLength ? fileName.substring(0, fileNameLength) + '..' + fileType : fileName;
             //console.log("order",maxProductImageCount,i)
@@ -513,7 +513,7 @@ jQuery(document).ready(function () {
                     //return
                 }
                 if (maxProductImageCount >= (uploadedImageValue + 1)) {
-                    console.log("Below one ");
+                    // console.log("Below one ");
                     ImageformData.append('files[]', this.files[i]);
                     ImageformData.append('productId', jQuery(this).attr('productId'));
                     var element = '<li><div class="card is-loading d-none"><div class="image"></div></div></li>';

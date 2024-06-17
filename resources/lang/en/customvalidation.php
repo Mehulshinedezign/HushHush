@@ -321,6 +321,7 @@ return [
             'max' => 'Minimum rent days must be between 3 to 7 days.',
             'string' => 'Please enter only digit values.',
             'regex' => 'Please enter only digit values.',
-        ]
+            'range' => 'Please enter the days from 3 to 7.',
+        ],
     ],
 ];

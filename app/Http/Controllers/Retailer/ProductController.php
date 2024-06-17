@@ -163,6 +163,7 @@ class ProductController extends Controller
                 'status' => $is_bankdetail ? isset($request->status) ? '1' : '0' : '0',
                 'product_market_value' => $request->product_market_value,
                 'product_link' => $request->product_link,
+                'min_days_rent_item' => $request->min_rent_days,
             ];
             if ($request->neighborhoodcity && $request->neighborhood) {
                 $data['city'] = $request->neighborhoodcity;
@@ -361,6 +362,7 @@ class ProductController extends Controller
                 'status' => isset($request->status) ? '1' : '0',
                 'product_market_value' => $request->product_market_value,
                 'product_link' => $request->product_link,
+                'min_days_rent_item' => $request->min_rent_days,
             ];
 
             if ($request->neighborhoodcity && $request->neighborhood) {

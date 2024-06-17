@@ -165,26 +165,26 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="formfield">
                     <input type="text" class="form-control" name="product_market_value" placeholder="Product market value"
                         value="{{ $product->product_market_value }}">
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="formfield">
                     <input type="text" class="form-control" name="product_link" placeholder="Product link"
                         value="{{ $product->product_link }}">
                 </div>
             </div>
 
-            {{-- <div class="col-md-4">
+            <div class="col-md-4">
                 <div class="formfield">
                     <input type="text" class="form-control" name="min_rent_days" placeholder="Minimum number of rental days"
-                        value="">
+                        value="{{ $product->min_days_rent_item }}">
                 </div>
-            </div> --}}
+            </div>
 
             {{-- <div class="col-md-6">
                 <div class="formfield">
