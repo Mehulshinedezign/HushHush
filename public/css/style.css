@@ -1,32 +1,44 @@
 /* webfonts */
 @font-face {
-    font-family: 'poppins';
-    src: url('../fonts/Poppins-Regular.ttf');
+    font-family: 'Outfit';
+    src: url('../fonts/Outfit-Regular.ttf');
 }
 
 @font-face {
-    font-family: 'poppins-med';
-    src: url('../fonts/Poppins-Medium.ttf');
+    font-family: 'Outfit-Medium';
+    src: url('../fonts/Outfit-Medium.ttf');
 }
 
 @font-face {
-    font-family: 'poppins-semi';
-    src: url('../fonts/Poppins-SemiBold.ttf');
+    font-family: 'Outfit-SemiBold';
+    src: url('../fonts/Outfit-SemiBold.ttf');
 }
 
 @font-face {
-    font-family: 'poppins-bold';
-    src: url('../fonts/Poppins-Bold.ttf');
+    font-family: '/Outfit-Bold';
+    src: url('../fonts/Outfit-Bold.ttf');
 }
 
 @font-face {
-    font-family: 'poppins-extra';
-    src: url('../fonts/Poppins-ExtraBold.ttf');
+    font-family: 'Outfit-ExtraBold';
+    src: url('../fonts/Outfit-ExtraBold.ttf');
 }
 
 @font-face {
-    font-family: 'poppins-black';
-    src: url('../fonts/Poppins-Black.ttf');
+    font-family: 'Outfit-Black';
+    src: url('../fonts/Outfit-Black.ttf');
+}
+@font-face {
+    font-family: 'Outfit-Light';
+    src: url('../fonts/Outfit-Light.ttf');
+}
+@font-face {
+    font-family: 'Outfit-Thin';
+    src: url('../fonts/Outfit-Thin.ttf');
+}
+@font-face {
+    font-family: 'Outfit-ExtraLight';
+    src: url('../fonts/Outfit-ExtraLight.ttf');
 }
 
 /* webfonts end */
