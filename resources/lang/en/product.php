@@ -85,6 +85,7 @@ return [
         'optionRequired' => 'Please select the option',
         'optionArray' => 'Option can either be security or insurance',
         'oops' => 'Something wrong with the product location',
+        'minDaysItemRegex' =>'Please enter only digit values.'
     ],
     'messages' => [
         'saveProduct' => 'Product saved successfully.',

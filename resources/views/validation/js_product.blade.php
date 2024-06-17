@@ -66,6 +66,10 @@
         },
         product_link:{
             required:true,
+        },
+        'min_rent_days':{
+            required:true,
+            regex:minDaysItemRegex,
         }
     }
     const messages = {
@@ -123,6 +127,10 @@
         product_link: {
             required: `{{ __('customvalidation.product.product_link.required') }}`,
         },
+        min_rent_days:{
+            required: `{{ __('customvalidation.product.min_rent_days.required') }}`,
+            regex: `{{ __('customvalidation.product.min_rent_days.regex', ['regex' => '${minDaysItemRegex}']) }}`,
+        },
     };
 
     // jQuery.validator.addClassRules("location-required", {
@@ -151,4 +159,6 @@
     // });
     // jQuery.validator.addMethod("SizeRequired", jQuery.validator.methods.required,
     //     `{{ __('customvalidation.product.size.required') }}`);
+
+
 </script>

@@ -53,4 +53,7 @@
 
     const descMinLength = {{ config('validation.product_desc_minlength') }};
     const descMaxLength = {{ config('validation.product_desc_maxlength') }};
+
+    const minDaysItemRegex = {{ config('validation.min_days_item_regex') }};
+    
 </script>

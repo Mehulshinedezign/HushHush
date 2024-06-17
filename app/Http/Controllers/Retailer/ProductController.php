@@ -358,7 +358,9 @@ class ProductController extends Controller
                 'user_id' => $userId,
                 'rent' => $request->rent,
                 'price' => $request->price,
-                'status' => isset($request->status) ? '1' : '0'
+                'status' => isset($request->status) ? '1' : '0',
+                'product_market_value' => $request->product_market_value,
+                'product_link' => $request->product_link,
             ];
 
             if ($request->neighborhoodcity && $request->neighborhood) {
