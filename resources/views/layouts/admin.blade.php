@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <link rel="stylesheet" href="{{ asset('css/superadmin.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
-    <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png') }}">
+    <!-- <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png') }}"> -->
 
     @stack('styles')
     <style>

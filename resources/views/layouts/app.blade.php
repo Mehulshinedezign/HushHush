@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{{ asset('front/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom-front.css') }}?ver={{ now() }}" />
-    <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png') }}">
+    <!-- <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png') }}"> -->
 
     <style>
         .invalid-feedback {
