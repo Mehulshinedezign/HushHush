@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
         $data = [
             'role_id' => 1,
             'name' => 'admin',
-            'email' => 'chere@gmail.com',
+            'email' => 'nudora@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('Shine@123'),
             'remember_token' => Str::random(10),
