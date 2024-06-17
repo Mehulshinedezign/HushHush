@@ -315,5 +315,12 @@ return [
         'product_link' => [
             'required' => 'Please enter product link.',
         ],
+        'min_rent_days' =>[
+            'required' => 'Please enter the number of days required to rent an item.',
+            'min' => 'Minimum rent days must be at least 3 days.',
+            'max' => 'Minimum rent days must be between 3 to 7 days.',
+            'string' => 'Please enter only digit values.',
+            'regex' => 'Please enter only digit values.',
+        ]
     ],
 ];

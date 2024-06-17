@@ -11,7 +11,7 @@ class Product extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name', 'description', 'specification', 'rentaltype', 'category_id', 'subcat_id', 'user_id', 'quantity', 'rent', 'price', 'security', 'available', 'status', 'size', 'other_size', 'color', 'brand', 'condition', 'modified_user_type', 'modified_by', 'city', 'neighborhood_city','product_market_value','product_link'
+        'name', 'description', 'specification', 'rentaltype', 'category_id', 'subcat_id', 'user_id', 'quantity', 'rent', 'price', 'security', 'available', 'status', 'size', 'other_size', 'color', 'brand', 'condition', 'modified_user_type', 'modified_by', 'city', 'neighborhood_city','product_market_value','product_link','min_days_rent_item'
     ];
 
     protected $appends = [

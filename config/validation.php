@@ -81,4 +81,7 @@ return [
 
         'product_desc_minlength' => 8,
         'product_desc_maxlength' => 1000,
+
+        'min_days_item_regex' => '/^[0-9]{1,20}$/',
+        'min_days_item_regex_message' =>  'Only digits allowed',
 ];

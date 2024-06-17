@@ -179,6 +179,13 @@
                 </div>
             </div>
 
+            {{-- <div class="col-md-4">
+                <div class="formfield">
+                    <input type="text" class="form-control" name="min_rent_days" placeholder="Minimum number of rental days"
+                        value="">
+                </div>
+            </div> --}}
+
             {{-- <div class="col-md-6">
                 <div class="formfield">
                     <label for="text">Pickup Location<span class="text-danger">*</span></label>
