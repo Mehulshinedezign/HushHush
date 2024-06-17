@@ -67,7 +67,7 @@
     <footer class="white-bg">
         <div class="container">
             <div class="copyright footer-section">
-                <p class="small-font">© {{ date('Y') }} Chere. {{ __('All rights reserved') }}</p>
+                <p class="small-font">© {{ date('Y') }} Nudora. {{ __('All rights reserved') }}</p>
                 <div class="copyright-links">
                     <ul>
 

@@ -70,7 +70,7 @@
     <footer>
         <div class="container">
             <div class="copyright footer-section">
-                <p class="small-font">© {{ date('Y') }} Chere. All rights reserved</p>
+                <p class="small-font">© {{ date('Y') }} Nudora. All rights reserved</p>
                 <div class="copyright-links">
                     <ul>
                         @foreach ($cms as $cms)
