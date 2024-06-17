@@ -56,8 +56,8 @@
                 </ul>
             </li> --}}
             <li class="dropdown @if (Route::current()->getName() == 'admin.commission') active @endif">
-                <a href="{{ route('admin.commission') }}" class="nav-link"><i
-                        data-feather="dollar-sign"></i><span>{{ __('adminsidebar.commission') }}</span></a>
+                {{-- <a href="{{ route('admin.commission') }}" class="nav-link"><i
+                        data-feather="dollar-sign"></i><span>{{ __('adminsidebar.commission') }}</span></a> --}}
             </li>
             <li class="dropdown @if (Route::current()->getName() == 'admin.cms') active @endif">
                 <a href="{{ route('admin.cms') }}" class="nav-link"><i
@@ -68,8 +68,8 @@
                     'admin.disputed-payouts',
                     'admin.security-payouts',
                 ])) active @endif">
-                <a href="#" class="menu-toggle nav-link has-dropdown"><i
-                        data-feather="credit-card"></i><span>{{ __('adminsidebar.transaction') }}</span></a>
+                {{-- <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                        data-feather="credit-card"></i><span>{{ __('adminsidebar.transaction') }}</span></a> --}}
                 <ul class="dropdown-menu">
                     <li @if (in_array(Route::current()->getName(), ['admin.retailer-payouts'])) class="active" @endif><a
                             href="{{ route('admin.retailer-payouts') }}">{{ config('constants.lender') }} Payouts</a>
@@ -80,7 +80,7 @@
                             href="{{ route('admin.disputed-payouts') }}">Disputed Order Payouts</a></li>
                 </ul>
             </li>
-            <li class="dropdown @if (in_array(Route::current()->getName(), ['admin.view-order', 'admin.orders', 'admin.disputed-orders'])) active @endif">
+            {{-- <li class="dropdown @if (in_array(Route::current()->getName(), ['admin.view-order', 'admin.orders', 'admin.disputed-orders'])) active @endif">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i
                         data-feather="package"></i><span>{{ __('adminsidebar.orders') }}</span></a>
                 <ul class="dropdown-menu">
@@ -89,7 +89,7 @@
                     <li @if (in_array(Route::current()->getName(), ['admin.disputed-orders'])) class="active" @endif><a
                             href="{{ route('admin.disputed-orders') }}">Disputed Orders</a></li>
                 </ul>
-            </li>
+            </li> --}}
             {{-- <li class="dropdown @if (Route::current()->getName() == 'admin.settings') active @endif  ">
                 <a href="{{ route('admin.settings') }}" class="nav-link"><i data-feather="settings"></i><span>{{ __('adminsidebar.settings') }}</span></a>
             </li> --}}
