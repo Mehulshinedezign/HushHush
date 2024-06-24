@@ -463,7 +463,7 @@
                                                                         Hello, {{ $user->name }}</h4>
                                                                     <p
                                                                         style="box-sizing: border-box; position: relative; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin-top: 0; font-size: 16px; font-family: 'Inter', sans-serif; color: #606060; line-height: 24px;text-align:center;">
-                                                                        Welcome to Chere. </p>
+                                                                        Welcome to Nudora. </p>
 
                                                                     <strong
                                                                         style="box-sizing: border-box; font-family: 'Inter', sans-serif; position: relative;">Please
