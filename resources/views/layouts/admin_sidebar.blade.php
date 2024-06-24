@@ -56,8 +56,8 @@
                 </ul>
             </li> --}}
             <li class="dropdown @if (Route::current()->getName() == 'admin.commission') active @endif">
-                {{-- <a href="{{ route('admin.commission') }}" class="nav-link"><i
-                        data-feather="dollar-sign"></i><span>{{ __('adminsidebar.commission') }}</span></a> --}}
+                <a href="{{ route('admin.commission') }}" class="nav-link"><i
+                        data-feather="dollar-sign"></i><span>{{ __('adminsidebar.commission') }}</span></a>
             </li>
             <li class="dropdown @if (Route::current()->getName() == 'admin.cms') active @endif">
                 <a href="{{ route('admin.cms') }}" class="nav-link"><i
@@ -68,8 +68,8 @@
                     'admin.disputed-payouts',
                     'admin.security-payouts',
                 ])) active @endif">
-                {{-- <a href="#" class="menu-toggle nav-link has-dropdown"><i
-                        data-feather="credit-card"></i><span>{{ __('adminsidebar.transaction') }}</span></a> --}}
+                <a href="#" class="menu-toggle nav-link has-dropdown"><i
+                        data-feather="credit-card"></i><span>{{ __('adminsidebar.transaction') }}</span></a>
                 <ul class="dropdown-menu">
                     <li @if (in_array(Route::current()->getName(), ['admin.retailer-payouts'])) class="active" @endif><a
                             href="{{ route('admin.retailer-payouts') }}">{{ config('constants.lender') }} Payouts</a>
@@ -94,9 +94,9 @@
                 <a href="{{ route('admin.settings') }}" class="nav-link"><i data-feather="settings"></i><span>{{ __('adminsidebar.settings') }}</span></a>
             </li> --}}
 
-            {{-- <li class="dropdown @if (Route::current()->getName() == 'admin.addbrand') active @endif">
+            <li class="dropdown @if (Route::current()->getName() == 'admin.addbrand') active @endif">
                 <a href="{{ route('admin.addbrand') }}" class="nav-link"><i data-feather="plus"></i>Create Brand</a>
-            </li> --}}
+            </li>
 
             <li class="dropdown @if (in_array(Route::current()->getName(), ['admin.brand', 'admin.addbrand'])) active @endif ">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i
