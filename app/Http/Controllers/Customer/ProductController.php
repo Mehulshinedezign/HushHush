@@ -88,6 +88,7 @@ class ProductController extends Controller
     public function view(Request $request, $id)
     {
         $id = jsdecode_userdata($id);
+        // dd("TODAY prodcut id is : ",$id);
         $product = $this->getProduct($request, $id);
         if (is_null($product)) {
             return redirect()->back()->with('message', __('product.messages.notAvailable'));

@@ -89,10 +89,11 @@ class ProfileController extends Controller
 
             if ($request->hasFile('profile_pic')) {
                 $profile = s3_store_image($request->file('profile_pic'), 'profiles');
+                // dd($profile);
                 $data['profile_file'] = $profile['name'];
                 $data['profile_url'] = $profile['url'];
                 if (!is_null($user->profile_url)) {
-                    Storage::disk('s3')->delete('profiles/' . $user->profile_file);
+                    Storage::disk('public')->delete('profiles/' . $user->profile_file);
                 }
             }
 

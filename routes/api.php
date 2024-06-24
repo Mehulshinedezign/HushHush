@@ -32,6 +32,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/remove-favorite',[App\Http\Controllers\Api\ProductController::class,'removeFavorite']);
     Route::post('/category-list',[App\Http\Controllers\Api\ProductController::class,'category']);
     Route::post('/add-product',[App\Http\Controllers\Api\ProductController::class,'addProduct']);
+    Route::get('/view-product/{id}',[App\Http\Controllers\Api\ProductController::class,'view']);
+
     Route::put('/edit-products/{id}', [App\Http\Controllers\Api\ProductController::class, 'updateProduct']);
     Route::delete('/delete-products/{id}', [App\Http\Controllers\Api\ProductController::class, 'deleteProduct']);
 

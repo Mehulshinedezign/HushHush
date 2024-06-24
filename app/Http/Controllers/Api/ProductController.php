@@ -33,7 +33,7 @@ class ProductController extends Controller
     {
         // dd("THENNNNN",$request->all(),$request->category);
         try {
-            $categories = Category::where('status', '1')->get();
+            $categories = Category::where('status', true)->get();
 
             $products = $this->getProducts($request);
             $products = $products->paginate($request->global_product_pagination);
@@ -66,16 +66,14 @@ class ProductController extends Controller
                     'neighborhood_city' => $product['neighborhood_city'],
                     'product_market_value' => $product['product_market_value'],
                     'product_link' => $product['product_link'],
-                    'created_at' => $product['created_at'],
-                    'updated_at' => $product['updated_at'],
-                    'deleted_at' => $product['deleted_at'],
                     'average_rating' => $product['average_rating'],
-
+                    'is_favorite' => $product->favorites === null ? false : true,
+                    // 'prodcut_image_url' => $product->thumbnailImage->url,
+                    'product_image_url' => $product->thumbnailImage && filter_var($product->thumbnailImage->url, FILTER_VALIDATE_URL) ? $product->thumbnailImage->url : null,
                 ];
             })->toArray();
 
-            // dd($transformedProducts);
-
+            // dd("HERE",$transformedProducts);
             $apiResponse = 'success';
             $statusCode = '200';
             $message = 'Data fetched successfully!';
@@ -360,6 +358,7 @@ class ProductController extends Controller
                 'map_address' => $neighborhoodcity->name,
             ]);
 
+
             $apiResponse = 'success';
             $statusCode = 200;
             $message = 'Product Added successfully!';
@@ -418,7 +417,7 @@ class ProductController extends Controller
             $apiResponse = 'success';
             $statusCode = 200;
             $message = 'Product Updated successfully!';
-            return $this->apiResponse($apiResponse,$statusCode,$message);
+            return $this->apiResponse($apiResponse, $statusCode, $message);
         } catch (\Throwable $e) {
             return $this->apiResponse('error', 500, 'An error occurred while updating the product.');
         }
@@ -434,9 +433,74 @@ class ProductController extends Controller
             $statusCode = 200;
             $message = 'Product deleted successfully!';
 
-            return $this->apiResponse($apiResponse,$statusCode,$message);
+            return $this->apiResponse($apiResponse, $statusCode, $message);
         } catch (\Throwable $e) {
             return $this->apiResponse('error', 500, 'An error occurred while deleting the product.');
+        }
+    }
+
+    public function view(Request $request)
+    {
+
+        try {
+            $product = $this->getProduct($request, $request->id);
+            if (is_null($product)) {
+                return redirect()->back()->with('message', __('product.messages.notAvailable'));
+            }
+
+            $apiResponse = 'success';
+            $statusCode = 200;
+            $message = 'Product fetched successfully!';
+
+            $additionalDescriptions = [
+                'This product is simply amazing!',
+                'You wont believe the quality of this item',
+                'A must-have for any collection',
+                'Perfect for everyday use or special occasions.',
+                'Highly recommended by satisfied customers.',
+                'Exceptional value for the price.',
+                'One of our most popular items.',
+                'You will wonder how you ever lived without it.',
+                'Combines style and functionality beautifully.',
+                'Guaranteed to exceed your expectations.',
+            ];
+
+            // dd("here",$product);
+            $ratings = $product->ratings->map(function($rating){
+                return[
+                    'user_id' => $rating->id,
+                    'review' => $rating->review,
+                    'user_name' => @$rating->user->name,
+                    'rating' => $rating->rating,
+                    'review_date'=> date('Y-m-d', strtotime($rating->created_at)),
+                ];
+            })->toARray();
+
+            // dd("here : ",$product->retailer->profile_file);
+            $productDetails = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'product_image_url' => [$product->thumbnailImage && filter_var($product->thumbnailImage->url, FILTER_VALIDATE_URL) ? $product->thumbnailImage->url : null],
+                'description' => $product->description,
+                'addition_description' => $additionalDescriptions[array_rand($additionalDescriptions)],
+                'category_name' => $product->category->name,
+                'rent' => $product->rent,
+                'size' => $product->size,
+                'pickup_location' => $product->locations[0]->map_address ?? null,
+                'disabled_date' => [date('Y-m-d', mt_rand(strtotime('1 year'), strtotime('+1 year')))],
+                'lender_info' => [
+                    'user_id' => $product->retailer->id,
+                    'user_name' => $product->retailer->username,
+                    'name' => $product->retailer->name,
+                    'lender_profile' => asset('storage/profiles/' . $product->retailer->profile_file),
+                ],
+                'review' =>$ratings,
+            ];
+
+
+            return $this->apiResponse($apiResponse, $statusCode, $message, $productDetails);
+        } catch (\Throwable $e) {
+            return $this->apiResponse('error', 500, $e->getMessage());
         }
     }
 }

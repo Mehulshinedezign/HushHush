@@ -110,8 +110,8 @@ if (!function_exists('s3_store_image')) {
             return null;
         }
         try {
-            $img_path = $data->store($path, 's3');
-            $url = Storage::disk('s3')->url($img_path);
+            $img_path = $data->store($path, 'public');
+            $url = Storage::disk('public')->url($img_path);
             $fileName = basename($img_path);
             return ['name' => $fileName, 'url' => $url];
         } catch (\Exception $e) {

@@ -122,11 +122,18 @@ trait ProductTrait
     // get single product
     public function getProduct(Request $request, $id)
     {
-        $fromAndToDate = array_map('trim', explode($request->global_date_separator, $request->reservation_date));
         $fromDate = $toDate = null;
-        if (count($fromAndToDate) == 2) {
-            $fromDate = DateTime::createFromFormat($request->global_date_format_for_check, $fromAndToDate[0])->format('Y-m-d');
-            $toDate = DateTime::createFromFormat($request->global_date_format_for_check, $fromAndToDate[1])->format('Y-m-d');
+        if (!empty($request->reservation_date) && !empty($request->global_date_separator)) {
+            $fromAndToDate = array_map('trim', explode($request->global_date_separator, $request->reservation_date));
+            if (count($fromAndToDate) == 2 && !empty($request->global_date_format_for_check)) {
+                $fromDate = DateTime::createFromFormat($request->global_date_format_for_check, $fromAndToDate[0]);
+                $toDate = DateTime::createFromFormat($request->global_date_format_for_check, $fromAndToDate[1]);
+
+                if ($fromDate && $toDate) {
+                    $fromDate = $fromDate->format('Y-m-d');
+                    $toDate = $toDate->format('Y-m-d');
+                }
+            }
         }
 
         $product = Product::with(['get_brand', 'thumbnailImage', 'images', 'allImages', 'locations', 'nonAvailableDates', 'ratings.user', 'retailer' => function ($q) {
@@ -136,11 +143,6 @@ trait ProductTrait
             $q->where('status', '1');
             $q->whereNull('deleted_at');
         }])->withCount('ratings')
-            // ->when(!empty($request->location), function ($q) use ($request) {
-            //     $q->whereHas('locations', function ($q) use ($request) {
-            //         $q->whereRaw(('ACOS( SIN( RADIANS( latitude ) ) * SIN( RADIANS( ' . $request->latitude . ' ) ) + COS( RADIANS( latitude ) ) * COS( RADIANS( ' . $request->latitude . ' )) * COS( RADIANS( `longitude` ) - RADIANS( ' . $request->longitude . ' )) ) * ' . $this->earthRadius . ' < ' . $this->range));
-            //     });
-            // })
             ->when(!is_null($fromDate) && !is_null($toDate), function ($q) use ($fromDate, $toDate) {
                 $q->whereDoesntHave('nonAvailableDates', function ($q) use ($fromDate, $toDate) {
                     $q->whereBetween('from_date', [$fromDate, $toDate]);
