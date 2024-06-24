@@ -94,9 +94,9 @@
                 <a href="{{ route('admin.settings') }}" class="nav-link"><i data-feather="settings"></i><span>{{ __('adminsidebar.settings') }}</span></a>
             </li> --}}
 
-            <li class="dropdown @if (Route::current()->getName() == 'admin.addbrand') active @endif">
+            {{-- <li class="dropdown @if (Route::current()->getName() == 'admin.addbrand') active @endif">
                 <a href="{{ route('admin.addbrand') }}" class="nav-link"><i data-feather="plus"></i>Create Brand</a>
-            </li>
+            </li> --}}
 
             <li class="dropdown @if (in_array(Route::current()->getName(), ['admin.brand', 'admin.addbrand'])) active @endif ">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i
