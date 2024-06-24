@@ -1,5 +1,7 @@
 var currentUrl = new URL(window.location.href);
 function addToWishlist(element, productId) {
+console.log("this val : ",element);
+    console.log("THE PRODUCT ID IS : ",productId);
     if(userId == '' || userId == null || userId == false) {
         window.location.replace(login_url);
     }

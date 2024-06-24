@@ -51,7 +51,7 @@ trait ProductTrait
             ->whereHas('categories', function ($q) use ($request) {
                 $q->where('status', '1')->whereNull('deleted_at');
                 $q->when(!empty($request->category), function ($query) use ($request) {
-                    $query->whereIn('id', $request->category);
+                    $query->whereIn('id', (array)$request->category);
                 });
             })
             // ->when(!is_null($request->neighborhoodcity) && !is_null($request->longitude), function ($q) use ($request) {
@@ -99,22 +99,22 @@ trait ProductTrait
                 $q->where('rentaltype', ucwords(strtolower($request->rental_type)));
             })
             ->when(!empty($request->condition), function ($q) use ($request) {
-                $q->whereIn('condition', $request->condition);
+                $q->whereIn('condition', (array)$request->condition);
             })->when(!is_null($rent_min) && !is_null($rent_max), function ($q) use ($rent_min, $rent_max) {
                 $q->where('rent', '>=', $rent_min);
                 $q->where('rent', '<=', $rent_max);
             })
             ->when(!empty($request->filtercolor), function ($q) use ($request) {
-                $q->whereIn('color', $request->filtercolor);
+                $q->whereIn('color', (array)$request->filtercolor);
             })
             ->when(!empty($request->brand), function ($q) use ($request) {
-                $q->whereIn('brand', $request->brand);
+                $q->whereIn('brand', (array)$request->brand);
             })
             ->when(!empty($request->size), function ($q) use ($request) {
-                $q->whereIn('size', $request->size);
+                $q->whereIn('size', (array)$request->size);
             })
             ->where('status', '1')->orderBy('id', 'desc');
-        // ->where('user_id', '!=', auth()->user()->id)
+        //->where('user_id', '!=', auth()->user()->id)
 
         return $products;
     }

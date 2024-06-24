@@ -47,6 +47,8 @@ class ProductController extends Controller
 
         $city = (isset($request->neighborhoodcity)) ? $request->neighborhoodcity : [];
         // dd($request->neighborhoodcity,  $city);
+
+        // dd($request->global_product_pagination);
         $allProducts = $products->get();
         $products = $products->paginate($request->global_product_pagination);
         $maxPrice = number_format((float)ceil(Product::max('rent')), 2, '.', '');
@@ -286,4 +288,9 @@ class ProductController extends Controller
         ];
         return view('index', compact('products', 'categories', 'filters', 'openModal'))->with(['selectedLocation' => $this->selectedLocation]);
     }
+
+    /**
+     * Add Product 
+     */
+    
 }
