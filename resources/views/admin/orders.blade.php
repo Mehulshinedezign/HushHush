@@ -30,7 +30,7 @@
                                                     href="{{ route('admin.view-order', [$order->id]) }}">#{{ $order->id }}</a>
                                             </td>
                                             <td>{{ $order->user->email }}</td>
-                                            <td>{{ $order->item->retailer->email }}</td>
+                                            <td>{{ !is_null($order->item) ? $order->item->retailer->email : "n/a" }} </td>
                                             <td>{{ $order->transaction->payment_id ?? '0' }}</td>
                                             <td>${{ $order->total }}</td>
                                             <td>{{ $order->status }}</td>

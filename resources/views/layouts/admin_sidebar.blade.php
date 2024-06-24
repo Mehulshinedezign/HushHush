@@ -80,7 +80,7 @@
                             href="{{ route('admin.disputed-payouts') }}">Disputed Order Payouts</a></li>
                 </ul>
             </li>
-            {{-- <li class="dropdown @if (in_array(Route::current()->getName(), ['admin.view-order', 'admin.orders', 'admin.disputed-orders'])) active @endif">
+            <li class="dropdown @if (in_array(Route::current()->getName(), ['admin.view-order', 'admin.orders', 'admin.disputed-orders'])) active @endif">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i
                         data-feather="package"></i><span>{{ __('adminsidebar.orders') }}</span></a>
                 <ul class="dropdown-menu">
@@ -89,7 +89,7 @@
                     <li @if (in_array(Route::current()->getName(), ['admin.disputed-orders'])) class="active" @endif><a
                             href="{{ route('admin.disputed-orders') }}">Disputed Orders</a></li>
                 </ul>
-            </li> --}}
+            </li>
             {{-- <li class="dropdown @if (Route::current()->getName() == 'admin.settings') active @endif  ">
                 <a href="{{ route('admin.settings') }}" class="nav-link"><i data-feather="settings"></i><span>{{ __('adminsidebar.settings') }}</span></a>
             </li> --}}
