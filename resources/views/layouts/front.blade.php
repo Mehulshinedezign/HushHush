@@ -227,7 +227,7 @@
                 var cityid = $(this).parent().siblings('.child' + parentid).children('.child' + parentid).prop(
                     'checked', false);
             }
-
+ 
         });
         // jQuery('body').bind('cut paste', function(event) {
         //     return false;

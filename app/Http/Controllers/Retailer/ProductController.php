@@ -295,7 +295,9 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
+        
         $product = $this->getProduct($id);
+        // dd("The category id is : ",$product->category_id);
         $sub_categories = Category::where('status', '1')->where('parent_id', $product->category_id)->get();
         $subcatId = ($product->subcat_id) ? $product->subcat_id : '';
 
@@ -312,7 +314,7 @@ class ProductController extends Controller
 
 
         $data = NeighborhoodCity::where('id', $product->neighborhood_city)->first();
-
+// dd($data);
         $neighborhood = NeighborhoodCity::where('parent_id', $data->parent_id)->get();
         $pickuplocation = ProductLocation::where('product_id', $product->id)->first();
 
