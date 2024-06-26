@@ -84,4 +84,7 @@ return [
 
         'min_days_item_regex' => '/^[0-9]{1,20}$/',
         'min_days_item_regex_message' =>  'Only digits allowed',
+
+        'min_complete_address' => 10,
+        'max_complete_address' => 255,
 ];

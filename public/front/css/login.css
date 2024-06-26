@@ -1,0 +1,215 @@
+.login-banner-section {
+    background: #F8F8F8;
+    padding-top: 50px;
+    padding-bottom: 28px;
+}
+
+.login-banner-wrapper h1 {
+    font-size: 20px;
+    line-height: 24px;
+    text-transform: uppercase;
+}
+
+.login-banner-wrapper p {
+    opacity: 60%;
+    margin-top: 4px;
+}
+
+.page-login-section {
+    padding-top: 40px;
+    padding-bottom: 60px;
+}
+
+.login-form-box {
+    width: 100%;
+    max-width: 520px;
+    background: #F8F8F8;
+    padding: 65px 50px;
+}
+
+.forget-btn {
+    font-size: 14px;
+    text-align: right;
+    width: 100%;
+    opacity: 70%;
+    margin-top: 10px;
+}
+
+.login-checkbox label {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 25px;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.or-box {
+    padding-top: 14px;
+
+}
+
+.or-box p {
+    font-size: 14px;
+    text-align: center;
+}
+
+.login-options-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 25px;
+    gap: 40px;
+}
+
+.login-options-box a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.login-wrapper {
+    display: flex;
+    gap: 40px;
+    max-width: 1540px;
+    margin: 0 auto;
+}
+
+.register-form-box {
+    width: 100%;
+    max-width: 865px;
+    margin-left: auto;
+}
+
+.two-input-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.two-input-box .form-group {
+    margin-bottom: 0;
+}
+
+.register-form .login-checkbox label {
+    margin-top: 25px;
+}
+
+.register-form-box .login-options-box {
+    flex-direction: row;
+    gap: 110px;
+    justify-content: center;
+}
+
+.or-divider {
+    display: grid;
+    max-width: 100px;
+    width: 100%;
+    justify-content: center;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 7px;
+    margin: 0 auto;
+}
+
+.or-divider hr {
+    opacity: 1;
+}
+
+.account-setting-wrapper {
+    display: flex;
+    gap: 70px;
+}
+
+.account-setting-section {
+    width: 100%;
+}
+
+.main-profile-image {
+    min-width: 240px;
+    width: 240px;
+    height: 240px;
+    object-fit: cover;
+    border-radius: 100%;
+}
+
+.three-box {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.payment-checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.payment-checkbox label {
+    margin-bottom: 0;
+}
+
+.section-heading {
+    font-size: 25px;
+}
+
+.input-btn {
+    min-height: 55px;
+}
+
+.btn-input-box {
+    align-items: end;
+}
+
+.page-ac-section {
+    padding-top: 50px;
+    padding-bottom: 60px;
+}
+
+.main-profile-image-box {
+    position: relative;
+}
+
+.file.file--upload label {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+    border: 1px solid #000000;
+    width: 52px;
+    height: 52px;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    cursor: pointer;
+}
+
+.page-Profile-section {
+    background: #F8F8F8;
+    padding-top: 50px;
+    padding-bottom: 78px;
+}
+
+.profile-img img {
+    width: 46px;
+    height: 46px;
+    object-fit: cover;
+    border-radius: 100px;
+}
+
+.profile-img-bx {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.profile-followers-box {
+    display: flex;
+    padding: 22px 22px;
+    border: 1px solid #0000001a;
+    justify-content: space-between;
+}
+
+.profile-followers-section {
+    padding-top: 33px;
+    padding-bottom: 60px;
+}

@@ -99,7 +99,9 @@ return [
         'cityExist' => 'Selected city does not exist',
         'zipRequired' => 'This field is required.',
         'address1Required' => 'Please enter the address',
-        'passwordConfirmed' => 'The password confirmation does not match.'
+        'passwordConfirmed' => 'The password confirmation does not match.',
+        'completeAddressMin'    =>  'Adress address must be between 2-50 characters.',
+        'completeAddressMax'    =>  'Complete address must be between 2-50 characters.',
     ],
     'messages' => [
         'passwordChanged' => 'Password changed successfully',

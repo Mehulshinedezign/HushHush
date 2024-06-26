@@ -39,6 +39,11 @@
                 required: true,
                 regex: zipcodeRegex,
             },
+            complete_address:{
+                required: true,
+                minlength: minCompleteAddress,
+                maxlength: maxCompleteAddress,
+            },
         }
         const messages = {
             username: {
@@ -79,24 +84,14 @@
                 required: `{{ __('customvalidation.user.zipcode.required') }}`,
                 regex: `{{ __('customvalidation.user.zipcode.regex', ['regex' => '${zipcodeRegex}']) }}`,
             },
+            complete_address: {
+                required: `{{ __('customvalidation.user.complete_address.required') }}`,
+                minlength: `{{ __('customvalidation.user.complete_address.min', ['min' => '${minCompleteAddress}', 'max' => '${maxCompleteAddress}']) }}`,
+                maxlength: `{{ __('customvalidation.user.complete_address.max', ['min' => '${minCompleteAddress}', 'max' => '${maxCompleteAddress}']) }}`,
+            },
         };
 
         handleValidation('register', rules, messages);
 
-       // $("#register").on("submit", function() {
-        //   if ($('#register').valid()) {
-        //        grecaptcha.ready(function() {
-         //           grecaptcha.execute("{{ env('GOOGLE_RECAPTCHA_KEY') }}", {
-         //               action: 'subscribe_newsletter'
-          //          }).then(function(token) {
-          //              $('#register').prepend(
-          //                  '<input type="hidden" name="g_recaptcha_response" value="' +
-          //                  token + '">');
-          //             $('#register').unbind('submit').submit();
-          //          });
-          //      });
-          //     $("#register").find('button').attr('disabled', true);
-          //  }
-      // });
     });
 </script>
