@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Models\User;
 use App\Models\UserOtp;
 use Carbon\Carbon;
@@ -41,7 +42,10 @@ class VerifyOtpController extends Controller
             $otp->save();
 
             $request->session()->forget('userId');
-            return redirect()->route('login')->with('success', 'Registration successful. A confirmation email has been sent to ' . $user->email . '. Please verify to log in.');
+            $loginController = new LoginController();
+            
+            return $loginController->loginUser($user);
+            // return redirect()->route('login')->with('success', 'Registration successful. A confirmation email has been sent to ' . $user->email . '. Please verify to log in.');
         }
         return redirect()->back()->withErrors(['otp' => 'Invalid or expired OTP']);
     }

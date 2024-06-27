@@ -17,7 +17,7 @@ class OtpService
         UserOtp::create([
             'user_id' => $user->id,
             'otp' => $otp,
-            'expires_at' => Carbon::now()->addMinutes(1),
+            'expires_at' => Carbon::now()->addMinutes(5),
             'status' =>'0',
         ]);
 
@@ -25,7 +25,7 @@ class OtpService
     }
 
 
-    public function sendOtp($user, $otp)
+    public function sendOtp($otp,$full_phone_number)
     {
         $accountSid = config('services.twilio.sid');
         $authToken = config('services.twilio.token');
@@ -34,7 +34,8 @@ class OtpService
 
         $client = new Client($accountSid, $authToken);
 
-        $toNumber = $this->formatPhoneNumber($user->phone_number);
+        // Use the phone number directly, assuming it's already in the correct format
+        $toNumber = $full_phone_number;
 
         $params = [
             'body' => "Your OTP is: $otp",
@@ -58,18 +59,5 @@ class OtpService
             Log::error('OTP send FAIL: ' . $e->getMessage());
             throw $e;
         }
-
-        // return redirect()->route('verify.otp');
-    }
-
-    private function formatPhoneNumber($phoneNumber)
-    {
-        $phoneNumber = preg_replace('/\D/', '', $phoneNumber);
-
-        if (strpos($phoneNumber, '+') !== 0) {
-            $phoneNumber = '+91' . $phoneNumber;
-        }
-
-        return $phoneNumber;
     }
 }

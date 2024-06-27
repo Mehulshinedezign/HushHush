@@ -41,7 +41,7 @@
                     {{ session('status') }}
                 </div>
             @endif
-            <form class="form-inline" method="POST" action="{{ route('password.email') }}">
+            <form class="form-inline" method="POST" action="{{ route('password.email') }}" id="login">
                 @csrf
                 <div class="form-group">
                     <label for="html">Email</label>
@@ -59,6 +59,11 @@
                         </span>
                     </div>
 
+                    @error('email')
+                        <span class="invalid-feedback" role="alert">
+                            {{ $message }}
+                        </span>
+                    @enderror
                 </div>
                 <button type="submit" class="primary-btn width-full">{{ __('Send Password Reset Link') }}</button>
                 <p class="have-account"><a href="{{ route('login') }}">Back to Login</a></p>
@@ -66,3 +71,34 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    jQuery(document).ready(function() {
+        const rules = {
+            email: {
+                required: true,
+                email: true,
+            },
+
+        }
+        const messages = {
+
+            email: {
+                required: `{{ __('customvalidation.login.email.required') }}`,
+            },
+        };
+
+        handleValidation('login', rules, messages);
+
+        $.validator.addMethod("email", function(value, element) {
+            // Regex to validate either email format or phone number format
+            var emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+            var phoneRegex = /^[0-9]{10}$/; 
+
+            return this.optional(element) || emailRegex.test(value) || phoneRegex.test(value);
+        }, "Please enter a valid email address or phone number.");
+    });
+</script>
+
+@endpush

@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\NotificationSetting;
 use App\Providers\RouteServiceProvider;
-use App\Models\{Otp, User, Role, UserDetail};
+use App\Models\{Otp, User, Role, UserDetail, UserDocuments};
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -72,10 +72,11 @@ class RegisterController extends Controller
             // 'username' => ['required', 'min:3', 'max:50', 'unique:users'],
             'name' => ['required', 'string', 'min:3', 'max:50'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'regex: ' . $emailRegex],
-            'phone_number' => ['required', 'digits:' . config('validation.phone_minlength'), 'min:' . config('validation.phone_minlength'), 'max:' . config('validation.phone_maxlength')],
+            'phone_number.main' => ['required', 'digits:' . config('validation.phone_minlength'), 'min:' . config('validation.phone_minlength'), 'max:' . config('validation.phone_maxlength')],
             // 'zipcode' => ['required'],
             'password' => ['required', 'string', 'min:8', 'max:32', 'confirmed'],
             'complete_address' => 'required',
+            'gov_id' => 'required|file|mimes:jpg,png,jpeg,pdf|max:2048',
         ];
 
         $message = [
@@ -90,10 +91,10 @@ class RegisterController extends Controller
             'email.regex' => __('user.validations.emailType'),
             'email.max' => __('user.validations.emailMax'),
             'email.unique' => __('user.validations.emailUnique'),
-            'phone_number.required' => __('customvalidation.user.phone_number.required'),
-            'phone_number.digits' => __('customvalidation.user.phone_number.digits'),
-            'phone_number.min' => __('customvalidation.user.phone_number.min', ['min' => config('validation.phone_minlength'), 'max' => config('validation.phone_maxlength')]),
-            'phone_number.max' => __('customvalidation.user.phone_number.max', ['min' => config('validation.phone_minlength'), 'max' => config('validation.phone_maxlength')]),
+            'phone_number.main.required' => __('customvalidation.user.phone_number.required'),
+            'phone_number.main.digits' => __('customvalidation.user.phone_number.digits'),
+            'phone_number.main.min' => __('customvalidation.user.phone_number.min', ['min' => config('validation.phone_minlength'), 'max' => config('validation.phone_maxlength')]),
+            'phone_number.main.max' => __('customvalidation.user.phone_number.max', ['min' => config('validation.phone_minlength'), 'max' => config('validation.phone_maxlength')]),
             'password.required' => __('user.validations.passwordRequired'),
             'password.string' => __('user.validations.passwordString'),
             'password.min' => 'Password must be 8-32 characters long',
@@ -104,6 +105,10 @@ class RegisterController extends Controller
             'complete_address' => __('customvalidation.user.complete_address.required'),
             'complete_address.min' => __('user.validations.completeAddressMin'),
             'complete_address.max' => __('user.validations.completeAddressMax'),
+
+            'gov_id' => __('customvalidation.user.gov_id.required'),
+            'gov_id.file' => __('customvalidation.user.gov_id.file'),
+            'gov_id.max' => __('customvalidation.user.gov_id.max_size'),
         ];
 
         // if ($previousUrl == $retailerRegisterUrl) {
@@ -146,7 +151,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'status' => '0',
             'email' => $data['email'],
-            'phone_number' => $data['phone_number'],
+            'phone_number' => $data['phone_number']['main'],
             // 'zipcode' => $data['zipcode'],
             'password' => Hash::make($data['password']),
             'email_verification_token' => Str::random(50)
@@ -158,36 +163,23 @@ class RegisterController extends Controller
             'about' =>$data['about'],
         ]);
 
+
+        $path = $data['gov_id']->store('user_documents');
+        $filePath = str_replace("public/", "", $path);
+        $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+        
+        UserDocuments::create([
+            'user_id' => $signUpData->id,
+            'file' => $fileExtension,
+            'url' => $filePath,
+        ]);
+
  
         $otp = $this->otpService->generateOtp($signUpData);
-        $this->otpService->sendOtp($signUpData, $otp);
+        $this->otpService->sendOtp($otp,$data['phone_number']['full']);
 
         return $signUpData;
-        // return User::create($signUpData);
 
-        // $documents = [];
-        // if ($previousUrl == $retailerRegisterUrl) {
-        //     $roleId = Role::where('name', $data['type'])->pluck('id')->firstOrFail();
-        //     $signUpData['role_id'] = $roleId;
-        //     $uploadedFileName = request()->file('proof')->getClientOriginalName();
-        //     $path = request()->file('proof')->store('documents', 's3');
-        //     $url = Storage::disk('s3')->url($path);
-        //     $fileName = basename($path);
-        //     $documents = [
-        //         'file' => $fileName,
-        //         'url' => $url,
-        //         'uploaded_file_name' => $uploadedFileName,
-        //     ];
-        //     $user = User::create($signUpData);   
-        //     $user->documents()->create($documents);
-
-        //     return $user;
-        // } else {
-        //     //$roleId = Role::where('name', 'customer')->pluck('id')->firstOrFail();
-        //     //$signUpData['role_id'] = $roleId;
-
-        //     return User::create($signUpData);
-        // }
     }
 
     protected function register(Request $request)

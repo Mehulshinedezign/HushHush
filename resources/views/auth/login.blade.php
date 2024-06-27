@@ -66,7 +66,7 @@
                     <label for="email">Email or phone number</label>
                     <div class="formfield">
                         <input type="email" class="form-control form-class @error('email') invalid-feedback @enderror"
-                            name="email" id="email" placeholder="Enter email"
+                            name="email" id="email" placeholder="Enter email or phone number"
                             value="{{ old('email', request()->cookie('rememberme') ? explode('_', request()->cookie('rememberme'))[0] : '') }}">
                         <span class="form-icon">
                             <svg width="22" height="15" viewBox="0 0 22 15" fill="none"

@@ -19,11 +19,15 @@
                 email: true,
                 regex: emailRegex,
             },
-            phone_number: {
+            "phone_number[main]": {
                 required: true,
                 digits: true,
                 minlength: phoneMinLength,
-                maxlength: phoneMaxLength
+                maxlength: phoneMaxLength,
+                isValidPhoneNumber:true,
+                normalizer: function(value) {
+                return $.trim(value);
+                }
             },
             password: {
                 required: true,
@@ -44,6 +48,11 @@
                 minlength: minCompleteAddress,
                 maxlength: maxCompleteAddress,
             },
+            gov_id: {
+                required:true,
+                filesize: gov_idSize,
+                extension: gov_idMimes,
+            },
         }
         const messages = {
             username: {
@@ -63,7 +72,7 @@
                 email: `{{ __('customvalidation.user.email.email') }}`,
                 regex: `{{ __('customvalidation.user.email.regex', ['regex' => '${emailRegex}']) }}`,
             },
-            phone_number: {
+            "phone_number[main]": {
                 required: `{{ __('customvalidation.user.phone_number.required') }}`,
                 digits: `{{ __('customvalidation.user.phone_number.digits') }}`,
                 minlength: `{{ __('customvalidation.user.phone_number.min', ['min' => '${phoneMinLength}', 'max' => '${phoneMaxLength}']) }}`,
@@ -89,9 +98,19 @@
                 minlength: `{{ __('customvalidation.user.complete_address.min', ['min' => '${minCompleteAddress}', 'max' => '${maxCompleteAddress}']) }}`,
                 maxlength: `{{ __('customvalidation.user.complete_address.max', ['min' => '${minCompleteAddress}', 'max' => '${maxCompleteAddress}']) }}`,
             },
+            gov_id: {
+                required:  `{{ __('customvalidation.user.gov_id.required') }}`,
+                extension:     `{{ __('customvalidation.user.gov_id.file') }}`,
+                filesize: `{{ __('customvalidation.user.gov_id.max_size') }}`,
+            },
         };
+        $.validator.addMethod("isValidPhoneNumber", function(value, element) {
+            return phone_number.isValidNumber();
+        }, "Please enter a valid phone number");
 
         handleValidation('register', rules, messages);
+
+
 
     });
 </script>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
@@ -143,5 +144,11 @@ class LoginController extends Controller
         return $request->wantsJson()
             ? new JsonResponse([], 204)
             : redirect('/login');
+    }
+
+    public function loginUser(User $user)
+    {
+        Auth::login($user);
+        return redirect($this->redirectPath());
     }
 }

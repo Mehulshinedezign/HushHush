@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserDetail;
+use App\Models\UserDocuments;
 use App\Notifications\VerificationEmail;
+use App\Services\OtpService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +19,13 @@ use Illuminate\Support\Facades\Log;
 
 class RegisterController extends Controller
 {
+    protected $otpService;
+
+    public function __construct(OtpService $otpService)
+    {
+        $this->otpService = $otpService;
+        
+    }
 
     public function register(Request $request)
     {
@@ -40,11 +50,36 @@ class RegisterController extends Controller
                 'email_verification_token' => Str::random(50),
             ]);
 
+            UserDetail::create([
+                'user_id' => $user->id,
+                'address1' =>$request->complete_address,
+                'about' =>$request->about,
+            ]);
+    
+    
+            $path = $request->gov_id->store('user_documents');
+            $filePath = str_replace("public/", "", $path);
+            $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+            
+            UserDocuments::create([
+                'user_id' => $user->id,
+                'file' => $fileExtension,
+                'url' => $filePath,
+            ]);
+
+            $country_code = $request->country_code;
+            $number = $request->phone_number;
+
+            $full_number = $country_code . $number;
+
+            $otp = $this->otpService->generateOtp($user);
+            $this->otpService->sendOtp($otp,$full_number);
+
             $user->notify(new VerificationEmail($user));
 
             $apiResponse = 'success';
             $statusCode = '200';
-            $message = "User Registration successful. Please verify your email address.";
+            $message = "User Registration successful. Please verify your email address or phone number .";
 
             return $this->apiResponse($apiResponse, $statusCode, $message);
 
@@ -62,16 +97,18 @@ class RegisterController extends Controller
 
         $emailRegex = "/^[a-zA-Z]+[a-zA-Z0-9_\.\-]*@[a-zA-Z]+(\.[a-zA-Z]+)*[\.]{1}[a-zA-Z]{2,10}$/";
         $validation = [
-            'username' => 'required|min:3|max:50|unique:users',
+            // 'username' => 'required|min:3|max:50|unique:users',
             'name' => 'required|string|min:3|max:50',
             'email' => 'required|string|email|max:255|unique:users|regex:' . $emailRegex,
             'phone_number' => 'required|digits:' . config('validation.phone_minlength') . '|min:' . config('validation.phone_minlength') . '|max:' . config('validation.phone_maxlength'),
-            'zipcode' => 'required',
             'password' => 'required|string|min:8|max:32|confirmed',
+            'complete_address' => 'required',
+            'gov_id' => 'required|file|mimes:jpg,png,jpeg,pdf|max:2048',
+            'country_code' => 'required'
         ];
 
         $message = [
-            'username.required' => __('customvalidation.user.username.required'),
+            // 'username.required' => __('customvalidation.user.username.required'),
             'name.required' => __('user.validations.nameRequired'),
             'name.string' => __('user.validations.nameString'),
             'name.min' => __('user.validations.nameMin'),
@@ -91,7 +128,15 @@ class RegisterController extends Controller
             'password.min' => 'Password must be 8-32 characters long',
             'password.max' => 'Password must be 8-32 characters long',
             'password.confirmed' => __('user.validations.passwordConfirmed'),
-            'zipcode.required' => __('customvalidation.user.zipcode.required'),
+
+            'complete_address' => __('customvalidation.user.complete_address.required'),
+            'complete_address.min' => __('user.validations.completeAddressMin'),
+            'complete_address.max' => __('user.validations.completeAddressMax'),
+
+            'gov_id' => __('customvalidation.user.gov_id.required'),
+            'gov_id.file' => __('customvalidation.user.gov_id.file'),
+            'gov_id.max' => __('customvalidation.user.gov_id.max_size'),
+    
         ];
 
         return Validator::make($data, $validation, $message);

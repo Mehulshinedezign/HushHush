@@ -87,4 +87,10 @@ return [
 
         'min_complete_address' => 10,
         'max_complete_address' => 255,
+
+        'php_gov_id_mimes' => 'jpg,jpeg,png,pdf',
+        'js_gov_id_mimes' => 'jpg|jpeg|png,pdf',
+        'php_gov_id_size' => '2000',
+        'js_gov_id_size' => '2097152',
+        'js_gov_id_size' => '2000000',
 ];

@@ -137,7 +137,7 @@
         <div class="form-setup login-form">
             <h4>Sign up</h4>
             <x-alert />
-            <form class="form-inline" method="POST" action="{{ route('register') }}" id="register">
+            <form class="form-inline" method="POST" action="{{ route('register') }}" id="register" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="g_recaptcha_response" id="recaptcha_token" value="">
                 <div class="form-group">
@@ -156,12 +156,11 @@
                     @enderror
 
                 </div>
-                <div class="form-group">
-
+                {{-- <div class="form-group">
                     <div class="formfield">
                         <input id="phone_number" type="text"
-                            class="form-control form-class @error('phone_number') is-invalid @enderror" name="phone_number"
-                            value="{{ old('phone_number') }}" autocomplete="off" placeholder="{{ __('Phone Number') }}">
+                            class="form-control form-class @error('phone_number') is-invalid @enderror" name="phone_number[main]"
+                            id="phone_number" value="{{ old('phone_number') }}" autocomplete="off" placeholder="{{ __('Phone Number') }}">
                         <span class="form-icon extra-icon">
                             <i class="fa-solid fa-phone"></i>
                         </span>
@@ -171,7 +170,35 @@
                             {{ $message }}
                         </span>
                     @enderror
+                </div> --}}
+                <div class="form-group">
+                    <div class="formfield">
+                        <input id="phone_number" type="text"
+                            class="form-control form-class @error('phone_number.main') is-invalid @enderror"
+                            name="phone_number[main]"
+                            value="{{ old('phone_number.main') }}"
+                            autocomplete="off" 
+                            placeholder="{{ __('Phone Number') }}">
+                        <span class="form-icon extra-icon">
+                            <i class="fa-solid fa-phone"></i>
+                        </span>
+                    </div>
+                    @error('phone_number.main')
+                        <span class="invalid-feedback" role="alert">
+                            {{ $message }}
+                        </span>
+                    @enderror
                 </div>
+
+                {{-- <div class="col-md-12 mb-2 mb-sm-3 phone-error-label-div">
+                    <div class="form-floating">
+                        <input type="tel" class="form-control @error('phone.full') is-invalid @enderror" id="phone"
+                            placeholder="Phone" name="phone[main]" value="{{ old('phone.full') }}" autofocus
+                            autocomplete="off">
+
+                    </div>
+                </div> --}}
+
                 <div class="form-group">
                     <label for="email">Email</label>
                     <div class="formfield">
@@ -193,6 +220,22 @@
                     @enderror
 
                 </div>
+
+                <div class="form-group">
+                    <label for="gov_id">Gov Id</label>
+                    <div class="formfield">
+                        <input type="file" class="form-control form-class @error('gov_id') is-invalid @enderror"
+                            name="gov_id" placeholder="Enter goverment id">
+                     
+                    </div>
+                    @error('gov_id')
+                        <span class="invalid-feedback" role="alert">
+                            {{ $message }}
+                        </span>
+                    @enderror
+
+                </div>
+
                 <div class="form-group">
                     <label for="password_confirmation">Password</label>
                     <div class="formfield">
@@ -252,7 +295,7 @@
                             <i class="bi bi-person-circle fs-4"></i>
                         </span>
                     </div>
-           
+
                 </div>
                 <button class="button primary-btn full-btn">Sign up</button>
                 <p class="have-account">Already have an account? <a href="{{ route('login') }}">Log in</a></p>
@@ -279,6 +322,8 @@
     </script> --}}
 
     <script src="https://www.google.com/recaptcha/api.js?render={{ env('GOOGLE_RECAPTCHA_KEY') }}"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/css/intlTelInput.min.css" rel="stylesheet" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
     @includeFirst(['validation'])
     @includeFirst(['validation.js_register'])
     @includeFirst(['validation.js_show_password'])
@@ -290,6 +335,14 @@
         jQuery("input[type=email]").on("keyup", function() {
             jQuery(this).removeClass('is-invalid')
             jQuery('span[id=removeemail]').empty();
+        });
+
+        var phone_number = window.intlTelInput(document.querySelector("#phone_number"), {
+            separateDialCode: true,
+            preferredCountries: ["us"],
+            hiddenInput: "full",
+            formatOnDisplay: false,
+            utilsScript: "//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"
         });
     </script>
 @endpush

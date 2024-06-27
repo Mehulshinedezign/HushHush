@@ -596,3 +596,9 @@ a.navbar-brand {
 .extra-icon{
     color: #DEE0E3;
 }
+.iti.iti--allow-dropdown.iti--separate-dial-code {
+    width: 405px;
+}
+li#iti-0__item-us-preferred {
+    width: 402px;
+}
