@@ -15,4 +15,8 @@ class UserOtp extends Model
         'expires_at',
         'status',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

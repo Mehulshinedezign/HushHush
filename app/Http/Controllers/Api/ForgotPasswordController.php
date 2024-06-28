@@ -13,7 +13,7 @@ class ForgotPasswordController extends Controller
     public function resetPassword(Request $request){
         
         $forgot = new MainforgotPassword();
-        $forgot->sendResetLinkEmail($request);
+        $forgot->sendResetPasswordLinkEmail($request);
 
         $errors = session('errors');
 

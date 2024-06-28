@@ -23,6 +23,8 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
     Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
     Route::post('/ajaxlogin', [App\Http\Controllers\Auth\LoginController::class, 'ajaxLogin'])->name('ajaxlogin');
     Route::get('verify-email/{user}/{token}', [App\Http\Controllers\Auth\RegisterController::class, 'verifyEmail'])->name('verify-email');
+    Route::post('/verify',[App\Http\Controllers\Auth\ResetPasswordController::class,'verifyOtp'])->name('verify');
+    Route::any('/update-password',[App\Http\Controllers\Auth\ResetPasswordController::class,'update'])->name('user.updatepassword');
 
     Auth::routes();
 

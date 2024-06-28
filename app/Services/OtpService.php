@@ -17,7 +17,7 @@ class OtpService
         UserOtp::create([
             'user_id' => $user->id,
             'otp' => $otp,
-            'expires_at' => Carbon::now()->addMinutes(5),
+            'expires_at' => Carbon::now()->addMinutes(50),
             'status' =>'0',
         ]);
 

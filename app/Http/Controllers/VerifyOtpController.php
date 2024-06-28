@@ -35,8 +35,9 @@ class VerifyOtpController extends Controller
         ->first();
       
         if ($otp) {
-            $user->otp_is_verified = true;
-            $user->save();
+            // $user->otp_is_verified = true;
+            $user->update(["status" => "1","otp_is_verified" => "1"]);
+            // $user->save();
 
             $otp->status = 1;
             $otp->save();

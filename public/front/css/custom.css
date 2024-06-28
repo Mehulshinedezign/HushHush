@@ -532,26 +532,7 @@ span.left-form-icon {
 .product-desc-slider {
     position: relative;
 }
-/* 
-.slider-forthumbnail .product-desc-slider{
-    max-height: 995px;
-    width: 100%;
-}
-.slider-forthumbnail .product-desc-slider img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-} */
-/* .product-slider-nav .thumb-slide{
-    width: 180px;
-    max-width: 180px;
-    height: 180px;
-}
-.product-slider-nav .thumb-slide img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-} */
+
 
 .product-slider-for .slick-slide{
     max-height: 995px;
@@ -1093,3 +1074,707 @@ span.left-form-icon {
     max-width: 107px;
     width: 100%;
 }
+
+
+
+
+/* ========================= rental request css========================== */
+
+.rental-request-bx {
+    padding: 40px 0px;
+}
+
+.rental-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.rental-header .form-group{
+    margin: 0;
+}
+.rental-header .form-group input{
+    max-height: 42px;
+    min-height: 42px;
+}
+.rental-header .form-group .form-icon{
+    top: 13px;
+}
+.cal-icon {
+    filter: invert(1);
+}
+
+.rental-header h2 {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 36px;
+}
+
+.rental-request-tb ul {
+    border-bottom: 1px solid #C0C0C0;
+    gap: 30px;
+}
+
+.rental-request-tb .nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    color: #1B1B1B;
+}
+
+.rental-request-tb .nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    background: none;
+}
+.rental-request-tb .nav-pills .nav-link.active{
+    border-bottom: 2px solid #1B1B1B;
+    border-radius: 0;
+}
+.tb-table {
+    overflow-x: auto;
+}
+
+.tb-table table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0 1px;
+    /* min-width: 1150px; */
+    background: #F1F2F3;
+}
+
+.tb-table table thead tr {
+    background: #F1F2F3;
+    font-weight: 500;
+    border-bottom: 1px solid #DEE0E3;
+
+}
+
+.tb-table table thead tr th {
+    padding: 22px 20px 10px;
+}
+
+.tb-table table tbody tr td {
+    padding: 22px 20px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+}
+
+.tb-table table thead tr th:first-child {
+    border-top-left-radius: 10px;
+}
+
+.tb-table table tbody tr {
+    border-bottom: 1px solid #DEE0E3;
+}
+
+.table-profile img {
+    width: 26px;
+    height: 27px;
+    min-width: 26px;
+    border-radius: 5px;
+}
+
+.user-table-profile {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.user-table-head h5 {
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 400;
+}
+
+.user-active {
+    color: #4381FB;
+}
+
+.user-complete {
+    color: #517B5D;
+}
+
+.db-table {
+    width: 100%;
+    border-radius: 10px;
+    background: #F1F2F3;
+    padding: 20px 17px 0;
+}
+
+.tb-table table tbody tr:hover {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 4px 34px 0px #0000000D;
+}
+
+.rental-request-tb .nav-link p {
+    color: #606060;
+}
+
+.rental-request-tb .nav-link.active p {
+    color: #1B1B1B;
+}
+
+.rental-request-tb .nav-link:focus,
+.nav-link:hover {
+    color: #1B1B1B;
+}
+
+.rental-history-badge .rental-badge-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #1B1B1B;
+    display: block;
+    border-radius: 50px;
+}
+.rental-history-badge.active .rental-badge-dot {
+    background-color: #517B5D;
+}
+.rental-history-badge.danger .rental-badge-dot {
+    background-color: #C66060;
+}
+.rental-history-badge {
+    display: flex;
+    width: fit-content;
+    border-radius: 2px;
+    padding: 5px;
+    align-items: center;
+    gap: 5px;
+    min-height: 24px;
+}
+.rental-history-box {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+.rental-history-wrapper {
+    padding: 30px 30px;
+    background-color: #F1F2F3;
+    max-width: 30%;
+    width: 100%;
+    border-radius: 10px;
+}
+.rental-profile h3 {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+}
+.rental-history-box .db-table{
+    max-width: 70%;
+} 
+.rental-profile-outer {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+}
+.rental-box {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.rental-box img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.rental-profile > h3 {
+    font-size: 16px;
+    line-height: 20px;
+    margin: 0 0 8px;
+}
+.rental-hist-pickup h3 {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1;
+    margin: 0 0 7px;
+}
+.rental-hist-pickup p {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1;
+    color: #606060;
+    margin: 0 0;
+}
+.rental-hist-pickup{
+    margin: 28px 0 23px;
+}
+.rental-hist-insurance .form-check{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.rental-hist-insurance .form-check label{
+    font-size: 12px;
+    font-weight: 400;
+    color: #1B1B1B;
+}
+.rental-hist-insurance{
+    margin: 23px 0px;
+}
+.rental-hist-total-amt h3{
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 700;
+}
+.rental-hist-total-amt{
+    padding: 16px 0px 18px;
+    margin: 23px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #DEE0E3;
+    border-bottom: 1px solid #DEE0E3;
+}
+.rental-his-payment-detail h3 {
+    font-size: 16px;
+    margin: 0 0 17px;
+    line-height: 20px;
+}
+.rental-his-payment-detail {
+    background-color: #fff;
+    padding: 7px 15px 15px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 26px 0px;
+}
+.rental-payment-detail-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.rental-payment-detail-card p{
+    color: #606060;
+    font-size: 14px;
+    font-weight: 400;
+}
+.rental-profile-img-box {
+    max-width: 30px;
+    min-width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 50px;
+}
+.rental-profile-img-box img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.rental-profile-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.rental-profile-name h4 {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    margin: 0 0 7px;
+}
+.rental-profile-name .rental-profile-rating a i{
+    font-size: 12px;
+}
+.rental-profile-rating a {
+    height: 14px;
+    display: inline-flex;
+}
+.rental-profile-rating {
+    display: flex;
+    align-items: center;
+}
+.rental-profile-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.rental-profile-head > p{
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 12px;
+    color: #606060;
+}
+.rental-profile-body p{
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #606060;
+}
+.rental-profile-body{
+    margin: 20px 0  0;
+}
+.rental-profile-box {
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+
+
+
+
+
+
+
+
+/* ========================= rental request css========================== */
+
+
+
+
+/* ======================= profile css -================================ */
+
+.profile-banner-sec{
+    padding: 68px 0px 140px;
+    background-color: #E8E8E8;
+    position: relative;
+    overflow: hidden;
+}
+.banner-laef-img{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.profile-banner-name h2{
+    text-align: center;
+    font-size: 28px;
+    line-height: 36px;
+
+}
+.profile-detail-box {
+    box-shadow: 0px 23px 40px 0px #00000014;
+    padding: 49px;
+    border-radius: 10px;
+    margin-top: -132px;
+    position: relative;
+    background-color: #fff;
+    margin-bottom: 45px;
+}
+.profile-personal-img {
+    width: 98px;
+    min-width: 98px;
+    border-radius: 100px;
+    overflow: hidden;
+    height: 98px;
+}
+.profile-personal-img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.profile-personal-detail > h3 {
+    font-size: 24px;
+    line-height: 31px;
+}
+.profile-personal-detail > h3 {
+    font-size: 14px;
+    line-height: 23px;
+}
+.profile-about-detail > h4 {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 20px;
+    margin: 0 0 11px;
+}
+.profile-about-detail > p {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 25px;
+    margin: 0 0 ;
+    color: #606060;
+}
+.profile-address-detail {
+    padding: 28px 17px 28px 30px;
+    background-color: #1b1b1b21;
+    border-radius: 6px;
+    display: flex;
+    gap: 10px;
+}
+.profile-address-data > h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 0 15px;
+    line-height: 1;
+}
+.profile-address-data > p {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0 0 ;
+    line-height: 21px;
+    color: #606060;
+}
+.profile-about-detail {
+    padding: 0 40px;
+    position: relative;
+}
+.profile-about-detail::after{
+    content: "";
+    width: 1px;
+    height: 150%;
+    position: absolute;
+    left: 0;
+    top: -25px;
+    background-color: var(--border-color);
+}
+.profile-about-detail::before{
+    content: "";
+    width: 1px;
+    height: 150%;
+    position: absolute;
+    right: 0;
+    left: auto;
+    top: -25px;
+    background-color: var(--border-color);
+}
+
+/* ======================= profile css -================================ */
+
+/* ======================= My profile css -================================ */
+
+.my-profile-sec{
+    padding: 60px 0px 120px ;
+}
+.my-profile-wrapper > h2 {
+    text-align: center;
+    font-size: 28px;
+    line-height: 36px;
+    margin: 0 0 30px;
+}
+.my-profile-info-box {
+    max-width: 797px;
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 10px;
+    background-color: #EFEFEF;
+    padding: 32px;
+}
+.my-pro-detail{
+    padding: 26px 28px;
+    background-color: #fff;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 100px;
+}
+.my-pro-detail-left a{
+    text-decoration: underline;
+    font-size: 14px;
+    font-weight: 400;
+    color: #606060;
+}
+.my-pro-detail-para p{
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    color: #606060;
+    margin: 0 0 12px;
+}
+.my-pro-detail-para h4{
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 23px;
+    margin: 0 0;
+}
+
+.change-password-box > p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #606060;
+    margin: 0 0 20px;
+}
+.change-pass-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* ======================= My profile css -================================ */
+
+
+/* ======================= My order history css -================================ */
+
+.order-his-tab-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.order-his-tab-head ul {
+    border-bottom: 0;
+    margin-bottom: 0;
+}
+.order-his-tab-head .form-group select{
+    border: 0;
+    background-color: #F1F2F3;
+    padding: 7px 45px 7px 22px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 400;
+    appearance: none;
+}
+.order-his-tab-head{
+    margin-bottom: 35px;
+    border-bottom: 1px solid var(--border-color);
+}
+.order-card-img{
+    width: 100%;
+    max-height: 251px;
+    height: 251px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.order-card-img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+}
+.order-his-card {
+    background-color: #F4F4F4;
+    padding: 18px 13px 14px 18px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    justify-content: space-between;
+    height: 100%;
+    cursor: pointer;
+}
+.order-details-list h4 {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+}
+.order-details-list p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #606060;
+    line-height: 1;
+}
+.order-details-list {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-left: 15px;
+    border-left: 1px solid var(--border-color);
+}
+.order-pro-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    row-gap: 15px;
+}
+.order-details-list:first-child{
+    padding: 0;
+    border: 0;
+}
+.order-card-top > p {
+    font-size: 16px;
+    line-height: 27px;
+}
+.order-card-top .badge {
+    background-color: #ffffff;
+}
+.order-card-footer .outline-btn{
+    background-color: #F4F4F4;
+}
+.order-his-card:hover .order-card-img img{
+    scale: 1.1;
+}
+.cancel-order-Modal .modal-header button.btn-close {
+    position: absolute;
+    top: -2px;
+    right: 18px;
+}
+.cancel-order-Modal .modal-body, .write-review-Modal .modal-body{
+    position: relative;
+    padding: 39px;
+}
+.cancel-order-Modal .modal-body .btn-close, .write-review-Modal .modal-body .btn-close {
+    position: absolute;
+    top: 0;
+    right: 24px;
+}
+.cancel-modal-box > h3 {
+    font-size: 20px;
+    line-height: 26px;
+    text-align: center;
+    margin: 0 0 32px;
+}
+.cancel-modal-box .form-group textarea{
+    background-color: #F1F2F3;
+    resize: none;
+    border: 1px solid #DEE0E3;
+}
+
+.write-review-Modal .modal-dialog{
+    max-width: 602px;
+    width: 100%;
+}
+.write-review-profile {
+    display: flex;
+    gap: 27px;
+    align-items: flex-start;
+    padding-bottom: 22px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--border-color);
+}
+.write-review-profile-dp {
+    max-width: 119px;
+    min-width: 119px;
+    width: 100%;
+    height: 119px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.write-review-profile-dp img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.review-upload-img {
+    width: 100%;
+    padding: 21px;
+    border: 1px dashed var(--border-color);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.review-upload-img-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* margin: 0 0 10px; */
+}
+.review-upload-img-inner img {
+    margin: 0 0 10px;
+}
+.review-upload-img-inner p{
+    font-size: 14px;
+    font-weight: 400;
+    color: #606060;
+}
+.write-review-upload-img {
+    margin: 0 0 22px;
+}
+.privacy-policy-para{
+    margin-bottom: 24px;
+    font-size: 14px;
+    line-height: 22px;
+}
+.notifiation-sidebar {
+    border-radius: 15px 0px 0px 15px;
+}
+
+
+
+
+/* ======================= My order history css -================================ */
+
+
+
+
+
+

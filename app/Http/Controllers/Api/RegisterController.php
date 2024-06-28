@@ -81,7 +81,13 @@ class RegisterController extends Controller
             $statusCode = '200';
             $message = "User Registration successful. Please verify your email address or phone number .";
 
-            return $this->apiResponse($apiResponse, $statusCode, $message);
+            $response = [
+                'token' => $user->createToken('login')->plainTextToken,
+                'name' => $user->name,
+                'user_id' => $user->id,
+            
+            ];
+            return $this->apiResponse($apiResponse, $statusCode, $message,$response);
 
         } catch (\Throwable $e) {
             return $this->apiResponse('error', '500', $e->getMessage(), ['errors' => $e->getMessage()]);

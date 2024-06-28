@@ -196,6 +196,7 @@
                                             </ul>
                                         </div>
                                     <li>
+                                        {{-- @dd(auth()->user()); --}}
                                         <input type="text" name="reservation_date" class="form-control"
                                             id="reservation_date" placeholder="When"
                                             onfocus="initDateRangePicker(this, dateOptions)"
