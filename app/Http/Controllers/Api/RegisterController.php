@@ -83,7 +83,6 @@ class RegisterController extends Controller
 
             $response = [
                 'token' => $user->createToken('login')->plainTextToken,
-                'name' => $user->name,
                 'user_id' => $user->id,
             
             ];

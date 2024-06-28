@@ -30,7 +30,7 @@
                     <div class="formfield">
                         <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
                             placeholder="Password" name="password" required autocomplete="new-password">
-                        <span class="icon">
+                        <span class="form-icon">
                             <svg width="17" height="21" viewBox="0 0 17 21" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -50,7 +50,7 @@
                     <div class="formfield">
                         <input id="password-confirm" type="password" class="form-control" placeholder="Confirm Password"
                             name="password_confirmation" required autocomplete="new-password">
-                        <span class="icon">
+                        <span class="form-icon">
                             <svg width="17" height="21" viewBox="0 0 17 21" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
