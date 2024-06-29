@@ -4,7 +4,7 @@
     <section>
         @include('category')
     </section>
-    <section>
+    {{-- <section>
         <div class="home-collection">
             <div class="container">
                 <div class="row">
@@ -17,6 +17,6 @@
                 <div class="custom-pagination">{{ $products->links('pagination::product-list') }}</div>
             </div>
         </div>
-    </section>
-    @include('instruction')
+    </section> --}}
+    {{-- @include('instruction') --}}
 @endsection

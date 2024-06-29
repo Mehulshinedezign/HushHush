@@ -33,7 +33,7 @@
             <div class="container">
                 <div class="cust-nav-header-sec">
                     <div class="logo mobile-logo">
-                        <a class="navbar-brand" href="home.html"><img src="{{asset('front/images/logo.svg')}}" alt="logo" width="91"
+                        <a class="navbar-brand" href="{{url('/')}}"><img src="{{asset('front/images/logo.svg')}}" alt="logo" width="91"
                                 height="63"></a>
                     </div>
                     <div class="collapse navbar-collapse cust-navbar-header" id="navbarNav">
@@ -43,6 +43,7 @@
                             </li>
                         </ul>
                     </div>
+                    @if (auth()->user())
                     <div class="header-cart">
                         <ul>
                             <li>
@@ -50,6 +51,9 @@
                             </li>
                         </ul>
                     </div>
+                        
+                    @endif
+
                     <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>

@@ -1774,7 +1774,26 @@ span.left-form-icon {
 /* ======================= My order history css -================================ */
 
 
+.profile-edit-box, .profile-edit-btn{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+.my-pro-notify-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
 
+.complete-mail-box{
+    display: flex;
+    align-items: center;
+}
+.complete-mail-box img{
+    max-width: 150px;
+}
 
 
 

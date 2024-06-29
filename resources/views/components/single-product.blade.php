@@ -1,4 +1,4 @@
-@foreach ($products as $product)
+{{-- @foreach ($products as $product)
     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
         <div class="collection-pro">
             <a href="{{ route('viewproduct', jsencode_userdata($product->id)) }}">
@@ -23,4 +23,4 @@
             <h6>${{ $product->rent }} <span>/day</span></h6>
         </div>
     </div>
-@endforeach
+@endforeach --}}
