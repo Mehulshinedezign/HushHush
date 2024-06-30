@@ -1774,6 +1774,61 @@ span.left-form-icon {
 /* ======================= My order history css -================================ */
 
 
+
+/* ======================= payment history css -================================ */
+
+.payment-history-haed {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 30px;
+}
+.payment-history-haed .form-group select {
+    border: 0;
+    background-color: #F1F2F3;
+    padding: 7px 45px 7px 22px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 400;
+    appearance: none;
+    cursor: pointer;
+}
+.payment-history-haed h2 {
+    font-size: 28px;
+    line-height: 36px;
+}
+.download-payment-his {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #3A3A3A;
+    border-radius: 3px;
+    float: right;
+    opacity: 0.5;
+}
+.payment-history-table-main table tr {
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+}
+.payment-history-table-main table tr th{
+    padding: 11px;
+}
+.payment-history-table-main table tr td{
+    padding: 26px 11px;
+}
+.payment-history-table-main table tr th:last-child{
+    float: right;
+}
+.payment-history-table-main table tr:hover td .download-payment-his{
+    opacity: 1;
+}
+/* ======================= payment history css -================================ */
+
+
+
+
 .profile-edit-box, .profile-edit-btn{
     display: flex;
     justify-content: end;
@@ -1794,6 +1849,3 @@ span.left-form-icon {
 .complete-mail-box img{
     max-width: 150px;
 }
-
-
-

@@ -1,12 +1,6 @@
 @extends('layouts.front')
-
-@section('title', 'Payment History')
-
 @section('content')
-    <section>
-       @include('category')
-    </section>
-    <section>
+    {{-- <section>
         <div class="payment-transaction-history-section section-space">
             <div class="container">
                 <div class="payment-transaction-history-title">
@@ -30,13 +24,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if(count($payment_history) > 0)
-                            @foreach($payment_history as $history)
+                            @if (count($payment_history) > 0)
+                            @foreach ($payment_history as $history)
                             <tr>
                                 <td>
                                     <div class="pro-img-name">
                                     <div class="pro-tab-image">
-                                        @if(@$history->item->product->thumbnailImage->url)
+                                        @if (@$history->item->product->thumbnailImage->url)
                                             <img src="{{ $history->item->product->thumbnailImage->url }}" alt="">
                                         @else
                                             <img src="{{ asset('front/images/pro-1.png') }}" alt="">
@@ -59,6 +53,183 @@
                         </tbody>
                     </table>
                     <div class="custom-pagination">{{ $payment_history->links('pagination::product-list') }}</div>
+                </div>
+            </div>
+        </div>
+    </section> --}}
+    <section class="rental-request-bx">
+        <div class="container">
+            <div class="rental-request-wrapper">
+                <div class="payment-history-haed">
+                    <h2>My Order History</h2>
+                    <div class="form-group m-0">
+                        <div class="formfield">
+                            <select name="" id="" class="form">
+                                <option value="">Past 2 Months</option>
+                                <option value="">Past 5 Months</option>
+                                <option value="">Past 1 Year</option>
+                            </select>
+                            <span class="form-icon">
+                                <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="dorpdown" width="13">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="payment-history-table-main">
+                    <div class="table-responsive">
+                        <table>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="#" class="user-table-profile">
+                                        <div class="table-profile ">
+                                            <img src="{{ asset('front/images/table-profile1.png') }}" alt="tb-profile"
+                                                width="26" height="27">
+                                        </div>
+                                        <div class="user-table-head">
+                                            <h5>Pennington Dress</h5>
+                                        </div>
+                                    </a>
+                                </td>
+                                <td>Jul 18, 2023</td>
+                                <td>Invoice</td>
+                                <td>$156</td>
+                                <td>
+                                    <a href="#" class="download-payment-his">
+                                        <img src="{{ asset('front/images/download-icon.svg') }}" alt="">
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="#" class="user-table-profile">
+                                        <div class="table-profile ">
+                                            <img src="{{ asset('front/images/table-profile1.png') }}" alt="tb-profile"
+                                                width="26" height="27">
+                                        </div>
+                                        <div class="user-table-head">
+                                            <h5>Pennington Dress</h5>
+                                        </div>
+                                    </a>
+                                </td>
+                                <td>Jul 18, 2023</td>
+                                <td>Invoice</td>
+                                <td>$156</td>
+                                <td>
+                                    <a href="#" class="download-payment-his">
+                                        <img src="{{ asset('front/images/download-icon.svg') }}" alt="">
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="#" class="user-table-profile">
+                                        <div class="table-profile ">
+                                            <img src="{{ asset('front/images/table-profile1.png') }}" alt="tb-profile"
+                                                width="26" height="27">
+                                        </div>
+                                        <div class="user-table-head">
+                                            <h5>Pennington Dress</h5>
+                                        </div>
+                                    </a>
+                                </td>
+                                <td>Jul 18, 2023</td>
+                                <td>Invoice</td>
+                                <td>$156</td>
+                                <td>
+                                    <a href="#" class="download-payment-his">
+                                        <img src="{{ asset('front/images/download-icon.svg') }}" alt="">
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="#" class="user-table-profile">
+                                        <div class="table-profile ">
+                                            <img src="{{ asset('front/images/table-profile1.png') }}" alt="tb-profile"
+                                                width="26" height="27">
+                                        </div>
+                                        <div class="user-table-head">
+                                            <h5>Pennington Dress</h5>
+                                        </div>
+                                    </a>
+                                </td>
+                                <td>Jul 18, 2023</td>
+                                <td>Invoice</td>
+                                <td>$156</td>
+                                <td>
+                                    <a href="#" class="download-payment-his">
+                                        <img src="{{ asset('front/images/download-icon.svg') }}" alt="">
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="#" class="user-table-profile">
+                                        <div class="table-profile ">
+                                            <img src="{{ asset('front/images/table-profile1.png') }}" alt="tb-profile"
+                                                width="26" height="27">
+                                        </div>
+                                        <div class="user-table-head">
+                                            <h5>Pennington Dress</h5>
+                                        </div>
+                                    </a>
+                                </td>
+                                <td>Jul 18, 2023</td>
+                                <td>Invoice</td>
+                                <td>$156</td>
+                                <td>
+                                    <a href="#" class="download-payment-his">
+                                        <img src="{{ asset('front/images/download-icon.svg') }}" alt="">
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="#" class="user-table-profile">
+                                        <div class="table-profile ">
+                                            <img src="{{ asset('front/images/table-profile1.png') }}" alt="tb-profile"
+                                                width="26" height="27">
+                                        </div>
+                                        <div class="user-table-head">
+                                            <h5>Pennington Dress</h5>
+                                        </div>
+                                    </a>
+                                </td>
+                                <td>Jul 18, 2023</td>
+                                <td>Invoice</td>
+                                <td>$156</td>
+                                <td>
+                                    <a href="#" class="download-payment-his">
+                                        <img src="{{ asset('front/images/download-icon.svg') }}" alt="">
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="pagination-main">
+                    <a href="javascript:void(0)" class="pagination-box">
+                        01
+                    </a>
+                    <a href="javascript:void(0)" class="pagination-box">
+                        02
+                    </a>
+                    <a href="javascript:void(0)" class="pagination-box active">
+                        03
+                    </a>
+                    <a href="javascript:void(0)" class="pagination-box">
+                        04
+                    </a>
+                    <a href="javascript:void(0)" class="pagination-box">
+                        05
+                    </a>
                 </div>
             </div>
         </div>

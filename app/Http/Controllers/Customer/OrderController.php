@@ -52,13 +52,19 @@ class OrderController extends Controller
         //     return view('retailer.order_list', compact('orders'));
         // }
         // dd($orders);
-        return view('customer.order_list', compact('orders'));
+
+
+        return view('customer.order_history');
+        // previous code
+        // return view('customer.order_list', compact('orders'));
     }
 
     public function payment_history(Request $request)
     {
         $payment_history = Order::with('item.product.thumbnailImage')->where('user_id', auth()->user()->id)->orderByDesc('id')->paginate($request->global_pagination);
-        return view('customer.payment_history', compact('payment_history'));
+        // return view('customer.payment_history', compact('payment_history'));
+
+        return view('customer.payment_history');
     }
 
     public function viewOrder(Order $order)
@@ -660,5 +666,11 @@ class OrderController extends Controller
         header("Content-Type: ." . $mime);
 
         return readfile($path);
+    }
+
+    // rental request 
+    public function rental_request(Request $request){
+        
+        return view('customer.rental_request');
     }
 }

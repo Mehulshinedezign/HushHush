@@ -134,6 +134,8 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         Route::match(['get', 'post'], 'orders', [App\Http\Controllers\Customer\OrderController::class, 'index'])->name('orders');
         Route::get('payment-history', [App\Http\Controllers\Customer\OrderController::class, 'payment_history'])->name('payment-history');
 
+        // rental request here
+        Route::get('rental-request', [App\Http\Controllers\Customer\OrderController::class, 'rental_request'])->name('rental-request');
         // my account
         Route::get('my-account', [App\Http\Controllers\ProfileController::class, 'profile'])->name('profile');
         Route::get('edit-account', [App\Http\Controllers\ProfileController::class, 'edit_profile'])->name('edit-account');
