@@ -67,7 +67,7 @@ class ForgotPasswordController extends Controller
         $this->otpService->sendOtp($otp, $request->input('phone_number.full'));
         
         $request->session()->put('phone_number', $phone);
-
+        session()->forget('error');
         session()->flash('status', 'OTP send successfully!');
         return view('auth.passwords.otp_verification');
          

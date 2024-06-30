@@ -78,7 +78,9 @@ class ResetPasswordController extends Controller
     
         $request->session()->forget('phone_number');
         if(!$validUser){
-            return redirect()->back()->with('status','Invalid OTP please send otp again');
+            session()->forget('status');
+            session()->flash('error', 'Incorrect otp please resend!');
+            return view('auth.passwords.otp_verification',compact('phone_number'));
         }
         return view('auth.passwords.otp_reset_password',compact('phone_number'));
         

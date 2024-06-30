@@ -262,155 +262,158 @@
                     @endforeach
                     </div>
                 </div> --}}
-                @if (count($products) > 0)
+                
+                    @if (count($products) > 0)
                     <x-single-product :products="$products" />
-                @else
-                    <h2 class="text-center">We're sorry, no products fit your search criteria.</h2>
-                @endif
-            </div>
-            <div class="custom-pagination">{{ $products->links('pagination::product-list') }}</div>
+                    {{-- <div class="custom-pagination">{{ $products->links('pagination::product-list') }}</div> --}}
+                    @else
+                    <div class="home-product-main">
+                            <div class="home-product-box">
+                                <div class="product-card">
+                                    <div class="product-img-box">
+                                        <img src="{{asset('front/images/pro-0.png')}}" alt="img">
+                                        <div class="product-card-like">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </div>
+                                        <div class="product-card-status">
+                                            <p>in Stock</p>
+                                        </div>
+                                    </div>
+                                    <div class="product-card-detail">
+                                        <p>Glamour Affair</p>
+                                        <h4>$159/day</h4>
+                                    </div>
+                                </div>
+                                <div class="product-card">
+                                    <div class="product-img-box">
+                                        <img src="{{asset('front/images/pro2.png')}}" alt="img">
+                                        <div class="product-card-like">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </div>
+                                        <div class="product-card-status">
+                                            <p>in Stock</p>
+                                        </div>
+                                    </div>
+                                    <div class="product-card-detail">
+                                        <p>Glamour Affair</p>
+                                        <h4>$159/day</h4>
+                                    </div>
+                                </div>
+                                <div class="product-card">
+                                    <div class="product-img-box">
+                                        <img src="{{asset('front/images/pro3.png')}}" alt="img">
+                                        <div class="product-card-like">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </div>
+                                        <div class="product-card-status">
+                                            <p>in Stock</p>
+                                        </div>
+                                    </div>
+                                    <div class="product-card-detail">
+                                        <p>Glamour Affair</p>
+                                        <h4>$159/day</h4>
+                                    </div>
+                                </div>
+                                <div class="product-card">
+                                    <div class="product-img-box">
+                                        <img src="{{asset('front/images/pro4.png')}}" alt="img">
+                                        <div class="product-card-like">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </div>
+                                        <div class="product-card-status">
+                                            <p>in Stock</p>
+                                        </div>
+                                    </div>
+                                    <div class="product-card-detail">
+                                        <p>Glamour Affair</p>
+                                        <h4>$159/day</h4>
+                                    </div>
+                                </div>
+                                <div class="product-card">
+                                    <div class="product-img-box">
+                                        <img src="{{asset('front/images/pro5.png')}}" alt="img">
+                                        <div class="product-card-like">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </div>
+                                        <div class="product-card-status">
+                                            <p>in Stock</p>
+                                        </div>
+                                    </div>
+                                    <div class="product-card-detail">
+                                        <p>Glamour Affair</p>
+                                        <h4>$159/day</h4>
+                                    </div>
+                                </div>
+                                <div class="product-card">
+                                    <div class="product-img-box">
+                                        <img src="{{asset('front/images/pro6.png')}}" alt="img">
+                                        <div class="product-card-like">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </div>
+                                        <div class="product-card-status">
+                                            <p>in Stock</p>
+                                        </div>
+                                    </div>
+                                    <div class="product-card-detail">
+                                        <p>Glamour Affair</p>
+                                        <h4>$159/day</h4>
+                                    </div>
+                                </div>
+                                <div class="product-card">
+                                    <div class="product-img-box">
+                                        <img src="{{asset('front/images/pro8.png')}}" alt="img">
+                                        <div class="product-card-like">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </div>
+                                        <div class="product-card-status">
+                                            <p>in Stock</p>
+                                        </div>
+                                    </div>
+                                    <div class="product-card-detail">
+                                        <p>Glamour Affair</p>
+                                        <h4>$159/day</h4>
+                                    </div>
+                                </div>
+                                <div class="product-card">
+                                    <div class="product-img-box">
+                                        <img src="{{asset('front/images/pro-0.png')}}" alt="img">
+                                        <div class="product-card-like">
+                                            <i class="fa-solid fa-heart"></i>
+                                        </div>
+                                        <div class="product-card-status">
+                                            <p>in Stock</p>
+                                        </div>
+                                    </div>
+                                    <div class="product-card-detail">
+                                        <p>Glamour Affair</p>
+                                        <h4>$159/day</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pagination-main">
+                                <a href="javascript:void(0)" class="pagination-box">
+                                    01
+                                </a>
+                                <a href="javascript:void(0)" class="pagination-box">
+                                    02
+                                </a>
+                                <a href="javascript:void(0)" class="pagination-box active">
+                                    03
+                                </a>
+                                <a href="javascript:void(0)" class="pagination-box">
+                                    04
+                                </a>
+                                <a href="javascript:void(0)" class="pagination-box">
+                                    05
+                                </a>
+                            </div>
+                        </div>
+                        {{-- <h2 class="text-center">We're sorry, no products fit your search criteria.</h2> --}}
 
-            {{-- <div class="home-product-main">
-                    <div class="home-product-box">
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{asset('front/images/pro-0.png')}}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <h4>$159/day</h4>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{asset('front/images/pro2.png')}}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <h4>$159/day</h4>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{asset('front/images/pro3.png')}}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <h4>$159/day</h4>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{asset('front/images/pro4.png')}}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <h4>$159/day</h4>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{asset('front/images/pro5.png')}}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <h4>$159/day</h4>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{asset('front/images/pro6.png')}}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <h4>$159/day</h4>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{asset('front/images/pro8.png')}}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <h4>$159/day</h4>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{asset('front/images/pro-0.png')}}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <h4>$159/day</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pagination-main">
-                        <a href="javascript:void(0)" class="pagination-box">
-                            01
-                        </a>
-                        <a href="javascript:void(0)" class="pagination-box">
-                            02
-                        </a>
-                        <a href="javascript:void(0)" class="pagination-box active">
-                            03
-                        </a>
-                        <a href="javascript:void(0)" class="pagination-box">
-                            04
-                        </a>
-                        <a href="javascript:void(0)" class="pagination-box">
-                            05
-                        </a>
-                    </div>
-                </div> --}}
+                    @endif
+
+            </div>
+
         </div>
     </div>
     </div>

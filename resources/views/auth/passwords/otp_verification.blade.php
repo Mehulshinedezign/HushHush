@@ -3,11 +3,7 @@
     <div class="cust-form-bg fill-hight">
         <div class="form-setup login-form">
             <h4>OTP Verification </h4>
-            @if (session('status'))
-                <div class="alert alert-warning">
-                    {{ session('status') }}
-                </div>
-            @endif
+            <x-alert />
             <form class="form-inline" method="POST" action="{{ route('verify') }}">
                 @csrf
                 <input type="hidden" name="phone_number" value="{{ session()->get('phone_number') }}">
@@ -27,6 +23,7 @@
                             class="form-control" name="verify_no6">
                     </div>
                 </div>
+                {{-- <a href="{{ route('password.email') }}" class="resend-otp">resend otp</a> --}}
                 <button class="button primary-btn full-btn">Confirm</button>
             </form>
         </div>
