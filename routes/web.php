@@ -144,6 +144,8 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         Route::get('download-proof', [App\Http\Controllers\ProfileController::class, 'downloadProof'])->name('download-proof');
         Route::get('notifications', [App\Http\Controllers\ProfileController::class, 'notifications'])->name('notifications');
         Route::get('switch-profile/{role}', [App\Http\Controllers\ProfileController::class, 'switch_profile'])->name('switch-profile');
+
+        Route::get('/change_pass', [App\Http\Controllers\ProfileController::class, 'ChangePassword'])->name('user.changePassword');
         // card
         Route::get('card-index', [App\Http\Controllers\CardController::class, 'index'])->name('card.index');
         Route::post('card-store', [App\Http\Controllers\CardController::class, 'store'])->name('card.store');

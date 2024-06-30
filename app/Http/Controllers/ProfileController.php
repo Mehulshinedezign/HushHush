@@ -178,7 +178,8 @@ class ProfileController extends Controller
         $newPassword = Hash::make($request->new_password);
         User::where('id', $user->id)->update(['password' => $newPassword]);
 
-        return redirect()->route('edit-account', ["tab" => "nav-profile"])->with('success', __('user.messages.passwordChanged'));
+        // return redirect()->route('edit-account', ["tab" => "nav-profile"])->with('success', __('user.messages.passwordChanged'));
+        return redirect()->route('index')->with('success', __('user.messages.passwordChanged'));
     }
 
 
@@ -491,5 +492,11 @@ class ProfileController extends Controller
                 'msg'      =>  $e->getMessage()
             ]);
         }
+    }
+
+    // html blade file change password
+
+    public function ChangePassword(){
+        return view('customer.change_password');
     }
 }

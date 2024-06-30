@@ -129,8 +129,8 @@
     select::-ms-expand {
         display: none;
     }
-</style> --}}
-{{-- <header class="cust-header">
+</style>
+<header class="cust-header">
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
             <div class="cust-nav-header-sec">
@@ -317,8 +317,8 @@
                                   <li><a class="dropdown-item" href="#"><img src="{{asset('front/images/notification-icon.svg')}}" alt="img">Notifications</a></li>
                                   <li><a class="dropdown-item" href="#"><img src="{{asset('front/images/saved-icon.svg')}}" alt="img">Saved Items</a></li>
                                   <li><a class="dropdown-item" href="#"><img src="{{asset('front/images/payment-history-icon.svg')}}" alt="img">Payment History</a></li>
-                                  <li><a class="dropdown-item" href="#"><i class="fa-light fa-gear"></i>Change password</a></li>
-                                  <li><a class="dropdown-item" href="#"><img src="{{asset('front/images/logout-icon.svg')}}" alt="img">Logout</a></li>
+                                  <li><a class="dropdown-item" href="{{ route('user.changePassword') }}"><i class="fa-light fa-gear"></i>Change password</a></li>
+                                  <li><a class="dropdown-item" href="{{ route('logout') }}"><img src="{{asset('front/images/logout-icon.svg')}}" alt="img">Logout</a></li>
                                 </ul>
                             </div>
                         </li>

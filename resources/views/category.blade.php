@@ -231,16 +231,17 @@
 
                 {{-- Product listing here --}}
 
-                <div class="home-product-main">
+                {{-- <div class="home-product-main">
                     <div class="home-product-box">
                         @foreach ($products as $product)
-                            <div class="product-card">
+                        <div class="product-card">
+                            <div class="product-img-box">
                                 <a href="{{ route('viewproduct', jsencode_userdata($product->id)) }}">
-                                    <div class="product-img-box">
-                                        @if (isset($product->thumbnailImage->url))
-                                            <img src="{{ $product->thumbnailImage->url }}"
-                                                alt="{{ $product->name }}">
-                                        @endif
+                                    @if (isset($product->thumbnailImage->url))
+                                        <img src="{{ $product->thumbnailImage->url }}" alt="{{ $product->name }}">
+                                    @else
+                                        <img src="{{asset('front/images/pro-0.png')}}" alt="{{ $product->name }}">
+                                    @endif
                                 </a>
                                 <div class="product-card-like" onclick="addToWishlist(this, {{ $product->id }})">
                                     @if (!is_null($product->favorites))
@@ -257,11 +258,19 @@
                                 <p>{{ $product->name }}</p>
                                 <h4>${{ $product->rent }}/day</h4>
                             </div>
-                    </div>
+                        </div>
                     @endforeach
-                </div>
+                    </div>
+                </div> --}}
+                @if (count($products) > 0)
+                    <x-single-product :products="$products" />
+                @else
+                    <h2 class="text-center">We're sorry, no products fit your search criteria.</h2>
+                @endif
+            </div>
+            <div class="custom-pagination">{{ $products->links('pagination::product-list') }}</div>
 
-                {{-- <div class="home-product-main">
+            {{-- <div class="home-product-main">
                     <div class="home-product-box">
                         <div class="product-card">
                             <div class="product-img-box">
@@ -402,8 +411,8 @@
                         </a>
                     </div>
                 </div> --}}
-            </div>
         </div>
+    </div>
     </div>
     </div>
 </section>

@@ -730,3 +730,25 @@ li#iti-0__item-us-preferred {
 .nofify-list {
     padding-right: 10px;
 }
+
+table{
+    width: 100%;
+}
+.complete-mail-box img{
+    max-width: 150px;
+}
+.complete-mail-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+.resend-otp {
+    padding: 15px 0px;
+    display: flex;
+    justify-content: flex-end;
+    text-decoration: underline;
+}
+.error-messages{
+    color: #dc3545 !important;
+}
