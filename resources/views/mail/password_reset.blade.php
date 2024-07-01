@@ -4,7 +4,7 @@
 <head>
     <meta content="en-us" http-equiv="content-language">
     <meta content="text/html; charset=utf-8" http-equiv="content-type">
-    <title>Chere</title>
+    <title>Nudora</title>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
@@ -532,7 +532,7 @@
                                                                 <td width="10%" style="width: 10%;"></td>
                                                                 {{-- <td width="80%"
                                                                     style="font-size:16px;font-family: 'Inter', sans-serif;text-align:left;line-height:24px;padding-top:10px;line-height:26px;width:80%">
-                                                                    Chere</td> --}}
+                                                                    Nudora</td> --}}
                                                                 <td width="10%" style="width: 10%;"></td>
                                                             </tr>
                                                         </table>
@@ -563,12 +563,12 @@
                                             <tr>
                                                 <td
                                                     style="font-style: normal;font-weight: 600;color: #1B1B1B;;font-size: 16px;font-family: 'Inter', sans-serif;margin: 0 0 3px">
-                                                    Team Chere</td>
+                                                    Team Nudora</td>
                                             </tr>
                                             <tr>
                                                 <td
                                                     style="font-style: normal;font-weight: 600;color: #1B1B1B;;font-size: 16px;font-family: 'Inter', sans-serif;margin: 0 0 3px">
-                                                    team@thechere.com</td>
+                                                    team@nudora.com</td>
                                             </tr>
                                         </table>
                                     </td>

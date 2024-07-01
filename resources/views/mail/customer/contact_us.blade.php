@@ -4,7 +4,7 @@
 <head>
     <meta content="en-us" http-equiv="content-language">
     <meta content="text/html; charset=utf-8" http-equiv="content-type">
-    <title>Chere</title>
+    <title>Nudora</title>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
