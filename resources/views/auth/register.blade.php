@@ -344,5 +344,14 @@
             formatOnDisplay: false,
             utilsScript: "//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"
         });
+        $(document).ready(function() {
+    $(document).on('keypress', 'input', function(e) {
+        if (e.which === 13) { // 13 is the Enter key code
+            e.preventDefault();
+            return false;
+        }
+    });
+});
+
     </script>
 @endpush
