@@ -752,3 +752,11 @@ table{
 .error-messages{
     color: #dc3545 !important;
 }
+
+.my-pro-detail.notification-user-pro {
+    display: flex;
+    flex-direction: column;
+}
+.my-pro-detail-left {
+    width: 100%;
+}

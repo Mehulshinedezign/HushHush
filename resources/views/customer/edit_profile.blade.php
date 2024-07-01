@@ -16,70 +16,8 @@
     @php
         $user = auth()->user();
     @endphp
-    {{-- <div class="container">
-    <div class="section-space vendor-profile-sec">
-        <div class="innerbox-container p-0">
-            <h5 class="order-heading mb-0">My Account</h5>
-            <hr class="h-border">
-            <div class="vend-pro-box">
-                <div class="row">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-5 col-xl-4">
-                        <div class="profile-view-outer">
-                            <div class="profile-header por_holder">
-                                <div class="profile-big-image">
-                                    @if (isset($user->profile_url))
-                                    <img src="{{ Storage::url($user->profile_url) }}"> --}}
-    {{-- <a class="remove-profile-pic" href="{{ route('retailer.removeprofile') }}" title="Remove Profile"> <i class="fas fa-times"></i></a> --}}
-    {{-- @else
-                                    <img src="{{ asset('img/avatar-small.png') }}">
-                                    @endif
-                                </div>
-                                <div class="profile_content pro_content">
-                                    <h6 class="m-0">{{ $user->name }}</h6>
-                                    <p class="smallFont">{{ ucfirst($user->role->name) }}</p>
-                                </div>
-                            </div>
-                            <div class="profile-view-body">
-                                <ul class="listing-row">
-                                    <li class="list-col auto-width">
-                                        <span class="list-item">Email:</span>
-                                        <span class="">{{ $user->email }}</span>
-                                    </li>
-                                    <li class="list-col auto-width">
-                                        <span class="list-item">Phone Number:</span>
-                                        <span>{{ !is_null($user->phone_number) ? @$user->phone_number : $notAvailable }}</span>
-                                    </li>
-                                    <li class="list-col auto-width">
-                                        <span class="list-item">Address:</span>
-                                        <span>{{ !is_null($user->userDetail) ? @$user->userDetail->address1 : $notAvailable }} @if (isset($user->userDetail->address2)) , {{ $user->userDetail->address2 }} @endif</span>
-                                    </li>
-                                    <li class="list-col auto-width">
-                                        <span class="list-item">{{ __('user.country') }}:</span>
-                                        <span>{{ !is_null($user->userDetail) ?  @$user->userDetail->country->name : $notAvailable }} </span>
-                                    </li>
-                                    <li class="list-col auto-width">
-                                        <span class="list-item">{{ __('user.state') }}:</span>
-                                        <span>{{ !is_null($user->userDetail) ? @$user->userDetail->state->name : $notAvailable }}</span>
-                                    </li>
-                                    <li class="list-col auto-width">
-                                        <span class="list-item">{{ __('user.city') }}:</span>
-                                        <span>{{ !is_null($user->userDetail) ? @$user->userDetail->city->name : $notAvailable }}</span>
-                                    </li>
-                                    <li class="list-col auto-width">
-                                        <span class="list-item">{{ __('user.zip') }}:</span>
-                                        <span>{{ !is_null($user->zipcode) ? @$user->zipcode : $notAvailable }}</span>
-                                    </li>
-                                    @if ($user->documents->isNotEmpty())
-                                    <li class="list-col auto-width">
-                                        <span class="list-item">{{ __('user.idProof') }}:</span>
-                                        <span class=""><a href="{{ route('download-proof') }}" target="_blank"> <i class="fas fa-download"></i> </a> </span>
-                                    </li>
-                                    @endif
-                                </ul> 
-                            </div>
-                        </div>
-                    </div> --}}
-    <div class="small-banner contact-banner">
+
+    {{-- <div class="small-banner contact-banner">
         <h4 style="text-align: center">Hi, {{ ucfirst($user->name) }}</h4>
     </div>
     <div class="wrapper-tab">
@@ -98,17 +36,13 @@
                                 <a class="nav-link @if ($errors->has('old_password') || $errors->has('new_password') || session('error')) active @endif" id="nav-profile-tab"
                                     data-bs-toggle="tab" href="#nav-profile" data-bs-target="#nav-profile" type="button"
                                     role="tab" aria-controls="nav-profile" aria-selected="false">Password</a>
-                                {{-- <a class="nav-link" id="nav-contact-tab" href="#nav-contact" data-bs-toggle="tab"
-                                    data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact"
-                                    aria-selected="false">Email Preferences</a> --}}
+ 
                                 <a class="nav-link" id="nav-card-tab" href="#nav-card" data-bs-toggle="tab"
                                     data-bs-target="#nav-card" type="button" role="tab" aria-controls="nav-card"
                                     aria-selected="true">Payment</a>
                                 <a class="nav-link" id="nav-bankdetails-tab" href="#nav-bankdetails" data-bs-toggle="tab"
                                     data-bs-target="#nav-bankdetails" type="button" role="tab"
                                     aria-controls="nav-bankdetails" aria-selected="true">Bank Details</a>
-                                {{-- <a class="nav-link" id= "nav-bankdetails-tab"href="{{ route('bankdetail') }}" type="button"
-                                    aria-selected="true">Bank Details</a> --}}
                             </div>
                         </nav>
                         <div class="tab-content" id="nav-tabContent">
@@ -119,20 +53,7 @@
                                     action="{{ route('saveprofile') }}" enctype="multipart/form-data" autocomplete="off">
                                     @csrf
                                     <div class="row">
-                                        {{-- <div class="col-12 col-sm-12 col-md-12 col-lg-12 form-group">
-                                                <label>{{ __('Switch Profile') }}</label>
-                                                <div class="personal-info-row mb-0 account_switch">
-                                                    <div>
-                                                        <span>Borrower</span>
-                                                    </div>
-                                                    <div class="toggle_cstm d-flex items-center ">
-                                                        <input type="checkbox" name="user_role" value="{{ $user->role_id }}">
-                                                    </div>
-                                                    <div>
-                                                        <span>Lender</span>
-                                                    </div>
-                                                </div>
-                                            </div> --}}
+
                                         <div class="col-12 col-sm-12 col-md-6 col-lg-6 form-group">
                                             <label></label>
                                             <div class="formfield">
@@ -176,19 +97,6 @@
                                                 <label class="error-messages">{{ $message }}</label>
                                             @enderror
                                         </div>
-                                        {{-- @if ($user->is_approved == 0)
-                                            <div class="col-12 col-sm-12 col-md-6 col-lg-6 form-group">
-                                                <label>Identification</label>
-                                                <div class="form-control input-file-uploader"> --}}
-                                        {{-- <span>@if ($user->documents->isNotEmpty()) {{ $user->documents[0]->uploaded_file_name }} @endif</span> --}}
-                                        {{-- <input type="file" name="proof" class="form-control"
-                                                        accept="{{ str_replace(['[', "'", ']'], ['', '', ''], $global_js_proof_extension) }}">
-                                                    @error('proof')
-                                                        <label class="error-messages">{{ $message }}</label>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                        @endif --}}
                                         <div class="col-12 col-sm-12 col-md-6 col-lg-6 form-group">
                                             <label><span class="text-danger"></span></label>
                                             <div class="formfield">
@@ -293,9 +201,6 @@
                                                 <input type="file" id="editprofileimg" name="profile_pic"
                                                     class="form-control" onchange="pressed()"
                                                     accept="{{ str_replace(['[', "'", ']'], ['', '', ''], $global_js_image_extension) }}">
-                                                {{-- @if (isset($user->profile_url))
-                                                    <img src="{{ $user->profile_url }}" alt="img">
-                                                @endif --}}
                                                 @error('profile_pic')
                                                     <label class="error-messages">{{ $message }}</label>
                                                 @enderror
@@ -368,215 +273,10 @@
                                     </div>
                                 </form>
                             </div>
-                            {{-- <div class="tab-pane fade" id="nav-contact" role="tabpanel"
-                                aria-labelledby="nav-contact-tab">
-                                <ul class="ven-notifi-setting">
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>Order Placed</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="order_placed" onchange="notification(this)"
-                                                    @if (@$user->notification->order_placed == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>Order Cancelled</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="order_cancelled"
-                                                    onchange="notification(this)"
-                                                    @if (@$user->notification->order_cancelled == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>Pick Up</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="order_pickup" onchange="notification(this)"
-                                                    @if (@$user->notification->order_pickup == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>Return</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="order_return" onchange="notification(this)"
-                                                    @if (@$user->notification->order_return == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>Payment</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="payment" onchange="notification(this)"
-                                                    @if (@$user->notification->payment == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>Welcome Mail</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="welcome_mail" onchange="notification(this)"
-                                                    @if (@$user->notification->welcome_mail == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>feedback Mail</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="feedback" onchange="notification(this)"
-                                                    @if (@$user->notification->welcome_mail == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>User Booking Request Mail</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="user_booking_request"
-                                                    onchange="notification(this)"
-                                                    @if (@$user->notification->user_booking_request == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>Lender Accept Booking Request</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="lender_accept_booking_request"
-                                                    onchange="notification(this)"
-                                                    @if (@$user->notification->lender_accept_booking_request == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>Reminder For Pickup Time Location</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="reminder_for_pickup_time_location"
-                                                    onchange="notification(this)"
-                                                    @if (@$user->notification->reminder_for_pickup_time_location == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>Reminder For Drop Off Time Location</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="reminder_for_drop_off_time_location"
-                                                    onchange="notification(this)"
-                                                    @if (@$user->notification->reminder_for_drop_off_time_location == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>Rate your experience</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="rate_your_experience"
-                                                    onchange="notification(this)"
-                                                    @if (@$user->notification->rate_your_experience == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>item we thik you might like</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="item_we_think_you_might_like"
-                                                    onchange="notification(this)"
-                                                    @if (@$user->notification->item_we_think_you_might_like == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>lender receives booking request</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="lender_receives_booking_request"
-                                                    onchange="notification(this)"
-                                                    @if (@$user->notification->lender_receives_booking_request == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>lender send first msg</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="lender_send_renter_first_msg"
-                                                    onchange="notification(this)"
-                                                    @if (@$user->notification->lender_send_renter_first_msg == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>Renter send first msg</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="renter_send_lender_first_msg"
-                                                    onchange="notification(this)"
-                                                    @if (@$user->notification->renter_send_lender_first_msg == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="personal-info-row mb-0">
-                                            <div>
-                                                <span>Reminder to start listing items</span>
-                                            </div>
-                                            <div class="toggle_cstm">
-                                                <input type="checkbox" name="reminder_to_start_listing_items"
-                                                    onchange="notification(this)"
-                                                    @if (@$user->notification->reminder_to_start_listing_items == 'on') checked @endif>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div> --}}
                             <div class="tab-pane fade" id="nav-card" role="tabpanel" aria-labelledby="nav-card-tab">
                                 <div class="tab-card">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center">
-                                            {{-- <h2 class="heading_dash">Payment Method</h2> --}}
                                         </div>
                                         <div class="btn-right">
                                             <button type="button" class="btn btn-dark load_script"
@@ -634,7 +334,6 @@
                                                     </tr>
                                                 @empty
                                                     <tr>
-                                                        {{-- <td colspan="5" class="text-center">No card</td> --}}
                                                     </tr>
                                                 @endforelse
                                             </tbody>
@@ -653,7 +352,6 @@
                                             <div class="col-sm-12">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-6 form-group">
-                                                        {{-- <label>Account Holder First Name</label> --}}
                                                         <input type="hidden" name="checkbankdetails" value="1">
                                                         <input type="text" name="account_holder_first_name"
                                                             class="form-control required"
@@ -664,7 +362,6 @@
                                                         @enderror
                                                     </div>
                                                     <div class="col-sm-12 col-md-6 form-group">
-                                                        {{-- <label>Account Holder Last Name</label> --}}
                                                         <input type="text" name="account_holder_last_name"
                                                             class="form-control required"
                                                             value="{{ old('account_holder_last_name', @$bankDetail->account_holder_last_name) }}"
@@ -676,7 +373,6 @@
 
                                                     <div class="col-sm-12 col-md-6 form-group">
                                                         <div class="order-status p-relative">
-                                                            {{-- <label for="text">Date of Birth</label> --}}
                                                             <div class="formfield">
                                                                 <input type="text" name="account_holder_dob"
                                                                     class="form-control required"
@@ -699,37 +395,7 @@
                                                         </div>
                                                     </div>
 
-                                                    {{-- <div class="col-sm-12 col-md-6 form-group">                                                        
-                                                        <select name="account_holder_type"
-                                                            class="form-control form-select cstm-select">
-                                                            <option value="">Account Holder Type</option>
-                                                            <option value="Individual"
-                                                                @if (old('account_holder_type', @$bankDetail->account_holder_type) == 'Individual') selected @endif>
-                                                                Individual</option>                                                           
-                                                        </select>
-                                                        @error('account_holder_type')
-                                                            <label class="error-messages">{{ $message }}</label>
-                                                        @enderror
-                                                    </div> --}}
-                                                    {{-- <div class="col-sm-12 col-md-6 form-group">
-                                                        <select name="account_type" class="form-control">
-                                                            <option value="">Account Type</option>
-                                                            <option value="Standard"
-                                                                @if (old('account_type', @$bankDetail->account_type) == 'Standard') selected @endif>
-                                                                Standard</option>
-                                                            <option value="Express"
-                                                                @if (old('account_type', @$bankDetail->account_type) == 'Express') selected @endif>
-                                                                Express</option>
-                                                            <option value="Custom"
-                                                                @if (old('account_type', @$bankDetail->account_type) == 'Custom') selected @endif>Custom
-                                                            </option>
-                                                        </select>
-                                                        @error('account_type')
-                                                            <label class="error-messages">{{ $message }}</label>
-                                                        @enderror
-                                                    </div> --}}
                                                     <div class="col-sm-12 col-md-6 form-group">
-                                                        {{-- <label>Account Number</label> --}}
                                                         <input type="text" name="account_number"
                                                             class="form-control required"
                                                             value="{{ old('account_number', jsdecode_userdata(@$bankDetail->account_number)) }}"
@@ -739,7 +405,6 @@
                                                         @enderror
                                                     </div>
                                                     <div class="col-sm-12 col-md-6 form-group">
-                                                        {{-- <label>Routing Number</label> --}}
                                                         <input type="text" name="routing_number"
                                                             class="form-control required"
                                                             value="{{ old('routing_number', jsdecode_userdata(@$bankDetail->routing_number)) }}"
@@ -763,8 +428,99 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
+    <section class="my-profile-sec">
+        <div class="container">
+            <div class="my-profile-wrapper">
+                <h2>My Profile</h2>
+                <div class="my-profile-info-box">
+                    <div class="row g-3">
+                        <div class="col-md-12 me-0 ms-auto">
+                            <div class="profile-edit-box">
+                                {{-- <a href="{{ route('change-Profile') }}" class="button primary-btn"><i class="fa-solid fa-pen-to-square"></i> Edit</a> --}}
+                                <a href="{{ route('change-Profile', $user) }}" class="button primary-btn">
+                                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="my-pro-detail">
+                                <div class="my-pro-detail-left">
+                                    <div class="my-pro-detail-para">
+                                        <p>Personal Info</p>
+                                        <h4>{{ $user->name }}</h4>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="my-pro-detail">
+                                <div class="my-pro-detail-left">
+                                    <div class="my-pro-detail-para">
+                                        <p>Email</p>
+                                        <h4>{{ $user->email }}</h4>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="my-pro-detail">
+                                <div class="my-pro-detail-left">
+                                    <div class="my-pro-detail-para">
+                                        <p>Address</p>
+                                        <h4>{{$user->userDetail->address1}}</h4>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="my-pro-detail">
+                                <div class="my-pro-detail-left">
+                                    <div class="my-pro-detail-para">
+                                        <p>Bank</p>
+                                        <h4>{{ $user->name }}, 2034338224</h4>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="my-pro-detail  notification-user-pro">
+                                <div class="my-pro-notify-box">
+                                    <div class="my-pro-detail-left">
+                                        <div class="my-pro-detail-para">
+                                            <h4 class="m-0">Notification</h4>
+                                        </div>
+                                    </div>
+                                    <div class="my-pro-detail-right">
+                                        <div class="toggle-btn">
+                                            <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="my-pro-notify-box">
+                                    <div class="my-pro-detail-left">
+                                        <div class="my-pro-detail-para">
+                                            <h4 class="m-0">Notification</h4>
+                                        </div>
+                                    </div>
+                                    <div class="my-pro-detail-right">
+                                        <div class="toggle-btn">
+                                            <input type="checkbox" checked id="switch1" /><label for="switch1">Toggle</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   </section>
 
 @endsection
 <!-- Add Card Modal -->

@@ -496,7 +496,63 @@ class ProfileController extends Controller
 
     // html blade file change password
 
-    public function ChangePassword(){
+    public function ChangePassword()
+    {
         return view('customer.change_password');
     }
+
+    public function changeProfile(User $user)
+    {
+        return view('customer.change_profile', compact('user'));
+    }
+
+    public function saveUserprofile(Request $request)
+    {
+
+        // dd("here",$request->all());
+        try {
+            $user = auth()->user();
+            $data = [
+                'username' => $request->name,
+                'name' => $request->name,
+                'email' => $request->email,
+            ];
+
+            $userdetail = [
+                'address1' => $request->complete_address,
+            ];
+
+             RetailerBankInformation::where('retailer_id', auth()->user()->id)->first();
+
+            RetailerBankInformation::updateOrCreate([
+                'retailer_id' => auth()->user()->id,
+            ], [
+                'account_holder_first_name' => $request->account_holder_first_name,
+                'account_holder_last_name' => $request->account_holder_last_name,
+                'account_holder_dob' => $request->input('date_of_birth'),
+                'account_holder_type' => 'Individual',
+                'account_type' => 'Custom',
+                'account_number' => jsencode_userdata($request->account_number),
+                'routing_number' => jsencode_userdata($request->routing_number),
+                'is_verified' => "" ,
+                'stripe_btok_token' => "",
+                'stripe_ba_token' => "",
+                'stripe_account_token' => "",
+                'stripe_btok_token_response' => "",
+                'stripe_account_token_response' => "",
+            ]);
+            $user->update($data);
+
+            if ($user->userDetail) {
+                $user->userDetail()->update($userdetail);
+            }
+
+            return redirect()->back()->with('success', __('user.messages.profileUpdated'));
+            // return redirect()->route('index')->with('success', __('user.messages.profileUpdated'));
+        } catch (Exception $exception) {
+            return redirect()->back();
+        }
+    }
+    
+
 }
