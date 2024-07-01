@@ -9,7 +9,7 @@
     <section class="my-profile-sec">
         <div class="container">
             <div class="my-profile-wrapper">
-                <h2>My Profile</h2>
+                <h2>Account Settings</h2>
                 <div class="my-profile-info-box">
                     <form action="{{ route('saveUserprofile') }}" method="POST" id="save_user">
                         @csrf

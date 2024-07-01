@@ -1,7 +1,7 @@
 @extends('layouts.front')
 @section('content')
     {{-- <x-alert /> --}}
-    <div class="">
+    <div class="cust-form-bg fill-hight">
         <div class="form-setup ">
             <h4>Change Password</h4>
             <form class="change-password form-inline" method="post" id="changePassword" action="{{ route('changepassword') }}" autocomplete="off">

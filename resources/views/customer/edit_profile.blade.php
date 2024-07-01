@@ -433,7 +433,7 @@
     <section class="my-profile-sec">
         <div class="container">
             <div class="my-profile-wrapper">
-                <h2>My Profile</h2>
+                <h2>Account Settings</h2>
                 <div class="my-profile-info-box">
                     <div class="row g-3">
                         <div class="col-md-12 me-0 ms-auto">

@@ -584,9 +584,9 @@ a.navbar-brand {
     align-items: center;
 }
 .cust-form-bg.fill-hight {
-    height: calc(100vh - 79px);
+    height: calc(100vh - 232px);
+    overflow: auto;
 }
-
 .form-control.is-invalid, .was-validated .form-control:invalid{
     background-image: unset !important;
 }

@@ -2,7 +2,7 @@
 @section('content')
     <div class="cust-form-bg fill-hight">
         <div class="form-setup login-form">
-            <h4>OTP Verification </h4>
+            <h4>OTP Verification</h4>
             <x-alert />
             <form class="form-inline" method="POST" action="{{ route('verify') }}">
                 @csrf
