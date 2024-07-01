@@ -74,8 +74,10 @@ class ResetPasswordController extends Controller
         $phone_number = $request->phone_number;
         $user = User::where('phone_number',$phone_number)->first();
         $otp = $request->verify_no1 . $request->verify_no2 . $request->verify_no3 . $request->verify_no4 . $request->verify_no5 . $request->verify_no6;
-        $validUser = UserOtp::where(['otp' => $otp,'user_id' => $user->id])->first();
-    
+        // $validUser = UserOtp::where(['otp' => $otp,'user_id' => $user->id])->first();
+
+        $validUser = UserOtp::where(['user_id' => $user->id])->first();
+
         $request->session()->forget('phone_number');
         if(!$validUser){
             session()->forget('status');

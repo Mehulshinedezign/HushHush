@@ -29,15 +29,32 @@ class VerifyOtpController extends Controller
         $userId = $request->session()->get('userId');
         $user = User::findOrFail($userId);
 
+        // $otp = UserOtp::where('user_id', $userId)
+        // ->where('otp', $request->otp)
+        // ->where('expires_at', '>=', Carbon::now())
+        // ->first();
+      
+        // if ($otp) {
+        //     // $user->otp_is_verified = true;
+        //     $user->update(["status" => "1","otp_is_verified" => "1"]);
+        //     // $user->save();
+
+        //     $otp->status = 1;
+        //     $otp->save();
+
+        //     $request->session()->forget('userId');
+        //     $loginController = new LoginController();
+            
+        //     return $loginController->loginUser($user);
+        //     // return redirect()->route('login')->with('success', 'Registration successful. A confirmation email has been sent to ' . $user->email . '. Please verify to log in.');
+        // }
+
         $otp = UserOtp::where('user_id', $userId)
-        ->where('otp', $request->otp)
         ->where('expires_at', '>=', Carbon::now())
         ->first();
       
         if ($otp) {
-            // $user->otp_is_verified = true;
             $user->update(["status" => "1","otp_is_verified" => "1"]);
-            // $user->save();
 
             $otp->status = 1;
             $otp->save();
@@ -48,6 +65,7 @@ class VerifyOtpController extends Controller
             return $loginController->loginUser($user);
             // return redirect()->route('login')->with('success', 'Registration successful. A confirmation email has been sent to ' . $user->email . '. Please verify to log in.');
         }
+
         return redirect()->back()->withErrors(['otp' => 'Invalid or expired OTP']);
     }
 }
