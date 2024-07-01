@@ -26,37 +26,38 @@ class ForgotPasswordController extends Controller
 
     public function sendResetLinkEmail(Request $request)
     {
+        // dd("here",$request->all());
+
+        $full =  $request->input('phone_number.full');
+        $main = $request->input('phone_number.main');
+        // dd($full);
         if ($request->has('phone_number') && $request->input('phone_number.main') && $request->input('phone_number.full') ) {
-            return $this->sendResetLinkToPhoneNumber($request);
+            return $this->sendResetLinkToPhoneNumber($full,$main,$request);
         } else {
-            $forgot = new MainforgotPassword();
-            $forgot->sendResetPasswordLinkEmail($request);
-            return redirect()->back();
+            $this->validateEmail($request);
+        $response = $this->broker()->sendResetLink(
+            $this->credentials($request)
+        );
+
+        return $response == Password::RESET_LINK_SENT
+                    ? $this->sendResetLinkResponse($request, $response)
+                    : $this->sendResetLinkFailedResponse($request, $response);
         }
     }
 
-    protected function sendResetLinkToEmail(Request $request)
+
+    protected function sendResetLinkToPhoneNumber($full_number,$main_number,Request $request)
     {
-        $mainForgotPassword = new MainForgotPassword();
-        return $mainForgotPassword->sendResetLinkEmail($request);
-    }
+        // dd($full_number,$main_number);
+        // dd("WWWWWWWWWW$",User::where('phone_number', $main_number)->first());
+        
+        // if (!$this->otpService) {
+        //     return response()->json(['message' => 'OTP service not available'], 500);
+        // }
 
-    protected function sendResetLinkToPhoneNumber(Request $request)
-    {
-        if (!$this->otpService) {
-            return response()->json(['message' => 'OTP service not available'], 500);
-        }
+        $user = User::where('phone_number', $main_number)->first();
 
-        $validator = Validator::make($request->all(), [
-            'phone_number.full' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $user = User::where('phone_number', $request->input('phone_number.main'))->first();
-
+        // dd("DONE",$user);
         $phone = $request->input('phone_number.main');
         if (!$user) {
             session()->flash('status', 'User not found');
@@ -64,9 +65,9 @@ class ForgotPasswordController extends Controller
         }
         
         $otp = $this->otpService->generateOtp($user);
-        $this->otpService->sendOtp($otp, $request->input('phone_number.full'));
+        $this->otpService->sendOtp($otp, $full_number);
         
-        $request->session()->put('phone_number', $phone);
+        $request->session()->put('phone_number', $main_number);
         session()->forget('error');
         session()->flash('status', 'OTP send successfully!');
         return view('auth.passwords.otp_verification');
