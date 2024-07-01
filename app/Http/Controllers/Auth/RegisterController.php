@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\NotificationSetting;
 use App\Providers\RouteServiceProvider;
-use App\Models\{Otp, User, Role};
+use App\Models\{Otp, User, Role, UserDetail, UserDocuments};
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -69,16 +69,18 @@ class RegisterController extends Controller
         $retailerRegisterUrl = url('/') . '/retailer/register';
         $emailRegex = "/^[a-zA-Z]+[a-zA-Z0-9_\.\-]*@[a-zA-Z]+(\.[a-zA-Z]+)*[\.]{1}[a-zA-Z]{2,10}$/";
         $validation = [
-            'username' => ['required', 'min:3', 'max:50', 'unique:users'],
+            // 'username' => ['required', 'min:3', 'max:50', 'unique:users'],
             'name' => ['required', 'string', 'min:3', 'max:50'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'regex: ' . $emailRegex],
-            'phone_number' => ['required', 'digits:' . config('validation.phone_minlength'), 'min:' . config('validation.phone_minlength'), 'max:' . config('validation.phone_maxlength')],
-            'zipcode' => ['required'],
+            'phone_number.main' => ['required', 'digits:' . config('validation.phone_minlength'), 'min:' . config('validation.phone_minlength'), 'max:' . config('validation.phone_maxlength')],
+            // 'zipcode' => ['required'],
             'password' => ['required', 'string', 'min:8', 'max:32', 'confirmed'],
+            'complete_address' => 'required',
+            'gov_id' => 'required|file|mimes:jpg,png,jpeg,pdf|max:2048',
         ];
 
         $message = [
-            'username.required' => __('customvalidation.user.username.required'),
+            // 'username.required' => __('customvalidation.user.username.required'),
             'name.required' => __('user.validations.nameRequired'),
             'name.string' => __('user.validations.nameString'),
             'name.min' => __('user.validations.nameMin'),
@@ -89,17 +91,24 @@ class RegisterController extends Controller
             'email.regex' => __('user.validations.emailType'),
             'email.max' => __('user.validations.emailMax'),
             'email.unique' => __('user.validations.emailUnique'),
-            'phone_number.required' => __('customvalidation.user.phone_number.required'),
-            'phone_number.digits' => __('customvalidation.user.phone_number.digits'),
-            'phone_number.min' => __('customvalidation.user.phone_number.min', ['min' => config('validation.phone_minlength'), 'max' => config('validation.phone_maxlength')]),
-            'phone_number.max' => __('customvalidation.user.phone_number.max', ['min' => config('validation.phone_minlength'), 'max' => config('validation.phone_maxlength')]),
+            'phone_number.main.required' => __('customvalidation.user.phone_number.required'),
+            'phone_number.main.digits' => __('customvalidation.user.phone_number.digits'),
+            'phone_number.main.min' => __('customvalidation.user.phone_number.min', ['min' => config('validation.phone_minlength'), 'max' => config('validation.phone_maxlength')]),
+            'phone_number.main.max' => __('customvalidation.user.phone_number.max', ['min' => config('validation.phone_minlength'), 'max' => config('validation.phone_maxlength')]),
             'password.required' => __('user.validations.passwordRequired'),
             'password.string' => __('user.validations.passwordString'),
             'password.min' => 'Password must be 8-32 characters long',
             'password.min' => 'Password must be 8-32 characters long',
             'password.confirmed' => __('user.validations.passwordConfirmed'),
-            'zipcode.required' => __('customvalidation.user.zipcode.required'),
+            // 'zipcode.required' => __('customvalidation.user.zipcode.required'),
             //'zipcode.numeric' => __('customvalidation.user.zipcode.numeric'),
+            'complete_address' => __('customvalidation.user.complete_address.required'),
+            'complete_address.min' => __('user.validations.completeAddressMin'),
+            'complete_address.max' => __('user.validations.completeAddressMax'),
+
+            'gov_id' => __('customvalidation.user.gov_id.required'),
+            'gov_id.file' => __('customvalidation.user.gov_id.file'),
+            'gov_id.max' => __('customvalidation.user.gov_id.max_size'),
         ];
 
         // if ($previousUrl == $retailerRegisterUrl) {
@@ -138,72 +147,44 @@ class RegisterController extends Controller
         // }
 
         $signUpData = User::create([
-            'username' => $data['username'],
+            // 'username' => $data['username'],
             'name' => $data['name'],
             'status' => '0',
             'email' => $data['email'],
-            'phone_number' => $data['phone_number'],
-            'zipcode' => $data['zipcode'],
+            'phone_number' => $data['phone_number']['main'],
+            // 'zipcode' => $data['zipcode'],
             'password' => Hash::make($data['password']),
             'email_verification_token' => Str::random(50)
         ]);
 
-        if ($data['is_captcha'] == null) {
+        UserDetail::create([
+            'user_id' => $signUpData->id,
+            'address1' =>$data['complete_address'],
+            'about' =>$data['about'],
+        ]);
 
-            NotificationSetting::create([
-                'user_id' => $signUpData->id,
-                'order_placed' =>  'off',
-                'order_pickup' => 'off',
-                'order_return' => 'off',
-                'order_cancelled' => 'on',
-                'payment' => 'on',
-                'welcome_mail' => 'on',
-                'feedback' => 'on',
-                'user_booking_request' => 'on',
-                'lender_accept_booking_request' => 'on',
-                'reminder_for_pickup_time_location' => 'on',
-                'reminder_for_drop_off_time_location' => 'on',
-                'rate_your_experience' => 'on',
-                'item_we_think_you_might_like' => 'on',
-                'lender_receives_booking_request' => 'on',
-                'lender_send_renter_first_msg' => 'on',
-                'renter_send_lender_first_msg' => 'on',
-                'reminder_to_start_listing_items' => 'on',
-            ]);
-        }
+
+        $path = $data['gov_id']->store('user_documents');
+        $filePath = str_replace("public/", "", $path);
+        $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+        
+        UserDocuments::create([
+            'user_id' => $signUpData->id,
+            'file' => $fileExtension,
+            'url' => $filePath,
+        ]);
+
+ 
         $otp = $this->otpService->generateOtp($signUpData);
-        $this->otpService->sendOtp($signUpData, $otp);
+        $this->otpService->sendOtp($otp,$data['phone_number']['full']);
 
         return $signUpData;
-        // return User::create($signUpData);
 
-        // $documents = [];
-        // if ($previousUrl == $retailerRegisterUrl) {
-        //     $roleId = Role::where('name', $data['type'])->pluck('id')->firstOrFail();
-        //     $signUpData['role_id'] = $roleId;
-        //     $uploadedFileName = request()->file('proof')->getClientOriginalName();
-        //     $path = request()->file('proof')->store('documents', 's3');
-        //     $url = Storage::disk('s3')->url($path);
-        //     $fileName = basename($path);
-        //     $documents = [
-        //         'file' => $fileName,
-        //         'url' => $url,
-        //         'uploaded_file_name' => $uploadedFileName,
-        //     ];
-        //     $user = User::create($signUpData);   
-        //     $user->documents()->create($documents);
-
-        //     return $user;
-        // } else {
-        //     //$roleId = Role::where('name', 'customer')->pluck('id')->firstOrFail();
-        //     //$signUpData['role_id'] = $roleId;
-
-        //     return User::create($signUpData);
-        // }
     }
 
     protected function register(Request $request)
     {
+        
         $this->validator($request->all())->validate();
         $user = $this->create($request->all());
         if ($user) {

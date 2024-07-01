@@ -23,6 +23,8 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
     Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
     Route::post('/ajaxlogin', [App\Http\Controllers\Auth\LoginController::class, 'ajaxLogin'])->name('ajaxlogin');
     Route::get('verify-email/{user}/{token}', [App\Http\Controllers\Auth\RegisterController::class, 'verifyEmail'])->name('verify-email');
+    Route::any('/verify',[App\Http\Controllers\Auth\ResetPasswordController::class,'verifyOtp'])->name('verify');
+    Route::any('/update-password',[App\Http\Controllers\Auth\ResetPasswordController::class,'update'])->name('user.updatepassword');
 
     Auth::routes();
 
@@ -132,6 +134,8 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         Route::match(['get', 'post'], 'orders', [App\Http\Controllers\Customer\OrderController::class, 'index'])->name('orders');
         Route::get('payment-history', [App\Http\Controllers\Customer\OrderController::class, 'payment_history'])->name('payment-history');
 
+        // rental request here
+        Route::get('rental-request', [App\Http\Controllers\Customer\OrderController::class, 'rental_request'])->name('rental-request');
         // my account
         Route::get('my-account', [App\Http\Controllers\ProfileController::class, 'profile'])->name('profile');
         Route::get('edit-account', [App\Http\Controllers\ProfileController::class, 'edit_profile'])->name('edit-account');
@@ -142,6 +146,10 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         Route::get('download-proof', [App\Http\Controllers\ProfileController::class, 'downloadProof'])->name('download-proof');
         Route::get('notifications', [App\Http\Controllers\ProfileController::class, 'notifications'])->name('notifications');
         Route::get('switch-profile/{role}', [App\Http\Controllers\ProfileController::class, 'switch_profile'])->name('switch-profile');
+
+        Route::get('/change_pass', [App\Http\Controllers\ProfileController::class, 'ChangePassword'])->name('user.changePassword');
+        Route::get('change-profile/{user}', [App\Http\Controllers\ProfileController::class, 'changeProfile'])->name('change-Profile');
+        Route::post('update_profile', [App\Http\Controllers\ProfileController::class, 'saveUserprofile'])->name('saveUserprofile');
         // card
         Route::get('card-index', [App\Http\Controllers\CardController::class, 'index'])->name('card.index');
         Route::post('card-store', [App\Http\Controllers\CardController::class, 'store'])->name('card.store');

@@ -12,11 +12,16 @@
     <link rel="stylesheet" href="{{ asset('front/css/slick.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css">
     <link rel="stylesheet" href="{{ asset('front/css/style.css') }}?ver={{ now() }}">
     <link rel="stylesheet" href="{{ asset('css/iziToast.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/daterangepicker.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/custom-front.css') }}?ver={{ now() }}" />
     <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}?ver={{ now() }}">
+    <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png') }}">
     <script>
         const APP_URL = "{{ url('') }}";
@@ -57,7 +62,6 @@
 </head>
 
 <body>
-    <!-- header Section Starts Here  -->
     @include('layouts.header')
 
     <main class="main @if (isset($layout_class)) single_product @endif">
@@ -65,7 +69,7 @@
     </main>
 
     {{-- Notifications --}}
-    @include('layouts.notifications')
+    {{-- @include('layouts.notifications') --}}
 
     <footer>
         <div class="container">

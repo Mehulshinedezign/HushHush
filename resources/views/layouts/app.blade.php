@@ -15,6 +15,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{ asset('front/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}">
+    <link rel="stylesheet" href="{{asset('front/css/login.css')}}">
     <link rel="stylesheet" href="{{ asset('css/custom-front.css') }}?ver={{ now() }}" />
     <!-- <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png') }}"> -->
 
@@ -32,10 +33,8 @@
             <div class="container">
                 <div class="cust-nav-header-sec">
                     <div class="logo mobile-logo">
-                        <a class="navbar-brand" href="{{ url('/') }}">
-                            {{-- <img src="{{ asset('front/images/logo.svg') }}" alt="logo"> --}}
-                            <h4>NUDORA</h4>
-                        </a>
+                        <a class="navbar-brand" href="{{url('/')}}"><img src="{{asset('front/images/logo.svg')}}" alt="logo" width="91"
+                                height="63"></a>
                     </div>
                     <div class="collapse navbar-collapse cust-navbar-header" id="navbarNav">
                         <ul class="navbar-nav">
@@ -44,17 +43,21 @@
                             </li>
                         </ul>
                     </div>
+                    @if (auth()->user())
                     <div class="header-cart">
                         <ul>
                             <li>
-                                {{-- <a href="#"><i class="fa-regular fa-user"></i></a> --}}
+                                <a href="#"><i class="fa-regular fa-user"></i></a>
                             </li>
                         </ul>
                     </div>
-                    {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button> --}}
+                        
+                    @endif
+
+                    <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button> -->
                 </div>
             </div>
         </nav>
@@ -63,41 +66,27 @@
     <main class="main login-pages">
         @yield('content')
     </main>
-
     <footer class="white-bg">
         <div class="container">
             <div class="copyright footer-section">
-                <p class="small-font">© {{ date('Y') }} Nudora. {{ __('All rights reserved') }}</p>
+                <p class="small-font">© 2023 Nudora. All rights reserved</p>
                 <div class="copyright-links">
                     <ul>
-
-                        @foreach ($cms as $cms)
-                            <li>
-                                <a href="{{ route('view', ['slug' => $cms->slug]) }}">{{ $cms->title }}</a>
-                            </li>
-                        @endforeach
-                        {{-- <li>
-                            <a href="{{ route('howitworks')}}">{{__('How it Works')}}</a>
+                        <li>
+                            <a href="#">About Us</a>
                         </li>
                         <li>
-                            <a href="{{ route('aboutus') }}">{{__('About Us')}}</a>
+                            <a href="#">FAQ</a>
                         </li>
                         <li>
-                            <a href="{{ route('faq') }}">{{__('FAQ')}}</a>
+                            <a href="#">Privacy Policy</a>
                         </li>
                         <li>
-                            <a href="{{ route('policies') }}">{{__('Privacy Policy')}}</a>
+                            <a href="#">Terms & Conditions</a>
                         </li>
                         <li>
-                            <a href="{{ route('termsconditions') }}">{{__('Terms & Conditions')}}</a>
+                            <a href="#">Contact Us</a>
                         </li>
-                        <li>
-                            <a href="{{ route('contactus') }}">{{__('Contact Us')}}</a>
-                        </li> --}}
-                        {{-- <li>
-                            <a href="#"><img src="{{ asset('front/images/android-store.png') }}" alt="android-icon"></a>
-                            <a href="#"><img src="{{ asset('front/images/play-store.png') }}" alt="play-icon"></a>
-                        </li> --}}
                     </ul>
                 </div>
             </div>

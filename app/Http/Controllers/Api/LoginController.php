@@ -31,8 +31,8 @@ class LoginController extends Controller
             if (!$user->status){
                 return $this->apiResponse('error', 500, 'Your account is deactivated', ['errors' => 'Your account is deactivated']);
             }
-            if(!$user->email_verified_at){
-                return $this->apiResponse('error', 500, 'Please verify your email', ['errors' => 'Please verify your email']);
+            if(!$user->email_verified_at || !$user->otp_is_verified){
+                return $this->apiResponse('error', 500, 'Please verify your email Or Phone', ['errors' => 'Please verify your email Or phone']);
             }
 
             $apiResponse = 'success';

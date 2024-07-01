@@ -521,12 +521,12 @@
                                             <tr>
                                                 <td
                                                     style="font-style: normal;font-weight: 600;color: #1B1B1B;;font-size: 16px;          margin: 0 0 3px">
-                                                    Team Chere</td>
+                                                    Team Nudora</td>
                                             </tr>
                                             <tr>
                                                 <td
                                                     style="font-style: normal;font-weight: 600;color: #1B1B1B;;font-size: 16px;          margin: 0 0 3px">
-                                                    team@thechere.com</td>
+                                                    team@nudora.com</td>
                                             </tr>
                                         </table>
                                     </td>

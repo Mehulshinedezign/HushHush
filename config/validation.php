@@ -84,4 +84,13 @@ return [
 
         'min_days_item_regex' => '/^[0-9]{1,20}$/',
         'min_days_item_regex_message' =>  'Only digits allowed',
+
+        'min_complete_address' => 10,
+        'max_complete_address' => 255,
+
+        'php_gov_id_mimes' => 'jpg,jpeg,png,pdf',
+        'js_gov_id_mimes' => 'jpg|jpeg|png,pdf',
+        'php_gov_id_size' => '2000',
+        'js_gov_id_size' => '2097152',
+        'js_gov_id_size' => '2000000',
 ];

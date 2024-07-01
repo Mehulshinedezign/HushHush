@@ -1,7 +1,5 @@
 var currentUrl = new URL(window.location.href);
 function addToWishlist(element, productId) {
-console.log("this val : ",element);
-    console.log("THE PRODUCT ID IS : ",productId);
     if(userId == '' || userId == null || userId == false) {
         window.location.replace(login_url);
     }
@@ -14,15 +12,13 @@ console.log("this val : ",element);
             },
             success: function(response) {
                 jQuery(element).find('span').toggleClass('active');
-                let iconElement = jQuery(element).find('span').find('i');
-                // if (response.action == 'added') {
-                //     iconElement.removeClass('far');
-                //     iconElement.addClass('fas');
-                // } else {
-                //     iconElement.removeClass('fas');
-                //     iconElement.addClass('far');
-                // }
-                
+                let iconElement = jQuery(element).find('i');
+                if (response.action === 'added') {
+                    iconElement.removeClass('fa-regular').addClass('fa-solid');
+                } else {
+                    iconElement.removeClass('fa-solid').addClass('fa-regular');
+                }
+
                 // iziToast.success({
                 //     title: "",
                 //     message: response.message,

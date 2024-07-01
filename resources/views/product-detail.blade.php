@@ -160,7 +160,7 @@
     </section>
     <!-- End You may like section-->
 
-    @include('instruction')
+    {{-- @include('instruction') --}}
 
     @include('product-booking')
     <div class="payment-fixed-section" id="payment"></div>

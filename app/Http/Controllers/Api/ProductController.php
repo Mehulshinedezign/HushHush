@@ -468,9 +468,10 @@ class ProductController extends Controller
             // dd("here",$product);
             $ratings = $product->ratings->map(function($rating){
                 return[
-                    'user_id' => $rating->id,
+                    'user_id' => $rating->user_id,
                     'review' => $rating->review,
                     'user_name' => @$rating->user->name,
+                    "review_user_profile" => asset('storage/profiles/' . $rating->user->profile_file),
                     'rating' => $rating->rating,
                     'review_date'=> date('Y-m-d', strtotime($rating->created_at)),
                 ];

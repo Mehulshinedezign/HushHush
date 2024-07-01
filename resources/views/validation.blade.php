@@ -55,5 +55,11 @@
     const descMaxLength = {{ config('validation.product_desc_maxlength') }};
 
     const minDaysItemRegex = {{ config('validation.min_days_item_regex') }};
+
+    const minCompleteAddress = {{ config('validation.min_complete_address') }};
+    const maxCompleteAddress = {{ config('validation.max_complete_address') }};
+
+    const gov_idMimes ="{{  config('validation.js_gov_id_mimes') }}";
+    const gov_idSize = "{{ config('validation.js_gov_id_size') }}";
     
 </script>
