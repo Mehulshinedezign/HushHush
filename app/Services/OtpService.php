@@ -28,9 +28,14 @@ class OtpService
     public function sendOtp($otp,$full_phone_number)
     {
         $accountSid = config('services.twilio.sid');
-        $authToken = config('services.twilio.token');
-        $twilioNumber = config('services.twilio.phone_number');
-        $messagingServiceSid = config('services.twilio.messaging_service_sid');
+        // $authToken = config('services.twilio.token');
+        // $twilioNumber = config('services.twilio.phone_number');
+        // $messagingServiceSid = config('services.twilio.messaging_service_sid');
+        
+        $accountSid = env('TWILIO_ACCOUNT_SID');
+        $authToken = env('TWILIO_AUTH_TOKEN');
+        $twilioNumber = env('TWILIO_PHONE_NUMBER');
+        $messagingServiceSid = env('TWILIO_MESSAGING_SERVICE_SID');
 
         $client = new Client($accountSid, $authToken);
 
