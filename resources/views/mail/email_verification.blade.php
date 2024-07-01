@@ -429,9 +429,7 @@
                         <td bgcolor="#e8e5de" valign="top" style="padding-top: 20px; padding-bottom:20px">
                             <a target="_blank" href="javascript:;"
                                 style="margin-left:auto;margin-right:auto;text-align:center;">
-                                <img alt="image" src="{{ asset('img/logo.svg') }}" width="100"
-                                    style="max-width:100px;padding: 0; border: 0;display:block;margin:0 auto;"
-                                    border="0">
+                               
                             </a>
                         </td>
                     </tr>
@@ -525,12 +523,12 @@
                                             <tr>
                                                 <td
                                                     style="font-style: normal;font-weight: 600;color: #1B1B1B;;font-size: 16px;font-family: 'Inter', sans-serif;margin: 0 0 3px">
-                                                    Team Chere</td>
+                                                    Team Nudora</td>
                                             </tr>
                                             <tr>
                                                 <td
                                                     style="font-style: normal;font-weight: 600;color: #1B1B1B;;font-size: 16px;font-family: 'Inter', sans-serif;margin: 0 0 3px">
-                                                    team@thechere.com</td>
+                                                    team@Nudora.com</td>
                                             </tr>
                                         </table>
                                     </td>
@@ -604,7 +602,7 @@
                                     <tr>
                                         <td colspan="3" align="center"
                                             style="color:#606060;font-size:12px;font-family: 'Inter', sans-serif;text-align:center;line-height:24px;padding-top: 5px;">
-                                            © {{ date('Y') }} Chere. All rights reserved</td>
+                                            © {{ date('Y') }} Nudora. All rights reserved</td>
                                     </tr>
                                     <tr>
                                         <td style="height: 30px;" colspan="3"></td>

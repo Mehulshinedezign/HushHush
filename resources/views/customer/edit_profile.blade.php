@@ -430,7 +430,7 @@
         </div>
     </div> --}}
 
-    <section class="my-profile-sec">
+    <section class="my-profile-sec cust-form-bg fill-hight">
         <div class="container">
             <div class="my-profile-wrapper">
                 <h2>Account Settings</h2>
@@ -502,7 +502,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="my-pro-notify-box">
+                                <!-- <div class="my-pro-notify-box">
                                     <div class="my-pro-detail-left">
                                         <div class="my-pro-detail-para">
                                             <h4 class="m-0">Notification</h4>
@@ -513,7 +513,7 @@
                                             <input type="checkbox" checked id="switch1" /><label for="switch1">Toggle</label>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
