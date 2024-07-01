@@ -547,7 +547,8 @@ class ProfileController extends Controller
                 $user->userDetail()->update($userdetail);
             }
 
-            return redirect()->back()->with('success', __('user.messages.profileUpdated'));
+            return redirect()->route('edit-account')->with('success', __('user.messages.profileUpdated'));
+            // return redirect()->back()->with('success', __('user.messages.profileUpdated'));
             // return redirect()->route('index')->with('success', __('user.messages.profileUpdated'));
         } catch (Exception $exception) {
             return redirect()->back();
