@@ -312,11 +312,11 @@
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                                     
                                   <li><a class="dropdown-item" href="{{ route('edit-account') }}"><img src="{{asset('front/images/user-icon.svg')}}" alt="img">Profile</a></li>
-                                  <li><a class="dropdown-item" href="{{ route('orders') }}"><img src="{{asset('front/images/order-history-icon.svg')}}" alt="img">Order History</a></li>
-                                  <li><a class="dropdown-item" href="{{ route('rental-request') }}"><img src="{{asset('front/images/rent-req-icon.svg')}}" alt="img">Rental Request</a></li>
-                                  <li><a class="dropdown-item" href="#"><img src="{{asset('front/images/notification-icon.svg')}}" alt="img">Notifications</a></li>
-                                  <li><a class="dropdown-item" href="#"><img src="{{asset('front/images/saved-icon.svg')}}" alt="img">Saved Items</a></li>
-                                  <li><a class="dropdown-item" href="{{ route('payment-history')}}"><img src="{{asset('front/images/payment-history-icon.svg')}}" alt="img">Payment History</a></li>
+                                  <!-- <li><a class="dropdown-item" href="{{ route('orders') }}"><img src="{{asset('front/images/order-history-icon.svg')}}" alt="img">Order History</a></li> -->
+                                  <!-- <li><a class="dropdown-item" href="{{ route('rental-request') }}"><img src="{{asset('front/images/rent-req-icon.svg')}}" alt="img">Rental Request</a></li> -->
+                                  <!-- <li><a class="dropdown-item" href="#"><img src="{{asset('front/images/notification-icon.svg')}}" alt="img">Notifications</a></li> -->
+                                  <!-- <li><a class="dropdown-item" href="#"><img src="{{asset('front/images/saved-icon.svg')}}" alt="img">Saved Items</a></li> -->
+                                  <!-- <li><a class="dropdown-item" href="{{ route('payment-history')}}"><img src="{{asset('front/images/payment-history-icon.svg')}}" alt="img">Payment History</a></li> -->
                                   <li><a class="dropdown-item" href="{{ route('user.changePassword') }}"><i class="fa-light fa-gear"></i>Change password</a></li>
                                   <li><a class="dropdown-item" href="{{ route('logout') }}"><img src="{{asset('front/images/logout-icon.svg')}}" alt="img">Logout</a></li>
                                 </ul>

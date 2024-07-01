@@ -63,11 +63,12 @@ class LoginController extends Controller
      */
     protected function validateLogin(Request $request)
     {
+
         $request->validate([
-            $this->username() => 'required|string',
+            'email' => 'required|string',
             'password' => 'required|string',
         ], [
-            $this->username() . '.required' => __('user.validations.emailRequired'),
+            'email.required' => __('user.validations.emailRequired'),
             //$this->username().'.email' => __('user.validations.emailType'),
             //$this->username().'.exists' => __('user.validations.invalidEmail'),
             'password.required' => __('user.validations.passwordRequired')
@@ -77,7 +78,11 @@ class LoginController extends Controller
     protected function credentials(Request $request)
     {
         // dd('here');
-        if (filter_var($request->email, FILTER_VALIDATE_INT)) {
+        // $loginType = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+        if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+            return ['email' => $request->email, 'password' => $request->password, 'status' => '1'];
+        }else{
+
             return ['phone_number' => $request->email, 'password' => $request->password, 'status' => '1'];
         }
 
