@@ -196,4 +196,12 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.categoryproduct', $category_id);
     }
+
+    public function getSubcategories(Request $request){
+
+        $categogy_id = $request->categoryId;
+        $subcategories = Category::where('status', '1')->where('parent_id', $categogy_id)->get();
+        // return Category::where('status', '1')->where('parent_id', $categogy_id)->get();
+        return response()->json($subcategories);
+    }
 }

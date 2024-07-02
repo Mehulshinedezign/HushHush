@@ -50,6 +50,11 @@ class Category extends Model
         return $this->hasMany(CategorySizeRelation::class);
      }
 
+     public function subcategories()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+
     public function scopeSearch($query)
     {
         $request = request();

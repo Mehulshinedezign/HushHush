@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('color')->nullable()->after('status');
             $table->string('brand')->nullable()->after('status');
             $table->string('condition')->nullable()->after('status');
-            $table->string('other_size')->nullable()->after('status');
+            // $table->string('other_size')->nullable()->after('status');
         });
     }
 

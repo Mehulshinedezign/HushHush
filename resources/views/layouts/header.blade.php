@@ -299,11 +299,11 @@
                 </div>
                 <div class="header-cart">
                     <ul>
-                        <!-- <li>
+                         <li>
                             <div data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
                                 Rent your closet
                             </div>
-                        </li> -->
+                        </li> 
                         <li>
                             <div class="dropdown">
                                 <div class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">

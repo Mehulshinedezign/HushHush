@@ -150,6 +150,8 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         Route::get('/change_pass', [App\Http\Controllers\ProfileController::class, 'ChangePassword'])->name('user.changePassword');
         Route::get('change-profile/{user}', [App\Http\Controllers\ProfileController::class, 'changeProfile'])->name('change-Profile');
         Route::post('update_profile', [App\Http\Controllers\ProfileController::class, 'saveUserprofile'])->name('saveUserprofile');
+
+        Route::get('get_subcategories', [App\Http\Controllers\Admin\CategoryController::class, 'getSubcategories'])->name('get_subcategories');
         // card
         Route::get('card-index', [App\Http\Controllers\CardController::class, 'index'])->name('card.index');
         Route::post('card-store', [App\Http\Controllers\CardController::class, 'store'])->name('card.store');
