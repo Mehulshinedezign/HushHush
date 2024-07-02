@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="cust-form-bg fill-hight">
+    <div class="cust-form-bg full-hight-sm">
         <div class="form-setup login-form">
             <h4>Forgot Password</h4>
             @if (session('status'))

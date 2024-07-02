@@ -367,7 +367,7 @@ a.navbar-brand {
 
 
 .cust-form-bg {
-    padding: 140px 0px;
+    padding: 80px 0px;
     background-image: url(../images/login-bg.png);
     background-repeat: no-repeat;
     background-position: center;
@@ -759,4 +759,9 @@ table{
 }
 .my-pro-detail-left {
     width: 100%;
+}
+
+.full-hight-sm{
+    height: calc(100vh - 163px);
+    overflow: auto;
 }

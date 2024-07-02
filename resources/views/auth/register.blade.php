@@ -8,7 +8,7 @@
                 @csrf
                 <input type="hidden" name="g_recaptcha_response" id="recaptcha_token" value="">
                 <div class="form-group">
-             
+                
                     <div class="formfield">
                         <input id="username" type="text"
                             class="form-control form-class @error('username') is-invalid @enderror" name="username"
@@ -24,7 +24,7 @@
                     @enderror
                 </div>
                 <div class="form-group">
-
+ 
                     <div class="formfield">
                         <input id="name" type="text"
                             class="form-control form-class @error('name') is-invalid @enderror" name="name"
@@ -133,7 +133,7 @@
             </form>
         </div>
     </div> --}}
-    <div class="cust-form-bg">
+    <div class="cust-form-bg full-hight-sm">
         <div class="form-setup login-form">
             <h4>Sign up</h4>
             <x-alert />

@@ -178,6 +178,12 @@ class ProfileController extends Controller
         $newPassword = Hash::make($request->new_password);
         User::where('id', $user->id)->update(['password' => $newPassword]);
 
+        if (Hash::check($request->new_password, $user->password)) {
+            return redirect()->back()->with('error', __('user.validations.oldNewPassword'));
+        }
+
+        // return redirect()->back()->with('error', __('user.validations.oldNewPassword'));
+
         // return redirect()->route('edit-account', ["tab" => "nav-profile"])->with('success', __('user.messages.passwordChanged'));
         return redirect()->route('index')->with('success', __('user.messages.passwordChanged'));
     }
@@ -509,14 +515,29 @@ class ProfileController extends Controller
     public function saveUserprofile(Request $request)
     {
 
-        // dd("here",$request->all());
+        
         try {
             $user = auth()->user();
             $data = [
                 'username' => $request->name,
                 'name' => $request->name,
-                'email' => $request->email,
+                // 'email' => $request->email,
             ];
+
+            if ($request->hasFile('profile_pic')) {
+                if (!is_null($user->profile_file)) {
+                    Storage::disk('public')->delete($user->profile_file);
+                }
+            
+                $file = $request->file('profile_pic');
+                $path = $file->store('profiles', 'public');
+                $data['profile_file'] = $path;
+            }
+
+            // $user->update($data);
+            if ($request->email !== $user->email) {
+                unset($data['email']);
+            }
 
             $userdetail = [
                 'address1' => $request->complete_address,

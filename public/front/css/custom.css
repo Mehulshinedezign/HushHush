@@ -1849,3 +1849,44 @@ span.left-form-icon {
 .complete-mail-box img{
     max-width: 150px;
 }
+
+.my-pro-dp-view {
+    max-width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 7px solid #fff;
+    margin: 0 auto;
+}
+.my-pro-dp-view img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.my-profilr-dp-edit {
+    max-width: 100px;
+    margin: 0 auto;
+    position: relative;
+}
+.upload-my-pro {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: var(--primary-color);
+    border-radius: 50px;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border: 2px solid #FFF;
+}
+.upload-my-pro i {
+    font-size: 10px;
+    color: #Fff;
+}
+.full-hight-sm{
+    height: calc(100vh - 163px);
+}
+

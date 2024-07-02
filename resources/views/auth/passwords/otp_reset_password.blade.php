@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="cust-form-bg fill-hight">
+    <div class="cust-form-bg full-hight-sm">
         <div class="form-setup login-form">
             <h4>Reset Password</h4>
             <form class="form-inline" action="{{ route('user.updatepassword') }}" method="POST" id="register">
