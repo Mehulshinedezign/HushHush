@@ -18,7 +18,7 @@
                     @enderror
                 </div>
 
-                <a href="{{ route('resend.otp', ['user_id' => $userId]) }}" class="text-dark">Resend</a>
+                <!-- <a href="{{ route('resend.otp', ['user_id' => $userId]) }}" class="text-dark">Resend</a> -->
 
                 <button type="submit" 
                     class="primary-btn width-full">{{ __('Verify OTP') }}</button>
