@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="{{ asset('css/custom-front.css') }}?ver={{ now() }}" />
     <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}?ver={{ now() }}">
     <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">
-    <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png') }}">
+    {{-- <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png') }}"> --}}
     <script>
         const APP_URL = "{{ url('') }}";
         const login_url = '{{ route('login') }}';
@@ -74,7 +74,7 @@
     <footer>
         <div class="container">
             <div class="copyright footer-section">
-                <p class="small-font">© {{ date('Y') }} Nudora. All rights reserved</p>
+                <p class="small-font">© {{ date('Y') }} {{ env('APP_NAME') }}. All rights reserved</p>
                 <div class="copyright-links">
                     <ul>
                         @foreach ($cms as $cms)

@@ -4,7 +4,7 @@
 <head>
     <meta content="en-us" http-equiv="content-language">
     <meta content="text/html; charset=utf-8" http-equiv="content-type">
-    <title>Chere</title>
+    <title>NUdora</title>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
     <style type="text/css">
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
@@ -428,12 +428,12 @@
                     style="max-width:750px; background-color: #fff; border-collapse:collapse;       font-weight:normal;font-size:14px;line-height:17pt;color:#444444;margin:0 auto;">
                     <tr>
                         <td bgcolor="#E8E5DE" valign="top" style="padding-top: 20px; padding-bottom:20px">
-                            <a target="_blank" href="javascript:;"
+                            {{-- <a target="_blank" href="javascript:;"
                                 style="margin-left:auto;margin-right:auto;text-align:center;">
                                 <img alt="image" src="{{ asset('img/logo.png') }}" width="100"
                                     style="max-width:100px;padding: 0; border: 0;display:block;margin:0 auto;"
                                     border="0">
-                            </a>
+                            </a> --}}
                         </td>
                     </tr>
                     <tr>
@@ -474,8 +474,8 @@
                                                                     <p
                                                                         style="box-sizing: border-box;         position: relative; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin-top: 0; font-size: 16px;color: #606060; line-height: 22px;text-align:center;">
                                                                         Feel free to leave us any feedback
-                                                                        <a href="mailto:team@thechere.com"
-                                                                            style="color: #767676;       ">team@thechere.com</a>
+                                                                        <a href="mailto:team@nudora.com"
+                                                                            style="color: #767676;       ">team@nudora.com</a>
                                                                         and we will do our best to
                                                                         accommodate.
                                                                     </p>
@@ -699,7 +699,7 @@
                                     <tr>
                                         <td colspan="3" align="center"
                                             style="color:#606060;       font-size:12px;text-align:center;line-height:24px;padding-top: 5px;">
-                                            © {{ date('Y') }} Chere. All rights reserved</td>
+                                            © {{ date('Y') }} {{ env('APP_NAME') }}. All rights reserved</td>
                                     </tr>
                                     <tr>
                                         <td style="height: 30px;" colspan="3"></td>

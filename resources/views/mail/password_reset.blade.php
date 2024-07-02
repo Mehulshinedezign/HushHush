@@ -644,7 +644,7 @@
                                     <tr>
                                         <td colspan="3" align="center"
                                             style="color:#777;font-size:12px;font-family: 'Inter', sans-serif;text-align:center;line-height:24px;padding-top: 5px;">
-                                            © {{ date('Y') }} Nudora. All rights reserved</td>
+                                            © {{ date('Y') }} {{ env('APP_NAME') }}. All rights reserved</td>
                                     </tr>
                                     <tr>
                                         <td style="height: 30px;" colspan="3"></td>

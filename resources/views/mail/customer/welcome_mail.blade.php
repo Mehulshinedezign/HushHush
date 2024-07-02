@@ -425,12 +425,12 @@
                     style="max-width:750px; background-color: #fff; border-collapse:collapse;  font-weight:normal;font-size:14px;line-height:17pt;color:#444444;margin:0 auto;">
                     <tr>
                         <td bgcolor="#E8E5DE" valign="top" style="padding-top: 20px; padding-bottom:20px">
-                            <a target="_blank" href="javascript:;"
+                            {{-- <a target="_blank" href="javascript:;"
                                 style="margin-left:auto;margin-right:auto;text-align:center;">
                                 <img alt="image" src="{{ asset('img/logo.png') }}" width="100"
                                     style="max-width:100px;padding: 0; border: 0;display:block;margin:0 auto;"
                                     border="0">
-                            </a>
+                            </a> --}}
                         </td>
                     </tr>
                     <tr>
@@ -681,7 +681,7 @@
                                     <tr>
                                         <td colspan="3" align="center"
                                             style="color:#606060;   font-size:12px;text-align:center;line-height:24px;padding-top: 5px;">
-                                            © {{ date('Y') }} nudora. All rights reserved</td>
+                                            © {{ date('Y') }} {{ env('APP_NAME') }}. All rights reserved</td>
                                     </tr>
                                     <tr>
                                         <td style="height: 30px;" colspan="3"></td>
