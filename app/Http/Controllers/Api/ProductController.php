@@ -83,7 +83,7 @@ class ProductController extends Controller
             $apiResponse = 'error';
             $statusCode = '500';
             $message = $e->getMessage();
-            return $this->apiResponse($apiResponse, $statusCode, $message);
+            return $this->apiResponse($apiResponse, $statusCode, $message,null,null);
         }
     }
 
@@ -140,9 +140,9 @@ class ProductController extends Controller
             $message = 'Wishlist product fetched successfully!';
 
             if ($wishlistProducts) {
-                return $this->apiResponse($apiResponse, $statusCode, $message, $wishlistProducts);
+                return $this->apiResponse($apiResponse, $statusCode, $message, $wishlistProducts,null);
             } else {
-                return $this->apiResponse($apiResponse, $statusCode, 'There is no product list add');
+                return $this->apiResponse($apiResponse, $statusCode, 'There is no product list add',null,null);
             }
         } catch (\Throwable $e) {
             $apiResponse = 'error';
@@ -216,7 +216,7 @@ class ProductController extends Controller
             $message = 'Failed to remove from wishlist. Error: ' . $e->getMessage();
         }
 
-        return $this->apiResponse($apiResponse, $statusCode, $message);
+        return $this->apiResponse($apiResponse, $statusCode, $message,null,null);
     }
 
     /**
@@ -283,7 +283,7 @@ class ProductController extends Controller
             $message = $e->getMessage();
         }
 
-        return $this->apiResponse($apiResponse, $statusCode, $message, $category_product);
+        return $this->apiResponse($apiResponse, $statusCode, $message, $category_product,null);
     }
 
     public function addProduct(Request $request)
@@ -363,13 +363,13 @@ class ProductController extends Controller
             $statusCode = 200;
             $message = 'Product Added successfully!';
 
-            return $this->apiResponse($apiResponse, $statusCode, $message);
+            return $this->apiResponse($apiResponse, $statusCode, $message,null,null);
         } catch (\Throwable $e) {
 
             $apiResponse = 'error';
             $statusCode = 500;
             $message = 'An error occurred while storing the product.';
-            return $this->apiResponse($apiResponse, $statusCode, $message);
+            return $this->apiResponse($apiResponse, $statusCode, $message,null,null);
         }
     }
 
@@ -417,9 +417,9 @@ class ProductController extends Controller
             $apiResponse = 'success';
             $statusCode = 200;
             $message = 'Product Updated successfully!';
-            return $this->apiResponse($apiResponse, $statusCode, $message);
+            return $this->apiResponse($apiResponse, $statusCode, $message,null,null);
         } catch (\Throwable $e) {
-            return $this->apiResponse('error', 500, 'An error occurred while updating the product.');
+            return $this->apiResponse('error', 500, 'An error occurred while updating the product.',null,null);
         }
     }
 
@@ -433,9 +433,9 @@ class ProductController extends Controller
             $statusCode = 200;
             $message = 'Product deleted successfully!';
 
-            return $this->apiResponse($apiResponse, $statusCode, $message);
+            return $this->apiResponse($apiResponse, $statusCode, $message,null,null);
         } catch (\Throwable $e) {
-            return $this->apiResponse('error', 500, 'An error occurred while deleting the product.');
+            return $this->apiResponse('error', 500, 'An error occurred while deleting the product.',null,null);
         }
     }
 
@@ -499,9 +499,9 @@ class ProductController extends Controller
             ];
 
 
-            return $this->apiResponse($apiResponse, $statusCode, $message, $productDetails);
+            return $this->apiResponse($apiResponse, $statusCode, $message, $productDetails,null);
         } catch (\Throwable $e) {
-            return $this->apiResponse('error', 500, $e->getMessage());
+            return $this->apiResponse('error', 500, $e->getMessage(),null,null);
         }
     }
 }

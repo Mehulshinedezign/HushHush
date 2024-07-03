@@ -27,7 +27,7 @@ Route::post('/update-password', [App\Http\Controllers\Api\ResetPasswordControlle
 
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/logout',[App\Http\Controllers\Api\LoginController::class,'logout']);
-
+    
     // Product API
     Route::get('/product',[App\Http\Controllers\Api\ProductController::class,'index']);
     Route::get('/my-wishlist',[App\Http\Controllers\Api\ProductController::class,'wishlist']);
@@ -36,10 +36,12 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/category-list',[App\Http\Controllers\Api\ProductController::class,'category']);
     Route::post('/add-product',[App\Http\Controllers\Api\ProductController::class,'addProduct']);
     Route::get('/view-product/{id}',[App\Http\Controllers\Api\ProductController::class,'view']);
-
+    
     Route::put('/edit-products/{id}', [App\Http\Controllers\Api\ProductController::class, 'updateProduct']);
     Route::delete('/delete-products/{id}', [App\Http\Controllers\Api\ProductController::class, 'deleteProduct']);
-
+    
+    
+    Route::get('/profile',[App\Http\Controllers\Api\ProfileController::class,'index']);
 });
 
 
