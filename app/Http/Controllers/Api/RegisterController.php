@@ -24,11 +24,11 @@ class RegisterController extends Controller
     public function __construct(OtpService $otpService)
     {
         $this->otpService = $otpService;
-        
     }
 
     public function register(Request $request)
     {
+        // dd('hello');
         $validator = $this->validator($request->all());
 
         if ($validator->fails()) {
@@ -46,34 +46,34 @@ class RegisterController extends Controller
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
                 'password' => Hash::make($request->password),
-                'zipcode' => $request->zipcode,
+                // 'zipcode' => $request->zipcode,
                 'email_verification_token' => Str::random(50),
             ]);
 
-            UserDetail::create([
-                'user_id' => $user->id,
-                'address1' =>$request->complete_address,
-                'about' =>$request->about,
-            ]);
-    
-    
-            $path = $request->gov_id->store('user_documents');
-            $filePath = str_replace("public/", "", $path);
-            $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
-            
-            UserDocuments::create([
-                'user_id' => $user->id,
-                'file' => $fileExtension,
-                'url' => $filePath,
-            ]);
+            // UserDetail::create([
+            //     'user_id' => $user->id,
+            //     'address1' => $request->complete_address,
+            //     'about' => $request->about,
+            // ]);
+
+
+            // $path = $request->gov_id->store('user_documents');
+            // $filePath = str_replace("public/", "", $path);
+            // $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+
+            // UserDocuments::create([
+            //     'user_id' => $user->id,
+            //     'file' => $fileExtension,
+            //     'url' => $filePath,
+            // ]);
 
             $country_code = $request->country_code;
             $number = $request->phone_number;
-
+            // dd($country_code);
             $full_number = $country_code . $number;
 
             $otp = $this->otpService->generateOtp($user);
-            $this->otpService->sendOtp($otp,$full_number);
+            $this->otpService->sendOtp($otp, $full_number);
 
             $user->notify(new VerificationEmail($user));
 
@@ -84,12 +84,11 @@ class RegisterController extends Controller
             $response = [
                 'token' => $user->createToken('login')->plainTextToken,
                 'user_id' => $user->id,
-            
-            ];
-            return $this->apiResponse($apiResponse, $statusCode, $message,$response);
 
+            ];
+            return $this->apiResponse($apiResponse, $statusCode, $message, $response, null);
         } catch (\Throwable $e) {
-            return $this->apiResponse('error', '500', $e->getMessage(), ['errors' => $e->getMessage()]);
+            return $this->apiResponse('error', '500', $e->getMessage(), ['errors' => $e->getMessage()], null);
             return response()->json([
                 'status' => 'error',
                 'message' => 'Something went wrong while sending the email verification. Please try again later.'
@@ -107,8 +106,8 @@ class RegisterController extends Controller
             'email' => 'required|string|email|max:255|unique:users|regex:' . $emailRegex,
             'phone_number' => 'required|digits:' . config('validation.phone_minlength') . '|min:' . config('validation.phone_minlength') . '|max:' . config('validation.phone_maxlength'),
             'password' => 'required|string|min:8|max:32|confirmed',
-            'complete_address' => 'required',
-            'gov_id' => 'required|file|mimes:jpg,png,jpeg,pdf|max:2048',
+            // 'complete_address' => 'required',
+            // 'gov_id' => 'required|file|mimes:jpg,png,jpeg,pdf|max:2048',
             'country_code' => 'required'
         ];
 
@@ -134,16 +133,63 @@ class RegisterController extends Controller
             'password.max' => 'Password must be 8-32 characters long',
             'password.confirmed' => __('user.validations.passwordConfirmed'),
 
-            'complete_address' => __('customvalidation.user.complete_address.required'),
-            'complete_address.min' => __('user.validations.completeAddressMin'),
-            'complete_address.max' => __('user.validations.completeAddressMax'),
+            // 'complete_address' => __('customvalidation.user.complete_address.required'),
+            // 'complete_address.min' => __('user.validations.completeAddressMin'),
+            // 'complete_address.max' => __('user.validations.completeAddressMax'),
 
-            'gov_id' => __('customvalidation.user.gov_id.required'),
-            'gov_id.file' => __('customvalidation.user.gov_id.file'),
-            'gov_id.max' => __('customvalidation.user.gov_id.max_size'),
-    
+            // 'gov_id' => __('customvalidation.user.gov_id.required'),
+            // 'gov_id.file' => __('customvalidation.user.gov_id.file'),
+            // 'gov_id.max' => __('customvalidation.user.gov_id.max_size'),
+
         ];
 
         return Validator::make($data, $validation, $message);
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'user_id' => 'required|exists:users,id',
+                'otp' => 'required|digits:6',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $validator->errors()->first(),
+                    'errors' => []
+                ], 422);
+            }
+
+            $user = User::find($request->input('user_id'));
+            $otp = $request->input('otp');
+
+            if ($this->otpService->verifyOtp($user, $otp)) {
+                $user->update(['status' => '1']);
+
+                $apiResponse = 'success';
+                $statusCode = 200;
+                $message = 'OTP verified successfully.';
+                $response = [
+                    'token' => $user->createToken('login')->plainTextToken,
+                    'user_id' => $user->id,
+                ];
+            } else {
+                $apiResponse = 'error';
+                $statusCode = 404;
+                $message = "Invalid OTP";
+                $response = [];
+            }
+
+            return $this->apiResponse($apiResponse, $statusCode, $message, $response, null);
+        } catch (\Throwable $e) {
+            $apiResponse = 'error';
+            $statusCode = 500;
+            $message = $e->getMessage();
+            $response = [];
+
+            return $this->apiResponse($apiResponse, $statusCode, $message, $response, null);
+        }
     }
 }

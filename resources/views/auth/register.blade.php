@@ -339,7 +339,7 @@
 
         var phone_number = window.intlTelInput(document.querySelector("#phone_number"), {
             separateDialCode: true,
-            preferredCountries: ["us"],
+            preferredCountries: ["us","in"],
             hiddenInput: "full",
             formatOnDisplay: false,
             utilsScript: "//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"

@@ -26,7 +26,7 @@ class ForgotPasswordController extends Controller
 
     public function sendResetLinkEmail(Request $request)
     {
-        if ($request->has('phone_number') && $request->input('phone_number.main') && $request->input('phone_number.full') ) {
+        if ($request->has('phone_number') && $request->input('phone_number.main') && $request->input('phone_number.full')) {
             return $this->sendResetLinkToPhoneNumber($request);
         } else {
             $forgot = new MainforgotPassword();
@@ -35,11 +35,11 @@ class ForgotPasswordController extends Controller
         }
     }
 
-    protected function sendResetLinkToEmail(Request $request)
-    {
-        $mainForgotPassword = new MainForgotPassword();
-        return $mainForgotPassword->sendResetLinkEmail($request);
-    }
+    // protected function sendResetPasswordLinkEmail(Request $request)
+    // {
+    //     $mainForgotPassword = new MainForgotPassword();
+    //     return $mainForgotPassword->sendResetLinkEmail($request);
+    // }
 
     protected function sendResetLinkToPhoneNumber(Request $request)
     {
@@ -62,15 +62,65 @@ class ForgotPasswordController extends Controller
             session()->flash('status', 'User not found');
             return redirect()->back();
         }
-        
+
         $otp = $this->otpService->generateOtp($user);
         $this->otpService->sendOtp($otp, $request->input('phone_number.full'));
-        
+
         $request->session()->put('phone_number', $phone);
         session()->forget('error');
         session()->flash('status', 'OTP send successfully!');
         return view('auth.passwords.otp_verification');
-         
-     
+    }
+
+
+
+
+    public function sendResetLink(Request $request)
+    {
+        if ($request->has('phone_number') && $request->input('phone_number.main') && $request->input('phone_number.full')) {
+            return $this->resetLinkToPhoneNumber($request);
+        } else {
+            return $this->resetLinkToEmail($request);
+        }
+    }
+
+    public function resetLinkToEmail(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $response = $this->broker()->sendResetLink($request->only('email'));
+
+        return $response;
+    }
+
+    public function resetLinkToPhoneNumber(Request $request)
+    {
+        if (!$this->otpService) {
+            return response()->json(['message' => 'OTP service not available'], 500);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'phone_number.full' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $user = User::where('phone_number', $request->input('phone_number.main'))->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $otp = $this->otpService->generateOtp($user);
+        $this->otpService->sendOtp($otp, $request->input('phone_number.full'));
+
+        return response()->json(['message' => 'OTP sent successfully'], 200);
+    }
+
+    protected function broker()
+    {
+        return Password::broker();
     }
 }

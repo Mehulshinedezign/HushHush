@@ -19,8 +19,11 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::post('/register',[App\Http\Controllers\Api\RegisterController::class,'register']);
-Route::post('/login',[App\Http\Controllers\Api\LoginController::class,'login']);
-Route::post('/reset-password',[App\Http\Controllers\Api\ForgotPasswordController::class,'resetPassword']);
+Route::post('/login/{type}',[App\Http\Controllers\Api\LoginController::class,'login']);
+Route::post('/reset-password/{type}', [App\Http\Controllers\Api\ForgotPasswordController::class, 'resetPassword']);
+Route::post('verify-otp', [App\Http\Controllers\Api\RegisterController::class, 'verifyOtp']);
+Route::post('/update-password', [App\Http\Controllers\Api\ResetPasswordController::class, 'resetPassword']);
+
 
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/logout',[App\Http\Controllers\Api\LoginController::class,'logout']);

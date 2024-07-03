@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Otp;
+use App\Models\User;
 use App\Models\UserOtp;
 use Carbon\Carbon;
 use Twilio\Rest\Client;
@@ -18,14 +19,14 @@ class OtpService
             'user_id' => $user->id,
             'otp' => $otp,
             'expires_at' => Carbon::now()->addMinutes(50),
-            'status' =>'0',
+            'status' => '0',
         ]);
 
         return $otp;
     }
 
 
-    public function sendOtp($otp,$full_phone_number)
+    public function sendOtp($otp, $full_phone_number)
     {
         // $accountSid = config('services.twilio.sid');
         // $authToken = config('services.twilio.token');
@@ -59,10 +60,30 @@ class OtpService
                 $params
             );
             Log::info("OTP sent successfully to {$toNumber}. Message SID: {$message->sid}");
-
         } catch (\Exception $e) {
             Log::error('OTP send FAIL: ' . $e->getMessage());
             throw $e;
         }
+    }
+
+    public function verifyOtp($user, $otp)
+    {
+        $userOtp = UserOtp::where('user_id', $user->id)
+        ->where('otp', $otp)
+        ->where('expires_at', '>', Carbon::now())
+        ->where('status', '0')
+        ->first();
+        
+        if (!$userOtp) {
+            // dd('here',$userOtp);
+            return false;
+        }
+
+        $userOtp->update(['status' => '1']);
+
+        $user=User::Where('id',$user->id);
+        $user->update(['otp_is_verified'=>true]);
+
+        return true;
     }
 }
