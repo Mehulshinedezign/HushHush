@@ -93,4 +93,7 @@ return [
         'php_gov_id_size' => '2000',
         'js_gov_id_size' => '2097152',
         'js_gov_id_size' => '2000000',
+
+        'only_digit_regex' => '/^[0-9]{1,20}$/',
+        'only_digit_regex_message' =>  'Only digits allowed',
 ];

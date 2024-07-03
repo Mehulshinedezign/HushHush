@@ -11,27 +11,32 @@ use Illuminate\Support\Facades\{Auth, Session};
 
 class ProfileController extends Controller
 {
+    public function handle(){
+        return view('edit_prodcut');
+    }
     public function profile()
     {
+        // dd("HERE PPPPPPPPPPPPPPPP");
         $user = auth()->user();
-        $selectedCountryId = $user->country_id;
-        if (is_null($user->country_id)) {
-            $selectedCountryId = Country::where('iso_code', 'US')->pluck('id')->first();
-        }
+        // $selectedCountryId = $user->country_id;
+        // if (is_null($user->country_id)) {
+        //     $selectedCountryId = Country::where('iso_code', 'US')->pluck('id')->first();
+        // }
 
-        $countries = Country::all();
-        $states = State::where('country_id', $selectedCountryId)->get();
-        $cities = City::where('state_id', $user->state_id)->get();
-        $notAvailable = 'N/A';
-        if (auth()->user()->role->name == 'customer') {
-            $file = 'customer.profile';
-        } elseif (auth()->user()->role->name == 'admin') {
-            $file = 'admin.profile';
-        } else {
-            $file = 'retailer.profile';
-        }
+        // $countries = Country::all();
+        // $states = State::where('country_id', $selectedCountryId)->get();
+        // $cities = City::where('state_id', $user->state_id)->get();
+        // $notAvailable = 'N/A';
+        // if (auth()->user()->role->name == 'customer') {
+        //     $file = 'customer.profile';
+        // } elseif (auth()->user()->role->name == 'admin') {
+        //     $file = 'admin.profile';
+        // } else {
+        //     $file = 'retailer.profile';
+        // }
 
-        return view($file, compact('user', 'countries', 'states', 'cities', 'selectedCountryId', 'notAvailable'));
+        $products = Product::where('user_id',$user->id)->get();
+        return view('customer.profile',compact('products'));
     }
 
     public function edit_profile()

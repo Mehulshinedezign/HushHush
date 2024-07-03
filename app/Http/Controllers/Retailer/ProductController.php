@@ -135,155 +135,131 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // public function store(Request $request)
+    // {
+    //     // dd("save product : ",$request->images);
+
+    //     // dd("Here",$request->all());
+    //     try {
+
+    //         $userId = auth()->user()->id;
+
+    //         $data = [
+    //             'name' => $request->product_name,
+    //             'user_id' => $userId,
+    //             'category_id' => $request->category,
+    //             'subcat_id' => $request->subcategory,
+    //             'size' => $request->size ?? '',
+    //             'color' => $request->color ?? '',
+    //             'brand' => $request->brand ?? '',
+    //             'condition' => $request->product_condition,
+    //             'state' => $request->state,
+    //             'city' => $request->city,
+    //             'product_market_value' => $request->product_market_value,
+    //             'product_link' => $request->product_link,
+    //             'min_days_rent_item' => $request->min_rent_days,
+    //             'description' => $request->description,
+    //             'rent_day' => $request->rent_price_day,
+    //             'rent_week' => $request->rent_price_week,
+    //             'rent_mont' => $request->rent_price_month,
+
+    //         ];
+
+    //         $product = Product::create($data);
+    //         // if ($request->other_brand) {
+    //         //     $brand = Brand::where('name', strtolower($request->other_brand))->first();
+    //         //     if (!$brand) {
+    //         //         $brand = Brand::create(['name' => $request->other_brand]);
+    //         //     }
+    //         //     $data['brand'] = $brand->id;
+    //         // }
+
+
+    //         if ($request->hasFile('images')) {
+    //             foreach ($request->file('images') as $index => $image) {
+    //                 // Generate a unique file name
+    //                 $fileName = $product->id . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
+    //                 $filePath = $image->storeAs('products/images', $fileName, 'public');
+
+    //                 ProductImage::create([
+    //                     'product_id' => $product->id,
+    //                     'file_name' => $fileName,
+    //                     'file_path' => $filePath,
+    //                 ]);
+    //             }
+    //         }
+
+
+
+    //         if ($request->other_size) {
+    //             $data['size'] = null;
+    //         }
+
+
+    //         ProductLocation::create([
+    //             'product_id' => $product->id,
+    //             'map_address' => $request->pick_up_location,
+    //         ]);
+
+
+    //         dd("YES DONE");
+    //         // session()->flash('success', "Your product has been uploaded successfully.");
+    //         return redirect()->back()-> session()->flash('success', "Your product has been uploaded successfully.");
+    //     } catch (\Exception $e) {
+    //         return redirect()->back()-> session()->flash('error', $e->getMessage());
+    //     }
+    // }
+
     public function store(Request $request)
     {
-        //dd(request()->cookie('img_token'));
-        //dd("product store method", $request->toArray());
-
-        // dd("Here",$request->all());
+        dd("AWS",$request->all());
+        // dd($request->state);
         try {
-
             $userId = auth()->user()->id;
-            $is_bankdetail = auth()->user()->vendorBankDetails;
-            $checkdocuments = count(auth()->user()->documents);
+
             $data = [
-                'name' => $request->name,
+                'name' => $request->product_name,
                 'description' => $request->description,
-                'rentaltype' => $request->rentaltype,
-                'category_id' => jsdecode_userdata($request->category),
-                'subcat_id' => jsdecode_userdata($request->sub_cat),
-                'size' => $request->size,
-                'other_size' => $request->other_size,
-                'color' => $request->color,
-                'brand' => $request->brand,
-                'condition' => $request->product_condition,
                 'user_id' => $userId,
-                'rent' => $request->rent,
-                'price' => $request->price,
-                'status' => $is_bankdetail ? isset($request->status) ? '1' : '0' : '0',
-                'product_market_value' => $request->product_market_value,
-                'product_link' => $request->product_link,
-                'min_days_rent_item' => $request->min_rent_days,
+                'category_id' => $request->category,
+                'subcat_id' => $request->subcategory,
+                'rent_price' => $request->rent_price ?? 0,
+                'rent_day' => $request->rent_price_day,
+                'rent_week' => $request->rent_price_week,
+                'rent_month' => $request->rent_price_month,
+                'price' => $request->price ?? null,
+                'city' => $request->city,
+                'state' => $request->state,
+                'status' => '1',
+                'modified_by' => $userId,
+                'modified_user_type' => 'Self',
+                'non_available_dates' => $request->non_available_dates ?? 1,
             ];
-            if ($request->neighborhoodcity && $request->neighborhood) {
-                $data['city'] = $request->neighborhoodcity;
-                $data['neighborhood_city'] = $request->neighborhood;
-            }
-
-            if ($request->other_brand) {
-                $brand = Brand::where('name', strtolower($request->other_brand))->first();
-                if (!$brand) {
-                    $brand = Brand::create(['name' => $request->other_brand]);
-                }
-                $data['brand'] = $brand->id;
-            }
-
-            if ($request->other_size) {
-                $data['size'] = null;
-            }
 
             $product = Product::create($data);
 
-            if (isset($_COOKIE['img_token'])) {
-                ProductImage::whereImageToken($_COOKIE['img_token'])->update(['product_id' => $product->id, 'image_token' => null]);
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $index => $image) {
+                    $fileName = $product->id . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
+                    $filePath = $image->storeAs('products/images', $fileName, 'public');
+
+                    // dd($fileName,$filePath);
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'file_name' => $fileName,
+                        'file_path' => $filePath,
+                    ]);
+                }
             }
 
-            $neighborhoodcity = NeighborhoodCity::where('id', $request->neighborhood)->first();
             ProductLocation::create([
                 'product_id' => $product->id,
-                'map_address' => $neighborhoodcity->name,
+                'map_address' => $request->pick_up_location,
             ]);
 
-            if ($request->has('locations')) {
-                $locationData = [];
-                $locations = $request->locations;
-                foreach ($locations['value'] as $index => $location) {
-                    $locationData[] = [
-                        'product_id' => $product->id,
-                        'map_address' => $location,
-                        'country' => $locations['country'][$index],
-                        'state' => $locations['state'][$index],
-                        'city' => $locations['city'][$index],
-                        'latitude' => $locations['latitude'][$index],
-                        'longitude' => $locations['longitude'][$index],
-                        'postcode' => $locations['postal_code'][$index],
-                        'custom_address' => $locations['custom'][$index],
-                    ];
-                }
-                // dd($locationData);
-                if (count($locationData)) {
-                    ProductLocation::insert($locationData);
-                }
-            }
-            if ($request->has('non_availabile_dates') && count($request->non_availabile_dates)) {
-                // dd($request->non_availabile_dates);
-
-                $nonAvailableDates = $request->non_availabile_dates;
-                $nonAvailableDatesArray = [];
-                $productUnavailability = [];
-
-                if ($request->rentaltype == 'Day') {
-                    foreach ($nonAvailableDates as $nonAvailableDate) {
-                        if (!is_null($nonAvailableDate)) {
-                            $fromAndToDate = array_map('trim', explode($request->global_date_separator, $nonAvailableDate));
-                            // $fromstartDate = date($request->global_date_format_for_check, strtotime($fromAndToDate[0]));
-                            // $fromendDate = date($request->global_date_format_for_check, strtotime($fromAndToDate[1]));
-                            $nonAvailableDatesArray = array_merge($fromAndToDate, $nonAvailableDatesArray);
-                        }
-                    }
-
-                    $unavailabilityLength = count($nonAvailableDatesArray);
-                    for ($i = 0; $i < $unavailabilityLength; $i += 2) {
-                        $productUnavailability[] = [
-                            'product_id' => $product->id,
-                            'from_date' => DateTime::createFromFormat('m/d/Y', $nonAvailableDatesArray[$i])->format('Y-m-d'),
-                            'to_date' => DateTime::createFromFormat('m/d/Y', $nonAvailableDatesArray[$i + 1])->format('Y-m-d'),
-                        ];
-                    }
-                } else {
-                    foreach ($nonAvailableDates as $nonAvailableDate) {
-                        if (!is_null($nonAvailableDate)) {
-                            $fromAndToDate = array_map('trim', explode($request->global_date_separator, $nonAvailableDate));
-                            $nonAvailableDatesArray = array_merge($nonAvailableDatesArray, $fromAndToDate);
-                        }
-                    }
-                    $unavailabilityLength = count($nonAvailableDatesArray);
-                    for ($i = 0; $i < $unavailabilityLength; $i += 2) {
-                        $productUnavailability[] = [
-                            'product_id' => $product->id,
-                            'from_date' => DateTime::createFromFormat($request->global_product_date_time_format, $nonAvailableDatesArray[$i])->format('Y-m-d'),
-                            'to_date' => DateTime::createFromFormat($request->global_product_date_time_format, $nonAvailableDatesArray[$i + 1])->format('Y-m-d'),
-                            'from_hour' => DateTime::createFromFormat($request->global_product_date_time_format, $nonAvailableDatesArray[$i])->format('H'),
-                            'from_minute' => DateTime::createFromFormat($request->global_product_date_time_format, $nonAvailableDatesArray[$i])->format('i'),
-                            'to_hour' => DateTime::createFromFormat($request->global_product_date_time_format, $nonAvailableDatesArray[$i + 1])->format('H'),
-                            'to_minute' => DateTime::createFromFormat($request->global_product_date_time_format, $nonAvailableDatesArray[$i + 1])->format('i'),
-                        ];
-                    }
-                }
-                if (count($productUnavailability)) {
-                    ProductUnavailability::insert($productUnavailability);
-                }
-            }
-            $getId =  jsencode_userdata($product->id);
-            // if (!request()->ajax()) {
-            //     if (!$is_bankdetail) {
-            //     }
-            //     return redirect()->route('index');
-            // }
-            // $url = route('products');
-            session()->flash('success', "Your product has been uploaded successfully.");
-            return response()->json([
-                'success'    =>  true,
-                // 'url'       =>   $url
-                'product' => $getId,
-                'is_bankdetail' => $is_bankdetail,
-                'checkdocuments' => $checkdocuments
-            ], 200);
+            return redirect()->back()->with('success', "Your product has been uploaded successfully.");
         } catch (\Exception $e) {
-            return response()->json([
-                'success'    =>  false,
-                'msg'      =>  $e->getMessage()
-            ]);
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
@@ -295,7 +271,7 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        
+
         $product = $this->getProduct($id);
         // dd("The category id is : ",$product->category_id);
         $sub_categories = Category::where('status', '1')->where('parent_id', $product->category_id)->get();
@@ -314,7 +290,7 @@ class ProductController extends Controller
 
 
         $data = NeighborhoodCity::where('id', $product->neighborhood_city)->first();
-// dd($data);
+        // dd($data);
         $neighborhood = NeighborhoodCity::where('parent_id', $data->parent_id)->get();
         $pickuplocation = ProductLocation::where('product_id', $product->id)->first();
 

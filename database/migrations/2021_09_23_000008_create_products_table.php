@@ -21,8 +21,9 @@ class CreateProductsTable extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             // $table->foreignId('category_id')->constrained('categories');
             $table->foreignId('category_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('subcat_id');
             // $table->integer('quantity')->default(1);
-            $table->float('rent', 8, 2);
+            // $table->float('rent', 8, 2);
             $table->float('rent_price', 8, 2);
             $table->float('rent_day',8,2);
             $table->float('rent_week',8,2);
