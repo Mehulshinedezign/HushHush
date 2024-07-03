@@ -312,7 +312,7 @@
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                                     
                                   <li><a class="dropdown-item" href="{{ route('edit-account') }}"><img src="{{asset('front/images/user-icon.svg')}}" alt="img">Account Settings</a></li>
-                                  <li><a class="dropdown-item" href="{{ route('handle') }}"><img src="{{asset('front/images/user-icon.svg')}}" alt="img">Handle it</a></li>
+                                  <li><a class="dropdown-item" href="{{ route('product') }}"><img src="{{asset('front/images/user-icon.svg')}}" alt="img">My Product</a></li>
                                   <li><a class="dropdown-item" href="{{ route('profile') }}"><img src="{{asset('front/images/user-icon.svg')}}" alt="img">Profile</a></li>
                                   <!-- <li><a class="dropdown-item" href="{{ route('orders') }}"><img src="{{asset('front/images/order-history-icon.svg')}}" alt="img">Order History</a></li> -->
                                   <!-- <li><a class="dropdown-item" href="{{ route('rental-request') }}"><img src="{{asset('front/images/rent-req-icon.svg')}}" alt="img">Rental Request</a></li> -->

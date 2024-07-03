@@ -212,7 +212,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        dd("AWS",$request->all());
+        // dd("AWS",$request->all());
         // dd($request->state);
         try {
             $userId = auth()->user()->id;

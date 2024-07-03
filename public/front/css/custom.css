@@ -1925,6 +1925,11 @@ span.left-form-icon {
     line-height: 36px;
     margin: 0 0 30px;
 }
+.product-btn-box {
+    display: flex;
+    gap: 15px;
+    margin: 15px 0px;
+}
 
 
 
