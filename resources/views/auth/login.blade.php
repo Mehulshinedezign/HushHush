@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <!-- header Section Starts Here  -->
-    <div class="cust-form-bg">
+    <div class="cust-form-bg full-hight-sm">
         <div class="form-setup login-form">
             <h4>{{ __('Log in') }}</h4>
             <x-alert />

@@ -11,27 +11,32 @@ use Illuminate\Support\Facades\{Auth, Session};
 
 class ProfileController extends Controller
 {
+    public function handle(){
+        return view('edit_prodcut');
+    }
     public function profile()
     {
+        // dd("HERE PPPPPPPPPPPPPPPP");
         $user = auth()->user();
-        $selectedCountryId = $user->country_id;
-        if (is_null($user->country_id)) {
-            $selectedCountryId = Country::where('iso_code', 'US')->pluck('id')->first();
-        }
+        // $selectedCountryId = $user->country_id;
+        // if (is_null($user->country_id)) {
+        //     $selectedCountryId = Country::where('iso_code', 'US')->pluck('id')->first();
+        // }
 
-        $countries = Country::all();
-        $states = State::where('country_id', $selectedCountryId)->get();
-        $cities = City::where('state_id', $user->state_id)->get();
-        $notAvailable = 'N/A';
-        if (auth()->user()->role->name == 'customer') {
-            $file = 'customer.profile';
-        } elseif (auth()->user()->role->name == 'admin') {
-            $file = 'admin.profile';
-        } else {
-            $file = 'retailer.profile';
-        }
+        // $countries = Country::all();
+        // $states = State::where('country_id', $selectedCountryId)->get();
+        // $cities = City::where('state_id', $user->state_id)->get();
+        // $notAvailable = 'N/A';
+        // if (auth()->user()->role->name == 'customer') {
+        //     $file = 'customer.profile';
+        // } elseif (auth()->user()->role->name == 'admin') {
+        //     $file = 'admin.profile';
+        // } else {
+        //     $file = 'retailer.profile';
+        // }
 
-        return view($file, compact('user', 'countries', 'states', 'cities', 'selectedCountryId', 'notAvailable'));
+        $products = Product::where('user_id',$user->id)->get();
+        return view('customer.profile',compact('products'));
     }
 
     public function edit_profile()
@@ -177,6 +182,12 @@ class ProfileController extends Controller
 
         $newPassword = Hash::make($request->new_password);
         User::where('id', $user->id)->update(['password' => $newPassword]);
+
+        if (Hash::check($request->new_password, $user->password)) {
+            return redirect()->back()->with('error', __('user.validations.oldNewPassword'));
+        }
+
+        // return redirect()->back()->with('error', __('user.validations.oldNewPassword'));
 
         // return redirect()->route('edit-account', ["tab" => "nav-profile"])->with('success', __('user.messages.passwordChanged'));
         return redirect()->route('index')->with('success', __('user.messages.passwordChanged'));
@@ -509,14 +520,29 @@ class ProfileController extends Controller
     public function saveUserprofile(Request $request)
     {
 
-        // dd("here",$request->all());
+        
         try {
             $user = auth()->user();
             $data = [
                 'username' => $request->name,
                 'name' => $request->name,
-                'email' => $request->email,
+                // 'email' => $request->email,
             ];
+
+            if ($request->hasFile('profile_pic')) {
+                if (!is_null($user->profile_file)) {
+                    Storage::disk('public')->delete($user->profile_file);
+                }
+            
+                $file = $request->file('profile_pic');
+                $path = $file->store('profiles', 'public');
+                $data['profile_file'] = $path;
+            }
+
+            // $user->update($data);
+            if ($request->email !== $user->email) {
+                unset($data['email']);
+            }
 
             $userdetail = [
                 'address1' => $request->complete_address,

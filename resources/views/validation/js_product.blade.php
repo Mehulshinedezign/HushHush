@@ -6,25 +6,30 @@
                 return $.trim(value);
             }
         },
+        // image: {
+        //     required: true,
+        // },
+        'images[]': {
+            required: true,
+            accept: "image/*",
+            maxfiles: 5
+        },
+        product_name: {
+            required: true,
+        },
         category: {
             required: true,
         },
-        size: {
-            required: true,
-        },
-        brand: {
-            required: true,
-        },
-        color: {
-            required: true,
-        },
+        // subcategory: {
+        //     required: true,
+        // },
         product_condition: {
             required: true,
         },
-        neighborhoodcity: {
+        state: {
             required: true,
         },
-        neighborhood: {
+        city: {
             required: true,
         },
         description: {
@@ -35,16 +40,11 @@
                 return $.trim(value);
             }
         },
-        rent: {
+        pick_up_location: {
             required: true,
-            // number: true,
-            min: priceMinLength,
-            max: priceMaxLength,
-            regex: priceRegex
         },
         price: {
             required: true,
-            // number: true,
             min: priceMinLength,
             max: priceMaxLength,
             regex: priceRegex
@@ -56,71 +56,81 @@
         uploaded_image: {
             required: function() {
                 let uploadedImageLength = jQuery('ul.product-img-preview').children().length;
-                if (uploadedImageLength > minProductImageCount) {
-                    return true;
-                }
+                return uploadedImageLength <= minProductImageCount;
             }
         },
-        product_market_value:{
-            required:true,
+        product_market_value: {
+            required: true,
         },
-        product_link:{
-            required:true,
+        product_link: {
+            required: true,
         },
-        'min_rent_days':{
-            required:true,
-            regex:minDaysItemRegex,
-            range: [3, 7],
+        min_rent_days: {
+            required: true,
+            regex: minDaysItemRegex,
+            range: [3, 3],
+        },
+        rent_price_day: {
+            required: true,
+            regex: OnlydigitRegex,
+        },
+        rent_price_week: {
+            required: true,
+            regex: OnlydigitRegex,
+        },
+        rent_price_month: {
+            required: true,
+            regex: OnlydigitRegex,
         }
-    }
+    };
+
     const messages = {
-        name: {
-            required: `{{ __('customvalidation.product.name.required') }}`,
+        // image: {
+        //     required: `{{ __('customvalidation.product.image.required') }}`,
+        // },
+        'images[]': {
+            required: "Please upload at least one image",
+            accept: "Please upload only image files",
+            maxfiles: "You can upload a maximum of 5 images"
+        },
+
+        product_name: {
+            required: `{{ __('customvalidation.product.product_name.required') }}`,
         },
         category: {
             required: `{{ __('customvalidation.product.category.required') }}`,
         },
-        size: {
-            required: `{{ __('customvalidation.product.size.required') }}`,
-        },
-        brand: {
-            required: `{{ __('customvalidation.product.brand.required') }}`,
-        },
-        color: {
-            required: `{{ __('customvalidation.product.color.required') }}`,
-        },
+        // subcategory: {
+        //     required: `{{ __('customvalidation.product.subcategory.required') }}`,
+        // },
         product_condition: {
             required: `{{ __('customvalidation.product.condition.required') }}`,
         },
-        neighborhoodcity: {
+        state: {
+            required: `{{ __('customvalidation.product.state.required') }}`,
+        },
+        city: {
             required: `{{ __('customvalidation.product.city.required') }}`,
         },
-        neighborhood: {
-            required: `{{ __('customvalidation.product.neighborhood.required') }}`,
+        pick_up_location: {
+            required: `{{ __('customvalidation.product.pick_up_location.required') }}`,
         },
         description: {
             required: `{{ __('customvalidation.product.description.required') }}`,
             minlength: `{{ __('customvalidation.product.description.min', ['min' => '${descMinLength}', 'max' => '${descMaxLength}']) }}`,
             maxlength: `{{ __('customvalidation.product.description.max', ['min' => '${descMinLength}', 'max' => '${descMaxLength}']) }}`,
         },
-        rent: {
-            required: `{{ __('customvalidation.product.rent.required') }}`,
-            min: `Invalid price.`,
-            max: `Invalid price.`,
-            regex: `{{ __('customvalidation.product.rent.regex') }}`,
+        rent_price_day: {
+            required: `{{ __('customvalidation.product.rent_price_day.required') }}`,
+            regex: `{{ __('customvalidation.product.rent_price_day.regex', ['regex' => '${OnlydigitRegex}']) }}`,
         },
-        price: {
-            required: `{{ __('customvalidation.product.price.required') }}`,
-            min: `Invalid price.`,
-            max: `Invalid price.`,
-            regex: `{{ __('customvalidation.product.price.regex') }}`,
+        rent_price_week: {
+            required: `{{ __('customvalidation.product.rent_price_week.required') }}`,
+            regex: `{{ __('customvalidation.product.rent_price_week.regex', ['regex' => '${OnlydigitRegex}']) }}`,
         },
-        thumbnail_image: {
-            required: `{{ __('customvalidation.product.image.required') }}`,
-            accept: "Only image type jpg/png/jpeg is allowed"
-        },
-        uploaded_image: {
-            required: `{{ __('customvalidation.product.uploaded_image.required', ['min' => '${minProductImageCount}']) }}`,
+        rent_price_month: {
+            required: `{{ __('customvalidation.product.rent_price_month.required') }}`,
+            regex: `{{ __('customvalidation.product.rent_price_month.regex', ['regex' => '${OnlydigitRegex}']) }}`,
         },
         product_market_value: {
             required: `{{ __('customvalidation.product.product_market_value.required') }}`,
@@ -128,39 +138,26 @@
         product_link: {
             required: `{{ __('customvalidation.product.product_link.required') }}`,
         },
-        min_rent_days:{
+        min_rent_days: {
             required: `{{ __('customvalidation.product.min_rent_days.required') }}`,
             regex: `{{ __('customvalidation.product.min_rent_days.regex', ['regex' => '${minDaysItemRegex}']) }}`,
-            range: `{{ __('customvalidation.product.min_rent_days.range', ['min' => 3, 'max' => 7]) }}`
+            range: `{{ __('customvalidation.product.min_rent_days.range', ['min' => 3, 'max' => 3]) }}`
         },
     };
 
-    // jQuery.validator.addClassRules("location-required", {
-    //     locationRequired: true,
-    //     normalizer: function(value) {
-    //         return $.trim(value);
-    //     }
-    // });
-    // jQuery.validator.addMethod("locationRequired", jQuery.validator.methods.required,
-    //     `{{ __('customvalidation.product.location.required') }}`);
 
-    // jQuery.validator.addClassRules("location-custom-required", {
-    //     locationCustomRequired: true,
-    //     normalizer: function(value) {
-    //         return $.trim(value);
-    //     }
-    // });
-    // jQuery.validator.addMethod("locationCustomRequired", jQuery.validator.methods.required,
-    //     `{{ __('customvalidation.product.custom_location.required') }}`);
-
-    // jQuery.validator.addClassRules("size-required", {
-    //     SizeRequired: true,
-    //     normalizer: function(value) {
-    //         return $.trim(value);
-    //     }
-    // });
-    // jQuery.validator.addMethod("SizeRequired", jQuery.validator.methods.required,
-    //     `{{ __('customvalidation.product.size.required') }}`);
+    jQuery.validator.addMethod("maxfiles", function(value, element, param) {
+        return this.optional(element) || element.files.length <= param;
+    }, "You can select a maximum of {0} files.");
 
 
+    jQuery('#addProduct').submit(function(e) {
+        e.preventDefault();
+        handleValidation('addProduct', rules, messages);
+        if ($('#addProduct').valid()) {
+            e.currentTarget.submit();
+        }
+    });
+
+    // Initialize form validation
 </script>

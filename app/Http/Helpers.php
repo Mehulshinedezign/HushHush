@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
-use App\Models\{User, Category, AdminSetting, Brand, Color, NeighborhoodCity, Order, Size, OrderItem};
+use App\Models\{User, Category, AdminSetting, Brand, City, Color, NeighborhoodCity, Order, Size, OrderItem, State};
 use Carbon\Carbon;
 use FontLib\TrueType\Collection;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -260,6 +260,20 @@ if (!function_exists('check_order_list_paginate_retailer')) {
         function adminsetting()
         {
             return AdminSetting::where('key', 'order_commission')->first();
+        }
+    }
+
+    if (!function_exists('states')) {
+        function states()
+        {
+            return State::orderBy('name', 'ASC')->get();
+        }
+    }
+    
+    if (!function_exists('cities')) {
+        function cities($state_id)
+        {
+            return City::where('state_id', $state_id)->orderBy('name', 'ASC')->get();
         }
     }
 }

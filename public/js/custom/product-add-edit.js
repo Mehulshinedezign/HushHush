@@ -169,20 +169,20 @@ jQuery(document).ready(function () {
     // else if (is_bankdetail) {
     //     var startDate = getstartDate;
     // }
-    jQuery('input[name="account_holder_dob"]').daterangepicker({
-        singleDatePicker: true,
-        autoUpdateInput: false,
-        startDate: startDate,
-        locale: {
-            format: dateFormat,
-            cancelLabel: 'Clear'
-        },
-        showDropdowns: true,
-        minYear: 1901,
-        maxYear: parseInt(moment().format('YYYY'), 10)
-    }, function (start, end, label) {
-        var years = moment().diff(start, 'years');
-    });
+    // jQuery('input[name="account_holder_dob"]').daterangepicker({
+    //     singleDatePicker: true,
+    //     autoUpdateInput: false,
+    //     startDate: startDate,
+    //     locale: {
+    //         format: dateFormat,
+    //         cancelLabel: 'Clear'
+    //     },
+    //     showDropdowns: true,
+    //     minYear: 1901,
+    //     maxYear: parseInt(moment().format('YYYY'), 10)
+    // }, function (start, end, label) {
+    //     var years = moment().diff(start, 'years');
+    // });
 
     $('input[name="account_holder_dob"]').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('MM/DD/YYYY'));

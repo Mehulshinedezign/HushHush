@@ -61,5 +61,7 @@
 
     const gov_idMimes ="{{  config('validation.js_gov_id_mimes') }}";
     const gov_idSize = "{{ config('validation.js_gov_id_size') }}";
+
+    const OnlydigitRegex = {{ config('validation.only_digit_regex') }};
     
 </script>

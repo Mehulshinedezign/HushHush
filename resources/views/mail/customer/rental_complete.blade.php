@@ -4,7 +4,7 @@
 <head>
     <meta content="en-us" http-equiv="content-language">
     <meta content="text/html; charset=utf-8" http-equiv="content-type">
-    <title>Chere</title>
+    <title>Nudora</title>
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
     <style type="text/css">
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
@@ -465,7 +465,7 @@
                                                                     </h4>
                                                                     <p
                                                                         style="box-sizing: border-box; position: relative; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin-top: 0; font-size: 16px;color: #1B1B1B; line-height: 22px;text-align:center;         ">
-                                                                        Thank you for chering on Chere!
+                                                                        Thank you for chering on Nudora!
                                                                     </p>
                                                                     <strong
                                                                         style="box-sizing: border-box;position: relative;         font-weight: 400;color: #1B1B1B;         ">
@@ -613,12 +613,12 @@
                                             <tr>
                                                 <td
                                                     style="font-style: normal;font-weight: 600;color: #1B1B1B;;font-size: 16px;         margin: 0 0 3px">
-                                                    Team Chere</td>
+                                                    Team Nudora</td>
                                             </tr>
                                             <tr>
                                                 <td
                                                     style="font-style: normal;font-weight: 600;color: #1B1B1B;;font-size: 16px;         margin: 0 0 3px">
-                                                    team@thechere.com</td>
+                                                    team@nudora.com</td>
                                             </tr>
                                         </table>
                                     </td>
@@ -693,7 +693,7 @@
                                     <tr>
                                         <td colspan="3" align="center"
                                             style="color:#606060;         font-size:12px;text-align:center;line-height:24px;padding-top: 5px;">
-                                            © {{ date('Y') }} Chere. All rights reserved</td>
+                                            © {{ date('Y') }} {{ env('APP_NAME') }}. All rights reserved</td>
                                     </tr>
                                     <tr>
                                         <td style="height: 30px;" colspan="3"></td>

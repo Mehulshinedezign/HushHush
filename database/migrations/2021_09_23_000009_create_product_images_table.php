@@ -15,11 +15,9 @@ class CreateProductImagesTable extends Migration
     {
         Schema::create('product_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->nullable()->constrained('products');
-            $table->string('image_token')->nullable();
-            $table->string('file');
-            $table->string('url')->nullable();
-            $table->enum('type', ['thumbnail', 'gallery']);
+            $table->foreignId('product_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->string('file_name')->nullable();
+            $table->string('file_path')->nullable();
             $table->timestamps();
         });
     }
