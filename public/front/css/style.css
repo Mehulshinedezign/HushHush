@@ -2,8 +2,8 @@
 
 @font-face {
     font-family: 'Outfit';
-    src: url('../fonts/Outfit-ExtraBold.woff2') format('woff2'),
-        url('../fonts/Outfit-ExtraBold.woff') format('woff');
+    src: url('../../fonts/Outfit-ExtraBold.woff2') format('woff2'),
+        url('../../fonts/Outfit-ExtraBold.woff') format('woff');
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -11,8 +11,8 @@
 
 @font-face {
     font-family: 'Outfit';
-    src: url('../fonts/Outfit-Light.woff2') format('woff2'),
-        url('../fonts/Outfit-Light.woff') format('woff');
+    src: url('../../fonts/Outfit-Light.woff2') format('woff2'),
+        url('../../fonts/Outfit-Light.woff') format('woff');
     font-weight: 300;
     font-style: normal;
     font-display: swap;
@@ -20,8 +20,8 @@
 
 @font-face {
     font-family: 'Outfit';
-    src: url('../fonts/Outfit-ExtraLight.woff2') format('woff2'),
-        url('../fonts/Outfit-ExtraLight.woff') format('woff');
+    src: url('../../fonts/Outfit-ExtraLight.woff2') format('woff2'),
+        url('../../fonts/Outfit-ExtraLight.woff') format('woff');
     font-weight: 200;
     font-style: normal;
     font-display: swap;
@@ -29,8 +29,8 @@
 
 @font-face {
     font-family: 'Outfit';
-    src: url('../fonts/Outfit-Black.woff2') format('woff2'),
-        url('../fonts/Outfit-Black.woff') format('woff');
+    src: url('../../fonts/Outfit-Black.woff2') format('woff2'),
+        url('../../fonts/Outfit-Black.woff') format('woff');
     font-weight: 900;
     font-style: normal;
     font-display: swap;
@@ -38,8 +38,8 @@
 
 @font-face {
     font-family: 'Outfit';
-    src: url('../fonts/Outfit-Bold.woff2') format('woff2'),
-        url('../fonts/Outfit-Bold.woff') format('woff');
+    src: url('../../fonts/Outfit-Bold.woff2') format('woff2'),
+        url('../../fonts/Outfit-Bold.woff') format('woff');
     font-weight: bold;
     font-style: normal;
     font-display: swap;
@@ -47,8 +47,8 @@
 
 @font-face {
     font-family: 'Outfit';
-    src: url('../fonts/Outfit-Medium.woff2') format('woff2'),
-        url('../fonts/Outfit-Medium.woff') format('woff');
+    src: url('../../fonts/Outfit-Medium.woff2') format('woff2'),
+        url('../../fonts/Outfit-Medium.woff') format('woff');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -56,17 +56,17 @@
 
 @font-face {
     font-family: 'Outfit';
-    src: url('../fonts/Outfit-SemiBold.woff2') format('woff2'),
-        url('../fonts/Outfit-SemiBold.woff') format('woff');
+    src: url('../../fonts/Outfit-SemiBold.woff2') format('woff2'),
+        url('../../fonts/Outfit-SemiBold.woff') format('woff');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
 }
 
 @font-face {
-    font-family: 'Outfit';
-    src: url('../fonts/Outfit-Regular.woff2') format('woff2'),
-        url('../fonts/Outfit-Regular.woff') format('woff');
+    font-family: 'outfit-regular';
+    src: url('../../fonts/Outfit-Regular.ttf') format('woff2'),
+        url('../../fonts/Outfit-Regular.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -74,8 +74,8 @@
 
 @font-face {
     font-family: 'Outfit';
-    src: url('../fonts/Outfit-Thin.woff2') format('woff2'),
-        url('../fonts/Outfit-Thin.woff') format('woff');
+    src: url('../../fonts/Outfit-Thin.woff2') format('woff2'),
+        url('../../fonts/Outfit-Thin.woff') format('woff');
     font-weight: 100;
     font-style: normal;
     font-display: swap;
@@ -95,7 +95,7 @@ html {
     margin: 0;
 }
 body {
-    font-family: 'Outfit';
+    font-family: 'outfit-regular';
     font-weight: 400;
     color: #1B1B1B;
 
@@ -132,7 +132,7 @@ h6 {
     white-space: normal;
     word-break: break-word;
     color: #1B1B1B;
-    font-family: 'Outfit';
+    font-family: 'outfit-regular';
     font-weight: 700;
     line-height: 1.1;
 }
@@ -160,7 +160,7 @@ h6{
     font-size: 18px;   
 }
 button, input, optgroup, select, textarea {
-    font-family: 'Outfit';
+    font-family: 'outfit-regular';
     font-weight: 500;
 }
 
@@ -249,7 +249,7 @@ input[type="checkbox"] {
 .form-icon {
     position: absolute;
     right: 18px;
-    top: 18px;
+    top: 23px;
     display: flex;
     align-items: center;
 }
@@ -272,7 +272,7 @@ input[type="checkbox"] {
     font-weight: 600;
     line-height: 17px;
     min-width: 90px;
-    text-transform: uppercase;
+    text-transform: capitalize;
     border-radius: 5px;
 }
 
@@ -379,7 +379,7 @@ a.navbar-brand {
     background: #fff;
     border: 1px solid;
     border-color: var(--border-color);
-    padding: 40px 55px;
+    padding: 40px 54px;
     border-radius: 8px;
     width: 100%;
     filter: drop-shadow(0px 4px 79px rgba(0, 0, 0, 0.05));
@@ -777,24 +777,48 @@ table{
     gap: 10px;
 }
 .upload-img-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+}
+.upload-img-box {
     max-width: 100px;
+    width: 100%;
     height: 125px;
     overflow: hidden;
-    width: 100%;
-    position: relative;
     border-radius: 10px;
+    position: relative;
 }
-.upload-img-preview img {
+.upload-img-box img{
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
+
 .upload-img-preview-box {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
 }
+.upload-img-cross {
+    position: absolute;
+    top: -3px;
+    right: 0;
+}
 label#upload-image-five-error {
     position: absolute;
     bottom: -25px;
+}
+.form-setup form button {
+    font-size: 16px;
+    padding: 20px 16px;
+    line-height: 18px;
+    font-weight: 500;
+    max-height: 60px;
+}
+
+.remember-me label{
+    cursor: pointer;
+    margin-top: 4px;
 }

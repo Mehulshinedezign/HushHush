@@ -127,15 +127,14 @@
                                 <div class="product-img-box">
 
                                     @if (isset($product->thumbnailImage->file_path))
-                                            {{-- @dd($product->thumbnailImage) --}}
                                         <img src="{{ asset('storage/'. $product->thumbnailImage->file_path) }}" alt="" loading="lazy">
                                     @else
                                         <img src="{{asset('front/images/pro-0.png')}}" alt="img">
                                     @endif
                                     {{-- <img src="{{ asset('front/images/pro-0.png') }}" alt="img"> --}}
-                                    <div class="product-card-like">
+                                    {{-- <div class="product-card-like">
                                         <i class="fa-solid fa-heart"></i>
-                                    </div>
+                                    </div> --}}
                                     {{-- <div class="product-card-status">
                                         <p>in Stock</p>
                                     </div> --}}

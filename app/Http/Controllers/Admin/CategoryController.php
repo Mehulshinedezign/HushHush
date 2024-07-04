@@ -199,7 +199,7 @@ class CategoryController extends Controller
 
     public function getSubcategories(Request $request){
 
-        $categogy_id = $request->categoryId;
+        $categogy_id = jsdecode_userdata ($request->categoryId);
         $subcategories = Category::where('status', '1')->where('parent_id', $categogy_id)->get();
         // return Category::where('status', '1')->where('parent_id', $categogy_id)->get();
         return response()->json($subcategories);

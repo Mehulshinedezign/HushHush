@@ -108,7 +108,7 @@
                                         </div>
                                         <div class="upload-img-preview-box">
                                             <div class="upload-img-preview">
-                                                <img src="{{asset('front/images/pro10.png')}}" alt="img">
+                                                {{-- <img src="{{asset('front/images/pro10.png')}}" alt="img"> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -132,7 +132,7 @@
                                                     <select name="category" class="parent_category">
                                                         <option value="">Category</option>
                                                         @foreach (getParentCategory() as $category)
-                                                            <option value="{{ $category->id }}">
+                                                            <option value="{{ jsencode_userdata($category->id) }}">
                                                                 {{ $category->name }}
                                                             </option>
                                                         @endforeach
