@@ -142,13 +142,14 @@ class ProductController extends Controller
             if ($wishlistProducts) {
                 return $this->apiResponse($apiResponse, $statusCode, $message, $wishlistProducts,null);
             } else {
-                return $this->apiResponse($apiResponse, $statusCode, 'There is no product list add',null,null);
+                $data=[];
+                return $this->apiResponse($apiResponse, $statusCode, 'There is no product list add',$data,null);
             }
         } catch (\Throwable $e) {
             $apiResponse = 'error';
             $statusCode = '500';
             $message = $e->getMessage();
-            return $this->apiResponse($apiResponse, $statusCode, $message);
+            return $this->apiResponse($apiResponse, $statusCode, $message,null,null);
         }
     }
 
@@ -362,14 +363,15 @@ class ProductController extends Controller
             $apiResponse = 'success';
             $statusCode = 200;
             $message = 'Product Added successfully!';
-
-            return $this->apiResponse($apiResponse, $statusCode, $message,null,null);
+            $data =[];
+            return $this->apiResponse($apiResponse, $statusCode, $message,$data,null);
         } catch (\Throwable $e) {
-
+            // dd($e->getMessage());
             $apiResponse = 'error';
             $statusCode = 500;
-            $message = 'An error occurred while storing the product.';
-            return $this->apiResponse($apiResponse, $statusCode, $message,null,null);
+            $message = $e->getMessage();
+            $data=[];
+            return $this->apiResponse($apiResponse, $statusCode, $message,$data,null);
         }
     }
 
@@ -432,10 +434,11 @@ class ProductController extends Controller
             $apiResponse = 'success';
             $statusCode = 200;
             $message = 'Product deleted successfully!';
-
-            return $this->apiResponse($apiResponse, $statusCode, $message,null,null);
+            $data=[];
+            return $this->apiResponse($apiResponse, $statusCode, $message,$data,null);
         } catch (\Throwable $e) {
-            return $this->apiResponse('error', 500, 'An error occurred while deleting the product.',null,null);
+            $data=[];
+            return $this->apiResponse('error', 500, 'An error occurred while deleting the product.',$data,null);
         }
     }
 
@@ -443,10 +446,14 @@ class ProductController extends Controller
     {
 
         try {
+            // dd($request->all());
+            // dd('1');
             $product = $this->getProduct($request, $request->id);
+            dd($product);
             if (is_null($product)) {
                 return redirect()->back()->with('message', __('product.messages.notAvailable'));
             }
+            dd(2);
 
             $apiResponse = 'success';
             $statusCode = 200;
@@ -465,7 +472,7 @@ class ProductController extends Controller
                 'Guaranteed to exceed your expectations.',
             ];
 
-            // dd("here",$product);
+            dd("here",$product);
             $ratings = $product->ratings->map(function($rating){
                 return[
                     'user_id' => $rating->user_id,
@@ -477,7 +484,7 @@ class ProductController extends Controller
                 ];
             })->toARray();
 
-            // dd("here : ",$product->retailer->profile_file);
+            dd("here : ",$product->retailer->profile_file);
             $productDetails = [
                 'id' => $product->id,
                 'name' => $product->name,
@@ -501,7 +508,12 @@ class ProductController extends Controller
 
             return $this->apiResponse($apiResponse, $statusCode, $message, $productDetails,null);
         } catch (\Throwable $e) {
-            return $this->apiResponse('error', 500, $e->getMessage(),null,null);
+
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'errors' => []
+            ], 500);
         }
     }
 }

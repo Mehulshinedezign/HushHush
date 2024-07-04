@@ -35,7 +35,10 @@ class User extends Authenticatable
         'is_approved',
         'zipcode',
         'email_verification_token',
-        'otp_is_verified'
+        'otp_is_verified',
+        'email_notifications',
+        'push_notifications',
+        'country_code',
     ];
 
     /**

@@ -48,12 +48,13 @@ class RegisterController extends Controller
                 'password' => Hash::make($request->password),
                 // 'zipcode' => $request->zipcode,
                 'email_verification_token' => Str::random(50),
+                'country_code' => $request->country_code,
             ]);
 
             // UserDetail::create([
             //     'user_id' => $user->id,
-            //     'address1' => $request->complete_address,
-            //     'about' => $request->about,
+            //     'address1' => $request->complete_address ?? NULL,
+            //     'about' => $request->about ?? NULL,
             // ]);
 
 

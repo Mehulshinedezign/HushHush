@@ -123,6 +123,7 @@ trait ProductTrait
     public function getProduct(Request $request, $id)
     {
         $fromDate = $toDate = null;
+     
         if (!empty($request->reservation_date) && !empty($request->global_date_separator)) {
             $fromAndToDate = array_map('trim', explode($request->global_date_separator, $request->reservation_date));
             if (count($fromAndToDate) == 2 && !empty($request->global_date_format_for_check)) {

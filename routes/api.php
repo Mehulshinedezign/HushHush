@@ -35,13 +35,23 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/remove-favorite',[App\Http\Controllers\Api\ProductController::class,'removeFavorite']);
     Route::post('/category-list',[App\Http\Controllers\Api\ProductController::class,'category']);
     Route::post('/add-product',[App\Http\Controllers\Api\ProductController::class,'addProduct']);
-    Route::get('/view-product/{id}',[App\Http\Controllers\Api\ProductController::class,'view']);
     
     Route::put('/edit-products/{id}', [App\Http\Controllers\Api\ProductController::class, 'updateProduct']);
     Route::delete('/delete-products/{id}', [App\Http\Controllers\Api\ProductController::class, 'deleteProduct']);
-    
+
+    //not working
+    Route::get('/view-product/{id}',[App\Http\Controllers\Api\ProductController::class,'view']);
     
     Route::get('/profile',[App\Http\Controllers\Api\ProfileController::class,'index']);
+    Route::get('/profile/edit', [App\Http\Controllers\Api\ProfileController::class, 'edit']);
+    Route::post('/profile/update', [App\Http\Controllers\Api\ProfileController::class, 'update']);
+    Route::post('/profile/change-password', [App\Http\Controllers\Api\ProfileController::class, 'changePassword']);
+
+
+    Route::post('/bank-account', [App\Http\Controllers\Api\BankAccountController::class, 'addOrUpdateBankAccount']);
+
+    
+
 });
 
 
