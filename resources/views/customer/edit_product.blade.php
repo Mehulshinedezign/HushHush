@@ -16,12 +16,13 @@
                             <div class="product-card">
                                 <div class="product-img-box">
                                     
-                                    
-                                    @if (isset($product->thumbnailImage->file_path))
-                                        <img src="{{ asset('storage/'. $product->thumbnailImage->file_path) }}" alt="" loading="lazy">
-                                    @else
-                                        <img src="{{asset('front/images/pro-0.png')}}" alt="img">
-                                    @endif
+                                    <a href="{{ route('viewproduct', jsencode_userdata($product->id)) }}">
+                                        @if (isset($product->thumbnailImage->file_path))
+                                            <img src="{{ asset('storage/'. $product->thumbnailImage->file_path) }}" alt="" loading="lazy">
+                                        @else
+                                            <img src="{{asset('front/images/pro-0.png')}}" alt="img">
+                                        @endif
+                                    </a>
                                     
                                 </div>
                                 <div class="product-card-detail">
@@ -29,8 +30,8 @@
                                     <h4>${{$product->rent_day}}/day</h4>
                                 </div>
                                 <div class="product-btn-box">
-                                    <a href="#" class="button outline-btn full-btn">Edit</a>
-                                    <a href="#" class="button primary-btn full-btn">Delete</a>
+                                    <a href="{{ route('editproduct', ['id' => jsencode_userdata($product->id)]) }}" class="button outline-btn full-btn">Edit</a>
+                                    <a href="{{ route('deleteproduct', ['id' => jsencode_userdata($product->id)]) }}" class="button primary-btn full-btn">Delete</a>
                                 </div>
                             </div>
                         @endforeach

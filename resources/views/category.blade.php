@@ -231,14 +231,15 @@
 
                 {{-- Product listing here --}}
 
-                {{-- <div class="home-product-main">
+                {{-- @dd($products); --}}
+                <div class="home-product-main">
                     <div class="home-product-box">
                         @foreach ($products as $product)
                         <div class="product-card">
                             <div class="product-img-box">
                                 <a href="{{ route('viewproduct', jsencode_userdata($product->id)) }}">
-                                    @if (isset($product->thumbnailImage->url))
-                                        <img src="{{ $product->thumbnailImage->url }}" alt="{{ $product->name }}">
+                                    @if (isset($product->thumbnailImage->file_path))
+                                        <img src="{{ asset('storage/' . $product->thumbnailImage->file_path) }}" alt="{{ $product->name }}">
                                     @else
                                         <img src="{{asset('front/images/pro-0.png')}}" alt="{{ $product->name }}">
                                     @endif
@@ -250,9 +251,9 @@
                                         <i class="fa-regular fa-heart"></i>
                                     @endif
                                 </div>
-                                <div class="product-card-status">
+                                {{-- <div class="product-card-status">
                                     <p>In Stock</p>
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="product-card-detail">
                                 <p>{{ $product->name }}</p>
@@ -261,10 +262,10 @@
                         </div>
                     @endforeach
                     </div>
-                </div> --}}
+                </div>
 
 
-                <div class="home-product-main">
+                {{-- <div class="home-product-main">
                     <div class="home-product-box">
                         <div class="product-card">
                             <div class="product-img-box">
@@ -404,7 +405,7 @@
                             05
                         </a>
                     </div>
-                </div>
+                </div> --}}
                 {{-- <h2 class="text-center">We're sorry, no products fit your search criteria.</h2> --}}
 
             </div>

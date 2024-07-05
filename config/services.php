@@ -37,6 +37,11 @@ return [
         'phone_number' => env('TWILIO_PHONE_NUMBER'),
         'messaging_service_sid' =>env('TWILIO_MESSAGING_SERVICE_SID'),
     ],
+
+    'stripe' => [
+    'secret' => env('STRIPE_SECRET'),
+    'publishable' => env('STRIPE_KEY'),
+],
         
    
     

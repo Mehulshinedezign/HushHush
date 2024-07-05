@@ -75,7 +75,7 @@ class RegisterController extends Controller
             'phone_number.main' => ['required', 'digits:' . config('validation.phone_minlength'), 'min:' . config('validation.phone_minlength'), 'max:' . config('validation.phone_maxlength')],
             // 'zipcode' => ['required'],
             'password' => ['required', 'string', 'min:8', 'max:32', 'confirmed'],
-            'complete_address' => 'required',
+            // 'complete_address' => 'required',
             'gov_id' => 'required|file|mimes:jpg,png,jpeg,pdf|max:2048',
         ];
 
@@ -102,9 +102,9 @@ class RegisterController extends Controller
             'password.confirmed' => __('user.validations.passwordConfirmed'),
             // 'zipcode.required' => __('customvalidation.user.zipcode.required'),
             //'zipcode.numeric' => __('customvalidation.user.zipcode.numeric'),
-            'complete_address' => __('customvalidation.user.complete_address.required'),
-            'complete_address.min' => __('user.validations.completeAddressMin'),
-            'complete_address.max' => __('user.validations.completeAddressMax'),
+            // 'complete_address' => __('customvalidation.user.complete_address.required'),
+            // 'complete_address.min' => __('user.validations.completeAddressMin'),
+            // 'complete_address.max' => __('user.validations.completeAddressMax'),
 
             'gov_id' => __('customvalidation.user.gov_id.required'),
             'gov_id.file' => __('customvalidation.user.gov_id.file'),
@@ -159,8 +159,8 @@ class RegisterController extends Controller
 
         UserDetail::create([
             'user_id' => $signUpData->id,
-            'address1' =>$data['complete_address'],
-            'about' =>$data['about'],
+            // 'address1' =>$data['complete_address'],
+            // 'about' =>$data['about'],
         ]);
 
 

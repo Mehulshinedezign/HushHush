@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\Notification;
 use App\Models\Setting;
 use App\Services\OtpService;
+use App\Services\StripeService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -20,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(OtpService::class, function ($app) {
             return new OtpService();
+        });
+        $this->app->singleton(StripeService::class, function ($app) {
+            return new StripeService();
         });
     }
 

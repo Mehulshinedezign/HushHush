@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->integer('min_days_rent_item')->after('rent_price');
+        Schema::table('users', function (Blueprint $table) {
+            $table->String('country_code')->nullable()->after('phone_number');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('min_days_rent_item');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('country_code');
         });
     }
 };

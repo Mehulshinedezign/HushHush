@@ -65,7 +65,7 @@
     <section class="profile-banner-sec">
         <div class="container">
             <div class="profile-banner-name">
-                <h2>Profile</h2>
+                <h2>{{$user->name}}'s profile</h2>
             </div>
         </div>
         <img src="{{asset('front/images/leaf-img.svg')}}" alt="leaf" class="banner-laef-img">
@@ -85,13 +85,21 @@
                                 {{-- <img src="{{asset('front/images/profile.png')}}" alt="img"> --}}
                             </div>
                             <h3>{{$user->name}}</h3>
-                            <p><img src="{{asset('front/images/us-flag.svg')}}" alt="img"> Los Angeles , USA</p>
+                            {{-- <p><img src="{{asset('front/images/us-flag.svg')}}" alt="img"> Los Angeles , USA</p> --}}
                         </div>
                     </div>
                     <div class="col-md-5">
                         <div class="profile-about-detail">
                             <h4>About me</h4>
-                            <p>{{ $user->userDetail->about }}</p>
+
+                            @if ($user->userDetail->about)
+                                <p>{{ $user->userDetail->about }}</p>  
+                            @else
+                                <p>Safer For The Environment: Our denim factory partner recycles 98% of their water using
+                                    reverse osmosis filtration and keeps byproducts out of the environment by mixing them with
+                                    concrete.</p>
+                            @endif
+
                             {{-- <p>Safer For The Environment: Our denim factory partner recycles 98% of their water using
                                 reverse osmosis filtration and keeps byproducts out of the environment by mixing them with
                                 concrete.</p> --}}
@@ -125,17 +133,17 @@
                         @foreach ($products as $product)
                             <div class="product-card">
                                 <div class="product-img-box">
-
-                                    @if (isset($product->thumbnailImage->file_path))
-                                            {{-- @dd($product->thumbnailImage) --}}
-                                        <img src="{{ asset('storage/'. $product->thumbnailImage->file_path) }}" alt="" loading="lazy">
-                                    @else
-                                        <img src="{{asset('front/images/pro-0.png')}}" alt="img">
-                                    @endif
+                                    <a href="{{ route('viewproduct', ['id' => jsencode_userdata($product->id)]) }}">
+                                        @if (isset($product->thumbnailImage->file_path))
+                                            <img src="{{ asset('storage/'. $product->thumbnailImage->file_path) }}" alt="" loading="lazy">
+                                        @else
+                                            <img src="{{asset('front/images/pro-0.png')}}" alt="img">
+                                        @endif
+                                    </a>
                                     {{-- <img src="{{ asset('front/images/pro-0.png') }}" alt="img"> --}}
-                                    <div class="product-card-like">
+                                    {{-- <div class="product-card-like">
                                         <i class="fa-solid fa-heart"></i>
-                                    </div>
+                                    </div> --}}
                                     {{-- <div class="product-card-status">
                                         <p>in Stock</p>
                                     </div> --}}

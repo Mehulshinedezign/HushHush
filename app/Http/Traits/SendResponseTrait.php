@@ -7,30 +7,21 @@ use Illuminate\Support\MessageBag;
 trait SendResponseTrait
 {
  
-  public function apiResponse($apiResponse, $statusCode = '400', $message = 'No records Found', $data = [])
+  public function apiResponse($apiResponse, $statusCode = '400', $message = 'No records Found', $data = [], $isVerified)
   {
- 
       $responseArray = [];
       $otherDetail = [];
- 
+  
       if ($data instanceof MessageBag)
-        $data = $data->messages();
- 
-     
- 
-      if ($apiResponse == 'success') {
- 
-        $responseArray['status'] = true;
-        $responseArray['message'] = $message;
-        $responseArray['data'] = array_merge($data, $otherDetail);
-      } else {
- 
-        $responseArray['status'] = false;
-        $responseArray['message'] = $message;
-        $responseArray['data'] = array_merge($data, $otherDetail);
-      }
- 
-      return response()->json($responseArray  , $statusCode );
+          $data = $data->messages();
+  
+      $responseArray['status'] = $apiResponse === 'success';
+      $responseArray['message'] = $message;
+      $responseArray['verify'] = $isVerified;
+      $responseArray['data'] = array_merge($data, $otherDetail);
+  
+      return response()->json($responseArray, $statusCode);
   }
+  
  
 }

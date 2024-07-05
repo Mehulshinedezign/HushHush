@@ -3,32 +3,95 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Auth\ForgotPasswordController as MainforgotPassword;
+
+use App\Models\User;
+use App\Notifications\EmailOtpVerification;
+use App\Services\OtpService;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Validator;
 
 class ForgotPasswordController extends Controller
 {
-    public function resetPassword(Request $request){
-        
-        $forgot = new MainforgotPassword();
-        $forgot->sendResetPasswordLinkEmail($request);
+    protected $otpService;
 
-        $errors = session('errors');
+    public function __construct(OtpService $otpService = null)
+    {
+        $this->otpService = $otpService;
+    }
 
-        if ($errors && $errors->has('email')) {
-            $errorMessage = $errors->first('email');
-            $apiResponse = 'error';
-            $statusCode = '404';
-            $message = $errorMessage;
-        } else {
+    public function resetPassword(Request $request, $type)
+    {
+        if ($type == "email") {
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => "error",
+                    'message' => $validator->errors()->first(),
+                    'errors' => []
+                ], 401);
+            }
+
+            // dd('djhjsd');
+            $user = User::where('email', $request->email)->first();
+            if (!$user) {
+                return response()->json([
+                    'status' => "error",
+                    'message' => 'User not found',
+                    'errors' => []
+                ], 404);
+            }
+
+            $otp = $this->otpService->generateOtp($user);
+            $user->notify(new EmailOtpVerification($user, $otp));
+
             $apiResponse = 'success';
-            $statusCode = '200';
-            $message = "Please check your email for a password reset link.";    
+            $statusCode = 200;
+            $message = 'OTP sent to your email successfully';
+            $response = [
+                'user_id' => $user->id,
+            ];
+            return $this->apiResponse($apiResponse, $statusCode, $message, $response, null);
         }
 
-        return $this->apiResponse($apiResponse,$statusCode,$message);
-        
-    }    
+        elseif ($type == "phone_number") {
+            $validator = Validator::make($request->all(), [
+                'phone_number' => 'required',
+                'country_code' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => "error",
+                    'message' => $validator->errors()->first(),
+                    'errors' => []
+                ], 401);
+            }
+
+            $user = User::where('phone_number', $request->phone_number)->first();
+
+            if (!$user) {
+                return response()->json([
+                    'status' => "error",
+                    'message' => 'User not found',
+                    'errors' => []
+                ], 404);
+            }
+
+            $otp = $this->otpService->generateOtp($user);
+            $this->otpService->sendOtp($otp, $request->country_code . $request->phone_number);
+
+            $apiResponse = "success";
+            $statusCode = 200;
+            $message = "OTP sent to your phone number successfully";
+            $response = [
+                'user_id' => $user->id,
+            ];
+
+            return $this->apiResponse($apiResponse, $statusCode, $message, $response, null);
+        }
+    }
 }

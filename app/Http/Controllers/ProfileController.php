@@ -546,6 +546,7 @@ class ProfileController extends Controller
 
             $userdetail = [
                 'address1' => $request->complete_address,
+                'about' => $request->about ?? null,
             ];
 
              RetailerBankInformation::where('retailer_id', auth()->user()->id)->first();

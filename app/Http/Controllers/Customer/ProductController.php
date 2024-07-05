@@ -42,8 +42,8 @@ class ProductController extends Controller
         $selectedbrands = (isset($request->brand)) ? $request->brand : [];
         $selectedsize = (isset($request->size)) ? $request->size : [];
         $rentalType = $request->rental_type ?? '';
-        $products = $this->getProducts($request);
-
+        $product = $this->getProducts($request);
+        $products = $product->get();
 
         $city = (isset($request->neighborhoodcity)) ? $request->neighborhoodcity : [];
         // dd($request->neighborhoodcity,  $city);
@@ -75,7 +75,7 @@ class ProductController extends Controller
         // ];
         // dd($products, $filters, $filters['categories']);
 
-        // dd($products->toArray());
+        // dd($products);
         return view('index', compact('products', 'categories'))->with(['selectedLocation' => $this->selectedLocation]);
         // return view('index', compact('products', 'categories', 'filters',))->with(['selectedLocation' => $this->selectedLocation]);
     }
@@ -85,10 +85,47 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function view(Request $request, $id)
+    // {
+
+      
+    //     $id = jsdecode_userdata($id);
+    //     // dd("TODAY prodcut id is : ",$id);
+    //     $product = $this->getProduct($request, $id);
+    //     if (is_null($product)) {
+    //         return redirect()->back()->with('message', __('product.messages.notAvailable'));
+    //     }
+    //     $security = $this->getSecurityAmount($product);
+    //     $insurance = $this->getInsuranceAmount($product);
+    //     $rating_progress = $this->getratingprogress($product);
+    //     $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
+    //         ->where('id', '<>', $product->id)
+    //         ->where('category_id', $product->category_id)->whereHas('category', function ($q) {
+    //             $q->where('status', '1');
+    //         })
+    //         ->where('user_id', '!=', auth()->user()->id)
+    //         ->inRandomOrder()
+    //         ->limit(5)
+    //         ->get();
+
+    //     $layout_class = 'single_product';
+
+
+    //     $neighborhoodcity =   NeighborhoodCity::where('id', $product->neighborhood_city)->first();
+    //     $city =   NeighborhoodCity::where('id', $neighborhoodcity->parent_id)->first();
+
+    //     // $nonDates = json_encode($nonDates);
+
+
+    //     return view('product-detail', compact('product', 'relatedProducts', 'security', 'insurance', 'layout_class', 'rating_progress', 'neighborhoodcity', 'city'))->with(['selectedLocation' => $this->selectedLocation]);
+    // }
+
     public function view(Request $request, $id)
     {
+
+      
         $id = jsdecode_userdata($id);
-        // dd("TODAY prodcut id is : ",$id);
+
         $product = $this->getProduct($request, $id);
         if (is_null($product)) {
             return redirect()->back()->with('message', __('product.messages.notAvailable'));
@@ -108,36 +145,11 @@ class ProductController extends Controller
 
         $layout_class = 'single_product';
 
-        // $nonDates = [];
-        // foreach ($product->nonAvailableDates as $date) {
-        //     if ($date) {
-        //         if ($date->from_date == $date->to_date) {
-        //             array_push($nonDates, $date->from_date);
-        //         } else {
-        //             $datetime1 = strtotime($date->from_date); // convert to timestamps
-        //             $datetime2 = strtotime($date->to_date); // convert to timestamps
-        //             $days = (int)(($datetime2 - $datetime1) / 86400);
 
-
-        //             $startDate = Carbon::createFromFormat('Y-m-d', $date->from_date);
-        //             $endDate = Carbon::createFromFormat('Y-m-d', $date->to_date);
-        //             $dateRange = CarbonPeriod::create($startDate, $endDate);
-        //             // dd($dateRange->toArray());
-        //             foreach ($dateRange as $date) {
-        //                 // dump($date->format('Y-m-d'));
-        //                 array_push($nonDates, $date->format('m/d/Y'));
-        //             }
-        //             // die('hererrerer');
-        //         }
-        //     }
-        // }
-        $neighborhoodcity =   NeighborhoodCity::where('id', $product->neighborhood_city)->first();
-        $city =   NeighborhoodCity::where('id', $neighborhoodcity->parent_id)->first();
-
-        // $nonDates = json_encode($nonDates);
-
-
-        return view('product-detail', compact('product', 'relatedProducts', 'security', 'insurance', 'layout_class', 'rating_progress', 'neighborhoodcity', 'city'))->with(['selectedLocation' => $this->selectedLocation]);
+        $productImages = $product->allImages;
+        // dd("DONE",$product);
+     
+        return view('product-detail', compact('product','productImages'));
     }
 
 
@@ -187,17 +199,33 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    // public function wishlist(Request $request)
+    // {
+    //     $products = ProductFavorite::with('product.thumbnailImage', 'product.category')->where('user_id', auth()->user()->id)->orderByDesc('id')->paginate($request->global_product_pagination);
+    //     $user = User::with('notification')->where('id', auth()->user()->id)->first();
+    //     if (!$products->isEmpty() && @$user->notification->item_we_think_you_might_like == "on") {
+    //         $user->notify(new ItemYouLike($user, $products));
+    //     }
+
+    //     return view('customer.wishlist', compact('products'));
+    // }
+
     public function wishlist(Request $request)
     {
-        $products = ProductFavorite::with('product.thumbnailImage', 'product.category')->where('user_id', auth()->user()->id)->orderByDesc('id')->paginate($request->global_product_pagination);
+        // $products = ProductFavorite::with('product.thumbnailImage', 'product.category')->where('user_id', auth()->user()->id)->orderByDesc('id')->paginate($request->global_product_pagination);
+        $products = ProductFavorite::with('product.thumbnailImage', 'product.category')
+    ->where('user_id', auth()->user()->id)
+    ->orderByDesc('id')->get();
+
         $user = User::with('notification')->where('id', auth()->user()->id)->first();
         if (!$products->isEmpty() && @$user->notification->item_we_think_you_might_like == "on") {
             $user->notify(new ItemYouLike($user, $products));
         }
+        // $product = $products->toArray();
 
+        // dd($products);
         return view('customer.wishlist', compact('products'));
     }
-
     /**
      * Book the product
      *

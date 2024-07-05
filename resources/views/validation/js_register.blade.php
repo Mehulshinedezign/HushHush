@@ -43,11 +43,11 @@
                 required: true,
                 regex: zipcodeRegex,
             },
-            complete_address:{
-                required: true,
-                minlength: minCompleteAddress,
-                maxlength: maxCompleteAddress,
-            },
+            // complete_address:{
+            //     required: true,
+            //     minlength: minCompleteAddress,
+            //     maxlength: maxCompleteAddress,
+            // },
             gov_id: {
                 required:true,
                 filesize: gov_idSize,
@@ -93,11 +93,11 @@
                 required: `{{ __('customvalidation.user.zipcode.required') }}`,
                 regex: `{{ __('customvalidation.user.zipcode.regex', ['regex' => '${zipcodeRegex}']) }}`,
             },
-            complete_address: {
-                required: `{{ __('customvalidation.user.complete_address.required') }}`,
-                minlength: `{{ __('customvalidation.user.complete_address.min', ['min' => '${minCompleteAddress}', 'max' => '${maxCompleteAddress}']) }}`,
-                maxlength: `{{ __('customvalidation.user.complete_address.max', ['min' => '${minCompleteAddress}', 'max' => '${maxCompleteAddress}']) }}`,
-            },
+            // complete_address: {
+            //     required: `{{ __('customvalidation.user.complete_address.required') }}`,
+            //     minlength: `{{ __('customvalidation.user.complete_address.min', ['min' => '${minCompleteAddress}', 'max' => '${maxCompleteAddress}']) }}`,
+            //     maxlength: `{{ __('customvalidation.user.complete_address.max', ['min' => '${minCompleteAddress}', 'max' => '${maxCompleteAddress}']) }}`,
+            // },
             gov_id: {
                 required:  `{{ __('customvalidation.user.gov_id.required') }}`,
                 extension:     `{{ __('customvalidation.user.gov_id.file') }}`,

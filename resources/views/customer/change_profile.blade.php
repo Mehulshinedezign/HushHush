@@ -186,6 +186,22 @@
                                                             @enderror
                                                         </div>
                                                     </div>
+
+                                                    <div class="col-md-12">
+                                                    <div class="my-pro-detail-left">
+                                                                <div class="my-pro-detail-para">
+                                                                    <p>About me</p>
+                                                                    <div class="my-pro-edit-form">
+                                                                        <div class="form-group">
+                                                                            <div class="formfield">
+                                                                                <textarea name="about" id="about" placeholder="About me"
+                                                                                    class="form-control @error('about') is-invalid @enderror">{{ $user->userDetail->about }}</textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -255,7 +271,7 @@
                     regex: `{{ __('customvalidation.user.email.regex', ['regex' => '${emailRegex}']) }}`,
                 },
                 complete_address: {
-                    required: `{{ __('customvalidation.user.complete_address.required') }}`,
+                    required: 'This field is required.',
                 },
                 account_holder_first_name: {
                     required: 'This field is required.',

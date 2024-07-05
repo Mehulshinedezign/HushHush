@@ -303,7 +303,10 @@
                             <div data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
                                 Rent your closet
                             </div>
-                        </li> 
+                        </li>
+                        <li><a href="{{ route('wishlist') }}"><i class="fa-regular fa-heart"></i>
+                            <p class="d-inline-block d-lg-none">Wishlist</p>
+                        </a></li> 
                         <li>
                             <div class="dropdown">
                                 <div class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -674,18 +677,18 @@
     //     selectBtn.classList.toggle("open");
     // });
 
-    items.forEach(item => {
-        item.addEventListener("click", () => {
-            item.classList.toggle("checked");
+    // items.forEach(item => {
+    //     item.addEventListener("click", () => {
+    //         item.classList.toggle("checked");
 
-            let checked = document.querySelectorAll(".checked"),
-                btnText = document.querySelector(".btn-text");
+    //         let checked = document.querySelectorAll(".checked"),
+    //             btnText = document.querySelector(".btn-text");
 
-            if (checked && checked.length > 0) {
-                btnText.innerText = `${checked.length} Selected`;
-            } else {
-                btnText.innerText = "Where";
-            }
-        });
-    })
+    //         if (checked && checked.length > 0) {
+    //             btnText.innerText = `${checked.length} Selected`;
+    //         } else {
+    //             btnText.innerText = "Where";
+    //         }
+    //     });
+    // })
 </script>

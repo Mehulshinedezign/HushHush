@@ -264,7 +264,7 @@
                     </div>
 
                 </div>
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="complete_address">Complete address</label>
                     <div class="formfield">
                         <input type="text"
@@ -284,17 +284,17 @@
                             {{ $message }}
                         </span>
                     @enderror
-                </div>
+                </div> --}}
                 <div class="form-group">
 
-                    <div class="formfield">
+                    {{-- <div class="formfield">
                         <input id="about" type="text"
                             class="form-control form-class @error('about') is-invalid @enderror" name="about"
                             value="{{ old('about') }}" autocomplete="off" placeholder="About me">
                         <span class="form-icon">
                             <i class="bi bi-person-circle fs-4"></i>
                         </span>
-                    </div>
+                    </div> --}}
 
                 </div>
                 <button class="button primary-btn full-btn">Sign up</button>
@@ -339,7 +339,7 @@
 
         var phone_number = window.intlTelInput(document.querySelector("#phone_number"), {
             separateDialCode: true,
-            preferredCountries: ["us"],
+            preferredCountries: ["us","in"],
             hiddenInput: "full",
             formatOnDisplay: false,
             utilsScript: "//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"

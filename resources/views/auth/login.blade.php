@@ -47,12 +47,12 @@
                 <div class="form-check remember-me">
                     <input class="form-check-input" type="checkbox" name="remember" id="remember" value=""
                         {{ request()->cookie('rememberme') ? 'checked' : '' }} id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">Remember me</label>
+                    <label class="form-check-label" for="remember">Remember me</label>
                 </div>
                 <button class="button primary-btn full-btn">Log in</button>
                 @if (Route::has('password.request'))
                     <div class="forgot-password-sec">
-                        <a href="{{ route('password.request') }}">Forgot Password</a>
+                        <a href="{{ route('password.request') }}">Forgot Password?</a>
                     </div>
                 @endif
                 <p class="have-account">Don't have an account? <a href="{{ route('register') }}">{{ __('Sign Up') }}</a></p>
