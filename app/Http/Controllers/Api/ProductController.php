@@ -845,10 +845,12 @@ class ProductController extends Controller
                 return [
                     'id' => $category->id,
                     'label' => $category->name,
+                    'value' => $category->name,
                     'Subcategory' => getChild($category->id)->map(function ($subCategory) {
                         return [
                             'id' => $subCategory->id,
                             'label' => $subCategory->name,
+                            'value' => $subCategory->name
                         ];
                     }),
                 ];
@@ -858,18 +860,23 @@ class ProductController extends Controller
                 return [
                     'id' => $brand->id,
                     'label' => $brand->name,
+                    'value' => $brand->name,
                 ];
             });
 
             $sizeData = $sizes->map(function ($size) {
 
                 return['id' => $size->id,
-                'label'=>$size->name] ;
+                'label'=>$size->name,
+                'value' => $size->name,
+                ] ;
             });
 
             $colorData = $colors->map(function ($color) {
                 return['id'=>$color->id,
-                'label'=>$color->name] ;
+                'label'=>$color->name,
+                'value' => $color->name,
+                ] ;
             });
 
             $data = [
