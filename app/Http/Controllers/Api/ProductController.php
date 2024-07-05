@@ -689,18 +689,11 @@ class ProductController extends Controller
     }
 
 
-    public function view(Request $request)
+    public function view(Request $request, $id)
     {
         try {
-            $product = $this->getProduct($request->id, $request);
-
-            if (is_null($product)) {
-                return redirect()->back()->with('message', __('product.messages.notAvailable'));
-            }
-
-            $apiResponse = 'success';
-            $statusCode = 200;
-            $message = 'Product fetched successfully!';
+            $product = Product::with(['category', 'thumbnailImage', 'locations', 'retailer'])
+                ->findOrFail($id);
 
             $additionalDescriptions = [
                 'This product is simply amazing!',
@@ -715,43 +708,31 @@ class ProductController extends Controller
                 'Guaranteed to exceed your expectations.',
             ];
 
-            $ratings = $product->ratings->map(function ($rating) {
-                return [
-                    'user_id' => $rating->user_id,
-                    'review' => $rating->review,
-                    'user_name' => @$rating->user->name,
-                    "review_user_profile" => asset('storage/profiles/' . $rating->user->profile_file),
-                    'rating' => $rating->rating,
-                    'review_date' => date('Y-m-d', strtotime($rating->created_at)),
-                ];
-            })->toArray();
-
-            $disableDates = $product->nonAvailableDates->pluck('disable_date')->toArray();
+            $disableDates = $product->disableDates->pluck('disable_date')->toArray();
 
             $productDetails = [
                 'id' => $product->id,
                 'name' => $product->name,
-                'product_image_url' => [$product->thumbnailImage && filter_var($product->thumbnailImage->url, FILTER_VALIDATE_URL) ? $product->thumbnailImage->url : null],
+                'product_image_url' => $product->thumbnailImage ? asset('storage/' . $product->thumbnailImage->url) : null,
                 'description' => $product->description,
-                'addition_description' => $additionalDescriptions[array_rand($additionalDescriptions)],
+                'additional_description' => $additionalDescriptions[array_rand($additionalDescriptions)],
                 'category_name' => $product->category->name,
                 'rent' => $product->rent,
                 'size' => $product->size,
                 'pickup_location' => $product->locations[0]->map_address ?? null,
-                'disabled_date' => $disableDates,
+                'disabled_dates' => $disableDates,
                 'lender_info' => [
                     'user_id' => $product->retailer->id,
                     'user_name' => $product->retailer->username,
                     'name' => $product->retailer->name,
-                    'lender_profile' => asset('storage/profiles/' . $product->retailer->profile_file),
+                    'lender_profile' => $product->retailer->profile_file ? asset('storage/profiles/' . $product->retailer->profile_file) : null,
                 ],
-                'review' => $ratings,
             ];
 
             return response()->json([
                 'status' => true,
                 'message' => 'Product fetched successfully!',
-                'data' => [$productDetails],
+                'data' => $productDetails,
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
@@ -761,6 +742,7 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
 
 
 
@@ -850,52 +832,4 @@ class ProductController extends Controller
         }
     }
 
-    private function getProduct($id, $request)
-    {
-        if ($id) {
-            $fromDate = $toDate = null;
-
-            if (!empty($request->reservation_date) && !empty($request->global_date_separator)) {
-                $fromAndToDate = array_map('trim', explode($request->global_date_separator, $request->reservation_date));
-                if (count($fromAndToDate) == 2 && !empty($request->global_date_format_for_check)) {
-                    $fromDate = DateTime::createFromFormat($request->global_date_format_for_check, $fromAndToDate[0]);
-                    $toDate = DateTime::createFromFormat($request->global_date_format_for_check, $fromAndToDate[1]);
-
-                    if ($fromDate && $toDate) {
-                        $fromDate = $fromDate->format('Y-m-d');
-                        $toDate = $toDate->format('Y-m-d');
-                    }
-                }
-            }
-
-            return Product::with([
-                'locations',
-                'allImages',
-                'thumbnailImage',
-                'nonAvailableDates',
-                'get_size',
-                'favorites',
-                'category',
-                'ratings.user',
-                'retailer' => function ($q) {
-                    $q->where('status', '1');
-                    $q->where('is_approved', '1');
-                }
-            ])
-                ->where('status', '1')
-                ->where('id', $id)
-                ->when(!is_null($fromDate) && !is_null($toDate), function ($q) use ($fromDate, $toDate) {
-                    $q->whereDoesntHave('nonAvailableDates', function ($q) use ($fromDate, $toDate) {
-                        $q->whereBetween('from_date', [$fromDate, $toDate])
-                            ->orWhereBetween('to_date', [$fromDate, $toDate])
-                            ->orWhere(function ($query) use ($fromDate, $toDate) {
-                                $query->where('from_date', '<=', $fromDate)
-                                    ->where('to_date', '>=', $toDate);
-                            });
-                    });
-                })
-                ->first();
-        }
-        return null;
-    }
 }
