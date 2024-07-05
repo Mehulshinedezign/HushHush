@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Models\{Category, Product, ProductImage, ProductLocation, ProductUnavailability, Brand, City, RetailerBankInformation, Size, User, NeighborhoodCity, State};
+use App\Models\{Category, Product, ProductImage, ProductLocation, ProductUnavailability, Brand, City, RetailerBankInformation, Size, User, NeighborhoodCity, ProductDisableDate, State};
 use Carbon\Carbon;
 use DateTime, Stripe;
 use Illuminate\Support\Facades\Auth;
@@ -212,7 +212,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->state);
+        // dd($request->all());
         try {
             $userId = auth()->user()->id;
 
@@ -262,6 +262,26 @@ class ProductController extends Controller
                 'product_id' => $product->id,
                 'map_address' => $request->pick_up_location,
             ]);
+
+
+
+            if ($request->has('non_available_dates')) {
+
+                $dateRange = $request->non_available_dates;
+
+                list($startDateStr, $endDateStr) = explode(' - ', $dateRange);
+                $startDate = Carbon::createFromFormat('m/d/Y', $startDateStr);
+                $endDate = Carbon::createFromFormat('m/d/Y', $endDateStr);
+            
+                for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+                    ProductDisableDate::create([
+                        'product_id' => $product->id,
+                        'disable_date' => $date->format('Y/m/d'),
+                    ]);
+                }
+            }
+
+
 
             return redirect()->back()->with('success', "Your product has been uploaded successfully.");
         } catch (\Exception $e) {
@@ -319,18 +339,14 @@ class ProductController extends Controller
 
         // dd("HERE EDITTT");
         $product = $this->getProduct($id);
-        // dd($product->allImages,"abc");
-        // dd("The category id is : ",$product->category_id);
+
         $sub_categories = Category::where('status', '1')->where('parent_id', $product->category_id)->get();
         $subcatId = ($product->subcat_id) ? $product->subcat_id : '';
-
-        // dd($subcatId);
 
         $category = Category::with(['size_type'])->where('status', '1')->where('id', $product->category_id)->first();
         $types = isset($category) && count($category->size_type) > 0 ? $category->size_type : [];
         $selectedType = ($product->get_size) ? $product->get_size->type : '';
 
-        // dd($category);
         $sizes = Size::where('status', '1')->where('type', $selectedType)->get();
         // dd("size",$sizes);
         $selectedSize = isset($product) ? $product->size : '';
@@ -340,7 +356,19 @@ class ProductController extends Controller
         $pickuplocation = ProductLocation::where('product_id', $product->id)->first();
 
 
-        return view('customer.update_product', compact('product', 'sub_categories', 'category', 'sizes', 'city', 'state', 'pickuplocation'));
+        $disabledDates = $product->disableDates;
+
+        if ($disabledDates->isNotEmpty()) {
+            $sortedDates = $disabledDates->sortBy('disable_date');
+            $firstDate = \Carbon\Carbon::parse($sortedDates->first()->disable_date)->format('m/d/Y');
+            $lastDate = \Carbon\Carbon::parse($sortedDates->last()->disable_date)->format('m/d/Y');
+
+            $formattedDates = $firstDate . ' - ' . $lastDate;
+        } else {
+            $formattedDates = '';
+        }
+
+        return view('customer.update_product', compact('product', 'sub_categories', 'category', 'sizes', 'city', 'state', 'pickuplocation','formattedDates'));
     }
 
     /**

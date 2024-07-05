@@ -10,4 +10,9 @@ class ProductDisableDate extends Model
     use HasFactory;
 
     protected $fillable = ['product_id', 'disable_date'];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

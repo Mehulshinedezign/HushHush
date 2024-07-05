@@ -1,183 +1,388 @@
 @extends('layouts.front')
 @section('title', $product->name)
+@php
+    $user =  auth()->user();
+@endphp
 @section('content')
-    <section>
+    <section class="product-desc-sec">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('index') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a
-                                    href="{{ route('index', ['category[1]' => $product->category->id]) }}">{{ $product->category->name }}</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ $product->name }}</li>
-                        </ol>
-                    </nav>
-                </div>
+            <div class="breadcrum-main">
+                <a href="" class="breadcrum-list">Home</a>
+                <a href="#" class="breadcrum-list">Chic Couture</a>
+                <a href="#" class="breadcrum-list active">Bohemian Dreams</a>
             </div>
-            <div class="row">
-                <div class="col-md-12 col-lg-7">
-                    <div class="gallery-single">
-                        @foreach ($product->allImages as $image)
-                            <div class="holder-single">
-                                <img src="{{ $image->url }}" class="img-fluid">
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-                <div class="col-md-12 col-lg-5">
-                    <div class="content_single">
-                        <div class="content_head pro_content">
-                            <h3>{{ ucfirst($product->name) }}</h3>
-                            {{-- <p>Retail value: ${{ $product->price }} </p> --}}
-                            <p>${{ $product->rent }} <span>/day</span></p>
-                            <div class="bottom d-flex">
-                                <div class="sku_tgs"> <span>Brand:</span> {{ @$product->get_brand->name }}</div>
-                                {{-- <div class="sku_tgs"> <span>Color: </span> {{ @$product->get_color->name }} </div>
-                                <div class="sku_tgs"> <span>Size: </span> {{ @$product->get_size->name }}</div> --}}
-                                <div class="sku_tgs"> <span>Location: </span> {{ $product->locations[0]->map_address }}
-                                </div>
-                            </div>
-                            {{-- <hr> --}}
-                            <div class="select_date mt-3">
-                                <label>Retal Value: ${{ @$product->price }}</label>
-                            </div>
+            <div class="product-desc-main">
+                <div class="row">
+                    <div class="col-lg-8 col-md-12">
+                        <div class="product-desc-box">
+                            <div class="product-desc-slider">
+                                <div class="container">
 
-                            <div class="select_date mt-0">
-                                {{-- <div class="form-group"> --}}
-                                <label>Color: {{ @$product->get_color->name }}</label>
-                                {{-- <div class="formfield">
-                                        <p></p>
-                                    </div> --}}
-                                {{-- </div> --}}
-                            </div>
-                            <div class="select_date mt-0">
-                                {{-- <div class="form-group"> --}}
-                                <label>Size: {{ @$product->get_size->name }}</label>
-                                {{-- <div class="formfield">
-                                        <p></p>
-                                    </div> --}}
-                                {{-- </div> --}}
-                            </div>
-                            <div class="select_date">
-                                <div class="form-group">
-                                    {{-- <label>Select your Rental date</label> --}}
-                                    <div class="formfield">
-                                        <input type="text" @if ($product->user_id == auth()->user()->id) disabled @endif readonly
-                                            class="form-control reservation_date" name="reservation_date"
-                                            placeholder="Rental Period" onfocus="initDateRangePicker(this, dateOptions)">
-                                        <span class="icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="20"
-                                                viewBox="0 0 19 20" fill="none">
-                                                <path
-                                                    d="M5.64531 1.4418C5.64531 0.956175 5.25164 0.5625 4.76602 0.5625C4.28039 0.5625 3.88672 0.956175 3.88672 1.4418V2.32109C3.88672 2.80672 4.28039 3.20039 4.76602 3.20039C5.25164 3.20039 5.64531 2.80672 5.64531 2.32109V1.4418Z"
-                                                    fill="#DEE0E3" />
-                                                <path
-                                                    d="M15.3191 1.4418C15.3191 0.956175 14.9255 0.5625 14.4398 0.5625C13.9542 0.5625 13.5605 0.956175 13.5605 1.4418V2.32109C13.5605 2.80672 13.9542 3.20039 14.4398 3.20039C14.9255 3.20039 15.3191 2.80672 15.3191 2.32109V1.4418Z"
-                                                    fill="#DEE0E3" />
-                                                <path
-                                                    d="M0.810547 7.15625V17.2682C0.810547 18.2393 1.59796 19.0268 2.56914 19.0268H16.6379C17.6091 19.0268 18.3965 18.2393 18.3965 17.2682V7.15625H0.810547ZM6.08633 15.9492C6.08633 16.435 5.69284 16.8285 5.20703 16.8285H4.32773C3.84192 16.8285 3.44844 16.435 3.44844 15.9492V15.0699C3.44844 14.5841 3.84192 14.1906 4.32773 14.1906H5.20703C5.69284 14.1906 6.08633 14.5841 6.08633 15.0699V15.9492ZM6.08633 11.1131C6.08633 11.5989 5.69284 11.9924 5.20703 11.9924H4.32773C3.84192 11.9924 3.44844 11.5989 3.44844 11.1131V10.2338C3.44844 9.74798 3.84192 9.35449 4.32773 9.35449H5.20703C5.69284 9.35449 6.08633 9.74798 6.08633 10.2338V11.1131ZM10.9225 15.9492C10.9225 16.435 10.529 16.8285 10.0432 16.8285H9.16387C8.67806 16.8285 8.28457 16.435 8.28457 15.9492V15.0699C8.28457 14.5841 8.67806 14.1906 9.16387 14.1906H10.0432C10.529 14.1906 10.9225 14.5841 10.9225 15.0699V15.9492ZM10.9225 11.1131C10.9225 11.5989 10.529 11.9924 10.0432 11.9924H9.16387C8.67806 11.9924 8.28457 11.5989 8.28457 11.1131V10.2338C8.28457 9.74798 8.67806 9.35449 9.16387 9.35449H10.0432C10.529 9.35449 10.9225 9.74798 10.9225 10.2338V11.1131ZM15.7586 15.9492C15.7586 16.435 15.3651 16.8285 14.8793 16.8285H14C13.5142 16.8285 13.1207 16.435 13.1207 15.9492V15.0699C13.1207 14.5841 13.5142 14.1906 14 14.1906H14.8793C15.3651 14.1906 15.7586 14.5841 15.7586 15.0699V15.9492ZM15.7586 11.1131C15.7586 11.5989 15.3651 11.9924 14.8793 11.9924H14C13.5142 11.9924 13.1207 11.5989 13.1207 11.1131V10.2338C13.1207 9.74798 13.5142 9.35449 14 9.35449H14.8793C15.3651 9.35449 15.7586 9.74798 15.7586 10.2338V11.1131Z"
-                                                    fill="#DEE0E3" />
-                                                <path
-                                                    d="M18.3965 6.2793V3.64141C18.3965 2.67022 17.6091 1.88281 16.6379 1.88281H16.1982V2.32246C16.1982 3.29233 15.4095 4.08105 14.4396 4.08105C13.4698 4.08105 12.6811 3.29233 12.6811 2.32246V1.88281H6.52598V2.32246C6.52598 3.29233 5.73725 4.08105 4.76738 4.08105C3.79752 4.08105 3.00879 3.29233 3.00879 2.32246V1.88281H2.56914C1.59796 1.88281 0.810547 2.67022 0.810547 3.64141V6.2793H18.3965Z"
-                                                    fill="#DEE0E3" />
-                                            </svg>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="btn btn_book btn_black" @if ($product->user_id == auth()->user()->id) disabled @endif>Book
-                                Now</button>
-
-                        </div>
-                        <div class="accordion" id="accordionExample">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingOne">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        Description
-                                    </button>
-                                </h2>
-                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                                    data-bs-parent="#accordionExample1">
-                                    <div class="accordion-body">
-                                        {{ $product->description }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="headingTwo">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        Product Condition
-                                    </button>
-                                </h2>
-                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                                    data-bs-parent="#accordionExample2">
-                                    <div class="accordion-body">
-                                        {{ $product->condition }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="leave_review">
-                            <h4>Lender</h4>
-                            <a href="{{ route('lender', jsencode_userdata($product->retailer->id)) }}">
-                                <div class="profile_review">
-                                    <div class="review_pro">
-                                        @if ($product->retailer->frontend_profile_url)
-                                            <img src="{{ $product->retailer->frontend_profile_url }}">
+                                    <div class="slider slider-content">
+                                        @if ($productImages->isNotEmpty())
+                                            @foreach ($productImages as $image)
+                                                <div><img src="{{ asset('storage/' . $image->file_path) }}" alt=""
+                                                        loading="lazy"></div>
+                                            @endforeach
                                         @else
-                                            <img src="{{ asset('front/images/profile1.png') }}">
+                                            <div><img src="{{ asset('front/images/pro-description-img.png') }}"
+                                                    alt="img"></div>
                                         @endif
                                     </div>
-                                    <div class="img_review">
-                                        <h3>{{ $product->retailer->name }}</h3>
+                                    <!-- <div class="product-desc-slider-small"> -->
+                                    <div class="slider slider-thumb">
+                                        @if ($productImages->isNotEmpty())
+                                            @foreach ($productImages as $image)
+                                                <div><img src="{{ asset('storage/' . $image->file_path) }}" alt=""
+                                                        loading="lazy"></div>
+                                            @endforeach
+                                        @else
+                                            <div><img src="{{ asset('front/images/pro-description-img.png') }}"
+                                                    alt="img"></div>
+                                        @endif
+
                                     </div>
                                 </div>
-                            </a>
+                                <div class="prev-prodec-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="18"
+                                        viewBox="0 0 26 18" fill="none">
+                                        <path
+                                            d="M24.8854 9.15808L17.2806 16.763C17.0074 17.082 16.5273 17.1192 16.2083 16.8459C15.8893 16.5727 15.8521 16.0926 16.1254 15.7736C16.1509 15.7439 16.1786 15.7161 16.2083 15.6907L22.5127 9.37865H0.901088C0.481121 9.37865 0.140625 9.03815 0.140625 8.61812C0.140625 8.19809 0.481121 7.85766 0.901088 7.85766H22.5127L16.2083 1.55325C15.8893 1.28007 15.8521 0.799974 16.1254 0.48098C16.3986 0.161985 16.8787 0.1248 17.1977 0.398046C17.2274 0.423534 17.2552 0.451242 17.2806 0.48098L24.8855 8.08587C25.1803 8.38239 25.1803 8.86143 24.8854 9.15808Z"
+                                            fill="#1B1B1B"></path>
+                                    </svg>
+                                </div>
+                                <div class="next-prodec-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="18"
+                                        viewBox="0 0 26 18" fill="none">
+                                        <path
+                                            d="M24.8854 9.15808L17.2806 16.763C17.0074 17.082 16.5273 17.1192 16.2083 16.8459C15.8893 16.5727 15.8521 16.0926 16.1254 15.7736C16.1509 15.7439 16.1786 15.7161 16.2083 15.6907L22.5127 9.37865H0.901088C0.481121 9.37865 0.140625 9.03815 0.140625 8.61812C0.140625 8.19809 0.481121 7.85766 0.901088 7.85766H22.5127L16.2083 1.55325C15.8893 1.28007 15.8521 0.799974 16.1254 0.48098C16.3986 0.161985 16.8787 0.1248 17.1977 0.398046C17.2274 0.423534 17.2552 0.451242 17.2806 0.48098L24.8855 8.08587C25.1803 8.38239 25.1803 8.86143 24.8854 9.15808Z"
+                                            fill="#1B1B1B"></path>
+                                    </svg>
+                                </div>
+
+                            </div>
+                            <div class="product-review-main">
+                                <div class="product-review-heading">
+                                    <p>120 Reviews</p>
+                                    <div class="form-group">
+                                        <div class="formfield">
+                                            <select name="" id="">
+                                                <option value="">Most Recent</option>
+                                                <option value="">older</option>
+                                                <option value="">unseen</option>
+                                            </select>
+                                            <span class="form-icon">
+                                                <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product-review-body">
+                                    <ul class="product-review-list">
+                                        <li>
+                                            <div class="product-review-box">
+                                                <div class="product-review-profile">
+                                                    <div class="review-profile-box">
+                                                        <div class="sm-dp-box">
+                                                            <img src="{{ asset('front/images/pro-1.png') }}" alt="img">
+                                                        </div>
+                                                        <div class="sm-dp-data">
+                                                            <h3>Desirae Vaccaro</h3>
+                                                            <div class="review-profile-rating-box">
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <p>June 11, 2023</p>
+                                                </div>
+                                                <div class="product-review-message">
+                                                    <p>Safer For The Environment: Our denim factory partner recycles 98% of
+                                                        their water using reverse osmosis filtration and keeps byproducts
+                                                        out of the environment by mixing.</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="product-review-box">
+                                                <div class="product-review-profile">
+                                                    <div class="review-profile-box">
+                                                        <div class="sm-dp-box">
+                                                            <img src="{{ asset('front/images/pro-1.png') }}" alt="img">
+                                                        </div>
+                                                        <div class="sm-dp-data">
+                                                            <h3>Desirae Vaccaro</h3>
+                                                            <div class="review-profile-rating-box">
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <p>June 11, 2023</p>
+                                                </div>
+                                                <div class="product-review-message">
+                                                    <p>Safer For The Environment: Our denim factory partner recycles 98% of
+                                                        their water using reverse osmosis filtration and keeps byproducts
+                                                        out of the environment by mixing.</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="product-review-box">
+                                                <div class="product-review-profile">
+                                                    <div class="review-profile-box">
+                                                        <div class="sm-dp-box">
+                                                            <img src="{{ asset('front/images/pro-1.png') }}"
+                                                                alt="img">
+                                                        </div>
+                                                        <div class="sm-dp-data">
+                                                            <h3>Desirae Vaccaro</h3>
+                                                            <div class="review-profile-rating-box">
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                                <a href="#"><i class="fa-solid fa-star"
+                                                                        style="color: #DEE0E3;"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <p>June 11, 2023</p>
+                                                </div>
+                                                <div class="product-review-message">
+                                                    <p>Safer For The Environment: Our denim factory partner recycles 98% of
+                                                        their water using reverse osmosis filtration and keeps byproducts
+                                                        out of the environment by mixing.</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                        <!-- product rating -->
-                        @include('product-rating')
-                        <!-- product rating end -->
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="pro-desc-details-main">
+                            <h4 class="pro-desc-name">{{ $product->categories->name }}</h4>
+                            <div class="pro-desc-prize">
+                                <h3>${{ $product->rent_day }}</h3>
+                                <div class="badge day-badge">
+                                    Per day
+                                </div>
+
+                            </div>
+                            <div class="pro-desc-info">
+                                <div class="pro-desc-info-box">
+                                    <h4>Category :</h4>
+                                    <p>{{ $product->categories->name }}</p>
+                                </div>
+                                <div class="pro-desc-info-box">
+                                    <h4>Size:</h4>
+                                    <p>{{ $product->get_size->name }}</p>
+                                </div>
+
+                            </div>
+                            {{-- <div class="form-group">
+                                <label for="">Select your Rental date</label>
+                                <div class="formfield">
+                                    <input type="text" placeholder="7/31/2023  to  8/01/2023" class="form-control">
+                                    <span class="form-icon">
+                                        <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
+                                    </span>
+                                </div>
+                            </div> --}}
+                            {{-- <div class="pro-desc-loc">
+                                <h3>Pick up Location</h3>
+                                <div class="pro-desc-loc-copy">
+                                    <p>Akshya Nagar 1st Block 1st Cross, Rammurthy nagar....</p>
+                                    <a href="#" class="copy-add-btn"><img
+                                            src="{{ asset('front/images/copy-icon.svg') }}" alt="img">Copy</a>
+                                </div>
+                            </div> --}}
+                            {{-- <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
+                                data-bs-target="#bookitem-sidebar" aria-controls="offcanvasRight">Book Now</a> --}}
+                            <div class="pro-info-accordian">
+                                <div class="accordion" id="accordionExample">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingOne">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseOne" aria-expanded="true"
+                                                aria-controls="collapseOne">
+                                                Description
+                                            </button>
+                                        </h2>
+                                        <div id="collapseOne" class="accordion-collapse collapse show"
+                                            aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                {{ $product->description }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingTwo">
+                                            <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                aria-expanded="false" aria-controls="collapseTwo">
+                                                Additional information
+                                            </button>
+                                        </h2>
+                                        <div id="collapseTwo" class="accordion-collapse collapse"
+                                            aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                Safer For The Environment: Our denim factory partner recycles 98% of their
+                                                water using reverse osmosis filtration and keeps byproducts out of the
+                                                environment by mixing them with concrete.
+                                            </div>
+                                        </div>
+                                    </div> --}}
+                                </div>
+                            </div>
+                            <div class="lender-profile">
+                                <p>Lender</p>
+                                <div class="lender-profile-box">
+                                    <div class="lender-dp-box">
+                                        @if ($user->profile_file)
+                                            <img src="{{ asset('storage/' . $user->profile_file) }}"
+                                                alt="Profile Picture">
+                                        @else
+                                            <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
+                                        @endif
+                                    </div>
+                                    <h4>{{ auth()->user()->name }}</h4>
+                                </div>
+                            </div>
+                            <div class="pro-dec-rating-main">
+                                <div class="pro-rating-head">
+                                    <h4>Ratings & Reviews</h4>
+                                    <a href="javascript:void(0)">Leave Review</a>
+                                </div>
+                                <div class="pro-rating-body">
+                                    <div class="pro-rating-left">
+                                        <h3>4.3</h3>
+                                        <p>4,376 Ratings & 311 Reviews</p>
+                                    </div>
+                                    <div class="pro-rating-right">
+                                        <ul>
+                                            <li>
+                                                <p>5</p>
+                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <div class="progress">
+                                                    <div class="progress-bar w-100" style="background-color: #517B5D;"
+                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <p>4</p>
+                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <div class="progress">
+                                                    <div class="progress-bar w-75" style="background-color: #517B5D;"
+                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <p>3</p>
+                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <div class="progress">
+                                                    <div class="progress-bar w-50" style="background-color: #517B5D;"
+                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <p>2</p>
+                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <div class="progress">
+                                                    <div class="progress-bar w-25" style="background-color: #CC9C55"
+                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <p>1</p>
+                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <div class="progress">
+                                                    <div class="progress-bar w-25" style="background-color: #C66060"
+                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                        aria-valuemax="100"></div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- End  single product page top section-->
-    <!--You may like section-->
-    <section>
-        <div class="slider-section profile-slider-section mt-0">
-            <div class="container">
-                <h6>You May Also Like</h6>
-                <div class="profile-custom-slider ">
-                    <x-single-product :products="$relatedProducts" />
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End You may like section-->
-
-    {{-- @include('instruction') --}}
-
-    @include('product-booking')
-    <div class="payment-fixed-section" id="payment"></div>
 @endsection
 @push('scripts')
-    @includeFirst(['validation'])
-    @includeFirst(['validation.js_product_review'])
-    @include('layouts.notification-alert')
-    <script src="https://js.stripe.com/v3/"></script>
     <script>
-        rentPrice = "{{ $product->rent }}";
-        const paymentjs = "{{ asset('js/custom/payment.js') }}";
-        var stripe = Stripe("{{ env('STRIPE_KEY') }}");
-        const Auth = "{{ auth()->user()->name }}";
-        const intent = "{{ auth()->user()->createSetupIntent()->client_secret }}";
-        const is_approved = "{{ auth()->user()->is_approved }}";
-        const product = "{{ auth()->user()->products }}";
+        $('.slider-content').slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: true,
+            fade: false,
+            infinite: true,
+            speed: 1000,
+            asNavFor: '.slider-thumb',
+            prevArrow: $('.prev-prodec-btn'),
+            nextArrow: $('.next-prodec-btn'),
+            arrows: true,
+            responsive: [{
+                    breakpoint: 1400,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    }
+                },
+                {
+                    breakpoint: 992,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    }
+                },
+                {
+                    breakpoint: 575,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    }
+                }
+
+            ]
+        });
+        $('.slider-thumb').slick({
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            asNavFor: '.slider-content',
+            dots: false,
+            centerMode: false,
+            focusOnSelect: true
+        });
     </script>
-    <script src="{{ asset('js/custom/single-product.js') }}?ver={{ now() }}"></script>
 @endpush

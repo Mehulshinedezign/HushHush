@@ -16,12 +16,13 @@
                             <div class="product-card">
                                 <div class="product-img-box">
                                     
-                                    
-                                    @if (isset($product->thumbnailImage->file_path))
-                                        <img src="{{ asset('storage/'. $product->thumbnailImage->file_path) }}" alt="" loading="lazy">
-                                    @else
-                                        <img src="{{asset('front/images/pro-0.png')}}" alt="img">
-                                    @endif
+                                    <a href="{{ route('viewproduct', jsencode_userdata($product->id)) }}">
+                                        @if (isset($product->thumbnailImage->file_path))
+                                            <img src="{{ asset('storage/'. $product->thumbnailImage->file_path) }}" alt="" loading="lazy">
+                                        @else
+                                            <img src="{{asset('front/images/pro-0.png')}}" alt="img">
+                                        @endif
+                                    </a>
                                     
                                 </div>
                                 <div class="product-card-detail">

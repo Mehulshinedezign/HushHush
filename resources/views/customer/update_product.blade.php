@@ -274,6 +274,40 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="">Non-Available Dates</label>
+                                            <div class="formfield">
+                                                <input type="text" name="non_available_dates" id="non_available_date"
+                                                    placeholder="Select Dates" class="form-control" value="{{ $formattedDates }}">
+                                                <span class="form-icon">
+                                                    <img src="{{ asset('front/images/calender-icon.svg') }}"
+                                                        alt="img">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="">Description</label>
+                                            <div class="formfield">
+                                                <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description">{{ $product->description }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="">Pickup Location</label>
+                                            <div class="formfield">
+                                                <div class="formfield">
+                                                    <textarea name="pick_up_location" id="" rows="4" class="form-control" placeholder="Text">{{ $pickuplocation->map_address }}</textarea>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Product market value</label>
@@ -305,25 +339,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="">Description</label>
-                                            <div class="formfield">
-                                                <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description">{{ $product->description }}</textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="">Pickup Location</label>
-                                            <div class="formfield">
-                                                <div class="formfield">
-                                                    <textarea name="pick_up_location" id="" rows="4" class="form-control" placeholder="Text">{{ $pickuplocation->map_address }}</textarea>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
+                                  
                                     {{-- <div class="col-lg-4 col-md-4 col-sm-12">
                                 <div class="form-group">
                                     <label for="">Non-Available Dates</label>

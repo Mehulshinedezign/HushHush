@@ -94,7 +94,12 @@
             rent_price_month: {
                 required: true,
                 regex: OnlydigitRegex,
+            },
+            non_available_dates:{
+                required: true,
             }
+
+
         };
 
         const messages = {
@@ -159,6 +164,9 @@
                 regex: `{{ __('customvalidation.product.min_rent_days.regex', ['regex' => '${minDaysItemRegex}']) }}`,
                 range: `{{ __('customvalidation.product.min_rent_days.range', ['min' => 1, 'max' => 30]) }}`
             },
+            // non_available_dates:{
+            //     required: `{{ __('customvalidation.product.non_availabile_dates.required') }}`,
+            // }
         };
   
 

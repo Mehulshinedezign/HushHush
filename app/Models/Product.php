@@ -96,7 +96,7 @@ class Product extends Model
      */
     public function images()
     {
-        return $this->hasMany(ProductImage::class)->where('type', 'gallery');
+        return $this->hasMany(ProductImage::class);
     }
 
     /**
@@ -176,4 +176,5 @@ class Product extends Model
     {
         return $this->hasMany(ProductDisableDate::class);
     }
+
 }

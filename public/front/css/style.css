@@ -583,7 +583,7 @@ a.navbar-brand {
     flex-direction: column;
     align-items: center;
 }
-.cust-form-bg.fill-hight {
+.fill-hight {
     height: calc(100vh - 232px);
     overflow: auto;
 }
@@ -845,4 +845,35 @@ span.remove-image {
     font-size: 32px;
     line-height: 18px;
 }
+
+.add-pro-form .form-group textarea.form-control{
+    max-height: 60px;
+    resize: none;
+}
+
+
+.my-wishlist-sec{
+    padding: 40px 0px;
+}
+.list-empty-box {
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+.list-empty-box img {
+    max-width: 100px;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
 

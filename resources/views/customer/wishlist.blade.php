@@ -1,50 +1,54 @@
 @extends('layouts.front')
 @section('title', 'My Wishlist')
 @section('content')
-    <section class="my-wishlist">
+    <section class="my-wishlist-sec   fill-hight">
         <div class="slider-section profile-slider-section mt-0">
             <div class="container">
-                <h4>Favorites</h4>
-                <div class="wishlist-bx">
-                    <div class="row justify-content-center">
-                        @if (count($products) > 0)
-                            @foreach ($products as $i => $product)
-                                @if (isset($product->product))
-                                    <div class="col-lg-3 col-md-4">
-                                        <div class="collection-pro">
-                                            <a href="{{ route('viewproduct', jsencode_userdata($product->product->id)) }}">
-                                                @if (isset($product->product->thumbnailImage->url))
-                                                    <img src="{{ $product->product->thumbnailImage->url }}">
-                                                @else
-                                                    <img src="{{ asset('img/default-product.png') }}">
-                                                @endif
-                                            </a>
-                                            <p>{{ $product->product->name }}</p>
-                                            <h6>${{ $product->product->rent }} <span>day</span></h6>
+                {{-- <h4>Favorites</h4> --}}
+                @if ($products->isNotEmpty())
+                    <div class="home-product-main">
+                        <div class="home-product-box">
+                            {{-- @dd($products->product); --}}
+                            @foreach ($products as $favrait)
+                                <div class="product-card">
+                                    <div class="product-img-box">
+                                        <a
+                                            href="{{ route('viewproduct', ['id' => jsencode_userdata($favrait->product->id)]) }}">
+                                            @if (isset($favrait->product->thumbnailImage->file_path))
+                                                <img src="{{ asset('storage/' . $favrait->product->thumbnailImage->file_path) }}"
+                                                    alt="{{ $favrait->product->name }}">
+                                            @else
+                                                <img src="{{ asset('front/images/pro-0.png') }}" alt="{{ $product->name }}">
+                                            @endif
+                                        </a>
+                                        <div class="product-card-like"
+                                            onclick="addToWishlist(this, {{ $favrait->product->id }})">
+                                            @if (!is_null($favrait->product->favorites))
+                                                <i class="fa-solid fa-heart active"></i>
+                                            @else
+                                                <i class="fa-regular fa-heart"></i>
+                                            @endif
+                                        </div>
+                                        <div class="product-card-status">
+                                            <p>In Stock</p>
                                         </div>
                                     </div>
-                                @endif
-                            @endforeach
-                            {{-- @else
-                                    <div class="box-wishlist">
-                                        <span class="wishlist-empty">
-                                        <img src="{{ asset('front/images/package.png') }}">
-                                        </span> 
-                                            <h3 class="text-center">Your wishlist is empty</h3>
+                                    <div class="product-card-detail">
+                                        <p>{{ $favrait->product->name }}</p>
+                                        <h4>${{ $favrait->product->rent }}/day</h4>
                                     </div>
-                                    @endif --}}
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
-                </div>
-                {{ $products->links('pagination::product-list') }}
+                @else
+                    <div class="list-empty-box">
+                        <img src="{{ asset('front/images/find-glass.svg') }}">
+                        <h3 class="text-center">Your wishlist is empty</h3>
+                    </div>
+
+                @endif
             </div>
-        @else
-            <div class="box-wishlist">
-                <span class="wishlist-empty">
-                    <img src="{{ asset('front/images/package.png') }}">
-                </span>
-                <h3 class="text-center">Your wishlist is empty</h3>
-            </div>
-            @endif
         </div>
     </section>
 @endsection

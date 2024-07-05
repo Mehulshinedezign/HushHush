@@ -303,7 +303,10 @@
                             <div data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
                                 Rent your closet
                             </div>
-                        </li> 
+                        </li>
+                        <li><a href="{{ route('wishlist') }}"><i class="fa-regular fa-heart"></i>
+                            <p class="d-inline-block d-lg-none">Wishlist</p>
+                        </a></li> 
                         <li>
                             <div class="dropdown">
                                 <div class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
