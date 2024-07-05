@@ -822,3 +822,27 @@ label#upload-image-five-error {
     cursor: pointer;
     margin-top: 4px;
 }
+#upload-image-five-error{
+    color: #dc3545 !important;
+}
+.image-wrapper {
+    position: relative;
+    max-width: 100px;
+    height: 125px;
+    overflow: hidden;
+    border-radius: 10px;
+}
+.image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+span.remove-image {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    color: #fff;
+    font-size: 32px;
+    line-height: 18px;
+}
+

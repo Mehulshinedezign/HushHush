@@ -215,11 +215,11 @@ return [
             'required' => __('This field is required.'),
             'regex' => __('Zip code is invalid.'),
         ],
-        'complete_address' => [
-            'required' => __('This field is required'),
-            'min' => __('Complete address length should be 10.'),
-            'max' => __('Complete address length should be 255.'),
-        ],
+        // 'complete_address' => [
+        //     'required' => __('This field is required'),
+        //     'min' => __('Complete address length should be 10.'),
+        //     'max' => __('Complete address length should be 255.'),
+        // ],
         'gov_id' => [
            'required' =>  __('This field is required'),
            'file' => 'The government ID must be a file of type: jpg, png, jpeg, pdf.',
@@ -342,11 +342,11 @@ return [
         ],
         'min_rent_days' =>[
             'required' => 'Please enter the number of days required to rent an item.',
-            'min' => 'Minimum rent days must be at least 3 days.',
-            'max' => 'Minimum rent days must be e days.',
+            'min' => 'Minimum rent days must be at least 1 days.',
+            'max' => 'Maximum rent days must be 30 days.',
             'string' => 'Please enter only digit values.',
             'regex' => 'Please enter only digit values.',
-            'range' => 'Please enter the days from 3.',
+            'range' => 'Please enter the days from 1 to 30.',
         ],
         'rent_price_day' =>[
             'required' => 'Please enter Rental price day.',

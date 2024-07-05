@@ -30,7 +30,7 @@
                                 </div>
                                 <div class="product-btn-box">
                                     <a href="{{ route('editproduct', ['id' => jsencode_userdata($product->id)]) }}" class="button outline-btn full-btn">Edit</a>
-                                    <a href="#" class="button primary-btn full-btn">Delete</a>
+                                    <a href="{{ route('deleteproduct', ['id' => jsencode_userdata($product->id)]) }}" class="button primary-btn full-btn">Delete</a>
                                 </div>
                             </div>
                         @endforeach

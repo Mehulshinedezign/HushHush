@@ -319,7 +319,7 @@ class ProductController extends Controller
 
         // dd("HERE EDITTT");
         $product = $this->getProduct($id);
-        // dd($product,"abc");
+        // dd($product->allImages,"abc");
         // dd("The category id is : ",$product->category_id);
         $sub_categories = Category::where('status', '1')->where('parent_id', $product->category_id)->get();
         $subcatId = ($product->subcat_id) ? $product->subcat_id : '';
@@ -504,9 +504,14 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, $id)
     {
-        // dd("here");
+        // dd("here",$request->all());
         // dd("ID Is: ",jsdecode_userdata($id));
+        // if ($request->hasFile('new_images')) {
+        //     dd($request->new_images);
+        //     dd('SLECTED');
+        // }
 
+        // dd("NOt slected");
         try {
             $product = Product::findOrFail(jsdecode_userdata($id));
             $userId = auth()->user()->id;
@@ -534,22 +539,32 @@ class ProductController extends Controller
                 'modified_user_type' => 'Self',
                 'non_available_dates' => $request->non_available_dates ?? 1,
             ];
-
+            
             $product->update($data);
 
-            if ($request->hasFile('images')) {
-                $existingImages = Storage::disk('public')->files('products/images');
-                $productImages = array_filter($existingImages, function($path) use ($product) {
-                    return strpos(basename($path), $product->id . '_') === 0;
-                });
+            $currentImageIds = $product->allImages()->pluck('id')->toArray();
+
+            if ($request->has('existing_images')) {
+                $existingImageIds = $request->input('existing_images');
             
-                // Delete existing images
-                foreach ($productImages as $imagePath) {
-                    Storage::disk('public')->delete($imagePath);
+                $imagesToDelete = array_diff($currentImageIds, $existingImageIds);
+                $imagesToDeleteModels = ProductImage::whereIn('id', $imagesToDelete)->get();
+                
+                foreach ($imagesToDeleteModels as $image) {
+                    Storage::disk('public')->delete($image->file_path);
+                    $image->delete();
                 }
-                $product->allImages()->delete();
+            } else {
+                $imagesToDeleteModels = ProductImage::whereIn('id', $currentImageIds)->get();
+                
+                foreach ($imagesToDeleteModels as $image) {
+                    Storage::disk('public')->delete($image->file_path);
+                    $image->delete();
+                }
+            }
             
-                foreach ($request->file('images') as $index => $image) {
+            if ($request->hasFile('new_images')) {
+                foreach ($request->file('new_images') as $index => $image) {
                     $fileName = $product->id . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
                     $filePath = $image->storeAs('products/images', $fileName, 'public');
             
@@ -584,31 +599,50 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // public function destroy(Request $request, $id)
+    // {
+    //     // dd("cvdcsdhcsdh", $request, $id);
+    //     $product = $this->getProduct($id);
+    //     $getimage = ProductImage::where('product_id', $product->id)->get();
+
+    //     foreach ($getimage as $image) {
+
+    //         if ($image) {
+    //             Storage::disk('s3')->delete('products/images/' . $image->file);
+    //             $image->delete();
+    //         }
+    //     }
+    //     $product->delete();
+    //     if (isset($request->text)) {
+
+    //         // session()->flash('success', __('product.messages.deleteProduct'));
+
+    //         return response()->json([
+    //             'success'    =>  true,
+    //         ], 200);
+    //     }
+
+    //     return redirect()->route('product')->with('success', __('product.messages.deleteProduct'));
+    // }
     public function destroy(Request $request, $id)
     {
-        // dd("cvdcsdhcsdh", $request, $id);
-        $product = $this->getProduct($id);
-        $getimage = ProductImage::where('product_id', $product->id)->get();
+        try {
+            $product = Product::findOrFail(jsdecode_userdata($id));
 
-        foreach ($getimage as $image) {
-
-            if ($image) {
-                Storage::disk('s3')->delete('products/images/' . $image->file);
+            foreach ($product->allImages as $image) {
+                Storage::disk('public')->delete($image->file_path);
                 $image->delete();
             }
+            $product->locations()->delete(); 
+
+            $product->delete();
+
+            return redirect()->back()->with('success', "Product and associated data have been deleted successfully.");
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
-        $product->delete();
-        if (isset($request->text)) {
-
-            // session()->flash('success', __('product.messages.deleteProduct'));
-
-            return response()->json([
-                'success'    =>  true,
-            ], 200);
-        }
-
-        return redirect()->route('product')->with('success', __('product.messages.deleteProduct'));
     }
+
 
     public function destroy_product(Request $request, $id)
     {

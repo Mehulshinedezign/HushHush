@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{{ asset('css/custom-front.css') }}?ver={{ now() }}" />
     <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}?ver={{ now() }}">
     <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"> --}}
     {{-- <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png') }}"> --}}
     <script>
         const APP_URL = "{{ url('') }}";
@@ -280,7 +281,21 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                    {{-- <div class="col-lg-4 col-md-4 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="">Non-Available Dates</label>
+                                            <div class="formfield">
+                                                <input type="text" name="" id="non_available_date"
+                                                    placeholder="Select Dates" class="form-control">
+                                                <span class="form-icon">
+                                                    <img src="{{ asset('front/images/calender-icon.svg') }}"
+                                                        alt="img">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div> --}}
+
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Description</label>
                                             <div class="formfield">
@@ -288,7 +303,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Pickup Location</label>
                                             <div class="formfield">
@@ -296,19 +311,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-lg-4 col-md-4 col-sm-12">
-                                <div class="form-group">
-                                    <label for="">Non-Available Dates</label>
-                                    <div class="formfield">
-                                        <input type="text" name="" id="non_available_date"
-                                            placeholder="Select Dates" class="form-control">
-                                        <span class="form-icon">
-                                            <img src="{{ asset('front/images/calender-icon.svg') }}"
-                                                alt="img">
-                                        </span>
-                                    </div>
-                                </div>
-                            </div> --}}
+
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Rent Price/Day</label>
@@ -339,6 +342,19 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {{-- <div class="col-lg-4 col-md-4 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="">Non-Available Dates</label>
+                                            <div class="formfield">
+                                                <input type="text" name="" id="non_available_date"
+                                                    placeholder="Select Dates" class="form-control">
+                                                <span class="form-icon">
+                                                    <img src="{{ asset('front/images/calender-icon.svg') }}"
+                                                        alt="img">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div> --}}
                                     <div class="col-md-12">
                                         <div class="right-btn-box">
                                             <button class="button primary-btn " id="addProduct">Add</button>
@@ -399,6 +415,9 @@
     <script src="{{ asset('js/additional-methods.min.js') }}"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOyw9TNt8YzANQjJMjjijfr8MC2DV_f1s&libraries=places">
     </script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+    <!-- Include DateRangePicker JS -->
+    {{-- <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> --}}
     <script src="{{ asset('js/custom/customer-search-location.js') }}"></script>
     <script src="{{ asset('js/custom/product-list.js') }}"></script>
     <script src="{{ asset('js/custom/add-wishlist.js') }}"></script>
@@ -673,6 +692,18 @@
                     $('#city-select').append('<option value="">Select City</option>');
                 }
             });
+
+
+
+            // $('#non_available_date').daterangepicker({
+            //     opens: 'right',
+            //     locale: {
+            //         format: 'MM/DD/YYYY'
+            //     }
+            // }, function(start, end, label) {
+            //     $('#non_available_date').val(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
+            // });
+
 
         });
     </script>
