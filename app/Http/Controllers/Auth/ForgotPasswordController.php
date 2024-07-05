@@ -26,9 +26,27 @@ class ForgotPasswordController extends Controller
 
     public function sendResetLinkEmail(Request $request)
     {
+        // dd("here",$request->all());
+
+        $full =  $request->input('phone_number.full');
+        $main = $request->input('phone_number.main');
+        // dd($full);
+        if ($request->has('phone_number') && $request->input('phone_number.main') && $request->input('phone_number.full') ) {
+            return $this->sendResetLinkToPhoneNumber($full,$main,$request);
         if ($request->has('phone_number') && $request->input('phone_number.main') && $request->input('phone_number.full')) {
             return $this->sendResetLinkToPhoneNumber($request);
         } else {
+            $this->validateEmail($request);
+        $response = $this->broker()->sendResetLink(
+            $this->credentials($request)
+        );
+
+        return $response == Password::RESET_LINK_SENT
+                    ? $this->sendResetLinkResponse($request, $response)
+                    : $this->sendResetLinkFailedResponse($request, $response);
+        }
+    }
+
             $forgot = new MainforgotPassword();
             $forgot->sendResetPasswordLinkEmail($request);
             return redirect()->back();
@@ -59,8 +77,7 @@ class ForgotPasswordController extends Controller
 
         $phone = $request->input('phone_number.main');
         if (!$user) {
-            session()->flash('status', 'User not found');
-            return redirect()->back();
+            return response()->json(['message' => 'User not found'], 404);
         }
 
         $otp = $this->otpService->generateOtp($user);

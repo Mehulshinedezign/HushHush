@@ -262,155 +262,150 @@
                     @endforeach
                     </div>
                 </div> --}}
-                
-                    @if (count($products) > 0)
-                    <x-single-product :products="$products" />
-                    {{-- <div class="custom-pagination">{{ $products->links('pagination::product-list') }}</div> --}}
-                    @else
-                    <div class="home-product-main">
-                            <div class="home-product-box">
-                                <div class="product-card">
-                                    <div class="product-img-box">
-                                        <img src="{{asset('front/images/pro-0.png')}}" alt="img">
-                                        <div class="product-card-like">
-                                            <i class="fa-solid fa-heart"></i>
-                                        </div>
-                                        <div class="product-card-status">
-                                            <p>in Stock</p>
-                                        </div>
-                                    </div>
-                                    <div class="product-card-detail">
-                                        <p>Glamour Affair</p>
-                                        <h4>$159/day</h4>
-                                    </div>
+
+
+                <div class="home-product-main">
+                    <div class="home-product-box">
+                        <div class="product-card">
+                            <div class="product-img-box">
+                                <img src="{{ asset('front/images/pro-0.png') }}" alt="img">
+                                <div class="product-card-like">
+                                    <i class="fa-solid fa-heart"></i>
                                 </div>
-                                <div class="product-card">
-                                    <div class="product-img-box">
-                                        <img src="{{asset('front/images/pro2.png')}}" alt="img">
-                                        <div class="product-card-like">
-                                            <i class="fa-solid fa-heart"></i>
-                                        </div>
-                                        <div class="product-card-status">
-                                            <p>in Stock</p>
-                                        </div>
-                                    </div>
-                                    <div class="product-card-detail">
-                                        <p>Glamour Affair</p>
-                                        <h4>$159/day</h4>
-                                    </div>
-                                </div>
-                                <div class="product-card">
-                                    <div class="product-img-box">
-                                        <img src="{{asset('front/images/pro3.png')}}" alt="img">
-                                        <div class="product-card-like">
-                                            <i class="fa-solid fa-heart"></i>
-                                        </div>
-                                        <div class="product-card-status">
-                                            <p>in Stock</p>
-                                        </div>
-                                    </div>
-                                    <div class="product-card-detail">
-                                        <p>Glamour Affair</p>
-                                        <h4>$159/day</h4>
-                                    </div>
-                                </div>
-                                <div class="product-card">
-                                    <div class="product-img-box">
-                                        <img src="{{asset('front/images/pro4.png')}}" alt="img">
-                                        <div class="product-card-like">
-                                            <i class="fa-solid fa-heart"></i>
-                                        </div>
-                                        <div class="product-card-status">
-                                            <p>in Stock</p>
-                                        </div>
-                                    </div>
-                                    <div class="product-card-detail">
-                                        <p>Glamour Affair</p>
-                                        <h4>$159/day</h4>
-                                    </div>
-                                </div>
-                                <div class="product-card">
-                                    <div class="product-img-box">
-                                        <img src="{{asset('front/images/pro5.png')}}" alt="img">
-                                        <div class="product-card-like">
-                                            <i class="fa-solid fa-heart"></i>
-                                        </div>
-                                        <div class="product-card-status">
-                                            <p>in Stock</p>
-                                        </div>
-                                    </div>
-                                    <div class="product-card-detail">
-                                        <p>Glamour Affair</p>
-                                        <h4>$159/day</h4>
-                                    </div>
-                                </div>
-                                <div class="product-card">
-                                    <div class="product-img-box">
-                                        <img src="{{asset('front/images/pro6.png')}}" alt="img">
-                                        <div class="product-card-like">
-                                            <i class="fa-solid fa-heart"></i>
-                                        </div>
-                                        <div class="product-card-status">
-                                            <p>in Stock</p>
-                                        </div>
-                                    </div>
-                                    <div class="product-card-detail">
-                                        <p>Glamour Affair</p>
-                                        <h4>$159/day</h4>
-                                    </div>
-                                </div>
-                                <div class="product-card">
-                                    <div class="product-img-box">
-                                        <img src="{{asset('front/images/pro8.png')}}" alt="img">
-                                        <div class="product-card-like">
-                                            <i class="fa-solid fa-heart"></i>
-                                        </div>
-                                        <div class="product-card-status">
-                                            <p>in Stock</p>
-                                        </div>
-                                    </div>
-                                    <div class="product-card-detail">
-                                        <p>Glamour Affair</p>
-                                        <h4>$159/day</h4>
-                                    </div>
-                                </div>
-                                <div class="product-card">
-                                    <div class="product-img-box">
-                                        <img src="{{asset('front/images/pro-0.png')}}" alt="img">
-                                        <div class="product-card-like">
-                                            <i class="fa-solid fa-heart"></i>
-                                        </div>
-                                        <div class="product-card-status">
-                                            <p>in Stock</p>
-                                        </div>
-                                    </div>
-                                    <div class="product-card-detail">
-                                        <p>Glamour Affair</p>
-                                        <h4>$159/day</h4>
-                                    </div>
+                                <div class="product-card-status">
+                                    <p>in Stock</p>
                                 </div>
                             </div>
-                            <div class="pagination-main">
-                                <a href="javascript:void(0)" class="pagination-box">
-                                    01
-                                </a>
-                                <a href="javascript:void(0)" class="pagination-box">
-                                    02
-                                </a>
-                                <a href="javascript:void(0)" class="pagination-box active">
-                                    03
-                                </a>
-                                <a href="javascript:void(0)" class="pagination-box">
-                                    04
-                                </a>
-                                <a href="javascript:void(0)" class="pagination-box">
-                                    05
-                                </a>
+                            <div class="product-card-detail">
+                                <p>Glamour Affair</p>
+                                <h4>$159/day</h4>
                             </div>
                         </div>
-                        {{-- <h2 class="text-center">We're sorry, no products fit your search criteria.</h2> --}}
-
-                    @endif
+                        <div class="product-card">
+                            <div class="product-img-box">
+                                <img src="{{ asset('front/images/pro2.png') }}" alt="img">
+                                <div class="product-card-like">
+                                    <i class="fa-solid fa-heart"></i>
+                                </div>
+                                <div class="product-card-status">
+                                    <p>in Stock</p>
+                                </div>
+                            </div>
+                            <div class="product-card-detail">
+                                <p>Glamour Affair</p>
+                                <h4>$159/day</h4>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-img-box">
+                                <img src="{{ asset('front/images/pro3.png') }}" alt="img">
+                                <div class="product-card-like">
+                                    <i class="fa-solid fa-heart"></i>
+                                </div>
+                                <div class="product-card-status">
+                                    <p>in Stock</p>
+                                </div>
+                            </div>
+                            <div class="product-card-detail">
+                                <p>Glamour Affair</p>
+                                <h4>$159/day</h4>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-img-box">
+                                <img src="{{ asset('front/images/pro4.png') }}" alt="img">
+                                <div class="product-card-like">
+                                    <i class="fa-solid fa-heart"></i>
+                                </div>
+                                <div class="product-card-status">
+                                    <p>in Stock</p>
+                                </div>
+                            </div>
+                            <div class="product-card-detail">
+                                <p>Glamour Affair</p>
+                                <h4>$159/day</h4>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-img-box">
+                                <img src="{{ asset('front/images/pro5.png') }}" alt="img">
+                                <div class="product-card-like">
+                                    <i class="fa-solid fa-heart"></i>
+                                </div>
+                                <div class="product-card-status">
+                                    <p>in Stock</p>
+                                </div>
+                            </div>
+                            <div class="product-card-detail">
+                                <p>Glamour Affair</p>
+                                <h4>$159/day</h4>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-img-box">
+                                <img src="{{ asset('front/images/pro6.png') }}" alt="img">
+                                <div class="product-card-like">
+                                    <i class="fa-solid fa-heart"></i>
+                                </div>
+                                <div class="product-card-status">
+                                    <p>in Stock</p>
+                                </div>
+                            </div>
+                            <div class="product-card-detail">
+                                <p>Glamour Affair</p>
+                                <h4>$159/day</h4>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-img-box">
+                                <img src="{{ asset('front/images/pro8.png') }}" alt="img">
+                                <div class="product-card-like">
+                                    <i class="fa-solid fa-heart"></i>
+                                </div>
+                                <div class="product-card-status">
+                                    <p>in Stock</p>
+                                </div>
+                            </div>
+                            <div class="product-card-detail">
+                                <p>Glamour Affair</p>
+                                <h4>$159/day</h4>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-img-box">
+                                <img src="{{ asset('front/images/pro-0.png') }}" alt="img">
+                                <div class="product-card-like">
+                                    <i class="fa-solid fa-heart"></i>
+                                </div>
+                                <div class="product-card-status">
+                                    <p>in Stock</p>
+                                </div>
+                            </div>
+                            <div class="product-card-detail">
+                                <p>Glamour Affair</p>
+                                <h4>$159/day</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pagination-main">
+                        <a href="javascript:void(0)" class="pagination-box">
+                            01
+                        </a>
+                        <a href="javascript:void(0)" class="pagination-box">
+                            02
+                        </a>
+                        <a href="javascript:void(0)" class="pagination-box active">
+                            03
+                        </a>
+                        <a href="javascript:void(0)" class="pagination-box">
+                            04
+                        </a>
+                        <a href="javascript:void(0)" class="pagination-box">
+                            05
+                        </a>
+                    </div>
+                </div>
+                {{-- <h2 class="text-center">We're sorry, no products fit your search criteria.</h2> --}}
 
             </div>
 
@@ -443,403 +438,150 @@
     </div>
 </section>
 
-{{-- Add produc modal here --}}
-<div class="modal fade addproduct-Modal" id="addproduct-Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="exampleModalLabel">Add New Product</h3>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="add-product-main">
-                    <div class="add-pro-form">
-                        <form action="">
-                            <div class="add-pro-box">
-                                <p>Product Images</p>
-                                <div class="add-pro-img-wrapper">
-                                    <label for="upload-pro1" class="upload-img-product">
-                                        <input type="file" style="display: none;" name=""
-                                            id="upload-pro1">
-                                        <img src="{{ asset('front/images/img-vid-icon.svg') }}" alt="img">
-                                    </label>
-                                    <label for="upload-pro1" class="upload-img-product">
-                                        <input type="file" style="display: none;" name=""
-                                            id="upload-pro1">
-                                        <img src="{{ asset('front/images/img-vid-icon.svg') }}" alt="img">
-                                    </label>
-                                    <label for="upload-pro1" class="upload-img-product">
-                                        <input type="file" style="display: none;" name=""
-                                            id="upload-pro1">
-                                        <img src="{{ asset('front/images/img-vid-icon.svg') }}" alt="img">
-                                    </label>
-                                    <label for="upload-pro1" class="upload-img-product">
-                                        <input type="file" style="display: none;" name=""
-                                            id="upload-pro1">
-                                        <img src="{{ asset('front/images/img-vid-icon.svg') }}" alt="img">
-                                    </label>
-                                    <label for="upload-pro1" class="upload-img-product">
-                                        <input type="file" style="display: none;" name=""
-                                            id="upload-pro1">
-                                        <img src="{{ asset('front/images/img-vid-icon.svg') }}" alt="img">
-                                    </label>
-                                    <label for="upload-pro1" class="upload-img-product">
-                                        <input type="file" style="display: none;" name=""
-                                            id="upload-pro1">
-                                        <img src="{{ asset('front/images/img-vid-icon.svg') }}" alt="img">
-                                    </label>
-
-                                    <label for="upload-pro1" class="upload-img-product">
-                                        <input type="file" style="display: none;" name=""
-                                            id="upload-pro1">
-                                        <img src="{{ asset('front/images/img-vid-icon.svg') }}" alt="img">
-                                    </label>
-                                    <label for="upload-pro1" class="upload-img-product">
-                                        <input type="file" style="display: none;" name=""
-                                            id="upload-pro1">
-                                        <img src="{{ asset('front/images/img-vid-icon.svg') }}" alt="img">
-                                    </label>
-                                    <label for="upload-pro1" class="upload-img-product">
-                                        <input type="file" style="display: none;" name=""
-                                            id="upload-pro1">
-                                        <img src="{{ asset('front/images/img-vid-icon.svg') }}" alt="img">
-                                    </label>
-                                    <label for="upload-pro1" class="upload-img-product">
-                                        <input type="file" style="display: none;" name=""
-                                            id="upload-pro1">
-                                        <img src="{{ asset('front/images/img-vid-icon.svg') }}" alt="img">
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6 col-md-6 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="">Product Name</label>
-                                        <div class="formfield">
-                                            <input type="text" name="" id=""
-                                                placeholder="Enter Name" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="">Category/Subcategory</label>
-                                        <div class="duel-select-field">
-                                            <div class="formfield">
-                                                <select name="" id="">
-                                                    <option value="">Category0</option>
-                                                    <option value="">Category1</option>
-                                                    <option value="">Category2</option>
-                                                </select>
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
-                                            </div>
-                                            <div class="formfield">
-                                                <select name="" id="">
-                                                    <option value="">Subcategory0</option>
-                                                    <option value="">Subcategory1</option>
-                                                    <option value="">Subcategory2</option>
-                                                </select>
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="">Size</label>
-                                        <div class="formfield">
-                                            <select name="" id="" class="form-control">
-                                                <option value="">Select Size</option>
-                                                <option value="">Select Size1</option>
-                                                <option value="">Select Size2</option>
-                                            </select>
-                                            <span class="form-icon">
-                                                <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                    alt="img">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="">Brand</label>
-                                        <div class="formfield">
-                                            <select name="" id="" class="form-control">
-                                                <option value="">Select Brand</option>
-                                                <option value="">Select Brand1</option>
-                                                <option value="">Select Brand2</option>
-                                            </select>
-                                            <span class="form-icon">
-                                                <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                    alt="img">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="">Color</label>
-                                        <div class="formfield">
-                                            <select name="" id="" class="form-control">
-                                                <option value="">Select Color</option>
-                                                <option value="">Select Color1</option>
-                                                <option value="">Select Color2</option>
-                                            </select>
-                                            <span class="form-icon">
-                                                <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                    alt="img">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="">Condition</label>
-                                        <div class="formfield">
-                                            <input type="text" name="" id=""
-                                                placeholder="Product Condition" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="">City/Neighborhood</label>
-                                        <div class="duel-select-field">
-                                            <div class="formfield">
-                                                <select name="" id="">
-                                                    <option value="">City</option>
-                                                    <option value="">Category1</option>
-                                                    <option value="">Category2</option>
-                                                </select>
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
-                                            </div>
-                                            <div class="formfield">
-                                                <select name="" id="">
-                                                    <option value="">Neighborhood</option>
-                                                    <option value="">Subcategory1</option>
-                                                    <option value="">Subcategory2</option>
-                                                </select>
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="">Description</label>
-                                        <div class="formfield">
-                                            <textarea name="" id="" rows="4" class="form-control" placeholder="Enter Description"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="">Pickup Location</label>
-                                        <div class="formfield">
-                                            <textarea name="" id="" rows="4" class="form-control" placeholder="Text"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="">Non-Available Dates</label>
-                                        <div class="formfield">
-                                            <input type="text" name="" id=""
-                                                placeholder="Select Dates" class="form-control">
-                                            <span class="form-icon">
-                                                <img src="{{ asset('front/images/calender-icon.svg') }}"
-                                                    alt="img">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="">Rent Price</label>
-                                        <div class="formfield">
-                                            <input type="text" name="" id="" placeholder="$85"
-                                                class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="">Rent Price/Day</label>
-                                        <div class="formfield">
-                                            <input type="text" name="" id="" placeholder="$85"
-                                                class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="right-btn-box">
-                                        <button class="button primary-btn ">Add</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script>
-    $('.navbar-toggler').on('click', function() {
-        $(".navbar-toggler").toggleClass('open');
-    });
-    $('.send-mail-open').on('click', function() {
-        $(".invite-member-popup").toggleClass('open');
-    });
-
-    $('.sidebar-expand-btn').on('click', function() {
-        $(".home-filter-box").addClass('expand');
-    });
-    $('.filter-fotter-btns').on('click', function() {
-        $(".home-filter-box").removeClass('expand');
-    });
 
 
+@push('scripts')
+    <script>
 
-
-
-
-    $(document).ready(function() {
-        $('.product-slider').slick({
-            dots: false,
-            infinite: false,
-            draggable: true,
-            arrow: true,
-            slidesToShow: 4,
-            prevArrow: $('.prev-product-btn'),
-            nextArrow: $('.next-product-btn'),
-            responsive: [{
-                    breakpoint: 1400,
-                    settings: {
-                        slidesToShow: 4,
-                        slidesToScroll: 1,
-                    }
-                },
-                {
-                    breakpoint: 992,
-                    settings: {
-                        slidesToShow: 3,
-                        slidesToScroll: 1,
-                    }
-                },
-                {
-                    breakpoint: 575,
-                    settings: {
-                        slidesToShow: 2,
-                        slidesToScroll: 1,
-                    }
-                }
-
-            ]
+        $('.navbar-toggler').on('click', function() {
+            $(".navbar-toggler").toggleClass('open');
         });
-    });
-
-    $(document).ready(function() {
-        $('.host-cal-slider').slick({
-            dots: false,
-            infinite: true,
-            draggable: true,
-            arrow: true,
-            slidesToShow: 1,
-            prevArrow: $('.prev-banner-btn'),
-            nextArrow: $('.next-banner-btn'),
-            responsive: [{
-                    breakpoint: 1400,
-                    settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1,
-                    }
-                },
-                {
-                    breakpoint: 992,
-                    settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1,
-                    }
-                },
-                {
-                    breakpoint: 575,
-                    settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1,
-                    }
-                }
-
-            ]
+        $('.send-mail-open').on('click', function() {
+            $(".invite-member-popup").toggleClass('open');
         });
-    });
 
-    var $range = $(".js-range-slider"),
-        $from = $(".from"),
-        $to = $(".to"),
-        range,
-        min = $range.data('min'),
-        max = $range.data('max'),
-        from,
-        to;
+        $('.sidebar-expand-btn').on('click', function() {
+            $(".home-filter-box").addClass('expand');
+        });
+        $('.filter-fotter-btns').on('click', function() {
+            $(".home-filter-box").removeClass('expand');
+        });
 
-    var updateValues = function() {
-        $from.prop("value", from);
-        $to.prop("value", to);
-    };
 
-    $range.ionRangeSlider({
-        onChange: function(data) {
-            from = data.from;
-            to = data.to;
+
+        $(document).ready(function() {
+            $('.product-slider').slick({
+                dots: false,
+                infinite: false,
+                draggable: true,
+                arrow: true,
+                slidesToShow: 4,
+                prevArrow: $('.prev-product-btn'),
+                nextArrow: $('.next-product-btn'),
+                responsive: [{
+                        breakpoint: 1400,
+                        settings: {
+                            slidesToShow: 4,
+                            slidesToScroll: 1,
+                        }
+                    },
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 1,
+                        }
+                    },
+                    {
+                        breakpoint: 575,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 1,
+                        }
+                    }
+
+                ]
+            });
+        });
+
+        $(document).ready(function() {
+            $('.host-cal-slider').slick({
+                dots: false,
+                infinite: true,
+                draggable: true,
+                arrow: true,
+                slidesToShow: 1,
+                prevArrow: $('.prev-banner-btn'),
+                nextArrow: $('.next-banner-btn'),
+                responsive: [{
+                        breakpoint: 1400,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1,
+                        }
+                    },
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1,
+                        }
+                    },
+                    {
+                        breakpoint: 575,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1,
+                        }
+                    }
+
+                ]
+            });
+        });
+
+        var $range = $(".js-range-slider"),
+            $from = $(".from"),
+            $to = $(".to"),
+            range,
+            min = $range.data('min'),
+            max = $range.data('max'),
+            from,
+            to;
+
+        var updateValues = function() {
+            $from.prop("value", from);
+            $to.prop("value", to);
+        };
+
+        $range.ionRangeSlider({
+            onChange: function(data) {
+                from = data.from;
+                to = data.to;
+                updateValues();
+            }
+        });
+
+        range = $range.data("ionRangeSlider");
+        var updateRange = function() {
+            range.update({
+                from: from,
+                to: to
+            });
+        };
+
+        $from.on("input", function() {
+            from = +$(this).prop("value");
+            if (from < min) {
+                from = min;
+            }
+            if (from > to) {
+                from = to;
+            }
             updateValues();
-        }
-    });
-
-    range = $range.data("ionRangeSlider");
-    var updateRange = function() {
-        range.update({
-            from: from,
-            to: to
+            updateRange();
         });
-    };
 
-    $from.on("input", function() {
-        from = +$(this).prop("value");
-        if (from < min) {
-            from = min;
-        }
-        if (from > to) {
-            from = to;
-        }
-        updateValues();
-        updateRange();
-    });
+        $to.on("input", function() {
+            to = +$(this).prop("value");
+            if (to > max) {
+                to = max;
+            }
+            if (to < from) {
+                to = from;
+            }
+            updateValues();
+            updateRange();
+        });
 
-    $to.on("input", function() {
-        to = +$(this).prop("value");
-        if (to > max) {
-            to = max;
-        }
-        if (to < from) {
-            to = from;
-        }
-        updateValues();
-        updateRange();
-    });
-</script>
+    </script>
+@endpush

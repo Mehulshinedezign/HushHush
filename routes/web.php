@@ -122,7 +122,7 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
 
         // country state city routes
         Route::get('states/{country}', [App\Http\Controllers\AjaxController::class, 'states'])->name('states');
-        Route::get('cities/{state}', [App\Http\Controllers\AjaxController::class, 'cities'])->name('cities');
+        Route::get('cities', [App\Http\Controllers\AjaxController::class, 'cities'])->name('cities');
 
     });
     // logged in routes
@@ -137,7 +137,8 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         // rental request here
         Route::get('rental-request', [App\Http\Controllers\Customer\OrderController::class, 'rental_request'])->name('rental-request');
         // my account
-        Route::get('my-account', [App\Http\Controllers\ProfileController::class, 'profile'])->name('profile');
+        Route::get('my-profile', [App\Http\Controllers\ProfileController::class, 'profile'])->name('profile');
+        Route::get('handle', [App\Http\Controllers\ProfileController::class, 'handle'])->name('handle');
         Route::get('edit-account', [App\Http\Controllers\ProfileController::class, 'edit_profile'])->name('edit-account');
         Route::post('change-password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('changepassword');
         Route::post('update-profile', [App\Http\Controllers\ProfileController::class, 'saveUserDetail'])->name('saveprofile');
@@ -150,6 +151,8 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         Route::get('/change_pass', [App\Http\Controllers\ProfileController::class, 'ChangePassword'])->name('user.changePassword');
         Route::get('change-profile/{user}', [App\Http\Controllers\ProfileController::class, 'changeProfile'])->name('change-Profile');
         Route::post('update_profile', [App\Http\Controllers\ProfileController::class, 'saveUserprofile'])->name('saveUserprofile');
+
+        Route::get('get_subcategories', [App\Http\Controllers\Admin\CategoryController::class, 'getSubcategories'])->name('get_subcategories');
         // card
         Route::get('card-index', [App\Http\Controllers\CardController::class, 'index'])->name('card.index');
         Route::post('card-store', [App\Http\Controllers\CardController::class, 'store'])->name('card.store');

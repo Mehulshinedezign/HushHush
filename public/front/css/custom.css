@@ -1034,6 +1034,7 @@ span.left-form-icon {
 }
 .duel-select-field {
     min-height: 60px;
+    max-height: 60px;
     border: 1px solid;
     border-color: var(--border-color);
     padding: 10px 18px;
@@ -1046,8 +1047,19 @@ span.left-form-icon {
     padding: 0px 20px;
 } */
 .duel-select-field .formfield:first-child{
-    border-right: 1px solid var(--border-color);
+    /* border-right: 1px solid var(--border-color); */
+    position: relative;
 }
+.duel-select-field .formfield:first-child::after{
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 38px;
+    width: 1px;
+    background-color: var(--border-color);
+}
+
 .duel-select-field .formfield select{
     border: 0;
     appearance: none;
@@ -1061,6 +1073,7 @@ span.left-form-icon {
     font-weight: 400;
     font-size: 14px;
     padding: 0px 20px;
+    max-height: 38px;
 }
 .duel-select-field .formfield select:focus-visible{
     border: 0;
@@ -1849,3 +1862,74 @@ span.left-form-icon {
 .complete-mail-box img{
     max-width: 150px;
 }
+
+.my-pro-dp-view {
+    max-width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 7px solid #fff;
+    margin: 0 auto;
+}
+.my-pro-dp-view img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.my-profilr-dp-edit {
+    max-width: 100px;
+    margin: 0 auto;
+    position: relative;
+}
+.upload-my-pro {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: var(--primary-color);
+    border-radius: 50px;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border: 2px solid #FFF;
+}
+.upload-my-pro i {
+    font-size: 10px;
+    color: #Fff;
+}
+.full-hight-sm{
+    height: calc(100vh - 163px);
+}
+.duel-select-field label.invalid-feedback {
+    margin-top: 14px;
+}
+.formfield.right-icon-field .form-icon {
+    right: auto;
+    left: 15px;
+    top: 17px;
+}
+.form-group:has(.duel-select-field .invalid-feedback){
+    margin-bottom: 30px;
+}
+.header-cart ul li div{
+    cursor: pointer;
+}
+.edit-product-main .my-profile-info-box{
+    background-color: #fff;
+}
+.edit-product-main h2{
+    text-align: center;
+    font-size: 28px;
+    line-height: 36px;
+    margin: 0 0 30px;
+}
+.product-btn-box {
+    display: flex;
+    gap: 15px;
+    margin: 15px 0px;
+}
+
+
+

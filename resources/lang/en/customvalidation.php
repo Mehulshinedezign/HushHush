@@ -215,11 +215,11 @@ return [
             'required' => __('This field is required.'),
             'regex' => __('Zip code is invalid.'),
         ],
-        'complete_address' => [
-            'required' => __('This field is required'),
-            'min' => __('Complete address length should be 10.'),
-            'max' => __('Complete address length should be 255.'),
-        ],
+        // 'complete_address' => [
+        //     'required' => __('This field is required'),
+        //     'min' => __('Complete address length should be 10.'),
+        //     'max' => __('Complete address length should be 255.'),
+        // ],
         'gov_id' => [
            'required' =>  __('This field is required'),
            'file' => 'The government ID must be a file of type: jpg, png, jpeg, pdf.',
@@ -308,7 +308,7 @@ return [
             'regex' => 'Price amount can be upto 2 digits from decimal.',
         ],
         'image' => [
-            'required' => 'Please select the thumbnail image.',
+            'required' => 'Please select the image.',
         ],
         'uploaded_image' => [
             'required' => 'Please upload at least :min images.',
@@ -323,15 +323,42 @@ return [
             'required' => 'Please enter product market value.',
         ],
         'product_link' => [
-            'required' => 'Please enter product link.',
+            'required' => 'Please enter Product link.',
+        ],
+        'state' => [
+            'required' => 'Please enter State.',
+        ],
+        'city' => [
+            'required' => 'Please enter City.',
+        ],
+        'product_name' => [
+            'required' => 'Please enter Product name.',
+        ],
+        'subcategory' => [
+            'required' => 'Please select Sub Category.',
+        ],
+        'pick_up_location' => [
+            'required' => 'Please select Pick up location.',
         ],
         'min_rent_days' =>[
             'required' => 'Please enter the number of days required to rent an item.',
-            'min' => 'Minimum rent days must be at least 3 days.',
-            'max' => 'Minimum rent days must be between 3 to 7 days.',
+            'min' => 'Minimum rent days must be at least 1 days.',
+            'max' => 'Maximum rent days must be 30 days.',
             'string' => 'Please enter only digit values.',
             'regex' => 'Please enter only digit values.',
-            'range' => 'Please enter the days from 3 to 7.',
+            'range' => 'Please enter the days from 1 to 30.',
+        ],
+        'rent_price_day' =>[
+            'required' => 'Please enter Rental price day.',
+            'regex' => 'Please enter only digit values.',
+        ],
+        'rent_price_week' =>[
+            'required' => 'Please enter Rental price week.',
+            'regex' => 'Please enter only digit values.',
+        ],
+        'rent_price_month' =>[
+            'required' => 'Please enter Rental price month.',
+            'regex' => 'Please enter only digit values.',
         ],
     ],
 ];

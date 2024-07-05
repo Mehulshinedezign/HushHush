@@ -407,7 +407,7 @@
                         </div>
                     </div>
                     <div class="footer-copyright" id="footer-copyright">
-                        <p class="footer-copyright-text">© {{ date('Y') }} RentAHobby. All rights reserved</p>
+                        <p class="footer-copyright-text">© {{ date('Y') }} {{ env('APP_NAME') }}. All rights reserved</p>
                     </div>
                 </div>
             </footer>

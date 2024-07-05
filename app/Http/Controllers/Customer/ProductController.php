@@ -49,35 +49,35 @@ class ProductController extends Controller
         // dd($request->neighborhoodcity,  $city);
 
         // dd($request->global_product_pagination);
-        $allProducts = $products->get();
-        $products = $products->paginate($request->global_product_pagination);
-        $maxPrice = number_format((float)ceil(Product::max('rent')), 2, '.', '');
-        $minPrice = number_format((float)floor(Product::min('rent')), 2, '.', '');
-        $fourStar = $allProducts->whereBetween('average_rating', [3.1, 5])->count();
-        $threeStar = $allProducts->whereBetween('average_rating', [2.1, 3])->count();
-        $twoStar = $allProducts->whereBetween('average_rating', [1.1, 2])->count();
-        $oneStar = $allProducts->whereBetween('average_rating', [0.1, 1])->count();
-        $filters = [
-            'maxprice' => $maxPrice,
-            'minprice' => $minPrice,
-            'categories' => $selectedCategories,
-            'selectedcolor' => $selectedcolor,
-            'selectedcondition' => $selectedcondition,
-            'selectedbrands' => $selectedbrands,
-            'selectedsize' => $selectedsize,
-            'rental_type' => [$rentalType],
-            'rent' => $request->rent ?? $maxPrice,
-            'star1' => $oneStar,
-            'star2' => $twoStar,
-            'star3' => $threeStar,
-            'star4' => $fourStar,
-            'neighborhoodcity' => $city,
-        ];
+        // $allProducts = $products->get();
+        // $products = $products->paginate($request->global_product_pagination);
+        // $maxPrice = number_format((float)ceil(Product::max('rent')), 2, '.', '');
+        // $minPrice = number_format((float)floor(Product::min('rent')), 2, '.', '');
+        // $fourStar = $allProducts->whereBetween('average_rating', [3.1, 5])->count();
+        // $threeStar = $allProducts->whereBetween('average_rating', [2.1, 3])->count();
+        // $twoStar = $allProducts->whereBetween('average_rating', [1.1, 2])->count();
+        // $oneStar = $allProducts->whereBetween('average_rating', [0.1, 1])->count();
+        // $filters = [
+        //     // 'maxprice' => $maxPrice,
+        //     // 'minprice' => $minPrice,
+        //     'categories' => $selectedCategories,
+        //     'selectedcolor' => $selectedcolor,
+        //     'selectedcondition' => $selectedcondition,
+        //     'selectedbrands' => $selectedbrands,
+        //     'selectedsize' => $selectedsize,
+        //     'rental_type' => [$rentalType],
+        //     // 'rent' => $request->rent ?? $maxPrice,
+        //     'star1' => $oneStar,
+        //     'star2' => $twoStar,
+        //     'star3' => $threeStar,
+        //     'star4' => $fourStar,
+        //     'neighborhoodcity' => $city,
+        // ];
         // dd($products, $filters, $filters['categories']);
 
         // dd($products->toArray());
-
-        return view('index', compact('products', 'categories', 'filters',))->with(['selectedLocation' => $this->selectedLocation]);
+        return view('index', compact('products', 'categories'))->with(['selectedLocation' => $this->selectedLocation]);
+        // return view('index', compact('products', 'categories', 'filters',))->with(['selectedLocation' => $this->selectedLocation]);
     }
 
     /**

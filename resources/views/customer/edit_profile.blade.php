@@ -1,15 +1,9 @@
 @extends('layouts.front')
 @section('title', 'My Profile')
 @section('links')
-    <script src="https://cdn.tiny.cloud/1/rcqfj1cr6ejxsyuriqt95tnyc64joig2nppf837i8qckzy90/tinymce/5/tinymce.min.js"
-        referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-            selector: 'textarea',
-            branding: false,
-        });
-        const notify_url = "{{ route('notificationsetting') }}";
-    </script>
+    @php
+        $user = auth()->user();
+    @endphp
 @endsection
 
 @section('content')
@@ -430,10 +424,10 @@
         </div>
     </div> --}}
 
-    <section class="my-profile-sec">
+    <section class="my-profile-sec cust-form-bg fill-hight">
         <div class="container">
             <div class="my-profile-wrapper">
-                <h2>My Profile</h2>
+                <h2>Account Settings</h2>
                 <div class="my-profile-info-box">
                     <div class="row g-3">
                         <div class="col-md-12 me-0 ms-auto">
@@ -444,6 +438,16 @@
                                 </a>
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <div class="my-pro-dp-view">
+                                @if ($user->profile_file)
+                                    <img src="{{ asset('storage/' . $user->profile_file) }}" alt="Profile Picture">
+                                @else
+                                    <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
+                                @endif
+                                {{-- <img src="{{asset('front/images/pro3.png')}}" alt="img"> --}}
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="my-pro-detail">
                                 <div class="my-pro-detail-left">
@@ -452,7 +456,7 @@
                                         <h4>{{ $user->name }}</h4>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -463,7 +467,7 @@
                                         <h4>{{ $user->email }}</h4>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -471,10 +475,10 @@
                                 <div class="my-pro-detail-left">
                                     <div class="my-pro-detail-para">
                                         <p>Address</p>
-                                        <h4>{{$user->userDetail->address1}}</h4>
+                                        <h4>{{ $user->userDetail->address1 }}</h4>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -485,7 +489,7 @@
                                         <h4>{{ $user->name }}, 2034338224</h4>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -502,25 +506,25 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="my-pro-notify-box">
-                                    <div class="my-pro-detail-left">
-                                        <div class="my-pro-detail-para">
-                                            <h4 class="m-0">Notification</h4>
-                                        </div>
-                                    </div>
-                                    <div class="my-pro-detail-right">
-                                        <div class="toggle-btn">
-                                            <input type="checkbox" checked id="switch1" /><label for="switch1">Toggle</label>
-                                        </div>
-                                    </div>
-                                </div>
+                                <!-- <div class="my-pro-notify-box">
+                                            <div class="my-pro-detail-left">
+                                                <div class="my-pro-detail-para">
+                                                    <h4 class="m-0">Notification</h4>
+                                                </div>
+                                            </div>
+                                            <div class="my-pro-detail-right">
+                                                <div class="toggle-btn">
+                                                    <input type="checkbox" checked id="switch1" /><label for="switch1">Toggle</label>
+                                                </div>
+                                            </div>
+                                        </div> -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-   </section>
+    </section>
 
 @endsection
 <!-- Add Card Modal -->
@@ -533,8 +537,7 @@
             </div>
             <div class="modal-body pt-2">
                 <div class="pay_mode">
-                    <form class="my-profile-form" action="{{ route('card.store') }}" method="post"
-                        id="addCardForm">
+                    <form class="my-profile-form" action="{{ route('card.store') }}" method="post" id="addCardForm">
                         @csrf
                         <div class="hold_card">
                             <div class="left-card">

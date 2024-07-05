@@ -299,11 +299,11 @@
                 </div>
                 <div class="header-cart">
                     <ul>
-                        <li>
+                         <li>
                             <div data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
                                 Rent your closet
                             </div>
-                        </li>
+                        </li> 
                         <li>
                             <div class="dropdown">
                                 <div class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -311,12 +311,14 @@
                                 </div>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                                     
-                                  <li><a class="dropdown-item" href="{{ route('edit-account') }}"><img src="{{asset('front/images/user-icon.svg')}}" alt="img">Profile</a></li>
-                                  <li><a class="dropdown-item" href="{{ route('orders') }}"><img src="{{asset('front/images/order-history-icon.svg')}}" alt="img">Order History</a></li>
-                                  <li><a class="dropdown-item" href="{{ route('rental-request') }}"><img src="{{asset('front/images/rent-req-icon.svg')}}" alt="img">Rental Request</a></li>
-                                  <li><a class="dropdown-item" href="#"><img src="{{asset('front/images/notification-icon.svg')}}" alt="img">Notifications</a></li>
-                                  <li><a class="dropdown-item" href="#"><img src="{{asset('front/images/saved-icon.svg')}}" alt="img">Saved Items</a></li>
-                                  <li><a class="dropdown-item" href="{{ route('payment-history')}}"><img src="{{asset('front/images/payment-history-icon.svg')}}" alt="img">Payment History</a></li>
+                                  <li><a class="dropdown-item" href="{{ route('edit-account') }}"><img src="{{asset('front/images/user-icon.svg')}}" alt="img">Account Settings</a></li>
+                                  <li><a class="dropdown-item" href="{{ route('product') }}"><img src="{{asset('front/images/user-icon.svg')}}" alt="img">My Product</a></li>
+                                  <li><a class="dropdown-item" href="{{ route('profile') }}"><img src="{{asset('front/images/user-icon.svg')}}" alt="img">Profile</a></li>
+                                  <!-- <li><a class="dropdown-item" href="{{ route('orders') }}"><img src="{{asset('front/images/order-history-icon.svg')}}" alt="img">Order History</a></li> -->
+                                  <!-- <li><a class="dropdown-item" href="{{ route('rental-request') }}"><img src="{{asset('front/images/rent-req-icon.svg')}}" alt="img">Rental Request</a></li> -->
+                                  <!-- <li><a class="dropdown-item" href="#"><img src="{{asset('front/images/notification-icon.svg')}}" alt="img">Notifications</a></li> -->
+                                  <!-- <li><a class="dropdown-item" href="#"><img src="{{asset('front/images/saved-icon.svg')}}" alt="img">Saved Items</a></li> -->
+                                  <!-- <li><a class="dropdown-item" href="{{ route('payment-history')}}"><img src="{{asset('front/images/payment-history-icon.svg')}}" alt="img">Payment History</a></li> -->
                                   <li><a class="dropdown-item" href="{{ route('user.changePassword') }}"><i class="fa-light fa-gear"></i>Change password</a></li>
                                   <li><a class="dropdown-item" href="{{ route('logout') }}"><img src="{{asset('front/images/logout-icon.svg')}}" alt="img">Logout</a></li>
                                 </ul>
@@ -672,18 +674,18 @@
     //     selectBtn.classList.toggle("open");
     // });
 
-    items.forEach(item => {
-        item.addEventListener("click", () => {
-            item.classList.toggle("checked");
+    // items.forEach(item => {
+    //     item.addEventListener("click", () => {
+    //         item.classList.toggle("checked");
 
-            let checked = document.querySelectorAll(".checked"),
-                btnText = document.querySelector(".btn-text");
+    //         let checked = document.querySelectorAll(".checked"),
+    //             btnText = document.querySelector(".btn-text");
 
-            if (checked && checked.length > 0) {
-                btnText.innerText = `${checked.length} Selected`;
-            } else {
-                btnText.innerText = "Where";
-            }
-        });
-    })
+    //         if (checked && checked.length > 0) {
+    //             btnText.innerText = `${checked.length} Selected`;
+    //         } else {
+    //             btnText.innerText = "Where";
+    //         }
+    //     });
+    // })
 </script>

@@ -245,18 +245,71 @@ $(document).ready(function() {
             var accordion = new Accordion($('#footer-accordion'), false);
         });
 	}
+    
 });
 
+// function handleValidation(form, rules, messages = {}, submitHandler = false) {
+//     if( typeof form == "string" )
+//         form = jQuery('form#' + form);
+//     let valdiationConfiguration = {
+//         errorClass: "invalid-feedback",
+//         ignore: [],
+//         rules: rules,
+//         messages: messages,
+//         highlight: function (element) {
+//             jQuery(element).siblings("span.invalid-feedback").remove();
+//             if (jQuery(element).hasClass('selectric')) {
+//                 jQuery(element).parents('.selectric-wrapper').addClass("selectric-is-invalid");
+//             } else {
+//                 jQuery(element).parent().addClass("is-invalid");
+//             }
+//             jQuery(element).addClass("is-invalid");
+//         },
+//         unhighlight: function (element) {
+//             if (jQuery(element).hasClass('selectric')) {
+//                 jQuery(element).parents('.selectric-wrapper').removeClass("selectric-is-invalid");
+//             } else {
+//                 jQuery(element).parent().removeClass("is-invalid");
+//             }
+//             jQuery(element).removeClass("is-invalid");
+//         },
+//         errorPlacement: function (label, element) {
+//             if (jQuery(element).hasClass('selectric')) {
+//                 label.removeClass('invalid-feedback').addClass('cstm-selectric-invalid').insertAfter(jQuery(element).parent().siblings('.selectric'))
+//             }else if( jQuery(element).hasClass('select2-error') ){
+//                 label.insertAfter( $(element).parent() )
+//             }else if( jQuery(element).hasClass('form-select') ){
+//                 label.insertAfter( $(element).parent().parent() )
+//             }else if( jQuery(element).hasClass('form-class') ){
+//                 label.insertAfter( $(element).parent() )
+//             }else if( jQuery(element).hasClass('star') ){
+//                 label.insertAfter( $(element).parent() )
+//             }else if( jQuery(element).hasClass('product-images') ){
+//                 label.insertAfter( $(element).parent() )
+//             }else if( jQuery(element).hasClass('form-category') ){
+//                 label.insertAfter( $(element).parent().parent().parent() )  
+//             }else if( jQuery(element).hasClass('neighborhood') ){
+//                 label.insertAfter( $(element).parent().parent())
+                
+//             }else {
+//                 label.insertAfter(element)
+//             }
+//         }
+//     };
+//     if( submitHandler )
+//         valdiationConfiguration.submitHandler = submitHandler;
+//     form.validate( valdiationConfiguration );
+// }
+
 function handleValidation(form, rules, messages = {}, submitHandler = false) {
-    if( typeof form == "string" )
+    if (typeof form == "string")
         form = jQuery('form#' + form);
-    let valdiationConfiguration = {
+    let validationConfiguration = {
         errorClass: "invalid-feedback",
         ignore: [],
         rules: rules,
         messages: messages,
         highlight: function (element) {
-            jQuery(element).siblings("span.invalid-feedback").remove();
             if (jQuery(element).hasClass('selectric')) {
                 jQuery(element).parents('.selectric-wrapper').addClass("selectric-is-invalid");
             } else {
@@ -273,33 +326,40 @@ function handleValidation(form, rules, messages = {}, submitHandler = false) {
             jQuery(element).removeClass("is-invalid");
         },
         errorPlacement: function (label, element) {
+            let target = element;
+            
             if (jQuery(element).hasClass('selectric')) {
-                label.removeClass('invalid-feedback').addClass('cstm-selectric-invalid').insertAfter(jQuery(element).parent().siblings('.selectric'))
-            }else if( jQuery(element).hasClass('select2-error') ){
-                label.insertAfter( $(element).parent() )
-            }else if( jQuery(element).hasClass('form-select') ){
-                label.insertAfter( $(element).parent().parent() )
-            }else if( jQuery(element).hasClass('form-class') ){
-                label.insertAfter( $(element).parent() )
-            }else if( jQuery(element).hasClass('star') ){
-                label.insertAfter( $(element).parent() )
-            }else if( jQuery(element).hasClass('product-images') ){
-                label.insertAfter( $(element).parent() )
-            }else if( jQuery(element).hasClass('form-category') ){
-                label.insertAfter( $(element).parent().parent().parent() )  
-            }else if( jQuery(element).hasClass('neighborhood') ){
-                label.insertAfter( $(element).parent().parent())
-                
-            }else {
-                label.insertAfter(element)
+                target = jQuery(element).parent().siblings('.selectric');
+                label.removeClass('invalid-feedback').addClass('cstm-selectric-invalid');
+            } else if (jQuery(element).hasClass('select2-error') || 
+                       jQuery(element).hasClass('form-select') || 
+                       jQuery(element).hasClass('form-class') || 
+                       jQuery(element).hasClass('star') || 
+                       jQuery(element).hasClass('product-images')) {
+                target = $(element).parent();
+            } else if (jQuery(element).hasClass('form-category')) {
+                target = $(element).parent().parent().parent();
+            } else if (jQuery(element).hasClass('neighborhood')) {
+                target = $(element).parent().parent();
+            }
+
+            label.insertAfter(target);
+
+            // If it's an email field and there's an existing "email already in use" message, keep it
+            if (element.attr('name') === 'email') {
+                let existingError = target.siblings('.invalid-feedback[role="alert"]');
+                if (existingError.length) {
+                    existingError.insertAfter(label);
+                }
             }
         }
     };
-    if( submitHandler )
-        valdiationConfiguration.submitHandler = submitHandler;
-    form.validate( valdiationConfiguration );
+    
+    if (submitHandler)
+        validationConfiguration.submitHandler = submitHandler;
+    
+    form.validate(validationConfiguration);
 }
-
 function ajaxCall(url, method, params, loader = true) {
     if (loader) {
         return new Promise((resolve, reject) => {

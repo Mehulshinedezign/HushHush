@@ -8,7 +8,7 @@
                 @csrf
                 <input type="hidden" name="g_recaptcha_response" id="recaptcha_token" value="">
                 <div class="form-group">
-             
+                
                     <div class="formfield">
                         <input id="username" type="text"
                             class="form-control form-class @error('username') is-invalid @enderror" name="username"
@@ -24,7 +24,7 @@
                     @enderror
                 </div>
                 <div class="form-group">
-
+ 
                     <div class="formfield">
                         <input id="name" type="text"
                             class="form-control form-class @error('name') is-invalid @enderror" name="name"
@@ -133,7 +133,7 @@
             </form>
         </div>
     </div> --}}
-    <div class="cust-form-bg">
+    <div class="cust-form-bg full-hight-sm">
         <div class="form-setup login-form">
             <h4>Sign up</h4>
             <x-alert />
@@ -264,7 +264,7 @@
                     </div>
 
                 </div>
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="complete_address">Complete address</label>
                     <div class="formfield">
                         <input type="text"
@@ -284,17 +284,17 @@
                             {{ $message }}
                         </span>
                     @enderror
-                </div>
+                </div> --}}
                 <div class="form-group">
 
-                    <div class="formfield">
+                    {{-- <div class="formfield">
                         <input id="about" type="text"
                             class="form-control form-class @error('about') is-invalid @enderror" name="about"
                             value="{{ old('about') }}" autocomplete="off" placeholder="About me">
                         <span class="form-icon">
                             <i class="bi bi-person-circle fs-4"></i>
                         </span>
-                    </div>
+                    </div> --}}
 
                 </div>
                 <button class="button primary-btn full-btn">Sign up</button>
@@ -344,5 +344,14 @@
             formatOnDisplay: false,
             utilsScript: "//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"
         });
+        $(document).ready(function() {
+    $(document).on('keypress', 'input', function(e) {
+        if (e.which === 13) { // 13 is the Enter key code
+            e.preventDefault();
+            return false;
+        }
+    });
+});
+
     </script>
 @endpush

@@ -36,11 +36,13 @@ class AjaxController extends Controller
         return response()->json(['title' => 'Success', 'data' => $states, 'message' => 'States retrieved successfully']);
     }
 
-    public function cities($stateId)
+    public function cities(Request $request)
     {
+        $stateId = $request->state_id;
         $cities = City::where('state_id', $stateId)->get();
 
-        return response()->json(['title' => 'Success', 'data' => $cities, 'message' => 'Cities retrieved successfully']);
+        return response()->json($cities);
+        // return response()->json(['title' => 'Success', 'data' => $cities, 'message' => 'Cities retrieved successfully']);
     }
 
     public function get_subcat($id)

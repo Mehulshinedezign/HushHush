@@ -14,7 +14,7 @@ class AddProductMarketValueAndProductLinkToProductsTable extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->decimal('product_market_value', 8, 2)->nullable()->after('neighborhood_city');
+            $table->decimal('product_market_value', 8, 2)->nullable()->after('state');
             $table->string('product_link')->nullable()->after('product_market_value');
         });
     }

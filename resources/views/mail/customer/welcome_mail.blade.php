@@ -4,7 +4,7 @@
 <head>
     <meta content="en-us" http-equiv="content-language">
     <meta content="text/html; charset=utf-8" http-equiv="content-type">
-    <title>Chere</title>
+    <title>nudora</title>
 
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
 
@@ -425,12 +425,12 @@
                     style="max-width:750px; background-color: #fff; border-collapse:collapse;  font-weight:normal;font-size:14px;line-height:17pt;color:#444444;margin:0 auto;">
                     <tr>
                         <td bgcolor="#E8E5DE" valign="top" style="padding-top: 20px; padding-bottom:20px">
-                            <a target="_blank" href="javascript:;"
+                            {{-- <a target="_blank" href="javascript:;"
                                 style="margin-left:auto;margin-right:auto;text-align:center;">
                                 <img alt="image" src="{{ asset('img/logo.png') }}" width="100"
                                     style="max-width:100px;padding: 0; border: 0;display:block;margin:0 auto;"
                                     border="0">
-                            </a>
+                            </a> --}}
                         </td>
                     </tr>
                     <tr>
@@ -454,7 +454,7 @@
                                                                 <td valign="top"
                                                                     style="width: 80%;font-size: 16px; line-height: 26px;color: #606060;text-align:center;">
                                                                     <h2 style="  text-align: center;">
-                                                                        Welcome to Chere </h2>
+                                                                        Welcome to nudora </h2>
                                                                     <h4
                                                                         style="font-size: 27px; color: #323232;text-align: center;font-style: normal;font-weight: bold;letter-spacing: -1px;padding-top: 5px;   ">
                                                                         Hello, {{ $user->name }}</h4>
@@ -535,7 +535,7 @@
                                                                     of interest. Keep track of items you love by adding
                                                                     them to your
                                                                     favorites.</li>
-                                                                <li>Chere your items: If you have fashion pieces you're
+                                                                <li>nudora your items: If you have fashion pieces you're
                                                                     open to
                                                                     lending, consider listing them. You will earn cash
                                                                     straight to
@@ -548,7 +548,7 @@
                                                                 Should you have any questions, comments or concerns, our
                                                                 support team is here to help. You can reach us at <a
                                                                     href="javascript: void(0);"
-                                                                    style="color: #767676;">team@thechere.com</a>.</p> --}}
+                                                                    style="color: #767676;">team@thenudora.com</a>.</p> --}}
                                                             <p style="text-align: center;margin: 20px auto 50px;"><a
                                                                     href="{{ route('index') }}"
                                                                     style="font-style: normal;
@@ -567,7 +567,7 @@
                                                                 Annika</p>
                                                             <p
                                                                 style="font-style: normal;color: #525252;font-size: 15px;   margin: 0 0 3px;font-weight: 600;">
-                                                                Founder & CEO, Chere</p> --}}
+                                                                Founder & CEO, nudora</p> --}}
                                                         </div>
                                                     </td>
                                                     <td style="width: 15%;"></td>
@@ -600,12 +600,12 @@
                                             <tr>
                                                 <td
                                                     style="font-style: normal;font-weight: 600;color: #1B1B1B;;font-size: 16px; margin: 0 0 3px">
-                                                    Team Chere</td>
+                                                    Team nudora</td>
                                             </tr>
                                             <tr>
                                                 <td
                                                     style="font-style: normal;font-weight: 600;color: #1B1B1B;;font-size: 16px; margin: 0 0 3px">
-                                                    team@thechere.com</td>
+                                                    team@thenudora.com</td>
                                             </tr>
                                         </table>
                                     </td>
@@ -681,7 +681,7 @@
                                     <tr>
                                         <td colspan="3" align="center"
                                             style="color:#606060;   font-size:12px;text-align:center;line-height:24px;padding-top: 5px;">
-                                            © {{ date('Y') }} Chere. All rights reserved</td>
+                                            © {{ date('Y') }} {{ env('APP_NAME') }}. All rights reserved</td>
                                     </tr>
                                     <tr>
                                         <td style="height: 30px;" colspan="3"></td>

@@ -102,6 +102,7 @@ return [
         'passwordConfirmed' => 'The password confirmation does not match.',
         'completeAddressMin'    =>  'Adress address must be between 2-50 characters.',
         'completeAddressMax'    =>  'Complete address must be between 2-50 characters.',
+        'oldNewPassword' => 'Old password and new password can not be same',
     ],
     'messages' => [
         'passwordChanged' => 'Password changed successfully',

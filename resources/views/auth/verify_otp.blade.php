@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="cust-form-bg">
+    <div class="cust-form-bg full-hight-sm">
         <div class="form-setup login-form">
             <x-alert />
             <form class="form-inline" method="POST" action="{{ route('verify.otp.submit') }}">
@@ -18,13 +18,13 @@
                     @enderror
                 </div>
 
-                <a href="{{ route('resend.otp', ['user_id' => $userId]) }}" class="text-dark">Resend</a>
+                <!-- <a href="{{ route('resend.otp', ['user_id' => $userId]) }}" class="text-dark">Resend</a> -->
 
                 <button type="submit" 
-                    class="primary-btn width-full">{{ __('Verify OTP') }}</button>
+                    class="button primary-btn full-btn">{{ __('Verify OTP') }}</button>
                 </p>
             </form>
-        </div>
+        </div> 
     </div>
 @endsection
 
