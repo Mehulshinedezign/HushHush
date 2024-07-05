@@ -47,7 +47,7 @@ class ForgotPasswordController extends Controller
             $forgot->sendResetPasswordLinkEmail($request);
             return redirect()->back();
         }
-    }
+
 
         // protected function sendResetPasswordLinkEmail(Request $request)
         // {

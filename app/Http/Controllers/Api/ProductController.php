@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\ProductTrait;
+use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\NeighborhoodCity;
 use App\Models\Product;
 use App\Models\ProductDisableDate;
@@ -12,6 +14,7 @@ use App\Models\ProductFavorite;
 use App\Models\ProductImage;
 use App\Models\ProductLocation;
 use App\Models\ProductUnavailability;
+use App\Models\Size;
 use App\Models\User;
 use App\Notifications\ItemYouLike;
 use Carbon\CarbonPeriod;
@@ -79,7 +82,7 @@ class ProductController extends Controller
             $apiResponse = 'success';
             $statusCode = '200';
             $message = 'Data fetched successfully!';
-
+            // dd($categories);
             return $this->apiResponse($apiResponse, $statusCode, $message, $transformedProducts, $categories);
         } catch (\Throwable $e) {
             $apiResponse = 'error';
@@ -745,11 +748,6 @@ class ProductController extends Controller
     }
 
 
-
-
-
-
-
     public function updateProduct(Request $request, $id)
     {
         try {
@@ -833,4 +831,62 @@ class ProductController extends Controller
         }
     }
 
+
+    public function getFormData()
+    {
+        // dd('here');
+        try {
+            $categories = getParentCategory();
+            $brands = getBrands();
+            $sizes = getAllsizes();
+            $colors = getColors();
+
+            $categoryData = $categories->map(function ($category) {
+                return [
+                    'id' => $category->id,
+                    'name' => $category->name,
+                    'Subcategory' => getChild($category->id)->map(function ($subCategory) {
+                        return [
+                            'id' => $subCategory->id,
+                            'subcatname' => $subCategory->name,
+                        ];
+                    }),
+                ];
+            });
+
+            $brandData = $brands->map(function ($brand) {
+                return [
+                    'id' => $brand->id,
+                    'name' => $brand->name,
+                ];
+            });
+
+            $sizeData = $sizes->map(function ($size) {
+                return $size->name;
+            });
+
+            $colorData = $colors->map(function ($color) {
+                return $color->name;
+            });
+
+            $data = [
+                'Category' => $categoryData,
+                'Brand' => $brandData,
+                'Size' => $sizeData,
+                'Color' => $colorData,
+            ];
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Form data fetched successfully!',
+                'data' => $data,
+            ], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'errors' => [],
+            ], 500);
+        }
+    }
 }

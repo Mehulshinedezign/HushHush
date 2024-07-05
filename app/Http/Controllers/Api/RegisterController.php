@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserDetail;
 use App\Models\UserDocuments;
+use App\Notifications\EmailOtpVerification;
 use App\Notifications\VerificationEmail;
 use App\Services\OtpService;
 use Illuminate\Auth\Events\Registered;
@@ -76,7 +77,8 @@ class RegisterController extends Controller
             $otp = $this->otpService->generateOtp($user);
             $this->otpService->sendOtp($otp, $full_number);
 
-            $user->notify(new VerificationEmail($user));
+            // $otp = $this->otpService->generateOtp($user);
+            $user->notify(new EmailOtpVerification($user, $otp));
 
             $apiResponse = 'success';
             $statusCode = '200';

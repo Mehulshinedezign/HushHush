@@ -18,6 +18,7 @@ class BankAccountController extends Controller
 
     public function addOrUpdateBankAccount(Request $request)
     {
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'account_holder_name' => 'required|string',
             // 'account_holder_last_name' => 'required|string',
