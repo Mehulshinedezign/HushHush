@@ -167,4 +167,12 @@ class Product extends Model
     {
         return $this->belongsTo(Size::class, 'size');
     }
+
+
+    //disable dates 
+
+    public function disableDates()
+    {
+        return $this->hasMany(ProductDisableDate::class);
+    }
 }

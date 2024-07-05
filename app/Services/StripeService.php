@@ -19,7 +19,7 @@ class StripeService
                 'bank_account' => [
                     'country' => $country,
                     'currency' => $currency,
-                    'account_holder_name' => $accountDetails['account_holder_first_name'] . ' ' . $accountDetails['account_holder_last_name'],
+                    'account_holder_name' => $accountDetails['account_holder_name'],
                     // 'account_holder_type' => $accountDetails['account_holder_type'],
                     'routing_number' => $accountDetails['routing_number'],
                     'account_number' => $accountDetails['account_number'],

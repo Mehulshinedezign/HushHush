@@ -120,10 +120,65 @@ trait ProductTrait
     }
 
     // get single product
+    // public function getProduct(Request $request, $id)
+    // {
+    //     $fromDate = $toDate = null;
+
+    //     if (!empty($request->reservation_date) && !empty($request->global_date_separator)) {
+    //         $fromAndToDate = array_map('trim', explode($request->global_date_separator, $request->reservation_date));
+    //         if (count($fromAndToDate) == 2 && !empty($request->global_date_format_for_check)) {
+    //             $fromDate = DateTime::createFromFormat($request->global_date_format_for_check, $fromAndToDate[0]);
+    //             $toDate = DateTime::createFromFormat($request->global_date_format_for_check, $fromAndToDate[1]);
+
+    //             if ($fromDate && $toDate) {
+    //                 $fromDate = $fromDate->format('Y-m-d');
+    //                 $toDate = $toDate->format('Y-m-d');
+    //             }
+    //         }
+    //     }
+
+    //     $product = Product::with(['get_brand', 'thumbnailImage', 'images', 'allImages', 'locations', 'nonAvailableDates', 'ratings.user', 'retailer' => function ($q) {
+    //         $q->where('status', '1');
+    //         $q->where('is_approved', '1');
+    //     }, 'categories' => function ($q) {
+    //         $q->where('status', '1');
+    //         $q->whereNull('deleted_at');
+    //     }])->withCount('ratings')
+    //         ->when(!is_null($fromDate) && !is_null($toDate), function ($q) use ($fromDate, $toDate) {
+    //             $q->whereDoesntHave('nonAvailableDates', function ($q) use ($fromDate, $toDate) {
+    //                 $q->whereBetween('from_date', [$fromDate, $toDate]);
+    //                 $q->orWhereBetween('to_date', [$fromDate, $toDate]);
+    //             });
+    //         })
+    //         ->when(!empty($request->rating), function ($q) use ($request) {
+    //             $q->whereHas('ratings', function ($q) use ($request) {
+    //                 $q->havingRaw('AVG(ratings.rating) >= ?', [$request->rating]);
+    //             });
+    //         })
+    //         ->when(!empty($request->rate), function ($q) use ($request) {
+    //             $q->where('rate', '<=', $request->rate);
+    //         })
+    //         ->whereHas('retailer', function ($q) {
+    //             $q->where('status', '1');
+    //             $q->where('is_approved', '1');
+    //         })
+    //         ->whereHas('categories', function ($q) use ($request) {
+    //             $q->where('status', '1')->whereNull('deleted_at');
+    //             $q->when(!empty($request->category), function ($query) use ($request) {
+    //                 $query->whereIn('id', $request->category);
+    //             });
+    //         })
+    //         ->where('status', '1')
+    //         ->where('id', $id)
+    //         ->first();
+
+    //     return $product;
+    // }
+
     public function getProduct(Request $request, $id)
     {
         $fromDate = $toDate = null;
-     
+
         if (!empty($request->reservation_date) && !empty($request->global_date_separator)) {
             $fromAndToDate = array_map('trim', explode($request->global_date_separator, $request->reservation_date));
             if (count($fromAndToDate) == 2 && !empty($request->global_date_format_for_check)) {
@@ -137,17 +192,28 @@ trait ProductTrait
             }
         }
 
-        $product = Product::with(['get_brand', 'thumbnailImage', 'images', 'allImages', 'locations', 'nonAvailableDates', 'ratings.user', 'retailer' => function ($q) {
-            $q->where('status', '1');
-            $q->where('is_approved', '1');
-        }, 'categories' => function ($q) {
-            $q->where('status', '1');
-            $q->whereNull('deleted_at');
-        }])->withCount('ratings')
+        $product = Product::with([
+            'get_brand',
+            'thumbnailImage',
+            'images',
+            'allImages',
+            'locations',
+            'nonAvailableDates',
+            'ratings.user',
+            'retailer' => function ($q) {
+                $q->where('status', '1');
+                $q->where('is_approved', '1');
+            },
+            'categories' => function ($q) {
+                $q->where('status', '1');
+                $q->whereNull('deleted_at');
+            }
+        ])
+            ->withCount('ratings')
             ->when(!is_null($fromDate) && !is_null($toDate), function ($q) use ($fromDate, $toDate) {
                 $q->whereDoesntHave('nonAvailableDates', function ($q) use ($fromDate, $toDate) {
-                    $q->whereBetween('from_date', [$fromDate, $toDate]);
-                    $q->orWhereBetween('to_date', [$fromDate, $toDate]);
+                    $q->whereBetween('from_date', [$fromDate, $toDate])
+                        ->orWhereBetween('to_date', [$fromDate, $toDate]);
                 });
             })
             ->when(!empty($request->rating), function ($q) use ($request) {
@@ -174,6 +240,7 @@ trait ProductTrait
 
         return $product;
     }
+
 
     // get the nearest product location
     public function productNearestLocation($latitude, $longitude, $productId)

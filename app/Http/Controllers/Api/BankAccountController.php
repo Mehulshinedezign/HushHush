@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -20,13 +19,11 @@ class BankAccountController extends Controller
     public function addOrUpdateBankAccount(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'account_holder_first_name' => 'required|string',
-            'account_holder_last_name' => 'required|string',
-            'account_holder_dob' => 'required|date',
-          
+            'account_holder_name' => 'required|string',
+            // 'account_holder_last_name' => 'required|string',
+            // 'account_holder_dob' => 'required|date',
             'account_number' => 'required|string',
             'routing_number' => 'required|string',
-           
         ]);
 
         if ($validator->fails()) {
@@ -58,5 +55,41 @@ class BankAccountController extends Controller
             ], 500);
         }
     }
-}
 
+    public function getDetails()
+    {
+        try {
+            $user = auth()->user();
+
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'User not authenticated',
+                    'errors' => []
+                ], 401);
+            }
+
+            $bankDetails = RetailerBankInformation::where('retailer_id', $user->id)->first();
+
+            if (!$bankDetails) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Bank details not found',
+                    'errors' => []
+                ], 404);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Bank details retrieved successfully',
+                'data' => $bankDetails
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'errors' => [],
+            ], 500);
+        }
+    }
+}
