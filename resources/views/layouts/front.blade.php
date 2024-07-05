@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="{{ asset('css/custom-front.css') }}?ver={{ now() }}" />
     <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}?ver={{ now() }}">
     <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">
-    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"> --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
     {{-- <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png') }}"> --}}
     <script>
         const APP_URL = "{{ url('') }}";
@@ -281,7 +281,7 @@
                                         </div>
                                     </div>
 
-                                    {{-- <div class="col-lg-4 col-md-4 col-sm-12">
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Non-Available Dates</label>
                                             <div class="formfield">
@@ -293,7 +293,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                    </div> --}}
+                                    </div>
 
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
@@ -417,7 +417,7 @@
     </script>
     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <!-- Include DateRangePicker JS -->
-    {{-- <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="{{ asset('js/custom/customer-search-location.js') }}"></script>
     <script src="{{ asset('js/custom/product-list.js') }}"></script>
     <script src="{{ asset('js/custom/add-wishlist.js') }}"></script>
@@ -695,14 +695,14 @@
 
 
 
-            // $('#non_available_date').daterangepicker({
-            //     opens: 'right',
-            //     locale: {
-            //         format: 'MM/DD/YYYY'
-            //     }
-            // }, function(start, end, label) {
-            //     $('#non_available_date').val(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
-            // });
+            $('#non_available_date').daterangepicker({
+                opens: 'right',
+                locale: {
+                    format: 'MM/DD/YYYY'
+                }
+            }, function(start, end, label) {
+                $('#non_available_date').val(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
+            });
 
 
         });
