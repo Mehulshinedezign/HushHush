@@ -649,6 +649,7 @@ class ProductController extends Controller
             // Handle disable dates
             if ($request->has('disable_dates')) {
                 foreach ($request->disable_dates as $dateRange) {
+
                     $dates = explode(',', $dateRange);
                     if (count($dates) == 1) {
                         // Single date
