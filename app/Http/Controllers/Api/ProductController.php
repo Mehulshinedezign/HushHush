@@ -692,7 +692,7 @@ class ProductController extends Controller
     public function view(Request $request)
     {
         try {
-            $product = $this->getProduct($request, $request->id);
+            $product = $this->getProduct($request->id, $request);
 
             if (is_null($product)) {
                 return redirect()->back()->with('message', __('product.messages.notAvailable'));
@@ -761,6 +761,8 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
+
 
 
 
@@ -846,5 +848,54 @@ class ProductController extends Controller
             $data = [];
             return $this->apiResponse('error', 500, 'An error occurred while updating the product.',  $data, null);
         }
+    }
+
+    private function getProduct($id, $request)
+    {
+        if ($id) {
+            $fromDate = $toDate = null;
+
+            if (!empty($request->reservation_date) && !empty($request->global_date_separator)) {
+                $fromAndToDate = array_map('trim', explode($request->global_date_separator, $request->reservation_date));
+                if (count($fromAndToDate) == 2 && !empty($request->global_date_format_for_check)) {
+                    $fromDate = DateTime::createFromFormat($request->global_date_format_for_check, $fromAndToDate[0]);
+                    $toDate = DateTime::createFromFormat($request->global_date_format_for_check, $fromAndToDate[1]);
+
+                    if ($fromDate && $toDate) {
+                        $fromDate = $fromDate->format('Y-m-d');
+                        $toDate = $toDate->format('Y-m-d');
+                    }
+                }
+            }
+
+            return Product::with([
+                'locations',
+                'allImages',
+                'thumbnailImage',
+                'nonAvailableDates',
+                'get_size',
+                'favorites',
+                'category',
+                'ratings.user',
+                'retailer' => function ($q) {
+                    $q->where('status', '1');
+                    $q->where('is_approved', '1');
+                }
+            ])
+                ->where('status', '1')
+                ->where('id', $id)
+                ->when(!is_null($fromDate) && !is_null($toDate), function ($q) use ($fromDate, $toDate) {
+                    $q->whereDoesntHave('nonAvailableDates', function ($q) use ($fromDate, $toDate) {
+                        $q->whereBetween('from_date', [$fromDate, $toDate])
+                            ->orWhereBetween('to_date', [$fromDate, $toDate])
+                            ->orWhere(function ($query) use ($fromDate, $toDate) {
+                                $query->where('from_date', '<=', $fromDate)
+                                    ->where('to_date', '>=', $toDate);
+                            });
+                    });
+                })
+                ->first();
+        }
+        return null;
     }
 }
