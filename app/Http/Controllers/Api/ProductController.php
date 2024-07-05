@@ -585,20 +585,20 @@ class ProductController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'description' => 'required|string',
-                'rentaltype' => 'required|string',
+                // 'rentaltype' => 'required|string',
                 'category' => 'required',
                 'size' => 'required_without:other_size',
-                'other_size' => 'required_without:size',
+                // 'other_size' => 'required_without:size',
                 'color' => 'required|string',
                 'brand' => 'required',
                 'product_condition' => 'required|string',
-                'rent' => 'required|numeric',
+                // 'rent' => 'required|numeric',
                 'price' => 'required|numeric',
                 'product_market_value' => 'required|numeric',
                 'product_link' => 'nullable|url',
                 'min_rent_days' => 'required|integer',
                 'neighborhood' => 'required',
-                'neighborhoodcity' => 'required|string',
+                // 'neighborhoodcity' => 'required|string',
                 'disable_dates' => 'array',
                 'disable_dates.*' => 'string',
             ]);
@@ -614,16 +614,16 @@ class ProductController extends Controller
             $data = [
                 'name' => $request->name,
                 'description' => $request->description,
-                'rentaltype' => $request->rentaltype,
+                // 'rentaltype' => $request->rentaltype,
                 'category_id' => $request->category,
                 'subcat_id' => $request->sub_cat ?? null,
                 'size' => $request->size,
-                'other_size' => $request->other_size,
+                // 'other_size' => $request->other_size,
                 'color' => $request->color,
                 'brand' => $request->brand,
                 'condition' => $request->product_condition,
                 'user_id' => $user->id,
-                'rent' => $request->rent,
+                // 'rent' => $request->rent,
                 'price' => $request->price,
                 'status' => $is_bankdetail && isset($request->status) ? '1' : '0',
                 'product_market_value' => $request->product_market_value,
@@ -631,10 +631,10 @@ class ProductController extends Controller
                 'min_days_rent_item' => $request->min_rent_days,
             ];
 
-            if ($request->neighborhoodcity && $request->neighborhood) {
-                $data['city'] = $request->neighborhoodcity;
-                $data['neighborhood_city'] = $request->neighborhood;
-            }
+            // if ($request->neighborhoodcity && $request->neighborhood) {
+            //     $data['city'] = $request->neighborhoodcity;
+            //     $data['neighborhood_city'] = $request->neighborhood;
+            // }
 
             $product = Product::create($data);
 
@@ -866,17 +866,19 @@ class ProductController extends Controller
 
             $sizeData = $sizes->map(function ($size) {
 
-                return['id' => $size->id,
-                'label'=>$size->name,
-                'value' => $size->name,
-                ] ;
+                return [
+                    'id' => $size->id,
+                    'label' => $size->name,
+                    'value' => $size->name,
+                ];
             });
 
             $colorData = $colors->map(function ($color) {
-                return['id'=>$color->id,
-                'label'=>$color->name,
-                'value' => $color->name,
-                ] ;
+                return [
+                    'id' => $color->id,
+                    'label' => $color->name,
+                    'value' => $color->name,
+                ];
             });
 
             $data = [
@@ -890,6 +892,44 @@ class ProductController extends Controller
                 'status' => true,
                 'message' => 'Form data fetched successfully!',
                 'data' => $data,
+            ], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'errors' => [],
+            ], 500);
+        }
+    }
+
+    public function getAllProducts()
+    {
+        try {
+            $products = Product::with(['disableDates', 'category', 'get_brand', 'get_color', 'get_size'])
+                ->where('status', 1)
+                ->get();
+
+            $productData = $products->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'description' => $product->description,
+                    'rent' => $product->rent,
+                    'price' => $product->price,
+                    'thumbnail_image' => $product->thumbnailImage ? $product->thumbnailImage->url : null,
+                    'disabled_dates' => $product->disableDates->pluck('disable_date')->toArray(),
+                    'category' => $product->category ? $product->category->name : null,
+                    'brand' => $product->get_brand ? $product->get_brand->name : null,
+                    'color' => $product->get_color ? $product->get_color->name : null,
+                    'size' => $product->get_size ? $product->get_size->name : null,
+                ];
+            });
+
+            // dd($productData);
+            return response()->json([
+                'status' => true,
+                'message' => 'Products fetched successfully!',
+                'data' => $productData,
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
