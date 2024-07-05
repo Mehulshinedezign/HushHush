@@ -170,7 +170,7 @@ class Product extends Model
     }
 
 
-    //disable dates 
+    //disable dates
 
     public function disableDates()
     {
