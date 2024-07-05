@@ -194,11 +194,11 @@
                             <div class="pro-desc-info">
                                 <div class="pro-desc-info-box">
                                     <h4>Category :</h4>
-                                    <p>{{ $product->categories->name }}</p>
+                                    <p>{{ $product->categories->name ?? ''}}</p>
                                 </div>
                                 <div class="pro-desc-info-box">
                                     <h4>Size:</h4>
-                                    <p>{{ $product->get_size->name }}</p>
+                                    <p>{{ $product->get_size->name ?? 'L' }}</p>
                                 </div>
 
                             </div>

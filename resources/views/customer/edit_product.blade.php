@@ -1,7 +1,7 @@
 @extends('layouts.front')
 
 @section('content')
-<section class="home-sec">
+<section class="home-sec fill-hight">
     <div class="container">
         <div class="home-wrapper">
             <div class="section-heading">
