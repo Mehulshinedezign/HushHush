@@ -47,6 +47,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //not working
     Route::get('/view-product/{id}', [App\Http\Controllers\Api\ProductController::class, 'view']);
 
+    Route::get('/products/listing', [App\Http\Controllers\Api\ProductController::class, 'getAllProducts']);
+
 
     //profile APIs
     Route::get('/profile', [App\Http\Controllers\Api\ProfileController::class, 'index']);
