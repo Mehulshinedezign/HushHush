@@ -73,7 +73,8 @@ if (!function_exists('jsdecode_userdata')) {
 if (!function_exists('getParentCategory')) {
     function getParentCategory()
     {
-        return Category::where('status', '1')->where('parent_id', null)->get();
+        return Category::where('status', '1')->get();
+ 
     }
 }
 

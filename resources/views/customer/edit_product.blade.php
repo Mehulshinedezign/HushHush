@@ -1,14 +1,15 @@
 @extends('layouts.front')
 
 @section('content')
-<section class="home-sec">
+<section class="home-sec fill-hight">
     <div class="container">
         <div class="home-wrapper">
             <div class="section-heading">
                 <h2>Products List</h2>
             </div>
             <div class="home-filter-product">
-                  
+            @if ($products->isNotEmpty())
+
                 <div class="home-product-main">
                     <div class="home-product-box">
 
@@ -54,6 +55,13 @@
                         </a>
                     </div> --}}
                 </div>
+                @else
+                    <div class="list-empty-box">
+                        <img src="{{ asset('front/images/find-glass.svg') }}">
+                        <h3 class="text-center">Your product is empty</h3>
+                    </div>
+
+                @endif
             </div>
         </div>
     </div>
