@@ -44,6 +44,8 @@ class ProductController extends Controller
         $rentalType = $request->rental_type ?? '';
         $product = $this->getProducts($request);
         $products = $product->get();
+        $product = $this->getProducts($request);
+        $products = $product->get();
 
         $city = (isset($request->neighborhoodcity)) ? $request->neighborhoodcity : [];
         // dd($request->neighborhoodcity,  $city);
@@ -88,7 +90,7 @@ class ProductController extends Controller
     // public function view(Request $request, $id)
     // {
 
-      
+
     //     $id = jsdecode_userdata($id);
     //     // dd("TODAY prodcut id is : ",$id);
     //     $product = $this->getProduct($request, $id);
@@ -123,7 +125,7 @@ class ProductController extends Controller
     public function view(Request $request, $id)
     {
 
-      
+
         $id = jsdecode_userdata($id);
 
         $product = $this->getProduct($request, $id);
@@ -148,7 +150,7 @@ class ProductController extends Controller
 
         $productImages = $product->allImages;
         // dd("DONE",$product);
-     
+
         return view('product-detail', compact('product','productImages'));
     }
 
@@ -214,8 +216,8 @@ class ProductController extends Controller
     {
         // $products = ProductFavorite::with('product.thumbnailImage', 'product.category')->where('user_id', auth()->user()->id)->orderByDesc('id')->paginate($request->global_product_pagination);
         $products = ProductFavorite::with('product.thumbnailImage', 'product.category')
-        ->where('user_id', auth()->user()->id)
-        ->orderByDesc('id')->get();
+    ->where('user_id', auth()->user()->id)
+    ->orderByDesc('id')->get();
 
         $user = User::with('notification')->where('id', auth()->user()->id)->first();
         if (!$products->isEmpty() && @$user->notification->item_we_think_you_might_like == "on") {
@@ -244,7 +246,7 @@ class ProductController extends Controller
         } else {
             $message = __('product.messages.notAvailable');
         }
-        // $product1 = $this->checkTimeAvailablity($request, $id);  
+        // $product1 = $this->checkTimeAvailablity($request, $id);
         // dd($request->toArray(),$id, $product1);
         $location = $this->productNearestLocation($request->latitude, $request->longitude, $id);
         if (is_null($location)) {
@@ -319,12 +321,12 @@ class ProductController extends Controller
     }
 
     /**
-     * Add Product 
+     * Add Product
      */
 
     public function lenderInfo(Request $request,$id){
 
-        
+
         $retailer = User::whereId(jsdecode_userdata($id))->first();
         $products = Product::with('ratings', 'thumbnailImage')->where('user_id', $retailer->id)->paginate($request->global_pagination);
         $ratedProducts = $products->where('average_rating', '>', '0');
@@ -335,5 +337,5 @@ class ProductController extends Controller
 
         return view('customer.profile',compact('products'));
     }
-    
+
 }

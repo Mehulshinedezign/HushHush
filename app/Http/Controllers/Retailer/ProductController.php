@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\{Category, Product, ProductImage, ProductLocation, ProductUnavailability, Brand, City, RetailerBankInformation, Size, User, NeighborhoodCity, ProductDisableDate, State};
+use App\Models\{Category, Product, ProductImage, ProductLocation, ProductUnavailability, Brand, City, RetailerBankInformation, Size, User, NeighborhoodCity, ProductDisableDate, State};
 use Carbon\Carbon;
 use DateTime, Stripe;
 use Illuminate\Support\Facades\Auth;
@@ -213,6 +214,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
+        // dd($request->all());
         try {
             $userId = auth()->user()->id;
 
@@ -267,15 +269,17 @@ class ProductController extends Controller
 
 
             if ($request->has('non_available_dates')) {
+
                 $dateRange = $request->non_available_dates;
+
                 list($startDateStr, $endDateStr) = explode(' - ', $dateRange);
-                $startDate = Carbon::createFromFormat('Y-m-d', $startDateStr);
-                $endDate = Carbon::createFromFormat('Y-m-d', $endDateStr);
-            
+                $startDate = Carbon::createFromFormat('m/d/Y', $startDateStr);
+                $endDate = Carbon::createFromFormat('m/d/Y', $endDateStr);
+
                 for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
                     ProductDisableDate::create([
                         'product_id' => $product->id,
-                        'disable_date' => $date->format('Y-m-d'),
+                        'disable_date' => $date->format('Y/m/d'),
                     ]);
                 }
             }
@@ -339,6 +343,7 @@ class ProductController extends Controller
         // dd("HERE EDITTT");
         $product = $this->getProduct($id);
 
+
         $sub_categories = Category::where('status', '1')->where('parent_id', $product->category_id)->get();
         $subcatId = ($product->subcat_id) ? $product->subcat_id : '';
 
@@ -357,12 +362,11 @@ class ProductController extends Controller
 
         $disabledDates = $product->disableDates;
 
-        // dd("here",$disabledDates);
         if ($disabledDates->isNotEmpty()) {
             $sortedDates = $disabledDates->sortBy('disable_date');
-            $firstDate = \Carbon\Carbon::parse($sortedDates->first()->disable_date)->format('Y-m-d');
-            $lastDate = \Carbon\Carbon::parse($sortedDates->last()->disable_date)->format('Y-m-d');
-        
+            $firstDate = \Carbon\Carbon::parse($sortedDates->first()->disable_date)->format('m/d/Y');
+            $lastDate = \Carbon\Carbon::parse($sortedDates->last()->disable_date)->format('m/d/Y');
+
             $formattedDates = $firstDate . ' - ' . $lastDate;
         } else {
             $formattedDates = '';
@@ -607,14 +611,14 @@ class ProductController extends Controller
 
             if ($request->has('non_available_dates')) {
                 ProductDisableDate::where('product_id', $product->id)->delete();
-        
+
                 $dateRange = $request->non_available_dates;
-        
+
                 if (!empty($dateRange)) {
                     list($startDateStr, $endDateStr) = explode(' - ', $dateRange);
                     $startDate = Carbon::createFromFormat('Y-m-d', $startDateStr);
                     $endDate = Carbon::createFromFormat('Y-m-d', $endDateStr);
-        
+
                     for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
                         ProductDisableDate::create([
                             'product_id' => $product->id,

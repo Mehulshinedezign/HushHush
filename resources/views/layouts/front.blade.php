@@ -520,7 +520,7 @@
     <script>
         $(document).ready(function() {
 
-            // Fetch the state behalf of country id 
+            // Fetch the state behalf of country id
             $('#country-select').change(function() {
                 var countryId = $(this).val();
                 var url = '{{ url('states') }}/' + countryId;
@@ -591,7 +591,7 @@
 
 
 
-            // fetch the city behalf of state id 
+            // fetch the city behalf of state id
             $('#state-select').change(function() {
 
                 var stateId = $(this).val();

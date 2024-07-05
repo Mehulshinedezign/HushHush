@@ -426,9 +426,9 @@
         const bank = new URLSearchParams(window.location.search);
         const bank_details = bank.get('bank');
         if(bank_details){
-            $('.user_bank_details').addClass('highlight'); 
+            $('.user_bank_details').addClass('highlight');
         }
- 
+
 
     </script>
 @endpush

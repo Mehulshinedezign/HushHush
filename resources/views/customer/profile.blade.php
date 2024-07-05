@@ -93,7 +93,7 @@
                             <h4>About me</h4>
 
                             @if ( ($user) && ($user->userDetail))
-                                <p>{{ $user->userDetail->about }}</p>  
+                                <p>{{ $user->userDetail->about }}</p>
                             @else
                                 <p>Safer For The Environment: Our denim factory partner recycles 98% of their water using
                                     reverse osmosis filtration and keeps byproducts out of the environment by mixing them with
@@ -389,11 +389,11 @@ $(document).ready(function () {
     $('.product-slider').slick({
         dots: false,
         infinite: false,
-        draggable: true, 
+        draggable: true,
         arrow: true,
         slidesToShow: 4,
         prevArrow: $('.prev-product-btn'),
-        nextArrow: $('.next-product-btn'),  
+        nextArrow: $('.next-product-btn'),
         responsive: [
             {
                 breakpoint: 1400,
@@ -406,7 +406,7 @@ $(document).ready(function () {
                 breakpoint: 992,
                 settings: {
                     slidesToShow: 3,
-                    slidesToScroll: 1, 
+                    slidesToScroll: 1,
                 }
             },
             {
@@ -425,11 +425,11 @@ $(document).ready(function () {
     $('.host-cal-slider').slick({
         dots: false,
         infinite: true,
-        draggable: true, 
+        draggable: true,
         arrow: true,
         slidesToShow: 1,
         prevArrow: $('.prev-banner-btn'),
-        nextArrow: $('.next-banner-btn'),  
+        nextArrow: $('.next-banner-btn'),
         responsive: [
             {
                 breakpoint: 1400,
@@ -456,5 +456,5 @@ $(document).ready(function () {
         ]
     });
 });
-</script> 
+</script>
 @endpush

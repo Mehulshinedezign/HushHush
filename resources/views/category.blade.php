@@ -233,6 +233,8 @@
 
                 {{-- @dd($products); --}}
                 <div class="home-product-main">
+                {{-- @dd($products); --}}
+                <div class="home-product-main">
                     <div class="home-product-box">
                         @foreach ($products as $product)
                         <div class="product-card">

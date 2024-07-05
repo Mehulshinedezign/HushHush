@@ -312,8 +312,8 @@
                              @else
                                 <div class="addProductButton" data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
                                     Add New Product
-                                </div>   
-                             @endif   
+                                </div>
+                             @endif
 
                         </li>
                         <li><a href="{{ route('wishlist') }}"><i class="fa-regular fa-heart"></i>
@@ -723,6 +723,6 @@
                 @endif
             });
         });
-    </script>  
+    </script>
 @endpush
 

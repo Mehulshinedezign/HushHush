@@ -43,19 +43,7 @@ class ForgotPasswordController extends Controller
         }
     }
 
-            $forgot = new MainforgotPassword();
-            $forgot->sendResetPasswordLinkEmail($request);
-            return redirect()->back();
-        }
-
-
-        // protected function sendResetPasswordLinkEmail(Request $request)
-        // {
-        //     $mainForgotPassword = new MainForgotPassword();
-        //     return $mainForgotPassword->sendResetLinkEmail($request);
-        // }
-
-    protected function sendResetLinkToPhoneNumber(Request $request)
+    protected function sendResetLinkToPhoneNumber($full_number, $main_number, Request $request)
     {
         if (!$this->otpService) {
             return response()->json(['message' => 'OTP service not available'], 500);
