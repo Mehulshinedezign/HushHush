@@ -844,11 +844,11 @@ class ProductController extends Controller
             $categoryData = $categories->map(function ($category) {
                 return [
                     'id' => $category->id,
-                    'name' => $category->name,
+                    'label' => $category->name,
                     'Subcategory' => getChild($category->id)->map(function ($subCategory) {
                         return [
                             'id' => $subCategory->id,
-                            'subcatname' => $subCategory->name,
+                            'label' => $subCategory->name,
                         ];
                     }),
                 ];
@@ -857,16 +857,19 @@ class ProductController extends Controller
             $brandData = $brands->map(function ($brand) {
                 return [
                     'id' => $brand->id,
-                    'name' => $brand->name,
+                    'label' => $brand->name,
                 ];
             });
 
             $sizeData = $sizes->map(function ($size) {
-                return $size->name;
+
+                return['id' => $size->id,
+                'label'=>$size->name] ;
             });
 
             $colorData = $colors->map(function ($color) {
-                return $color->name;
+                return['id'=>$color->id,
+                'label'=>$color->name] ;
             });
 
             $data = [
