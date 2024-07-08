@@ -95,7 +95,7 @@
                 required: true,
                 regex: OnlydigitRegex,
             },
-            non_available_dates:{
+            non_available_dates: {
                 required: true,
             }
 
@@ -168,20 +168,38 @@
             //     required: `{{ __('customvalidation.product.non_availabile_dates.required') }}`,
             // }
         };
-  
+
 
         jQuery.validator.addMethod("maxfiles", function(value, element, param) {
             return this.optional(element) || element.files.length <= param;
         }, "You can select a maximum of {0} files.");
 
 
-        jQuery('#addProduct').submit(function(e) {
-            e.preventDefault();
+        // jQuery('#addProduct').submit(function(e) {
+        //     e.preventDefault();
+        //     handleValidation('addProduct', rules, messages);
+        //     if ($('#addProduct').valid()) {
+        //         e.currentTarget.submit();
+        //     }
+        // });
+
+
+        $('#addProduct').submit(function(e) {
+            e.preventDefault(); // Prevent form submission
+
+            // Perform form validation
             handleValidation('addProduct', rules, messages);
+
+            // Check if the form is valid
             if ($('#addProduct').valid()) {
-                e.currentTarget.submit();
+                $('body').addClass('loading');
+                setTimeout(function() {
+                    e.currentTarget.submit();
+                }, 1000); // Adjust delay as needed
             }
         });
+
+
 
     });
     // Initialize form validation

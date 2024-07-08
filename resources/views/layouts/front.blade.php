@@ -65,6 +65,7 @@
 </head>
 
 <body>
+    <div class="overlay" id="overlay"></div>
     @include('layouts.header')
 
     <main class="main @if (isset($layout_class)) single_product @endif">
@@ -256,7 +257,7 @@
                                             <div class="formfield">
                                                 <input type="text" name="non_available_dates" id="non_available_date"
                                                     placeholder="Select Dates" class="form-control">
-                                                <span class="form-icon">
+                                                <span class="form-icon cal-icon">
                                                     <img src="{{ asset('front/images/calender-icon.svg') }}"
                                                         alt="img">
                                                 </span>
@@ -295,7 +296,7 @@
                                         <div class="form-group">
                                             <label for="">Product link</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" name="product_link"
+                                                <input type="text" class="form-control" name="product_link" placeholder="Product link"
                                                     value="">
                                             </div>
                                         </div>
@@ -305,7 +306,7 @@
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days</label>
                                             <div class="formfield ">
-                                                <input type="text" class="form-control" name="min_rent_days"
+                                                <input type="text" class="form-control" name="min_rent_days" placeholder="Rental days"
                                                     value="">
                                             </div>
                                         </div>

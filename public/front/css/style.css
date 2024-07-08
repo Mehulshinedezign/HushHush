@@ -867,6 +867,33 @@ span.remove-image {
     max-width: 100px;
     text-align: center;
 }
+.duel-select-field .form-icon {
+    top: 15px !important;
+}
+.add-pro-form .formfield .form-icon {
+    right: 18px;
+    top: 25px;
+}
+span.cal-icon.form-icon {
+    top: 20px !important;
+}
+.overlay {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9999999;
+    background: rgb(23 23 23 / 78%) url(../images/loader.gif) center no-repeat;
+    background-size: 50px;
+}
+body.loading .overlay {
+    display: block;
+}
+.formfield.upload-id-field input {
+    padding: 18px 24px;
+}
 
 
 

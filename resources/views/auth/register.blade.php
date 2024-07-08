@@ -223,7 +223,7 @@
 
                 <div class="form-group">
                     <label for="gov_id">Gov Id</label>
-                    <div class="formfield">
+                    <div class="formfield upload-id-field">
                         <input type="file" class="form-control form-class @error('gov_id') is-invalid @enderror"
                             name="gov_id" placeholder="Enter goverment id">
                      

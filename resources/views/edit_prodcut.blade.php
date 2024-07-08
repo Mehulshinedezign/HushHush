@@ -228,7 +228,7 @@
                                     <div class="formfield">
                                         <input type="text" name="" id="non_available_date"
                                             placeholder="Select Dates" class="form-control">
-                                        <span class="form-icon">
+                                        <span class="form-icon ">
                                             <img src="{{ asset('front/images/calender-icon.svg') }}"
                                                 alt="img">
                                         </span>
