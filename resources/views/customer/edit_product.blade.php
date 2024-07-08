@@ -32,7 +32,9 @@
                                 </div>
                                 <div class="product-btn-box">
                                     <a href="{{ route('editproduct', ['id' => jsencode_userdata($product->id)]) }}" class="button outline-btn full-btn">Edit</a>
-                                    <a href="{{ route('deleteproduct', ['id' => jsencode_userdata($product->id)]) }}" class="button primary-btn full-btn">Delete</a>
+                                    {{-- <a href="{{ route('deleteproduct', ['id' => jsencode_userdata($product->id)]) }}" class="button primary-btn full-btn">Delete</a> --}}
+                                    <a href="{{ route('deleteproduct', ['id' => jsencode_userdata($product->id)]) }}" class="button primary-btn full-btn"
+                                        onclick="confirmDelete(event)">Delete</a>
                                 </div>
                             </div>
                         @endforeach
@@ -68,5 +70,25 @@
 </section>
 @endsection
 @push('scripts')
+    <script>
+        function confirmDelete(event) {
+    event.preventDefault(); 
 
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('body').addClass('loading');
+
+            window.location.href = event.target.href;
+        }
+    });
+}
+    </script>
 @endpush
