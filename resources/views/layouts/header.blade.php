@@ -301,7 +301,7 @@
                     <ul>
                          <li>
                             <div data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
-                                Rent your closet
+                                Add New Product
                             </div>
                         </li>
                         <li><a href="{{ route('wishlist') }}"><i class="fa-regular fa-heart"></i>

@@ -30,6 +30,7 @@ class ColorSeeder extends Seeder
             ['name' => 'Multi', 'color_code' => '#ff00e1'],
             ['name' => 'Silver', 'color_code' => '#c0c0c0'],
             ['name' => 'Gold', 'color_code' => '#FFD700'],
+            ['name' => 'Other', 'color_code' => ''],
         ];
         
         Color::insert($color);

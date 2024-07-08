@@ -154,7 +154,7 @@ class BrandSeeder extends Seeder
             ['name' => 'Norma Kamali'],
             ['name' => 'Nour Hammour'],
             ['name' => 'Onia'],
-            ['name' => 'Other (with text box)'],
+            // ['name' => 'Other'],
             ['name' => 'Paravel'],
             ['name' => 'POSSE'],
             ['name' => 'Poupette St Barth'],

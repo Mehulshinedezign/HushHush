@@ -61,6 +61,7 @@ class SizeSeeder extends Seeder
             ['type' => 'type6', 'name' => '40'],
             ['type' => 'type6', 'name' => '40.5'],
             ['type' => 'type6', 'name' => '41'],
+            ['type' => 'type7', 'name' => 'Other']
         ];
                 
         Size::insert($size);

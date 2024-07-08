@@ -257,7 +257,7 @@
                             </div>
                             <div class="product-card-detail">
                                 <p>{{ $product->name }}</p>
-                                <h4>${{ $product->rent }}/day</h4>
+                                <h4>${{ $product->rent_day }}/day</h4>
                             </div>
                         </div>
                     @endforeach
