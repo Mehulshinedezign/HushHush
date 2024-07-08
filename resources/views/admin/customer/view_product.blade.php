@@ -9,11 +9,11 @@
                         <div class="profile-header">
                             <div class="profile-big-image">
 
-                                @if (isset($product->allImages[0]->url))
-                                    <img src="{{ $product->allImages[0]->url }}">
-                                @else
-                                    <img src="{{ asset('img/avatar-small.png') }}">
-                                @endif
+                            @if (isset($product->thumbnailImage->file_path))
+                                <img src="{{ asset('storage/'. $product->thumbnailImage->file_path) }}" alt="" loading="lazy">
+                            @else
+                                <img src="{{asset('front/images/pro-0.png')}}" alt="img">
+                            @endif
                             </div>
                             <div class="profile-detail">
                                 <h4>{{ $product->name }}</h4>
@@ -32,7 +32,7 @@
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item">Rent:</span>
-                                    <span class="">{{ $product->rent ?? 'N/A' }} </span>
+                                    <span class="">{{ $product->rent_day ?? 'N/A' }} </span>
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item">Condition:</span>
