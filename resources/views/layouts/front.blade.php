@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+    @include("favicon")
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSRF Token -->
@@ -24,7 +25,6 @@
     <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}?ver={{ now() }}">
     <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
-    <link rel="icon" type="image/x-icon" href="{{ asset('front/images/favicon.ico') }}">
 
     <script>
         const APP_URL = "{{ url('') }}";

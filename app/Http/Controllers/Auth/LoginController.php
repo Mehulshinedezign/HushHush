@@ -96,13 +96,25 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        $remember = $request->remember ? true : false;
+        // $remember = $request->remember ? true : false;
+        // dd("remember me",$remember);
+        // if ($remember) {
+        //     $loginby = $request->email . '_' . $request->password;
+        //     if (!request()->cookie('rememberme')) {
+        //         Cookie::queue(Cookie::make('rememberme', $loginby, 2628000));  //2628000 (five years)
+        //     } else if ($request->email != explode("_", request()->cookie('rememberme'))[0] && $request->password != explode("_", request()->cookie('rememberme'))[1]) {
+        //         Cookie::queue(Cookie::make('rememberme', $loginby, 2628000));  //2628000 (five years)
+        //     }
+        // } else {
+        //     Cookie::queue(Cookie::forget('rememberme'));
+        // }
+        $remember = $request->has('remember');
         if ($remember) {
             $loginby = $request->email . '_' . $request->password;
-            if (!request()->cookie('rememberme')) {
-                Cookie::queue(Cookie::make('rememberme', $loginby, 2628000));  //2628000 (five years)
-            } else if ($request->email != explode("_", request()->cookie('rememberme'))[0] && $request->password != explode("_", request()->cookie('rememberme'))[1]) {
-                Cookie::queue(Cookie::make('rememberme', $loginby, 2628000));  //2628000 (five years)
+            $cookie = Cookie::get('rememberme');
+            
+            if (!$cookie || ($request->email != explode("_", $cookie)[0] || $request->password != explode("_", $cookie)[1])) {
+                Cookie::queue('rememberme', $loginby, 2628000);  // 2628000 minutes (five years)
             }
         } else {
             Cookie::queue(Cookie::forget('rememberme'));

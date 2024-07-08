@@ -26,7 +26,6 @@
                                             <img id="preview-img" src="{{ asset('front/images/pro3.png') }}"
                                                 alt="Default Image">
                                         @endif
-                                        {{-- <img src="{{asset('front/images/pro3.png')}}" alt="img"> --}}
                                     </div>
                                     <label for="upload-my-pro" class="upload-my-pro">
                                         <i class="fa-solid fa-pen"></i>
@@ -231,67 +230,151 @@
     <script src="{{ asset('js/custom/card.js') }}"></script>
 
     <script>
-        jQuery(document).ready(function() {
-            $("#save_user").find('button').attr('disabled', false);
-            const rules = {
-                name: {
-                    required: true,
-                },
-                email: {
-                    required: true,
-                    email: true,
-                    regex: emailRegex,
-                },
-                complete_address: {
-                    required: true,
-                },
-                account_holder_first_name: {
-                    required: true,
-                },
-                account_holder_last_name: {
-                    required: true,
-                },
-                date_of_birth: {
-                    required: true,
-                },
-                account_number: {
-                    required: true,
-                },
-                routing_number: {
-                    required: true,
-                }
-            }
-            const messages = {
-                name: {
-                    required: `{{ __('customvalidation.user.name.required') }}`,
-                },
-                email: {
-                    required: `{{ __('customvalidation.user.email.required') }}`,
-                    email: `{{ __('customvalidation.user.email.email') }}`,
-                    regex: `{{ __('customvalidation.user.email.regex', ['regex' => '${emailRegex}']) }}`,
-                },
-                complete_address: {
-                    required: 'This field is required.',
-                },
-                account_holder_first_name: {
-                    required: 'This field is required.',
-                },
-                account_holder_last_name: {
-                    required: 'This field is required.',
-                },
-                date_of_birth: {
-                    required: 'This field is required.',
-                },
-                account_number: {
-                    required: 'This field is required.',
-                },
-                routing_number: {
-                    required: 'This field is required.',
-                }
-            };
+        // jQuery(document).ready(function() {
+        //     $("#save_user").find('button').attr('disabled', false);
+        //     const rules = {
+        //         name: {
+        //             required: true,
+        //         },
+        //         email: {
+        //             required: true,
+        //             email: true,
+        //             regex: emailRegex,
+        //         },
+        //         complete_address: {
+        //             required: true,
+        //         },
+        //         account_holder_first_name: {
+        //             required: true,
+        //         },
+        //         account_holder_last_name: {
+        //             required: true,
+        //         },
+        //         date_of_birth: {
+        //             required: true,
+        //         },
+        //         account_number: {
+        //             required: true,
+        //         },
+        //         routing_number: {
+        //             required: true,
+        //         }
+        //     }
+        //     const messages = {
+        //         name: {
+        //             required: `{{ __('customvalidation.user.name.required') }}`,
+        //         },
+        //         email: {
+        //             required: `{{ __('customvalidation.user.email.required') }}`,
+        //             email: `{{ __('customvalidation.user.email.email') }}`,
+        //             regex: `{{ __('customvalidation.user.email.regex', ['regex' => '${emailRegex}']) }}`,
+        //         },
+        //         complete_address: {
+        //             required: 'This field is required.',
+        //         },
+        //         account_holder_first_name: {
+        //             required: 'This field is required.',
+        //         },
+        //         account_holder_last_name: {
+        //             required: 'This field is required.',
+        //         },
+        //         date_of_birth: {
+        //             required: 'This field is required.',
+        //         },
+        //         account_number: {
+        //             required: 'This field is required.',
+        //         },
+        //         routing_number: {
+        //             required: 'This field is required.',
+        //         }
+        //     };
 
-            handleValidation('save_user', rules, messages);
-        });
+        //     handleValidation('save_user', rules, messages);
+        // });
+        jQuery(document).ready(function() {
+    $("#save_user").find('button').attr('disabled', false);
+
+    const nameRegex = /^[a-zA-Z\s]+$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const addressRegex = /^[a-zA-Z0-9\s,.'-]{3,}$/;
+    const dateOfBirthRegex = /^\d{4}-\d{2}-\d{2}$/;
+    const accountNumberRegex = /^\d+$/;
+    const routingNumberRegex = /^\d+$/;
+
+    const rules = {
+        name: {
+            required: true,
+            regex: nameRegex,
+        },
+        email: {
+            required: true,
+            email: true,
+            regex: emailRegex,
+        },
+        complete_address: {
+            required: true,
+            regex: addressRegex,
+        },
+        account_holder_first_name: {
+            required: true,
+            regex: nameRegex,
+        },
+        account_holder_last_name: {
+            required: true,
+            regex: nameRegex,
+        },
+        date_of_birth: {
+            required: true,
+            regex: dateOfBirthRegex,
+        },
+        account_number: {
+            required: true,
+            regex: accountNumberRegex,
+        },
+        routing_number: {
+            required: true,
+            regex: routingNumberRegex,
+        }
+    };
+
+    const messages = {
+        name: {
+            required: `{{ __('customvalidation.user.name.required') }}`,
+            regex: 'Name must contain only letters and spaces.',
+        },
+        email: {
+            required: `{{ __('customvalidation.user.email.required') }}`,
+            email: `{{ __('customvalidation.user.email.email') }}`,
+            regex: `{{ __('customvalidation.user.email.regex', ['regex' => '${emailRegex}']) }}`,
+        },
+        complete_address: {
+            required: 'This field is required.',
+            regex: 'Address must contain only letters, numbers, spaces, commas, periods, and hyphens.',
+        },
+        account_holder_first_name: {
+            required: 'This field is required.',
+            regex:'First name must contain only letters and spaces.',
+        },
+        account_holder_last_name: {
+            required: 'This field is required.',
+            regex: 'Last name must contain only letters and spaces.',
+        },
+        date_of_birth: {
+            required: 'This field is required.',
+            regex:'Date of birth must be in the format YYYY-MM-DD.',
+        },
+        account_number: {
+            required: 'This field is required.',
+            regex: 'Account number must contain only digits.',
+        },
+        routing_number: {
+            required: 'This field is required.',
+            regex:  'Routing number must contain only digits.',
+        }
+    };
+
+    handleValidation('save_user', rules, messages);
+});
 
         $(document).ready(function() {
             $('#upload-my-pro').change(function() {

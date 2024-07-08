@@ -44,9 +44,16 @@
                         </span>
                     @enderror
                 </div>
-                <div class="form-check remember-me">
+
+               
+                <!-- <div class="form-check remember-me">
                     <input class="form-check-input" type="checkbox" name="remember" id="remember" value=""
                         {{ request()->cookie('rememberme') ? 'checked' : '' }} id="flexCheckDefault">
+                    <label class="form-check-label" for="remember">Remember me</label>
+                </div> -->
+                <div class="form-check remember-me">
+                    <input class="form-check-input" type="checkbox" name="remember" id="remember" 
+                        {{ request()->cookie('rememberme') ? 'checked' : '' }}>
                     <label class="form-check-label" for="remember">Remember me</label>
                 </div>
                 <button class="button primary-btn full-btn">Log in</button>

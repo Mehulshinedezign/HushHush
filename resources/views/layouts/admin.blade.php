@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+@include("favicon")
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -11,7 +12,6 @@
     <title>{{ config('app.name', 'Chere') }}</title>
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    {{-- <link rel="icon" href="{{ asset('img/favicon.svg') }}" type="image/svg" sizes="32x32"> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/app.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
