@@ -24,7 +24,8 @@
     <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}?ver={{ now() }}">
     <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
-    {{-- <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png') }}"> --}}
+    <link rel="icon" type="image/x-icon" href="{{ asset('front/images/favicon.ico') }}">
+
     <script>
         const APP_URL = "{{ url('') }}";
         const login_url = '{{ route('login') }}';
