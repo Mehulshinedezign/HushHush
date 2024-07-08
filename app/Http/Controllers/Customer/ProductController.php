@@ -214,8 +214,8 @@ class ProductController extends Controller
     {
         // $products = ProductFavorite::with('product.thumbnailImage', 'product.category')->where('user_id', auth()->user()->id)->orderByDesc('id')->paginate($request->global_product_pagination);
         $products = ProductFavorite::with('product.thumbnailImage', 'product.category')
-    ->where('user_id', auth()->user()->id)
-    ->orderByDesc('id')->get();
+        ->where('user_id', auth()->user()->id)
+        ->orderByDesc('id')->get();
 
         $user = User::with('notification')->where('id', auth()->user()->id)->first();
         if (!$products->isEmpty() && @$user->notification->item_we_think_you_might_like == "on") {
@@ -321,5 +321,19 @@ class ProductController extends Controller
     /**
      * Add Product 
      */
+
+    public function lenderInfo(Request $request,$id){
+
+        
+        $retailer = User::whereId(jsdecode_userdata($id))->first();
+        $products = Product::with('ratings', 'thumbnailImage')->where('user_id', $retailer->id)->paginate($request->global_pagination);
+        $ratedProducts = $products->where('average_rating', '>', '0');
+        $averageRating = 0.0;
+        if (count($ratedProducts)) {
+            $averageRating = $ratedProducts->sum('average_rating') / count($ratedProducts);
+        }
+
+        return view('customer.profile',compact('products'));
+    }
     
 }

@@ -50,6 +50,7 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         Route::get('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index');
         Route::get('products', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('products');
         Route::get('product/{id}', [App\Http\Controllers\Customer\ProductController::class, 'view'])->name('viewproduct');
+        Route::get('lender_info/{id}', [App\Http\Controllers\Customer\ProductController::class, 'lenderInfo'])->name('lenderProfile');
         Route::get('product/{product}/book', [App\Http\Controllers\Customer\ProductController::class, 'book'])->name('book');
         Route::get('lender/{id}', [App\Http\Controllers\Customer\ProductController::class, 'retailer'])->name('lender');
         Route::post('transfee', [App\Http\Controllers\Customer\ProductController::class, 'get_transfee'])->name('transfee');
