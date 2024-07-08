@@ -31,24 +31,23 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Product API
     Route::get('/product', [App\Http\Controllers\Api\ProductController::class, 'index']);
     Route::get('/my-wishlist', [App\Http\Controllers\Api\ProductController::class, 'wishlist']);
-    Route::post('/add-favorite', [App\Http\Controllers\Api\ProductController::class, 'addFavorite']);
+    Route::post('/add-favorite/{id}', [App\Http\Controllers\Api\ProductController::class, 'addFavorite']);
     Route::post('/remove-favorite', [App\Http\Controllers\Api\ProductController::class, 'removeFavorite']);
     Route::post('/category-list', [App\Http\Controllers\Api\ProductController::class, 'category']);
     Route::post('/add-product', [App\Http\Controllers\Api\ProductController::class, 'addProduct']);
 
     Route::post('/edit-products/{id}', [App\Http\Controllers\Api\ProductController::class, 'updateProduct']);
-    Route::delete('/delete-products/{id}', [App\Http\Controllers\Api\ProductController::class, 'deleteProduct']);
+    Route::post('/delete-products/{id}', [App\Http\Controllers\Api\ProductController::class, 'deleteProduct']);
 
 
     // Route::post('/products/{productId}/disable-dates', [App\Http\Controllers\Api\ProductController::class, 'addDisableDates']);
     // // Route::get('/products/{productId}', [ProductController::class, 'getProductDetails']);
 
     Route::get('/product-category', [App\Http\Controllers\Api\ProductController::class, 'getFormData']);
-    //not working
     Route::get('/view-product/{id}', [App\Http\Controllers\Api\ProductController::class, 'view']);
-
     Route::get('/products/listing', [App\Http\Controllers\Api\ProductController::class, 'getAllProducts']);
-
+    Route::get('/product-details/{id}', [App\Http\Controllers\Api\ProductController::class, 'getAllProductsById']);
+    Route::get('/editProduct/{id}', [App\Http\Controllers\Api\ProductController::class, 'editProduct']);
 
     //profile APIs
     Route::get('/profile', [App\Http\Controllers\Api\ProfileController::class, 'index']);

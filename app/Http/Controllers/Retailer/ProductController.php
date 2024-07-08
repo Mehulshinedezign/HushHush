@@ -568,35 +568,35 @@ class ProductController extends Controller
                 'modified_user_type' => 'Self',
                 'non_available_dates' => $request->non_available_dates ?? 1,
             ];
-            
+
             $product->update($data);
 
             $currentImageIds = $product->allImages()->pluck('id')->toArray();
 
             if ($request->has('existing_images')) {
                 $existingImageIds = $request->input('existing_images');
-            
+
                 $imagesToDelete = array_diff($currentImageIds, $existingImageIds);
                 $imagesToDeleteModels = ProductImage::whereIn('id', $imagesToDelete)->get();
-                
+
                 foreach ($imagesToDeleteModels as $image) {
                     Storage::disk('public')->delete($image->file_path);
                     $image->delete();
                 }
             } else {
                 $imagesToDeleteModels = ProductImage::whereIn('id', $currentImageIds)->get();
-                
+
                 foreach ($imagesToDeleteModels as $image) {
                     Storage::disk('public')->delete($image->file_path);
                     $image->delete();
                 }
             }
-            
+
             if ($request->hasFile('new_images')) {
                 foreach ($request->file('new_images') as $index => $image) {
                     $fileName = $product->id . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
                     $filePath = $image->storeAs('products/images', $fileName, 'public');
-            
+
                     ProductImage::create([
                         'product_id' => $product->id,
                         'file_name' => $fileName,
@@ -681,7 +681,7 @@ class ProductController extends Controller
                 Storage::disk('public')->delete($image->file_path);
                 $image->delete();
             }
-            $product->locations()->delete(); 
+            $product->locations()->delete();
 
             $product->delete();
 
