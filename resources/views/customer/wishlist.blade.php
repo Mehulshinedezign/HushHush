@@ -12,7 +12,7 @@
                             @foreach ($products as $favrait)
                                 <div class="product-card">
                                     <div class="product-img-box">
-                                        <a
+                                        {{-- <a
                                             href="{{ route('viewproduct', ['id' => jsencode_userdata($favrait->product->id)]) }}">
                                             @if (isset($favrait->product->thumbnailImage->file_path))
                                                 <img src="{{ asset('storage/' . $favrait->product->thumbnailImage->file_path) }}"
@@ -20,23 +20,51 @@
                                             @else
                                                 <img src="{{ asset('front/images/pro-0.png') }}" alt="{{ $product->name }}">
                                             @endif
-                                        </a>
-                                        <div class="product-card-like"
+                                        </a> --}}
+                                        @if ($favrait->product)
+                                            <a
+                                                href="{{ route('viewproduct', ['id' => jsencode_userdata($favrait->product->id)]) }}">
+                                                @if ($favrait->product->thumbnailImage && $favrait->product->thumbnailImage->file_path)
+                                                    <img src="{{ asset('storage/' . $favrait->product->thumbnailImage->file_path) }}"
+                                                        alt="{{ $favrait->product->name }}">
+                                                @else
+                                                    <img src="{{ asset('front/images/pro-0.png') }}"
+                                                        alt="{{ $favrait->product->name }}">
+                                                @endif
+                                            </a>
+                                        @else
+                                            <p>Product not found</p>
+                                        @endif
+
+                                        {{-- <div class="product-card-like"
                                             onclick="addToWishlist(this, {{ $favrait->product->id }})">
                                             @if (!is_null($favrait->product->favorites))
                                                 <i class="fa-solid fa-heart active"></i>
                                             @else
                                                 <i class="fa-regular fa-heart"></i>
                                             @endif
+                                        </div> --}}
+                                        <div class="product-card-like"
+                                            onclick="addToWishlist(this, {{ $favrait->product->id ?? 'null' }})">
+                                            <!-- Use 'null' or any appropriate default value if $favrait->product->id is null -->
+                                            @if ($favrait->product && !is_null($favrait->product->favorites))
+                                                <i class="fa-solid fa-heart active"></i>
+                                            @else
+                                                <i class="fa-regular fa-heart"></i>
+                                            @endif
                                         </div>
+
                                         <div class="product-card-status">
                                             <p>In Stock</p>
                                         </div>
                                     </div>
-                                    <div class="product-card-detail">
-                                        <p>{{ $favrait->product->name }}</p>
-                                        <h4>${{ $favrait->product->rent }}/day</h4>
-                                    </div>
+                                    @if ($favrait->product)
+                                        <p>{{ $favrait->product->name ?: 'Product Name Not Available' }}</p>
+                                        <h4>${{ $favrait->product->rent ?: '0' }}/day</h4>
+                                    @else
+                                        <p>Product Not Available</p>
+                                    @endif
+
                                 </div>
                             @endforeach
                         </div>

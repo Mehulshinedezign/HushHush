@@ -18,10 +18,10 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Name</th>
-                                        <th>Quantity</th>
+                                        <!-- <th>Quantity</th> -->
                                         <th>Size</th>
                                         <th>Rent</th>
-                                        <th>Price</th>
+                                        <!-- <th>Price</th> -->
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -29,10 +29,10 @@
                                         <tr>
                                             <td>{{ $index + 1 }}</th>
                                             <td>{{ $product->name }}</td>
-                                            <td>{{ $product->quantity }}</td>
+                                            <!-- <td>{{ $product->quantity }}</td> -->
                                             <td>{{ $product->size }}</td>
-                                            <td>{{ $product->rent }}</td>
-                                            <td>{{ $product->price }}</td>
+                                            <td>{{ $product->rent_day }}</td>
+                                            <!-- <td>{{ $product->price }}</td> -->
 
                                             <td>
                                                 <label class="custom-switch">

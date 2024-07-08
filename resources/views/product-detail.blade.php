@@ -261,14 +261,16 @@
                                 <p>Lender</p>
                                 <div class="lender-profile-box">
                                     <div class="lender-dp-box">
+                                        <a href="{{ route('lenderProfile', jsencode_userdata($product->user_id)) }}">
                                         @if ($user->profile_file)
-                                            <img src="{{ asset('storage/' . $user->profile_file) }}"
+                                            <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
                                                 alt="Profile Picture">
                                         @else
                                             <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
                                         @endif
+                                        </a>
                                     </div>
-                                    <h4>{{ auth()->user()->name }}</h4>
+                                    <h4>{{ $product->retailer->name }}</h4>
                                 </div>
                             </div>
                             <div class="pro-dec-rating-main">
