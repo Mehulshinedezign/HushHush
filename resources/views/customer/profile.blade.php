@@ -92,7 +92,7 @@
                         <div class="profile-about-detail">
                             <h4>About me</h4>
 
-                            @if ( $user && $user->userDetail->about)
+                            @if ( ($user) && ($user->userDetail))
                                 <p>{{ $user->userDetail->about }}</p>  
                             @else
                                 <p>Safer For The Environment: Our denim factory partner recycles 98% of their water using
@@ -117,7 +117,11 @@
                             </div>
                             <div class="profile-address-data">
                                 <h3>Address</h3>
-                                <p>{{ $user->userDetail->address1 }}</p>
+
+                                @if($user && $user->userDetail)
+                                    <p>{{ $user->userDetail->address1 }}</p>
+                                @endif
+
                                 {{-- <p>Akshya Nagar 1st Block 1st Cross, Rammurthy nagar Los Angeles , USA</p> --}}
                             </div>
                         </div>
