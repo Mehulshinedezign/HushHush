@@ -221,7 +221,7 @@ return [
         //     'max' => __('Complete address length should be 255.'),
         // ],
         'gov_id' => [
-           'required' =>  __('This field is required'),
+           'required' =>  __('This field is required.'),
            'file' => 'The government ID must be a file of type: jpg, png, jpeg, pdf.',
            'max_size' => 'The government ID may not be greater than 2MB.',
         ],
