@@ -256,7 +256,7 @@
                                             <label for="">Non-Available Dates</label>
                                             <div class="formfield">
                                                 <input type="text" name="non_available_dates" id="non_available_date"
-                                                    placeholder="Select Dates" class="form-control">
+                                                    placeholder="Select Dates" class="form-control daterange-cus">
                                                 <span class="form-icon cal-icon">
                                                     <img src="{{ asset('front/images/calender-icon.svg') }}"
                                                         alt="img">
@@ -405,6 +405,7 @@
 
 
     <!--JS-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ asset('front/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('front/js/jquery.min.js') }}"></script>
     <script src="{{ asset('front/js/slick.js') }}"></script>
@@ -697,16 +698,36 @@
 
 
 
-            $('#non_available_date').daterangepicker({
-                opens: 'right',
-                autoUpdateInput: false,
-                locale: {
-                    format: 'MM/DD/YYYY'
-                }
-            }, function(start, end, label) {
-                $('#non_available_date').val(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
-            });
+            // $('#non_available_date').daterangepicker({
+            //     opens: 'right',
+            //     autoUpdateInput: false,
+            //     locale: {
+            //         format: 'MM/DD/YYYY'
+            //     },
+            // }, function(start, end, label) {
+            //     $('#non_available_date').val(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
+            // });
 
+            $('.daterange-cus').daterangepicker({
+            locale: { format: 'YYYY-MM-DD' },
+            drops: 'down',
+            opens: 'right'
+            });
+            $('.daterange-btn').daterangepicker({
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            startDate: moment().subtract(29, 'days'),
+            endDate: moment(),
+            // separator: 'to',
+            }, function (start, end) {
+            $('.daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+            });
 
         });
     </script>

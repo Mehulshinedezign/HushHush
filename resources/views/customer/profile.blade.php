@@ -92,7 +92,7 @@
                         <div class="profile-about-detail">
                             <h4>About me</h4>
 
-                            @if ($user->userDetail->about)
+                            @if ( $user && $user->userDetail->about)
                                 <p>{{ $user->userDetail->about }}</p>  
                             @else
                                 <p>Safer For The Environment: Our denim factory partner recycles 98% of their water using

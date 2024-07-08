@@ -266,17 +266,15 @@ class ProductController extends Controller
 
 
             if ($request->has('non_available_dates')) {
-
                 $dateRange = $request->non_available_dates;
-
                 list($startDateStr, $endDateStr) = explode(' - ', $dateRange);
-                $startDate = Carbon::createFromFormat('m/d/Y', $startDateStr);
-                $endDate = Carbon::createFromFormat('m/d/Y', $endDateStr);
+                $startDate = Carbon::createFromFormat('Y-m-d', $startDateStr);
+                $endDate = Carbon::createFromFormat('Y-m-d', $endDateStr);
             
                 for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
                     ProductDisableDate::create([
                         'product_id' => $product->id,
-                        'disable_date' => $date->format('Y/m/d'),
+                        'disable_date' => $date->format('Y-m-d'),
                     ]);
                 }
             }
@@ -358,11 +356,12 @@ class ProductController extends Controller
 
         $disabledDates = $product->disableDates;
 
+        // dd("here",$disabledDates);
         if ($disabledDates->isNotEmpty()) {
             $sortedDates = $disabledDates->sortBy('disable_date');
-            $firstDate = \Carbon\Carbon::parse($sortedDates->first()->disable_date)->format('m/d/Y');
-            $lastDate = \Carbon\Carbon::parse($sortedDates->last()->disable_date)->format('m/d/Y');
-
+            $firstDate = \Carbon\Carbon::parse($sortedDates->first()->disable_date)->format('Y-m-d');
+            $lastDate = \Carbon\Carbon::parse($sortedDates->last()->disable_date)->format('Y-m-d');
+        
             $formattedDates = $firstDate . ' - ' . $lastDate;
         } else {
             $formattedDates = '';
@@ -601,6 +600,25 @@ class ProductController extends Controller
                         'file_name' => $fileName,
                         'file_path' => $filePath,
                     ]);
+                }
+            }
+
+            if ($request->has('non_available_dates')) {
+                ProductDisableDate::where('product_id', $product->id)->delete();
+        
+                $dateRange = $request->non_available_dates;
+        
+                if (!empty($dateRange)) {
+                    list($startDateStr, $endDateStr) = explode(' - ', $dateRange);
+                    $startDate = Carbon::createFromFormat('Y-m-d', $startDateStr);
+                    $endDate = Carbon::createFromFormat('Y-m-d', $endDateStr);
+        
+                    for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+                        ProductDisableDate::create([
+                            'product_id' => $product->id,
+                            'disable_date' => $date->format('Y-m-d'),
+                        ]);
+                    }
                 }
             }
 
