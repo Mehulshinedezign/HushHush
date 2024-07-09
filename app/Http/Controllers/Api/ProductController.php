@@ -21,6 +21,7 @@ use Carbon\CarbonPeriod;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use PhpParser\ErrorHandler\Throwing;
 use Illuminate\Support\Facades\Validator;
 
@@ -38,9 +39,11 @@ class ProductController extends Controller
     {
         // dd("THENNNNN",$request->all(),$request->category);
         try {
+            // dd(auth()->user());
             $categories = Category::where('status', true)->get();
 
             $products = $this->getProducts($request);
+            // dd($products);
             $products = $products->paginate($request->global_product_pagination);
 
             $transformedProducts = $products->map(function ($product) {
@@ -302,143 +305,7 @@ class ProductController extends Controller
         return $this->apiResponse($apiResponse, $statusCode, $message, $category_product, null);
     }
 
-    // public function addProduct(Request $request)
-    // {
 
-    //     try {
-    //         $validator = Validator::make($request->all(), [
-    //             'name' => 'required|string',
-    //             'description' => 'required|string',
-    //             'rentaltype' => 'required|string',
-    //             'category' => 'required',
-    //             'size' => 'required_without:other_size',
-    //             'other_size' => 'required_without:size',
-    //             'color' => 'required|string',
-    //             'brand' => 'required',
-    //             'product_condition' => 'required|string',
-    //             'rent' => 'required|numeric',
-    //             'price' => 'required|numeric',
-    //             'product_market_value' => 'required|numeric',
-    //             'product_link' => 'nullable|url',
-    //             'min_rent_days' => 'required|integer',
-    //             'neighborhood' => 'required|',
-    //             'neighborhoodcity' => 'required|string',
-    //         ]);
-
-    //         if ($validator->fails()) {
-    //             return response()->json(['errors' => $validator->errors()], 422);
-    //         }
-
-    //         $user = $request->user();
-    //         $is_bankdetail = $user->vendorBankDetails;
-
-    //         // dd("AVAIL",$is_bankdetail);
-    //         $data = [
-    //             'name' => $request->name,
-    //             'description' => $request->description,
-    //             'rentaltype' => $request->rentaltype,
-    //             'category_id' => $request->category,
-    //             'subcat_id' => $request->sub_cat ?? null,
-    //             'size' => $request->size,
-    //             'other_size' => $request->other_size,
-    //             'color' => $request->color,
-    //             'brand' => $request->brand,
-    //             'condition' => $request->product_condition,
-    //             'user_id' => $user->id,
-    //             'rent' => $request->rent,
-    //             'price' => $request->price,
-    //             // 'status' => $is_bankdetail ? isset($request->status) ? '1' : '0' : '0',
-    //             'status' => $is_bankdetail && isset($request->status) ? '1' : '0',
-
-    //             'product_market_value' => $request->product_market_value,
-    //             'product_link' => $request->product_link,
-    //             'min_days_rent_item' => $request->min_rent_days,
-    //         ];
-
-    //         if ($request->neighborhoodcity && $request->neighborhood) {
-    //             $data['city'] = $request->neighborhoodcity;
-    //             $data['neighborhood_city'] = $request->neighborhood;
-    //         }
-
-    //         $product = Product::create($data);
-
-
-    //         if ($request->cookie('img_token')) {
-    //             ProductImage::where('image_token', $request->cookie('img_token'))
-    //                 ->update(['product_id' => $product->id, 'image_token' => null]);
-    //         }
-
-    //         $neighborhoodcity = NeighborhoodCity::findOrFail($request->neighborhood);
-    //         ProductLocation::create([
-    //             'product_id' => $product->id,
-    //             'map_address' => $neighborhoodcity->name,
-    //         ]);
-
-
-    //         $apiResponse = 'success';
-    //         $statusCode = 200;
-    //         $message = 'Product Added successfully!';
-    //         $data = [];
-    //         return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
-    //     } catch (\Throwable $e) {
-    //         // dd($e->getMessage());
-    //         $apiResponse = 'error';
-    //         $statusCode = 500;
-    //         $message = $e->getMessage();
-    //         $data = [];
-    //         return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
-    //     }
-    // }
-
-    // public function updateProduct(Request $request, $id)
-    // {
-    //     try {
-    //         $product = Product::findOrFail($id);
-
-    //         $validator = Validator::make($request->all(), [
-    //             'name' => 'required|string',
-    //             'description' => 'required|string',
-    //             'rentaltype' => 'required|string',
-    //             'category' => 'required',
-    //             'size' => 'required_without:other_size',
-    //             'other_size' => 'required_without:size',
-    //             'color' => 'required|string',
-    //             'brand' => 'required',
-    //             'product_condition' => 'required|string',
-    //             'rent' => 'required|numeric',
-    //             'price' => 'required|numeric',
-    //             'product_market_value' => 'required|numeric',
-    //             'product_link' => 'nullable|url',
-    //             'min_rent_days' => 'required|integer',
-    //             'neighborhood' => 'required',
-    //             'neighborhoodcity' => 'required',
-    //         ]);
-
-    //         if ($validator->fails()) {
-    //             return response()->json(['errors' => $validator->errors()], 422);
-    //         }
-
-    //         $product->update($request->all());
-
-    //         if ($request->has('neighborhood') && $request->has('neighborhoodcity')) {
-    //             $product->city = $request->neighborhoodcity;
-    //             $product->neighborhood_city = $request->neighborhood;
-    //             $product->save();
-
-    //             $neighborhoodcity = NeighborhoodCity::findOrFail($request->neighborhood);
-    //             $product->productLocation()->update([
-    //                 'map_address' => $neighborhoodcity->name,
-    //             ]);
-    //         }
-
-    //         $apiResponse = 'success';
-    //         $statusCode = 200;
-    //         $message = 'Product Updated successfully!';
-    //         return $this->apiResponse($apiResponse, $statusCode, $message, null, null);
-    //     } catch (\Throwable $e) {
-    //         return $this->apiResponse('error', 500, 'An error occurred while updating the product.', null, null);
-    //     }
-    // }
 
     public function deleteProduct($id)
     {
@@ -473,179 +340,46 @@ class ProductController extends Controller
         }
     }
 
-    // public function view(Request $request,$id)
-    // {
-
-    //     try {
-    //         // dd($request->all());
-    //         dd('1');
-    //         $product = $this->getProduct($id);
-    //         dd($product);
-    //         if (is_null($product)) {
-    //             return redirect()->back()->with('message', __('product.messages.notAvailable'));
-    //         }
-    //         dd(2);
-
-    //         $apiResponse = 'success';
-    //         $statusCode = 200;
-    //         $message = 'Product fetched successfully!';
-
-    //         $additionalDescriptions = [
-    //             'This product is simply amazing!',
-    //             'You wont believe the quality of this item',
-    //             'A must-have for any collection',
-    //             'Perfect for everyday use or special occasions.',
-    //             'Highly recommended by satisfied customers.',
-    //             'Exceptional value for the price.',
-    //             'One of our most popular items.',
-    //             'You will wonder how you ever lived without it.',
-    //             'Combines style and functionality beautifully.',
-    //             'Guaranteed to exceed your expectations.',
-    //         ];
-
-    //         dd("here", $product);
-    //         $ratings = $product->ratings->map(function ($rating) {
-    //             return [
-    //                 'user_id' => $rating->user_id,
-    //                 'review' => $rating->review,
-    //                 'user_name' => @$rating->user->name,
-    //                 "review_user_profile" => asset('storage/profiles/' . $rating->user->profile_file),
-    //                 'rating' => $rating->rating,
-    //                 'review_date' => date('Y-m-d', strtotime($rating->created_at)),
-    //             ];
-    //         })->toARray();
-
-    //         dd("here : ", $product->retailer->profile_file);
-    //         $productDetails = [
-    //             'id' => $product->id,
-    //             'name' => $product->name,
-    //             'product_image_url' => [$product->thumbnailImage && filter_var($product->thumbnailImage->url, FILTER_VALIDATE_URL) ? $product->thumbnailImage->url : null],
-    //             'description' => $product->description,
-    //             'addition_description' => $additionalDescriptions[array_rand($additionalDescriptions)],
-    //             'category_name' => $product->category->name,
-    //             'rent' => $product->rent,
-    //             'size' => $product->size,
-    //             'pickup_location' => $product->locations[0]->map_address ?? null,
-    //             'disabled_date' => [date('Y-m-d', mt_rand(strtotime('1 year'), strtotime('+1 year')))],
-    //             'lender_info' => [
-    //                 'user_id' => $product->retailer->id,
-    //                 'user_name' => $product->retailer->username,
-    //                 'name' => $product->retailer->name,
-    //                 'lender_profile' => asset('storage/profiles/' . $product->retailer->profile_file),
-    //             ],
-    //             'review' => $ratings,
-    //         ];
-
-
-    //         return $this->apiResponse($apiResponse, $statusCode, $message, $productDetails, null);
-    //     } catch (\Throwable $e) {
-
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => $e->getMessage(),
-    //             'errors' => []
-    //         ], 500);
-    //     }
-    // }
-
-
-    // public function addDisableDates(Request $request, $productId)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'dates' => 'required|array',
-    //         'dates.*' => 'date_format:Y-m-d',
-    //         'start_date' => 'date_format:Y-m-d',
-    //         'end_date' => 'date_format:Y-m-d|after_or_equal:start_date',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json(['status' => false, 'errors' => $validator->errors()], 422);
-    //     }
-
-    //     try {
-    //         $disableDates = [];
-
-    //         if ($request->has('start_date') && $request->has('end_date')) {
-    //             $period = CarbonPeriod::create($request->start_date, $request->end_date);
-
-    //             foreach ($period as $date) {
-    //                 $disableDates[] = [
-    //                     'product_id' => $productId,
-    //                     'disable_date' => $date->format('Y-m-d'),
-    //                     'created_at' => now(),
-    //                     'updated_at' => now(),
-    //                 ];
-    //             }
-    //         }
-
-    //         if ($request->has('dates')) {
-    //             foreach ($request->dates as $date) {
-    //                 $disableDates[] = [
-    //                     'product_id' => $productId,
-    //                     'disable_date' => $date,
-    //                     'created_at' => now(),
-    //                     'updated_at' => now(),
-    //                 ];
-    //             }
-    //         }
-
-    //         ProductDisableDate::insert($disableDates);
-
-    //         return response()->json([
-    //             'status' => true,
-    //             'message' => 'Disable dates added successfully!',
-    //             'data' => $disableDates,
-    //         ], 200);
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => $e->getMessage(),
-    //             'errors' => [],
-    //         ], 500);
-    //     }
-    // }
 
     public function addProduct(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string',
-                'description' => 'required|string',
-                // 'rentaltype' => 'required|string',
-                'category' => 'required',
-                'size' => 'required_without:other_size',
-                // 'other_size' => 'required_without:size',
-                'color' => 'required|string',
-                'brand' => 'required',
-                'product_condition' => 'required|string',
-                // 'rent' => 'required|numeric',
-                'price' => 'required|numeric',
-                'product_market_value' => 'required|numeric',
-                'product_link' => 'nullable|url',
-                'min_rent_days' => 'required|integer',
-                // 'neighborhood' => 'required',
-                // 'neighborhoodcity' => 'required|string',
-                'disable_dates' => 'array',
-                'disable_dates.*' => 'string',
-                'state' => 'state',
-                'city' => 'city',
-            ]);
+            // $validator = Validator::make($request->all(), [
+            //     'name' => 'required|string',
+            //     'description' => 'required|string',
+            //     'category' => 'required',
+            //     'size' => 'required_without:other_size',
+            //     'color' => 'required|string',
+            //     'brand' => 'required',
+            //     'product_condition' => 'required|string',
+            //     'product_market_value' => 'required|numeric',
+            //     'product_link' => 'nullable|url',
+            //     'min_rent_days' => 'required|integer',
+            //     //'disable_dates' => 'required|string',
+            //     'state' => 'required|integer',
+            //     'city' => 'required|integer',
+            //     'rent_day' => 'required|integer',
+            //     'rent_week' => 'required|integer',
+            //     'rent_month' => 'required|integer',
+            //     'pickup_location' => 'required|string',
+            //     'images' => 'required|array',
+            //     //'images.*' => 'string'
+            // ]);
 
-            // dd($request->all());
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 422);
-            }
+            // if ($validator->fails()) {
+            //     return response()->json(['errors' => $validator->errors()], 422);
+            // }
 
             $user = $request->user();
             $is_bankdetail = $user->vendorBankDetails;
-            // dd($is_bankdetail);
+
             if (is_null($is_bankdetail)) {
                 $apiResponse = 'error';
                 $statusCode = 422;
                 $message = "Please enter bank details before adding products";
                 $data = [
                     'user_id' => $user->id,
-                    'bankdetail' =>  $is_bankdetail,
+                    'bankdetail' => $is_bankdetail,
                 ];
                 return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
             }
@@ -653,31 +387,23 @@ class ProductController extends Controller
             $data = [
                 'name' => $request->name,
                 'description' => $request->description,
-                // 'rentaltype' => $request->rentaltype,
                 'category_id' => $request->category,
                 'subcat_id' => $request->sub_cat ?? null,
                 'size' => $request->size,
-                // 'other_size' => $request->other_size,
                 'color' => $request->color,
                 'brand' => $request->brand,
-                'condition' => $request->product_condition,
+                'product_condition' => $request->product_condition,
                 'user_id' => $user->id,
-                // 'rent' => $request->rent,
-                'price' => $request->price,
                 'status' => $is_bankdetail && isset($request->status) ? '1' : '0',
                 'product_market_value' => $request->product_market_value,
                 'product_link' => $request->product_link,
                 'min_days_rent_item' => $request->min_rent_days,
                 'state' => $request->state,
                 'city' => $request->city,
-                // 'img_token'=>$request->img_token,
-
+                'rent_day' => $request->rent_day,
+                'rent_week' => $request->rent_week,
+                'rent_month' => $request->rent_month,
             ];
-
-            // if ($request->neighborhoodcity && $request->neighborhood) {
-            //     $data['city'] = $request->neighborhoodcity;
-            //     $data['neighborhood_city'] = $request->neighborhood;
-            // }
 
             $product = Product::create($data);
 
@@ -686,27 +412,25 @@ class ProductController extends Controller
                     ->update(['product_id' => $product->id, 'image_token' => null]);
             }
 
-            // $neighborhoodcity = NeighborhoodCity::findOrFail($request->neighborhood);
-            // ProductLocation::create([
-            //     'product_id' => $product->id,
-            //     'map_address' => $neighborhoodcity->name,
-            // ]);
+            ProductLocation::create([
+                'product_id' => $product->id,
+                'map_address' => $request->pickup_location,
+            ]);
 
             // Handle disable dates
             if ($request->has('disable_dates')) {
-                foreach ($request->disable_dates as $dateRange) {
-
-                    $dates = explode(',', $dateRange);
-                    if (count($dates) == 1) {
+                $disableDates = json_decode($request->disable_dates, true);
+                foreach ($disableDates as $dateRange) {
+                    if (count($dateRange) == 1) {
                         // Single date
                         ProductDisableDate::create([
                             'product_id' => $product->id,
-                            'disable_date' => $dates[0],
+                            'disable_date' => \DateTime::createFromFormat('d/m/Y', $dateRange[0])->format('Y-m-d'),
                         ]);
-                    } else if (count($dates) == 2) {
+                    } else if (count($dateRange) == 2) {
                         // Date range
-                        $start = new \DateTime($dates[0]);
-                        $end = new \DateTime($dates[1]);
+                        $start = \DateTime::createFromFormat('d/m/Y', $dateRange[0]);
+                        $end = \DateTime::createFromFormat('d/m/Y', $dateRange[1]);
 
                         while ($start <= $end) {
                             ProductDisableDate::create([
@@ -718,6 +442,53 @@ class ProductController extends Controller
                     }
                 }
             }
+
+            // // Handle images
+            if ($request->hasFile('images')) {
+                foreach ($request->images as $index => $image) {
+                    $fileName = $product->id . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
+                    $filePath = $image->storeAs('products/images', $fileName, 'public');
+
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'file_name' => $fileName,
+                        'file_path' => $filePath,
+                    ]);
+                }
+            }
+
+            // // Assuming $request->images contains the JSON string
+            // $imageData = $request->images;
+            // dd($imageData);
+            // // return response()->json([
+            // //     'message' => json_decode($imageData),
+            // // ]);
+            // // Handle images
+            // if (!empty($imageData)) {
+            //     foreach ($imageData as $index => $image) {
+            //         // Decode the individual image data
+            //         $imageInfo = json_decode($image[1], true);
+
+            //         if ($imageInfo && isset($imageInfo['uri'])) {
+            //             $filePath = $imageInfo['uri'];
+            //             $fileName = $imageInfo['name'];
+
+            //             // Store the image file
+            //             $storedPath = Storage::disk('public')->putFileAs(
+            //                 'products/images',
+            //                 new \Illuminate\Http\File($filePath),
+            //                 $fileName
+            //             );
+
+            //             // Save image info to the database
+            //             ProductImage::create([
+            //                 'product_id' => $product->id,
+            //                 'file_name' => $fileName,
+            //                 'file_path' => $storedPath,
+            //             ]);
+            //         }
+            //     }
+            // }
 
             $apiResponse = 'success';
             $statusCode = 200;
@@ -736,79 +507,18 @@ class ProductController extends Controller
     }
 
 
-    // public function view(Request $request, $id)
-    // {
-    //     dd($request->all());
-    //     try {
-    //         $product = Product::with(['category', 'thumbnailImage', 'locations', 'retailer'])
-    //             ->findOrFail($id);
-
-    //         $additionalDescriptions = [
-    //             'This product is simply amazing!',
-    //             'You won\'t believe the quality of this item.',
-    //             'A must-have for any collection.',
-    //             'Perfect for everyday use or special occasions.',
-    //             'Highly recommended by satisfied customers.',
-    //             'Exceptional value for the price.',
-    //             'One of our most popular items.',
-    //             'You will wonder how you ever lived without it.',
-    //             'Combines style and functionality beautifully.',
-    //             'Guaranteed to exceed your expectations.',
-    //         ];
-
-    //         $disableDates = $product->disableDates->pluck('disable_date')->toArray();
-
-    //         $productDetails = [
-    //             'id' => $product->id,
-    //             'name' => $product->name,
-    //             'product_image_url' => $product->thumbnailImage ? asset('storage/' . $product->thumbnailImage->url) : null,
-    //             'description' => $product->description,
-    //             'additional_description' => $additionalDescriptions[array_rand($additionalDescriptions)],
-    //             'category_name' => $product->category->name,
-    //             'rent' => $product->rent,
-    //             'size' => $product->size,
-    //             'pickup_location' => $product->locations[0]->map_address ?? null,
-    //             'disabled_dates' => $disableDates,
-    //             'lender_info' => [
-    //                 'user_id' => $product->retailer->id,
-    //                 'user_name' => $product->retailer->username,
-    //                 'name' => $product->retailer->name,
-    //                 'lender_profile' => $product->retailer->profile_file ? asset('storage/profiles/' . $product->retailer->profile_file) : null,
-    //             ],
-    //         ];
-
-    //         return response()->json([
-    //             'status' => true,
-    //             'message' => 'Product fetched successfully!',
-    //             'data' => $productDetails,
-    //         ], 200);
-    //     } catch (\Throwable $e) {
-    //         return response()->json([
-    //             'status' => false,
-    //             'message' => $e->getMessage(),
-    //             'errors' => [],
-    //         ], 500);
-    //     }
-    // }
 
 
     public function updateProduct(Request $request, $id)
     {
         try {
             $product = Product::findOrFail($id);
-            if (is_null($product)) {
+
+            $user = $request->user();
+            if ($product->user_id != $user->id) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Product not found',
-                    'errors' => ['product_id' => 'The product does not exist.'],
-                ], 404);
-            }
-            $user = auth()->user();
-            // dd($product->user_id  , $user->id);
-            if ($product->user_id  != $user->id) {
-                return response()->json([
-                    'status' => false,
-                    'message' => "You are not authorized for this actions",
+                    'message' => "You are not authorized to perform this action",
                     'errors' => [],
                 ], 401);
             }
@@ -816,56 +526,65 @@ class ProductController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'description' => 'required|string',
-                // 'rentaltype' => 'required|string',
                 'category' => 'required',
                 'size' => 'required_without:other_size',
-                'other_size' => 'required_without:size',
                 'color' => 'required|string',
                 'brand' => 'required',
                 'product_condition' => 'required|string',
-                'rent' => 'required|numeric',
-                'price' => 'required|numeric',
                 'product_market_value' => 'required|numeric',
                 'product_link' => 'nullable|url',
                 'min_rent_days' => 'required|integer',
-                // 'neighborhood' => 'required',
-                // 'neighborhoodcity' => 'required',
                 'disable_dates' => 'array',
                 'disable_dates.*' => 'string',
-
+                'state' => 'required|integer',
+                'city' => 'required|integer',
+                'rent_day' => 'required|integer',
+                'rent_week' => 'required|integer',
+                'rent_month' => 'required|integer',
+                'pickup_location' => 'required|string',
+                'images' => 'array',
+                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
             ]);
 
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
 
-            $product->update($request->all());
+            $data = [
+                'name' => $request->name,
+                'description' => $request->description,
+                'category_id' => $request->category,
+                'subcat_id' => $request->sub_cat ?? null,
+                'size' => $request->size,
+                'color' => $request->color,
+                'brand' => $request->brand,
+                'product_condition' => $request->product_condition,
+                'product_market_value' => $request->product_market_value,
+                'product_link' => $request->product_link,
+                'min_days_rent_item' => $request->min_rent_days,
+                'state' => $request->state,
+                'city' => $request->city,
+                'rent_day' => $request->rent_day,
+                'rent_week' => $request->rent_week,
+                'rent_month' => $request->rent_month,
+            ];
 
-            if ($request->has('neighborhood') && $request->has('neighborhoodcity')) {
-                $product->city = $request->neighborhoodcity;
-                $product->neighborhood_city = $request->neighborhood;
-                $product->save();
+            $product->update($data);
 
-                $neighborhoodcity = NeighborhoodCity::findOrFail($request->neighborhood);
-                $product->locations()->update([
-                    'map_address' => $neighborhoodcity->name,
-                ]);
-            }
+            ProductLocation::where('product_id', $product->id)->update([
+                'map_address' => $request->pickup_location,
+            ]);
 
-            // Handle disable dates
             if ($request->has('disable_dates')) {
                 ProductDisableDate::where('product_id', $product->id)->delete();
-
                 foreach ($request->disable_dates as $dateRange) {
                     $dates = explode(',', $dateRange);
                     if (count($dates) == 1) {
-                        // Single date
                         ProductDisableDate::create([
                             'product_id' => $product->id,
                             'disable_date' => $dates[0],
                         ]);
                     } else if (count($dates) == 2) {
-                        // Date range
                         $start = new \DateTime($dates[0]);
                         $end = new \DateTime($dates[1]);
 
@@ -880,17 +599,35 @@ class ProductController extends Controller
                 }
             }
 
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $index => $image) {
+                    $fileName = $product->id . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
+                    $filePath = $image->storeAs('products/images', $fileName, 'public');
+
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'file_name' => $fileName,
+                        'file_path' => $filePath,
+                    ]);
+                }
+            }
+
             $apiResponse = 'success';
             $statusCode = 200;
-            $message = 'Product Updated successfully!';
-            $data = ['product_id' => $product->id];
+            $message = 'Product updated successfully!';
+            $data = [
+                'product_id' => $product->id
+            ];
             return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
         } catch (\Throwable $e) {
-            // dd($e->getMessage());
+            $apiResponse = 'error';
+            $statusCode = 500;
+            $message = $e->getMessage();
             $data = [];
-            return $this->apiResponse('error', 500, 'An error occurred while updating the product.',  $data, null);
+            return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
         }
     }
+
 
 
     public function getFormData()
@@ -963,44 +700,7 @@ class ProductController extends Controller
         }
     }
 
-    //     public function getAllProducts()
-    //     {
-    //         try {
-    //             $products = Product::with(['disableDates', 'category', 'get_brand', 'get_color', 'get_size'])
-    //                 ->where('status', 1)
-    //                 ->get();
-    //                 // dd($products);
-    // ;                // $disableDates = $product->disableDates->pluck('disable_date')->toArray();
-    //             $productData = $products->map(function ($product) {
-    //                 return [
-    //                     'id' => $product->id,
-    //                     'name' => $product->name,
-    //                     'description' => $product->description,
-    //                     'rent' => $product->rent,
-    //                     'price' => $product->price,
-    //                     'thumbnail_image' => $product->thumbnailImage ? $product->thumbnailImage->url : null,
-    //                     'disabled_dates' => $product->disableDates->pluck('disable_date')->toArray(),
-    //                     'category' => $product->category ? $product->category->name : null,
-    //                     'brand' => $product->get_brand ? $product->get_brand->name : null,
-    //                     'color' => $product->get_color ? $product->get_color->name : null,
-    //                     'size' => $product->get_size ? $product->get_size->name : null,
-    //                 ];
-    //             });
 
-    //             // dd($productData);
-    //             return response()->json([
-    //                 'status' => true,
-    //                 'message' => 'Products fetched successfully!',
-    //                 'data' => $productData,
-    //             ], 200);
-    //         } catch (\Throwable $e) {
-    //             return response()->json([
-    //                 'status' => false,
-    //                 'message' => $e->getMessage(),
-    //                 'errors' => [],
-    //             ], 500);
-    //         }
-    //     }
 
 
     private function getProduct($id)
@@ -1013,22 +713,57 @@ class ProductController extends Controller
     public function getAllProducts()
     {
         try {
-            $products = Product::all();
-            // dd($products);
-            // $disableDates = $product->disableDates->pluck('disable_date')->toArray();
+            $authUserId = auth()->user()->id;
+            $products = Product::where('user_id', '!=', $authUserId)->get();
+            // $categories = Category::where('status', true)->get();
+
             $allProducts = [];
             foreach ($products as $product) {
                 $productDetails = $this->getProduct($product->id);
                 $allProducts[] = $productDetails;
             }
 
+            $transformedProducts = $products->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'description' => $product->description,
+                    'specification' => $product->specification,
+                    'rentaltype' => $product->rentaltype,
+                    'user_id' => $product->user_id,
+                    'category_id' => $product->category_id,
+                    'subcat_id' => $product->subcat_id,
+                    'quantity' => $product->quantity,
+                    'rent' => $product->rent,
+                    'min_days_rent_item' => $product->min_days_rent_item,
+                    'price' => $product->price,
+                    'security' => $product->security,
+                    'status' => $product->status,
+                    'other_size' => $product->other_size,
+                    'condition' => $product->condition,
+                    'brand' => $product->get_brand->name ?? null,
+                    'color' => $product->get_color->name ?? null,
+                    'size' => $product->get_size->name ?? null,
+                    'rent_day' => $product->rent_day,
+                    'rent_week' => $product->rent_week,
+                    'rent_month' => $product->rent_month,
+                    'modified_by' => $product->modified_by,
+                    'modified_user_type' => $product->modified_user_type,
+                    'available' => $product->available,
+                    'city' => $product->city,
+                    'neighborhood_city' => $product->neighborhood_city,
+                    'product_market_value' => $product->product_market_value,
+                    'product_link' => $product->product_link,
+                    'average_rating' => $product->average_rating,
+                    // 'is_favorite' => $product->favorites->isEmpty() ? false : true,
+                    'product_image_url' => $product->thumbnailImage->file_path ?? null && filter_var(asset('storage/' . $product->thumbnailImage->file_path), FILTER_VALIDATE_URL) ? asset('storage/' . $product->thumbnailImage->file_path) : null,
+                ];
+            })->toArray();
 
-
-            // dd($productData);
             return response()->json([
                 'status' => true,
                 'message' => 'Products fetched successfully!',
-                'data' => $allProducts,
+                'data' => ['products' => $transformedProducts],
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
@@ -1038,6 +773,64 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
+    public function getAuthUserProducts()
+    {
+        try {
+            $authUserId = auth()->user()->id;
+            $products = Product::where('user_id', $authUserId)->get();
+            $categories = Category::where('status', true)->get();
+
+            $transformedProducts = $products->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'description' => $product->description,
+                    'specification' => $product->specification,
+                    'rentaltype' => $product->rentaltype,
+                    'user_id' => $product->user_id,
+                    'category_id' => $product->category_id,
+                    'subcat_id' => $product->subcat_id,
+                    'quantity' => $product->quantity,
+                    'rent' => $product->rent,
+                    'min_days_rent_item' => $product->min_days_rent_item,
+                    'price' => $product->price,
+                    'security' => $product->security,
+                    'status' => $product->status,
+                    'other_size' => $product->other_size,
+                    'condition' => $product->condition,
+                    'brand' => $product->get_brand->name ?? null,
+                    'color' => $product->get_color->name ?? null,
+                    'size' => $product->get_size->name ?? null,
+                    'rent_day' => $product->rent_day,
+                    'rent_week' => $product->rent_week,
+                    'rent_month' => $product->rent_month,
+                    'modified_by' => $product->modified_by,
+                    'modified_user_type' => $product->modified_user_type,
+                    'available' => $product->available,
+                    'city' => $product->city,
+                    'product_market_value' => $product->product_market_value,
+                    'product_link' => $product->product_link,
+                    'average_rating' => $product->average_rating,
+                    'product_image_url' => $product->thumbnailImage->file_path ?? null && filter_var(asset('storage/' . $product->thumbnailImage->file_path), FILTER_VALIDATE_URL) ? asset('storage/' . $product->thumbnailImage->file_path) : null,
+                ];
+            })->toArray();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Products fetched successfully!',
+                'data' => ['products' => $transformedProducts],
+            ], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'errors' => [],
+            ], 500);
+        }
+    }
+
+
 
     public function getAllProductsById($id)
     {
@@ -1057,60 +850,11 @@ class ProductController extends Controller
             if (is_null($product)) {
                 return redirect()->back()->with('message', __('product.messages.notAvailable'));
             }
-            // dd(2);
-
-            $apiResponse = 'success';
-            $statusCode = 200;
-            $message = 'Product fetched successfully!';
-
-            $additionalDescriptions = [
-                'This product is simply amazing!',
-                'You wont believe the quality of this item',
-                'A must-have for any collection',
-                'Perfect for everyday use or special occasions.',
-                'Highly recommended by satisfied customers.',
-                'Exceptional value for the price.',
-                'One of our most popular items.',
-                'You will wonder how you ever lived without it.',
-                'Combines style and functionality beautifully.',
-                'Guaranteed to exceed your expectations.',
-            ];
-
-            // dd("here", $product);
-            $ratings = $product->ratings->map(function ($rating) {
-                return [
-                    'user_id' => $rating->user_id,
-                    'review' => $rating->review,
-                    'user_name' => @$rating->user->name,
-                    "review_user_profile" => asset('storage/profiles/' . $rating->user->profile_file),
-                    'rating' => $rating->rating,
-                    'review_date' => date('Y-m-d', strtotime($rating->created_at)),
-                ];
-            })->toARray();
-
-            // dd("here : ", $product->retailer->profile_file);
-            $productDetails = [
-                'id' => $product->id,
-                'name' => $product->name,
-                'product_image_url' => [$product->thumbnailImage && filter_var($product->thumbnailImage->url, FILTER_VALIDATE_URL) ? $product->thumbnailImage->url : null],
-                'description' => $product->description,
-                'addition_description' => $additionalDescriptions[array_rand($additionalDescriptions)],
-                'category_name' => $product->category->name,
-                'rent' => $product->rent,
-                'size' => $product->size,
-                'pickup_location' => $product->locations[0]->map_address ?? null,
-                'disabled_date' => $product->disableDates->pluck('disable_date')->toArray(),
-                'lender_info' => [
-                    'user_id' => $product->retailer->id,
-                    'user_name' => $product->retailer->username,
-                    'name' => $product->retailer->name,
-                    'lender_profile' => asset('storage/profiles/' . $product->retailer->profile_file),
-                ],
-                'review' => $ratings,
-            ];
-
-
-            return $this->apiResponse($apiResponse, $statusCode, $message, $productDetails, null);
+            return response()->json([
+                'status' => true,
+                'message' => 'product details fetched succesfully',
+                'data' => $product,
+            ], 200);
         } catch (\Throwable $e) {
 
             return response()->json([
@@ -1125,7 +869,7 @@ class ProductController extends Controller
     {
         try {
             $product = Product::findOrFail($id);
-            $product = Product::findOrFail($id);
+            // $product = Product::findOrFail($id);
             if (is_null($product)) {
                 return response()->json([
                     'status' => false,
