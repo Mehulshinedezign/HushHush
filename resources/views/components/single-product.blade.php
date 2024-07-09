@@ -29,7 +29,7 @@
         @foreach ($products as $product)
             <div class="product-card">
                 <div class="product-img-box">
-                    <a href="{{ route('viewproduct', jsencode_userdata($product->id)) }}">
+                    <a href="{{ route('viewproduct', jsencode_userdata($product->id)) }}" class="productLink">
                         @if (isset($product->thumbnailImage->url))
                             <img src="{{ $product->thumbnailImage->url }}" alt="{{ $product->name }}" loading="lazy">
                         @else

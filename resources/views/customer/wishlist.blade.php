@@ -23,7 +23,7 @@
                                         </a> --}}
                                         @if ($favrait->product)
                                             <a
-                                                href="{{ route('viewproduct', ['id' => jsencode_userdata($favrait->product->id)]) }}">
+                                                href="{{ route('viewproduct', ['id' => jsencode_userdata($favrait->product->id)]) }}" class="productLink">
                                                 @if ($favrait->product->thumbnailImage && $favrait->product->thumbnailImage->file_path)
                                                     <img src="{{ asset('storage/' . $favrait->product->thumbnailImage->file_path) }}"
                                                         alt="{{ $favrait->product->name }}">

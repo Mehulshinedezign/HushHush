@@ -781,6 +781,7 @@ table{
     flex-wrap: wrap;
     gap: 10px;
 
+    width: 100%;
 }
 .upload-img-box {
     max-width: 100px;
@@ -895,6 +896,24 @@ body.loading .overlay {
     padding: 18px 24px;
 }.error{
     color: red;
+}
+.formfield.form-control {
+    border: 0;
+    padding-left: 0;
+}
+
+.daterangepicker td.active, .daterangepicker td.active:hover {
+    background-color: var(--primary-color) !important;
+    border-color: transparent;
+    color: #fff;
+}
+.daterangepicker td.in-range {
+    background-color: #3a3a3a21;
+}
+.daterangepicker .drp-buttons button.applyBtn.btn.btn-sm.btn-primary {
+    background-color: #3a3a3a;
+    border: 0;
+    min-height: 40px;
 }
 
 

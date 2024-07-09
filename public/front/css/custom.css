@@ -838,14 +838,16 @@ span.left-form-icon {
     max-width: 180px;
     min-width: 180px;
 }
-.slider-content .slick-slide img{
+.slider-content .slick-slide img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 .slider-content .slick-slide{
-    max-height: 995px;
+    height: 995px;
+    position: relative;
 }
+
 .product-desc-slider .slider.slider-content{
     margin-bottom: -244px;
 }
@@ -1930,6 +1932,9 @@ span.left-form-icon {
     gap: 15px;
     margin: 15px 0px;
 }
-
-
+.highlight {
+    border: 3px solid #ff7272;
+    border-radius: 10px;
+    overflow: hidden;
+}
 

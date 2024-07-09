@@ -512,14 +512,14 @@ class ProfileController extends Controller
         return view('customer.change_password');
     }
 
-    public function changeProfile(User $user)
+    public function changeProfile(User $user,Request $request)
     {
-        return view('customer.change_profile', compact('user'));
+        $bank = $request->input('bank') ?? null;
+        return view('customer.change_profile', compact('user','bank'));
     }
 
     public function saveUserprofile(Request $request)
     {
-
         
         try {
             $user = auth()->user();
@@ -540,9 +540,9 @@ class ProfileController extends Controller
             }
 
             // $user->update($data);
-            if ($request->email !== $user->email) {
-                unset($data['email']);
-            }
+            // if ($request->email !== $user->email) {
+            //     unset($data['email']);
+            // }
 
             $userdetail = [
                 'address1' => $request->complete_address,
