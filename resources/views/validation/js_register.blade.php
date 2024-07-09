@@ -24,9 +24,9 @@
                 digits: true,
                 minlength: phoneMinLength,
                 maxlength: phoneMaxLength,
-                isValidPhoneNumber:true,
+                isValidPhoneNumber: true,
                 normalizer: function(value) {
-                return $.trim(value);
+                    return $.trim(value);
                 }
             },
             password: {
@@ -49,7 +49,7 @@
             //     maxlength: maxCompleteAddress,
             // },
             gov_id: {
-                required:true,
+                required: true,
                 filesize: gov_idSize,
                 extension: gov_idMimes,
             },
@@ -99,8 +99,8 @@
             //     maxlength: `{{ __('customvalidation.user.complete_address.max', ['min' => '${minCompleteAddress}', 'max' => '${maxCompleteAddress}']) }}`,
             // },
             gov_id: {
-                required:  `{{ __('customvalidation.user.gov_id.required') }}`,
-                extension:     `{{ __('customvalidation.user.gov_id.file') }}`,
+                required: `{{ __('customvalidation.user.gov_id.required') }}`,
+                extension: `{{ __('customvalidation.user.gov_id.file') }}`,
                 filesize: `{{ __('customvalidation.user.gov_id.max_size') }}`,
             },
         };
@@ -108,7 +108,11 @@
             return phone_number.isValidNumber();
         }, "Please enter a valid phone number");
 
-        handleValidation('register', rules, messages);
+
+        handleValidation('register', rules, messages, function(form) {
+            $('body').addClass('loading');
+            form.submit();
+        });
 
 
 

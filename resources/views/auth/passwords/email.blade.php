@@ -93,5 +93,19 @@
             formatOnDisplay: false,
             utilsScript: "//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"
         });
+
+        $(document).ready(function() {
+            $("#login").on("submit", function(e) {
+                e.preventDefault();
+                if ($(this).valid()) {
+                    $('body').addClass('loading');
+                    $(this).find('button[type="submit"]').prop('disabled', true);
+                    
+                    setTimeout(() => {
+                        this.submit();
+                    }, 10);
+                }
+            });
+        });
     </script>
 @endpush

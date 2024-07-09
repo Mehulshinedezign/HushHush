@@ -222,8 +222,8 @@ return [
         // ],
         'gov_id' => [
            'required' =>  __('This field is required.'),
-           'file' => 'The government ID must be a file of type: jpg, png, jpeg, pdf.',
            'max_size' => 'The government ID may not be greater than 2MB.',
+           'file' => 'The government ID must be a file of type: jpg, png, jpeg, pdf.',
         ],
 
     ],
@@ -321,6 +321,7 @@ return [
         ],
         'product_market_value' => [
             'required' => 'Please enter product market value.',
+            'regex' => 'Please enter only digit values.',
         ],
         'product_link' => [
             'required' => 'Please enter Product link.',

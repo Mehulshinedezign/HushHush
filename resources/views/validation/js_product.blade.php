@@ -74,6 +74,7 @@
             },
             product_market_value: {
                 required: true,
+                regex: OnlydigitRegex,
             },
             product_link: {
                 required: true,
@@ -155,6 +156,7 @@
             },
             product_market_value: {
                 required: `{{ __('customvalidation.product.product_market_value.required') }}`,
+                regex: `{{ __('customvalidation.product.product_market_value.regex', ['regex' => '${OnlydigitRegex}']) }}`,
             },
             product_link: {
                 required: `{{ __('customvalidation.product.product_link.required') }}`,
