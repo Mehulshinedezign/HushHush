@@ -237,7 +237,7 @@
                         @foreach ($products as $product)
                         <div class="product-card">
                             <div class="product-img-box">
-                                <a href="{{ route('viewproduct', jsencode_userdata($product->id)) }}">
+                                <a href="{{ route('viewproduct', jsencode_userdata($product->id)) }}" class="productLink">
                                     @if (isset($product->thumbnailImage->file_path))
                                         <img src="{{ asset('storage/' . $product->thumbnailImage->file_path) }}" alt="{{ $product->name }}">
                                     @else
@@ -583,6 +583,5 @@
             updateValues();
             updateRange();
         });
-
     </script>
 @endpush

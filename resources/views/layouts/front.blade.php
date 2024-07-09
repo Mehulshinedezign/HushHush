@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
 
+
     <script>
         const APP_URL = "{{ url('') }}";
         const login_url = '{{ route('login') }}';
@@ -527,6 +528,7 @@
             $(".toggle").click(function() {
                 $(this).toggleClass("activate");
             });
+            
         });
     </script>
     {{-- header country checkbox --}}
@@ -709,25 +711,32 @@
             // });
 
             $('.daterange-cus').daterangepicker({
-            locale: { format: 'YYYY-MM-DD' },
-            drops: 'down',
-            opens: 'right'
+                autoUpdateInput: false,
+                locale: { format: 'YYYY-MM-DD' },
+                drops: 'down',
+                opens: 'right'
+            }).on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
             });
+
             $('.daterange-btn').daterangepicker({
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            },
-            startDate: moment().subtract(29, 'days'),
-            endDate: moment(),
-            // separator: 'to',
-            }, function (start, end) {
-            $('.daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                autoUpdateInput: false,
+            }).on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
             });
+
+            $('.productLink').on('click', function() {
+            console.log("click");
+            $('body').addClass('loading');
+        });
 
         });
     </script>

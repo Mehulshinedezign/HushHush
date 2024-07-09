@@ -433,5 +433,77 @@
                 $('label.error[for="' + fieldName + '"]').remove();
             }
         });
+
+        // $(document).ready(function() {
+        //     let imageCount = $('.image-wrapper').length;
+        //     const maxFiles = 5;
+
+        //     $('#upload-image-five').on('change', function() {
+        //         let files = $(this)[0].files;
+        //         let remainingSlots = maxFiles - imageCount;
+
+        //         if (files.length > remainingSlots) {
+        //             alert(`You can upload only 5 images.`);
+        //             $(this).val('');
+        //             return;
+        //         }
+
+        //         for (let i = 0; i < files.length; i++) {
+        //             return
+        //             let file = files[i];
+        //             let reader = new FileReader();
+
+        //             reader.onload = function(e) {
+        //                 let imgWrapper = $('<div>').addClass('image-wrapper');
+        //                 let img = $('<img>').attr('src', e.target.result).attr('alt', '');
+        //                 let removeBtn = $('<span>').addClass('remove-image').text('×');
+        //                 let hiddenInput = $('<input>').attr({
+        //                     type: 'hidden',
+        //                     name: 'new_images[]'
+        //                 }).val(file.name);
+
+        //                 imgWrapper.append(img, removeBtn, hiddenInput);
+        //                 $('.upload-img-preview').append(imgWrapper);
+
+        //                 imageCount++;
+        //                 updateRemoveButtons();
+        //             }
+
+        //             reader.readAsDataURL(file);
+        //         }
+        //     });
+
+        //     $(document).on('click', '.remove-image', function() {
+        //         $(this).closest('.image-wrapper').remove();
+        //         imageCount--;
+        //         updateRemoveButtons();
+
+        //         if (imageCount === 0) {
+        //             alert("Please upload at least one image.");
+        //         }
+        //     });
+
+        //     function updateRemoveButtons() {
+        //         $('.remove-image').toggle(imageCount > 1);
+        //     }
+
+        //     updateRemoveButtons();
+
+        //     $('#addProduct').on('submit', function(e) {
+        //         if (imageCount === 0) {
+        //             e.preventDefault();
+        //             alert("Please upload at least one image before submitting.");
+        //         } else if (imageCount > maxFiles) {
+        //             e.preventDefault();
+        //             alert(
+        //                 `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`);
+        //         }
+        //     });
+
+        //     function clearError(fieldName) {
+        //         $('label.error[for="' + fieldName + '"]').remove();
+        //     }
+        // });
+       
     </script>
 @endpush
