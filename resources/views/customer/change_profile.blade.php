@@ -115,7 +115,7 @@
                                                                 <input type="text" name="account_holder_first_name"
                                                                     class="form-control @error('account_holder_first_name') is-invalid @enderror"
                                                                     placeholder="Account Holder First Name"
-                                                                    value="{{ $user->vendorBankDetails->account_holder_first_name }}">
+                                                                    value="{{ $user->vendorBankDetails->account_holder_first_name ?? ''}}">
                                                             </div>
                                                             @error('account_holder_first_name')
                                                                 <span class="invalid-feedback" role="alert">
@@ -131,7 +131,7 @@
                                                                 <input type="text" name="account_holder_last_name"
                                                                     class="form-control @error('account_holder_last_name') is-invalid @enderror"
                                                                     placeholder="Account Holder Last Name"
-                                                                    value="{{ $user->vendorBankDetails->account_holder_last_name }}">
+                                                                    value="{{ $user->vendorBankDetails->account_holder_last_name ?? ''}}">
                                                             </div>
                                                             @error('account_holder_last_name')
                                                                 <span class="invalid-feedback" role="alert">
@@ -146,7 +146,7 @@
                                                             <div class="formfield">
                                                                 <input type="text" name="date_of_birth"
                                                                     class="form-control @error('date_of_birth') is-invalid @enderror"
-                                                                    placeholder="Date of Birth" value="{{ $user->vendorBankDetails->account_holder_dob }}">
+                                                                    placeholder="Date of Birth" value="{{ $user->vendorBankDetails->account_holder_dob ?? ''}}">
                                                             </div>
                                                             @error('date_of_birth')
                                                                 <span class="invalid-feedback" role="alert">
@@ -161,7 +161,7 @@
                                                             <div class="formfield">
                                                                 <input type="text" name="account_number"
                                                                     class="form-control @error('account_number') is-invalid @enderror"
-                                                                    placeholder="Account Number" value="{{jsdecode_userdata ($user->vendorBankDetails->account_number) }}">
+                                                                    placeholder="Account Number" value="{{ isset($user->vendorBankDetails->account_number) ? jsdecode_userdata($user->vendorBankDetails->account_number) : '' }}">
                                                             </div>
                                                             @error('account_number')
                                                                 <span class="invalid-feedback" role="alert">
@@ -176,7 +176,7 @@
                                                             <div class="formfield">
                                                                 <input type="text" name="routing_number"
                                                                     class="form-control @error('routing_number') is-invalid @enderror"
-                                                                    placeholder="Routing Number" value="{{ jsdecode_userdata($user->vendorBankDetails->routing_number) }}">
+                                                                    placeholder="Routing Number" value="{{ isset($user->vendorBankDetails->routing_number) ? jsdecode_userdata($user->vendorBankDetails->routing_number) : '' }}">
                                                             </div>
                                                             @error('routing_number')
                                                                 <span class="invalid-feedback" role="alert">
