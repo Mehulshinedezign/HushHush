@@ -76,13 +76,17 @@
         jQuery(document).ready(function() {
             jQuery('form#addCategory').validate({
                 rules: {
-                    name: 'required',
+                    name: {
+                        required: true,
+                        pattern: /^[a-zA-Z0-9]+$/
+                    },
                     category_image: 'required',
                     'type[]': 'required',
                 },
                 messages: {
                     name: {
-                        required: '{{ __('category.validations.name') }}'
+                        required: '{{ __('category.validations.name') }}',
+                        pattern: 'Category name only accept alphanumeric values.'
                     },
                     category_image: {
                         required: '{{ __('category.validations.image') }}'

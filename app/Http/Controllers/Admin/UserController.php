@@ -14,7 +14,7 @@ use App\Models\State;
 use App\Models\UserDetail;
 use App\Notifications\DeleteUser;
 use Illuminate\Http\Request;
-use App\Models\{BillingToken, Role, User};
+use App\Models\{BillingToken, ProductImage, ProductLocation, Role, User};
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -231,32 +231,31 @@ class UserController extends Controller
     {
         try {
             DB::beginTransaction();
-            // BillingToken::where('user_id', $id)->delete();
-            // UserDetail::where('user_id', $id)->delete();
-            // $products = Product::where('user_id', $id)->get();
-            // if ($products) {
-            //     foreach ($products as $product) {
-            //         $product->delete();
-            //     }
-            // }
-            $notification = NotificationSetting::where('user_id', $id)->first();
-            $notification->delete();
-            $user = User::where('id', $id)->firstOrFail();
+        
+            $user = User::findOrFail($id);
+        
+            $products = Product::where('user_id', $id)->get();
+            foreach ($products as $product) {
+                $product->locations()->delete();
+                
+                foreach ($product->allImages as $image) {
+                    Storage::disk('public')->delete($image->file_path);
+                    $image->delete();
+                }
+                
+                $product->delete();
+            }
+        
+            UserDetail::where('user_id', $id)->delete();
+        
             $user->notify(new DeleteUser($user));
-            // if ($user->profile_url != null) {
-            //     Storage::delete($user->profile_url);
-            // }
-            // if ($user->cover_url != null) {
-            //     Storage::delete($user->cover_url);
-            // }
-            // $user->update(['deleted_by' => "admin" ]);
-
+        
             $user->delete();
+        
             DB::commit();
             return redirect()->back()->with('success', 'User deleted successfully');
         } catch (\Exception $e) {
             DB::rollback();
-
             return redirect()->back()->with('error', $e->getMessage());
         }
     }

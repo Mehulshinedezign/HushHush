@@ -80,16 +80,21 @@
 @push('scripts')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.19.3/jquery.validate.min.js"></script>
     <script>
         jQuery(document).ready(function() {
             jQuery('form#editCategory').validate({
                 rules: {
-                    name: 'required',
+                    name: {
+                        required: true,
+                        pattern: /^[a-zA-Z0-9]+$/
+                    },
                     'type[]': 'required',
                 },
                 messages: {
                     name: {
-                        required: '{{ __('category.validations.name') }}'
+                        required: '{{ __('category.validations.name') }}',
+                        pattern: 'Category name only accept alphanumeric values.',
                     },
                     'type[]': {
                         required: '{{ __('category.validations.type') }}'

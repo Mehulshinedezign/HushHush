@@ -90,7 +90,10 @@
      
         };
 
-        handleValidation('reset_password', rules, messages);
+        handleValidation('reset_password', rules, messages, function(form) {
+            $('body').addClass('loading');
+            form.submit();
+        });
 
     });
 </script>

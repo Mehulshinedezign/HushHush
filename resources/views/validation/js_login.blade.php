@@ -33,6 +33,10 @@
         $("#login").on("submit", function() {
             if ($('#login').valid()) {
                 $("#login").find('button').attr('disabled', true);
+                $('body').addClass('loading');
+                setTimeout(function() {
+                    e.currentTarget.submit();
+                }, 1000);
             }
         });
 

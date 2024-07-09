@@ -28,6 +28,7 @@
 </head>
 
 <body>
+    <div class="overlay" id="overlay"></div>
     <!-- header Section Starts Here  -->
     <header class="cust-header">
         <nav class="navbar navbar-expand-lg navbar-light">
@@ -87,6 +88,12 @@
                         </li>
                         <li>
                             <a href="#">Contact Us</a>
+                        </li>
+                        <li>
+                            <a href="#">Help Support</a>
+                        </li>
+                        <li>
+                            <a href="#">Cancellation and Refund policies</a>
                         </li>
                     </ul>
                 </div>

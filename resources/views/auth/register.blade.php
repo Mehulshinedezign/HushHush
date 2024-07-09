@@ -175,9 +175,7 @@
                     <div class="formfield">
                         <input id="phone_number" type="text"
                             class="form-control form-class @error('phone_number.main') is-invalid @enderror"
-                            name="phone_number[main]"
-                            value="{{ old('phone_number.main') }}"
-                            autocomplete="off" 
+                            name="phone_number[main]" value="{{ old('phone_number.main') }}" autocomplete="off"
                             placeholder="{{ __('Phone Number') }}">
                         <span class="form-icon extra-icon">
                             <i class="fa-solid fa-phone"></i>
@@ -226,7 +224,7 @@
                     <div class="formfield upload-id-field">
                         <input type="file" class="form-control form-class @error('gov_id') is-invalid @enderror"
                             name="gov_id" placeholder="Enter goverment id">
-                     
+
                     </div>
                     @error('gov_id')
                         <span class="invalid-feedback" role="alert">
@@ -324,6 +322,8 @@
     <script src="https://www.google.com/recaptcha/api.js?render={{ env('GOOGLE_RECAPTCHA_KEY') }}"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/css/intlTelInput.min.css" rel="stylesheet" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
+    <script src="
+    https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
     @includeFirst(['validation'])
     @includeFirst(['validation.js_register'])
     @includeFirst(['validation.js_show_password'])
@@ -339,19 +339,18 @@
 
         var phone_number = window.intlTelInput(document.querySelector("#phone_number"), {
             separateDialCode: true,
-            preferredCountries: ["us","in"],
+            preferredCountries: ["us", "in"],
             hiddenInput: "full",
             formatOnDisplay: false,
             utilsScript: "//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/utils.js"
         });
         $(document).ready(function() {
-    $(document).on('keypress', 'input', function(e) {
-        if (e.which === 13) { // 13 is the Enter key code
-            e.preventDefault();
-            return false;
-        }
-    });
-});
-
+            $(document).on('keypress', 'input', function(e) {
+                if (e.which === 13) { // 13 is the Enter key code
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
     </script>
 @endpush
