@@ -242,7 +242,7 @@
                                             <label for="">Product market value</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="text" class="form-control" name="product_market_value"
-                                                    value="{{ number_format($product->product_market_value, 0) }}">
+                                                    value="{{ number_format($product->product_market_value, 0, '', '') }}">
                                                 <span class="form-icon">$</span>
                                             </div>
                                         </div>
