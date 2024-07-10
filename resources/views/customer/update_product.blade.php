@@ -174,7 +174,7 @@
                                                     @endforeach
                                                 </select>
                                                 <span class="form-icon">
-                                                    <img src="http://192.168.10.13:8081/front/images/dorpdown-icon.svg"
+                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                         alt="img">
                                                 </span>
                                             </div>
