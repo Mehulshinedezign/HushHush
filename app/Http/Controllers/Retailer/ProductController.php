@@ -212,7 +212,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
+
         try {
             $userId = auth()->user()->id;
 
@@ -627,8 +627,8 @@ class ProductController extends Controller
             $product->locations()->update([
                 'map_address' => $request->pick_up_location,
             ]);
-            return redirect()->route('index')->with('success', 'Product updated successfully.');
-            // return redirect()->back()->with('success', 'Product updated successfully.');
+            // return redirect()->route('index')->with('success', 'Product updated successfully.');
+            return redirect()->back()->with('success', 'Product updated successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
