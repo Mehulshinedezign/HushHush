@@ -37,7 +37,7 @@
                                                     data-images="{{ json_encode($product->allImages->pluck('file_path')->toArray()) }}">
                                                     @foreach ($product->allImages as $image)
                                                         <div class="image-wrapper" data-id="{{ $image->id }}">
-                                                            <img src="{{ asset('storage/' . $image->file_path) }}"
+                                                            <img src="{{ $image->file_path }}"
                                                                 alt="" loading="lazy">
                                                             <input type="hidden" name="existing_images[]"
                                                                 value="{{ $image->id }}">
@@ -563,100 +563,107 @@
         //     }
         // });
         $(document).ready(function() {
-    let imageCount = $('.image-wrapper').length;
-    const maxFiles = 5;
-    let uploadedFiles = new Set();
-    let newFiles = new Set();
+            let imageCount = $('.image-wrapper').length;
+            const maxFiles = 5;
+            let uploadedFiles = new Set();
+            let newFiles = new Set();
 
-    $('.image-wrapper').each(function() {
-        uploadedFiles.add($(this).find('input[name="existing_images[]"]').val());
-    });
+            $('.image-wrapper').each(function() {
+                uploadedFiles.add($(this).find('input[name="existing_images[]"]').val());
+            });
 
-    $('#update-upload-image-five').on('change', function() {
-        let files = $(this)[0].files;
-        let remainingSlots = maxFiles - imageCount;
+            $('#update-upload-image-five').on('change', function(e) {
+                let files = e.target.files;
+                let remainingSlots = maxFiles - imageCount;
 
-        if (files.length > remainingSlots) {
-            alert(`You can upload only ${maxFiles} images in total.`);
-            return;
-        }
+                if (files.length > remainingSlots) {
+                    alert(`You can upload only ${maxFiles} images in total.`);
+                    return;
+                }
 
-        for (let i = 0; i < files.length; i++) {
-            let file = files[i];
-            let reader = new FileReader();
+                let filesToProcess = Array.from(files);
 
-            reader.onload = function(e) {
-                let imgWrapper = $('<div>').addClass('image-wrapper');
-                let img = $('<img>').attr('src', e.target.result).attr('alt', '').attr(
-                    'loading', 'lazy');
-                let removeBtn = $('<span>').addClass('remove-image').html('&times;');
-                let hiddenInput = $('<input>').attr({
-                    type: 'hidden',
-                    name: 'new_images[]'
-                }).val(file.name);
+                processFiles(filesToProcess);
+            });
 
-                imgWrapper.append(img, removeBtn, hiddenInput);
-                $('.update-upload-img-preview').append(imgWrapper);
+            function processFiles(files) {
+                if (files.length === 0) {
+                    updateFileInput();
+                    return;
+                }
 
-                imageCount++;
-                uploadedFiles.add(file.name);
-                newFiles.add(file);
+                let file = files.shift();
+                if (!uploadedFiles.has(file.name)) {
+                    let reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        let imgWrapper = $('<div>').addClass('image-wrapper');
+                        let img = $('<img>').attr('src', e.target.result).attr('alt', '').attr('loading',
+                            'lazy');
+                        let removeBtn = $('<span>').addClass('remove-image').html('&times;');
+                        let hiddenInput = $('<input>').attr({
+                            type: 'hidden',
+                            name: 'new_images[]'
+                        }).val(file.name);
+
+                        imgWrapper.append(img, removeBtn, hiddenInput);
+                        $('.update-upload-img-preview').append(imgWrapper);
+
+                        imageCount++;
+                        uploadedFiles.add(file.name);
+                        newFiles.add(file);
+                        updateRemoveButtons();
+
+                        processFiles(files);
+                    }
+
+                    reader.readAsDataURL(file);
+                } else {
+                    processFiles(files);
+                }
+            }
+
+            $(document).on('click', '.remove-image', function() {
+                let wrapper = $(this).closest('.image-wrapper');
+                let imageId = wrapper.data('id');
+                if (imageId) {
+                    uploadedFiles.delete(imageId.toString());
+                } else {
+                    let filename = wrapper.find('input[name="new_images[]"]').val();
+                    if (filename) {
+                        uploadedFiles.delete(filename);
+                        newFiles.delete([...newFiles].find(file => file.name === filename));
+                    }
+                }
+                wrapper.remove();
+                imageCount--;
+                updateFileInput();
                 updateRemoveButtons();
+            });
+
+            function updateFileInput() {
+                let fileInput = document.getElementById('update-upload-image-five');
+                let dt = new DataTransfer();
+                newFiles.forEach(file => dt.items.add(file));
+                fileInput.files = dt.files;
             }
 
-            reader.readAsDataURL(file);
-        }
-
-        // Update file input after processing all new files
-        updateFileInput();
-    });
-
-    $(document).on('click', '.remove-image', function() {
-        let wrapper = $(this).closest('.image-wrapper');
-        let imageId = wrapper.data('id');
-        if (imageId) {
-            uploadedFiles.delete(imageId.toString());
-        } else {
-            let filename = wrapper.find('input[name="new_images[]"]').val();
-            if (filename) {
-                uploadedFiles.delete(filename);
-                newFiles.delete([...newFiles].find(file => file.name === filename));
+            function updateRemoveButtons() {
+                $('.remove-image').toggle(imageCount > 1);
             }
-        }
-        wrapper.remove();
-        imageCount--;
-        updateFileInput();
-        updateRemoveButtons();
-    });
 
-    function updateFileInput() {
-        let fileInput = $('#update-upload-image-five')[0];
-        let dt = new DataTransfer();
-        newFiles.forEach(file => dt.items.add(file));
-        fileInput.files = dt.files;
-    }
+            updateRemoveButtons();
 
-    function updateRemoveButtons() {
-        $('.remove-image').toggle(imageCount > 1);
-    }
-
-    updateRemoveButtons();
-
-    $('form').on('submit', function(e) {
-        if (imageCount === 0) {
-            e.preventDefault();
-            alert("Please upload at least one image before submitting.");
-        } else if (imageCount > maxFiles) {
-            e.preventDefault();
-            alert(
-                `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`
-            );
-        }
-    });
-
-    function clearError(fieldName) {
-        $('label.error[for="' + fieldName + '"]').remove();
-    }
-});
+            $('form').on('submit', function(e) {
+                if (imageCount === 0) {
+                    e.preventDefault();
+                    alert("Please upload at least one image before submitting.");
+                } else if (imageCount > maxFiles) {
+                    e.preventDefault();
+                    alert(
+                        `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`);
+                }
+            });
+        });
     </script>
 @endpush
