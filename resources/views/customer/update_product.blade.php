@@ -229,17 +229,20 @@
                                         <div class="form-group">
                                             <label for="">Condition</label>
                                             <div class="formfield">
-                                                    <select class="form-control" name="product_condition">
-                                                        <option value="">Condition</option>
-                                                        <option value="Excellent" @if ($product->product_condition == 'Excellent') selected @endif>Excellent
-                                                        </option>
-                                                        <option value="Good" @if ($product->product_condition == 'Good') selected @endif>Good</option>
-                                                        <option value="Bad" @if ($product->product_condition == 'Bad') selected @endif>Fine</option>
-                                                    </select>
-                                                    <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
-                                                    </span>
+                                                <select class="form-control" name="product_condition">
+                                                    <option value="">Condition</option>
+                                                    <option value="Excellent"
+                                                        @if ($product->product_condition == 'Excellent') selected @endif>Excellent
+                                                    </option>
+                                                    <option value="Good"
+                                                        @if ($product->product_condition == 'Good') selected @endif>Good</option>
+                                                    <option value="Bad"
+                                                        @if ($product->product_condition == 'Bad') selected @endif>Fine</option>
+                                                </select>
+                                                <span class="form-icon">
+                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                        alt="img">
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -254,7 +257,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Description</label>
                                             <div class="formfield">
@@ -461,100 +464,199 @@
         // });
 
 
+        // $(document).ready(function() {
+        //     let imageCount = $('.image-wrapper').length;
+        //     const maxFiles = 5;
+        //     let uploadedFiles = new Set();
+        //     let newFiles = new Set();
 
+        //     $('.image-wrapper').each(function() {
+        //         uploadedFiles.add($(this).find('input[name="existing_images[]"]').val());
+        //     });
+
+        //     $('#update-upload-image-five').on('change', function() {
+        //         let files = $(this)[0].files;
+        //         let remainingSlots = maxFiles - imageCount;
+
+        //         if (files.length > remainingSlots) {
+        //             alert(`You can upload only ${maxFiles} images in total.`);
+        //             $(this).val('');
+        //             return;
+        //         }
+
+        //         for (let i = 0; i < files.length; i++) {
+        //             let file = files[i];
+        //             let reader = new FileReader();
+
+        //             reader.onload = function(e) {
+        //                 let imgWrapper = $('<div>').addClass('image-wrapper');
+        //                 let img = $('<img>').attr('src', e.target.result).attr('alt', '').attr(
+        //                     'loading', 'lazy');
+        //                 let removeBtn = $('<span>').addClass('remove-image').html('&times;');
+        //                 let hiddenInput = $('<input>').attr({
+        //                     type: 'hidden',
+        //                     name: 'new_images[]'
+        //                 }).val(file.name);
+
+        //                 imgWrapper.append(img, removeBtn, hiddenInput);
+        //                 $('.update-upload-img-preview').append(imgWrapper);
+
+        //                 imageCount++;
+        //                 uploadedFiles.add(file.name);
+        //                 newFiles.add(file);
+        //                 updateRemoveButtons();
+        //                 updateFileInput(); // Update file input after each new image
+        //             }
+
+        //             reader.readAsDataURL(file);
+        //         }
+
+        //         // Clear the file input to allow uploading the same file again
+        //         $(this).val('');
+        //     });
+
+        //     $(document).on('click', '.remove-image', function() {
+        //         let wrapper = $(this).closest('.image-wrapper');
+        //         let imageId = wrapper.data('id');
+        //         if (imageId) {
+        //             uploadedFiles.delete(imageId.toString());
+        //         } else {
+        //             let filename = wrapper.find('input[name="new_images[]"]').val();
+        //             if (filename) {
+        //                 uploadedFiles.delete(filename);
+        //                 newFiles.delete([...newFiles].find(file => file.name === filename));
+        //             }
+        //         }
+        //         wrapper.remove();
+        //         imageCount--;
+        //         updateFileInput();
+        //         updateRemoveButtons();
+        //     });
+
+        //     function updateFileInput() {
+        //         let fileInput = $('#update-upload-image-five')[0];
+        //         let dt = new DataTransfer();
+        //         newFiles.forEach(file => dt.items.add(file));
+        //         fileInput.files = dt.files;
+        //     }
+
+        //     function updateRemoveButtons() {
+        //         $('.remove-image').toggle(imageCount > 1);
+        //     }
+
+        //     updateRemoveButtons();
+
+        //     $('form').on('submit', function(e) {
+        //         if (imageCount === 0) {
+        //             e.preventDefault();
+        //             alert("Please upload at least one image before submitting.");
+        //         } else if (imageCount > maxFiles) {
+        //             e.preventDefault();
+        //             alert(
+        //                 `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`
+        //             );
+        //         }
+        //     });
+
+        //     function clearError(fieldName) {
+        //         $('label.error[for="' + fieldName + '"]').remove();
+        //     }
+        // });
         $(document).ready(function() {
-            let imageCount = $('.image-wrapper').length;
-            const maxFiles = 5;
-            let uploadedFiles = new Set();
-            let newFiles = new Set();
+    let imageCount = $('.image-wrapper').length;
+    const maxFiles = 5;
+    let uploadedFiles = new Set();
+    let newFiles = new Set();
 
-            $('.image-wrapper').each(function() {
-                uploadedFiles.add($(this).find('input[name="existing_images[]"]').val());
-            });
+    $('.image-wrapper').each(function() {
+        uploadedFiles.add($(this).find('input[name="existing_images[]"]').val());
+    });
 
-            $('#update-upload-image-five').on('change', function() {
-                let files = $(this)[0].files;
-                let remainingSlots = maxFiles - imageCount;
+    $('#update-upload-image-five').on('change', function() {
+        let files = $(this)[0].files;
+        let remainingSlots = maxFiles - imageCount;
 
-                if (files.length > remainingSlots) {
-                    alert(`You can upload only ${maxFiles} images in total.`);
-                    $(this).val('');
-                    return;
-                }
+        if (files.length > remainingSlots) {
+            alert(`You can upload only ${maxFiles} images in total.`);
+            return;
+        }
 
-                for (let i = 0; i < files.length; i++) {
-                    let file = files[i];
-                    let reader = new FileReader();
+        for (let i = 0; i < files.length; i++) {
+            let file = files[i];
+            let reader = new FileReader();
 
-                    reader.onload = function(e) {
-                        let imgWrapper = $('<div>').addClass('image-wrapper');
-                        let img = $('<img>').attr('src', e.target.result).attr('alt', '').attr(
-                            'loading', 'lazy');
-                        let removeBtn = $('<span>').addClass('remove-image').html('&times;');
-                        let hiddenInput = $('<input>').attr({
-                            type: 'hidden',
-                            name: 'new_images[]'
-                        }).val(file.name);
+            reader.onload = function(e) {
+                let imgWrapper = $('<div>').addClass('image-wrapper');
+                let img = $('<img>').attr('src', e.target.result).attr('alt', '').attr(
+                    'loading', 'lazy');
+                let removeBtn = $('<span>').addClass('remove-image').html('&times;');
+                let hiddenInput = $('<input>').attr({
+                    type: 'hidden',
+                    name: 'new_images[]'
+                }).val(file.name);
 
-                        imgWrapper.append(img, removeBtn, hiddenInput);
-                        $('.update-upload-img-preview').append(imgWrapper);
+                imgWrapper.append(img, removeBtn, hiddenInput);
+                $('.update-upload-img-preview').append(imgWrapper);
 
-                        imageCount++;
-                        uploadedFiles.add(file.name);
-                        newFiles.add(file);
-                        updateRemoveButtons();
-                    }
-
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            $(document).on('click', '.remove-image', function() {
-                let wrapper = $(this).closest('.image-wrapper');
-                let imageId = wrapper.data('id');
-                if (imageId) {
-                    uploadedFiles.delete(imageId.toString());
-                } else {
-                    let filename = wrapper.find('input[name="new_images[]"]').val();
-                    if (filename) {
-                        uploadedFiles.delete(filename);
-                        newFiles.delete([...newFiles].find(file => file.name === filename));
-                    }
-                }
-                wrapper.remove();
-                imageCount--;
-                updateFileInput();
+                imageCount++;
+                uploadedFiles.add(file.name);
+                newFiles.add(file);
                 updateRemoveButtons();
-            });
-
-            function updateFileInput() {
-                let fileInput = $('#update-upload-image-five')[0];
-                let dt = new DataTransfer();
-                newFiles.forEach(file => dt.items.add(file));
-                fileInput.files = dt.files;
             }
 
-            function updateRemoveButtons() {
-                $('.remove-image').toggle(imageCount > 1);
+            reader.readAsDataURL(file);
+        }
+
+        // Update file input after processing all new files
+        updateFileInput();
+    });
+
+    $(document).on('click', '.remove-image', function() {
+        let wrapper = $(this).closest('.image-wrapper');
+        let imageId = wrapper.data('id');
+        if (imageId) {
+            uploadedFiles.delete(imageId.toString());
+        } else {
+            let filename = wrapper.find('input[name="new_images[]"]').val();
+            if (filename) {
+                uploadedFiles.delete(filename);
+                newFiles.delete([...newFiles].find(file => file.name === filename));
             }
+        }
+        wrapper.remove();
+        imageCount--;
+        updateFileInput();
+        updateRemoveButtons();
+    });
 
-            updateRemoveButtons();
+    function updateFileInput() {
+        let fileInput = $('#update-upload-image-five')[0];
+        let dt = new DataTransfer();
+        newFiles.forEach(file => dt.items.add(file));
+        fileInput.files = dt.files;
+    }
 
-            $('form').on('submit', function(e) {
-                if (imageCount === 0) {
-                    e.preventDefault();
-                    alert("Please upload at least one image before submitting.");
-                } else if (imageCount > maxFiles) {
-                    e.preventDefault();
-                    alert(
-                        `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`
-                        );
-                }
-            });
+    function updateRemoveButtons() {
+        $('.remove-image').toggle(imageCount > 1);
+    }
 
-            function clearError(fieldName) {
-                $('label.error[for="' + fieldName + '"]').remove();
-            }
-        });
+    updateRemoveButtons();
+
+    $('form').on('submit', function(e) {
+        if (imageCount === 0) {
+            e.preventDefault();
+            alert("Please upload at least one image before submitting.");
+        } else if (imageCount > maxFiles) {
+            e.preventDefault();
+            alert(
+                `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`
+            );
+        }
+    });
+
+    function clearError(fieldName) {
+        $('label.error[for="' + fieldName + '"]').remove();
+    }
+});
     </script>
 @endpush
