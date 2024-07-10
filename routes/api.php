@@ -49,6 +49,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/product-details/{id}', [App\Http\Controllers\Api\ProductController::class, 'getAllProductsById']);
     Route::get('/editProduct/{id}', [App\Http\Controllers\Api\ProductController::class, 'editProduct']);
     Route::get('/user/products/listing', [App\Http\Controllers\Api\ProductController::class, 'getAuthUserProducts']);
+
+    Route::get('/lender-profile/{id}', [App\Http\Controllers\Api\LenderController::class, 'index']);
     //profile APIs
     Route::get('/profile', [App\Http\Controllers\Api\ProfileController::class, 'index']);
     Route::get('/profile/edit', [App\Http\Controllers\Api\ProfileController::class, 'edit']);
