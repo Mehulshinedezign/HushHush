@@ -1937,4 +1937,9 @@ span.left-form-icon {
     border-radius: 10px;
     overflow: hidden;
 }
+.update-upload-img-preview {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
 
