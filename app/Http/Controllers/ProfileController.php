@@ -27,16 +27,16 @@ class ProfileController extends Controller
         // $states = State::where('country_id', $selectedCountryId)->get();
         // $cities = City::where('state_id', $user->state_id)->get();
         // $notAvailable = 'N/A';
-        // if (auth()->user()->role->name == 'customer') {
-        //     $file = 'customer.profile';
-        // } elseif (auth()->user()->role->name == 'admin') {
-        //     $file = 'admin.profile';
-        // } else {
-        //     $file = 'retailer.profile';
-        // }
+        if (auth()->user()->role->name == 'customer') {
+            $file = 'customer.profile';
+        } elseif (auth()->user()->role->name == 'admin') {
+            $file = 'admin.profile';
+        } else {
+            $file = 'retailer.profile';
+        }
 
         $products = Product::where('user_id',$user->id)->get();
-        return view('customer.profile',compact('products'));
+        return view($file,compact('products'));
     }
 
     public function edit_profile()

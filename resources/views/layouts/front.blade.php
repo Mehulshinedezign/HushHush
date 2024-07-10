@@ -213,12 +213,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Condition</label>
+                                            <label for="">Country</label>
                                             <div class="formfield">
-                                                <input type="text" name="product_condition" id=""
-                                                    placeholder="Product Condition" class="form-control">
+                                                <select name="" id="" class="form-control">
+                                                    <option value="">India</option>
+                                                    <option value="">USA</option>
+                                                </select>
+                                                <span class="form-icon">
+                                                    <img src="http://192.168.10.13:8081/front/images/dorpdown-icon.svg" alt="img">
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -265,12 +271,12 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Description</label>
+                                            <label for="">Condition</label>
                                             <div class="formfield">
-                                                <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description"></textarea>
+                                                <input type="text" name="product_condition" id=""
+                                                    placeholder="Product Condition" class="form-control">
                                             </div>
                                         </div>
                                     </div>
@@ -282,6 +288,15 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="">Description</label>
+                                            <div class="formfield">
+                                                <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Product market value</label>

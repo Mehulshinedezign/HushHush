@@ -7,9 +7,9 @@
     <section class="product-desc-sec">
         <div class="container">
             <div class="breadcrum-main">
-                <a href="" class="breadcrum-list">Home</a>
-                <a href="#" class="breadcrum-list">Chic Couture</a>
-                <a href="#" class="breadcrum-list active">Bohemian Dreams</a>
+                <a href="{{ url('/') }}" class="breadcrum-list">Home</a>
+                <a href="#" class="breadcrum-list">{{$product->categories->name ?? ''}}</a>
+                <a href="#" class="breadcrum-list active">{{$product->categories->singlesubcategory->name ?? '' }}</a>
             </div>
             <div class="product-desc-main">
                 <div class="row">
