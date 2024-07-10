@@ -73,7 +73,7 @@ class User extends Authenticatable
                 //     return $this->profile_url;
 
                 return $this->profile_url ?
-                    Storage::url($this->profile_url) :
+                 url('/storage/'.$this->profile_url) :
                     asset('img/avatar-small.png');
             }
         );
@@ -222,5 +222,10 @@ class User extends Authenticatable
     public function cards()
     {
         return $this->hasMany(UserCard::class);
+    }
+
+    public function getCountryAttribute($value)
+    {
+        return Country::find($value)->country_value;
     }
 }

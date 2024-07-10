@@ -180,10 +180,16 @@ class ProductController extends Controller
             // Check if the product is already in the user's favorites
             $favorite = ProductFavorite::where('user_id', auth()->user()->id)->where('product_id', $id)->first();
             if (is_null($favorite)) {
+                // Add to favorites if not already in the list
                 ProductFavorite::create([
                     'product_id' => $id,
                     'user_id' => auth()->user()->id
                 ]);
+                $message = 'Added to wishlist';
+            } else {
+                // Remove from favorites if already in the list
+                $favorite->delete();
+                $message = 'Removed from wishlist';
             }
 
             // Get product details
@@ -194,16 +200,16 @@ class ProductController extends Controller
                 'product_id' => $id,
                 'product_details' => $product_details,
             ];
-            $message = 'Added to wishlist';
         } catch (\Throwable $e) {
             $apiResponse = 'error';
             $statusCode = 500;
             $data = [];
-            $message = 'Failed to add to wishlist. Error: ' . $e->getMessage();
+            $message = 'Failed to update wishlist. Error: ' . $e->getMessage();
         }
 
         return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
     }
+
 
 
     /**
@@ -307,6 +313,7 @@ class ProductController extends Controller
 
 
 
+
     public function deleteProduct($id)
     {
         try {
@@ -344,31 +351,31 @@ class ProductController extends Controller
     public function addProduct(Request $request)
     {
         try {
-            // $validator = Validator::make($request->all(), [
-            //     'name' => 'required|string',
-            //     'description' => 'required|string',
-            //     'category' => 'required',
-            //     'size' => 'required_without:other_size',
-            //     'color' => 'required|string',
-            //     'brand' => 'required',
-            //     'product_condition' => 'required|string',
-            //     'product_market_value' => 'required|numeric',
-            //     'product_link' => 'nullable|url',
-            //     'min_rent_days' => 'required|integer',
-            //     //'disable_dates' => 'required|string',
-            //     'state' => 'required|integer',
-            //     'city' => 'required|integer',
-            //     'rent_day' => 'required|integer',
-            //     'rent_week' => 'required|integer',
-            //     'rent_month' => 'required|integer',
-            //     'pickup_location' => 'required|string',
-            //     'images' => 'required|array',
-            //     //'images.*' => 'string'
-            // ]);
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string',
+                'description' => 'required|string',
+                'category' => 'required',
+                'size' => 'required_without:other_size',
+                'color' => 'required|string',
+                'brand' => 'required',
+                'product_condition' => 'required|string',
+                'product_market_value' => 'required|numeric',
+                'product_link' => 'nullable|url',
+                'min_rent_days' => 'required|integer',
+                //'disable_dates' => 'required|string',
+                'state' => 'required|integer',
+                'city' => 'required|integer',
+                'rent_day' => 'required|integer',
+                'rent_week' => 'required|integer',
+                'rent_month' => 'required|integer',
+                'pickup_location' => 'required|string',
+                'images' => 'required|array',
+                //'images.*' => 'string'
+            ]);
 
-            // if ($validator->fails()) {
-            //     return response()->json(['errors' => $validator->errors()], 422);
-            // }
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
 
             $user = $request->user();
             $is_bankdetail = $user->vendorBankDetails;
@@ -457,39 +464,6 @@ class ProductController extends Controller
                 }
             }
 
-            // // Assuming $request->images contains the JSON string
-            // $imageData = $request->images;
-            // dd($imageData);
-            // // return response()->json([
-            // //     'message' => json_decode($imageData),
-            // // ]);
-            // // Handle images
-            // if (!empty($imageData)) {
-            //     foreach ($imageData as $index => $image) {
-            //         // Decode the individual image data
-            //         $imageInfo = json_decode($image[1], true);
-
-            //         if ($imageInfo && isset($imageInfo['uri'])) {
-            //             $filePath = $imageInfo['uri'];
-            //             $fileName = $imageInfo['name'];
-
-            //             // Store the image file
-            //             $storedPath = Storage::disk('public')->putFileAs(
-            //                 'products/images',
-            //                 new \Illuminate\Http\File($filePath),
-            //                 $fileName
-            //             );
-
-            //             // Save image info to the database
-            //             ProductImage::create([
-            //                 'product_id' => $product->id,
-            //                 'file_name' => $fileName,
-            //                 'file_path' => $storedPath,
-            //             ]);
-            //         }
-            //     }
-            // }
-
             $apiResponse = 'success';
             $statusCode = 200;
             $message = 'Product Added successfully!';
@@ -534,7 +508,7 @@ class ProductController extends Controller
                 'product_market_value' => 'required|numeric',
                 'product_link' => 'nullable|url',
                 'min_rent_days' => 'required|integer',
-                'disable_dates' => 'array',
+                // 'disable_dates' => 'array',
                 'disable_dates.*' => 'string',
                 'state' => 'required|integer',
                 'city' => 'required|integer',
@@ -542,8 +516,8 @@ class ProductController extends Controller
                 'rent_week' => 'required|integer',
                 'rent_month' => 'required|integer',
                 'pickup_location' => 'required|string',
-                'images' => 'array',
-                'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+                // 'images' => 'array',
+                // 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
             ]);
 
             if ($validator->fails()) {
@@ -577,16 +551,18 @@ class ProductController extends Controller
 
             if ($request->has('disable_dates')) {
                 ProductDisableDate::where('product_id', $product->id)->delete();
-                foreach ($request->disable_dates as $dateRange) {
-                    $dates = explode(',', $dateRange);
-                    if (count($dates) == 1) {
+                $disableDates = json_decode($request->disable_dates, true);
+                foreach ($disableDates as $dateRange) {
+                    if (count($dateRange) == 1) {
+                        // Single date
                         ProductDisableDate::create([
                             'product_id' => $product->id,
-                            'disable_date' => $dates[0],
+                            'disable_date' => \DateTime::createFromFormat('d/m/Y', $dateRange[0])->format('Y-m-d'),
                         ]);
-                    } else if (count($dates) == 2) {
-                        $start = new \DateTime($dates[0]);
-                        $end = new \DateTime($dates[1]);
+                    } else if (count($dateRange) == 2) {
+                        // Date range
+                        $start = \DateTime::createFromFormat('d/m/Y', $dateRange[0]);
+                        $end = \DateTime::createFromFormat('d/m/Y', $dateRange[1]);
 
                         while ($start <= $end) {
                             ProductDisableDate::create([
@@ -705,25 +681,34 @@ class ProductController extends Controller
 
     private function getProduct($id)
     {
-        if ($id)
-            return Product::with(['locations', 'allImages', 'thumbnailImage', 'get_size', 'favorites', 'category', 'disableDates'])->whereId(($id))->first();
+        if ($id) {
+            return Product::with(['locations', 'allImages', 'thumbnailImage', 'get_size', 'favorites', 'category', 'disableDates', 'retailer'])
+                ->whereId($id)
+                ->first()
+                ->makeVisible(['file_path']);
+        }
         return null;
     }
+
 
     public function getAllProducts()
     {
         try {
             $authUserId = auth()->user()->id;
             $products = Product::where('user_id', '!=', $authUserId)->get();
-            // $categories = Category::where('status', true)->get();
-
-            $allProducts = [];
-            foreach ($products as $product) {
-                $productDetails = $this->getProduct($product->id);
-                $allProducts[] = $productDetails;
-            }
 
             $transformedProducts = $products->map(function ($product) {
+                $allImages = $product->allImages->map(function ($image) {
+                    return [
+                        'id' => $image->id,
+                        'product_id' => $image->product_id,
+                        'file_name' => $image->file_name,
+                        'file_path' => $image->file_path,
+                        'created_at' => $image->created_at,
+                        'updated_at' => $image->updated_at
+                    ];
+                });
+
                 return [
                     'id' => $product->id,
                     'name' => $product->name,
@@ -751,12 +736,12 @@ class ProductController extends Controller
                     'modified_user_type' => $product->modified_user_type,
                     'available' => $product->available,
                     'city' => $product->city,
-                    'neighborhood_city' => $product->neighborhood_city,
                     'product_market_value' => $product->product_market_value,
                     'product_link' => $product->product_link,
                     'average_rating' => $product->average_rating,
-                    // 'is_favorite' => $product->favorites->isEmpty() ? false : true,
-                    'product_image_url' => $product->thumbnailImage->file_path ?? null && filter_var(asset('storage/' . $product->thumbnailImage->file_path), FILTER_VALIDATE_URL) ? asset('storage/' . $product->thumbnailImage->file_path) : null,
+                    'product_image_url' => $product->thumbnailImage->file_path ?? null,
+                    'all_images' => $allImages,
+                    'favourites' => !is_null($product->favorites) ? true : false,
                 ];
             })->toArray();
 
@@ -773,15 +758,26 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
 
     public function getAuthUserProducts()
     {
         try {
             $authUserId = auth()->user()->id;
             $products = Product::where('user_id', $authUserId)->get();
-            $categories = Category::where('status', true)->get();
 
             $transformedProducts = $products->map(function ($product) {
+                $allImages = $product->allImages->map(function ($image) {
+                    return [
+                        'id' => $image->id,
+                        'product_id' => $image->product_id,
+                        'file_name' => $image->file_name,
+                        'file_path' => $image->file_path,
+                        'created_at' => $image->created_at,
+                        'updated_at' => $image->updated_at
+                    ];
+                });
+
                 return [
                     'id' => $product->id,
                     'name' => $product->name,
@@ -812,7 +808,10 @@ class ProductController extends Controller
                     'product_market_value' => $product->product_market_value,
                     'product_link' => $product->product_link,
                     'average_rating' => $product->average_rating,
-                    'product_image_url' => $product->thumbnailImage->file_path ?? null && filter_var(asset('storage/' . $product->thumbnailImage->file_path), FILTER_VALIDATE_URL) ? asset('storage/' . $product->thumbnailImage->file_path) : null,
+                    'product_image_url' => $product->thumbnailImage->file_path ?? null,
+                    'all_images' => $allImages,
+                    'favourites' => !is_null($product->favorites) ? true : false,
+
                 ];
             })->toArray();
 
@@ -832,10 +831,11 @@ class ProductController extends Controller
 
 
 
+
     public function getAllProductsById($id)
     {
         try {
-            $product = Product::findOrFail($id);
+            $product = Product::with('allImages',)->findOrFail($id);
             if (is_null($product)) {
                 return response()->json([
                     'status' => false,
@@ -843,20 +843,26 @@ class ProductController extends Controller
                     'errors' => ['product_id' => 'The product does not exist.'],
                 ], 404);
             }
-            // dd($request->all());
-            // dd('1');
-            $product = $this->getProduct($id);
-            // dd($product);
-            if (is_null($product)) {
-                return redirect()->back()->with('message', __('product.messages.notAvailable'));
-            }
+
+            // dd($image->file_path);
+            $productDetails = $this->getProduct($id);
+            $productDetails->all_images = $productDetails->allImages->map(function ($image) {
+                return [
+                    'id' => $image->id,
+                    'product_id' => $image->product_id,
+                    'file_name' => $image->file_name,
+                    'file_path' => storage_path($image->file_path),
+                    'created_at' => $image->created_at,
+                    'updated_at' => $image->updated_at
+                ];
+            });
+
             return response()->json([
                 'status' => true,
-                'message' => 'product details fetched succesfully',
-                'data' => $product,
+                'message' => 'Product details fetched successfully',
+                'data' => $productDetails,
             ], 200);
         } catch (\Throwable $e) {
-
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),
@@ -864,6 +870,8 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
+
 
     public function editProduct(Request $request, $id)
     {

@@ -13,7 +13,8 @@ class OtpService
 {
     public function generateOtp($user)
     {
-        $otp = mt_rand(100000, 999999);
+        // $otp = mt_rand(100000, 999999);
+        $otp = '123456';
 
         UserOtp::create([
             'user_id' => $user->id,
@@ -73,7 +74,7 @@ class OtpService
         ->where('expires_at', '>', Carbon::now())
         ->where('status', '0')
         ->first();
-        
+
         if (!$userOtp) {
             // dd('here',$userOtp);
             return false;

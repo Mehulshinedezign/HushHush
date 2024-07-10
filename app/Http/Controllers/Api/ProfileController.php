@@ -96,7 +96,7 @@ class ProfileController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'string|max:255',
                 'email' => 'string|email|max:255|unique:users,email,' . $user->id,
-                'phone_number' => 'string|max:20|unique:users,phone_number,' . $user->id,
+                'phone_number' => 'string|max:20' . $user->id,
                 'profile_pic' => 'nullable|file',
                 'zipcode' => 'nullable|string|max:20',
                 'email_notifications' => 'boolean',
