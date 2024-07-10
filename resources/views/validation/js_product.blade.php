@@ -77,7 +77,7 @@
                 regex: OnlydigitRegex,
             },
             product_link: {
-                required: true,
+                // required: true,
                 url:'/^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/',
             },
             min_rent_days: {
@@ -160,7 +160,7 @@
                 regex: `{{ __('customvalidation.product.product_market_value.regex', ['regex' => '${OnlydigitRegex}']) }}`,
             },
             product_link: {
-                required: `{{ __('customvalidation.product.product_link.required') }}`,
+                // required: `{{ __('customvalidation.product.product_link.required') }}`,
                 url: 'Please enter valid url link.',
             },
             min_rent_days: {
