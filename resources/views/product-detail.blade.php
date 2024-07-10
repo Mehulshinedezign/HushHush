@@ -21,7 +21,7 @@
                                     <div class="slider slider-content">
                                         @if ($productImages->isNotEmpty())
                                             @foreach ($productImages as $image)
-                                                <div><img src="{{ asset('storage/' . $image->file_path) }}" alt=""
+                                                <div><img src="{{ $image->file_path }}" alt=""
                                                         loading="lazy"></div>
                                             @endforeach
                                         @else
