@@ -78,6 +78,7 @@
             },
             product_link: {
                 required: true,
+                url:'/^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/',
             },
             min_rent_days: {
                 required: true,
@@ -160,6 +161,7 @@
             },
             product_link: {
                 required: `{{ __('customvalidation.product.product_link.required') }}`,
+                url: 'Please enter valid url link.',
             },
             min_rent_days: {
                 required: `{{ __('customvalidation.product.min_rent_days.required') }}`,
