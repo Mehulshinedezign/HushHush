@@ -15,7 +15,7 @@
                                         {{-- <a
                                             href="{{ route('viewproduct', ['id' => jsencode_userdata($favrait->product->id)]) }}">
                                             @if (isset($favrait->product->thumbnailImage->file_path))
-                                                <img src="{{ asset('storage/' . $favrait->product->thumbnailImage->file_path) }}"
+                                                <img src="{{$favrait->product->thumbnailImage->file_path }}"
                                                     alt="{{ $favrait->product->name }}">
                                             @else
                                                 <img src="{{ asset('front/images/pro-0.png') }}" alt="{{ $product->name }}">
@@ -25,7 +25,7 @@
                                             <a
                                                 href="{{ route('viewproduct', ['id' => jsencode_userdata($favrait->product->id)]) }}" class="productLink">
                                                 @if ($favrait->product->thumbnailImage && $favrait->product->thumbnailImage->file_path)
-                                                    <img src="{{ asset('storage/' . $favrait->product->thumbnailImage->file_path) }}"
+                                                    <img src="{{  $favrait->product->thumbnailImage->file_path }}"
                                                         alt="{{ $favrait->product->name }}">
                                                 @else
                                                     <img src="{{ asset('front/images/pro-0.png') }}"
