@@ -159,13 +159,24 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Condition</label>
+                                            <label for="">Country</label>
                                             <div class="formfield">
-                                                <input type="text" name="product_condition" id=""
-                                                    placeholder="Product Condition" class="form-control"
-                                                    value="{{ $product->product_condition }}">
+                                                <select name="country" class="form-control" id="country-select">
+                                                    <option value="">Select Country</option>
+                                                    @foreach (country() as $country)
+                                                        <option value="{{ $country->id }}"
+                                                            @if ($product->country == $country->id) selected @endif>
+                                                            {{ ucwords($country->name) }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                <span class="form-icon">
+                                                    <img src="http://192.168.10.13:8081/front/images/dorpdown-icon.svg"
+                                                        alt="img">
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -191,7 +202,6 @@
                                                 <div class="formfield">
                                                     <select name="city" id="city-select">
                                                         <option value="">Select City</option>
-
                                                     </select>
                                                     <span class="form-icon">
                                                         <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
@@ -201,7 +211,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Non-Available Dates</label>
@@ -216,12 +225,21 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Description</label>
+                                            <label for="">Condition</label>
                                             <div class="formfield">
-                                                <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description">{{ $product->description }}</textarea>
+                                                    <select class="form-control" name="product_condition">
+                                                        <option value="">Condition</option>
+                                                        <option value="Excellent" @if ($product->product_condition == 'Excellent') selected @endif>Excellent
+                                                        </option>
+                                                        <option value="Good" @if ($product->product_condition == 'Good') selected @endif>Good</option>
+                                                        <option value="Bad" @if ($product->product_condition == 'Bad') selected @endif>Fine</option>
+                                                    </select>
+                                                    <span class="form-icon">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                            alt="img">
+                                                    </span>
                                             </div>
                                         </div>
                                     </div>
@@ -233,6 +251,14 @@
                                                     <textarea name="pick_up_location" id="" rows="4" class="form-control" placeholder="Text">{{ $pickuplocation->map_address }}</textarea>
                                                 </div>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="">Description</label>
+                                            <div class="formfield">
+                                                <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description">{{ $product->description }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -521,7 +547,8 @@
                 } else if (imageCount > maxFiles) {
                     e.preventDefault();
                     alert(
-                        `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`);
+                        `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`
+                        );
                 }
             });
 

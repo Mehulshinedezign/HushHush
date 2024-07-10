@@ -31,9 +31,10 @@ class AjaxController extends Controller
 
     public function states(Request $request, $countryId)
     {
+        // dd("here state data ");
         $states = State::where('country_id', $countryId)->get();
-
-        return response()->json(['title' => 'Success', 'data' => $states, 'message' => 'States retrieved successfully']);
+        return response()->json($states);
+        // return response()->json(['title' => 'Success', 'data' => $states, 'message' => 'States retrieved successfully']);
     }
 
     public function cities(Request $request)
@@ -164,5 +165,17 @@ class AjaxController extends Controller
                 }
         }
         return $msg;
+    }
+
+    public function get_subcategory($id){
+        $id = jsdecode_userdata($id);
+        if ((int) $id) {
+            $category = Category::with(['size_type'])->where('status', '1')->where('id', $id)->first();
+            $types = isset($category) && count($category->size_type) > 0 ? $category->size_type : [];
+            $sub_categories = Category::where('status', '1')->where('parent_id', $id)->get();
+            $sizes = Size::where('status', '1')->get();
+
+            return response()->json($sub_categories);
+        }
     }
 }

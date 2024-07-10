@@ -99,7 +99,10 @@
             },
             non_available_dates: {
                 required: true,
-            }
+            },
+            country:{
+                required:true,
+            },
 
 
         };
@@ -168,6 +171,9 @@
                 regex: `{{ __('customvalidation.product.min_rent_days.regex', ['regex' => '${minDaysItemRegex}']) }}`,
                 range: `{{ __('customvalidation.product.min_rent_days.range', ['min' => 1, 'max' => 30]) }}`
             },
+            country:{
+                required: "Please enter country.",
+            }
             // non_available_dates:{
             //     required: `{{ __('customvalidation.product.non_availabile_dates.required') }}`,
             // }

@@ -55,6 +55,7 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         Route::get('lender/{id}', [App\Http\Controllers\Customer\ProductController::class, 'retailer'])->name('lender');
         Route::post('transfee', [App\Http\Controllers\Customer\ProductController::class, 'get_transfee'])->name('transfee');
         Route::get('subcat/{id}', [App\Http\Controllers\AjaxController::class, 'get_subcat']);
+        Route::get('sub_category/{id}',[App\http\Controllers\AjaxController::class,'get_subcategory']);
 
         Route::get('neighborhoodcity/{id}', [App\Http\Controllers\AjaxController::class, 'get_city']);
 
@@ -153,7 +154,6 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         Route::get('change-profile/{user}', [App\Http\Controllers\ProfileController::class, 'changeProfile'])->name('change-Profile');
         Route::post('update_profile', [App\Http\Controllers\ProfileController::class, 'saveUserprofile'])->name('saveUserprofile');
 
-        Route::get('get_subcategories', [App\Http\Controllers\Admin\CategoryController::class, 'getSubcategories'])->name('get_subcategories');
         // card
         Route::get('card-index', [App\Http\Controllers\CardController::class, 'index'])->name('card.index');
         Route::post('card-store', [App\Http\Controllers\CardController::class, 'store'])->name('card.store');

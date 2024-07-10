@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    @include("favicon")
+    @include('favicon')
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSRF Token -->
@@ -213,17 +213,22 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Country</label>
                                             <div class="formfield">
-                                                <select name="" id="" class="form-control">
-                                                    <option value="">India</option>
-                                                    <option value="">USA</option>
+                                                <select name="country" class="form-control" id="country-select">
+                                                    <option value="">Select Country</option>
+                                                    @foreach (country() as $country)
+                                                        <option value="{{ $country->id }}">
+                                                            {{ ucwords($country->name) }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                                 <span class="form-icon">
-                                                    <img src="http://192.168.10.13:8081/front/images/dorpdown-icon.svg" alt="img">
+                                                    <img src="http://192.168.10.13:8081/front/images/dorpdown-icon.svg"
+                                                        alt="img">
                                                 </span>
                                             </div>
                                         </div>
@@ -235,11 +240,6 @@
                                                 <div class="formfield">
                                                     <select class="" name="state" id="state-select">
                                                         <option value="">Select State</option>
-                                                        @foreach (states() as $state)
-                                                            <option value="{{ $state->id }}">
-                                                                {{ ucwords($state->name) }}
-                                                            </option>
-                                                        @endforeach
                                                     </select>
                                                     <span class="form-icon">
                                                         <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
@@ -262,8 +262,9 @@
                                         <div class="form-group">
                                             <label for="">Non-Available Dates</label>
                                             <div class="formfield">
-                                                <input type="text" name="non_available_dates" id="non_available_date"
-                                                    placeholder="Select Dates" class="form-control daterange-cus">
+                                                <input type="text" name="non_available_dates"
+                                                    id="non_available_date" placeholder="Select Dates"
+                                                    class="form-control daterange-cus">
                                                 <span class="form-icon cal-icon">
                                                     <img src="{{ asset('front/images/calender-icon.svg') }}"
                                                         alt="img">
@@ -275,8 +276,19 @@
                                         <div class="form-group">
                                             <label for="">Condition</label>
                                             <div class="formfield">
-                                                <input type="text" name="product_condition" id=""
-                                                    placeholder="Product Condition" class="form-control">
+
+                                                {{-- <input type="text" name="product_condition" id=""
+                                                    placeholder="Product Condition" class="form-control"> --}}
+                                                <select class="form-control" name="product_condition">
+                                                    <option value="">Select Condition</option>
+                                                    <option value="Excellent">Excellent</option>
+                                                    <option value="Good">Good</option>
+                                                    <option value="Bad">Fine</option>
+                                                </select>
+                                                <span class="form-icon">
+                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                        alt="img">
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -296,7 +308,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Product market value</label>
@@ -312,8 +324,8 @@
                                         <div class="form-group">
                                             <label for="">Product link</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" name="product_link" placeholder="Product link"
-                                                    value="">
+                                                <input type="text" class="form-control" name="product_link"
+                                                    placeholder="Product link" value="">
                                             </div>
                                         </div>
                                     </div>
@@ -322,8 +334,8 @@
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days</label>
                                             <div class="formfield ">
-                                                <input type="text" class="form-control" name="min_rent_days" placeholder="Rental days"
-                                                    value="">
+                                                <input type="text" class="form-control" name="min_rent_days"
+                                                    placeholder="Rental days" value="">
                                             </div>
                                         </div>
                                     </div>
@@ -503,162 +515,60 @@
             }
         });
     </script>
-    <script>
-        $(document).ready(function() {
-            $("a.notification").click(function() {
-                $('body').addClass("show-noti");
-            });
-            $(".notifications-heading button").click(function() {
-                $('body').removeClass("show-noti");
-            });
-
-            // $(".user-profile").click(function() {
-            //     $('.user-profile-dropdown').toggleClass("show");
-            // });
-            var $el = $(".user-profile");
-            var $ee = $(".user-profile-dropdown");
-            $el.click(function(e) {
-                e.stopPropagation();
-                $(".user-profile-dropdown").toggleClass('show');
-            });
-            $(document).on('click', function(e) {
-                if (($(e.target) != $el) && ($ee.hasClass('show'))) {
-                    $ee.removeClass('show');
-                    // console.log("yes");
-                }
-            });
-            var $elw = $(".cstm-select-bx");
-            var $eew = $(".select-btn");
-            $elw.click(function(e) {
-                e.stopPropagation();
-                $(".select-btn").addClass('open');
-            });
-            $(document).on('click', function(e) {
-                if (($(e.target) != $elw) && ($eew.hasClass('open'))) {
-                    $eew.removeClass('open');
-                    // console.log("yes");
-                }
-            });
-            $("#loader").addClass("load-complete");
-            $(".toggle").click(function() {
-                $(this).toggleClass("activate");
-            });
-            
-        });
-    </script>
-    {{-- header country checkbox --}}
-    <script>
-        jQuery(document).on("click", ".parent", function() {
-            var parentid = jQuery(this).val();
-            var checkedvalue = jQuery(this).is(':checked');
-
-            if (checkedvalue == true) {
-                var cityid = $(this).parent().siblings('.child' + parentid).children('.child' + parentid).prop(
-                    'checked', true);
-            } else {
-                var cityid = $(this).parent().siblings('.child' + parentid).children('.child' + parentid).prop(
-                    'checked', false);
-            }
-
-        });
-        // jQuery('body').bind('cut paste', function(event) {
-        //     return false;
-        // });
-    </script>
-    {{-- open modal on specific url --}}
-    {{-- @if (request()->url() == 'http://chere-internal.in/lend')
-        <script src="{{ asset('js/custom/product-add-edit.js') }}?ver={{ now() }}"></script>
-    @endif --}}
-    @if (isset($openModal) || isset($_COOKIE['lend']))
-        <script>
-            jQuery(document).ready(function() {
-                var url = "{{ request()->url() }}";
-                // setCookie('lendurl', '', url);
-
-
-                const commision_type = "{{ adminsetting()->type }}"
-                const commision = "{{ adminsetting()->value }}"
-                const maxProductImageCount = parseInt("{{ $global_max_product_image_count }}");
-                const is_bankdetail = "{{ auth()->user()->vendorBankDetails }}";
-                const checkdocuments = "{{ count(auth()->user()->documents) }}";
-                const checkdocumentstatus = "{{ auth()->user()->is_approved }}";
-                const product_check = "{{ count(auth()->user()->products) }}";
-                const image_store_url = "{{ route('image.store') }}";
-                var htmlForm = `@include('retailer.include.product-from', ['product' => new App\Models\Product()])`;
-                jQuery('#ajax-form-html').html(htmlForm);
-                jQuery('#NproductModal').modal('show');
-
-                // submit form
-                jQuery('#addProduct').submit(function(e) {
-                    e.preventDefault();
-                    handleValidation('addProduct', rules, messages);
-                    if ($('#addProduct').valid()) {
-                        productformData = new FormData($('form#addProduct').get(0));
-                        var url = jQuery('#addProduct').attr('action');
-                        response = ajaxCall(url, 'post', productformData)
-                        response.then(response => {
-                            if (response.success) {
-                                setCookie('img_token', '', '-1');
-                                //console.log(response.checkdocuments, "check response here");
-                                // if (response.checkdocuments == 0) {
-                                //     jQuery('#mutlistepForm1').modal("show");
-                                //     jQuery("#NproductModal").modal("hide");
-
-                                // } else
-
-                                getId = response.product;
-                                localStorage.setItem("getid", getId);
-                                if (!response.is_bankdetail && response.product) {
-                                    jQuery('#mutlistepForm2').modal("show");
-                                    jQuery("#NproductModal").modal("hide");
-                                } else {
-                                    // window.location.href = response.url
-
-                                    window.location.replace(APP_URL + '/' + 'products')
-                                }
-                            }
-
-                        }).catch(error => {
-                            return iziToast.error({
-                                title: 'Error',
-                                message: error.msg,
-                                position: 'topRight'
-                            });
-                        });
-
-
-                    }
-
-                });
-            });
-        </script>
-        @php setcookie("lend", "", time() - 3600);@endphp
-    @endif
-
-
 
     {{-- Search the country and state  --}}
     <script>
         $(document).ready(function() {
 
+            // Fetch the state behalf of country id 
+            $('#country-select').change(function() {
+                var countryId = $(this).val();
+                var url = '{{ url('states') }}/' + countryId;
+                // alert(url);
+                if (countryId) {
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        dataType: 'json',
+                        headers: {
+                            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(data) {
+                            $('#state-select').empty();
+                            $('#state-select').append('<option value="">Select City</option>');
+                            $.each(data, function(key, value) {
+                                $('#state-select').append('<option value="' + value.id +
+                                    '">' + value.name + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#state-select').empty();
+                    $('#state-select').append('<option value="">Select City</option>');
+                }
+            });
+
+
+
+
             // fetch the subcategory data
             $('.parent_category').change(function() {
                 var categoryId = $(this).val();
-                var route = '{{ route('get_subcategories') }}';
+                var route = '{{ url('sub_category') }}/' + categoryId;
                 // console.log(route, 'route');
 
                 if (categoryId) {
                     $.ajax({
                         type: 'GET',
                         url: route,
-                        data: {
-                            categoryId: categoryId
-                        },
+                        // data: {
+                        //     categoryId: categoryId
+                        // },
                         dataType: 'json',
                         headers: {
                             'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function(data) {
+                        success: function(data,size) {
                             $('#subcategory').empty();
                             $('#subcategory').append('<option value="">Subcategory</option>');
 
@@ -679,8 +589,9 @@
 
 
 
-            // Fetch the city data
 
+
+            // fetch the city behalf of state id 
             $('#state-select').change(function() {
 
                 var stateId = $(this).val();
@@ -713,25 +624,16 @@
                 }
             });
 
-
-
-            // $('#non_available_date').daterangepicker({
-            //     opens: 'right',
-            //     autoUpdateInput: false,
-            //     locale: {
-            //         format: 'MM/DD/YYYY'
-            //     },
-            // }, function(start, end, label) {
-            //     $('#non_available_date').val(start.format('MM/DD/YYYY') + ' - ' + end.format('MM/DD/YYYY'));
-            // });
-
             $('.daterange-cus').daterangepicker({
                 autoUpdateInput: false,
-                locale: { format: 'YYYY-MM-DD' },
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
                 drops: 'down',
                 opens: 'right'
             }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format(
+                    'YYYY-MM-DD'));
             });
 
             $('.daterange-btn').daterangepicker({
@@ -741,22 +643,24 @@
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
                     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                     'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
+                        'month').endOf('month')]
                 },
                 autoUpdateInput: false,
             }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
+                $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format(
+                    'MMMM D, YYYY'));
             });
 
             $('.productLink').on('click', function() {
-            console.log("click");
-            $('body').addClass('loading');
-        });
+                console.log("click");
+                $('body').addClass('loading');
+            });
 
         });
     </script>
 
-
+    {{-- This code show the image preview option --}}
     <script>
         $(document).ready(function() {
             const MAX_IMAGES = 5;
