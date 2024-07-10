@@ -183,7 +183,7 @@
                     </div>
                     <div class="col-lg-4 col-md-12">
                         <div class="pro-desc-details-main">
-                            <h4 class="pro-desc-name">{{ $product->categories->name }}</h4>
+                            <h4 class="pro-desc-name">{{ $product->name }}</h4>
                             <div class="pro-desc-prize">
                                 <h3>${{ $product->rent_day }}</h3>
                                 <div class="badge day-badge">

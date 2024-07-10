@@ -54,13 +54,13 @@
                                             @endif
                                         </div>
 
-                                        <div class="product-card-status">
+                                        {{-- <div class="product-card-status">
                                             <p>In Stock</p>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     @if ($favrait->product)
                                         <p>{{ $favrait->product->name ?: 'Product Name Not Available' }}</p>
-                                        <h4>${{ $favrait->product->rent ?: '0' }}/day</h4>
+                                        <h4>${{ $favrait->product->rent_day ?: '0' }}/day</h4>
                                     @else
                                         <p>Product Not Available</p>
                                     @endif
