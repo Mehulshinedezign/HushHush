@@ -243,20 +243,6 @@
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                         alt="img">
                                                 </span>
-                                                <select class="form-control" name="product_condition">
-                                                    <option value="">Condition</option>
-                                                    <option value="Excellent"
-                                                        @if ($product->product_condition == 'Excellent') selected @endif>Excellent
-                                                    </option>
-                                                    <option value="Good"
-                                                        @if ($product->product_condition == 'Good') selected @endif>Good</option>
-                                                    <option value="Bad"
-                                                        @if ($product->product_condition == 'Bad') selected @endif>Fine</option>
-                                                </select>
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -271,7 +257,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Description</label>
@@ -578,14 +563,14 @@
         //     }
         // });
         $(document).ready(function() {
-    let imageCount = $('.image-wrapper').length;
-    const maxFiles = 5;
-    let uploadedFiles = new Set();
-    let newFiles = new Set();
+            let imageCount = $('.image-wrapper').length;
+            const maxFiles = 5;
+            let uploadedFiles = new Set();
+            let newFiles = new Set();
 
-    $('.image-wrapper').each(function() {
-        uploadedFiles.add($(this).find('input[name="existing_images[]"]').val());
-    });
+            $('.image-wrapper').each(function() {
+                uploadedFiles.add($(this).find('input[name="existing_images[]"]').val());
+            });
 
             $('#update-upload-image-five').on('change', function(e) {
                 let files = e.target.files;
@@ -621,8 +606,8 @@
                             name: 'new_images[]'
                         }).val(file.name);
 
-                imgWrapper.append(img, removeBtn, hiddenInput);
-                $('.update-upload-img-preview').append(imgWrapper);
+                        imgWrapper.append(img, removeBtn, hiddenInput);
+                        $('.update-upload-img-preview').append(imgWrapper);
 
                         imageCount++;
                         uploadedFiles.add(file.name);
@@ -638,23 +623,23 @@
                 }
             }
 
-    $(document).on('click', '.remove-image', function() {
-        let wrapper = $(this).closest('.image-wrapper');
-        let imageId = wrapper.data('id');
-        if (imageId) {
-            uploadedFiles.delete(imageId.toString());
-        } else {
-            let filename = wrapper.find('input[name="new_images[]"]').val();
-            if (filename) {
-                uploadedFiles.delete(filename);
-                newFiles.delete([...newFiles].find(file => file.name === filename));
-            }
-        }
-        wrapper.remove();
-        imageCount--;
-        updateFileInput();
-        updateRemoveButtons();
-    });
+            $(document).on('click', '.remove-image', function() {
+                let wrapper = $(this).closest('.image-wrapper');
+                let imageId = wrapper.data('id');
+                if (imageId) {
+                    uploadedFiles.delete(imageId.toString());
+                } else {
+                    let filename = wrapper.find('input[name="new_images[]"]').val();
+                    if (filename) {
+                        uploadedFiles.delete(filename);
+                        newFiles.delete([...newFiles].find(file => file.name === filename));
+                    }
+                }
+                wrapper.remove();
+                imageCount--;
+                updateFileInput();
+                updateRemoveButtons();
+            });
 
             function updateFileInput() {
                 let fileInput = document.getElementById('update-upload-image-five');
@@ -663,11 +648,11 @@
                 fileInput.files = dt.files;
             }
 
-    function updateRemoveButtons() {
-        $('.remove-image').toggle(imageCount > 1);
-    }
+            function updateRemoveButtons() {
+                $('.remove-image').toggle(imageCount > 1);
+            }
 
-    updateRemoveButtons();
+            updateRemoveButtons();
 
             $('form').on('submit', function(e) {
                 if (imageCount === 0) {
