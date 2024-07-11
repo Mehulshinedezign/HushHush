@@ -102,46 +102,57 @@ class ProductController extends Controller
 
     public function wishlist(Request $request)
     {
-        // dd("wishlist HERE");
-
         try {
-            $productFavorites = ProductFavorite::with('product.thumbnailImage', 'product.category')->where('user_id', auth()->user()->id)->orderByDesc('id')->paginate($request->global_product_pagination);
 
-            $wishlistProducts = $productFavorites->map(function ($productFavorit) {
-                return [
-                    'id' => $productFavorit->product['id'],
-                    'name' => $productFavorit->product['name'],
-                    'description' => $productFavorit->product['description'],
-                    'specification' => $productFavorit->product['specification'],
-                    'rentaltype' => $productFavorit->product['rentaltype'],
-                    'user_id' => $productFavorit->product['user_id'],
-                    'category_id' => $productFavorit->product['category_id'],
-                    'subcat_id' => $productFavorit->product['subcat_id'],
-                    'quantity' => $productFavorit->product['quantity'],
-                    'rent' => $productFavorit->product['rent'],
-                    'min_days_rent_item' => $productFavorit->product['min_days_rent_item'],
-                    'price' => $productFavorit->product['price'],
-                    'security' => $productFavorit->product['security'],
-                    'status' => $productFavorit->product['status'],
-                    'other_size' => $productFavorit->product['other_size'],
-                    'condition' => $productFavorit->product['condition'],
-                    'brand' => $productFavorit->product['brand'],
-                    'color' => $productFavorit->product['color'],
-                    'size' => $productFavorit->product['size'],
-                    'modified_by' => $productFavorit->product['modified_by'],
-                    'modified_user_type' => $productFavorit->product['modified_user_type'],
-                    'available' => $productFavorit->product['available'],
-                    'city' => $productFavorit->product['city'],
-                    'neighborhood_city' => $productFavorit->product['neighborhood_city'],
-                    'product_market_value' => $productFavorit->product['product_market_value'],
-                    'product_link' => $productFavorit->product['product_link'],
-                    'created_at' => $productFavorit->product['created_at'],
-                    'updated_at' => $productFavorit->product['updated_at'],
-                    'deleted_at' => $productFavorit->product['deleted_at'],
-                    'average_rating' => $productFavorit->product['average_rating'],
+            $productFavorites = ProductFavorite::with(['product.thumbnailImage', 'product.category'])
+                ->where('user_id', auth()->user()->id)
+                ->whereHas('product', function ($query) {
+                    $query->whereNull('deleted_at');
+                })
+                ->orderByDesc('id')
+                ->paginate($request->global_product_pagination);
 
-                ];
-            })->toArray();
+            $wishlistProducts = $productFavorites->map(function ($productFavorite) {
+                $product = $productFavorite->product;
+
+                if ($product) {
+                    return [
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'description' => $product->description,
+                        'specification' => $product->specification,
+                        'rentaltype' => $product->rentaltype,
+                        'user_id' => $product->user_id,
+                        'category_name' => $product->category->name,
+                        'subcat_id' => $product->subcat_id,
+                        'quantity' => $product->quantity,
+                        'rent' => $product->rent,
+                        'min_days_rent_item' => $product->min_days_rent_item,
+                        'price' => $product->price,
+                        'security' => $product->security,
+                        'status' => $product->status,
+                        'other_size' => $product->other_size,
+                        'condition' => $product->condition,
+                        'brand' => $product->get_brand->name,
+                        'color' => $product->get_color->name,
+                        'size' => $product->get_size->name,
+                        'modified_by' => $product->modified_by,
+                        'modified_user_type' => $product->modified_user_type,
+                        'available' => $product->available,
+                        'city' => $product->city,
+                        // 'neighborhood_city' => $product->neighborhood_city,
+                        'product_market_value' => $product->product_market_value,
+                        'product_link' => $product->product_link,
+                        // 'created_at' => $product->created_at,
+                        // 'updated_at' => $product->updated_at,
+                        // 'deleted_at' => $product->deleted_at,
+                        'average_rating' => $product->average_rating,
+                        'product_image_url' => $product->thumbnailImage && filter_var($product->thumbnailImage->file_path, FILTER_VALIDATE_URL) ? $product->thumbnailImage->file_path : null,
+                    ];
+                }
+
+                return null;
+            })->filter()->toArray();
 
             $apiResponse = 'success';
             $statusCode = '200';
@@ -161,13 +172,15 @@ class ProductController extends Controller
         }
     }
 
+
+
     /**
      * Add the product in wish list
      */
     public function addFavorite(Request $request, $id)
     {
         try {
-            // Check if the product exists
+
             $product = Product::find($id);
             if (is_null($product)) {
                 return response()->json([
@@ -177,22 +190,21 @@ class ProductController extends Controller
                 ], 404);
             }
 
-            // Check if the product is already in the user's favorites
             $favorite = ProductFavorite::where('user_id', auth()->user()->id)->where('product_id', $id)->first();
             if (is_null($favorite)) {
-                // Add to favorites if not already in the list
+
                 ProductFavorite::create([
                     'product_id' => $id,
                     'user_id' => auth()->user()->id
                 ]);
                 $message = 'Added to wishlist';
             } else {
-                // Remove from favorites if already in the list
+
                 $favorite->delete();
                 $message = 'Removed from wishlist';
             }
 
-            // Get product details
+
             $product_details = $this->getProduct($id);
             $apiResponse = 'success';
             $statusCode = 200;
@@ -312,7 +324,9 @@ class ProductController extends Controller
     }
 
 
-
+    /**
+     * Delete product from my products.
+     */
 
     public function deleteProduct($id)
     {
@@ -348,6 +362,9 @@ class ProductController extends Controller
     }
 
 
+    /**
+     * Adding product in my products.
+     */
     public function addProduct(Request $request)
     {
         try {
@@ -419,23 +436,45 @@ class ProductController extends Controller
                     ->update(['product_id' => $product->id, 'image_token' => null]);
             }
 
+            // Extract location data from request
+            $locationData = json_decode($request->pickup_location, true);
+            // dd($request->pickup_location);
+
             ProductLocation::create([
                 'product_id' => $product->id,
-                'map_address' => $request->pickup_location,
+                'country' => $locationData['country'],
+                'state' => $locationData['stateOrProvince'],
+                'city' => $locationData['city'],
+                'custom_address' => $locationData['name'],
+                'postcode' => $locationData['postcode'] ?? null, // Add postcode if it's available in the response
+                'latitude' => $locationData['latitude'],
+                'longitude' => $locationData['longitude'],
+                'map_address' => $locationData['formatted_address'],
+                'raw_address' => $request->pickup_location,
             ]);
+            // $productLocationData = [
+            //     'product_id' => $product->id,
+            //     'country' => $locationData['country'],
+            //     'state' => $locationData['stateOrProvince'],
+            //     'city' => $locationData['city'],
+            //     'custom_address' => $locationData['name'],
+            //     'postcode' => $locationData['postcode'] ?? null, // Add postcode if it's available in the response
+            //     'latitude' => $locationData['latitude'],
+            //     'longitude' => $locationData['longitude'],
+            //     'map_address' => $locationData['formatted_address'],
+            //     'raw_address' => $locationData,
+            // ];
 
-            // Handle disable dates
+
             if ($request->has('disable_dates')) {
                 $disableDates = json_decode($request->disable_dates, true);
                 foreach ($disableDates as $dateRange) {
                     if (count($dateRange) == 1) {
-                        // Single date
                         ProductDisableDate::create([
                             'product_id' => $product->id,
                             'disable_date' => \DateTime::createFromFormat('d/m/Y', $dateRange[0])->format('Y-m-d'),
                         ]);
                     } else if (count($dateRange) == 2) {
-                        // Date range
                         $start = \DateTime::createFromFormat('d/m/Y', $dateRange[0]);
                         $end = \DateTime::createFromFormat('d/m/Y', $dateRange[1]);
 
@@ -450,7 +489,6 @@ class ProductController extends Controller
                 }
             }
 
-            // // Handle images
             if ($request->hasFile('images')) {
                 foreach ($request->images as $index => $image) {
                     $fileName = $product->id . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
@@ -482,6 +520,9 @@ class ProductController extends Controller
 
 
 
+    /**
+     * Updating product from my products.
+     */
 
     public function updateProduct(Request $request, $id)
     {
@@ -516,7 +557,7 @@ class ProductController extends Controller
                 'rent_week' => 'required|integer',
                 'rent_month' => 'required|integer',
                 'pickup_location' => 'required|string',
-                // 'images' => 'array',
+                'images' => 'array',
                 // 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
             ]);
 
@@ -544,9 +585,18 @@ class ProductController extends Controller
             ];
 
             $product->update($data);
-
-            ProductLocation::where('product_id', $product->id)->update([
-                'map_address' => $request->pickup_location,
+            $locationData = json_decode($request->pickup_location, true);
+            ProductLocation::where('product_id', $product->id)->updateOrCreate([
+                'product_id' => $product->id,
+                'country' => $locationData['country'],
+                'state' => $locationData['stateOrProvince'],
+                'city' => $locationData['city'],
+                'custom_address' => $locationData['name'],
+                'postcode' => $locationData['postcode'] ?? null, // Add postcode if it's available in the response
+                'latitude' => $locationData['latitude'],
+                'longitude' => $locationData['longitude'],
+                'map_address' => $locationData['formatted_address'],
+                'raw_address' => $request->pickup_location,
             ]);
 
             if ($request->has('disable_dates')) {
@@ -605,10 +655,11 @@ class ProductController extends Controller
     }
 
 
-
+    /**
+     * getting required data for product add/edit page.
+     */
     public function getFormData()
     {
-        // dd('here');
         try {
             $categories = getParentCategory();
             $brands = getBrands();
@@ -639,7 +690,6 @@ class ProductController extends Controller
             });
 
             $sizeData = $sizes->map(function ($size) {
-
                 return [
                     'id' => $size->id,
                     'label' => $size->name,
@@ -655,11 +705,19 @@ class ProductController extends Controller
                 ];
             });
 
+            $conditionData = [
+                ['id' => '1', 'label' => 'Hardly used', 'value' => 'Hardly used'],
+                ['id' => '2', 'label' => 'Great condition', 'value' => 'Great condition'],
+                ['id' => '3', 'label' => 'Good condition', 'value' => 'Good condition'],
+                ['id' => '4', 'label' => 'Fair condition', 'value' => 'Fair condition'],
+            ];
+
             $data = [
                 'Category' => $categoryData,
                 'Brand' => $brandData,
                 'Size' => $sizeData,
                 'Color' => $colorData,
+                'Condition' => $conditionData,
             ];
 
             return response()->json([
@@ -679,10 +737,12 @@ class ProductController extends Controller
 
 
 
+
+
     private function getProduct($id)
     {
         if ($id) {
-            return Product::with(['locations', 'allImages', 'thumbnailImage', 'get_size', 'favorites', 'category', 'disableDates', 'retailer'])
+            return Product::with(['locations', 'allImages', 'thumbnailImage', 'get_size', 'favorites', 'category', 'disableDates', 'retailer', 'get_color', 'get_brand'])
                 ->whereId($id)
                 ->first()
                 ->makeVisible(['file_path']);
@@ -691,6 +751,9 @@ class ProductController extends Controller
     }
 
 
+    /**
+     * index product listing.
+     */
     public function getAllProducts()
     {
         try {
@@ -759,7 +822,9 @@ class ProductController extends Controller
         }
     }
 
-
+    /**
+     * listing of user product.
+     */
     public function getAuthUserProducts()
     {
         try {
@@ -830,10 +895,13 @@ class ProductController extends Controller
     }
 
 
-
+    /**
+     *details of product.
+     */
 
     public function getAllProductsById($id)
     {
+        // dd(auth()->user());
         try {
             $product = Product::with('allImages',)->findOrFail($id);
             if (is_null($product)) {
