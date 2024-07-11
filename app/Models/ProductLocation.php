@@ -11,7 +11,7 @@ class ProductLocation extends Model
     use HasFactory;
 
     protected $fillable = [
-        'product_id','country','state','city','custom_address','postcode', 'latitude', 'longitude', 'map_address'
+        'product_id','country','state','city','custom_address','postcode', 'latitude', 'longitude', 'map_address','raw_address'
     ];
 
     /**
