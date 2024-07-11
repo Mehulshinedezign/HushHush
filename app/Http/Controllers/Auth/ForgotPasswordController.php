@@ -43,6 +43,18 @@ class ForgotPasswordController extends Controller
         }
     }
 
+    //     $forgot = new MainforgotPassword();
+    //     $forgot->sendResetPasswordLinkEmail($request);
+    //     return redirect()->back();
+    // }
+
+
+    // protected function sendResetPasswordLinkEmail(Request $request)
+    // {
+    //     $mainForgotPassword = new MainForgotPassword();
+    //     return $mainForgotPassword->sendResetLinkEmail($request);
+    // }
+
     protected function sendResetLinkToPhoneNumber($full_number, $main_number, Request $request)
     {
         if (!$this->otpService) {
@@ -63,5 +75,54 @@ class ForgotPasswordController extends Controller
         session()->forget('error');
         session()->flash('status', 'OTP sent successfully!');
         return view('auth.passwords.otp_verification');
+    }
+
+    public function sendResetLink(Request $request)
+    {
+        if ($request->has('phone_number') && $request->input('phone_number.main') && $request->input('phone_number.full')) {
+            return $this->resetLinkToPhoneNumber($request);
+        } else {
+            return $this->resetLinkToEmail($request);
+        }
+    }
+
+    public function resetLinkToEmail(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $response = $this->broker()->sendResetLink($request->only('email'));
+
+        return $response;
+    }
+
+    public function resetLinkToPhoneNumber(Request $request)
+    {
+        if (!$this->otpService) {
+            return response()->json(['message' => 'OTP service not available'], 500);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'phone_number.full' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $user = User::where('phone_number', $request->input('phone_number.main'))->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $otp = $this->otpService->generateOtp($user);
+        $this->otpService->sendOtp($otp, $request->input('phone_number.full'));
+
+        return response()->json(['message' => 'OTP sent successfully'], 200);
+    }
+
+    protected function broker()
+    {
+        return Password::broker();
     }
 }

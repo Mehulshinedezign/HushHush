@@ -29,7 +29,7 @@
 
     <script>
         const APP_URL = "{{ url('') }}";
-        const login_url = '{{ route('login') }}';
+        const login_url = '{{ route("login") }}';
         const userId = '{{ jsencode_userdata(auth()->id()) }}';
         const url = "{{ route('addfavorite') }}";
         const errorTitle = "{{ __('favorite.error') }}";
@@ -227,7 +227,7 @@
                                                     @endforeach
                                                 </select>
                                                 <span class="form-icon">
-                                                    <img src="http://192.168.10.13:8081/front/images/dorpdown-icon.svg"
+                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                         alt="img">
                                                 </span>
                                             </div>

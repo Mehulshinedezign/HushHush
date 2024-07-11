@@ -239,7 +239,7 @@
                             <div class="product-img-box">
                                 <a href="{{ route('viewproduct', jsencode_userdata($product->id)) }}" class="productLink">
                                     @if (isset($product->thumbnailImage->file_path))
-                                        <img src="{{ asset('storage/' . $product->thumbnailImage->file_path) }}" alt="{{ $product->name }}">
+                                        <img src="{{ $product->thumbnailImage->file_path }}" alt="{{ $product->name }}">
                                     @else
                                         <img src="{{asset('front/images/pro-0.png')}}" alt="{{ $product->name }}">
                                     @endif

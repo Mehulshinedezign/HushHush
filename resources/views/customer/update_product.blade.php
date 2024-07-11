@@ -37,7 +37,7 @@
                                                     data-images="{{ json_encode($product->allImages->pluck('file_path')->toArray()) }}">
                                                     @foreach ($product->allImages as $image)
                                                         <div class="image-wrapper" data-id="{{ $image->id }}">
-                                                            <img src="{{ asset('storage/' . $image->file_path) }}"
+                                                            <img src="{{ $image->file_path }}"
                                                                 alt="" loading="lazy">
                                                             <input type="hidden" name="existing_images[]"
                                                                 value="{{ $image->id }}">
@@ -174,7 +174,7 @@
                                                     @endforeach
                                                 </select>
                                                 <span class="form-icon">
-                                                    <img src="http://192.168.10.13:8081/front/images/dorpdown-icon.svg"
+                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                         alt="img">
                                                 </span>
                                             </div>
@@ -243,6 +243,20 @@
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                         alt="img">
                                                 </span>
+                                                <select class="form-control" name="product_condition">
+                                                    <option value="">Condition</option>
+                                                    <option value="Excellent"
+                                                        @if ($product->product_condition == 'Excellent') selected @endif>Excellent
+                                                    </option>
+                                                    <option value="Good"
+                                                        @if ($product->product_condition == 'Good') selected @endif>Good</option>
+                                                    <option value="Bad"
+                                                        @if ($product->product_condition == 'Bad') selected @endif>Fine</option>
+                                                </select>
+                                                <span class="form-icon">
+                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                        alt="img">
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -257,6 +271,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Description</label>
@@ -572,44 +587,56 @@
         uploadedFiles.add($(this).find('input[name="existing_images[]"]').val());
     });
 
-    $('#update-upload-image-five').on('change', function() {
-        let files = $(this)[0].files;
-        let remainingSlots = maxFiles - imageCount;
+            $('#update-upload-image-five').on('change', function(e) {
+                let files = e.target.files;
+                let remainingSlots = maxFiles - imageCount;
 
-        if (files.length > remainingSlots) {
-            alert(`You can upload only ${maxFiles} images in total.`);
-            return;
-        }
+                if (files.length > remainingSlots) {
+                    alert(`You can upload only ${maxFiles} images in total.`);
+                    return;
+                }
 
-        for (let i = 0; i < files.length; i++) {
-            let file = files[i];
-            let reader = new FileReader();
+                let filesToProcess = Array.from(files);
 
-            reader.onload = function(e) {
-                let imgWrapper = $('<div>').addClass('image-wrapper');
-                let img = $('<img>').attr('src', e.target.result).attr('alt', '').attr(
-                    'loading', 'lazy');
-                let removeBtn = $('<span>').addClass('remove-image').html('&times;');
-                let hiddenInput = $('<input>').attr({
-                    type: 'hidden',
-                    name: 'new_images[]'
-                }).val(file.name);
+                processFiles(filesToProcess);
+            });
+
+            function processFiles(files) {
+                if (files.length === 0) {
+                    updateFileInput();
+                    return;
+                }
+
+                let file = files.shift();
+                if (!uploadedFiles.has(file.name)) {
+                    let reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        let imgWrapper = $('<div>').addClass('image-wrapper');
+                        let img = $('<img>').attr('src', e.target.result).attr('alt', '').attr('loading',
+                            'lazy');
+                        let removeBtn = $('<span>').addClass('remove-image').html('&times;');
+                        let hiddenInput = $('<input>').attr({
+                            type: 'hidden',
+                            name: 'new_images[]'
+                        }).val(file.name);
 
                 imgWrapper.append(img, removeBtn, hiddenInput);
                 $('.update-upload-img-preview').append(imgWrapper);
 
-                imageCount++;
-                uploadedFiles.add(file.name);
-                newFiles.add(file);
-                updateRemoveButtons();
+                        imageCount++;
+                        uploadedFiles.add(file.name);
+                        newFiles.add(file);
+                        updateRemoveButtons();
+
+                        processFiles(files);
+                    }
+
+                    reader.readAsDataURL(file);
+                } else {
+                    processFiles(files);
+                }
             }
-
-            reader.readAsDataURL(file);
-        }
-
-        // Update file input after processing all new files
-        updateFileInput();
-    });
 
     $(document).on('click', '.remove-image', function() {
         let wrapper = $(this).closest('.image-wrapper');
@@ -629,12 +656,12 @@
         updateRemoveButtons();
     });
 
-    function updateFileInput() {
-        let fileInput = $('#update-upload-image-five')[0];
-        let dt = new DataTransfer();
-        newFiles.forEach(file => dt.items.add(file));
-        fileInput.files = dt.files;
-    }
+            function updateFileInput() {
+                let fileInput = document.getElementById('update-upload-image-five');
+                let dt = new DataTransfer();
+                newFiles.forEach(file => dt.items.add(file));
+                fileInput.files = dt.files;
+            }
 
     function updateRemoveButtons() {
         $('.remove-image').toggle(imageCount > 1);
@@ -642,21 +669,16 @@
 
     updateRemoveButtons();
 
-    $('form').on('submit', function(e) {
-        if (imageCount === 0) {
-            e.preventDefault();
-            alert("Please upload at least one image before submitting.");
-        } else if (imageCount > maxFiles) {
-            e.preventDefault();
-            alert(
-                `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`
-            );
-        }
-    });
-
-    function clearError(fieldName) {
-        $('label.error[for="' + fieldName + '"]').remove();
-    }
-});
+            $('form').on('submit', function(e) {
+                if (imageCount === 0) {
+                    e.preventDefault();
+                    alert("Please upload at least one image before submitting.");
+                } else if (imageCount > maxFiles) {
+                    e.preventDefault();
+                    alert(
+                        `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`);
+                }
+            });
+        });
     </script>
 @endpush

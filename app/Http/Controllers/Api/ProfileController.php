@@ -96,7 +96,7 @@ class ProfileController extends Controller
             $validator = Validator::make($request->all(), [
                 'name' => 'string|max:255',
                 'email' => 'string|email|max:255|unique:users,email,' . $user->id,
-                'phone_number' => 'string|max:20|unique:users,phone_number,' . $user->id,
+                'phone_number' => 'string|max:20' . $user->id,
                 'profile_pic' => 'nullable|file',
                 'zipcode' => 'nullable|string|max:20',
                 'email_notifications' => 'boolean',
@@ -140,11 +140,11 @@ class ProfileController extends Controller
             $userDetails = UserDetail::updateOrCreate(
                 ['user_id' => $user->id],
                 [
-                    'address1' => $address1, 
-                    'address2' => $address2, 
-                    'country_id' => $country, 
-                    'state_id' => $state, 
-                    'city_id' => $city, 
+                    'address1' => $address1,
+                    'address2' => $address2,
+                    'country_id' => $country,
+                    'state_id' => $state,
+                    'city_id' => $city,
                     'about' => $about
                 ]
             );
@@ -184,7 +184,7 @@ class ProfileController extends Controller
             }
             $validator = Validator::make($request->all(), [
                 'old_password' => 'required',
-                'new_password' => 'required|string|min:8|max:32|confirmed',
+                'new_password' => 'required|string|min:8|max:32',
             ]);
             // dd($request->all(),$validator);
 

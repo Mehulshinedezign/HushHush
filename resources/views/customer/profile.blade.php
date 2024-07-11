@@ -78,7 +78,7 @@
                         <div class="profile-personal-detail">
                             <div class="profile-personal-img">
                                 @if ($user->profile_file)
-                                    <img src="{{ asset('storage/' . $user->profile_file) }}" alt="Profile Picture">
+                                    <img src="{{ asset ('storage/'. $user->profile_file) }}" alt="Profile Picture">
                                 @else
                                     <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
                                 @endif
@@ -139,7 +139,7 @@
                                 <div class="product-img-box">
                                     <a href="{{ route('viewproduct', ['id' => jsencode_userdata($product->id)]) }}">
                                         @if (isset($product->thumbnailImage->file_path))
-                                            <img src="{{ asset('storage/'. $product->thumbnailImage->file_path) }}" alt="" loading="lazy">
+                                            <img src="{{  $product->thumbnailImage->file_path }}" alt="" loading="lazy">
                                         @else
                                             <img src="{{asset('front/images/pro-0.png')}}" alt="img">
                                         @endif
