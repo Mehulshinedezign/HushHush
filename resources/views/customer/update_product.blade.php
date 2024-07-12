@@ -231,13 +231,15 @@
                                             <div class="formfield">
                                                 <select class="form-control" name="product_condition">
                                                     <option value="">Condition</option>
-                                                    <option value="Excellent"
-                                                        @if ($product->product_condition == 'Excellent') selected @endif>Excellent
+                                                    <option value="Hardly"
+                                                        @if ($product->product_condition == 'Hardly') selected @endif>Hardly used
                                                     </option>
+                                                    <option value="Great"
+                                                        @if ($product->product_condition == 'Great') selected @endif>Hardly used</option>
                                                     <option value="Good"
-                                                        @if ($product->product_condition == 'Good') selected @endif>Good</option>
-                                                    <option value="Bad"
-                                                        @if ($product->product_condition == 'Bad') selected @endif>Fine</option>
+                                                        @if ($product->product_condition == 'Good') selected @endif>Good condition</option>
+                                                        <option value="Fair"
+                                                        @if ($product->product_condition == 'Fair') selected @endif>Fair condition</option>
                                                 </select>
                                                 <span class="form-icon">
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
