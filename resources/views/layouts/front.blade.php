@@ -281,9 +281,10 @@
                                                     placeholder="Product Condition" class="form-control"> --}}
                                                 <select class="form-control" name="product_condition">
                                                     <option value="">Select Condition</option>
-                                                    <option value="Excellent">Excellent</option>
-                                                    <option value="Good">Good</option>
-                                                    <option value="Bad">Fine</option>
+                                                    <option value="Hardly">Hardly used</option>
+                                                    <option value="Great">Great condition</option>
+                                                    <option value="Good">Good condition</option>
+                                                    <option value="Fair">Fair condition</option>
                                                 </select>
                                                 <span class="form-icon">
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
