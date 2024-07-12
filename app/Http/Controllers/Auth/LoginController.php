@@ -81,7 +81,7 @@ class LoginController extends Controller
         // $loginType = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
         if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
             return ['email' => $request->email, 'password' => $request->password, 'status' => '1'];
-        }else{
+        } else {
 
             return ['phone_number' => $request->email, 'password' => $request->password, 'status' => '1'];
         }
@@ -112,7 +112,7 @@ class LoginController extends Controller
         if ($remember) {
             $loginby = $request->email . '_' . $request->password;
             $cookie = Cookie::get('rememberme');
-            
+
             if (!$cookie || ($request->email != explode("_", $cookie)[0] || $request->password != explode("_", $cookie)[1])) {
                 Cookie::queue('rememberme', $loginby, 2628000);  // 2628000 minutes (five years)
             }

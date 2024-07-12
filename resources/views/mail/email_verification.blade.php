@@ -429,7 +429,7 @@
                         <td bgcolor="#e8e5de" valign="top" style="padding-top: 20px; padding-bottom:20px">
                             <a target="_blank" href="javascript:;"
                                 style="margin-left:auto;margin-right:auto;text-align:center;">
-                               
+
                             </a>
                         </td>
                     </tr>
@@ -479,10 +479,11 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan="3" align="center" style="padding-top: 15px;">
-                                                        <a href="{{ route('verify-email', [$user->id, $user->email_verification_token]) }}"
+                                                        {{-- <a href="{{ route('verify-email', [$user->id, $user->email_verification_token]) }}"
                                                             style="font-family: 'Inter', sans-serif;background:#e8e5de;border-radius:4px;padding:8px 35px;color:#1B1B1B;font-size:17px;display:inherit;line-height:30px;text-decoration:none;font-weight: 600;">Verify
                                                             Email Now
-                                                        </a>
+                                                        </a> --}}
+                                                        {{ $otp }}
                                                     </td>
                                                 </tr>
                                                 <tr>

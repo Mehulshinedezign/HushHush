@@ -3,69 +3,85 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Models\EmailOtp;
+use App\Models\PhoneOtp;
 use App\Models\User;
 use App\Models\UserOtp;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 
 class VerifyOtpController extends Controller
 {
-    public function showVerifyOtpForm(Request $request)
+    // public function showVerifyOtpForm(Request $request)
+    // {
+    //     $user =  User::find($user->id);
+    //     // $userId = $request->session()->get('userId');
+    //     return view('auth.verify_otp', compact('user'));
+    // }
+
+    public function verifyEmailOtp(Request $request)
     {
-        $userId = $request->session()->get('userId');
-        return view('auth.verify_otp',compact('userId'));
-        
-    }
 
-    public function verifyOtp(Request $request)
-    {
-        $request->validate([
-            'otp' => 'required|digits:6',
-        ], [
-            'otp.required' => 'OTP is required',
-            'otp.digits' => 'OTP must be 6 digits',
-        ]);
+        // $request->validate([
+        //     'emailotp' => 'required|digits:6',
+        // ], [
+        //     'emailotp.required' => 'OTP is required',
+        //     'emailotp.digits' => 'OTP must be 6 digits',
+        // ]);
 
-        $userId = $request->session()->get('userId');
-        $user = User::findOrFail($userId);
 
-        // $otp = UserOtp::where('user_id', $userId)
-        // ->where('otp', $request->otp)
-        // ->where('expires_at', '>=', Carbon::now())
-        // ->first();
-      
-        // if ($otp) {
-        //     // $user->otp_is_verified = true;
-        //     $user->update(["status" => "1","otp_is_verified" => "1"]);
-        //     // $user->save();
+        $user = User::with('phoneOtp', 'emailOtp')->where('id', $request->user_id)->first();
 
-        //     $otp->status = 1;
-        //     $otp->save();
-
-        //     $request->session()->forget('userId');
-        //     $loginController = new LoginController();
-            
-        //     return $loginController->loginUser($user);
-        //     // return redirect()->route('login')->with('success', 'Registration successful. A confirmation email has been sent to ' . $user->email . '. Please verify to log in.');
-        // }
-
-        $otp = UserOtp::where('user_id', $userId)
-        ->where('expires_at', '>=', Carbon::now())
-        ->first();
-      
-        if ($otp) {
-            $user->update(["status" => "1","otp_is_verified" => "1"]);
-
-            $otp->status = 1;
-            $otp->save();
-
-            $request->session()->forget('userId');
-            $loginController = new LoginController();
-            
-            return $loginController->loginUser($user);
-            // return redirect()->route('login')->with('success', 'Registration successful. A confirmation email has been sent to ' . $user->email . '. Please verify to log in.');
+        if ($user->emailOtp->otp != $request->emailotp) {
+            return redirect()->back()->with('error', 'Email verification token is invalid.');
         }
 
-        return redirect()->back()->withErrors(['otp' => 'Invalid or expired OTP']);
+        $expiry  = Carbon::now()->subMinutes(15);
+
+        // if ($user->phoneOtp->expires_at <= $expiry) {
+        //     return redirect()->route('login')->with('error', 'Password verification link expired');
+        // }
+
+        try {
+
+            EmailOtp::where('user_id', $user->id)->update(['status' => "1"]);
+
+            if (isset($user->phoneOtp->status) && $user->phoneOtp->status == '1') {
+                auth()->login($user);
+                return response()->json(['login' => 1]);
+            }
+            return response()->json(['status' => true]);
+        } catch (Exception $ex) {
+            return redirect()->route('login')->with('error', $ex->getMessage());
+        }
+    }
+
+    public function verifyPhoneOtp(Request $request)
+    {
+        // $request->validate([
+        //     'phoneotp' => 'required|digits:6',
+        // ], [
+        //     'phoneotp.required' => 'OTP is required',
+        //     'phoneotp.digits' => 'OTP must be 6 digits',
+        // ]);
+        // dd('here');
+        $user = User::with('phoneOtp', 'emailOtp')->where('id', $request->user_id)->first();
+        if ($user->phoneOtp->otp != $request->phoneotp) {
+            return redirect()->back()->with('error', 'Email verification token is invalid.');
+        }
+
+        $expiry  = Carbon::now()->subMinutes(15);
+
+        try {
+            PhoneOtp::where('user_id', $user->id)->update(['status' => "1"]);
+            if (isset($user->emailOtp->status) && $user->emailOtp->status == '1') {
+                auth()->login($user);
+                return response()->json(['login' => 1]);
+            }
+            return response()->json(['status' => true]);
+        } catch (Exception $ex) {
+            return redirect()->route('login')->with('error', $ex->getMessage());
+        }
     }
 }

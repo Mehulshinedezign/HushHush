@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-@include("favicon")
+    @include('favicon')
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSRF Token -->
@@ -16,10 +16,12 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{ asset('front/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}">
-    <link rel="stylesheet" href="{{asset('front/css/login.css')}}">
+    <link rel="stylesheet" href="{{ asset('front/css/login.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom-front.css') }}?ver={{ now() }}" />
     <!-- <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png') }}"> -->
-
+    <script>
+        const APP_URL = "{{ url('') }}";
+    </script>
     <style>
         .invalid-feedback {
             display: block;
@@ -35,7 +37,8 @@
             <div class="container">
                 <div class="cust-nav-header-sec">
                     <div class="logo mobile-logo">
-                        <a class="navbar-brand" href="{{url('/')}}"><img src="{{asset('front/images/logo.svg')}}" alt="logo" width="91"
+                        <a class="navbar-brand" href="{{ url('/') }}"><img
+                                src="{{ asset('front/images/logo.svg') }}" alt="logo" width="91"
                                 height="63"></a>
                     </div>
                     <div class="collapse navbar-collapse cust-navbar-header" id="navbarNav">
@@ -46,14 +49,13 @@
                         </ul>
                     </div>
                     @if (auth()->user())
-                    <div class="header-cart">
-                        <ul>
-                            <li>
-                                <a href="#"><i class="fa-regular fa-user"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                        
+                        <div class="header-cart">
+                            <ul>
+                                <li>
+                                    <a href="#"><i class="fa-regular fa-user"></i></a>
+                                </li>
+                            </ul>
+                        </div>
                     @endif
 
                     <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"

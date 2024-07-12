@@ -16,10 +16,11 @@ class VerificationEmail extends Notification implements ShouldQueue
      *
      * @return void
      */
-    protected $data;
-    public function __construct($user)
+    protected $data, $otp;
+    public function __construct($user, $otp)
     {
         $this->data = $user;
+        $this->otp = $otp;
     }
 
     /**
@@ -42,8 +43,9 @@ class VerificationEmail extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         $user = $this->data;
+        $otp = $this->otp;
 
-        return (new MailMessage)->subject('Verify your email')->markdown('mail.email_verification', compact('user'));
+        return (new MailMessage)->subject('Verify your email')->markdown('mail.email_verification', compact('user', 'otp'));
     }
 
     /**

@@ -1,8 +1,9 @@
 <?php
 
+use App\Models\PhoneOtp;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
-use App\Models\{User, Category, AdminSetting, Brand, City, Color, Country, NeighborhoodCity, Order, Size, OrderItem, State};
+use App\Models\{User, Category, AdminSetting, Brand, City, Color, Country, EmailOtp, NeighborhoodCity, Order, Size, OrderItem, State};
 use Carbon\Carbon;
 use FontLib\TrueType\Collection;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -74,7 +75,6 @@ if (!function_exists('getParentCategory')) {
     function getParentCategory()
     {
         return Category::where('status', '1')->get();
- 
     }
 }
 
@@ -270,7 +270,7 @@ if (!function_exists('check_order_list_paginate_retailer')) {
             return State::orderBy('name', 'ASC')->get();
         }
     }
-    
+
     if (!function_exists('cities')) {
         function cities($state_id)
         {
@@ -278,9 +278,27 @@ if (!function_exists('check_order_list_paginate_retailer')) {
         }
     }
 
-    if(!function_exists('country')){
-        function country(){
-            return Country::orderBy('name','ASC')->get();
+    if (!function_exists('country')) {
+        function country()
+        {
+            return Country::orderBy('name', 'ASC')->get();
+        }
+    }
+
+    if (!function_exists('phoneNumberValidate')) {
+        function phoneNumberValidate($user)
+        {
+            $status = PhoneOtp::where('user_id', $user)->first();
+
+            return $status->status ==  1 ? false : true;
+        }
+    }
+    if (!function_exists('emailValidate')) {
+        function emailValidate($user)
+        {
+            $status = EmailOtp::where('user_id', $user)->first();
+
+            return $status->status ==  1 ? false : true;
         }
     }
 }
