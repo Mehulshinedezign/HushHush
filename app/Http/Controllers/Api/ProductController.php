@@ -368,12 +368,8 @@ class ProductController extends Controller
      */
     public function addProduct(Request $request)
     {
+        DB::beginTransaction();
         try {
-            // $request1 = $request->toArray();
-            // Log::info('test',$request->toarray());
-            // Log::info('test1',$request->pickup_location);
-            // Log::info('test2');
-            // return $this->apiResponse(true, "200", json_encode($request), $request, null);
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'description' => 'required|string',
@@ -385,15 +381,11 @@ class ProductController extends Controller
                 'product_market_value' => 'required|numeric',
                 'product_link' => 'nullable|url',
                 'min_rent_days' => 'required|integer',
-                //'disable_dates' => 'required|string',
-                // 'state' => 'required|integer',
-                // 'city' => 'required|integer',
                 'rent_day' => 'required|integer',
                 'rent_week' => 'required|integer',
                 'rent_month' => 'required|integer',
                 'pickup_location' => 'required',
                 'images' => 'required|array',
-                //'images.*' => 'string'
             ]);
 
             if ($validator->fails()) {
@@ -413,6 +405,7 @@ class ProductController extends Controller
                 ];
                 return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
             }
+
             $data = [
                 'name' => $request->name,
                 'description' => $request->description,
@@ -427,8 +420,6 @@ class ProductController extends Controller
                 'product_market_value' => $request->product_market_value,
                 'product_link' => $request->product_link,
                 'min_days_rent_item' => $request->min_rent_days,
-                // 'state' => $request->state,
-                // 'city' => $request->city,
                 'rent_day' => $request->rent_day,
                 'rent_week' => $request->rent_week,
                 'rent_month' => $request->rent_month,
@@ -436,47 +427,23 @@ class ProductController extends Controller
 
             $product = Product::create($data);
 
-            // if ($request->cookie('img_token')) {
-            //     ProductImage::where('file_path', $request->cookie('img_token'))
-            //         ->update(['product_id' => $product->id, 'image_token' => null]);
-            // }
-            // dd(json_decode('{"formatted_address":"Hda. Ánimas 15, Impulsora Popular Avicola, 57130 Cdad. Nezahualcóyotl, Méx., Mexico","name":"Shine Bar","latitude":19.4777825,"longitude":-99.0452011,"place_id":"ChIJsz1ORhv70YURQIK4K-zxUEk","city":"Ciudad Nezahualcóyotl","stateOrProvince":"Estado de México","country":"Mexico"}'));
-            // Extract location data from request
             $locationData = json_decode($request->pickup_location, true);
-            // return $this->apiResponse("true", "200",json_encode($request->pickup_location).$request->pickup_location, [], null);
-            // dd($request->pickup_location);
-            // dd($locationData);
             ProductLocation::create([
                 'product_id' => $product->id,
                 'country' => $locationData['country'],
                 'state' => $locationData['stateOrProvince'],
                 'city' => $locationData['city'],
                 'custom_address' => $locationData['name'],
-                'postcode' => $locationData['postcode'] ?? null, // Add postcode if it's available in the response
+                'postcode' => $locationData['postcode'] ?? null,
                 'latitude' => $locationData['latitude'],
                 'longitude' => $locationData['longitude'],
                 'map_address' => $locationData['formatted_address'],
                 'raw_address' => $request->pickup_location,
             ]);
 
-            // $productLocationData = [
-            //     'product_id' => $product->id,
-            //     'country' => $locationData['country'],
-            //     'state' => $locationData['stateOrProvince'],
-            //     'city' => $locationData['city'],
-            //     'custom_address' => $locationData['name'],
-            //     'postcode' => $locationData['postcode'] ?? null, // Add postcode if it's available in the response
-            //     'latitude' => $locationData['latitude'],
-            //     'longitude' => $locationData['longitude'],
-            //     'map_address' => $locationData['formatted_address'],
-            //     'raw_address' => $locationData,
-            // ];
-            // return $this->apiResponse("true", "200", "fjaskhfjkashfjkashf", [], null);
-
             if ($request->has('disable_dates')) {
                 $disableDates = json_decode($request->disable_dates, true);
                 if ($disableDates && count($disableDates)) {
-
                     foreach ($disableDates as $dateRange) {
                         if (count($dateRange) == 1) {
                             ProductDisableDate::create([
@@ -512,6 +479,8 @@ class ProductController extends Controller
                 }
             }
 
+            DB::commit();
+
             $apiResponse = 'success';
             $statusCode = 200;
             $message = 'Product Added successfully!';
@@ -520,6 +489,8 @@ class ProductController extends Controller
             ];
             return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
         } catch (\Throwable $e) {
+            DB::rollback();
+
             $apiResponse = 'error';
             $statusCode = 500;
             $message = $e->getMessage();
@@ -531,12 +502,14 @@ class ProductController extends Controller
 
 
 
+
     /**
      * Updating product from my products.
      */
 
     public function updateProduct(Request $request, $id)
     {
+        DB::beginTransaction();
         try {
             $product = Product::findOrFail($id);
 
@@ -560,16 +533,12 @@ class ProductController extends Controller
                 'product_market_value' => 'required|numeric',
                 'product_link' => 'nullable|url',
                 'min_rent_days' => 'required|integer',
-                // 'disable_dates' => 'array',
                 'disable_dates.*' => 'string',
-                // 'state' => 'required|integer',
-                // 'city' => 'required|integer',
                 'rent_day' => 'required|integer',
                 'rent_week' => 'required|integer',
                 'rent_month' => 'required|integer',
                 'pickup_location' => 'required|string',
                 'images' => 'array',
-                // 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
             ]);
 
             if ($validator->fails()) {
@@ -588,8 +557,6 @@ class ProductController extends Controller
                 'product_market_value' => $request->product_market_value,
                 'product_link' => $request->product_link,
                 'min_days_rent_item' => $request->min_rent_days,
-                // 'state' => $request->state,
-                // 'city' => $request->city,
                 'rent_day' => $request->rent_day,
                 'rent_week' => $request->rent_week,
                 'rent_month' => $request->rent_month,
@@ -603,7 +570,7 @@ class ProductController extends Controller
                 'state' => $locationData['stateOrProvince'],
                 'city' => $locationData['city'],
                 'custom_address' => $locationData['name'],
-                'postcode' => $locationData['postcode'] ?? null, // Add postcode if it's available in the response
+                'postcode' => $locationData['postcode'] ?? null,
                 'latitude' => $locationData['latitude'],
                 'longitude' => $locationData['longitude'],
                 'map_address' => $locationData['formatted_address'],
@@ -615,13 +582,11 @@ class ProductController extends Controller
                 $disableDates = json_decode($request->disable_dates, true);
                 foreach ($disableDates as $dateRange) {
                     if (count($dateRange) == 1) {
-                        // Single date
                         ProductDisableDate::create([
                             'product_id' => $product->id,
                             'disable_date' => \DateTime::createFromFormat('d/m/Y', $dateRange[0])->format('Y-m-d'),
                         ]);
                     } else if (count($dateRange) == 2) {
-                        // Date range
                         $start = \DateTime::createFromFormat('d/m/Y', $dateRange[0]);
                         $end = \DateTime::createFromFormat('d/m/Y', $dateRange[1]);
 
@@ -649,6 +614,8 @@ class ProductController extends Controller
                 }
             }
 
+            DB::commit();
+
             $apiResponse = 'success';
             $statusCode = 200;
             $message = 'Product updated successfully!';
@@ -657,6 +624,8 @@ class ProductController extends Controller
             ];
             return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
         } catch (\Throwable $e) {
+            DB::rollback();
+
             $apiResponse = 'error';
             $statusCode = 500;
             $message = $e->getMessage();
@@ -664,6 +633,7 @@ class ProductController extends Controller
             return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
         }
     }
+
 
 
     /**
