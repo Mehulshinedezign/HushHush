@@ -5,12 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\EmailOtp;
 use App\Models\PhoneOtp;
 use App\Models\User;
+use App\Services\OtpService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 
 class VerifyOtpController extends Controller
 {
+    protected $otpService;
+
+    public function __construct(OtpService $otpService = null)
+    {
+        $this->otpService = $otpService;
+    }
+
     public function showVerifyOtpForm(Request $request)
     {
         $user = User::find($request->user()->id); // Use request to get the authenticated user ID
@@ -39,7 +47,7 @@ class VerifyOtpController extends Controller
         }
 
         try {
-            EmailOtp::where('user_id', $user->id)->update(['status' => "1"]);
+            EmailOtp::where('user_id', $user->id)->update(['email_verified_at' => now()]);
             if (isset($user->phoneOtp->status) && $user->phoneOtp->status == '1') {
                 auth()->login($user);
                 return response()->json(['login' => 1]);
@@ -72,7 +80,7 @@ class VerifyOtpController extends Controller
         }
 
         try {
-            PhoneOtp::where('user_id', $user->id)->update(['status' => "1"]);
+            PhoneOtp::where('user_id', $user->id)->update(['otp_is_verified' => "1"]);
             if (isset($user->emailOtp->status) && $user->emailOtp->status == '1') {
                 auth()->login($user);
                 return response()->json(['login' => 1]);
@@ -81,6 +89,37 @@ class VerifyOtpController extends Controller
         } catch (Exception $ex) {
             return redirect()->route('login')->with('error', $ex->getMessage());
         }
+    }
+
+    public function resendOtp(Request $request, $type)
+    {
+        $userId = $request->query('user_id');
+        $user = User::findOrFail($userId);
+
+        if ($type === 'email') {
+            $otp = $this->otpService->generateOtp($user);
+            // $this->otpService->sendEmailOtp($user, $otp);
+
+            EmailOtp::updateOrCreate(['user_id' => $user->id], [
+                'otp' => $otp,
+                'expires_at' => now()->addMinutes(15),
+                'status' => '0',
+            ]);
+        } elseif ($type === 'phone_number') {
+            $otp = $this->otpService->generateOtp($user);
+            // $this->otpService->sendPhoneOtp($user, $otp);
+
+            PhoneOtp::updateOrCreate(['user_id' => $user->id], [
+                'otp' => $otp,
+                'expires_at' => now()->addMinutes(15),
+                'status' => '0',
+            ]);
+        } else {
+            return redirect()->route('auth.verify_otp_form', ['user_id' => $user->id])->with('error', 'Invalid OTP type.');
+        }
+
+        return redirect()->route('auth.verify_otp_form', ['user_id' => $user->id])
+            ->with('status', ucfirst($type) . ' OTP resent successfully.');
     }
 
 

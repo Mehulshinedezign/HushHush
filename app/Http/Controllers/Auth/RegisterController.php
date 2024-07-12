@@ -277,34 +277,5 @@ class RegisterController extends Controller
 
     }
 
-    public function resendOtp(Request $request, $type)
-    {
-        $userId = $request->query('user_id');
-        $user = User::findOrFail($userId);
 
-        if ($type === 'email') {
-            $otp = $this->otpService->generateOtp($user);
-            // $this->otpService->sendEmailOtp($user, $otp);
-
-            EmailOtp::updateOrCreate(['user_id' => $user->id], [
-                'otp' => $otp,
-                'expires_at' => now()->addMinutes(15),
-                'status' => '0',
-            ]);
-        } elseif ($type === 'phone_number') {
-            $otp = $this->otpService->generateOtp($user);
-            // $this->otpService->sendPhoneOtp($user, $otp);
-
-            PhoneOtp::updateOrCreate(['user_id' => $user->id], [
-                'otp' => $otp,
-                'expires_at' => now()->addMinutes(15),
-                'status' => '0',
-            ]);
-        } else {
-            return redirect()->route('auth.verify_otp_form', ['user_id' => $user->id])->with('error', 'Invalid OTP type.');
-        }
-
-        return redirect()->route('auth.verify_otp_form', ['user_id' => $user->id])
-            ->with('status', ucfirst($type) . ' OTP resent successfully.');
-    }
 }
