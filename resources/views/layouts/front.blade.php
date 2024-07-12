@@ -91,7 +91,7 @@
                                 <input type="hidden" name="rentaltype" value="Day">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="">Add Product Images (Up to 5)</label>
+                                        <label for="">Add Product Images (Up to 5)*</label>
                                         <div class="formfield">
                                             <label class="img-upload-box mb-4" for="upload-image-five">
                                                 <span>
@@ -121,7 +121,7 @@
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Product Name</label>
+                                            <label for="">Product Name*</label>
                                             <div class="formfield">
                                                 <input type="text" name="product_name" id=""
                                                     placeholder="Enter Name" class="form-control">
@@ -216,7 +216,7 @@
 
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Country</label>
+                                            <label for="">Country*</label>
                                             <div class="formfield">
                                                 <select name="country" class="form-control" id="country-select">
                                                     <option value="">Select Country</option>
@@ -235,7 +235,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">State/city</label>
+                                            <label for="">State/city*</label>
                                             <div class="duel-select-field">
                                                 <div class="formfield">
                                                     <select class="" name="state" id="state-select">
@@ -260,7 +260,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Non-Available Dates</label>
+                                            <label for="">Non-Available Dates*</label>
                                             <div class="formfield">
                                                 <input type="text" name="non_available_dates"
                                                     id="non_available_date" placeholder="Select Dates"
@@ -274,7 +274,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Condition</label>
+                                            <label for="">Condition*</label>
                                             <div class="formfield">
 
                                                 {{-- <input type="text" name="product_condition" id=""
@@ -294,7 +294,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Pickup Location</label>
+                                            <label for="">Pickup Location*</label>
                                             <div class="formfield">
                                                 <textarea name="pick_up_location" id="" rows="4" class="form-control" placeholder="Text"></textarea>
                                             </div>
@@ -302,7 +302,7 @@
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Description</label>
+                                            <label for="">Description*</label>
                                             <div class="formfield">
                                                 <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description"></textarea>
                                             </div>
@@ -311,7 +311,7 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Product market value</label>
+                                            <label for="">Product market value*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="text" class="form-control"
                                                     name="product_market_value" value="">
@@ -332,7 +332,7 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Minimum number of rental days</label>
+                                            <label for="">Minimum number of rental days*</label>
                                             <div class="formfield ">
                                                 <input type="text" class="form-control" name="min_rent_days"
                                                     placeholder="Rental days" value="">
@@ -344,7 +344,7 @@
 
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Rent Price/Day</label>
+                                            <label for="">Rent Price/Day*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="text" name="rent_price_day" id=""
                                                     placeholder="" class="form-control">
@@ -354,7 +354,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group ">
-                                            <label for="">Rent Price/Week</label>
+                                            <label for="">Rent Price/Week*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="text" name="rent_price_week" id=""
                                                     placeholder="" class="form-control">
@@ -364,7 +364,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group ">
-                                            <label for="">Rent Price/Month</label>
+                                            <label for="">Rent Price/Month*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="text" name="rent_price_month" id=""
                                                     placeholder="" class="form-control">
@@ -394,6 +394,32 @@
                             </form>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade addbank-Modal" id="addbank-Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">Add your bank details</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="#" method="POST">
+                        @csrf
+                        <div class="profile-select-box border-disabled">
+                            <ul class="profile-check-list">
+                             
+                                <a href="javascript:void(0)" data-bs-dismiss="modal" arial-label="Close">Cancel</a>
+                               
+                                <button type="submit" id="bank_info">Submit</button>
+                       
+                            </ul>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>
@@ -444,9 +470,8 @@
     <script src="{{ asset('js/daterangepicker.js') }}"></script>
     <script src="{{ asset('js/jquery-validation.min.js') }}"></script>
     <script src="{{ asset('js/additional-methods.min.js') }}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOyw9TNt8YzANQjJMjjijfr8MC2DV_f1s&libraries=places">
+        <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places"> </script>
     </script>
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <!-- Include DateRangePicker JS -->
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="{{ asset('js/custom/customer-search-location.js') }}"></script>
@@ -630,10 +655,10 @@
                     format: 'YYYY-MM-DD'
                 },
                 drops: 'down',
-                opens: 'right'
+                opens: 'right',
+                minDate: moment().startOf('day') // Disable previous dates
             }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format(
-                    'YYYY-MM-DD'));
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
             });
 
             $('.daterange-btn').daterangepicker({
@@ -643,13 +668,12 @@
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
                     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                     'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
-                        'month').endOf('month')]
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                 },
                 autoUpdateInput: false,
+                minDate: moment().startOf('day') // Disable previous dates
             }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format(
-                    'MMMM D, YYYY'));
+                $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
             });
 
             $('.productLink').on('click', function() {
