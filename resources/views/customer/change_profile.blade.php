@@ -62,7 +62,7 @@
                                         <div class="my-pro-detail-para">
                                             <p>Email</p>
                                             <div class="my-pro-edit-form">
-                                                <div class="form-group">
+                                                <div class="form-group ">
                                                     <div class="formfield form-control">
                                                         {{-- <input type="email" name="email" id="email"
                                                             class="form-control @error('email') is-invalid @enderror"
@@ -102,6 +102,70 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-4">
+                                <div class="my-pro-detail">
+                                    <div class="my-pro-detail-left">
+                                        <div class="my-pro-detail-para">
+                                            <p>Country</p>
+                                            <div class="my-pro-edit-form">
+                                                <div class="form-group">
+                                                    <div class="formfield">
+                                                        <input type="text" placeholder="Country" id="country" class="form-control">
+                                                    </div>
+                                                </div>
+                                                @error('complete_address')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="my-pro-detail">
+                                    <div class="my-pro-detail-left">
+                                        <div class="my-pro-detail-para">
+                                            <p>State</p>
+                                            <div class="my-pro-edit-form">
+                                                <div class="form-group">
+                                                    <div class="formfield">
+                                                        <input type="text" name="state" placeholder="state" id="state" class="form-control">
+                                                    </div>
+                                                </div>
+                                                @error('complete_address')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="my-pro-detail">
+                                    <div class="my-pro-detail-left">
+                                        <div class="my-pro-detail-para">
+                                            <p>City</p>
+                                            <div class="my-pro-edit-form">
+                                                <div class="form-group">
+                                                    <div class="formfield">
+                                                        <input type="text" name="city" id="city" placeholder="City"  class="form-control">
+                                                    </div>
+                                                </div>
+                                                @error('complete_address')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="col-md-12 user_bank_details p-0">
                                 <div class="my-pro-detail">
                                     <div class="my-pro-detail-left">
@@ -227,81 +291,17 @@
 
 @push('scripts')
     @includeFirst(['validation'])
-    <script src="{{ asset('js/custom/notification-setting.js') }}"></script>
-    <script src="{{ asset('js/custom/toggle-password.js') }}"></script>
-    <script src="{{ asset('js/custom/profile.js') }}"></script>
     <script src="{{ asset('js/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('js/custom/card.js') }}"></script>
+
 
     <script>
-        // jQuery(document).ready(function() {
-        //     $("#save_user").find('button').attr('disabled', false);
-        //     const rules = {
-        //         name: {
-        //             required: true,
-        //         },
-        //         email: {
-        //             required: true,
-        //             email: true,
-        //             regex: emailRegex,
-        //         },
-        //         complete_address: {
-        //             required: true,
-        //         },
-        //         account_holder_first_name: {
-        //             required: true,
-        //         },
-        //         account_holder_last_name: {
-        //             required: true,
-        //         },
-        //         date_of_birth: {
-        //             required: true,
-        //         },
-        //         account_number: {
-        //             required: true,
-        //         },
-        //         routing_number: {
-        //             required: true,
-        //         }
-        //     }
-        //     const messages = {
-        //         name: {
-        //             required: `{{ __('customvalidation.user.name.required') }}`,
-        //         },
-        //         email: {
-        //             required: `{{ __('customvalidation.user.email.required') }}`,
-        //             email: `{{ __('customvalidation.user.email.email') }}`,
-        //             regex: `{{ __('customvalidation.user.email.regex', ['regex' => '${emailRegex}']) }}`,
-        //         },
-        //         complete_address: {
-        //             required: 'This field is required.',
-        //         },
-        //         account_holder_first_name: {
-        //             required: 'This field is required.',
-        //         },
-        //         account_holder_last_name: {
-        //             required: 'This field is required.',
-        //         },
-        //         date_of_birth: {
-        //             required: 'This field is required.',
-        //         },
-        //         account_number: {
-        //             required: 'This field is required.',
-        //         },
-        //         routing_number: {
-        //             required: 'This field is required.',
-        //         }
-        //     };
-
-        //     handleValidation('save_user', rules, messages);
-        // });
         jQuery(document).ready(function() {
             $("#save_user").find('button').attr('disabled', false);
 
             const nameRegex = /^[a-zA-Z\s]+$/;
             const lastNameRegex = /^[a-zA-Z]+$/;
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            const addressRegex = /^[a-zA-Z0-9\s,.'-]{3,}$/;
+            // const addressRegex = /^[a-zA-Z0-9\s,.'-]{3,}$/;
             const dateOfBirthRegex = /^\d{4}-\d{2}-\d{2}$/;
             const accountNumberRegex = /^\d+$/;
             const routingNumberRegex = /^\d+$/;
@@ -318,7 +318,7 @@
                 },
                 complete_address: {
                     required: true,
-                    regex: addressRegex,
+                    // regex: addressRegex,
                 },
                 account_holder_first_name: {
                     required: true,
@@ -354,7 +354,7 @@
                 },
                 complete_address: {
                     required: 'This field is required.',
-                    regex: 'Address must contain only letters, numbers, spaces, commas, periods, and hyphens.',
+                    // regex: 'Address must contain only letters, numbers, spaces, commas, periods, and hyphens.',
                 },
                 account_holder_first_name: {
                     required: 'This field is required.',
@@ -421,6 +421,36 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             });
+
+
+            // google place api 
+            function initAutocomplete() {
+                var input = document.getElementById('address');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+                
+                autocomplete.addListener('place_changed', function() {
+                    var place = autocomplete.getPlace();
+                    
+                    $('#country, #state, #city').val('');  
+                    
+                    $.each(place.address_components, function(index, component) {
+                        var addressType = component.types[0];
+                        
+                        if (addressType === 'country') {
+                            $('#country').val(component.long_name).prop('readonly', true);
+                        }
+                        if (addressType === 'administrative_area_level_1') {
+                            $('#state').val(component.long_name).prop('readonly', true);
+                        }
+                        if (addressType === 'locality') {
+                            $('#city').val(component.long_name).prop('readonly', true);
+                        }
+                    });
+                });
+            }
+
+            google.maps.event.addDomListener(window, 'load', initAutocomplete);
+
         });
 
         const bank = new URLSearchParams(window.location.search);

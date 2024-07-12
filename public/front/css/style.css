@@ -847,9 +847,10 @@ span.remove-image {
     line-height: 18px;
 }
 
-.add-pro-form .form-group textarea.form-control{
+.add-pro-form .form-group textarea.form-control {
     max-height: 60px;
     resize: none;
+    padding: 18px 24px;
 }
 
 
@@ -897,10 +898,10 @@ body.loading .overlay {
 }.error{
     color: red;
 }
-.formfield.form-control {
+/* .formfield.form-control {
     border: 0;
     padding-left: 0;
-}
+} */
 
 .daterangepicker td.active, .daterangepicker td.active:hover {
     background-color: var(--primary-color) !important;
@@ -916,6 +917,23 @@ body.loading .overlay {
     min-height: 40px;
 }
 
+
+.alert-container .alert {
+    display: flex;
+    gap: 20px;
+    position: relative;
+}
+
+.alert-container .alert .alert-cross {
+    position: absolute;
+    top: 13px;
+    right: 13px;
+}
+
+.alert-container .alert .alert-cross.close svg {
+    width: 15px;
+    height: 15px;
+}
 
 
 

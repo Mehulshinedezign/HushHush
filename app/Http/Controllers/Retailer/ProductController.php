@@ -281,8 +281,9 @@ class ProductController extends Controller
             }
 
 
+            return redirect()->route('product')->with('success', "Your product has been uploaded successfully.");
 
-            return redirect()->back()->with('success', "Your product has been uploaded successfully.");
+            // return redirect()->back()->with('success', "Your product has been uploaded successfully.");
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

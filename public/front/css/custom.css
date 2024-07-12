@@ -258,7 +258,7 @@ span.left-form-icon {
 
 .home-product-box {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 60px 25px;
 }
 
@@ -281,7 +281,7 @@ span.left-form-icon {
     align-items: center;
     top: 15px;
     right: 20px;
-    transform: translateY(-50px);
+    /* transform: translateY(-50px); */
     transition: all 0.2s ease-in;
 }
 
@@ -423,7 +423,7 @@ span.left-form-icon {
 
 .home-filter-product:has(.home-filter-box.expand) .home-product-box {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 60px 25px;
 }
 
@@ -1039,7 +1039,7 @@ span.left-form-icon {
     max-height: 60px;
     border: 1px solid;
     border-color: var(--border-color);
-    padding: 10px 18px;
+    padding: 10px 10px 10px 0px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     /* gap: 10px; */
@@ -1942,4 +1942,34 @@ span.left-form-icon {
     gap: 20px;
     flex-wrap: wrap;
 }
+.pro-desc-prize-wrapper{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.duel-select-field .formfield:first-child select{
+    padding: 0px 20px 0px 18px;
+}
+
+
+.alert-container .alert {
+    display: flex;
+    gap: 20px;
+    position: relative;
+}
+
+.alert-container .alert .alert-cross {
+    position: absolute;
+    top: 13px;
+    right: 13px;
+}
+
+.alert-container .alert .alert-cross.close svg {
+    width: 15px;
+    height: 15px;
+}
+
+
+
 

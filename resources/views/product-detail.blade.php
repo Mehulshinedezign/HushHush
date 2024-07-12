@@ -184,12 +184,28 @@
                     <div class="col-lg-4 col-md-12">
                         <div class="pro-desc-details-main">
                             <h4 class="pro-desc-name">{{ $product->name }}</h4>
-                            <div class="pro-desc-prize">
-                                <h3>${{ $product->rent_day }}</h3>
-                                <div class="badge day-badge">
-                                    Per day
-                                </div>
+                            <div class="pro-desc-prize-wrapper">
+                                <div class="pro-desc-prize">
+                                    <h3>${{ $product->rent_day }}</h3>
+                                    <div class="badge day-badge">
+                                        Per day
+                                    </div>
 
+                                </div>
+                                <div class="pro-desc-prize">
+                                    <h3>${{ $product->rent_week }}</h3>
+                                    <div class="badge day-badge">
+                                        Per month
+                                    </div>
+
+                                </div>
+                                <div class="pro-desc-prize">
+                                    <h3>${{ $product->rent_month }}</h3>
+                                    <div class="badge day-badge">
+                                        Per Year 
+                                    </div>
+
+                                </div>
                             </div>
                             <div class="pro-desc-info">
                                 <div class="pro-desc-info-box">

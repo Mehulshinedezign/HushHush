@@ -306,11 +306,11 @@
                     <ul>
                         <li>
                              @if (is_null($vendorBankDetails))
-                                <div class="addProductButton" data-bs-toggle="modal" data-bs-target="">
+                                <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
                                     Add New Product
                                 </div>
                              @else
-                                <div class="addProductButton" data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
+                                <div data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
                                     Add New Product
                                 </div>   
                              @endif   
@@ -713,16 +713,6 @@
     </nav>
 </header>
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('.addProductButton').on('click', function(event) {
-                console.log("addd");
-                @if (is_null($vendorBankDetails))
-                    window.location.href = "{{ route('change-Profile',['user' => $user ,'bank'=>'not_bank_details']) }}";
-                    event.preventDefault();
-                @endif
-            });
-        });
-    </script>  
+
 @endpush
 
