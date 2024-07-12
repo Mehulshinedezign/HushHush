@@ -301,11 +301,11 @@
                 <div class="header-cart">
                     @php
                         $user = auth()->user();
-                        $vendorBankDetails = auth()->user()->vendorBankDetails;
+                        $userBankInfo = auth()->user()->userBankInfo;
                     @endphp
                     <ul>
                         <li>
-                             @if (is_null($vendorBankDetails))
+                             @if (is_null($userBankInfo))
                                 <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
                                     Add New Product
                                 </div>

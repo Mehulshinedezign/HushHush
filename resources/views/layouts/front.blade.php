@@ -403,24 +403,22 @@
     <div class="modal fade addbank-Modal" id="addbank-Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="exampleModalLabel">Add your bank details</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
                 <div class="modal-body">
-                    <form action="#" method="POST">
+                    <form action="{{ route('stripe.onboarding.redirect') }}" method="POST">
+                        <h3 class="modal-title" id="exampleModalLabel">Add your bank details</h3>
                         @csrf
+                        <img src="{{ asset('front/images/bank-img.png') }}" alt="">
                         <div class="profile-select-box border-disabled">
-                            <ul class="profile-check-list">
+                            <div class="profile-check-list">
                              
-                                <a href="javascript:void(0)" data-bs-dismiss="modal" arial-label="Close">Cancel</a>
+                                <a href="javascript:void(0)" data-bs-dismiss="modal" arial-label="Close" class="button outline-btn full-btn">Cancel</a>
                                
-                                <button type="submit" id="bank_info">Submit</button>
+                                <button type="submit" class="button primary-btn full-btn" id="bank_info">Yes</button>
                        
-                            </ul>
+                            </div>
                         </div>
                     </form>
-
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
             </div>
         </div>

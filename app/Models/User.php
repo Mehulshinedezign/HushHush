@@ -122,6 +122,10 @@ class User extends Authenticatable
         return $this->hasOne(RetailerBankInformation::class, 'retailer_id');
     }
 
+    public function userBankInfo(){
+        return $this->hasone(UserBankDetail::class,'user_id');
+    }
+
     public function vendorCompletedOrderedItems()
     {
         return $this->hasMany(OrderItem::class, 'retailer_id')->where([

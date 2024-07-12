@@ -866,7 +866,7 @@ span.remove-image {
     gap: 20px;
 }
 .list-empty-box img {
-    max-width: 100px;
+    max-width: 300px;
     text-align: center;
 }
 .duel-select-field .form-icon {
@@ -934,9 +934,35 @@ body.loading .overlay {
     width: 15px;
     height: 15px;
 }
-
-
-
+.addbank-Modal .modal-body{
+    position: relative;
+}
+.addbank-Modal .modal-body .btn-close {
+    position: absolute;
+    opacity: 1;
+    top: 10px;
+    right: 10px;
+    min-height: unset;
+}
+.profile-check-list {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+.addbank-Modal .modal-body h3 {
+    text-align: center;
+    font-size: 24px;
+    line-height: 28px;
+    margin-bottom: 20px;
+}
+.profile-select-box.border-disabled {
+    width: 100%;
+}
+.addbank-Modal .modal-body form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 
 

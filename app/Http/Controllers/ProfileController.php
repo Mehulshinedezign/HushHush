@@ -59,13 +59,13 @@ class ProfileController extends Controller
         // card index
         $cards = UserCard::where('user_id', auth()->user()->id)->get();
         // dd($user->getCashier());
-        $stripePublicKey = config('cashier.key');
-        $stripeCustomer = $user->createOrGetStripeCustomer();
-        $intent = $user->createSetupIntent();
+        // $stripePublicKey = config('cashier.key');/
+        // $stripeCustomer = $user->createOrGetStripeCustomer();
+        // $intent = $user->createSetupIntent();
 
         // bankdetails
         $bankDetail = RetailerBankInformation::where('retailer_id', $user->id)->first();
-        return view('customer.edit_profile', compact('user', 'countries', 'states', 'cities', 'selectedCountryId', 'notAvailable', 'cards', 'stripePublicKey', 'stripeCustomer', 'intent', 'bankDetail'));
+        return view('customer.edit_profile', compact('user', 'countries', 'states', 'cities', 'selectedCountryId', 'notAvailable', 'cards', 'bankDetail'));
     }
 
     public function saveUserDetail(UserDetailRequest $request)
@@ -520,7 +520,44 @@ class ProfileController extends Controller
 
     public function saveUserprofile(Request $request)
     {
-        
+
+        $complete_address = $request->input('complete_address');
+        $address = urlencode($complete_address);
+
+        $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=" . config('services.google_maps.api_key');
+        $response = file_get_contents($url);
+        $data = json_decode($response);
+
+        if ($data->status == 'OK') {
+            $result = $data->results[0];
+            $addressLine1 = '';
+            $addressLine2 = '';
+            $country = '';
+            $state = '';
+            $city = '';
+            $pincode = '';
+    
+            foreach ($result->address_components as $component) {
+                if (in_array('street_number', $component->types)) {
+                    $addressLine1 = $component->long_name; 
+                }
+                if (in_array('route', $component->types)) {
+                    $addressLine2 = $component->long_name; 
+                }
+                if (in_array('country', $component->types)) {
+                    $country = $component->long_name;
+                }
+                if (in_array('administrative_area_level_1', $component->types)) {
+                    $state = $component->long_name;
+                }
+                if (in_array('locality', $component->types)) {
+                    $city = $component->long_name;
+                }
+            }
+    
+        }
+
+       
         try {
             $user = auth()->user();
             $data = [
@@ -539,13 +576,13 @@ class ProfileController extends Controller
                 $data['profile_file'] = $path;
             }
 
-            // $user->update($data);
-            // if ($request->email !== $user->email) {
-            //     unset($data['email']);
-            // }
-
             $userdetail = [
-                'address1' => $request->complete_address,
+                'complete_address' => $complete_address,
+                'address1' => $addressLine1,
+                'address2' => $addressLine2,
+                'country' => $country,
+                'state' => $state,
+                'city' => $city,
                 'about' => $request->about ?? null,
             ];
 
@@ -570,13 +607,12 @@ class ProfileController extends Controller
             ]);
             $user->update($data);
 
-            if ($user->userDetail) {
-                $user->userDetail()->update($userdetail);
-            }
+            $user->userDetail()->updateOrCreate(
+                ['user_id' => $user->id], 
+                $userdetail
+            );
 
             return redirect()->route('edit-account')->with('success', __('user.messages.profileUpdated'));
-            // return redirect()->back()->with('success', __('user.messages.profileUpdated'));
-            // return redirect()->route('index')->with('success', __('user.messages.profileUpdated'));
         } catch (Exception $exception) {
             return redirect()->back();
         }

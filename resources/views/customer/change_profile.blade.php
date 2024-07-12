@@ -89,7 +89,7 @@
                                                 <div class="form-group">
                                                     <div class="formfield">
                                                         <textarea name="complete_address" id="address" placeholder="Address"
-                                                            class="form-control @error('complete_address') is-invalid @enderror">{{ $user->userDetail->address1 }}</textarea>
+                                                            class="form-control @error('complete_address') is-invalid @enderror">{{ $user->userDetail->complete_address ?? ''}}</textarea>
                                                     </div>
                                                 </div>
                                                 @error('complete_address')
@@ -262,7 +262,7 @@
                                                                     <div class="form-group">
                                                                         <div class="formfield">
                                                                             <textarea name="about" id="about" placeholder="About me"
-                                                                                class="form-control @error('about') is-invalid @enderror">{{ $user->userDetail->about }}</textarea>
+                                                                                class="form-control @error('about') is-invalid @enderror">{{ $user->userDetail->about ?? ''}}</textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
