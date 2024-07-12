@@ -192,7 +192,7 @@ if (!function_exists('check_chat_exist')) {
     }
 }
 
-// 
+//
 if (!function_exists('leaveReview')) {
     function leaveReview($id)
     {
@@ -290,15 +290,26 @@ if (!function_exists('check_order_list_paginate_retailer')) {
         {
             $status = PhoneOtp::where('user_id', $user)->first();
 
-            return $status->status ==  1 ? false : true;
+            // Check if the record exists before accessing the status property
+            if (!$status) {
+                return true; // Assuming no record means not verified
+            }
+
+            return $status->status == 1 ? false : true;
         }
     }
+
     if (!function_exists('emailValidate')) {
         function emailValidate($user)
         {
             $status = EmailOtp::where('user_id', $user)->first();
 
-            return $status->status ==  1 ? false : true;
+            // Check if the record exists before accessing the status property
+            if (!$status) {
+                return true; // Assuming no record means not verified
+            }
+
+            return $status->status == 1 ? false : true;
         }
     }
 }

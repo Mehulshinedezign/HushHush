@@ -42,9 +42,10 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
     });
 
     // verify otp
-    Route::get('/verify-otp', [App\Http\Controllers\VerifyOtpController::class, 'showVerifyOtpForm'])->name('verify.otp');
+    Route::get('verify-otp', [App\Http\Controllers\VerifyOtpController::class, 'showVerifyOtpForm'])->name('auth.verify_otp_form');
+
     Route::post('/verify/email/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyEmailOtp'])->name('verify.email.otp');
-    Route::get('/resend-otp', [App\Http\Controllers\Auth\RegisterController::class, 'resendOtp'])->name('resend.otp');
+    Route::get('/resend-otp/{type}', [App\Http\Controllers\auth\RegisterController::class, 'resendOtp'])->name('resend.otp');
     Route::post('/verify/phone/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyPhoneOtp'])->name('verify.phone.otp');
 
     Route::middleware('auth', 'restrict-admin-retailer')->group(function () {
@@ -83,7 +84,7 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
     });
 
     Route::middleware('auth')->group(function () {
-        //Retailer order 
+        //Retailer order
         Route::match(['get', 'post'], 'retailer/order', [App\Http\Controllers\Retailer\OrderController::class, 'index'])->name('retailercustomer');
         Route::get('order/{order}', [App\Http\Controllers\Retailer\OrderController::class, 'viewOrder'])->name('retailervieworder');
         Route::post('retailer/order/{order}/pickup', [App\Http\Controllers\Retailer\OrderController::class, 'orderPickUp'])->name('retailerorderpickup');

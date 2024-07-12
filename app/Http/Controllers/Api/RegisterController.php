@@ -75,7 +75,7 @@ class RegisterController extends Controller
             $full_number = $country_code . $number;
 
             $otp = $this->otpService->generateOtp($user);
-            $this->otpService->sendOtp($otp, $full_number);
+            // $this->otpService->sendOtp($otp, $full_number);
 
             // $otp = $this->otpService->generateOtp($user);
             $user->notify(new EmailOtpVerification($user, $otp));
