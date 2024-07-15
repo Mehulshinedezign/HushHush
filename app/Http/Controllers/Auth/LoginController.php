@@ -68,7 +68,7 @@ class LoginController extends Controller
         }
 
         // Check OTP verification and email verification
-        if ($user->otp_is_verified != 1 || is_null($user->email_verification_token)) {
+        if ($user->otp_is_verified != 1 || is_null($user->email_verified_at)) {
             return redirect()->route('auth.verify_otp_form')->with('error', 'Please verify your OTP and email.');
         }
 

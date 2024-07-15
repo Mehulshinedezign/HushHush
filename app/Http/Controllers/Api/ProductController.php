@@ -395,16 +395,16 @@ class ProductController extends Controller
             $user = $request->user();
             $is_bankdetail = $user->vendorBankDetails;
 
-            if (is_null($is_bankdetail)) {
-                $apiResponse = 'error';
-                $statusCode = 422;
-                $message = "Please enter bank details before adding products";
-                $data = [
-                    'user_id' => $user->id,
-                    'bankdetail' => $is_bankdetail,
-                ];
-                return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
-            }
+            // if (is_null($is_bankdetail)) {
+            //     $apiResponse = 'error';
+            //     $statusCode = 422;
+            //     $message = "Please enter bank details before adding products";
+            //     $data = [
+            //         'user_id' => $user->id,
+            //         'bankdetail' => $is_bankdetail,
+            //     ];
+            //     return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
+            // }
 
             $data = [
                 'name' => $request->name,
