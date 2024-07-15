@@ -26,75 +26,75 @@ class VerifyOtpController extends Controller
     }
 
     public function verifyEmailOtp(Request $request)
-{
-    $request->validate([
-        'emailotp' => 'required|digits:6',
-    ], [
-        'emailotp.required' => 'OTP is required',
-        'emailotp.digits' => 'OTP must be 6 digits',
-    ]);
+    {
+        $request->validate([
+            'emailotp' => 'required|digits:6',
+        ], [
+            'emailotp.required' => 'OTP is required',
+            'emailotp.digits' => 'OTP must be 6 digits',
+        ]);
 
-    $user = User::with('emailOtp', 'phoneOtp')->where('id', $request->user_id)->firstOrFail();
+        $user = User::with('emailOtp', 'phoneOtp')->where('id', $request->user_id)->firstOrFail();
 
-    if ($user->emailOtp->otp != $request->emailotp) {
-        return response()->json(['status' => false, 'message' => 'Invalid OTP']);
-    }
-
-    if (Carbon::now() >= $user->emailOtp->expires_at) {
-        return response()->json(['status' => false, 'message' => 'OTP has expired']);
-    }
-
-    try {
-        $user->emailOtp->update(['status' => '1']);
-        $user->update(['email_verified_at' => carbon::now()]);
-
-        if ($user->email_verified_at && $user->otp_is_verified) {
-            auth()->login($user);
-            return response()->json(['login' => 1]);
+        if ($user->emailOtp->otp != $request->emailotp) {
+            return response()->json(['status' => false, 'message' => 'Invalid OTP']);
         }
 
-        return response()->json(['status' => true, 'message' => 'Email OTP verified successfully']);
-    } catch (Exception $ex) {
-        return response()->json(['status' => false, 'message' => $ex->getMessage()]);
+        if (Carbon::now() >= $user->emailOtp->expires_at) {
+            return response()->json(['status' => false, 'message' => 'OTP has expired']);
+        }
+
+        try {
+            $user->emailOtp->update(['status' => '1']);
+            $user->update(['email_verified_at' => carbon::now()]);
+
+            if ($user->email_verified_at && $user->otp_is_verified) {
+                auth()->login($user);
+                return response()->json(['login' => 1]);
+            }
+
+            return response()->json(['status' => true, 'message' => 'Email OTP verified successfully']);
+        } catch (Exception $ex) {
+            return response()->json(['status' => false, 'message' => $ex->getMessage()]);
+        }
     }
-}
 
 
 
 
     public function verifyPhoneOtp(Request $request)
-{
-    $request->validate([
-        'phoneotp' => 'required|digits:6',
-    ], [
-        'phoneotp.required' => 'OTP is required',
-        'phoneotp.digits' => 'OTP must be 6 digits',
-    ]);
+    {
+        $request->validate([
+            'phoneotp' => 'required|digits:6',
+        ], [
+            'phoneotp.required' => 'OTP is required',
+            'phoneotp.digits' => 'OTP must be 6 digits',
+        ]);
 
-    $user = User::with('phoneOtp', 'emailOtp')->where('id', $request->user_id)->firstOrFail();
+        $user = User::with('phoneOtp', 'emailOtp')->where('id', $request->user_id)->firstOrFail();
 
-    if ($user->phoneOtp->otp != $request->phoneotp) {
-        return response()->json(['status' => false, 'message' => 'Invalid OTP']);
-    }
-
-    if (Carbon::now() >= $user->phoneOtp->expires_at) {
-        return response()->json(['status' => false, 'message' => 'OTP has expired']);
-    }
-
-    try {
-        $user->phoneOtp->update(['status' => '1']);
-        $user->update(['otp_is_verified' => '1']);
-
-        if ($user->email_verified_at && $user->otp_is_verified) {
-            auth()->login($user);
-            return response()->json(['login' => 1]);
+        if ($user->phoneOtp->otp != $request->phoneotp) {
+            return response()->json(['status' => false, 'message' => 'Invalid OTP']);
         }
 
-        return response()->json(['status' => true, 'message' => 'Phone OTP verified successfully']);
-    } catch (Exception $ex) {
-        return response()->json(['status' => false, 'message' => $ex->getMessage()]);
+        if (Carbon::now() >= $user->phoneOtp->expires_at) {
+            return response()->json(['status' => false, 'message' => 'OTP has expired']);
+        }
+
+        try {
+            $user->phoneOtp->update(['status' => '1']);
+            $user->update(['otp_is_verified' => '1']);
+
+            if ($user->email_verified_at && $user->otp_is_verified) {
+                auth()->login($user);
+                return response()->json(['login' => 1]);
+            }
+
+            return response()->json(['status' => true, 'message' => 'Phone OTP verified successfully']);
+        } catch (Exception $ex) {
+            return response()->json(['status' => false, 'message' => $ex->getMessage()]);
+        }
     }
-}
 
 
 
