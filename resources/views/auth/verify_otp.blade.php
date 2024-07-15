@@ -4,7 +4,7 @@
         <div class="form-setup login-form">
             <x-alert />
             {{-- @dd($user); --}}
-            @if (emailValidate($user->id))
+            @if (emailValidate($user))
                 <form id="emailOtpVerify" class="form-inline" action="{{ route('verify.email.otp') }}" method="POST">
                     @csrf
                     <input type="hidden" name="user_id" value="{{ $user->id }}">

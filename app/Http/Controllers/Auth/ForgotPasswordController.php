@@ -69,7 +69,7 @@ class ForgotPasswordController extends Controller
         }
 
         $otp = $this->otpService->generateOtp($user);
-        $this->otpService->sendOtp($otp, $full_number);
+        // $this->otpService->sendOtp($otp, $full_number);
 
         $request->session()->put('phone_number', $main_number);
         session()->forget('error');
@@ -116,7 +116,7 @@ class ForgotPasswordController extends Controller
         }
 
         $otp = $this->otpService->generateOtp($user);
-        $this->otpService->sendOtp($otp, $request->input('phone_number.full'));
+        // $this->otpService->sendOtp($otp, $request->input('phone_number.full'));
 
         return response()->json(['message' => 'OTP sent successfully'], 200);
     }

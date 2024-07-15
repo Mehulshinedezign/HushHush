@@ -43,10 +43,10 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
 
     // verify otp
     Route::get('verify-otp', [App\Http\Controllers\VerifyOtpController::class, 'showVerifyOtpForm'])->name('auth.verify_otp_form');
-
     Route::post('/verify/email/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyEmailOtp'])->name('verify.email.otp');
-    Route::get('/resend-otp/{type}', [App\Http\Controllers\VerifyOtpController::class, 'resendOtp'])->name('resend.otp');
     Route::post('/verify/phone/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyPhoneOtp'])->name('verify.phone.otp');
+    Route::get('/resend-otp/{type}', [App\Http\Controllers\VerifyOtpController::class, 'resendOtp'])->name('resend.otp');
+
 
     Route::middleware('auth', 'restrict-admin-retailer')->group(function () {
         Route::get('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index');

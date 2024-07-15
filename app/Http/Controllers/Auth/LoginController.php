@@ -116,4 +116,17 @@ class LoginController extends Controller
         Auth::login($user);
         return redirect($this->redirectPath());
     }
+
+    protected function getRedirectUrl($user)
+    {
+        if ($user->role->name == 'admin') {
+            return 'admin/dashboard';
+        } elseif ($user->role->name == 'retailer') {
+            return 'retailer/dashboard';
+        } elseif ($user->role->name == 'customer') {
+            return route('index');
+        }
+
+        return '/';
+    }
 }

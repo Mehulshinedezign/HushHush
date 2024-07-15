@@ -21,7 +21,7 @@ class VerifyOtpController extends Controller
 
     public function showVerifyOtpForm(Request $request)
     {
-        $user = User::find($request->user()->id); // Use request to get the authenticated user ID
+        $user = User::find($request->user->id);
         return view('auth.verify_otp', compact('user'));
     }
 
@@ -46,11 +46,11 @@ class VerifyOtpController extends Controller
 
         try {
             $user->emailOtp->update(['status' => '1']);
-            $user->update(['email_verified_at' => carbon::now()]);
+            $user->update(['email_verified_at' => Carbon::now()]);
 
             if ($user->email_verified_at && $user->otp_is_verified) {
                 auth()->login($user);
-                return response()->json(['login' => 1]);
+                return response()->json(['login' => 1, 'redirect' => $this->getRedirectUrl($user)]);
             }
 
             return response()->json(['status' => true, 'message' => 'Email OTP verified successfully']);
@@ -58,9 +58,6 @@ class VerifyOtpController extends Controller
             return response()->json(['status' => false, 'message' => $ex->getMessage()]);
         }
     }
-
-
-
 
     public function verifyPhoneOtp(Request $request)
     {
@@ -87,7 +84,7 @@ class VerifyOtpController extends Controller
 
             if ($user->email_verified_at && $user->otp_is_verified) {
                 auth()->login($user);
-                return response()->json(['login' => 1]);
+                return response()->json(['login' => 1, 'redirect' => $this->getRedirectUrl($user)]);
             }
 
             return response()->json(['status' => true, 'message' => 'Phone OTP verified successfully']);
@@ -95,6 +92,7 @@ class VerifyOtpController extends Controller
             return response()->json(['status' => false, 'message' => $ex->getMessage()]);
         }
     }
+
 
 
 
@@ -136,7 +134,7 @@ class VerifyOtpController extends Controller
             return redirect()->route('auth.verify_otp_form', ['user_id' => $user->id])->with('error', 'Invalid OTP type.');
         }
 
-        return redirect()->route('auth.verify_otp_form', ['user_id' => $user->id])
+        return redirect()->route('auth.verify_otp_form',  $user->id)
             ->with('status', ucfirst($type) . ' OTP resent successfully.');
     }
 }

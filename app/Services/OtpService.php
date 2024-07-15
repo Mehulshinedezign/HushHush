@@ -36,7 +36,7 @@ class OtpService
         // if ($method == "email") {
 
         //     $user->notify(new SendLoginOtp($otp->otp));
-        // } 
+        // }
         // else {
         $message = "Login OTP is " . $otp;
         $account_sid = env("TWILIO_SID");
