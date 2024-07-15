@@ -513,40 +513,49 @@ class ProductController extends Controller
 
     public function updateProduct(Request $request, $id)
     {
+        // Log the request data
+        // Log::info('Update Product Request Data:', $request->all());
+
         DB::beginTransaction();
         try {
             $product = Product::findOrFail($id);
 
             $user = $request->user();
             if ($product->user_id != $user->id) {
-                return response()->json([
+                $response = [
                     'status' => false,
                     'message' => "You are not authorized to perform this action",
                     'errors' => [],
-                ], 401);
+                ];
+                // Log::info('Update Product Response:', $response);
+                return response()->json($response, 401);
             }
 
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'description' => 'required|string',
-                'category' => 'required',
-                'size' => 'required_without:other_size',
+                'category' => 'required|integer',
+                'size' => 'required|string',
                 'color' => 'required|string',
-                'brand' => 'required',
+                'brand' => 'required|string',
                 'product_condition' => 'required|string',
                 'product_market_value' => 'required|numeric',
                 'product_link' => 'nullable|url',
                 'min_rent_days' => 'required|integer',
-                'disable_dates.*' => 'string',
+                'disable_dates' => 'nullable|string',
                 'rent_day' => 'required|integer',
                 'rent_week' => 'required|integer',
                 'rent_month' => 'required|integer',
                 'pickup_location' => 'required|string',
-                'images' => 'array',
+                // 'deleted_images' => 'nullable|array',
+                // 'deleted_images.*' => 'integer',
+                'images' => 'nullable|array',
             ]);
 
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 422);
+                $response = ['errors' => $validator->errors()];
+                // Log::info('Update Product Response:', $response);
+                return response()->json($response, 422);
             }
 
             $data = [
@@ -567,32 +576,47 @@ class ProductController extends Controller
             ];
 
             $product->update($data);
-            $locationData = json_decode($request->pickup_location, true);
-            ProductLocation::where('product_id', $product->id)->updateOrCreate([
-                'product_id' => $product->id,
-                'country' => $locationData['country'],
-                'state' => $locationData['stateOrProvince'],
-                'city' => $locationData['city'],
-                'custom_address' => $locationData['name'],
-                'postcode' => $locationData['postcode'] ?? null,
-                'latitude' => $locationData['latitude'],
-                'longitude' => $locationData['longitude'],
-                'map_address' => $locationData['formatted_address'],
-                'raw_address' => $request->pickup_location,
-            ]);
 
-            if ($request->has('disable_dates')) {
+            $locationData = json_decode($request->pickup_location, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception("Invalid JSON in pickup_location");
+            }
+
+            ProductLocation::updateOrCreate(
+                ['product_id' => $product->id],
+                [
+                    'country' => $locationData['country'],
+                    'state' => $locationData['stateOrProvince'],
+                    'city' => $locationData['city'],
+                    'custom_address' => $locationData['name'],
+                    'postcode' => $locationData['postcode'] ?? null,
+                    'latitude' => $locationData['latitude'],
+                    'longitude' => $locationData['longitude'],
+                    'map_address' => $locationData['formatted_address'],
+                    'raw_address' => $request->pickup_location,
+                ]
+            );
+
+            if ($request->has('disable_dates') && !empty($request->disable_dates)) {
                 ProductDisableDate::where('product_id', $product->id)->delete();
+                // Log::info('sdfsdfsdfsdffsdfsdfdsfdsfdsfdsfsdfdsfsdfsdfdsfdsfdsfdsfdsfdsfgsdf');
+
+                //   $disableDates = $request->disable_dates;
                 $disableDates = json_decode($request->disable_dates, true);
+
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    throw new \Exception("Invalid JSON in disable_dates");
+                }
+
                 foreach ($disableDates as $dateRange) {
                     if (count($dateRange) == 1) {
                         ProductDisableDate::create([
                             'product_id' => $product->id,
-                            'disable_date' => \DateTime::createFromFormat('d/m/Y', $dateRange[0])->format('Y-m-d'),
+                            'disable_date' => \DateTime::createFromFormat('Y-m-d', $dateRange[0])->format('Y-m-d'),
                         ]);
                     } else if (count($dateRange) == 2) {
-                        $start = \DateTime::createFromFormat('d/m/Y', $dateRange[0]);
-                        $end = \DateTime::createFromFormat('d/m/Y', $dateRange[1]);
+                        $start = \DateTime::createFromFormat('Y-m-d', $dateRange[0]);
+                        $end = \DateTime::createFromFormat('Y-m-d', $dateRange[1]);
 
                         while ($start <= $end) {
                             ProductDisableDate::create([
@@ -605,7 +629,20 @@ class ProductController extends Controller
                 }
             }
 
-            if ($request->hasFile('images')) {
+            if ($request->has('deleted_images')) {
+                $deletedImages = json_decode($request->deleted_images);
+                if (count($deletedImages)) {
+                    foreach ($deletedImages as $imageId) {
+                        $image = ProductImage::find($imageId);
+                        if ($image && $image->product_id == $product->id) {
+                            Storage::disk('public')->delete($image->file_path);
+                            $image->delete();
+                        }
+                    }
+                }
+            }
+
+            if ($request->hasFile('images') && count($request->file('images')) > 0) {
                 foreach ($request->file('images') as $index => $image) {
                     $fileName = $product->id . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
                     $filePath = $image->storeAs('products/images', $fileName, 'public');
@@ -620,23 +657,28 @@ class ProductController extends Controller
 
             DB::commit();
 
-            $apiResponse = 'success';
-            $statusCode = 200;
-            $message = 'Product updated successfully!';
-            $data = [
-                'product_id' => $product->id
+            $response = [
+                'apiResponse' => 'success',
+                'statusCode' => 200,
+                'message' => 'Product updated successfully!',
+                'data' => [
+                    'product_id' => $product->id
+                ],
             ];
-            return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
+            return $this->apiResponse($response['apiResponse'], $response['statusCode'], $response['message'], $response['data'], null);
         } catch (\Throwable $e) {
             DB::rollback();
 
-            $apiResponse = 'error';
-            $statusCode = 500;
-            $message = $e->getMessage();
-            $data = [];
-            return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
+            $response = [
+                'apiResponse' => 'error',
+                'statusCode' => 500,
+                'message' => "dsfsdffsdf",
+                'data' => [],
+            ];
+            return $this->apiResponse($response['apiResponse'], $response['statusCode'], $response['message'], $response['data'], null);
         }
     }
+
 
 
 
@@ -744,7 +786,91 @@ class ProductController extends Controller
         try {
             $authUserId = auth()->user()->id;
             $products = Product::where('user_id', '!=', $authUserId)->get();
+            $categories = getParentCategory();
+            $brands = getBrands();
+            $sizes = getAllsizes();
+            $colors = getColors();
 
+            // Format the filters
+            $filters = [
+                [
+                    'id' => '1',
+                    'name' => 'Category',
+                    'subItems' => $categories->map(function ($category) {
+                        return [
+                            'name' => $category->name,
+                            'isSelect' => false,
+                        ];
+                    })->toArray(),
+                ],
+                [
+                    'id' => '2',
+                    'name' => 'Size',
+                    'subItems' => $sizes->map(function ($size) {
+                        return [
+                            'name' => $size->name,
+                            'isSelect' => false,
+                        ];
+                    })->toArray(),
+                ],
+                [
+                    'id' => '3',
+                    'name' => 'Color',
+                    'subItems' => $colors->map(function ($color) {
+                        return [
+                            'name' => $color->name,
+                            'isSelect' => false,
+                        ];
+                    })->toArray(),
+                ],
+                [
+                    'id' => '4',
+                    'name' => 'Brand',
+                    'subItems' => $brands->map(function ($brand) {
+                        return [
+                            'name' => $brand->name,
+                            'isSelect' => false,
+                        ];
+                    })->toArray(),
+                ],
+                [
+                    'id' => '5',
+                    'name' => 'Price Range',
+                    'subItems' => [
+                        ['name' => 'below 1000', 'isSelect' => false],
+                        ['name' => '1000-2000', 'isSelect' => false],
+                        ['name' => '2000-3000', 'isSelect' => false],
+                        ['name' => 'above 3000', 'isSelect' => false],
+                    ],
+                ],
+                // [
+                //     'id' => '6',
+                //     'name' => 'Status',
+                //     'subItems' => [
+                //         ['name' => 'Available', 'isSelect' => false],
+                //         ['name' => 'Not Available', 'isSelect' => false],
+                //     ],
+                // ],
+                [
+                    'id' => '6',
+                    'name' => 'Condition',
+                    'subItems' => [
+                        ['name' => 'Excellent', 'isSelect' => false],
+                        ['name' => 'Good', 'isSelect' => false],
+                        ['name' => 'Fair', 'isSelect' => false],
+                    ],
+                ],
+                // [
+                //     'id' => '8',
+                //     'name' => 'In Stock',
+                //     'subItems' => [
+                //         ['name' => 'Yes', 'isSelect' => false],
+                //         ['name' => 'No', 'isSelect' => false],
+                //     ],
+                // ],
+            ];
+
+            // Transform the products
             $transformedProducts = $products->map(function ($product) {
                 $allImages = $product->allImages->map(function ($image) {
                     return [
@@ -753,7 +879,7 @@ class ProductController extends Controller
                         'file_name' => $image->file_name,
                         'file_path' => $image->file_path,
                         'created_at' => $image->created_at,
-                        'updated_at' => $image->updated_at
+                        'updated_at' => $image->updated_at,
                     ];
                 });
 
@@ -796,7 +922,10 @@ class ProductController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Products fetched successfully!',
-                'data' => ['products' => $transformedProducts],
+                'data' => [
+                    'products' => $transformedProducts,
+                    'filters' => $filters,
+                ],
             ], 200);
         } catch (\Throwable $e) {
             return response()->json([
@@ -806,6 +935,7 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
 
     /**
      * listing of user product.
@@ -884,106 +1014,106 @@ class ProductController extends Controller
      *details of product.
      */
 
-     public function getAllProductsById($id)
-     {
-         try {
-             $product = Product::with('allImages')->findOrFail($id);
+    public function getAllProductsById($id)
+    {
+        try {
+            $product = Product::with('allImages')->findOrFail($id);
 
-             if (is_null($product)) {
-                 return response()->json([
-                     'status' => false,
-                     'message' => 'Product not found',
-                     'data' => [
-                         'errors' => ['product_id' => 'The product does not exist.'],
-                     ]
-                 ], 404);
-             }
+            if (is_null($product)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Product not found',
+                    'data' => [
+                        'errors' => ['product_id' => 'The product does not exist.'],
+                    ]
+                ], 404);
+            }
 
-             $categories = getParentCategory();
-             $brands = getBrands();
-             $sizes = getAllsizes();
-             $colors = getColors();
+            $categories = getParentCategory();
+            $brands = getBrands();
+            $sizes = getAllsizes();
+            $colors = getColors();
 
-             $categoryData = $categories->map(function ($category) {
-                 return [
-                     'id' => $category->id,
-                     'label' => $category->name,
-                     'value' => $category->name,
-                     'Subcategory' => getChild($category->id)->map(function ($subCategory) {
-                         return [
-                             'id' => $subCategory->id,
-                             'label' => $subCategory->name,
-                             'value' => $subCategory->name
-                         ];
-                     }),
-                 ];
-             });
+            $categoryData = $categories->map(function ($category) {
+                return [
+                    'id' => $category->id,
+                    'label' => $category->name,
+                    'value' => $category->name,
+                    'Subcategory' => getChild($category->id)->map(function ($subCategory) {
+                        return [
+                            'id' => $subCategory->id,
+                            'label' => $subCategory->name,
+                            'value' => $subCategory->name
+                        ];
+                    }),
+                ];
+            });
 
-             $brandData = $brands->map(function ($brand) {
-                 return [
-                     'id' => $brand->id,
-                     'label' => $brand->name,
-                     'value' => $brand->name,
-                 ];
-             });
+            $brandData = $brands->map(function ($brand) {
+                return [
+                    'id' => $brand->id,
+                    'label' => $brand->name,
+                    'value' => $brand->name,
+                ];
+            });
 
-             $sizeData = $sizes->map(function ($size) {
-                 return [
-                     'id' => $size->id,
-                     'label' => $size->name,
-                     'value' => $size->name,
-                 ];
-             });
+            $sizeData = $sizes->map(function ($size) {
+                return [
+                    'id' => $size->id,
+                    'label' => $size->name,
+                    'value' => $size->name,
+                ];
+            });
 
-             $colorData = $colors->map(function ($color) {
-                 return [
-                     'id' => $color->id,
-                     'label' => $color->name,
-                     'value' => $color->name,
-                 ];
-             });
+            $colorData = $colors->map(function ($color) {
+                return [
+                    'id' => $color->id,
+                    'label' => $color->name,
+                    'value' => $color->name,
+                ];
+            });
 
-             $conditionData = [
-                 ['id' => '1', 'label' => 'Hardly used', 'value' => 'Hardly used'],
-                 ['id' => '2', 'label' => 'Great condition', 'value' => 'Great condition'],
-                 ['id' => '3', 'label' => 'Good condition', 'value' => 'Good condition'],
-                 ['id' => '4', 'label' => 'Fair condition', 'value' => 'Fair condition'],
-             ];
+            $conditionData = [
+                ['id' => '1', 'label' => 'Hardly used', 'value' => 'Hardly used'],
+                ['id' => '2', 'label' => 'Great condition', 'value' => 'Great condition'],
+                ['id' => '3', 'label' => 'Good condition', 'value' => 'Good condition'],
+                ['id' => '4', 'label' => 'Fair condition', 'value' => 'Fair condition'],
+            ];
 
-             $productDetails = $this->getProduct($id);
-             $productDetails->all_images = $productDetails->allImages->map(function ($image) {
-                 return [
-                     'id' => $image->id,
-                     'product_id' => $image->product_id,
-                     'file_name' => $image->file_name,
-                     'file_path' => storage_path($image->file_path),
-                     'created_at' => $image->created_at,
-                     'updated_at' => $image->updated_at
-                 ];
-             });
+            $productDetails = $this->getProduct($id);
+            $productDetails->all_images = $productDetails->allImages->map(function ($image) {
+                return [
+                    'id' => $image->id,
+                    'product_id' => $image->product_id,
+                    'file_name' => $image->file_name,
+                    'file_path' => storage_path($image->file_path),
+                    'created_at' => $image->created_at,
+                    'updated_at' => $image->updated_at
+                ];
+            });
 
-             return response()->json([
-                 'status' => true,
-                 'message' => 'Product details fetched successfully',
-                 'data' => [
-                     'product' => $productDetails,
-                     'categories' => $categoryData,
-                     'brands' => $brandData,
-                     'sizes' => $sizeData,
-                     'colors' => $colorData,
-                     'conditions' => $conditionData,
-                 ],
-             ], 200);
-         } catch (\Throwable $e) {
-             return response()->json([
-                 'status' => false,
-                 'message' => $e->getMessage(),
-                 'data' => [
-                     'errors' => []
-                 ]
-             ], 500);
-         }
-     }
+            return response()->json([
+                'status' => true,
+                'message' => 'Product details fetched successfully',
+                'data' => [
+                    'product' => $productDetails,
+                    'categories' => $categoryData,
+                    'brands' => $brandData,
+                    'sizes' => $sizeData,
+                    'colors' => $colorData,
+                    'conditions' => $conditionData,
+                ],
+            ], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [
+                    'errors' => []
+                ]
+            ], 500);
+        }
+    }
 
 
 
