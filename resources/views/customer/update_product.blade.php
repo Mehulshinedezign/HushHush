@@ -159,73 +159,39 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="">Address</label>
+                                            <div class="form-field">
+                                                <input type="text" class="form-control" placeholder="Address" name="product_complete_location" id="product_address" value="{{ $product->productCompleteLocation->product_complete_location ?? '' }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">Country*</label>
                                             <div class="formfield">
-                                                <select name="country" class="form-control" id="country-select">
-                                                    <option value="">Select Country</option>
-                                                    @foreach (country() as $country)
-                                                        <option value="{{ $country->id }}"
-                                                            @if ($product->country == $country->id) selected @endif>
-                                                            {{ ucwords($country->name) }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
+                                                <input type="text" class="form-control" placeholder="country" name="country" id="product_country" value="{{ $product->productCompleteLocation->country ?? ''}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">State*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="state" name="state" id="product_state" value="{{ $product->productCompleteLocation->state ?? ''}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">City*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="city" name="city" id="product_city" value="{{ $product->city}}">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="">State/city*</label>
-                                            <div class="duel-select-field">
-                                                <div class="formfield">
-                                                    <select class="" name="state" id="state-select">
-                                                        <option value="">Select State</option>
-                                                        @foreach (states() as $state)
-                                                            <option value="{{ $state->id }}"
-                                                                @if ($product->state == $state->id) selected @endif>
-                                                                {{ ucwords($state->name) }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
-                                                    </span>
-                                                </div>
-                                                <div class="formfield">
-                                                    <select name="city" id="city-select">
-                                                        <option value="">Select City</option>
-                                                    </select>
-                                                    <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="">Non-Available Dates*</label>
-                                            <div class="formfield">
-                                                <input type="text" name="non_available_dates" id="non_available_date"
-                                                    placeholder="Select Dates" class="form-control daterange-cus"
-                                                    value="{{ $formattedDates }}">
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/calender-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Condition*</label>
                                             <div class="formfield">
@@ -248,12 +214,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Pickup Location*</label>
                                             <div class="formfield">
                                                 <div class="formfield">
-                                                    <textarea name="pick_up_location" id="" rows="4" class="form-control" placeholder="Text">{{ $pickuplocation->map_address }}</textarea>
+                                                    <textarea name="pick_up_location" id="" rows="4" class="form-control" placeholder="Text">{{ $pickuplocation->pick_up_location }}</textarea>
                                                 </div>
 
                                             </div>
@@ -362,7 +328,7 @@
 @endsection
 
 @push('scripts')
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             function loadCities(stateId) {
                 var url = '{{ route('cities') }}';
@@ -405,7 +371,7 @@
                 loadCities(stateId);
             });
         });
-    </script>
+    </script> --}}
 
     <script>
 

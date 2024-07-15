@@ -213,27 +213,47 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Country*</label>
-                                            <div class="formfield">
-                                                <select name="country" class="form-control" id="country-select">
-                                                    <option value="">Select Country</option>
-                                                    @foreach (country() as $country)
-                                                        <option value="{{ $country->id }}">
-                                                            {{ ucwords($country->name) }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
+                                            <label for="">Address</label>
+                                            <div class="form-field">
+                                                <input type="text" class="form-control" name="product_complete_location" placeholder="Address" id="product_address">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">Country*</label>
+                                            <div class="formfield">
+                                                <!-- <select name="country" class="form-control" id="country-select">
+                                                    <option value="">Select Country</option>
+                                                    {{-- @foreach (country() as $country)
+                                                        <option value="{{ $country->id }}">
+                                                            {{ ucwords($country->name) }}
+                                                        </option>
+                                                    @endforeach --}}
+                                                </select> -->
+                                                <input type="text" class="form-control" placeholder="country" name="country" id="product_country">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">State*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="state" name="state" id="product_state">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">City*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="city" name="city" id="product_city">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
                                             <label for="">State/city*</label>
                                             <div class="duel-select-field">
@@ -257,7 +277,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Non-Available Dates*</label>
@@ -373,19 +393,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-lg-4 col-md-4 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="">Non-Available Dates</label>
-                                            <div class="formfield">
-                                                <input type="text" name="" id="non_available_date"
-                                                    placeholder="Select Dates" class="form-control">
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/calender-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div> --}}
                                     <div class="col-md-12">
                                         <div class="right-btn-box">
                                             <button class="button primary-btn " id="addProduct">Add</button>
@@ -544,37 +551,6 @@
     <script>
         $(document).ready(function() {
 
-            // Fetch the state behalf of country id 
-            $('#country-select').change(function() {
-                var countryId = $(this).val();
-                var url = '{{ url('states') }}/' + countryId;
-                // alert(url);
-                if (countryId) {
-                    $.ajax({
-                        type: 'GET',
-                        url: url,
-                        dataType: 'json',
-                        headers: {
-                            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(data) {
-                            $('#state-select').empty();
-                            $('#state-select').append('<option value="">Select City</option>');
-                            $.each(data, function(key, value) {
-                                $('#state-select').append('<option value="' + value.id +
-                                    '">' + value.name + '</option>');
-                            });
-                        }
-                    });
-                } else {
-                    $('#state-select').empty();
-                    $('#state-select').append('<option value="">Select City</option>');
-                }
-            });
-
-
-
-
             // fetch the subcategory data
             $('.parent_category').change(function() {
                 var categoryId = $(this).val();
@@ -612,42 +588,6 @@
             });
 
 
-
-
-
-            // fetch the city behalf of state id 
-            $('#state-select').change(function() {
-
-                var stateId = $(this).val();
-                var url = '{{ route('cities') }}';
-                // alert(url);
-                // console.log("state id ",stateId);
-                if (stateId) {
-                    $.ajax({
-                        type: 'GET',
-                        url: url,
-                        data: {
-                            state_id: stateId
-                        },
-                        dataType: 'json',
-                        headers: {
-                            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(data) {
-                            $('#city-select').empty();
-                            $('#city-select').append('<option value="">Select City</option>');
-                            $.each(data, function(key, value) {
-                                $('#city-select').append('<option value="' + value.id +
-                                    '">' + value.name + '</option>');
-                            });
-                        }
-                    });
-                } else {
-                    $('#city-select').empty();
-                    $('#city-select').append('<option value="">Select City</option>');
-                }
-            });
-
             $('.daterange-cus').daterangepicker({
                 autoUpdateInput: false,
                 locale: {
@@ -679,6 +619,53 @@
                 console.log("click");
                 $('body').addClass('loading');
             });
+
+
+            // Google place api 
+            $('.product_sub_data').hide();
+
+            $('#product_address').on('focus', function() {
+                $(".product_sub_data").slideDown("slow");
+                initAutocomplete();
+            });
+
+            $('#product_address').on('input', function() {
+                if ($(this).val() === '') {
+                    $(".product_sub_data").slideUp("slow");
+                    $('#country, #state, #city').val('');
+                }
+            });
+
+            function initAutocomplete() {
+                var input = document.getElementById('product_address');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+
+                $('#product_country, #product_state, #product_city').prop('readonly', true);
+
+                autocomplete.addListener('place_changed', function() {
+                    var place = autocomplete.getPlace();
+
+                    $('#product_country, #product_state, #product_city').val('');
+
+                    for (var i = 0; i < place.address_components.length; i++) {
+                        var addressType = place.address_components[i].types[0];
+
+                        if (addressType === 'country') {
+                            $('#product_country').val(place.address_components[i].long_name);
+                        }
+                        if (addressType === 'administrative_area_level_1') {
+                            $('#product_state').val(place.address_components[i].long_name);
+                        }
+                        if (addressType === 'locality') {
+                            $('#product_city').val(place.address_components[i].long_name);
+                        }
+                    }
+
+                    $(".product_sub_data").slideDown("slow");
+                });
+            }
+
+
 
         });
     </script>

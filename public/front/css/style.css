@@ -963,9 +963,22 @@ body.loading .overlay {
     flex-direction: column;
     align-items: center;
 }
-
-
-
-
+.offcanvas-header button {
+    min-height: 22px;
+}
+.offcanvas-header h5 {
+    font-size: 24px;
+    line-height: 31px;
+}
+.inquiry-sidebar .pro-desc-prize-wrapper .pro-desc-prize h3 {
+    font-size: 18px;
+}
+.inquiry-sidebar .pro-desc-prize-wrapper .badge {
+    font-size: 10px;
+}
+.inquiry-sidebar .pro-desc-prize-wrapper {
+    display: flex;
+    gap: 5px;
+}
 
 

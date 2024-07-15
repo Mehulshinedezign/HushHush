@@ -1,15 +1,15 @@
 @extends('layouts.front')
 @section('title', $product->name)
 @php
-    $user =  auth()->user();
+    $user = auth()->user();
 @endphp
 @section('content')
     <section class="product-desc-sec">
         <div class="container">
             <div class="breadcrum-main">
                 <a href="{{ url('/') }}" class="breadcrum-list">Home</a>
-                <a href="#" class="breadcrum-list">{{$product->categories->name ?? ''}}</a>
-                <a href="#" class="breadcrum-list active">{{$product->categories->singlesubcategory->name ?? '' }}</a>
+                <a href="#" class="breadcrum-list">{{ $product->categories->name ?? '' }}</a>
+                <a href="#" class="breadcrum-list active">{{ $product->categories->singlesubcategory->name ?? '' }}</a>
             </div>
             <div class="product-desc-main">
                 <div class="row">
@@ -21,8 +21,7 @@
                                     <div class="slider slider-content">
                                         @if ($productImages->isNotEmpty())
                                             @foreach ($productImages as $image)
-                                                <div><img src="{{ $image->file_path }}" alt=""
-                                                        loading="lazy"></div>
+                                                <div><img src="{{ $image->file_path }}" alt="" loading="lazy"></div>
                                             @endforeach
                                         @else
                                             <div><img src="{{ asset('front/images/pro-description-img.png') }}"
@@ -33,8 +32,7 @@
                                     <div class="slider slider-thumb">
                                         @if ($productImages->isNotEmpty())
                                             @foreach ($productImages as $image)
-                                                <div><img src="{{ $image->file_path }}" alt=""
-                                                        loading="lazy"></div>
+                                                <div><img src="{{ $image->file_path }}" alt="" loading="lazy"></div>
                                             @endforeach
                                         @else
                                             <div><img src="{{ asset('front/images/pro-description-img.png') }}"
@@ -202,7 +200,7 @@
                                 <div class="pro-desc-prize">
                                     <h3>${{ $product->rent_month }}</h3>
                                     <div class="badge day-badge">
-                                        Per Year 
+                                        Per Year
                                     </div>
 
                                 </div>
@@ -210,7 +208,7 @@
                             <div class="pro-desc-info">
                                 <div class="pro-desc-info-box">
                                     <h4>Category :</h4>
-                                    <p>{{ $product->categories->name ?? ''}}</p>
+                                    <p>{{ $product->categories->name ?? '' }}</p>
                                 </div>
                                 <div class="pro-desc-info-box">
                                     <h4>Size:</h4>
@@ -237,6 +235,10 @@
                             </div> --}}
                             {{-- <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
                                 data-bs-target="#bookitem-sidebar" aria-controls="offcanvasRight">Book Now</a> --}}
+
+                            <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
+                                data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Ask Query</a>
+
                             <div class="pro-info-accordian">
                                 <div class="accordion" id="accordionExample">
                                     <div class="accordion-item">
@@ -278,12 +280,12 @@
                                 <div class="lender-profile-box">
                                     <div class="lender-dp-box">
                                         <a href="{{ route('lenderProfile', jsencode_userdata($product->user_id)) }}">
-                                        @if ($user->profile_file)
-                                            <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
-                                                alt="Profile Picture">
-                                        @else
-                                            <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
-                                        @endif
+                                            @if ($user->profile_file)
+                                                <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
+                                                    alt="Profile Picture">
+                                            @else
+                                                <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
+                                            @endif
                                         </a>
                                     </div>
                                     <h4>{{ $product->retailer->name }}</h4>
@@ -357,6 +359,88 @@
         </div>
     </section>
 @endsection
+
+
+
+<div class="offcanvas offcanvas-end inquiry-sidebar" tabindex="-1" id="inquiry-sidebar" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Query</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="book-item-sidebar">
+            <div class="book-item-main">
+                <div class="book-item-profile">
+                    <div class="book-item-profile-img">
+                        <!-- <img src="images/style-single2.png" alt="img"> -->
+                        @if ($productImages->isNotEmpty())
+                            @foreach ($productImages as $image)
+                                <div><img src="{{ $image->file_path }}" alt="" loading="lazy"></div>
+                            @endforeach
+                        @else
+                            <div><img src="{{ asset('front/images/pro-description-img.png') }}"
+                            alt="img"></div>
+                        @endif
+                    </div>
+                    <div class="book-item-profile-info">
+                        <h3>Pennington Dress</h3>
+                        <div class="pro-desc-prize-wrapper">
+                                <div class="pro-desc-prize">
+                                    <h3>$23</h3>
+                                    <div class="badge day-badge">
+                                        Per day
+                                    </div>
+
+                                </div>
+                                <div class="pro-desc-prize">
+                                    <h3>$23</h3>
+                                    <div class="badge day-badge">
+                                        Per month
+                                    </div>
+
+                                </div>
+                                <div class="pro-desc-prize">
+                                    <h3>$32</h3>
+                                    <div class="badge day-badge">
+                                        Per Year
+                                    </div>
+
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="book-item-date">
+                    <div class="form-group">
+                        <label for="">Select your Rental date</label>
+                        <div class="formfield">
+                            <input type="text" class="form-control daterange-cus" placeholder="Select rental date">
+                            <span class="form-icon">
+                                <!-- <img src="images/calender-icon.svg" alt="img"> -->
+                                <img src="{{ asset('front/images//calender-icon.svg') }}" alt="img">
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group my-3">
+                        <label for="">Description</label>
+                        <div class="formfield">
+                            <textarea name="" id="" cols="30" rows="5" class="form-control" placeholder="Description"></textarea>
+                        </div>
+                    </div>
+                    <div class="item-pickup-loc-main">
+                        <h4>Pick up Location</h4>
+                        <p>{{ $product->productCompleteLocation->pick_up_location ?? '' }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="book-item-footer">
+                <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
+                    data-bs-target="#checkout-sidebar" aria-controls="offcanvasRight">Next</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
     <script>
         $('.slider-content').slick({

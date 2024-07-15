@@ -82,90 +82,86 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="my-pro-detail">
-                                    <div class="my-pro-detail-left">
-                                        <div class="my-pro-detail-para">
-                                            <p>Address</p>
-                                            <div class="my-pro-edit-form">
-                                                <div class="form-group">
-                                                    <div class="formfield">
-                                                        <textarea name="complete_address" id="address" placeholder="Address"
-                                                            class="form-control @error('complete_address') is-invalid @enderror">{{ $user->userDetail->complete_address ?? ''}}</textarea>
+                                    
+                                    <div class="row w-100">
+                                        <div class="col-md-12">
+                                            <div class="my-pro-detail-left">
+                                                <div class="my-pro-detail-para">
+                                                    <p>Address</p>
+                                                    <div class="my-pro-edit-form">
+                                                        <div class="form-group">
+                                                            <div class="formfield">
+                                                                <textarea name="complete_address" id="address" placeholder="Address"
+                                                                    class="form-control @error('complete_address') is-invalid @enderror">{{ $user->userDetail->complete_address ?? '' }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                        @error('complete_address')
+                                                            <span class="invalid-feedback" role="alert">
+                                                                {{ $message }}
+                                                            </span>
+                                                        @enderror
                                                     </div>
                                                 </div>
-                                                @error('complete_address')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        {{ $message }}
-                                                    </span>
-                                                @enderror
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 address_data">
+                                            <div class="my-pro-detail-para">
+                                                <p>Country</p>
+                                                <div class="my-pro-edit-form">
+                                                    <div class="form-group">
+                                                        <div class="formfield">
+                                                            <input type="text" placeholder="Country" id="country" name="country"
+                                                                class="form-control" value="{{ $user->userDetail->country }}">
+                                                        </div>
+                                                    </div>
+                                                    @error('country')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 address_data">
+                                            <div class="my-pro-detail-para">
+                                                <p>State</p>
+                                                <div class="my-pro-edit-form">
+                                                    <div class="form-group">
+                                                        <div class="formfield">
+                                                            <input type="text" name="state" placeholder="state" value="{{ $user->userDetail->state }}"
+                                                                id="state" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    @error('state')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>       
+                                        </div>
+                                        <div class="col-md-4 address_data">
+                                            <div class="my-pro-detail-para">
+                                                <p>City</p>
+                                                <div class="my-pro-edit-form">
+                                                    <div class="form-group">
+                                                        <div class="formfield">
+                                                            <input type="text" name="city" id="city" value="{{ $user->userDetail->city }}"
+                                                                placeholder="City" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    @error('city')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="my-pro-detail">
-                                    <div class="my-pro-detail-left">
-                                        <div class="my-pro-detail-para">
-                                            <p>Country</p>
-                                            <div class="my-pro-edit-form">
-                                                <div class="form-group">
-                                                    <div class="formfield">
-                                                        <input type="text" placeholder="Country" id="country" class="form-control">
-                                                    </div>
-                                                </div>
-                                                @error('complete_address')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        {{ $message }}
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="my-pro-detail">
-                                    <div class="my-pro-detail-left">
-                                        <div class="my-pro-detail-para">
-                                            <p>State</p>
-                                            <div class="my-pro-edit-form">
-                                                <div class="form-group">
-                                                    <div class="formfield">
-                                                        <input type="text" name="state" placeholder="state" id="state" class="form-control">
-                                                    </div>
-                                                </div>
-                                                @error('complete_address')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        {{ $message }}
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="my-pro-detail">
-                                    <div class="my-pro-detail-left">
-                                        <div class="my-pro-detail-para">
-                                            <p>City</p>
-                                            <div class="my-pro-edit-form">
-                                                <div class="form-group">
-                                                    <div class="formfield">
-                                                        <input type="text" name="city" id="city" placeholder="City"  class="form-control">
-                                                    </div>
-                                                </div>
-                                                @error('complete_address')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        {{ $message }}
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
+
                             <div class="col-md-12 user_bank_details p-0">
                                 <div class="my-pro-detail">
                                     <div class="my-pro-detail-left">
@@ -262,7 +258,7 @@
                                                                     <div class="form-group">
                                                                         <div class="formfield">
                                                                             <textarea name="about" id="about" placeholder="About me"
-                                                                                class="form-control @error('about') is-invalid @enderror">{{ $user->userDetail->about ?? ''}}</textarea>
+                                                                                class="form-control @error('about') is-invalid @enderror">{{ $user->userDetail->about ?? '' }}</textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -306,6 +302,10 @@
             const accountNumberRegex = /^\d+$/;
             const routingNumberRegex = /^\d+$/;
 
+            $.validator.addMethod("userCompleteAddress", function(value, element) {
+                return $('#country').val() !== '' && $('#state').val() !== '' && $('#city').val() !== '';
+            }, "Please enter the complete address");
+
             const rules = {
                 name: {
                     required: true,
@@ -318,7 +318,7 @@
                 },
                 complete_address: {
                     required: true,
-                    // regex: addressRegex,
+                    userCompleteAddress: true,
                 },
                 account_holder_first_name: {
                     required: true,
@@ -354,7 +354,7 @@
                 },
                 complete_address: {
                     required: 'This field is required.',
-                    // regex: 'Address must contain only letters, numbers, spaces, commas, periods, and hyphens.',
+                    userCompleteAddress: 'Please enter the complete address',
                 },
                 account_holder_first_name: {
                     required: 'This field is required.',
@@ -381,6 +381,11 @@
             handleValidation('save_user', rules, messages, function(form) {
                 $('body').addClass('loading');
                 form.submit();
+            });
+
+        // Trigger validation when country, state, or city fields change
+            $('#country, #state, #city').on('change', function() {
+                $('#address').valid();
             });
         });
 
@@ -424,41 +429,51 @@
 
 
             // google place api 
+            $('.address_data').hide();
+
+            $('#address').on('focus', function() {
+                $(".address_data").slideDown("slow");
+                initAutocomplete();
+            });
+
+            $('#address').on('input', function() {
+                if ($(this).val() === '') {
+                    $(".address_data").slideUp("slow");
+                    $('#country, #state, #city').val('');
+                }
+            });
+
             function initAutocomplete() {
                 var input = document.getElementById('address');
                 var autocomplete = new google.maps.places.Autocomplete(input);
-                
+
+                $('#country, #state, #city').prop('readonly', true);
+
                 autocomplete.addListener('place_changed', function() {
                     var place = autocomplete.getPlace();
-                    
-                    $('#country, #state, #city').val('');  
-                    
-                    $.each(place.address_components, function(index, component) {
-                        var addressType = component.types[0];
-                        
+
+                    $('#country, #state, #city').val('');
+
+                    for (var i = 0; i < place.address_components.length; i++) {
+                        var addressType = place.address_components[i].types[0];
+
                         if (addressType === 'country') {
-                            $('#country').val(component.long_name).prop('readonly', true);
+                            $('#country').val(place.address_components[i].long_name);
                         }
                         if (addressType === 'administrative_area_level_1') {
-                            $('#state').val(component.long_name).prop('readonly', true);
+                            $('#state').val(place.address_components[i].long_name);
                         }
                         if (addressType === 'locality') {
-                            $('#city').val(component.long_name).prop('readonly', true);
+                            $('#city').val(place.address_components[i].long_name);
                         }
-                    });
+                    }
+
+                    $(".address_data").slideDown("slow");
                 });
             }
 
-            google.maps.event.addDomListener(window, 'load', initAutocomplete);
-
         });
 
-        const bank = new URLSearchParams(window.location.search);
-        const bank_details = bank.get('bank');
-        if(bank_details){
-            $('.user_bank_details').addClass('highlight'); 
-        }
- 
 
     </script>
 @endpush
