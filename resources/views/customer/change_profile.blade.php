@@ -111,7 +111,7 @@
                                                     <div class="form-group">
                                                         <div class="formfield">
                                                             <input type="text" placeholder="Country" id="country" name="country"
-                                                                class="form-control" value="{{ $user->userDetail->country }}">
+                                                                class="form-control" value="{{ $user->userDetail->country ?? '' }}">
                                                         </div>
                                                     </div>
                                                     @error('country')
@@ -128,7 +128,7 @@
                                                 <div class="my-pro-edit-form">
                                                     <div class="form-group">
                                                         <div class="formfield">
-                                                            <input type="text" name="state" placeholder="state" value="{{ $user->userDetail->state }}"
+                                                            <input type="text" name="state" placeholder="state" value="{{ $user->userDetail->state ?? ''}}"
                                                                 id="state" class="form-control">
                                                         </div>
                                                     </div>
@@ -146,7 +146,7 @@
                                                 <div class="my-pro-edit-form">
                                                     <div class="form-group">
                                                         <div class="formfield">
-                                                            <input type="text" name="city" id="city" value="{{ $user->userDetail->city }}"
+                                                            <input type="text" name="city" id="city" value="{{ $user->userDetail->city ?? '' }}"
                                                                 placeholder="City" class="form-control">
                                                         </div>
                                                     </div>
