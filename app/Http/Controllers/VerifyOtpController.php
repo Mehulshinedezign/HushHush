@@ -10,6 +10,7 @@ use App\Services\OtpService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Twilio\Rest\Client;
 
 class VerifyOtpController extends Controller
 {
@@ -128,7 +129,18 @@ class VerifyOtpController extends Controller
             );
         } elseif ($type === 'phone_number') {
             $otp = $this->otpService->generateOtp($user);
-
+            // $message = "Login OTP is " . $otp;
+            // $account_sid = env("TWILIO_SID");
+            // $auth_token = env("TWILIO_TOKEN");
+            // $twilio_number = env("TWILIO_FROM");
+            // $client = new Client($account_sid, $auth_token);
+            // $client->messages->create("+919463833241", [
+            //     'from' => $twilio_number,
+            //     'body' => $message
+            // ]);
+            // info('SMS Sent Successfully.');
+            // }
+            // return "Otp sent successfully";
             // Uncomment the following line to actually send the phone OTP
             // $this->otpService->sendPhoneOtp($user, $otp);
 
