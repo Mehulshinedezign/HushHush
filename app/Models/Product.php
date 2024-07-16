@@ -11,7 +11,7 @@ class Product extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name', 'description', 'specification', 'rentaltype', 'category_id', 'subcat_id', 'user_id', 'quantity', 'rent', 'price', 'security', 'available', 'status', 'size', 'other_size', 'color', 'brand', 'product_condition', 'modified_user_type', 'modified_by', 'city', 'neighborhood_city','product_market_value','product_link','min_days_rent_item','rent_price','rent_day','rent_week','rent_month','state','country'
+        'name', 'description', 'specification', 'rentaltype', 'category_id', 'subcat_id', 'user_id', 'quantity', 'rent', 'price', 'security', 'available', 'status', 'size', 'other_size', 'color', 'brand', 'product_condition', 'modified_user_type', 'modified_by', 'city', 'neighborhood_city', 'product_market_value', 'product_link', 'min_days_rent_item', 'rent_price', 'rent_day', 'rent_week', 'rent_month', 'state', 'country'
 
     ];
 
@@ -70,7 +70,7 @@ class Product extends Model
     }
 
     /**
-     * single product location 
+     * single product location
      */
     public function productCompleteLocation()
     {
@@ -189,4 +189,66 @@ class Product extends Model
         return $this->hasOne(Query::class);
     }
 
+
+    public function scopeFilterByCategories($query, $categories)
+    {
+        if (!empty($categories)) {
+            return $query->whereIn('category_id', $categories);
+        }
+        return $query;
+    }
+
+    public function scopeFilterByBrands($query, $brands)
+    {
+        if (!empty($brands)) {
+            return $query->whereIn('brand', $brands);
+        }
+        return $query;
+    }
+
+    public function scopeFilterBySizes($query, $sizes)
+    {
+        if (!empty($sizes)) {
+            return $query->whereIn('size', $sizes);
+        }
+        return $query;
+    }
+
+    public function scopeFilterByColors($query, $colors)
+    {
+        if (!empty($colors)) {
+            return $query->whereIn('color', $colors);
+        }
+        return $query;
+    }
+
+    public function scopeFilterByPriceRange($query, $priceRange)
+    {
+        if (in_array('1', $priceRange)) {
+            $query->orWhere('price', '<', 1000);
+        }
+        if (in_array('2', $priceRange)) {
+            $query->orWhereBetween('price', [1000, 2000]);
+        }
+        if (in_array('3', $priceRange)) {
+            $query->orWhereBetween('price', [2000, 3000]);
+        }
+        if (in_array('4', $priceRange)) {
+            $query->orWhere('price', '>', 3000);
+        }
+        return $query;
+    }
+
+    public function scopeFilterByCondition($query, $conditions)
+    {
+        if (!empty($conditions)) {
+            return $query->whereIn('product_condition', $conditions);
+        }
+        return $query;
+    }
+
+    public function queries()
+    {
+        return $this->hasMany(Query::class);
+    }
 }
