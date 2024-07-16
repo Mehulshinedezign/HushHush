@@ -6,7 +6,10 @@
         // var action1 = segments[1];
         // var action2 = segments[2];
         // const url = action1+'/'+action2;
-
+        
+        $.validator.addMethod("completeAddress", function(value, element) {
+                return $('#product_country').val() !== '' && $('#product_state').val() !== '' && $('#product_city').val() !== '';
+            }, "Please enter the complete address");
         const rules = {
             name: {
                 required: true,
@@ -39,12 +42,12 @@
             product_condition: {
                 required: true,
             },
-            state: {
-                required: true,
-            },
-            city: {
-                required: true,
-            },
+            // state: {
+            //     required: true,
+            // },
+            // city: {
+            //     required: true,
+            // },
             description: {
                 required: true,
                 minlength: descMinLength,
@@ -100,8 +103,12 @@
             non_available_dates: {
                 required: true,
             },
-            country:{
+            // country:{
+            //     required:true,
+            // },
+            product_complete_location:{
                 required:true,
+                completeAddress: true,
             },
 
 
@@ -132,12 +139,12 @@
             product_condition: {
                 required: `{{ __('customvalidation.product.condition.required') }}`,
             },
-            state: {
-                required: `{{ __('customvalidation.product.state.required') }}`,
-            },
-            city: {
-                required: `{{ __('customvalidation.product.city.required') }}`,
-            },
+            // state: {
+            //     required: `{{ __('customvalidation.product.state.required') }}`,
+            // },
+            // city: {
+            //     required: `{{ __('customvalidation.product.city.required') }}`,
+            // },
             pick_up_location: {
                 required: `{{ __('customvalidation.product.pick_up_location.required') }}`,
             },
@@ -171,12 +178,13 @@
                 regex: `{{ __('customvalidation.product.min_rent_days.regex', ['regex' => '${minDaysItemRegex}']) }}`,
                 range: `{{ __('customvalidation.product.min_rent_days.range', ['min' => 1, 'max' => 30]) }}`
             },
-            country:{
-                required: "Please enter country.",
+            // country:{
+            //     required: "Please enter country.",
+            // },
+            product_complete_location:{
+                required: `{{ __('customvalidation.product.product_complete_location.required') }}`,
+                completeAddress: 'Please enter the complete address',
             }
-            // non_available_dates:{
-            //     required: `{{ __('customvalidation.product.non_availabile_dates.required') }}`,
-            // }
         };
 
 
@@ -194,12 +202,13 @@
         // });
 
 
+        
         $('#addProduct').submit(function(e) {
             e.preventDefault(); // Prevent form submission
-
+            
             // Perform form validation
             handleValidation('addProduct', rules, messages);
-
+            
             // Check if the form is valid
             if ($('#addProduct').valid()) {
                 $('body').addClass('loading');
@@ -208,8 +217,11 @@
                 }, 1000); // Adjust delay as needed
             }
         });
-
-
+        
+        
+        $('#product_country, #product_state, #product_city').on('change', function() {
+            $('#product_address').valid();
+        });
 
     });
     // Initialize form validation

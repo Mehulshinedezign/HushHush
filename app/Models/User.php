@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Notifications\PasswordReset;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Storage;
@@ -73,7 +74,7 @@ class User extends Authenticatable
                 //     return $this->profile_url;
 
                 return $this->profile_url ?
-                 url('/storage/'.$this->profile_url) :
+                    url('/storage/' . $this->profile_url) :
                     asset('img/avatar-small.png');
             }
         );
@@ -84,6 +85,14 @@ class User extends Authenticatable
         return $this->hasOne(UserDetail::class);
     }
 
+    public function emailOtp()
+    {
+        return $this->hasOne(EmailOtp::class);
+    }
+    public function phoneOtp()
+    {
+        return $this->hasOne(PhoneOtp::class);
+    }
     /**
      * User documents
      *
@@ -120,6 +129,10 @@ class User extends Authenticatable
     public function vendorBankDetails()
     {
         return $this->hasOne(RetailerBankInformation::class, 'retailer_id');
+    }
+
+    public function userBankInfo(){
+        return $this->hasone(UserBankDetail::class,'user_id');
     }
 
     public function vendorCompletedOrderedItems()

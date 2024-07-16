@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\StripeOnboardingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,13 +19,13 @@ use Illuminate\Support\Facades\Auth;
 //     return redirect()->route('login');
 // });
 
-Route::middleware('localization', 'prevent-back-history')->group(function () {
+Route::middleware('localization', 'prevent-back-history',)->group(function () {
 
     Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
     Route::post('/ajaxlogin', [App\Http\Controllers\Auth\LoginController::class, 'ajaxLogin'])->name('ajaxlogin');
     Route::get('verify-email/{user}/{token}', [App\Http\Controllers\Auth\RegisterController::class, 'verifyEmail'])->name('verify-email');
-    Route::any('/verify',[App\Http\Controllers\Auth\ResetPasswordController::class,'verifyOtp'])->name('verify');
-    Route::any('/update-password',[App\Http\Controllers\Auth\ResetPasswordController::class,'update'])->name('user.updatepassword');
+    Route::any('/verify', [App\Http\Controllers\Auth\ResetPasswordController::class, 'verifyOtp'])->name('verify');
+    Route::any('/update-password', [App\Http\Controllers\Auth\ResetPasswordController::class, 'update'])->name('user.updatepassword');
 
     Auth::routes();
 
@@ -42,11 +43,19 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
     });
 
     // verify otp
-    Route::get('/verify-otp', [App\Http\Controllers\VerifyOtpController::class, 'showVerifyOtpForm'])->name('verify.otp');
-    Route::post('/verify-otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyOtp'])->name('verify.otp.submit');
-    Route::get('/resend-otp', [App\Http\Controllers\Auth\RegisterController::class, 'resendOtp'])->name('resend.otp');
+    Route::middleware('auth')->group(function () {
+        // verifi otp flow
+        Route::get('verify-otp', [App\Http\Controllers\VerifyOtpController::class, 'showVerifyOtpForm'])->name('auth.verify_otp_form');
+        Route::post('/verify/email/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyEmailOtp'])->name('verify.email.otp');
+        Route::post('/verify/phone/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyPhoneOtp'])->name('verify.phone.otp');
+        Route::get('/resend-otp/{type}', [App\Http\Controllers\VerifyOtpController::class, 'resendOtp'])->name('resend.otp');
+        // end
+    });
 
-    Route::middleware('auth', 'restrict-admin-retailer')->group(function () {
+
+    Route::middleware('auth', 'restrict-admin-retailer', 'VerifyOtp')->group(function () {
+
+
         Route::get('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index');
         Route::get('products', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('products');
         Route::get('product/{id}', [App\Http\Controllers\Customer\ProductController::class, 'view'])->name('viewproduct');
@@ -55,7 +64,7 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         Route::get('lender/{id}', [App\Http\Controllers\Customer\ProductController::class, 'retailer'])->name('lender');
         Route::post('transfee', [App\Http\Controllers\Customer\ProductController::class, 'get_transfee'])->name('transfee');
         Route::get('subcat/{id}', [App\Http\Controllers\AjaxController::class, 'get_subcat']);
-        Route::get('sub_category/{id}',[App\http\Controllers\AjaxController::class,'get_subcategory']);
+        Route::get('sub_category/{id}', [App\http\Controllers\AjaxController::class, 'get_subcategory']);
 
         Route::get('neighborhoodcity/{id}', [App\Http\Controllers\AjaxController::class, 'get_city']);
 
@@ -82,7 +91,7 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
     });
 
     Route::middleware('auth')->group(function () {
-        //Retailer order 
+        //Retailer order
         Route::match(['get', 'post'], 'retailer/order', [App\Http\Controllers\Retailer\OrderController::class, 'index'])->name('retailercustomer');
         Route::get('order/{order}', [App\Http\Controllers\Retailer\OrderController::class, 'viewOrder'])->name('retailervieworder');
         Route::post('retailer/order/{order}/pickup', [App\Http\Controllers\Retailer\OrderController::class, 'orderPickUp'])->name('retailerorderpickup');
@@ -126,6 +135,9 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         Route::get('states/{country}', [App\Http\Controllers\AjaxController::class, 'states'])->name('states');
         Route::get('cities', [App\Http\Controllers\AjaxController::class, 'cities'])->name('cities');
 
+        Route::post('stripe/onboarding', [StripeOnboardingController::class, 'redirectToStripe'])->name('stripe.onboarding.redirect');
+        Route::get('stripe/onboarding/refresh', [StripeOnboardingController::class, 'refreshOnboarding'])->name('stripe.onboarding.refresh');
+        Route::get('stripe/onboarding/complete', [StripeOnboardingController::class, 'completeOnboarding'])->name('stripe.onboarding.complete');
     });
     // logged in routes
     Route::middleware(['auth', 'customer'])->group(function () {
@@ -203,6 +215,12 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
             // end
 
             Route::get('order/{order}/chat', [App\Http\Controllers\Customer\OrderController::class, 'orderChat'])->name('orderchat');
+
+            // Query section code here
+            Route::post('query',[App\Http\Controllers\Customer\QueryController::class,'store'])->name('query');
+            Route::get('my_query',[App\Http\Controllers\Customer\QueryController::class,'myQuery'])->name('my_query');
+            Route::get('query_view', [App\Http\Controllers\Customer\QueryController::class, 'view'])->name('query_view');
+
         });
     });
 });

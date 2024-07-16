@@ -82,7 +82,7 @@ class ForgotPasswordController extends Controller
             }
 
             $otp = $this->otpService->generateOtp($user);
-            $this->otpService->sendOtp($otp, $request->country_code . $request->phone_number);
+            // $this->otpService->sendOtp($otp, $request->country_code . $request->phone_number);
 
             $apiResponse = "success";
             $statusCode = 200;

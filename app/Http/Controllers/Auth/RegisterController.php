@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\NotificationSetting;
 use App\Providers\RouteServiceProvider;
-use App\Models\{Otp, User, Role, UserDetail, UserDocuments};
+use App\Models\{EmailOtp, Otp, PhoneOtp, User, Role, UserDetail, UserDocuments};
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -167,24 +167,34 @@ class RegisterController extends Controller
         $path = $data['gov_id']->store('user_documents');
         $filePath = str_replace("public/", "", $path);
         $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
-        
+
         UserDocuments::create([
             'user_id' => $signUpData->id,
             'file' => $fileExtension,
             'url' => $filePath,
         ]);
 
- 
+
         $otp = $this->otpService->generateOtp($signUpData);
-        $this->otpService->sendOtp($otp,$data['phone_number']['full']);
+        PhoneOtp::updateOrCreate(['user_id' => $signUpData->id], [
+            'otp' => $otp,
+            'expires_at' => date('Y-m-d H:i:s'),
+            'status' => '0',
+        ]);
+        EmailOtp::updateOrCreate(['user_id' => $signUpData->id], [
+
+            'otp' => $otp,
+            'expires_at' => date('Y-m-d H:i:s'),
+            'status' => '0',
+        ]);
+        // $this->otpService->sendOtp($otp, $data['phone_number']['full']);
 
         return $signUpData;
-
     }
 
     protected function register(Request $request)
     {
-        
+
         $this->validator($request->all())->validate();
         $user = $this->create($request->all());
         if ($user) {
@@ -219,20 +229,20 @@ class RegisterController extends Controller
             return redirect()->back()->with(['message' => 'data store successfully']);
         }
 
-        auth()->logout();
+        // auth()->logout();
 
         try {
-            $user->notify(new VerificationEmail($user));
+            $otp = $user->emailOtp->otp;
+            $user->notify(new VerificationEmail($user, $otp));
+            // $request->session()->put('userId', $user->id);
+            // return redirect()->route('verify.otp', compact('user'));
 
-            $request->session()->put('userId', $user->id);
-            return redirect()->route('verify.otp');
+            return view('auth.verify_otp');
 
             // return redirect()->route('login')->with('success', 'Registration successful. A confirmation email has been sent to ' . $user->email . '. Please verify to log in.');
         } catch (Exception $ex) {
             return redirect()->route('login')->with('error', $ex->getMessage());
         }
-
-
     }
 
     public function verifyEmail(Request $request, User $user, $token)
@@ -247,7 +257,7 @@ class RegisterController extends Controller
         }
         try {
             User::where("id", $user->id)->update(["status" => "1", "email_verified_at" => date('Y-m-d H:i:s'), 'email_verification_token' => null]);
-            $user->notify(new WelcomeEmail($user));
+            // $user->notify(new WelcomeEmail($user));
         } catch (Exception $ex) {
             return redirect()->route('login')->with('error', $ex->getMessage());
         }
@@ -267,19 +277,4 @@ class RegisterController extends Controller
         // return redirect($this->redirectTo);
 
     }
-
-    public function resendOtp(Request $request)
-    {
-        $userId = $request->user_id;
-        // dd("Resend here",$userId);
-        $user = User::findOrFail($userId);
-
-        $otp = $this->otpService->generateOtp($user);
-        $this->otpService->sendOtp($user, $otp);
-
-        return redirect()->route('verify.otp', ['user_id' => $user->id])
-                         ->with('status', 'OTP resent successfully.');
-    }
-
-    
 }

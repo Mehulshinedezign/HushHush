@@ -213,27 +213,47 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Country*</label>
-                                            <div class="formfield">
-                                                <select name="country" class="form-control" id="country-select">
-                                                    <option value="">Select Country</option>
-                                                    @foreach (country() as $country)
-                                                        <option value="{{ $country->id }}">
-                                                            {{ ucwords($country->name) }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
+                                            <label for="">Address</label>
+                                            <div class="form-field">
+                                                <input type="text" class="form-control" name="product_complete_location" placeholder="Address" id="product_address">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">Country*</label>
+                                            <div class="formfield">
+                                                <!-- <select name="country" class="form-control" id="country-select">
+                                                    <option value="">Select Country</option>
+                                                    {{-- @foreach (country() as $country)
+                                                        <option value="{{ $country->id }}">
+                                                            {{ ucwords($country->name) }}
+                                                        </option>
+                                                    @endforeach --}}
+                                                </select> -->
+                                                <input type="text" class="form-control" placeholder="country" name="country" id="product_country">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">State*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="state" name="state" id="product_state">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">City*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="city" name="city" id="product_city">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
                                             <label for="">State/city*</label>
                                             <div class="duel-select-field">
@@ -257,7 +277,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Non-Available Dates*</label>
@@ -373,19 +393,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-lg-4 col-md-4 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="">Non-Available Dates</label>
-                                            <div class="formfield">
-                                                <input type="text" name="" id="non_available_date"
-                                                    placeholder="Select Dates" class="form-control">
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/calender-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div> --}}
                                     <div class="col-md-12">
                                         <div class="right-btn-box">
                                             <button class="button primary-btn " id="addProduct">Add</button>
@@ -403,28 +410,75 @@
     <div class="modal fade addbank-Modal" id="addbank-Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="exampleModalLabel">Add your bank details</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
                 <div class="modal-body">
-                    <form action="#" method="POST">
+                    <form action="{{ route('stripe.onboarding.redirect') }}" method="POST">
+                        <h3 class="modal-title" id="exampleModalLabel">Add your bank details</h3>
                         @csrf
+                        <img src="{{ asset('front/images/bank-img.png') }}" alt="">
                         <div class="profile-select-box border-disabled">
-                            <ul class="profile-check-list">
+                            <div class="profile-check-list">
                              
-                                <a href="javascript:void(0)" data-bs-dismiss="modal" arial-label="Close">Cancel</a>
+                                <a href="javascript:void(0)" data-bs-dismiss="modal" arial-label="Close" class="button outline-btn full-btn">Cancel</a>
                                
-                                <button type="submit" id="bank_info">Submit</button>
+                                <button type="submit" class="button primary-btn full-btn" id="bank_info">Yes</button>
                        
-                            </ul>
+                            </div>
                         </div>
                     </form>
-
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
             </div>
         </div>
     </div>
+
+{{-- Query modal section success and error  --}}
+    <div class="modal fade query_msg" id="query_msg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content"> 
+                <div class="modal-body">
+                    @if (session()->has('success'))
+                        <div class="alert-container">
+                            <div class="container-box">
+                                <div class="alert alert-success" role="alert">
+                                    <span class="alert-icon"><i class="far fa-check-circle"></i></span>
+                                    <div class="alert-content">
+                                        <h6>Success</h6>
+                                        <p>{{ session()->get('success') }}</p>
+                                    </div>
+                                    <a class="alert-cross close" data-bs-dismiss="alert" aria-label="Close">
+                                        <svg width="7" height="7" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M6.66033 0.947986C6.61823 0.906277 6.56822 0.873185 6.51316 0.850607C6.4581 0.828028 6.39907 0.816406 6.33946 0.816406C6.27985 0.816406 6.22083 0.828028 6.16577 0.850607C6.11071 0.873185 6.06069 0.906277 6.01859 0.947986L3.81264 3.12833L1.60668 0.947986C1.52158 0.863874 1.40616 0.81662 1.28581 0.81662C1.16546 0.81662 1.05004 0.863874 0.96494 0.947986C0.87984 1.0321 0.832031 1.14618 0.832031 1.26513C0.832031 1.38408 0.87984 1.49816 0.96494 1.58228L3.1709 3.76262L0.96494 5.94296C0.922803 5.98461 0.889378 6.03405 0.866573 6.08847C0.843769 6.14288 0.832031 6.20121 0.832031 6.26011C0.832031 6.31901 0.843769 6.37733 0.866573 6.43174C0.889378 6.48616 0.922803 6.5356 0.96494 6.57725C1.00708 6.6189 1.0571 6.65194 1.11216 6.67448C1.16721 6.69702 1.22622 6.70862 1.28581 6.70862C1.3454 6.70862 1.40441 6.69702 1.45946 6.67448C1.51452 6.65194 1.56454 6.6189 1.60668 6.57725L3.81264 4.39691L6.01859 6.57725C6.06073 6.6189 6.11075 6.65194 6.16581 6.67448C6.22086 6.69702 6.27987 6.70862 6.33946 6.70862C6.39905 6.70862 6.45806 6.69702 6.51311 6.67448C6.56817 6.65194 6.61819 6.6189 6.66033 6.57725C6.70247 6.5356 6.73589 6.48616 6.7587 6.43174C6.7815 6.37733 6.79324 6.31901 6.79324 6.26011C6.79324 6.20121 6.7815 6.14288 6.7587 6.08847C6.73589 6.03405 6.70247 5.98461 6.66033 5.94296L4.45438 3.76262L6.66033 1.58228C6.70253 1.54066 6.73601 1.49123 6.75885 1.43681C6.7817 1.38239 6.79346 1.32405 6.79346 1.26513C6.79346 1.20621 6.7817 1.14787 6.75885 1.09345C6.73601 1.03903 6.70253 0.9896 6.66033 0.947986Z" fill="#898383" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+    
+                    @if (session()->has('error'))
+                        <div class="alert-container">
+                            <div class="container-box">
+                                <div class="alert alert-danger" role="alert">
+                                    <span class="alert-icon"><i class="far fa-times-circle"></i></span>
+                                    <div class="alert-content">
+                                        <h6>Error</h6>
+                                        <p>{{ session()->get('error') }}</p>
+                                    </div>
+                                    <a class="alert-cross close" data-bs-dismiss="alert" aria-label="Close">
+                                        <svg width="7" height="7" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M6.66033 0.947986C6.61823 0.906277 6.56822 0.873185 6.51316 0.850607C6.4581 0.828028 6.39907 0.816406 6.33946 0.816406C6.27985 0.816406 6.22083 0.828028 6.16577 0.850607C6.11071 0.873185 6.06069 0.906277 6.01859 0.947986L3.81264 3.12833L1.60668 0.947986C1.52158 0.863874 1.40616 0.81662 1.28581 0.81662C1.16546 0.81662 1.05004 0.863874 0.96494 0.947986C0.87984 1.0321 0.832031 1.14618 0.832031 1.26513C0.832031 1.38408 0.87984 1.49816 0.96494 1.58228L3.1709 3.76262L0.96494 5.94296C0.922803 5.98461 0.889378 6.03405 0.866573 6.08847C0.843769 6.14288 0.832031 6.20121 0.832031 6.26011C0.832031 6.31901 0.843769 6.37733 0.866573 6.43174C0.889378 6.48616 0.922803 6.5356 0.96494 6.57725C1.00708 6.6189 1.0571 6.65194 1.11216 6.67448C1.16721 6.69702 1.22622 6.70862 1.28581 6.70862C1.3454 6.70862 1.40441 6.69702 1.45946 6.67448C1.51452 6.65194 1.56454 6.6189 1.60668 6.57725L3.81264 4.39691L6.01859 6.57725C6.06073 6.6189 6.11075 6.65194 6.16581 6.67448C6.22086 6.69702 6.27987 6.70862 6.33946 6.70862C6.39905 6.70862 6.45806 6.69702 6.51311 6.67448C6.56817 6.65194 6.61819 6.6189 6.66033 6.57725C6.70247 6.5356 6.73589 6.48616 6.7587 6.43174C6.7815 6.37733 6.79324 6.31901 6.79324 6.26011C6.79324 6.20121 6.7815 6.14288 6.7587 6.08847C6.73589 6.03405 6.70247 5.98461 6.66033 5.94296L4.45438 3.76262L6.66033 1.58228C6.70253 1.54066 6.73601 1.49123 6.75885 1.43681C6.7817 1.38239 6.79346 1.32405 6.79346 1.26513C6.79346 1.20621 6.7817 1.14787 6.75885 1.09345C6.73601 1.03903 6.70253 0.9896 6.66033 0.947986Z" fill="#898383" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
 
     {{-- Notifications --}}
@@ -546,37 +600,6 @@
     <script>
         $(document).ready(function() {
 
-            // Fetch the state behalf of country id 
-            $('#country-select').change(function() {
-                var countryId = $(this).val();
-                var url = '{{ url('states') }}/' + countryId;
-                // alert(url);
-                if (countryId) {
-                    $.ajax({
-                        type: 'GET',
-                        url: url,
-                        dataType: 'json',
-                        headers: {
-                            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(data) {
-                            $('#state-select').empty();
-                            $('#state-select').append('<option value="">Select City</option>');
-                            $.each(data, function(key, value) {
-                                $('#state-select').append('<option value="' + value.id +
-                                    '">' + value.name + '</option>');
-                            });
-                        }
-                    });
-                } else {
-                    $('#state-select').empty();
-                    $('#state-select').append('<option value="">Select City</option>');
-                }
-            });
-
-
-
-
             // fetch the subcategory data
             $('.parent_category').change(function() {
                 var categoryId = $(this).val();
@@ -614,42 +637,6 @@
             });
 
 
-
-
-
-            // fetch the city behalf of state id 
-            $('#state-select').change(function() {
-
-                var stateId = $(this).val();
-                var url = '{{ route('cities') }}';
-                // alert(url);
-                // console.log("state id ",stateId);
-                if (stateId) {
-                    $.ajax({
-                        type: 'GET',
-                        url: url,
-                        data: {
-                            state_id: stateId
-                        },
-                        dataType: 'json',
-                        headers: {
-                            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(data) {
-                            $('#city-select').empty();
-                            $('#city-select').append('<option value="">Select City</option>');
-                            $.each(data, function(key, value) {
-                                $('#city-select').append('<option value="' + value.id +
-                                    '">' + value.name + '</option>');
-                            });
-                        }
-                    });
-                } else {
-                    $('#city-select').empty();
-                    $('#city-select').append('<option value="">Select City</option>');
-                }
-            });
-
             $('.daterange-cus').daterangepicker({
                 autoUpdateInput: false,
                 locale: {
@@ -681,6 +668,53 @@
                 console.log("click");
                 $('body').addClass('loading');
             });
+
+
+            // Google place api 
+            $('.product_sub_data').hide();
+
+            $('#product_address').on('focus', function() {
+                $(".product_sub_data").slideDown("slow");
+                initAutocomplete();
+            });
+
+            $('#product_address').on('input', function() {
+                if ($(this).val() === '') {
+                    $(".product_sub_data").slideUp("slow");
+                    $('#country, #state, #city').val('');
+                }
+            });
+
+            function initAutocomplete() {
+                var input = document.getElementById('product_address');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+
+                $('#product_country, #product_state, #product_city').prop('readonly', true);
+
+                autocomplete.addListener('place_changed', function() {
+                    var place = autocomplete.getPlace();
+
+                    $('#product_country, #product_state, #product_city').val('');
+
+                    for (var i = 0; i < place.address_components.length; i++) {
+                        var addressType = place.address_components[i].types[0];
+
+                        if (addressType === 'country') {
+                            $('#product_country').val(place.address_components[i].long_name);
+                        }
+                        if (addressType === 'administrative_area_level_1') {
+                            $('#product_state').val(place.address_components[i].long_name);
+                        }
+                        if (addressType === 'locality') {
+                            $('#product_city').val(place.address_components[i].long_name);
+                        }
+                    }
+
+                    $(".product_sub_data").slideDown("slow");
+                });
+            }
+
+
 
         });
     </script>

@@ -301,19 +301,19 @@
                 <div class="header-cart">
                     @php
                         $user = auth()->user();
-                        $vendorBankDetails = auth()->user()->vendorBankDetails;
+                        $userBankInfo = auth()->user()->userBankInfo;
                     @endphp
                     <ul>
                         <li>
-                             @if (is_null($vendorBankDetails))
+                            @if (is_null($userBankInfo))
                                 <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
                                     Add New Product
                                 </div>
-                             @else
+                            @else
                                 <div data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
                                     Add New Product
-                                </div>   
-                             @endif   
+                                </div>
+                            @endif
 
                         </li>
                         <li><a href="{{ route('wishlist') }}"><i class="fa-regular fa-heart"></i>
@@ -333,6 +333,10 @@
                                     <li><a class="dropdown-item" href="{{ route('product') }}"><img width="15"
                                                 height="14" src="{{ asset('front/images/ecommerce.png') }}"
                                                 alt="img">My Products</a></li>
+
+                                    <li><a class="dropdown-item" href="{{ route('my_query') }}"><img width="15"
+                                        height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
+                                        alt="img">My Query</a></li>
                                     <li><a class="dropdown-item" href="{{ route('profile') }}"><img
                                                 src="{{ asset('front/images/user-icon.svg') }}"
                                                 alt="img">Profile</a></li>
@@ -713,6 +717,4 @@
     </nav>
 </header>
 @push('scripts')
-
 @endpush
-

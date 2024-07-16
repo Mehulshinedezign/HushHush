@@ -16,12 +16,12 @@ class OtpService
         // $otp = mt_rand(100000, 999999);
         $otp = '123456';
 
-        UserOtp::create([
-            'user_id' => $user->id,
-            'otp' => $otp,
-            'expires_at' => Carbon::now()->addMinutes(50),
-            'status' => '0',
-        ]);
+        // UserOtp::create([
+        //     'user_id' => $user->id,
+        //     'otp' => $otp,
+        //     'expires_at' => Carbon::now()->addMinutes(50),
+        //     'status' => '0',
+        // ]);
 
         return $otp;
     }
@@ -29,62 +29,54 @@ class OtpService
 
     public function sendOtp($otp, $full_phone_number)
     {
-        // $accountSid = config('services.twilio.sid');
-        // $authToken = config('services.twilio.token');
-        // $twilioNumber = config('services.twilio.phone_number');
-        // $messagingServiceSid = config('services.twilio.messaging_service_sid');
+        // try {
+        $otp = rand(100000, 999999);
+        // $otp = LoginOtp::updateOrCreate(["user_id" => $user->id], ["otp" => $otp, "expire_at" => now()->addMinutes(2)]);
 
-        $accountSid = env('TWILIO_ACCOUNT_SID');
-        $authToken = env('TWILIO_AUTH_TOKEN');
-        $twilioNumber = env('TWILIO_PHONE_NUMBER');
-        $messagingServiceSid = env('TWILIO_MESSAGING_SERVICE_SID');
+        // if ($method == "email") {
 
-        $client = new Client($accountSid, $authToken);
+        //     $user->notify(new SendLoginOtp($otp->otp));
+        // }
+        // else {
+        $message = "Login OTP is " . $otp;
+        $account_sid = env("TWILIO_SID");
+        $auth_token = env("TWILIO_TOKEN");
+        $twilio_number = env("TWILIO_FROM");
+        $client = new Client($account_sid, $auth_token);
+        $client->messages->create("+919463833241", [
+            'from' => $twilio_number,
+            'body' => $message
+        ]);
+        info('SMS Sent Successfully.');
+        // }
+        return "Otp sent successfully";
+        // } catch (Exception $e) {
 
-        // Use the phone number directly, assuming it's already in the correct format
-        $toNumber = $full_phone_number;
+        //     throw ValidationException::withMessages([
+        //         $method => [$e->getMessage()],
+        //     ]);
 
-        $params = [
-            'body' => "Your OTP is: $otp",
-            'to' => $toNumber
-        ];
-
-        if ($messagingServiceSid) {
-            $params['messagingServiceSid'] = $messagingServiceSid;
-        } else {
-            $params['from'] = $twilioNumber;
-        }
-
-        try {
-            $message = $client->messages->create(
-                $toNumber,
-                $params
-            );
-            Log::info("OTP sent successfully to {$toNumber}. Message SID: {$message->sid}");
-        } catch (\Exception $e) {
-            Log::error('OTP send FAIL: ' . $e->getMessage());
-            throw $e;
-        }
+        // }
     }
 
-    public function verifyOtp($user, $otp)
-    {
-        $userOtp = UserOtp::where('user_id', $user->id)
-        ->where('otp', $otp)
-        ->where('expires_at', '>', Carbon::now())
-        ->where('status', '0')
-        ->first();
+    // public function verifyOtp($user, $otp)
+    // {
+    //     $userOtp = UserOtp::where('user_id', $user->id)
+    //         ->where('otp', $otp)
+    //         ->where('expires_at', '>', Carbon::now())
+    //         ->where('status', '0')
+    //         ->first();
 
-        if (!$userOtp) {
-            // dd('here',$userOtp);
-            return false;
-        }
+    //     if (!$userOtp) {
+    //         // dd('here',$userOtp);
+    //         return false;
+    //     }
 
-        $userOtp->update(['status' => '1']);
+    //     $userOtp->update(['status' => '1']);
 
-        $user=User::Where('id',$user->id);
-        $user->update(['otp_is_verified'=>true]);
+    //     $user = User::Where('id', $user->id);
+    //     $user->update(['otp_is_verified' => true]);
 
-        return true;
-    }
+    //     return true;
+    // }
 }

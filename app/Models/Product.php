@@ -70,6 +70,13 @@ class Product extends Model
     }
 
     /**
+     * single product location 
+     */
+    public function productCompleteLocation()
+    {
+        return $this->hasOne(ProductLocation::class);
+    }
+    /**
      * Product locations
      *
      * @var object
@@ -175,6 +182,11 @@ class Product extends Model
     public function disableDates()
     {
         return $this->hasMany(ProductDisableDate::class);
+    }
+
+    public function querydat(){
+
+        return $this->hasOne(Query::class);
     }
 
 }

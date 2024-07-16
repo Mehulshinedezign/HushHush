@@ -61,7 +61,7 @@
                         </div>
                     @else
                         <div class="list-empty-box">
-                            <img src="{{ asset('front/images/find-glass.svg') }}">
+                            <img src="{{ asset('front/images/no-products.svg') }}">
                             <h3 class="text-center">Your product is empty</h3>
                         </div>
                     @endif

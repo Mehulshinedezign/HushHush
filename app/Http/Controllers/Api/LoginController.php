@@ -49,7 +49,7 @@ class LoginController extends Controller
                         $full_number = $country_code . $number;
 
                         $otp = $this->otpService->generateOtp($user);
-                        $this->otpService->sendOtp($otp, $full_number);
+                        // $this->otpService->sendOtp($otp, $full_number);
                     }
                     $apiResponse = 'success';
                     $statusCode = 200;
@@ -72,7 +72,7 @@ class LoginController extends Controller
                         $full_number = $country_code . $number;
 
                         $otp = $this->otpService->generateOtp($user);
-                        $this->otpService->sendOtp($otp, $full_number);
+                        // $this->otpService->sendOtp($otp, $full_number);
                     }
                     $apiResponse = 'success';
                     $statusCode = 200;

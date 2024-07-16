@@ -12,34 +12,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
+use Stripe\Review;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
     protected $redirectTo = RouteServiceProvider::HOME;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
@@ -53,75 +33,49 @@ class LoginController extends Controller
         }
         return view('auth.login');
     }
-    /**
-     * Validate the user login request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
+
     protected function validateLogin(Request $request)
     {
-
         $request->validate([
             'email' => 'required|string',
             'password' => 'required|string',
         ], [
             'email.required' => __('user.validations.emailRequired'),
-            //$this->username().'.email' => __('user.validations.emailType'),
-            //$this->username().'.exists' => __('user.validations.invalidEmail'),
             'password.required' => __('user.validations.passwordRequired')
         ]);
     }
 
     protected function credentials(Request $request)
     {
-        // dd('here');
-        // $loginType = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
         if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
-            return ['email' => $request->email, 'password' => $request->password, 'status' => '1'];
-        }else{
-
-            return ['phone_number' => $request->email, 'password' => $request->password, 'status' => '1'];
+            return ['email' => $request->email, 'password' => $request->password];
+        } else {
+            return ['phone_number' => $request->email, 'password' => $request->password];
         }
-
-
-        $credentials = $request->only($this->username(), 'password');
-
-        $credentials['status'] = '1';
-
-        return $credentials;
     }
 
     protected function authenticated(Request $request, $user)
     {
-        // $remember = $request->remember ? true : false;
-        // dd("remember me",$remember);
-        // if ($remember) {
-        //     $loginby = $request->email . '_' . $request->password;
-        //     if (!request()->cookie('rememberme')) {
-        //         Cookie::queue(Cookie::make('rememberme', $loginby, 2628000));  //2628000 (five years)
-        //     } else if ($request->email != explode("_", request()->cookie('rememberme'))[0] && $request->password != explode("_", request()->cookie('rememberme'))[1]) {
-        //         Cookie::queue(Cookie::make('rememberme', $loginby, 2628000));  //2628000 (five years)
-        //     }
-        // } else {
-        //     Cookie::queue(Cookie::forget('rememberme'));
-        // }
+
         $remember = $request->has('remember');
         if ($remember) {
             $loginby = $request->email . '_' . $request->password;
             $cookie = Cookie::get('rememberme');
-            
+
             if (!$cookie || ($request->email != explode("_", $cookie)[0] || $request->password != explode("_", $cookie)[1])) {
                 Cookie::queue('rememberme', $loginby, 2628000);  // 2628000 minutes (five years)
             }
         } else {
             Cookie::queue(Cookie::forget('rememberme'));
         }
-        // dd('hererr', $_COOKIE['lendurl']);
+        // Check OTP verification and email verification
+        if ($user->otp_is_verified != 1 || is_null($user->email_verified_at)) {
+            $user = $user->id;
+            return view('auth.verify_otp');
+            // return redirect()->route('auth.verify_otp_form', ['user' => $user->id]);
+        }
 
-
+        // Set redirection based on user role
         if ($user->role->name == 'admin') {
             $this->redirectTo = 'admin/dashboard';
         } elseif ($user->role->name == 'retailer') {
@@ -142,18 +96,13 @@ class LoginController extends Controller
         return redirect($this->redirectTo);
     }
 
-    /**
-     * Log the user out of the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
-     */
+
+
     public function logout(Request $request)
     {
         $this->guard()->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         if ($response = $this->loggedOut($request)) {
@@ -170,4 +119,17 @@ class LoginController extends Controller
         Auth::login($user);
         return redirect($this->redirectPath());
     }
+
+    // protected function getRedirectUrl($user)
+    // {
+    //     if ($user->role->name == 'admin') {
+    //         return 'admin/dashboard';
+    //     } elseif ($user->role->name == 'retailer') {
+    //         return 'retailer/dashboard';
+    //     } elseif ($user->role->name == 'customer') {
+    //         return route('index');
+    //     }
+
+    //     return '/';
+    // }
 }

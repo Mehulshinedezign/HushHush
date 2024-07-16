@@ -361,7 +361,7 @@ return [
             'required' => 'Please enter Rental price month.',
             'regex' => 'Please enter only digit values.',
         ],
-        'non_available_dates' => [
+        'product_complete_location' => [
             'required' =>  'This field is required',
         ],
     ],
