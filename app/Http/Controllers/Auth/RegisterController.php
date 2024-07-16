@@ -229,14 +229,15 @@ class RegisterController extends Controller
             return redirect()->back()->with(['message' => 'data store successfully']);
         }
 
-        auth()->logout();
+        // auth()->logout();
 
         try {
             $otp = $user->emailOtp->otp;
             $user->notify(new VerificationEmail($user, $otp));
             // $request->session()->put('userId', $user->id);
             // return redirect()->route('verify.otp', compact('user'));
-            return view('auth.verify_otp', compact('user'));
+
+            return view('auth.verify_otp');
 
             // return redirect()->route('login')->with('success', 'Registration successful. A confirmation email has been sent to ' . $user->email . '. Please verify to log in.');
         } catch (Exception $ex) {
@@ -276,6 +277,4 @@ class RegisterController extends Controller
         // return redirect($this->redirectTo);
 
     }
-
-
 }

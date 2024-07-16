@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
+use Stripe\Review;
 
 class LoginController extends Controller
 {
@@ -55,6 +56,7 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
+
         $remember = $request->has('remember');
         if ($remember) {
             $loginby = $request->email . '_' . $request->password;
@@ -66,10 +68,11 @@ class LoginController extends Controller
         } else {
             Cookie::queue(Cookie::forget('rememberme'));
         }
-
         // Check OTP verification and email verification
         if ($user->otp_is_verified != 1 || is_null($user->email_verified_at)) {
-            return redirect()->route('auth.verify_otp_form')->with('error', 'Please verify your OTP and email.');
+            $user = $user->id;
+            return view('auth.verify_otp');
+            // return redirect()->route('auth.verify_otp_form', ['user' => $user->id]);
         }
 
         // Set redirection based on user role
@@ -117,16 +120,16 @@ class LoginController extends Controller
         return redirect($this->redirectPath());
     }
 
-    protected function getRedirectUrl($user)
-    {
-        if ($user->role->name == 'admin') {
-            return 'admin/dashboard';
-        } elseif ($user->role->name == 'retailer') {
-            return 'retailer/dashboard';
-        } elseif ($user->role->name == 'customer') {
-            return route('index');
-        }
+    // protected function getRedirectUrl($user)
+    // {
+    //     if ($user->role->name == 'admin') {
+    //         return 'admin/dashboard';
+    //     } elseif ($user->role->name == 'retailer') {
+    //         return 'retailer/dashboard';
+    //     } elseif ($user->role->name == 'customer') {
+    //         return route('index');
+    //     }
 
-        return '/';
-    }
+    //     return '/';
+    // }
 }

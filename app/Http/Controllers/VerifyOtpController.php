@@ -21,36 +21,41 @@ class VerifyOtpController extends Controller
 
     public function showVerifyOtpForm(Request $request)
     {
-        $user = User::find($request->user->id);
+
+        $user = User::find(auth()->user()->id);
         return view('auth.verify_otp', compact('user'));
     }
 
     public function verifyEmailOtp(Request $request)
     {
-        $request->validate([
-            'emailotp' => 'required|digits:6',
-        ], [
-            'emailotp.required' => 'OTP is required',
-            'emailotp.digits' => 'OTP must be 6 digits',
-        ]);
+        // dd($request);
+        // $request->validate([
+        //     'emailotp' => 'required|digits:6',
+        // ], [
+        //     'emailotp.required' => 'OTP is required',
+        //     'emailotp.digits' => 'OTP must be 6 digits',
+        // ]);
 
-        $user = User::with('emailOtp', 'phoneOtp')->where('id', $request->user_id)->firstOrFail();
+        $user = User::with('emailOtp', 'phoneOtp')->where('id', auth()->user()->id)->firstOrFail();
 
         if ($user->emailOtp->otp != $request->emailotp) {
             return response()->json(['status' => false, 'message' => 'Invalid OTP']);
         }
 
-        if (Carbon::now() >= $user->emailOtp->expires_at) {
-            return response()->json(['status' => false, 'message' => 'OTP has expired']);
-        }
+        // if (Carbon::now() >= $user->emailOtp->expires_at) {
+        //     return response()->json(['status' => false, 'message' => 'OTP has expired']);
+        // }
 
         try {
             $user->emailOtp->update(['status' => '1']);
-            $user->update(['email_verified_at' => Carbon::now()]);
+            // dd($request, $user);
 
-            if ($user->email_verified_at && $user->otp_is_verified) {
+            if ($user->phoneOtp->status == 1) {
+                User::where("id", $user->id)->update(["status" => "1", "email_verified_at" => date('Y-m-d H:i:s'), 'email_verification_token' => null]);
+
                 auth()->login($user);
-                return response()->json(['login' => 1, 'redirect' => $this->getRedirectUrl($user)]);
+                $url = route('index');
+                return response()->json(['login' => 1, 'url' => $url]);
             }
 
             return response()->json(['status' => true, 'message' => 'Email OTP verified successfully']);
@@ -61,30 +66,33 @@ class VerifyOtpController extends Controller
 
     public function verifyPhoneOtp(Request $request)
     {
-        $request->validate([
-            'phoneotp' => 'required|digits:6',
-        ], [
-            'phoneotp.required' => 'OTP is required',
-            'phoneotp.digits' => 'OTP must be 6 digits',
-        ]);
+        // dd($request);
+        // $request->validate([
+        //     'phoneotp' => 'required|digits:6',
+        // ], [
+        //     'phoneotp.required' => 'OTP is required',
+        //     'phoneotp.digits' => 'OTP must be 6 digits',
+        // ]);
 
-        $user = User::with('phoneOtp', 'emailOtp')->where('id', $request->user_id)->firstOrFail();
-
+        $user = User::with('phoneOtp', 'emailOtp')->where('id', auth()->user()->id)->firstOrFail();
         if ($user->phoneOtp->otp != $request->phoneotp) {
             return response()->json(['status' => false, 'message' => 'Invalid OTP']);
         }
 
-        if (Carbon::now() >= $user->phoneOtp->expires_at) {
-            return response()->json(['status' => false, 'message' => 'OTP has expired']);
-        }
+        // if (Carbon::now() >= $user->phoneOtp->expires_at) {
+        //     return response()->json(['status' => false, 'message' => 'OTP has expired']);
+        // }
 
         try {
             $user->phoneOtp->update(['status' => '1']);
             $user->update(['otp_is_verified' => '1']);
 
-            if ($user->email_verified_at && $user->otp_is_verified) {
+            if ($user->emailOtp->status == 1) {
+                User::where("id", $user->id)->update(["status" => "1", "email_verified_at" => date('Y-m-d H:i:s'), 'email_verification_token' => null]);
+
                 auth()->login($user);
-                return response()->json(['login' => 1, 'redirect' => $this->getRedirectUrl($user)]);
+                $url = route('index');
+                return response()->json(['login' => 1, 'url' => $url]);
             }
 
             return response()->json(['status' => true, 'message' => 'Phone OTP verified successfully']);
@@ -99,8 +107,8 @@ class VerifyOtpController extends Controller
 
     public function resendOtp(Request $request, $type)
     {
-        $userId = $request->query('user_id');
-        $user = User::findOrFail($userId);
+        // $userId = $request->query('user_id');
+        $user = User::findOrFail(auth()->user()->id);
 
         if ($type === 'email') {
             $otp = $this->otpService->generateOtp($user);
@@ -112,7 +120,7 @@ class VerifyOtpController extends Controller
                 ['user_id' => $user->id],
                 [
                     'otp' => $otp,
-                    'expires_at' => now()->addMinutes(15),
+                    'expires_at' => date('Y-m-d H:i:s'),
                     'status' => '0',
                 ]
             );
@@ -126,15 +134,15 @@ class VerifyOtpController extends Controller
                 ['user_id' => $user->id],
                 [
                     'otp' => $otp,
-                    'expires_at' => now()->addMinutes(15),
+                    'expires_at' => date('Y-m-d H:i:s'),
                     'status' => '0',
                 ]
             );
         } else {
-            return redirect()->route('auth.verify_otp_form', ['user_id' => $user->id])->with('error', 'Invalid OTP type.');
+            return redirect()->route('auth.verify_otp_form', ['user' => $user->id])->with('error', 'Invalid OTP type.');
         }
 
-        return redirect()->route('auth.verify_otp_form',  $user->id)
+        return redirect()->route('auth.verify_otp_form',  ['user' => $user->id])
             ->with('status', ucfirst($type) . ' OTP resent successfully.');
     }
 }

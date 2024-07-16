@@ -76,7 +76,7 @@ class Kernel extends HttpKernel
         'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
         'restrict-admin-retailer' => \App\Http\Middleware\RestrictAdminRetailerMiddleware::class,
         'localization' => \App\Http\Middleware\Localization::class,
-        // 'VerifyOtp' => \App\Http\Middleware\VerifyOtpMiddleware::class,
+        'VerifyOtp' => \App\Http\Middleware\VerifyOtpMiddleware::class,
 
     ];
     protected $commands = [

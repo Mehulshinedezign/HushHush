@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('front/css/login.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom-front.css') }}?ver={{ now() }}" />
+    <link rel="stylesheet" href="{{ asset('css/iziToast.min.css') }}" />
+
     <!-- <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png') }}"> -->
     <script>
         const APP_URL = "{{ url('') }}";
@@ -50,11 +52,22 @@
                     </div>
                     @if (auth()->user())
                         <div class="header-cart">
-                            <ul>
+                            {{-- <ul>
                                 <li>
                                     <a href="#"><i class="fa-regular fa-user"></i></a>
                                 </li>
-                            </ul>
+                            </ul> --}}
+                            <div class="dropdown">
+                                <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-regular fa-user"></i>
+                                </div>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item" href="{{ route('logout') }}"><img
+                                                src="{{ asset('front/images/logout-icon.svg') }}"
+                                                alt="img">Logout</a></li>
+                                </ul>
+                            </div>
                         </div>
                     @endif
 
@@ -109,6 +122,8 @@
     <script src="{{ asset('front/js/slick.min.js') }}"></script>
     <script src="{{ asset('js/jquery-validation.min.js') }}"></script>
     <script src="{{ asset('js/custom/common.js') }}?ver={{ now() }}"></script>
+    <script src="{{ asset('js/iziToast.min.js') }}"></script>
+
     {{-- <script>
         jQuery(document).ready(function() {
             var url = "{{ URL::previous() ? URL::previous() : '' }}"
