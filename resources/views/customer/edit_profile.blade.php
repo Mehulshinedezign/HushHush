@@ -70,7 +70,7 @@
 
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        {{-- <div class="col-md-12">
                             <div class="my-pro-detail">
                                 <div class="my-pro-detail-left">
                                     <div class="my-pro-detail-para">
@@ -80,7 +80,7 @@
                                 </div>
 
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-md-12">
                             <div class="my-pro-detail  notification-user-pro">
                                 <div class="my-pro-notify-box">
