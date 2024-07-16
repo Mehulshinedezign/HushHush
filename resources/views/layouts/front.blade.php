@@ -91,7 +91,7 @@
                                 <input type="hidden" name="rentaltype" value="Day">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="">Add Product Images (Up to 5)</label>
+                                        <label for="">Add Product Images (Up to 5)*</label>
                                         <div class="formfield">
                                             <label class="img-upload-box mb-4" for="upload-image-five">
                                                 <span>
@@ -121,7 +121,7 @@
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Product Name</label>
+                                            <label for="">Product Name*</label>
                                             <div class="formfield">
                                                 <input type="text" name="product_name" id=""
                                                     placeholder="Enter Name" class="form-control">
@@ -213,29 +213,49 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Country</label>
-                                            <div class="formfield">
-                                                <select name="country" class="form-control" id="country-select">
-                                                    <option value="">Select Country</option>
-                                                    @foreach (country() as $country)
-                                                        <option value="{{ $country->id }}">
-                                                            {{ ucwords($country->name) }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
+                                            <label for="">Address</label>
+                                            <div class="form-field">
+                                                <input type="text" class="form-control" name="product_complete_location" placeholder="Address" id="product_address">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
                                         <div class="form-group">
-                                            <label for="">State/city</label>
+                                            <label for="">Country*</label>
+                                            <div class="formfield">
+                                                <!-- <select name="country" class="form-control" id="country-select">
+                                                    <option value="">Select Country</option>
+                                                    {{-- @foreach (country() as $country)
+                                                        <option value="{{ $country->id }}">
+                                                            {{ ucwords($country->name) }}
+                                                        </option>
+                                                    @endforeach --}}
+                                                </select> -->
+                                                <input type="text" class="form-control" placeholder="country" name="country" id="product_country">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">State*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="state" name="state" id="product_state">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">City*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="city" name="city" id="product_city">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="">State/city*</label>
                                             <div class="duel-select-field">
                                                 <div class="formfield">
                                                     <select class="" name="state" id="state-select">
@@ -257,10 +277,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Non-Available Dates</label>
+                                            <label for="">Non-Available Dates*</label>
                                             <div class="formfield">
                                                 <input type="text" name="non_available_dates"
                                                     id="non_available_date" placeholder="Select Dates"
@@ -274,16 +294,17 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Condition</label>
+                                            <label for="">Condition*</label>
                                             <div class="formfield">
 
                                                 {{-- <input type="text" name="product_condition" id=""
                                                     placeholder="Product Condition" class="form-control"> --}}
                                                 <select class="form-control" name="product_condition">
                                                     <option value="">Select Condition</option>
-                                                    <option value="Excellent">Excellent</option>
-                                                    <option value="Good">Good</option>
-                                                    <option value="Bad">Fine</option>
+                                                    <option value="Hardly">Hardly used</option>
+                                                    <option value="Great">Great condition</option>
+                                                    <option value="Good">Good condition</option>
+                                                    <option value="Fair">Fair condition</option>
                                                 </select>
                                                 <span class="form-icon">
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
@@ -294,7 +315,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Pickup Location</label>
+                                            <label for="">Pickup Location*</label>
                                             <div class="formfield">
                                                 <textarea name="pick_up_location" id="" rows="4" class="form-control" placeholder="Text"></textarea>
                                             </div>
@@ -302,7 +323,7 @@
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Description</label>
+                                            <label for="">Description*</label>
                                             <div class="formfield">
                                                 <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description"></textarea>
                                             </div>
@@ -311,7 +332,7 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Product market value</label>
+                                            <label for="">Product market value*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="text" class="form-control"
                                                     name="product_market_value" value="">
@@ -332,7 +353,7 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Minimum number of rental days</label>
+                                            <label for="">Minimum number of rental days*</label>
                                             <div class="formfield ">
                                                 <input type="text" class="form-control" name="min_rent_days"
                                                     placeholder="Rental days" value="">
@@ -344,7 +365,7 @@
 
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Rent Price/Day</label>
+                                            <label for="">Rent Price/Day*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="text" name="rent_price_day" id=""
                                                     placeholder="" class="form-control">
@@ -354,7 +375,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group ">
-                                            <label for="">Rent Price/Week</label>
+                                            <label for="">Rent Price/Week*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="text" name="rent_price_week" id=""
                                                     placeholder="" class="form-control">
@@ -364,7 +385,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group ">
-                                            <label for="">Rent Price/Month</label>
+                                            <label for="">Rent Price/Month*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="text" name="rent_price_month" id=""
                                                     placeholder="" class="form-control">
@@ -372,19 +393,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-lg-4 col-md-4 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="">Non-Available Dates</label>
-                                            <div class="formfield">
-                                                <input type="text" name="" id="non_available_date"
-                                                    placeholder="Select Dates" class="form-control">
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/calender-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div> --}}
                                     <div class="col-md-12">
                                         <div class="right-btn-box">
                                             <button class="button primary-btn " id="addProduct">Add</button>
@@ -394,6 +402,30 @@
                             </form>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade addbank-Modal" id="addbank-Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form action="{{ route('stripe.onboarding.redirect') }}" method="POST">
+                        <h3 class="modal-title" id="exampleModalLabel">Add your bank details</h3>
+                        @csrf
+                        <img src="{{ asset('front/images/bank-img.png') }}" alt="">
+                        <div class="profile-select-box border-disabled">
+                            <div class="profile-check-list">
+                             
+                                <a href="javascript:void(0)" data-bs-dismiss="modal" arial-label="Close" class="button outline-btn full-btn">Cancel</a>
+                               
+                                <button type="submit" class="button primary-btn full-btn" id="bank_info">Yes</button>
+                       
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
             </div>
         </div>
@@ -444,9 +476,8 @@
     <script src="{{ asset('js/daterangepicker.js') }}"></script>
     <script src="{{ asset('js/jquery-validation.min.js') }}"></script>
     <script src="{{ asset('js/additional-methods.min.js') }}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOyw9TNt8YzANQjJMjjijfr8MC2DV_f1s&libraries=places">
+        <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places"> </script>
     </script>
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <!-- Include DateRangePicker JS -->
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script src="{{ asset('js/custom/customer-search-location.js') }}"></script>
@@ -520,37 +551,6 @@
     <script>
         $(document).ready(function() {
 
-            // Fetch the state behalf of country id 
-            $('#country-select').change(function() {
-                var countryId = $(this).val();
-                var url = '{{ url('states') }}/' + countryId;
-                // alert(url);
-                if (countryId) {
-                    $.ajax({
-                        type: 'GET',
-                        url: url,
-                        dataType: 'json',
-                        headers: {
-                            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(data) {
-                            $('#state-select').empty();
-                            $('#state-select').append('<option value="">Select City</option>');
-                            $.each(data, function(key, value) {
-                                $('#state-select').append('<option value="' + value.id +
-                                    '">' + value.name + '</option>');
-                            });
-                        }
-                    });
-                } else {
-                    $('#state-select').empty();
-                    $('#state-select').append('<option value="">Select City</option>');
-                }
-            });
-
-
-
-
             // fetch the subcategory data
             $('.parent_category').change(function() {
                 var categoryId = $(this).val();
@@ -588,52 +588,16 @@
             });
 
 
-
-
-
-            // fetch the city behalf of state id 
-            $('#state-select').change(function() {
-
-                var stateId = $(this).val();
-                var url = '{{ route('cities') }}';
-                // alert(url);
-                // console.log("state id ",stateId);
-                if (stateId) {
-                    $.ajax({
-                        type: 'GET',
-                        url: url,
-                        data: {
-                            state_id: stateId
-                        },
-                        dataType: 'json',
-                        headers: {
-                            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(data) {
-                            $('#city-select').empty();
-                            $('#city-select').append('<option value="">Select City</option>');
-                            $.each(data, function(key, value) {
-                                $('#city-select').append('<option value="' + value.id +
-                                    '">' + value.name + '</option>');
-                            });
-                        }
-                    });
-                } else {
-                    $('#city-select').empty();
-                    $('#city-select').append('<option value="">Select City</option>');
-                }
-            });
-
             $('.daterange-cus').daterangepicker({
                 autoUpdateInput: false,
                 locale: {
                     format: 'YYYY-MM-DD'
                 },
                 drops: 'down',
-                opens: 'right'
+                opens: 'right',
+                minDate: moment().startOf('day') // Disable previous dates
             }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format(
-                    'YYYY-MM-DD'));
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
             });
 
             $('.daterange-btn').daterangepicker({
@@ -643,19 +607,65 @@
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
                     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                     'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
-                        'month').endOf('month')]
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
                 },
                 autoUpdateInput: false,
+                minDate: moment().startOf('day') // Disable previous dates
             }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format(
-                    'MMMM D, YYYY'));
+                $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
             });
 
             $('.productLink').on('click', function() {
                 console.log("click");
                 $('body').addClass('loading');
             });
+
+
+            // Google place api 
+            $('.product_sub_data').hide();
+
+            $('#product_address').on('focus', function() {
+                $(".product_sub_data").slideDown("slow");
+                initAutocomplete();
+            });
+
+            $('#product_address').on('input', function() {
+                if ($(this).val() === '') {
+                    $(".product_sub_data").slideUp("slow");
+                    $('#country, #state, #city').val('');
+                }
+            });
+
+            function initAutocomplete() {
+                var input = document.getElementById('product_address');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+
+                $('#product_country, #product_state, #product_city').prop('readonly', true);
+
+                autocomplete.addListener('place_changed', function() {
+                    var place = autocomplete.getPlace();
+
+                    $('#product_country, #product_state, #product_city').val('');
+
+                    for (var i = 0; i < place.address_components.length; i++) {
+                        var addressType = place.address_components[i].types[0];
+
+                        if (addressType === 'country') {
+                            $('#product_country').val(place.address_components[i].long_name);
+                        }
+                        if (addressType === 'administrative_area_level_1') {
+                            $('#product_state').val(place.address_components[i].long_name);
+                        }
+                        if (addressType === 'locality') {
+                            $('#product_city').val(place.address_components[i].long_name);
+                        }
+                    }
+
+                    $(".product_sub_data").slideDown("slow");
+                });
+            }
+
+
 
         });
     </script>

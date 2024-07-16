@@ -33,8 +33,8 @@ class CreateProductsTable extends Migration
             $table->float('rent_week',8,2);
             $table->float('rent_month',8,2);
             $table->float('price', 8, 2)->nullable();
-            $table->integer('city')->nullable();
-            $table->integer('state')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
             // $table->float('security', 8, 2);
             $table->enum('status', ['0', '1'])->default('1');
             $table->foreignId('modified_by')->nullable()->constrained('users');

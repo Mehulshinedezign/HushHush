@@ -214,6 +214,19 @@ class ProductController extends Controller
     {
 
         try {
+
+            $product_complete_location = $request->input('product_complete_location');
+            $address = urlencode($product_complete_location);
+            
+            $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=" . config('services.google_maps.api_key');
+            $response = file_get_contents($url);
+            $raw_address = json_decode($response, true);
+            
+            if (!empty($raw_address['results'])) {
+                $formatted_address = json_encode($raw_address['results'][0]);
+            }
+            
+
             $userId = auth()->user()->id;
 
             $data = [
@@ -234,7 +247,7 @@ class ProductController extends Controller
                 'brand' => $request->brand ?? null,
                 'color' => $request->color ?? null,
                 'price' => $request->price ?? null,
-                'city' => $request->city,
+                'city' => $request->city ?? null,
                 'state' => $request->state,
                 'country' => $request->country,
                 'status' => '1',
@@ -261,7 +274,12 @@ class ProductController extends Controller
 
             ProductLocation::create([
                 'product_id' => $product->id,
-                'map_address' => $request->pick_up_location,
+                'country' => $request->country,
+                'state' => $request->state,
+                'city' => $request->city ?? null,
+                'pick_up_location' => $request->pick_up_location,
+                'product_complete_location' => $request->product_complete_location,
+                'raw_address' => $formatted_address ?? null,
             ]);
 
 
@@ -281,8 +299,9 @@ class ProductController extends Controller
             }
 
 
+            return redirect()->route('product')->with('success', "Your product has been uploaded successfully.");
 
-            return redirect()->back()->with('success', "Your product has been uploaded successfully.");
+            // return redirect()->back()->with('success', "Your product has been uploaded successfully.");
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -540,6 +559,18 @@ class ProductController extends Controller
         // }
 
         // dd("NOt slected");
+
+        $product_complete_location = $request->input('product_complete_location');
+        $address = urlencode($product_complete_location);
+        
+        $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=" . config('services.google_maps.api_key');
+        $response = file_get_contents($url);
+        $raw_address = json_decode($response, true);
+        
+        if (!empty($raw_address['results'])) {
+            $formatted_address = json_encode($raw_address['results'][0]);
+        }
+
         try {
             $product = Product::findOrFail(jsdecode_userdata($id));
             $userId = auth()->user()->id;
@@ -561,7 +592,7 @@ class ProductController extends Controller
                 'brand' => $request->brand ?? null,
                 'color' => $request->color ?? null,
                 'price' => $request->price ?? null,
-                'city' => $request->city,
+                'city' => $request->city ?? null,
                 'state' => $request->state,
                 'country' => $request->country,
                 'modified_by' => $userId,
@@ -625,10 +656,16 @@ class ProductController extends Controller
             }
 
             $product->locations()->update([
-                'map_address' => $request->pick_up_location,
+                'product_id' => $product->id,
+                'country' => $request->country,
+                'state' => $request->state,
+                'city' => $request->city ?? null,
+                'pick_up_location' => $request->pick_up_location,
+                'product_complete_location' => $request->product_complete_location,
+                'raw_address' => $formatted_address ?? null,
             ]);
-            // return redirect()->route('index')->with('success', 'Product updated successfully.');
-            return redirect()->back()->with('success', 'Product updated successfully.');
+            return redirect()->route('product')->with('success', 'Product updated successfully.');
+            // return redirect()->back()->with('success', 'Product updated successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

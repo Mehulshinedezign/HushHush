@@ -52,7 +52,7 @@
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Product Name</label>
+                                            <label for="">Product Name*</label>
                                             <div class="formfield">
                                                 <input type="text" name="product_name" id=""
                                                     placeholder="Enter Name" class="form-control"
@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Category/Subcategory</label>
+                                            <label for="">Category/Subcategory*</label>
                                             <div class="duel-select-field">
                                                 <div class="formfield">
                                                     <select name="category" class="parent_category">
@@ -159,85 +159,53 @@
                                             </div>
                                         </div>
                                     </div>
-
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="">Address</label>
+                                            <div class="form-field">
+                                                <input type="text" class="form-control" placeholder="Address" name="product_complete_location" id="product_address" value="{{ $product->productCompleteLocation->product_complete_location ?? '' }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">Country*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="country" name="country" id="product_country" value="{{ $product->productCompleteLocation->country ?? ''}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">State*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="state" name="state" id="product_state" value="{{ $product->productCompleteLocation->state ?? ''}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">City*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="city" name="city" id="product_city" value="{{ $product->city}}">
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Country</label>
-                                            <div class="formfield">
-                                                <select name="country" class="form-control" id="country-select">
-                                                    <option value="">Select Country</option>
-                                                    @foreach (country() as $country)
-                                                        <option value="{{ $country->id }}"
-                                                            @if ($product->country == $country->id) selected @endif>
-                                                            {{ ucwords($country->name) }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="">State/city</label>
-                                            <div class="duel-select-field">
-                                                <div class="formfield">
-                                                    <select class="" name="state" id="state-select">
-                                                        <option value="">Select State</option>
-                                                        @foreach (states() as $state)
-                                                            <option value="{{ $state->id }}"
-                                                                @if ($product->state == $state->id) selected @endif>
-                                                                {{ ucwords($state->name) }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
-                                                    </span>
-                                                </div>
-                                                <div class="formfield">
-                                                    <select name="city" id="city-select">
-                                                        <option value="">Select City</option>
-                                                    </select>
-                                                    <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="">Non-Available Dates</label>
-                                            <div class="formfield">
-                                                <input type="text" name="non_available_dates" id="non_available_date"
-                                                    placeholder="Select Dates" class="form-control daterange-cus"
-                                                    value="{{ $formattedDates }}">
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/calender-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="">Condition</label>
+                                            <label for="">Condition*</label>
                                             <div class="formfield">
                                                 <select class="form-control" name="product_condition">
                                                     <option value="">Condition</option>
-                                                    <option value="Excellent"
-                                                        @if ($product->product_condition == 'Excellent') selected @endif>Excellent
+                                                    <option value="Hardly"
+                                                        @if ($product->product_condition == 'Hardly') selected @endif>Hardly used
                                                     </option>
+                                                    <option value="Great"
+                                                        @if ($product->product_condition == 'Great') selected @endif>Hardly used</option>
                                                     <option value="Good"
-                                                        @if ($product->product_condition == 'Good') selected @endif>Good</option>
-                                                    <option value="Bad"
-                                                        @if ($product->product_condition == 'Bad') selected @endif>Fine</option>
+                                                        @if ($product->product_condition == 'Good') selected @endif>Good condition</option>
+                                                        <option value="Fair"
+                                                        @if ($product->product_condition == 'Fair') selected @endif>Fair condition</option>
                                                 </select>
                                                 <span class="form-icon">
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
@@ -246,12 +214,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Pickup Location</label>
+                                            <label for="">Pickup Location*</label>
                                             <div class="formfield">
                                                 <div class="formfield">
-                                                    <textarea name="pick_up_location" id="" rows="4" class="form-control" placeholder="Text">{{ $pickuplocation->map_address }}</textarea>
+                                                    <textarea name="pick_up_location" id="" rows="4" class="form-control" placeholder="Text">{{ $pickuplocation->pick_up_location }}</textarea>
                                                 </div>
 
                                             </div>
@@ -259,7 +227,7 @@
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Description</label>
+                                            <label for="">Description*</label>
                                             <div class="formfield">
                                                 <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description">{{ $product->description }}</textarea>
                                             </div>
@@ -268,7 +236,7 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Product market value</label>
+                                            <label for="">Product market value*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="text" class="form-control" name="product_market_value"
                                                     value="{{ number_format($product->product_market_value, 0, '', '') }}">
@@ -289,7 +257,7 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Minimum number of rental days</label>
+                                            <label for="">Minimum number of rental days*</label>
                                             <div class="formfield ">
                                                 <input type="text" class="form-control" name="min_rent_days"
                                                     value="{{ $product->min_days_rent_item }}">
@@ -300,7 +268,7 @@
 
                                     {{-- <div class="col-lg-4 col-md-4 col-sm-12">
                                 <div class="form-group">
-                                    <label for="">Non-Available Dates</label>
+                                    <label for="">Non-Available Dates*</label>
                                     <div class="formfield">
                                         <input type="text" name="" id="non_available_date"
                                             placeholder="Select Dates" class="form-control">
@@ -313,7 +281,7 @@
                             </div> --}}
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Rent Price/Day</label>
+                                            <label for="">Rent Price/Day*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="text" name="rent_price_day" id=""
                                                     placeholder="" class="form-control"
@@ -324,7 +292,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group ">
-                                            <label for="">Rent Price/Week</label>
+                                            <label for="">Rent Price/Week*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="text" name="rent_price_week" id=""
                                                     placeholder="" class="form-control"
@@ -335,7 +303,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group ">
-                                            <label for="">Rent Price/Month</label>
+                                            <label for="">Rent Price/Month*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="text" name="rent_price_month" id=""
                                                     placeholder="" class="form-control"
@@ -360,7 +328,7 @@
 @endsection
 
 @push('scripts')
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             function loadCities(stateId) {
                 var url = '{{ route('cities') }}';
@@ -403,165 +371,11 @@
                 loadCities(stateId);
             });
         });
-    </script>
+    </script> --}}
 
     <script>
-        // $(document).ready(function() {
-        //     let imageCount = $('.image-wrapper').length;
-        //     const maxFiles = 5;
 
-        //     $('#upload-image-five').on('change', function() {
-        //         let files = $(this)[0].files;
-        //         for (let i = 0; i < files.length && imageCount < maxFiles; i++) {
-        //             let file = files[i];
-        //             let reader = new FileReader();
-
-        //             reader.onload = function(e) {
-        //                 let img = $('<img>').attr('src', e.target.result).attr('alt', '');
-        //                 let removeBtn = $('<span>').addClass('remove-image').text('×');
-        //                 let hiddenInput = $('<input>').attr({
-        //                     type: 'hidden',
-        //                     name: 'new_images[]'
-        //                 }).val(file.name);
-
-        //                 imgWrapper.append(img, removeBtn, hiddenInput);
-
-        //                 imageCount++;
-        //                 updateRemoveButtons();
-        //             }
-
-        //             reader.readAsDataURL(file);
-        //         }
-        //     });
-
-        //     $(document).on('click', '.remove-image', function() {
-        //         $(this).closest('.image-wrapper').remove();
-        //         imageCount--;
-        //         updateRemoveButtons();
-
-        //         if (imageCount === 0) {
-        //             alert("Please upload at least one image.");
-        //         }
-        //     });
-
-        //     function updateRemoveButtons() {
-        //         $('.remove-image').toggle(imageCount > 1);
-        //     }
-
-        //     updateRemoveButtons();
-
-        //     // Submit event handler
-        //     $('#addProduct').on('submit', function(e) {
-        //         if (imageCount === 0) {
-        //             e.preventDefault();
-        //             alert("Please upload at least one image before submitting.");
-        //         }
-        //     });
-
-        //     function clearError(fieldName) {
-        //         $('label.error[for="' + fieldName + '"]').remove();
-        //     }
-        // });
-
-
-        // $(document).ready(function() {
-        //     let imageCount = $('.image-wrapper').length;
-        //     const maxFiles = 5;
-        //     let uploadedFiles = new Set();
-        //     let newFiles = new Set();
-
-        //     $('.image-wrapper').each(function() {
-        //         uploadedFiles.add($(this).find('input[name="existing_images[]"]').val());
-        //     });
-
-        //     $('#update-upload-image-five').on('change', function() {
-        //         let files = $(this)[0].files;
-        //         let remainingSlots = maxFiles - imageCount;
-
-        //         if (files.length > remainingSlots) {
-        //             alert(`You can upload only ${maxFiles} images in total.`);
-        //             $(this).val('');
-        //             return;
-        //         }
-
-        //         for (let i = 0; i < files.length; i++) {
-        //             let file = files[i];
-        //             let reader = new FileReader();
-
-        //             reader.onload = function(e) {
-        //                 let imgWrapper = $('<div>').addClass('image-wrapper');
-        //                 let img = $('<img>').attr('src', e.target.result).attr('alt', '').attr(
-        //                     'loading', 'lazy');
-        //                 let removeBtn = $('<span>').addClass('remove-image').html('&times;');
-        //                 let hiddenInput = $('<input>').attr({
-        //                     type: 'hidden',
-        //                     name: 'new_images[]'
-        //                 }).val(file.name);
-
-        //                 imgWrapper.append(img, removeBtn, hiddenInput);
-        //                 $('.update-upload-img-preview').append(imgWrapper);
-
-        //                 imageCount++;
-        //                 uploadedFiles.add(file.name);
-        //                 newFiles.add(file);
-        //                 updateRemoveButtons();
-        //                 updateFileInput(); // Update file input after each new image
-        //             }
-
-        //             reader.readAsDataURL(file);
-        //         }
-
-        //         // Clear the file input to allow uploading the same file again
-        //         $(this).val('');
-        //     });
-
-        //     $(document).on('click', '.remove-image', function() {
-        //         let wrapper = $(this).closest('.image-wrapper');
-        //         let imageId = wrapper.data('id');
-        //         if (imageId) {
-        //             uploadedFiles.delete(imageId.toString());
-        //         } else {
-        //             let filename = wrapper.find('input[name="new_images[]"]').val();
-        //             if (filename) {
-        //                 uploadedFiles.delete(filename);
-        //                 newFiles.delete([...newFiles].find(file => file.name === filename));
-        //             }
-        //         }
-        //         wrapper.remove();
-        //         imageCount--;
-        //         updateFileInput();
-        //         updateRemoveButtons();
-        //     });
-
-        //     function updateFileInput() {
-        //         let fileInput = $('#update-upload-image-five')[0];
-        //         let dt = new DataTransfer();
-        //         newFiles.forEach(file => dt.items.add(file));
-        //         fileInput.files = dt.files;
-        //     }
-
-        //     function updateRemoveButtons() {
-        //         $('.remove-image').toggle(imageCount > 1);
-        //     }
-
-        //     updateRemoveButtons();
-
-        //     $('form').on('submit', function(e) {
-        //         if (imageCount === 0) {
-        //             e.preventDefault();
-        //             alert("Please upload at least one image before submitting.");
-        //         } else if (imageCount > maxFiles) {
-        //             e.preventDefault();
-        //             alert(
-        //                 `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`
-        //             );
-        //         }
-        //     });
-
-        //     function clearError(fieldName) {
-        //         $('label.error[for="' + fieldName + '"]').remove();
-        //     }
-        // });
+        // New update script code here 
         $(document).ready(function() {
             let imageCount = $('.image-wrapper').length;
             const maxFiles = 5;

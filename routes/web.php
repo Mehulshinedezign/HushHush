@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\StripeOnboardingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -133,6 +134,10 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
         // country state city routes
         Route::get('states/{country}', [App\Http\Controllers\AjaxController::class, 'states'])->name('states');
         Route::get('cities', [App\Http\Controllers\AjaxController::class, 'cities'])->name('cities');
+
+        Route::post('stripe/onboarding', [StripeOnboardingController::class, 'redirectToStripe'])->name('stripe.onboarding.redirect');
+        Route::get('stripe/onboarding/refresh', [StripeOnboardingController::class, 'refreshOnboarding'])->name('stripe.onboarding.refresh');
+        Route::get('stripe/onboarding/complete', [StripeOnboardingController::class, 'completeOnboarding'])->name('stripe.onboarding.complete');
     });
     // logged in routes
     Route::middleware(['auth', 'customer'])->group(function () {

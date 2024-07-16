@@ -70,6 +70,13 @@ class Product extends Model
     }
 
     /**
+     * single product location 
+     */
+    public function productCompleteLocation()
+    {
+        return $this->hasOne(ProductLocation::class);
+    }
+    /**
      * Product locations
      *
      * @var object

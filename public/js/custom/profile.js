@@ -167,9 +167,7 @@ jQuery(document).ready(function () {
         }
     })
 
-    if (stateId) {
-        jQuery('#state').trigger('change');
-    }
+
 
     function handleStateData(response) {
         let options = '<option value="">Select City</option>';

@@ -61,7 +61,7 @@
                         </div>
                     @else
                         <div class="list-empty-box">
-                            <img src="{{ asset('front/images/find-glass.svg') }}">
+                            <img src="{{ asset('front/images/no-products.svg') }}">
                             <h3 class="text-center">Your product is empty</h3>
                         </div>
                     @endif
@@ -77,7 +77,7 @@
 
     Swal.fire({
         title: 'Are you sure?',
-        text: "You won't delete the product!",
+        text: "Are you sure you want to delete this product?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#1B1B1B',
