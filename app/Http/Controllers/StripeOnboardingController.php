@@ -88,9 +88,10 @@ class StripeOnboardingController extends Controller
                 'raw_data' => json_encode($account),
             ]);
 
-            return redirect()->back()->with('success', 'Your account is created and your bank details have been stored.');
+            
+            return redirect()->route('index')->with('success', 'Your account is created and your bank details have been stored.');
         } else {
-            return redirect()->back()->with('error', 'Your Stripe account setup is incomplete. Please complete the onboarding process.');
+            return redirect()->route('index')->with('error', 'Your Stripe account setup is incomplete. Please complete the onboarding process.');
         }
     }
 }
