@@ -333,6 +333,10 @@
                                     <li><a class="dropdown-item" href="{{ route('product') }}"><img width="15"
                                                 height="14" src="{{ asset('front/images/ecommerce.png') }}"
                                                 alt="img">My Products</a></li>
+
+                                    <li><a class="dropdown-item" href="{{ route('my_query') }}"><img width="15"
+                                        height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
+                                        alt="img">My Query</a></li>
                                     <li><a class="dropdown-item" href="{{ route('profile') }}"><img
                                                 src="{{ asset('front/images/user-icon.svg') }}"
                                                 alt="img">Profile</a></li>

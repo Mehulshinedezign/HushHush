@@ -184,4 +184,9 @@ class Product extends Model
         return $this->hasMany(ProductDisableDate::class);
     }
 
+    public function querydat(){
+
+        return $this->hasOne(Query::class);
+    }
+
 }

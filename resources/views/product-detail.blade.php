@@ -360,9 +360,8 @@
     </section>
 @endsection
 
-
-
-<div class="offcanvas offcanvas-end inquiry-sidebar" tabindex="-1" id="inquiry-sidebar" aria-labelledby="offcanvasExampleLabel">
+<div class="offcanvas offcanvas-end inquiry-sidebar" tabindex="-1" id="inquiry-sidebar"
+    aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasExampleLabel">Query</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -378,68 +377,94 @@
                                 <div><img src="{{ $image->file_path }}" alt="" loading="lazy"></div>
                             @endforeach
                         @else
-                            <div><img src="{{ asset('front/images/pro-description-img.png') }}"
-                            alt="img"></div>
+                            <div><img src="{{ asset('front/images/pro-description-img.png') }}" alt="img"></div>
                         @endif
                     </div>
                     <div class="book-item-profile-info">
                         <h3>Pennington Dress</h3>
                         <div class="pro-desc-prize-wrapper">
-                                <div class="pro-desc-prize">
-                                    <h3>$23</h3>
-                                    <div class="badge day-badge">
-                                        Per day
-                                    </div>
-
+                            <div class="pro-desc-prize">
+                                <h3>$23</h3>
+                                <div class="badge day-badge">
+                                    Per day
                                 </div>
-                                <div class="pro-desc-prize">
-                                    <h3>$23</h3>
-                                    <div class="badge day-badge">
-                                        Per month
-                                    </div>
 
-                                </div>
-                                <div class="pro-desc-prize">
-                                    <h3>$32</h3>
-                                    <div class="badge day-badge">
-                                        Per Year
-                                    </div>
-
-                                </div>
                             </div>
-                    </div>
-                </div>
-                <div class="book-item-date">
-                    <div class="form-group">
-                        <label for="">Select your Rental date</label>
-                        <div class="formfield">
-                            <input type="text" class="form-control daterange-cus" placeholder="Select rental date">
-                            <span class="form-icon">
-                                <!-- <img src="images/calender-icon.svg" alt="img"> -->
-                                <img src="{{ asset('front/images//calender-icon.svg') }}" alt="img">
-                            </span>
+                            <div class="pro-desc-prize">
+                                <h3>$23</h3>
+                                <div class="badge day-badge">
+                                    Per month
+                                </div>
+
+                            </div>
+                            <div class="pro-desc-prize">
+                                <h3>$32</h3>
+                                <div class="badge day-badge">
+                                    Per Year
+                                </div>
+
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="form-group my-3">
-                        <label for="">Description</label>
-                        <div class="formfield">
-                            <textarea name="" id="" cols="30" rows="5" class="form-control" placeholder="Description"></textarea>
+                </div>
+                {{-- <x-alert /> --}}
+                <form id="Sendquery">
+                    @csrf
+                    <input type="hidden" name="for_user" value="{{ jsencode_userdata($product->user_id) }}">
+                    <input type="hidden" name="product_id" value="{{ jsencode_userdata($product->id) }}">
+                    <div class="book-item-date">
+                        <div class="form-group">
+                            <label for="">Select your Rental date</label>
+                            <div class="formfield">
+                                <input type="text" name="rental_dates"
+                                    class="form-control daterange-cus form-class @error('rental_dates') is-invalid @enderror"
+                                    placeholder="Select rental date">
+                                <span class="form-icon">
+                                    <!-- <img src="images/calender-icon.svg" alt="img"> -->
+                                    <img src="{{ asset('front/images//calender-icon.svg') }}" alt="img">
+                                </span>
+                            </div>
+                            @error('rental_dates')
+                                <span class="invalid-feedback" role="alert">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group my-3">
+                            <label for="">Description</label>
+                            <div class="formfield">
+                                <textarea name="description" id="" cols="30" rows="5"
+                                    class="form-control form-class @error('description') is-invalid @enderror" placeholder="Description"></textarea>
+                            </div>
+                            @error('description')
+                                <span class="invalid-feedback" role="alert">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="item-pickup-loc-main">
+                            <h4>Pick up Location</h4>
+                            <p>{{ $product->productCompleteLocation->pick_up_location ?? '' }}</p>
                         </div>
                     </div>
-                    <div class="item-pickup-loc-main">
-                        <h4>Pick up Location</h4>
-                        <p>{{ $product->productCompleteLocation->pick_up_location ?? '' }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="book-item-footer">
-                <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                    data-bs-target="#checkout-sidebar" aria-controls="offcanvasRight">Next</a>
+
+                    <button type="button" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
+                        data-bs-target="#checkout-sidebar" aria-controls="offcanvasRight"
+                        id="Askquery">Next</button>
+
+                </form>
+                {{-- <div class="book-item-footer">
+                    <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
+                        data-bs-target="#checkout-sidebar" aria-controls="offcanvasRight">Next</a>
+                </div> --}}
             </div>
         </div>
     </div>
 </div>
+
+
+
 
 @push('scripts')
     <script>
@@ -485,6 +510,67 @@
             dots: false,
             centerMode: false,
             focusOnSelect: true
+        });
+
+        $(document).ready(function() {
+            $('#Askquery').on('click', function() {
+                let form = $('form#Sendquery')[0];
+                let formData = new FormData(form);
+                if ($('#Sendquery').valid()) {
+                    $('#Askquery').prop('disabled', true);
+                    var url = `{{ route('query') }}`;
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+
+                        success: function(response) {
+                            var modalContent = '';
+                            if (response.success) {
+                                modalContent =
+                                    '<div class="alert alert-success" role="alert">' + response
+                                    .message + '</div>';
+                            } else {
+                                modalContent = '<div class="alert alert-danger" role="alert">' +
+                                    response.message + '</div>';
+                            }
+
+                            $('#query_msg .modal-body').html(
+                                '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
+                                modalContent
+                            );
+
+                            $('#query_msg').modal('show');
+                            $('#Askquery').prop('disabled', false);
+                            $("#Sendquery")[0].reset();
+
+                            // Add click event to close button
+                            $('#closeModalBtn').on('click', function() {
+                                $('#query_msg').modal('hide');
+                            });
+                        },
+                        error: function(response) {
+                            $('#Askquery').prop('disabled', false);
+                            $('#query_msg .modal-body').html(
+                                '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
+                                '<div class="alert alert-danger" role="alert">Please fill all fields or processing your request.</div>'
+                            );
+                            $('#query_msg').modal('show');
+
+                            // Add click event to close button
+                            $('#closeModalBtn').on('click', function() {
+                                $('#query_msg').modal('hide');
+                            });
+                        }
+                    });
+
+                }
+            })
         });
     </script>
 @endpush

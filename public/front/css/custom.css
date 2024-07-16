@@ -1970,6 +1970,90 @@ span.left-form-icon {
     height: 15px;
 }
 
+.Inquiry-desc {
+    display: inline-block;
+    max-width: 20em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.small-btn {
+    padding: 5px 10px !important;
+    min-width: 68px;
+    min-height: 35px;
+    font-size: 12px;
+}
+.reject-btn {
+    color: red;
+    background-color: #ff00003b;
+}
+.reject-btn:hover {
+    color: #fff;
+    background-color: red;
+}
+.accept-btn {
+    color: green;
+    background-color: #0080004f;
+}
+.accept-btn:hover {
+    color: #fff;
+    background-color: green;
+}
+.inquiry-list-main table tr th:last-child{
+    float: right;
+}
+.inquiry-list-main .inquiry-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+.inquiry-list-main .table-profile img {
+    width: 60px;
+    height: 60px;
+    min-width: 26px;
+    border-radius: 5px;
+}
+.Query-Modal .btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    min-height: 22px;
+    opacity: 1;
+}
+.query-detail-box > h3 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 28px;
+}
+.query-detail-img {
+    max-width: 220px;
+    height: 220px;
+    overflow: hidden;
+    border-radius: 10px;
+    margin: 0 auto 20px;
+}
+.query-detail-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.query-detail-info h4 {
+    font-size: 18px;
+    line-height: 22px;
+    margin-bottom: 10px;
+}
+.query-detail-info > h3 {
+    font-size: 18px;
+    line-height: 22px;
+}
 
+.query_btn_close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    min-height: 22px;
+    opacity: 1;
+}
 
 

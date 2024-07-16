@@ -215,6 +215,12 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
             // end
 
             Route::get('order/{order}/chat', [App\Http\Controllers\Customer\OrderController::class, 'orderChat'])->name('orderchat');
+
+            // Query section code here
+            Route::post('query',[App\Http\Controllers\Customer\QueryController::class,'store'])->name('query');
+            Route::get('my_query',[App\Http\Controllers\Customer\QueryController::class,'myQuery'])->name('my_query');
+            Route::get('query_view', [App\Http\Controllers\Customer\QueryController::class, 'view'])->name('query_view');
+
         });
     });
 });
