@@ -169,7 +169,7 @@
                                             <p>Bank</p>
                                             <div class="my-pro-edit-form">
                                                 <div class="row g-3">
-                                                    <div class="col-md-6">
+                                                    {{-- <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="">First Name</label>
                                                             <div class="formfield">
@@ -184,8 +184,8 @@
                                                                 </span>
                                                             @enderror
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-6">
+                                                    </div> --}}
+                                                    {{-- <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="">Last Name</label>
                                                             <div class="formfield">
@@ -200,8 +200,8 @@
                                                                 </span>
                                                             @enderror
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-6">
+                                                    </div> --}}
+                                                    {{-- <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="">DOB</label>
                                                             <div class="formfield">
@@ -216,8 +216,8 @@
                                                                 </span>
                                                             @enderror
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-6">
+                                                    </div> --}}
+                                                    {{-- <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="">Account Number</label>
                                                             <div class="formfield">
@@ -232,8 +232,8 @@
                                                                 </span>
                                                             @enderror
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-12">
+                                                    </div> --}}
+                                                    {{-- <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label for="">Routing Number</label>
                                                             <div class="formfield">
@@ -248,7 +248,7 @@
                                                                 </span>
                                                             @enderror
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
 
                                                     <div class="col-md-12">
                                                         <div class="my-pro-detail-left">
@@ -320,26 +320,26 @@
                     required: true,
                     userCompleteAddress: true,
                 },
-                account_holder_first_name: {
-                    required: true,
-                    regex: nameRegex,
-                },
-                account_holder_last_name: {
-                    required: true,
-                    regex: lastNameRegex,
-                },
-                date_of_birth: {
-                    required: true,
-                    regex: dateOfBirthRegex,
-                },
-                account_number: {
-                    required: true,
-                    regex: accountNumberRegex,
-                },
-                routing_number: {
-                    required: true,
-                    regex: routingNumberRegex,
-                }
+                // account_holder_first_name: {
+                //     required: true,
+                //     regex: nameRegex,
+                // },
+                // account_holder_last_name: {
+                //     required: true,
+                //     regex: lastNameRegex,
+                // },
+                // date_of_birth: {
+                //     required: true,
+                //     regex: dateOfBirthRegex,
+                // },
+                // account_number: {
+                //     required: true,
+                //     regex: accountNumberRegex,
+                // },
+                // routing_number: {
+                //     required: true,
+                //     regex: routingNumberRegex,
+                // }
             };
 
             const messages = {
@@ -356,26 +356,26 @@
                     required: 'This field is required.',
                     userCompleteAddress: 'Please enter the complete address',
                 },
-                account_holder_first_name: {
-                    required: 'This field is required.',
-                    regex: 'First name must contain only letters and spaces.',
-                },
-                account_holder_last_name: {
-                    required: 'This field is required.',
-                    regex: 'Last name must not contain space and digits.',
-                },
-                date_of_birth: {
-                    required: 'This field is required.',
-                    regex: 'Date of birth must be in the format YYYY-MM-DD.',
-                },
-                account_number: {
-                    required: 'This field is required.',
-                    regex: 'Account number must contain only digits.',
-                },
-                routing_number: {
-                    required: 'This field is required.',
-                    regex: 'Routing number must contain only digits.',
-                }
+                // account_holder_first_name: {
+                //     required: 'This field is required.',
+                //     regex: 'First name must contain only letters and spaces.',
+                // },
+                // account_holder_last_name: {
+                //     required: 'This field is required.',
+                //     regex: 'Last name must not contain space and digits.',
+                // },
+                // date_of_birth: {
+                //     required: 'This field is required.',
+                //     regex: 'Date of birth must be in the format YYYY-MM-DD.',
+                // },
+                // account_number: {
+                //     required: 'This field is required.',
+                //     regex: 'Account number must contain only digits.',
+                // },
+                // routing_number: {
+                //     required: 'This field is required.',
+                //     regex: 'Routing number must contain only digits.',
+                // }
             };
 
             handleValidation('save_user', rules, messages, function(form) {

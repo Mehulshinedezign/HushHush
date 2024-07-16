@@ -49,7 +49,7 @@ class QueryController extends Controller
 
     public function myQuery(Request $request){
         $user = auth()->user();
-        $querydatas = Query::where('for_user',$user->id)->get();
+        $querydatas = Query::where('user_id',$user->id)->get();
        
         return view('customer.query_list',compact('querydatas'));
     }

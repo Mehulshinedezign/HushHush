@@ -1871,7 +1871,7 @@ span.left-form-icon {
     overflow: hidden;
     border-radius: 50%;
     border: 7px solid #fff;
-    margin: 0 auto;
+    margin: -20px auto 0;
 }
 .my-pro-dp-view img {
     width: 100%;

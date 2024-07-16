@@ -363,7 +363,7 @@
 <div class="offcanvas offcanvas-end inquiry-sidebar" tabindex="-1" id="inquiry-sidebar"
     aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Query</h5>
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Ask query</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">

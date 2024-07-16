@@ -586,25 +586,25 @@ class ProfileController extends Controller
                 'about' => $request->about ?? null,
             ];
 
-             RetailerBankInformation::where('retailer_id', auth()->user()->id)->first();
+            //  RetailerBankInformation::where('retailer_id', auth()->user()->id)->first();
 
-            RetailerBankInformation::updateOrCreate([
-                'retailer_id' => auth()->user()->id,
-            ], [
-                'account_holder_first_name' => $request->account_holder_first_name,
-                'account_holder_last_name' => $request->account_holder_last_name,
-                'account_holder_dob' => $request->input('date_of_birth'),
-                'account_holder_type' => 'Individual',
-                'account_type' => 'Custom',
-                'account_number' => jsencode_userdata($request->account_number),
-                'routing_number' => jsencode_userdata($request->routing_number),
-                'is_verified' => "" ,
-                'stripe_btok_token' => "",
-                'stripe_ba_token' => "",
-                'stripe_account_token' => "",
-                'stripe_btok_token_response' => "",
-                'stripe_account_token_response' => "",
-            ]);
+            // RetailerBankInformation::updateOrCreate([
+            //     'retailer_id' => auth()->user()->id,
+            // ], [
+            //     'account_holder_first_name' => $request->account_holder_first_name,
+            //     'account_holder_last_name' => $request->account_holder_last_name,
+            //     'account_holder_dob' => $request->input('date_of_birth'),
+            //     'account_holder_type' => 'Individual',
+            //     'account_type' => 'Custom',
+            //     'account_number' => jsencode_userdata($request->account_number),
+            //     'routing_number' => jsencode_userdata($request->routing_number),
+            //     'is_verified' => "" ,
+            //     'stripe_btok_token' => "",
+            //     'stripe_ba_token' => "",
+            //     'stripe_account_token' => "",
+            //     'stripe_btok_token_response' => "",
+            //     'stripe_account_token_response' => "",
+            // ]);
             $user->update($data);
 
             $user->userDetail()->updateOrCreate(

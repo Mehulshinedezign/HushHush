@@ -42,13 +42,27 @@
     .bottom {
         gap: 15px;
     }
+    .pro-desc-prize-wrapper .pro-desc-prize h3 {
+        font-size: 18px;
+        line-height: 30px;
+    }
+    .pro-desc-prize-wrapper .badge {
+        font-weight: 400;
+        font-size: 12px;
+    }
+    .inquiry-sidebar .pro-desc-prize-wrapper .pro-desc-prize h3 {
+        font-size: 16px;
+    }
 }
 
 @media screen and (max-width:1440px) {
     .container {
         max-width: 1280px;
     }
-
+    .pro-desc-prize-wrapper {
+        display: flex;
+        gap: 10px;
+    }
     .menu-categories button {
         padding: 10px 15px;
         min-width: 170px;
