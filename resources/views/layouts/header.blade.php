@@ -305,15 +305,15 @@
                     @endphp
                     <ul>
                         <li>
-                             @if (is_null($userBankInfo))
+                            @if (is_null($userBankInfo))
                                 <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
                                     Add New Product
                                 </div>
-                             @else
+                            @else
                                 <div data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
                                     Add New Product
-                                </div>   
-                             @endif   
+                                </div>
+                            @endif
 
                         </li>
                         <li><a href="{{ route('wishlist') }}"><i class="fa-regular fa-heart"></i>
@@ -717,6 +717,4 @@
     </nav>
 </header>
 @push('scripts')
-
 @endpush
-

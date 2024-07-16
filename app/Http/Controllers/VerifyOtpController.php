@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EmailOtp;
 use App\Models\PhoneOtp;
 use App\Models\User;
+use App\Notifications\VerificationEmail;
 use App\Services\OtpService;
 use Carbon\Carbon;
 use Exception;
@@ -115,6 +116,7 @@ class VerifyOtpController extends Controller
 
             // Uncomment the following line to actually send the email OTP
             // $this->otpService->sendEmailOtp($user, $otp);
+            $user->notify(new VerificationEmail($user, $otp));
 
             EmailOtp::updateOrCreate(
                 ['user_id' => $user->id],
