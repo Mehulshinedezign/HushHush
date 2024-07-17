@@ -45,6 +45,7 @@ class Product extends Model
             $parent->allImages()->delete();
         });
 
+
         // Add more event listeners for other relationships as needed
     }
     public function getRentAttribute($value)

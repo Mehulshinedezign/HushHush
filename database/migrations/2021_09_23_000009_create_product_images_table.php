@@ -19,6 +19,7 @@ class CreateProductImagesTable extends Migration
             $table->string('file_name')->nullable();
             $table->string('file_path')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

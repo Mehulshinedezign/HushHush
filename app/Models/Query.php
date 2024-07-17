@@ -28,4 +28,13 @@ class Query extends Model
     {
         return $this->belongsTo(User::class, 'for_user');
     }
+
+    public function scopeFilterByStatus($query, $status)
+    {
+        if ($status) {
+            return $query->where('status', $status);
+        }
+
+        return $query;
+    }
 }

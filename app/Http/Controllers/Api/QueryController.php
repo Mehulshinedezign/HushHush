@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Query;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -58,12 +59,14 @@ class QueryController extends Controller
         }
     }
 
-    public function queriesByUser()
+    public function queriesByUser(Request $request)
     {
         $user = auth()->user();
+        $status = $request->get('status');
         try {
             $queries = Query::where('user_id', $user->id)
                 ->whereNull('deleted_at')
+                ->filterByStatus($status)
                 ->get();
 
             if (count($queries) > 0) {
@@ -73,6 +76,7 @@ class QueryController extends Controller
                     $product = Product::where('id', $productId)
                         ->whereNull('deleted_at')
                         ->first();
+                        $lender = User::where('id', $query->for_user)->first();
 
                     return [
                         'id' => $query->id,
@@ -87,6 +91,7 @@ class QueryController extends Controller
                         ],
                         'name' => $product->name ?? null,
                         'product_image_url' => $product->thumbnailImage->file_path ?? null,
+                        'lender'=>$lender->name ?? null,
                     ];
                 });
 
@@ -100,7 +105,7 @@ class QueryController extends Controller
                     'status' => true,
                     'message' => 'No query is available',
                     'data' => $queries,
-                ], 400);
+                ], 200);
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -110,21 +115,24 @@ class QueryController extends Controller
         }
     }
 
-    public function queriesForUser()
+    public function queriesForUser(Request $request)
     {
         $user = auth()->user();
+        $status = $request->get('status');
         try {
             $queries = Query::where('for_user', $user->id)
                 ->whereNull('deleted_at')
+                ->filterByStatus($status)
                 ->get();
 
-            if (count($queries) > 0) {
+            if ($queries->count() > 0) {
                 $queries = $queries->map(function ($query) {
                     [$startDate, $endDate] = explode(' - ', $query->date_range);
                     $productId = $query->product_id;
                     $product = Product::where('id', $productId)
                         ->whereNull('deleted_at')
                         ->first();
+                    $borrower = User::where('id', $query->user_id)->first();
 
                     return [
                         'id' => $query->id,
@@ -139,6 +147,7 @@ class QueryController extends Controller
                         ],
                         'name' => $product->name ?? null,
                         'product_image_url' => $product->thumbnailImage->file_path ?? null,
+                        'borrower' => $borrower->name ?? null,
                     ];
                 });
 
@@ -152,7 +161,7 @@ class QueryController extends Controller
                     'status' => true,
                     'message' => 'No query is available',
                     'data' => $queries,
-                ], 400);
+                ], 200);
             }
         } catch (\Exception $e) {
             return response()->json([
@@ -161,6 +170,7 @@ class QueryController extends Controller
             ], 500);
         }
     }
+
 
 
 
@@ -170,10 +180,15 @@ class QueryController extends Controller
         try {
             $query = Query::findOrFail($id);
 
-            if (in_array($type, ['ACCEPTED', 'REJECTED'])) {
-                $query->status = $type;
-                $query->save();
-
+            if ($type == 'ACCEPTED') {
+                $query = Query::where('id', $id)->update(['status' => 'ACCEPTED']);
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Query status updated successfully',
+                    'data' => $query,
+                ], 200);
+            } elseif ($type == 'REJECTED') {
+                $query = Query::where('id', $id)->update(['status' => 'REJECTED']);
                 return response()->json([
                     'status' => true,
                     'message' => 'Query status updated successfully',

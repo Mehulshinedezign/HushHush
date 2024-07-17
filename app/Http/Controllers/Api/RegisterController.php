@@ -74,11 +74,11 @@ class RegisterController extends Controller
             // dd($country_code);
             $full_number = $country_code . $number;
 
-            $otp = $this->otpService->generateOtp($user);
+            $phoneOtp = $this->otpService->generateOtp($user);
             // $this->otpService->sendOtp($otp, $full_number);
 
-            // $otp = $this->otpService->generateOtp($user);
-            $user->notify(new EmailOtpVerification($user, $otp));
+            $emailOtp = $this->otpService->generateOtp($user);
+            $user->notify(new EmailOtpVerification($user, $emailOtp));
 
             $apiResponse = 'success';
             $statusCode = '200';
@@ -149,9 +149,11 @@ class RegisterController extends Controller
         return Validator::make($data, $validation, $message);
     }
 
-    public function verifyOtp(Request $request)
+    public function verifyOtp(Request $request,$type)
     {
+        // dd('here');
         try {
+
             $validator = Validator::make($request->all(), [
                 'user_id' => 'required|exists:users,id',
                 'otp' => 'required|digits:6',
