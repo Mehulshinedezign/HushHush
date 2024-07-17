@@ -19,6 +19,34 @@ class Product extends Model
         'average_rating'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Cascading delete for children1 relationship
+        static::deleting(function ($parent) {
+            $parent->queries()->delete();
+        });
+
+        // Cascading delete for children2 relationship
+        static::deleting(function ($parent) {
+            $parent->locations()->delete();
+        });
+
+        static::deleting(function ($parent) {
+            $parent->locations()->delete();
+        });
+
+        static::deleting(function ($parent) {
+            $parent->disableDates()->delete();
+        });
+
+        static::deleting(function ($parent) {
+            $parent->allImages()->delete();
+        });
+
+        // Add more event listeners for other relationships as needed
+    }
     public function getRentAttribute($value)
     {
         return number_format((float)$value, 2, '.', '');
@@ -38,6 +66,7 @@ class Product extends Model
     {
         return number_format(round($this->ratings()->avg('rating'), 1), 1, '.', '');
     }
+
 
     /**
      * Product retailer

@@ -13,14 +13,18 @@ return new class extends Migration
     {
         Schema::create('queries', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('for_user');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
+
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade')->onUpdate('cascade');
+
+            $table->foreignId('for_user')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
+
             $table->text('query_message')->nullable();
             $table->enum('status', ['ACCEPTED', 'REJECTED', 'PENDING', 'COMPLETED'])->default('PENDING');
             $table->string('date_range');
             $table->timestamps();
-            $table->softDeletes(); // Add soft delete column
+            $table->softDeletes();
+
 
             // Foreign keys
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
