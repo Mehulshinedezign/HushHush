@@ -76,7 +76,7 @@ class QueryController extends Controller
                     $product = Product::where('id', $productId)
                         ->whereNull('deleted_at')
                         ->first();
-                        $lender = User::where('id', $query->for_user)->first();
+                    $lender = User::where('id', $query->for_user)->first();
 
                     return [
                         'id' => $query->id,
@@ -91,7 +91,7 @@ class QueryController extends Controller
                         ],
                         'name' => $product->name ?? null,
                         'product_image_url' => $product->thumbnailImage->file_path ?? null,
-                        'lender'=>$lender->name ?? null,
+                        'lender' => $lender->name ?? null,
                     ];
                 });
 
