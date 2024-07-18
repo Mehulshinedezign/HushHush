@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class QueryController extends Controller
 {
@@ -39,6 +40,18 @@ class QueryController extends Controller
             ];
             // dd($data);
             $qur = Query::create($data);
+
+            // create chat
+
+            $product = Product::where('id', $product_id)->first();
+            $receiver_id = $product->user_id;
+            $sent_by = auth()->user()->role_id == '3' ? 'Customer' : 'Retailer';
+
+            if (check_chat_exist_or_not($receiver_id))
+                $chat = check_chat_exist_or_not($receiver_id);
+            else
+                $chat = auth()->user()->chat()->create(['chatid' => str::random(10), 'retailer_id' => $receiver_id, 'order_id' => null, 'sent_by' => $sent_by]);
+
 
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Query send successfully']);

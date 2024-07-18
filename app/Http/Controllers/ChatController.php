@@ -208,4 +208,10 @@ class ChatController extends Controller
             ]
         ]);
     }
+    public function common_chat(Request $request)
+    {
+        $chatlist = Chat::where('user_id', auth()->user()->id)->orWhere('retailer_id', auth()->user()->id)->get();
+
+        return view('chat', compact('chatlist'));
+    }
 }
