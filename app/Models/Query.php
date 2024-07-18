@@ -11,7 +11,7 @@ class Query extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'product_id', 'for_user', 'query_message', 'status', 'date_range',
+        'user_id', 'product_id', 'for_user', 'query_message', 'status', 'date_range','negotiate_price',
     ];
 
     public function product()

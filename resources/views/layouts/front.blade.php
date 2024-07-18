@@ -215,29 +215,44 @@
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Address</label>
+                                            <div class="product_manual_location">
+                                                <label for="">Pickup Location*</label>
+
+                                                <div class="form-check form-switch">
+                                                    <label class="form-check-label" for="flexSwitchCheckChecked">Checked switch checkbox input</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </div>
                                             <div class="form-field">
                                                 <input type="text" class="form-control" name="product_complete_location" placeholder="Address" id="product_address">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                    <div class="col-lg-6 col-md-3 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">Address line 1*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="address line 1" name="address1" id="product_address1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-3 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">Address line 2*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="address line 2" name="address2" id="product_address2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">Country*</label>
                                             <div class="formfield">
-                                                <!-- <select name="country" class="form-control" id="country-select">
-                                                    <option value="">Select Country</option>
-                                                    {{-- @foreach (country() as $country)
-                                                        <option value="{{ $country->id }}">
-                                                            {{ ucwords($country->name) }}
-                                                        </option>
-                                                    @endforeach --}}
-                                                </select> -->
                                                 <input type="text" class="form-control" placeholder="country" name="country" id="product_country">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                    <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">State*</label>
                                             <div class="formfield">
@@ -245,7 +260,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                    <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">City*</label>
                                             <div class="formfield">
@@ -253,32 +268,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-lg-6 col-md-6 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="">State/city*</label>
-                                            <div class="duel-select-field">
-                                                <div class="formfield">
-                                                    <select class="" name="state" id="state-select">
-                                                        <option value="">Select State</option>
-                                                    </select>
-                                                    <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
-                                                    </span>
-                                                </div>
-                                                <div class="formfield">
-                                                    <select name="city" id="city-select">
-                                                        <option value="">Select City</option>
-                                                    </select>
-                                                    <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Non-Available Dates*</label>
                                             <div class="formfield">
@@ -292,7 +282,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Condition*</label>
                                             <div class="formfield">
@@ -313,14 +303,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
+                                    {{-- <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Pickup Location*</label>
                                             <div class="formfield">
                                                 <textarea name="pick_up_location" id="" rows="4" class="form-control" placeholder="Text"></textarea>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Description*</label>
@@ -596,7 +586,7 @@
         });
     </script>
 
-    {{-- Search the country and state  --}}
+    {{-- Search the country and state  and GOogle place Api --}}
     <script>
         $(document).ready(function() {
 
@@ -681,7 +671,8 @@
             $('#product_address').on('input', function() {
                 if ($(this).val() === '') {
                     $(".product_sub_data").slideUp("slow");
-                    $('#country, #state, #city').val('');
+                    // $('#country, #state, #city').val('');
+                    $(' #product_address1,#product_address2,#product_country, #product_state, #product_city').val('');
                 }
             });
 
@@ -689,16 +680,21 @@
                 var input = document.getElementById('product_address');
                 var autocomplete = new google.maps.places.Autocomplete(input);
 
-                $('#product_country, #product_state, #product_city').prop('readonly', true);
+                $('#product_address1,#product_address2,#product_country, #product_state, #product_city').prop('readonly', true);
 
                 autocomplete.addListener('place_changed', function() {
                     var place = autocomplete.getPlace();
 
-                    $('#product_country, #product_state, #product_city').val('');
+                    $(' #product_address1,#product_address2,#product_country, #product_state, #product_city').val('');
 
                     for (var i = 0; i < place.address_components.length; i++) {
                         var addressType = place.address_components[i].types[0];
-
+                        if(addressType === 'street_number'){
+                            $('#product_address1').val(place.address_components[i].long_name);
+                        }
+                        if(addressType === 'route'){
+                            $('#product_address2').val(place.address_components[i].long_name);
+                        }
                         if (addressType === 'country') {
                             $('#product_country').val(place.address_components[i].long_name);
                         }
@@ -709,6 +705,17 @@
                             $('#product_city').val(place.address_components[i].long_name);
                         }
                     }
+
+                    function setReadonly(selector) {
+                        if ($(selector).val()) {
+                            $(selector).prop('readonly', true);
+                        } else {
+                            $(selector).prop('readonly', false);
+                        }
+                    }
+
+                    setReadonly('#product_address1');
+                    setReadonly('#product_address2');
 
                     $(".product_sub_data").slideDown("slow");
                 });

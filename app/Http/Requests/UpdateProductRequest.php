@@ -42,7 +42,7 @@ class UpdateProductRequest extends FormRequest
             'city' => 'required',
             'state' => 'required',
             'non_available_dates' => 'nullable',
-            'pick_up_location' => 'required|',
+            // 'pick_up_location' => 'required|',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
@@ -66,7 +66,7 @@ class UpdateProductRequest extends FormRequest
             'product_market_value.required' => 'The product market value is required.',
             'city.required' => 'The city is required.',
             'state.required' => 'The state is required.',
-            'pick_up_location.required' => 'The pick-up location is required.',
+            // 'pick_up_location.required' => 'The pick-up location is required.',
             'images.*.image' => 'The uploaded file must be an image.',
             'images.*.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
             'images.*.max' => 'The image may not be greater than 2MB.',
