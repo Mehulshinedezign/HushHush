@@ -76,12 +76,11 @@ function submitForm(e) {
     //     console.log("ReceiverId",ReceiverId);
     // }
 
-    Id = jQuery(".chat-list.activecht").attr("data-id");
-    chatId = jQuery(".chat-list.activecht").attr("data-chatid");
-    ReceiverId = jQuery(".chat-list.activecht").attr("data-receiverid");
+    Id = jQuery(".chat-list-profile.activecht").attr("data-id");
+    chatId = jQuery(".chat-list-profile.activecht").attr("data-chatId");
+    ReceiverId = jQuery(".chat-list-profile.activecht").attr("data-receiverid");
     //console.log("chatId",chatId);
     //console.log("ReceiverId",ReceiverId);
-
     const currentTime = new Date().getTime();
     const timestamp = currentTime.toString();
     const messageInput = document.getElementById("message");
@@ -108,6 +107,7 @@ function submitForm(e) {
 
 
     if (typeof attachmentInput.value != 'undefined' && attachmentInput.value != '') {
+
         jQuery('#sendMessage').prop('disabled', true);
         jQuery('#message').val('');
         var formData = new FormData();
@@ -151,6 +151,7 @@ function submitForm(e) {
             jQuery('#sendMessage').prop('disabled', false);
         }
     } else {
+
         if (messageData.message != '') {
 
             //console.log("messageData",messageData);
@@ -162,6 +163,7 @@ function submitForm(e) {
 function sendMessage(chatId, timestamp, data) {
     jQuery('#sendMessage').prop('disabled', true);
     let response = new Promise((resolve, reject) => {
+        console.log(chatId);
         db.collection(chatId)
             .doc(timestamp)
             .set(data)
@@ -317,11 +319,13 @@ function _lastMsgUpdate(chatId) {
 }
 
 function insertChatId() {
-    var params = { 'order_id': $('.chat-list.activecht').attr('data-orderId'), 'receiver_id': $('.chat-list.activecht').attr('data-receiverId'), _token: $('meta[name="csrf-token"]').attr('content') };
+    var params = { 'order_id': $('.chat-list-profile.activecht').attr('data-orderId'), 'receiver_id': $('.chat-list-profile.activecht').attr('data-receiverId'), _token: $('meta[name="csrf-token"]').attr('content') };
+    console.log(params);
+    alert(params);
     let response = ajaxCall(chat_store_url, "post", params);
     response.then(handleStateData).catch(handleStateError)
     function handleStateData(response) {
-        var element = jQuery('.chat-list.activecht');
+        var element = jQuery('.chat-list-profile.activecht');
         // element.find("input[name='id']").val(response.chat.id);
         // element.find("input[name='ChatId']").val(response.chat.chatid);
         // element.find("input[name='ReceiverId']").val(response.chat.receiver_id);
@@ -366,9 +370,9 @@ async function getMessages(get_chat_url, formData) {
 
 }
 
-$(document).on('click', '.chat-list', function () {
+$(document).on('click', '.chat-list-profile', function () {
     //console.log("hello");
-    var classElement = jQuery('.chat-list');
+    var classElement = jQuery('.chat-list-profile');
     classElement.removeClass('activecht');
     // classElement.find('p.chat-txt').removeClass('chatmsg');
     // classElement.find('.time-count-deta span').removeClass('chatdate');
@@ -380,18 +384,18 @@ $(document).on('click', '.chat-list', function () {
 
     jQuery('#sendMessage').attr('disabled', false);
 
-    if ($('.chat-list.activecht').attr('data-chatId') == '')
+    if ($('.chat-list-profile.activecht').attr('data-chatId') == '')
         insertChatId();
     var formData = new FormData();
-    formData.append('receiverId', jQuery(".chat-list.activecht").attr('data-receiverId'));
-    formData.append('orderId', jQuery(".chat-list.activecht").attr('data-orderId'));
+    formData.append('receiverId', jQuery(".chat-list-profile.activecht").attr('data-receiverId'));
+    formData.append('orderId', jQuery(".chat-list-profile.activecht").attr('data-orderId'));
     //console.log(get_chat_url)
     getMessages(get_chat_url, formData);
 });
 
 jQuery(document).ready(function () {
-    $('.chat-list.activecht').trigger('click');
-    $(".chat-list").click(function () {
+    $('.chat-list-profile.activecht').trigger('click');
+    $(".chat-list-profile").click(function () {
         $("body").addClass("actvecht");
     });
 

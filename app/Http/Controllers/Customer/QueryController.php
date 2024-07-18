@@ -8,6 +8,7 @@ use App\Models\Query;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class QueryController extends Controller
 {
@@ -16,8 +17,7 @@ class QueryController extends Controller
         // Validate incoming request
 
         $request->validate([
-            'rental_dates' =>'required',
-            'product_id' => 'required',
+            'rental_dates' => 'required',
             'description' => 'required|string',
         ]);
 
@@ -39,6 +39,18 @@ class QueryController extends Controller
 
             $qur = Query::create($data);
 
+            // create chat
+
+            $product = Product::where('id', $product_id)->first();
+            $receiver_id = $product->user_id;
+            $sent_by = auth()->user()->role_id == '3' ? 'Customer' : 'Retailer';
+
+            if (check_chat_exist_or_not($receiver_id))
+                $chat = check_chat_exist_or_not($receiver_id);
+            else
+                $chat = auth()->user()->chat()->create(['chatid' => str::random(10), 'retailer_id' => $receiver_id, 'order_id' => null, 'sent_by' => $sent_by]);
+
+
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Query send successfully']);
         } catch (\Exception $e) {
@@ -47,11 +59,12 @@ class QueryController extends Controller
         }
     }
 
-    public function myQuery(Request $request){
+    public function myQuery(Request $request)
+    {
         $user = auth()->user();
-        $querydatas = Query::where('user_id',$user->id)->get();
-       
-        return view('customer.query_list',compact('querydatas'));
+        $querydatas = Query::where('user_id', $user->id)->get();
+
+        return view('customer.query_list', compact('querydatas'));
     }
 
     public function view(Request $request)
@@ -62,6 +75,9 @@ class QueryController extends Controller
         $view = view('customer.query_product', compact('product'))->render();
 
         return response()->json(['success' => true, 'data' => $view]);
+    }
 
+    public function querychat()
+    {
     }
 }

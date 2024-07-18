@@ -10,7 +10,7 @@
                 @csrf
 
                 <div class="form-group ">
-                    <label for="">Email OTP Send On: {{ auth()->user()->email }}</label>
+                    <label for="">Email OTP Send To: {{ auth()->user()->email }}</label>
                     <div class="formfield custm-otp-field">
                         <input id="emailotp" type="text"
                             class="form-control form-class @error('emailotp') is-invalid @enderror" name="emailotp"
@@ -44,7 +44,7 @@
                 method="POST">
                 @csrf
                 <div class="form-group mt-3">
-                    <label for="">Phone OTP Send On: {{ auth()->user()->phone_number }}</label>
+                    <label for="">Phone OTP Send To: {{ auth()->user()->phone_number }}</label>
                     <div class="formfield custm-otp-field   ">
                         <input id="phoneotp" type="text"
                             class="form-control form-class @error('phoneotp') is-invalid @enderror" name="phoneotp"
