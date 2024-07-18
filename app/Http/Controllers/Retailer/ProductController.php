@@ -213,6 +213,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
+        // dd($request->all());
         try {
 
             $product_complete_location = $request->input('product_complete_location');
@@ -274,11 +275,14 @@ class ProductController extends Controller
 
             ProductLocation::create([
                 'product_id' => $product->id,
+                'address1' => $request->address1,
+                'address2' => $request->address2,
+                'manul_pickup_location' => $request->manual_location ? '1' : '0',
                 'country' => $request->country,
                 'state' => $request->state,
                 'city' => $request->city ?? null,
-                'pick_up_location' => $request->pick_up_location,
-                'product_complete_location' => $request->product_complete_location,
+                'pick_up_location' => $request->product_complete_location,
+                // 'product_complete_location' => $request->product_complete_location,
                 'raw_address' => $formatted_address ?? null,
             ]);
 
@@ -559,7 +563,7 @@ class ProductController extends Controller
         // }
 
         // dd("NOt slected");
-
+     
         $product_complete_location = $request->input('product_complete_location');
         $address = urlencode($product_complete_location);
         
@@ -657,11 +661,14 @@ class ProductController extends Controller
 
             $product->locations()->update([
                 'product_id' => $product->id,
+                'address1' => $request->address1,
+                'address2' => $request->address2,
+                'manul_pickup_location' => $request->manual_location ? '1' : '0',
                 'country' => $request->country,
                 'state' => $request->state,
                 'city' => $request->city ?? null,
-                'pick_up_location' => $request->pick_up_location,
-                'product_complete_location' => $request->product_complete_location,
+                'pick_up_location' => $request->product_complete_location,
+                // 'product_complete_location' => $request->product_complete_location,
                 'raw_address' => $formatted_address ?? null,
             ]);
             return redirect()->route('product')->with('success', 'Product updated successfully.');

@@ -417,7 +417,7 @@
                             <label for="">Select your Rental date</label>
                             <div class="formfield">
                                 <input type="text" name="rental_dates"
-                                    class="form-control daterange-cus form-class @error('rental_dates') is-invalid @enderror"
+                                    class="form-control rent_dates form-class @error('rental_dates') is-invalid @enderror"
                                     placeholder="Select rental date">
                                 <span class="form-icon">
                                     <!-- <img src="images/calender-icon.svg" alt="img"> -->
@@ -571,6 +571,58 @@
 
                 }
             })
+
+
+
+            // date range jquery
+            var queryDates = @json($querydates);
+
+
+            var disabledDateRanges = queryDates.map(function(query) {
+                var dateRange = query.date_range.split(' - ');
+                return {
+                    start: moment(dateRange[0]),
+                    end: moment(dateRange[1])
+                };
+            });
+
+            $('.rent_dates').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                drops: 'down',
+                opens: 'right',
+                minDate: moment().startOf('day'),
+                isInvalidDate: function(date) {
+                    return disabledDateRanges.some(function(range) {
+                        return date.isBetween(range.start, range.end, null, '[]');
+                    });
+                }
+            }).on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            });
+
+            $('.daterange-btn').daterangepicker({
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                autoUpdateInput: false,
+                minDate: moment().startOf('day'),
+                isInvalidDate: function(date) {
+                    return disabledDateRanges.some(function(range) {
+                        return date.isBetween(range.start, range.end, null, '[]');
+                    });
+                }
+            }).on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
+            });
+
         });
     </script>
 @endpush

@@ -161,13 +161,36 @@
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Address</label>
+                                            <div class="product_manual_location">
+                                                <label for="">Pickup Location*</label>
+
+                                                <div class="form-check form-switch">
+                                                    <label class="form-check-label" for="flexSwitchCheckChecked">Checked switch checkbox input</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                                                </div>
+                                            </div>
                                             <div class="form-field">
-                                                <input type="text" class="form-control" placeholder="Address" name="product_complete_location" id="product_address" value="{{ $product->productCompleteLocation->product_complete_location ?? '' }}">
+                                                <input type="text" class="form-control" placeholder="Address" name="product_complete_location" id="product_address" value="{{ $product->productCompleteLocation->pick_up_location ?? '' }}">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                    <div class="col-lg-6 col-md-3 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">Address line 1*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="address line 1" name="address1" id="product_address1" value="{{ $product->productCompleteLocation->address1 ?? ''}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-3 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">Address line 2*</label>
+                                            <div class="formfield">
+                                                <input type="text" class="form-control" placeholder="address line 2" name="address2" id="product_address2" value="{{ $product->productCompleteLocation->address2 ?? ''}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">Country*</label>
                                             <div class="formfield">
@@ -175,7 +198,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                    <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">State*</label>
                                             <div class="formfield">
@@ -183,11 +206,26 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12 product_sub_data">
+                                    <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">City*</label>
                                             <div class="formfield">
                                                 <input type="text" class="form-control" placeholder="city" name="city" id="product_city" value="{{ $product->city}}">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="">Non-Available Dates*</label>
+                                            <div class="formfield">
+                                                <input type="text" name="non_available_dates"
+                                                    id="non_available_date" placeholder="Select Dates"
+                                                    class="form-control daterange-cus" value="{{ $formattedDates }}">
+                                                <span class="form-icon cal-icon">
+                                                    <img src="{{ asset('front/images/calender-icon.svg') }}"
+                                                        alt="img">
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -214,7 +252,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                    {{-- <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Pickup Location*</label>
                                             <div class="formfield">
@@ -224,7 +262,7 @@
 
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Description*</label>
@@ -264,21 +302,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-
-                                    {{-- <div class="col-lg-4 col-md-4 col-sm-12">
-                                <div class="form-group">
-                                    <label for="">Non-Available Dates*</label>
-                                    <div class="formfield">
-                                        <input type="text" name="" id="non_available_date"
-                                            placeholder="Select Dates" class="form-control">
-                                        <span class="form-icon">
-                                            <img src="{{ asset('front/images/calender-icon.svg') }}"
-                                                alt="img">
-                                        </span>
-                                    </div>
-                                </div>
-                            </div> --}}
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Rent Price/Day*</label>

@@ -37,12 +37,13 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($querydatas as $query)
+                                        {{-- @dd($query->product->thumbnailImage->file_path); --}}
                                             <tr>
                                                 <td>
                                                     <a href="#" class="user-table-profile">
                                                         <div class="table-profile ">
                                                             @if ($query->product)
-                                                                <img src="{{ $query->product->thumbnailImage->file_path }}"
+                                                                <img src="{{ $query->product->thumbnailImage->file_path ?? ''}}"
                                                                     alt="tb-profile" width="26" height="27">
                                                             @else
                                                                 <img src="{{ asset('front/images/table-profile1.png') }}"
@@ -64,10 +65,10 @@
                                                 <td>{{ $query->date_range ?? '' }}</td>
                                                 <td class="user-active">
                                                     <div class="inquiry-actions">
-                                                        <a href="#" class="button accept-btn small-btn"><i
+                                                        {{-- <a href="#" class="button accept-btn small-btn"><i
                                                                 class="fa-solid fa-circle-check"></i> Accept</a>
                                                         <a href="#" class="button reject-btn small-btn"><i
-                                                                class="fa-solid fa-ban"></i> Reject</a>
+                                                                class="fa-solid fa-ban"></i> Reject</a> --}}
                                                         <a href="#" class="button outline-btn small-btn"><i
                                                                 class="fa-solid fa-comments"></i> Chat</a>
                                                         <a href="{{ route('query_view') }}"
@@ -136,6 +137,8 @@
                     }
                 });
             });
+
+            $('.my_query_details').hide();
         });
     </script>
 @endpush

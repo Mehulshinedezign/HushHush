@@ -30,15 +30,15 @@
                 @endif
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 my_query_details">
             <div class="inquiry-actions">
-                <a href="#" class="button accept-btn full-btn mb-2"><i class="fa-solid fa-circle-check"></i>
+                <a href="{{ route('accept_query', ['id' => $product->querydata->id]) }}" class="button accept-btn full-btn mb-2"><i class="fa-solid fa-circle-check"></i>
                     Accept</a>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 my_query_details">
             <div class="inquiry-actions">
-                <a href="#" class="button reject-btn full-btn mb-2"><i class="fa-solid fa-ban"></i> Reject</a>
+                <a href="{{ route('reject_query', ['id' => $product->querydata->id]) }}" class="button reject-btn full-btn mb-2" onclick="confirmReject(event)"><i class="fa-solid fa-ban"></i> Reject</a>
             </div>
         </div>
         <div class="col-md-4">

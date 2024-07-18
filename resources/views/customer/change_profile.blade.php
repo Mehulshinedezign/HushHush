@@ -104,6 +104,42 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-6 address_data">
+                                            <div class="my-pro-detail-para">
+                                                <p>Address line 1</p>
+                                                <div class="my-pro-edit-form">
+                                                    <div class="form-group">
+                                                        <div class="formfield">
+                                                            <input type="text" placeholder="address1" id="addressline1" name="addressline1"
+                                                                class="form-control" value="{{ $user->userDetail->address1 ?? '' }}">
+                                                        </div>
+                                                    </div>
+                                                    @error('addressline1')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 address_data">
+                                            <div class="my-pro-detail-para">
+                                                <p>Address line 2</p>
+                                                <div class="my-pro-edit-form">
+                                                    <div class="form-group">
+                                                        <div class="formfield">
+                                                            <input type="text" placeholder="address2" id="addressline2" name="addressline2"
+                                                                class="form-control" value="{{ $user->userDetail->address2 ?? '' }}">
+                                                        </div>
+                                                    </div>
+                                                    @error('addressline2')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            {{ $message }}
+                                                        </span>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-md-4 address_data">
                                             <div class="my-pro-detail-para">
                                                 <p>Country</p>
@@ -166,7 +202,7 @@
                                 <div class="my-pro-detail">
                                     <div class="my-pro-detail-left">
                                         <div class="my-pro-detail-para">
-                                            <p>Bank</p>
+                                            {{-- <p>Bank</p> --}}
                                             <div class="my-pro-edit-form">
                                                 <div class="row g-3">
                                                     {{-- <div class="col-md-6">
@@ -303,7 +339,7 @@
             const routingNumberRegex = /^\d+$/;
 
             $.validator.addMethod("userCompleteAddress", function(value, element) {
-                return $('#country').val() !== '' && $('#state').val() !== '' && $('#city').val() !== '';
+                return $('#addressline1').val() !== '' && $('#addressline2').val() !== '' && $('#country').val() !== '' && $('#state').val() !== '' && $('#city').val() !== '';
             }, "Please enter the complete address");
 
             const rules = {
@@ -384,7 +420,7 @@
             });
 
         // Trigger validation when country, state, or city fields change
-            $('#country, #state, #city').on('change', function() {
+            $('#addressline1, #addressline2, #country, #state, #city').on('change', function() {
                 $('#address').valid();
             });
         });
@@ -439,7 +475,7 @@
             $('#address').on('input', function() {
                 if ($(this).val() === '') {
                     $(".address_data").slideUp("slow");
-                    $('#country, #state, #city').val('');
+                    $('#addressline1, #addressline2, #country, #state, #city').val('');
                 }
             });
 
@@ -447,16 +483,21 @@
                 var input = document.getElementById('address');
                 var autocomplete = new google.maps.places.Autocomplete(input);
 
-                $('#country, #state, #city').prop('readonly', true);
+                $('#addressline1, #addressline2, #country, #state, #city').prop('readonly', true);
 
                 autocomplete.addListener('place_changed', function() {
                     var place = autocomplete.getPlace();
 
-                    $('#country, #state, #city').val('');
+                    $('#addressline1, #addressline2, #country, #state, #city').val('');
 
                     for (var i = 0; i < place.address_components.length; i++) {
                         var addressType = place.address_components[i].types[0];
-
+                        if(addressType === 'street_number'){
+                            $('#addressline1').val(place.address_components[i].long_name);
+                        }
+                        if(addressType === 'route'){
+                            $('#addressline2').val(place.address_components[i].long_name);
+                        }
                         if (addressType === 'country') {
                             $('#country').val(place.address_components[i].long_name);
                         }
@@ -467,6 +508,16 @@
                             $('#city').val(place.address_components[i].long_name);
                         }
                     }
+
+                    function setReadonly(selector) {
+                        if ($(selector).val()) {
+                            $(selector).prop('readonly', true);
+                        } else {
+                            $(selector).prop('readonly', false);
+                        }
+                    }
+                    setReadonly('#addressline1');
+                    setReadonly('#addressline2');
 
                     $(".address_data").slideDown("slow");
                 });

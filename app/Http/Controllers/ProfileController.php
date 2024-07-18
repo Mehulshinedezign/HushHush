@@ -520,43 +520,6 @@ class ProfileController extends Controller
 
     public function saveUserprofile(Request $request)
     {
-
-        $complete_address = $request->input('complete_address');
-        $address = urlencode($complete_address);
-
-        $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=" . config('services.google_maps.api_key');
-        $response = file_get_contents($url);
-        $data = json_decode($response);
-
-        if ($data->status == 'OK') {
-            $result = $data->results[0];
-            $addressLine1 = '';
-            $addressLine2 = '';
-            $country = '';
-            $state = '';
-            $city = '';
-            $pincode = '';
-    
-            foreach ($result->address_components as $component) {
-                if (in_array('street_number', $component->types)) {
-                    $addressLine1 = $component->long_name; 
-                }
-                if (in_array('route', $component->types)) {
-                    $addressLine2 = $component->long_name; 
-                }
-                if (in_array('country', $component->types)) {
-                    $country = $component->long_name;
-                }
-                if (in_array('administrative_area_level_1', $component->types)) {
-                    $state = $component->long_name;
-                }
-                if (in_array('locality', $component->types)) {
-                    $city = $component->long_name;
-                }
-            }
-    
-        }
-
        
         try {
             $user = auth()->user();
@@ -577,12 +540,12 @@ class ProfileController extends Controller
             }
 
             $userdetail = [
-                'complete_address' => $complete_address,
-                'address1' => $addressLine1,
-                'address2' => $addressLine2,
-                'country' => $country,
-                'state' => $state,
-                'city' => $city,
+                'complete_address' => $request->complete_address,
+                'address1' => $request->addressline1,
+                'address2' => $request->addressline2,
+                'country' => $request->country,
+                'state' => $request->state,
+                'city' => $request->city,
                 'about' => $request->about ?? null,
             ];
 
