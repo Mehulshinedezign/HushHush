@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\EmailOtp;
 use App\Models\Otp;
+use App\Models\PhoneOtp;
 use App\Models\User;
 use App\Models\UserOtp;
 use Carbon\Carbon;
@@ -13,15 +15,10 @@ class OtpService
 {
     public function generateOtp($user)
     {
-        // $otp = mt_rand(100000, 999999);
-        $otp = '123456';
+        $otp = mt_rand(100000, 999999);
+        // $otp = '123456';
 
-        // UserOtp::create([
-        //     'user_id' => $user->id,
-        //     'otp' => $otp,
-        //     'expires_at' => Carbon::now()->addMinutes(50),
-        //     'status' => '0',
-        // ]);
+
 
         return $otp;
     }
@@ -30,7 +27,7 @@ class OtpService
     public function sendOtp($otp, $full_phone_number)
     {
         // try {
-        $otp = rand(100000, 999999);
+        // $otp = rand(100000, 999999);
         // $otp = LoginOtp::updateOrCreate(["user_id" => $user->id], ["otp" => $otp, "expire_at" => now()->addMinutes(2)]);
 
         // if ($method == "email") {
@@ -61,6 +58,8 @@ class OtpService
 
     // public function verifyOtp($user, $otp)
     // {
+
+    //     if($type)
     //     $userOtp = UserOtp::where('user_id', $user->id)
     //         ->where('otp', $otp)
     //         ->where('expires_at', '>', Carbon::now())
@@ -74,9 +73,79 @@ class OtpService
 
     //     $userOtp->update(['status' => '1']);
 
-        $user=User::Where('id',$user->id);
-        $user->update(['otp_is_verified'=>true,'email_verified_at'=>carbon::now()]);
+    //     $user=User::Where('id',$user->id);
+    //     $user->update(['otp_is_verified'=>true,'email_verified_at'=>carbon::now()]);
 
     //     return true;
     // }
+
+
+
+    // public function verifyOtpByType($user, $otp, $type)
+    // {
+    //     $otpModel = $type === 'phone_number' ? PhoneOtp::class : EmailOtp::class;
+    //     $userOtp = $otpModel::where('user_id', $user->id)
+    //         ->where('otp', $otp)
+    //         ->where('expires_at', '>', now())
+    //         ->where('status', '0')
+    //         ->first();
+
+    //     if (!$userOtp) {
+    //         return false;
+    //     }
+
+    //     $userOtp->update(['status' => '1']);
+
+    //     if ($type === 'phone_number') {
+    //         $user->update(['otp_is_verified' => true]);
+    //     } else if ($type === 'email') {
+    //         $user->update(['email_verified_at' => Carbon::now()]);
+    //     }
+
+    //     if ($user->email_verified_at && $user->otp_is_verified) {
+    //         $user->update(['status' => '1']);
+    //     }
+
+    //     return true;
+    // }
+
+    public function verifyOtpByType($user, $otp, $type)
+    {
+        if ($type === 'phone_number') {
+            $otpModel = PhoneOtp::class;
+        } elseif ($type === 'email') {
+            $otpModel = EmailOtp::class;
+        } elseif ($type === 'reset') {
+            $otpModel = UserOtp::class;
+        } else {
+            return false;
+        }
+
+        $userOtp = $otpModel::where('user_id', $user->id)
+            ->where('otp', $otp)
+            ->where('expires_at', '>', now())
+            ->where('status', '0')
+            ->first();
+
+        if (!$userOtp) {
+            return false;
+        }
+
+        $userOtp->update(['status' => '1']);
+
+        if ($type === 'phone_number') {
+            $user->update(['otp_is_verified' => true]);
+        } elseif ($type === 'email') {
+            $user->update(['email_verified_at' => Carbon::now()]);
+        } elseif ($type === 'reset') {
+            // Custom handling for reset type
+            $user->update(['status' => '1']); // Update this as needed
+        }
+
+        if ($user->email_verified_at && $user->otp_is_verified) {
+            $user->update(['status' => '1']);
+        }
+
+        return true;
+    }
 }

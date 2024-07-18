@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\EmailOtp;
+use App\Models\PhoneOtp;
 use App\Models\User;
 use App\Models\UserDetail;
 use App\Models\UserDocuments;
@@ -12,6 +14,7 @@ use App\Services\OtpService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
@@ -27,6 +30,7 @@ class RegisterController extends Controller
         $this->otpService = $otpService;
     }
 
+
     public function register(Request $request)
     {
         // dd('hello');
@@ -39,6 +43,8 @@ class RegisterController extends Controller
             ], 422);
         }
 
+        DB::beginTransaction();
+
         try {
             $user = User::create([
                 'username' => $request->username,
@@ -47,57 +53,53 @@ class RegisterController extends Controller
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
                 'password' => Hash::make($request->password),
-                // 'zipcode' => $request->zipcode,
                 'email_verification_token' => Str::random(50),
                 'country_code' => $request->country_code,
             ]);
 
-            // UserDetail::create([
-            //     'user_id' => $user->id,
-            //     'address1' => $request->complete_address ?? NULL,
-            //     'about' => $request->about ?? NULL,
-            // ]);
-
-
-            // $path = $request->gov_id->store('user_documents');
-            // $filePath = str_replace("public/", "", $path);
-            // $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
-
-            // UserDocuments::create([
-            //     'user_id' => $user->id,
-            //     'file' => $fileExtension,
-            //     'url' => $filePath,
-            // ]);
-
             $country_code = $request->country_code;
             $number = $request->phone_number;
-            // dd($country_code);
             $full_number = $country_code . $number;
 
-            $phoneOtp = $this->otpService->generateOtp($user);
-            // $this->otpService->sendOtp($otp, $full_number);
+
+            // $phoneOtp = $this->otpService->generateOtp($user);
+            $phoneOtp='777777';
+            PhoneOtp::updateOrCreate(['user_id' => $user->id], [
+                'otp' => $phoneOtp,
+                'expires_at' => now()->addMinutes(15),
+                'status' => '0',
+            ]);
+
+            // $this->otpService->sendOtp($phoneOtp, $full_number);
 
             $emailOtp = $this->otpService->generateOtp($user);
+            EmailOtp::updateOrCreate(['user_id' => $user->id], [
+                'otp' => $emailOtp,
+                'expires_at' => now()->addMinutes(15),
+                'status' => '0',
+            ]);
+
             $user->notify(new EmailOtpVerification($user, $emailOtp));
+
+            DB::commit();
 
             $apiResponse = 'success';
             $statusCode = '200';
-            $message = "User Registration successful. Please verify your email address or phone number .";
+            $message = "User registration successful. Please verify your email address or phone number.";
 
             $response = [
                 'token' => $user->createToken('login')->plainTextToken,
                 'user_id' => $user->id,
-
             ];
+
             return $this->apiResponse($apiResponse, $statusCode, $message, $response, null);
         } catch (\Throwable $e) {
+            DB::rollBack();
             return $this->apiResponse('error', '500', $e->getMessage(), ['errors' => $e->getMessage()], null);
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Something went wrong while sending the email verification. Please try again later.'
-            ], 500);
         }
     }
+
+
 
     protected function validator(array $data)
     {
@@ -149,11 +151,10 @@ class RegisterController extends Controller
         return Validator::make($data, $validation, $message);
     }
 
-    public function verifyOtp(Request $request,$type)
-    {
-        // dd('here');
-        try {
 
+    public function verifyOtp(Request $request, $type)
+    {
+        try {
             $validator = Validator::make($request->all(), [
                 'user_id' => 'required|exists:users,id',
                 'otp' => 'required|digits:6',
@@ -170,12 +171,11 @@ class RegisterController extends Controller
             $user = User::find($request->input('user_id'));
             $otp = $request->input('otp');
 
-            if ($this->otpService->verifyOtp($user, $otp)) {
-                $user->update(['status' => '1']);
-
+            if ($this->otpService->verifyOtpByType($user, $otp, $type)) {
                 $apiResponse = 'success';
                 $statusCode = 200;
                 $message = 'OTP verified successfully.';
+
                 $response = [
                     'token' => $user->createToken('login')->plainTextToken,
                     'user_id' => $user->id,

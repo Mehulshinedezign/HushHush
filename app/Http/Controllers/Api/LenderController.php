@@ -12,15 +12,13 @@ class LenderController extends Controller
     public function index(Request $request, $id)
 {
     try {
-        // Fetch user details along with user details and products
+
         $userDetails = User::with(['userDetail'])->whereId($id)->firstOrFail();
 
-        // Fetch products along with related data
         $products = Product::with(['locations', 'allImages', 'thumbnailImage', 'get_size', 'favorites', 'category', 'disableDates', 'get_brand', 'get_color'])
             ->where('user_id', $id)
             ->get();
 
-        // Transform the products array to include brand, color, size, category names, and image URLs
         $transformedProducts = $products->map(function ($product) {
             $allImages = $product->allImages->map(function ($image) {
                 return [

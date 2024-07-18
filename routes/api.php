@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [App\Http\Controllers\Api\RegisterController::class, 'register']);
 Route::post('/login/{type}', [App\Http\Controllers\Api\LoginController::class, 'login']);
 Route::post('/reset-password/{type}', [App\Http\Controllers\Api\ForgotPasswordController::class, 'resetPassword']);
-Route::post('verify-otp', [App\Http\Controllers\Api\RegisterController::class, 'verifyOtp']);
+Route::post('verify-otp/{type}', [App\Http\Controllers\Api\RegisterController::class, 'verifyOtp']);
 Route::post('/update-password', [App\Http\Controllers\Api\ResetPasswordController::class, 'resetPassword']);
 
 
@@ -57,6 +57,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/queries/user', [App\Http\Controllers\Api\QueryController::class, 'queriesByUser']);
     Route::get('/queries/for-user', [App\Http\Controllers\Api\QueryController::class, 'queriesForUser']);
     Route::post('/queries/{id}/status/{type}', [App\Http\Controllers\Api\QueryController::class, 'updateQueryStatus']);
+
+
+    Route::post('/stripe/charge', [App\Http\Controllers\Api\PaymentController::class, 'createCharge']);
 
     //profile APIs
     Route::get('/profile', [App\Http\Controllers\Api\ProfileController::class, 'index']);

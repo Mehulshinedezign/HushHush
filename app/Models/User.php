@@ -40,6 +40,7 @@ class User extends Authenticatable
         'email_notifications',
         'push_notifications',
         'country_code',
+        'email_verified_at',
     ];
 
     /**
