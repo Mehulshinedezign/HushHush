@@ -216,25 +216,27 @@ function loadMessages(chatId) {
                 //console.log(sender, senderId)
                 if (sender == senderId) {
                     // console.log('hey')
-                    messageList += '<div class="msg-send">';
-                    messageList += '<div class="msg-data"><div class="pro_name d-flex justify-content-end"><span>' + time + '</span><p>You</p></div>';
+                    messageList += '<div class="chat-screen-right-wrapper">';
+                    messageList += '<div class="chat-screenmsg-wrapper">';
+                    messageList += '<div class="chat-screen-name-time">';
+                    messageList += '<span>' + time + '</span><p>You</p></div>';
                     if (attachment)
                         messageList += '<div class="msg_media"><img src="' + attachment + '"></div>';
                     if (message)
-                        messageList += '<div class="msg msg_sender">' + parseMessage(urlify(message)) + '</div></div>';
-                    messageList += '<div class="msg-profile"><img src="' + userImage + '?id=' + sender + '"></div>';
+                        messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message)) + '</div></div>';
+                    messageList += '<div class="chat-screen-img"><img src="' + userImage + '?id=' + sender + '"></div>';
                     messageList += '</div>';
                 }
                 else {
-                    messageList += '<div class="msg-received">';
-                    messageList += '<div class="msg-profile"><img src="' + userImage + '?id=' + sender + '"></div>';
+                    messageList += '<div class="chat-screen-left-wrapper">';
+                    messageList += '<div class="chat-screen-img"><img src="' + userImage + '?id=' + sender + '"></div>';
                     messageList += '<div class="msg-data"><div class="pro_name d-flex">';
                     messageList += `<p>{{USERNAME-${sender}}}</p>`;
                     messageList += '<span>' + time + '</span></div>';
                     if (attachment)
                         messageList += '<div class="msg_media"><img src="' + attachment + '"></div>';
                     if (message)
-                        messageList += '<div class="msg msg-get">' + parseMessage(urlify(message)) + '</div>';
+                        messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message)) + '</div>';
                     messageList += '</div></div>';
                 }
                 //messageList += `<p>{{USERNAME-${sender}}}</p>`;

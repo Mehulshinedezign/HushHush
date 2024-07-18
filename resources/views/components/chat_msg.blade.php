@@ -26,7 +26,7 @@
         </div>
     </div>
     <div class="chat-screen">
-        <p>Today, August 7</p>
+        {{-- <p>Today, August 7</p> --}}
         <div class="chat-screen-area">
             <div class="msg_wrap" id="chatWindow"></div>
 
@@ -66,7 +66,6 @@
         </div>
     </div>
     <form id="chatForm" class="chatwindowform">
-
         <div class="chat-text-area-field">
             <textarea class="commentarea" id="message" placeholder="Type a Message"></textarea>
             <div class="upload-img-chat">
