@@ -219,8 +219,8 @@
                                                 <label for="">Pickup Location*</label>
 
                                                 <div class="form-check form-switch">
-                                                    <label class="form-check-label" for="flexSwitchCheckChecked">Checked switch checkbox input</label>
-                                                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                                                    <label class="form-check-label" for="flexSwitchCheckChecked">Manual Pickup location</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch" name="manual_location" id="flexSwitchCheckChecked" checked>
                                                 </div>
                                             </div>
                                             <div class="form-field">

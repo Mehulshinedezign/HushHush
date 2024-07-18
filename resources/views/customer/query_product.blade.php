@@ -18,7 +18,7 @@
                 <h4>{{ $product->name ?? '' }}</h4>
 
                 @if ($product)
-                    <p>{{ $product->querydat->date_range ?? '' }}</p>
+                    <p>{{ $product->querydata->date_range ?? '' }}</p>
                 @endif
             </div>
         </div>
@@ -26,21 +26,27 @@
             <div class="query-detail-info">
                 <h3>Query</h3>
                 @if ($product)
-                    <p>{{ $product->querydat->query_message ?? '' }}</p>
+                    <p>{{ $product->querydata->query_message ?? '' }}</p>
                 @endif
             </div>
         </div>
-        <div class="col-md-4 my_query_details">
-            <div class="inquiry-actions">
-                <a href="{{ route('accept_query', ['id' => $product->querydata->id]) }}" class="button accept-btn full-btn mb-2"><i class="fa-solid fa-circle-check"></i>
-                    Accept</a>
+
+        @if ($product->querydata->user_id != auth()->user()->id)
+            <div class="col-md-4 my_query_details">
+                <div class="inquiry-actions">
+                    <a href="{{ route('accept_query', ['id' => $product->querydata->id]) }}" class="button accept-btn full-btn mb-2"><i class="fa-solid fa-circle-check"></i>
+                        Accept</a>
+                </div>
             </div>
-        </div>
-        <div class="col-md-4 my_query_details">
-            <div class="inquiry-actions">
-                <a href="{{ route('reject_query', ['id' => $product->querydata->id]) }}" class="button reject-btn full-btn mb-2" onclick="confirmReject(event)"><i class="fa-solid fa-ban"></i> Reject</a>
+            <div class="col-md-4 my_query_details">
+                <div class="inquiry-actions">
+                    {{-- <a href="{{ route('reject_query', ['id' => $product->querydata->id]) }}" class="button reject-btn full-btn mb-2" onclick="confirmReject(event)"><i class="fa-solid fa-ban"></i> Reject</a> --}}
+                    <a href="javascript:void(0)" class="button reject-btn full-btn mb-2"
+                        onclick="confirmReject(event, '{{ $product->querydata->id }}')"><i class="fa-solid fa-circle-check"></i> Reject</a>
+                </div>
             </div>
-        </div>
+        @endif
+
         <div class="col-md-4">
             <div class="inquiry-actions">
                 <a href="#" class="button outline-btn full-btn"><i class="fa-solid fa-comments"></i> Chat</a>

@@ -38,7 +38,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($querydatas as $query)
-                                            <tr>
+                                            <tr class="user_query-{{$query->id}}">
                                                 <td>
                                                     <a href="#" class="user-table-profile">
                                                         <div class="table-profile ">
@@ -148,7 +148,7 @@
             });
         });
 
-        // accept
+        // accept query
         function acceptQuery(queryId) {
             var price = document.getElementById('negotiate_price_' + queryId).value;
             var encodedPrice = (price);
@@ -156,7 +156,7 @@
             window.location.href = url;
         }
 
-        // reject 
+        // reject query
         function confirmReject(event, queryId) {
             event.preventDefault();
 
@@ -181,6 +181,7 @@
         function rejectQuery(queryId) {
             var url = `{{ url('/reject_query') }}/${queryId}`;
             window.location.href = url;
+            $('.user_query-'+queryId).remove();
         }
     </script>
 @endpush

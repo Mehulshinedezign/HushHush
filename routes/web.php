@@ -135,7 +135,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
         Route::get('states/{country}', [App\Http\Controllers\AjaxController::class, 'states'])->name('states');
         Route::get('cities', [App\Http\Controllers\AjaxController::class, 'cities'])->name('cities');
 
-        Route::post('stripe/onboarding', [StripeOnboardingController::class, 'redirectToStripe'])->name('stripe.onboarding.redirect');
+        Route::any('stripe/onboarding', [StripeOnboardingController::class, 'redirectToStripe'])->name('stripe.onboarding.redirect');
         Route::get('stripe/onboarding/refresh', [StripeOnboardingController::class, 'refreshOnboarding'])->name('stripe.onboarding.refresh');
         Route::get('stripe/onboarding/complete', [StripeOnboardingController::class, 'completeOnboarding'])->name('stripe.onboarding.complete');
     });

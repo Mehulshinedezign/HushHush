@@ -31,13 +31,13 @@
                                             <th>Product</th>
                                             <th>Name</th>
                                             <th>Query</th>
-                                            <th>date</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($querydatas as $query)
-                                        {{-- @dd($query->product->thumbnailImage->file_path); --}}
                                             <tr>
                                                 <td>
                                                     <a href="#" class="user-table-profile">
@@ -63,6 +63,16 @@
                                                     <p class="Inquiry-desc">{{ $query->query_message ?? '' }}</p>
                                                 </td>
                                                 <td>{{ $query->date_range ?? '' }}</td>
+                                                <td>
+                                                    @if($query->status == 'ACCEPTED')
+                                                        ACCEPTED
+                                                    @elseif($query->status == 'PENDING')
+                                                        PENDING
+                                                    @else
+                                                        REJECTED
+                                                    @endif
+                                                </td>
+                                                    
                                                 <td class="user-active">
                                                     <div class="inquiry-actions">
                                                         {{-- <a href="#" class="button accept-btn small-btn"><i
@@ -77,6 +87,11 @@
                                                             data-product-id="{{ $query->product_id }}">
                                                             <i class="fa-solid fa-eye"></i> View
                                                         </a>
+                                                        @if($query->status == 'PENDING' || $query->status == 'REJECTED')
+                                                            <a href="#" class="button outline-btn small-btn">Status Pendding...</a>
+                                                        @else
+                                                            <a href="#" class="button outline-btn small-btn">Book now for {{$query->negotiate_price}}$</a>
+                                                        @endif
 
                                                     </div>
                                                 </td>
