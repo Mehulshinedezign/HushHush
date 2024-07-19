@@ -444,8 +444,12 @@
                             @enderror
                         </div>
                         <div class="item-pickup-loc-main">
+
                             <h4>Pick up Location</h4>
-                            <p>{{ $product->productCompleteLocation->pick_up_location ?? '' }}</p>
+                            @if($product->productCompleteLocation->manul_pickup_location == '1')
+                                <p>{{ $product->productCompleteLocation->pick_up_location ?? '' }}</p>
+                            @endif
+
                         </div>
                     </div>
 
