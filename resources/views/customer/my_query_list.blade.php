@@ -87,8 +87,10 @@
                                                             data-product-id="{{ $query->product_id }}">
                                                             <i class="fa-solid fa-eye"></i> View
                                                         </a>
-                                                        @if($query->status == 'PENDING' || $query->status == 'REJECTED')
-                                                            <a href="#" class="button outline-btn small-btn">Status Pendding...</a>
+                                                        @if($query->status == 'PENDING')
+                                                            <a href="#" class="button outline-btn small-btn">Status Pending...</a>
+                                                        @elseif ($query->status == 'REJECTED')
+                                                            <a href="#" class="button outline-btn small-btn">Status Rejected...</a>
                                                         @else
                                                             <a href="#" class="button outline-btn small-btn">Book now for {{$query->negotiate_price}}$</a>
                                                         @endif
