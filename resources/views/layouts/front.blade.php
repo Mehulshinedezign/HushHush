@@ -136,7 +136,7 @@
                                                     <select name="category" class="parent_category">
                                                         <option value="">Category</option>
                                                         @foreach (getParentCategory() as $category)
-                                                            <option value="{{ jsencode_userdata($category->id) }}">
+                                                            <option value="{{ jsencode_userdata($category->id) }}" data-fetchsize="{{ $category->name }}">
                                                                 {{ $category->name }}
                                                             </option>
                                                         @endforeach
@@ -165,10 +165,7 @@
                                             <div class="formfield">
                                                 <select class="form-control" name="size">
                                                     <option value="">Size</option>
-                                                    @foreach (getAllsizes() as $size)
-                                                        <option value="{{ $size->id }}">{{ $size->name }}
-                                                        </option>
-                                                    @endforeach
+                                                   
                                                 </select>
                                                 <span class="form-icon">
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
@@ -594,26 +591,27 @@
             $('.parent_category').change(function() {
                 var categoryId = $(this).val();
                 var route = '{{ url('sub_category') }}/' + categoryId;
-                // console.log(route, 'route');
 
+                
+                
                 if (categoryId) {
                     $.ajax({
                         type: 'GET',
                         url: route,
                         // data: {
-                        //     categoryId: categoryId
-                        // },
-                        dataType: 'json',
-                        headers: {
-                            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                        },
+                            //     categoryId: categoryId
+                            // },
+                            dataType: 'json',
+                            headers: {
+                                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                            },
                         success: function(data,size) {
                             $('#subcategory').empty();
                             $('#subcategory').append('<option value="">Subcategory</option>');
 
                             $.each(data, function(key, value) {
                                 $('#subcategory').append('<option value="' + value.id +
-                                    '">' + value.name + '</option>');
+                                '">' + value.name + '</option>');
                             });
                         },
                         error: function(xhr, status, error) {
@@ -624,9 +622,32 @@
                     $('#subcategory').empty();
                     $('#subcategory').append('<option value="">Subcategory</option>');
                 }
+
+                
+                var sizes = @json(config('size'));     
+                var fetchSize = $(this).find('option:selected').data('fetchsize');
+
+                var sizeOptions = sizes[fetchSize] || [];
+                var sizeSelect = $('select[name="size"]');
+                sizeSelect.empty();
+                sizeSelect.append('<option value="">Size</option>');
+
+                if(sizeOptions.length === 0){
+                    var bydefaultSizes = sizes['bydefault'];
+                    $.each(bydefaultSizes, function(index, size) {
+                        sizeSelect.append('<option value="' + size + '">' + size + '</option>');
+                    });
+                }else{
+                    $.each(sizeOptions, function(key, options) {
+                        $.each(options, function(index, size) {
+                            sizeSelect.append('<option value="' + size + '">' + size + '</option>');
+                        });
+                    });   
+                }
+                
             });
 
-
+            
             $('.daterange-cus').daterangepicker({
                 autoUpdateInput: false,
                 locale: {

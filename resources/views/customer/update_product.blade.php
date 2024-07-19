@@ -68,7 +68,7 @@
                                                     <select name="category" class="parent_category">
                                                         <option value="">Category</option>
                                                         @foreach (getParentCategory() as $category)
-                                                            <option value="{{ jsencode_userdata($category->id) }}"
+                                                            <option value="{{ jsencode_userdata($category->id) }}" data-fetchsize="{{ $category->name }}"
                                                                 @if ($product->category_id == $category->id) selected @endif>
                                                                 {{ $category->name }}
                                                             </option>
@@ -107,12 +107,6 @@
                                             <div class="formfield">
                                                 <select class="form-control" name="size">
                                                     <option value="">Size</option>
-                                                    @foreach (getAllsizes() as $size)
-                                                        <option value="{{ $size->id }}"
-                                                            @if ($product->size == $size->id) selected @endif>
-                                                            {{ $size->name }}
-                                                        </option>
-                                                    @endforeach
                                                 </select>
                                                 <span class="form-icon">
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
@@ -501,6 +495,32 @@
                         `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`);
                 }
             });
+
+            // size script code here 
+            var sizes = @json(config('size'));
+            var category_size = $(this).find('option:selected').data('fetchsize');
+            var size = "{{$product->size}}";
+            var selectedOption = $('select[name="size"]');
+            selectedOption.empty(); 
+
+            var sizeOptions = sizes[category_size] || [];
+
+            if (sizeOptions.length === 0) {
+                var bydefaultSizes = sizes['bydefault'];
+
+                $.each(bydefaultSizes, function(index, confSize) {
+                    var isSelected = (confSize === size) ? ' selected' : '';
+                    selectedOption.append('<option value="' + confSize + '"' + isSelected + '>' + confSize + '</option>');
+                });
+            } else {
+                $.each(sizeOptions, function(key, options) {
+                    $.each(options, function(index, confSize) {
+                        var isSelected = (confSize === size) ? ' selected' : '';
+                        selectedOption.append('<option value="' + confSize + '"' + isSelected + '>' + confSize + '</option>');
+                    });
+                });
+            }
+
         });
     </script>
 @endpush
