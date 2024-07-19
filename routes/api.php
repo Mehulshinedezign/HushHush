@@ -54,8 +54,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     //Query
     Route::post('/queries', [App\Http\Controllers\Api\QueryController::class, 'store']);
-    Route::get('/queries/user/{user_id}', [App\Http\Controllers\Api\QueryController::class, 'queriesByUser']);
-    Route::get('/queries/for-user/{for_user}', [App\Http\Controllers\Api\QueryController::class, 'queriesForUser']);
+    Route::get('/queries/user', [App\Http\Controllers\Api\QueryController::class, 'queriesByUser']);
+    Route::get('/queries/for-user', [App\Http\Controllers\Api\QueryController::class, 'queriesForUser']);
+    Route::post('/queries/{id}/status/{type}', [App\Http\Controllers\Api\QueryController::class, 'updateQueryStatus']);
+
     //profile APIs
     Route::get('/profile', [App\Http\Controllers\Api\ProfileController::class, 'index']);
     Route::get('/profile/edit', [App\Http\Controllers\Api\ProfileController::class, 'edit']);
