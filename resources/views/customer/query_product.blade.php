@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        @if ($product->querydata->user_id != auth()->user()->id)
+        @if (@$product->querydata->user_id != auth()->user()->id)
             <div class="col-md-4 my_query_details">
                 <div class="inquiry-actions">
                     <a href="{{ route('accept_query', ['id' => $product->querydata->id]) }}" class="button accept-btn full-btn mb-2"><i class="fa-solid fa-circle-check"></i>
