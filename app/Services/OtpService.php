@@ -74,8 +74,8 @@ class OtpService
 
     //     $userOtp->update(['status' => '1']);
 
-        $user=User::Where('id',$user->id);
-        $user->update(['otp_is_verified'=>true,'email_verified_at'=>carbon::now()]);
+        // $user=User::Where('id',$user->id);
+        // $user->update(['otp_is_verified'=>true,'email_verified_at'=>carbon::now()]);
 
     //     return true;
     // }
