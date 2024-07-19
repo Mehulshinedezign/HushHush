@@ -18,6 +18,7 @@ use App\Models\Query;
 use App\Models\Size;
 use App\Models\User;
 use App\Notifications\ItemYouLike;
+use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use DateTime;
 use Illuminate\Http\Request;
@@ -433,16 +434,17 @@ class ProductController extends Controller
             $product = Product::create($data);
 
             $locationData = json_decode($request->pickup_location, true);
+            // dd($locationData);
             ProductLocation::create([
                 'product_id' => $product->id,
                 'country' => $locationData['country'],
                 'state' => $locationData['stateOrProvince'],
                 'city' => $locationData['city'],
-                'custom_address' => $locationData['name'],
+                'pick_up_location' => $locationData['name'],
                 'postcode' => $locationData['postcode'] ?? null,
                 'latitude' => $locationData['latitude'],
                 'longitude' => $locationData['longitude'],
-                'map_address' => $locationData['formatted_address'],
+                'product_complete_location' => $locationData['formatted_address'],
                 'raw_address' => $request->pickup_location,
             ]);
 
@@ -582,18 +584,18 @@ class ProductController extends Controller
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new \Exception("Invalid JSON in pickup_location");
             }
-
+            // dd($locationData);
             ProductLocation::updateOrCreate(
                 ['product_id' => $product->id],
                 [
                     'country' => $locationData['country'],
                     'state' => $locationData['stateOrProvince'],
                     'city' => $locationData['city'],
-                    'custom_address' => $locationData['name'],
+                    'pick_up_location' => $locationData['name'],
                     'postcode' => $locationData['postcode'] ?? null,
                     'latitude' => $locationData['latitude'],
                     'longitude' => $locationData['longitude'],
-                    'map_address' => $locationData['formatted_address'],
+                    'complete_pickup_location' => $locationData['formatted_address'],
                     'raw_address' => $request->pickup_location,
                 ]
             );
@@ -1043,112 +1045,112 @@ class ProductController extends Controller
      *details of product.
      */
 
-     public function getAllProductsById($id)
-     {
-         try {
-             $product = Product::with('allImages')->findOrFail($id);
+    public function getAllProductsById($id)
+    {
+        try {
+            $product = Product::with('allImages')->findOrFail($id);
 
-             if (is_null($product)) {
-                 return response()->json([
-                     'status' => false,
-                     'message' => 'Product not found',
-                     'data' => [
-                         'errors' => ['product_id' => 'The product does not exist.'],
-                     ]
-                 ], 404);
-             }
+            if (is_null($product)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Product not found',
+                    'data' => [
+                        'errors' => ['product_id' => 'The product does not exist.'],
+                    ]
+                ], 404);
+            }
 
 
-             $authUserId = auth()->user()->id;
+            $authUserId = auth()->user()->id;
 
-             $queries = Query::where('product_id', $id)->where('user_id', $authUserId)->first();
+            $queries = Query::where('product_id', $id)->where('user_id', $authUserId)->first();
             //  $queries = (object)$query;
-             $categories = getParentCategory();
-             $brands = getBrands();
-             $sizes = getAllsizes();
-             $colors = getColors();
+            $categories = getParentCategory();
+            $brands = getBrands();
+            $sizes = getAllsizes();
+            $colors = getColors();
 
-             $categoryData = $categories->map(function ($category) {
-                 return [
-                     'id' => $category->id,
-                     'label' => $category->name,
-                     'value' => $category->name,
-                     'Subcategory' => getChild($category->id)->map(function ($subCategory) {
-                         return [
-                             'id' => $subCategory->id,
-                             'label' => $subCategory->name,
-                             'value' => $subCategory->name
-                         ];
-                     }),
-                 ];
-             });
+            $categoryData = $categories->map(function ($category) {
+                return [
+                    'id' => $category->id,
+                    'label' => $category->name,
+                    'value' => $category->name,
+                    'Subcategory' => getChild($category->id)->map(function ($subCategory) {
+                        return [
+                            'id' => $subCategory->id,
+                            'label' => $subCategory->name,
+                            'value' => $subCategory->name
+                        ];
+                    }),
+                ];
+            });
 
-             $brandData = $brands->map(function ($brand) {
-                 return [
-                     'id' => $brand->id,
-                     'label' => $brand->name,
-                     'value' => $brand->name,
-                 ];
-             });
+            $brandData = $brands->map(function ($brand) {
+                return [
+                    'id' => $brand->id,
+                    'label' => $brand->name,
+                    'value' => $brand->name,
+                ];
+            });
 
-             $sizeData = $sizes->map(function ($size) {
-                 return [
-                     'id' => $size->id,
-                     'label' => $size->name,
-                     'value' => $size->name,
-                 ];
-             });
+            $sizeData = $sizes->map(function ($size) {
+                return [
+                    'id' => $size->id,
+                    'label' => $size->name,
+                    'value' => $size->name,
+                ];
+            });
 
-             $colorData = $colors->map(function ($color) {
-                 return [
-                     'id' => $color->id,
-                     'label' => $color->name,
-                     'value' => $color->name,
-                 ];
-             });
+            $colorData = $colors->map(function ($color) {
+                return [
+                    'id' => $color->id,
+                    'label' => $color->name,
+                    'value' => $color->name,
+                ];
+            });
 
-             $conditionData = [
-                 ['id' => '1', 'label' => 'Hardly used', 'value' => 'Hardly used'],
-                 ['id' => '2', 'label' => 'Great condition', 'value' => 'Great condition'],
-                 ['id' => '3', 'label' => 'Good condition', 'value' => 'Good condition'],
-                 ['id' => '4', 'label' => 'Fair condition', 'value' => 'Fair condition'],
-             ];
+            $conditionData = [
+                ['id' => '1', 'label' => 'Hardly used', 'value' => 'Hardly used'],
+                ['id' => '2', 'label' => 'Great condition', 'value' => 'Great condition'],
+                ['id' => '3', 'label' => 'Good condition', 'value' => 'Good condition'],
+                ['id' => '4', 'label' => 'Fair condition', 'value' => 'Fair condition'],
+            ];
 
-             $productDetails = $this->getProduct($id);
-             $productDetails->all_images = $productDetails->allImages->map(function ($image) {
-                 return [
-                     'id' => $image->id,
-                     'product_id' => $image->product_id,
-                     'file_name' => $image->file_name,
-                     'file_path' => storage_path($image->file_path),
-                     'created_at' => $image->created_at,
-                     'updated_at' => $image->updated_at
-                 ];
-             });
+            $productDetails = $this->getProduct($id);
+            $productDetails->all_images = $productDetails->allImages->map(function ($image) {
+                return [
+                    'id' => $image->id,
+                    'product_id' => $image->product_id,
+                    'file_name' => $image->file_name,
+                    'file_path' => storage_path($image->file_path),
+                    'created_at' => $image->created_at,
+                    'updated_at' => $image->updated_at
+                ];
+            });
 
-             return response()->json([
-                 'status' => true,
-                 'message' => 'Product details fetched successfully',
-                 'data' => [
-                     'product' => $productDetails,
-                     'categories' => $categoryData,
-                     'brands' => $brandData,
-                     'sizes' => $sizeData,
-                     'colors' => $colorData,
-                     'conditions' => $conditionData,
-                     'queries' => $queries, // Include queries data
-                 ],
-             ], 200);
-         } catch (\Throwable $e) {
-             return response()->json([
-                 'status' => false,
-                 'message' => $e->getMessage(),
-                 'data' => [
-                     'errors' => []
-                 ]
-             ], 500);
-         }
-     }
+            return response()->json([
+                'status' => true,
+                'message' => 'Product details fetched successfully',
+                'data' => [
+                    'product' => $productDetails,
+                    'categories' => $categoryData,
+                    'brands' => $brandData,
+                    'sizes' => $sizeData,
+                    'colors' => $colorData,
+                    'conditions' => $conditionData,
+                    'queries' => $queries, // Include queries data
+                ],
+            ], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [
+                    'errors' => []
+                ]
+            ], 500);
+        }
+    }
 
 
 
@@ -1179,6 +1181,82 @@ class ProductController extends Controller
                 'status' => false,
                 'message' => $e->getMessage(),
                 'errors' => []
+            ], 500);
+        }
+    }
+
+    public function checkout(Request $request, $id)
+    {
+        try {
+            $query = Query::findOrFail($id);
+            $product_id = $query->product_id;
+            $productDetails = $this->getProduct($product_id);
+
+            // Fetch and map all images with complete file paths
+            $productDetails->all_images = $productDetails->allImages->map(function ($image) {
+                return [
+                    'id' => $image->id,
+                    'product_id' => $image->product_id,
+                    'file_name' => $image->file_name,
+                    'file_path' => $image->file_path,
+                    'created_at' => $image->created_at,
+                    'updated_at' => $image->updated_at,
+                ];
+            })->toArray();
+
+            // Prepare product details
+            $productDetailsArray = [
+                'id' => $productDetails->id,
+                'name' => $productDetails->name,
+                'description' => $productDetails->description,
+                'specification' => $productDetails->specification,
+                'rentaltype' => $productDetails->rentaltype,
+                'user_id' => $productDetails->user_id,
+                'category_id' => $productDetails->category_id,
+                'subcat_id' => $productDetails->subcat_id,
+                'quantity' => $productDetails->quantity,
+                'rent' => $productDetails->rent,
+                'min_days_rent_item' => $productDetails->min_days_rent_item,
+                'price' => $productDetails->price,
+                'security' => $productDetails->security,
+                'status' => $productDetails->status,
+                'other_size' => $productDetails->other_size,
+                'condition' => $productDetails->condition,
+                'brand' => $productDetails->get_brand->name ?? null,
+                'color' => $productDetails->get_color->name ?? null,
+                'size' => $productDetails->get_size->name ?? null,
+                'rent_day' => $productDetails->rent_day,
+                'rent_week' => $productDetails->rent_week,
+                'rent_month' => $productDetails->rent_month,
+                'modified_by' => $productDetails->modified_by,
+                'modified_user_type' => $productDetails->modified_user_type,
+                'available' => $productDetails->available,
+                'city' => $productDetails->city,
+                'product_market_value' => $productDetails->product_market_value,
+                'product_link' => $productDetails->product_link,
+                'average_rating' => $productDetails->average_rating,
+                'product_image_url' => $productDetails->thumbnailImage->file_path ?? null,
+                'all_images' => $productDetails->all_images,
+                'favourites' => !is_null($productDetails->favorites),
+            ];
+
+            // Determine the price
+            $price = $query->price ?? $productDetails->getCalculatedPrice($query->date_range);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Product details fetched successfully',
+                'data' => [
+                    'product' => $productDetailsArray,
+                    'queries' => $query,
+                    'price' => $price,
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to fetch product details',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }

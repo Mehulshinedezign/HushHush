@@ -49,6 +49,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/product-details/{id}', [App\Http\Controllers\Api\ProductController::class, 'getAllProductsById']);
     Route::get('/editProduct/{id}', [App\Http\Controllers\Api\ProductController::class, 'editProduct']);
     Route::get('/user/products/listing', [App\Http\Controllers\Api\ProductController::class, 'getAuthUserProducts']);
+    Route::get('/product/checkout/{id}', [App\Http\Controllers\Api\ProductController::class, 'checkout']);
 
     Route::get('/lender-profile/{id}', [App\Http\Controllers\Api\LenderController::class, 'index']);
 
@@ -59,7 +60,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/queries/{id}/status/{type}', [App\Http\Controllers\Api\QueryController::class, 'updateQueryStatus']);
 
 
-    Route::post('/stripe/charge', [App\Http\Controllers\Api\PaymentController::class, 'createCharge']);
+    Route::post('/stripe/charge', [App\Http\Controllers\Api\StripeController::class, 'createCharge']);
 
     //profile APIs
     Route::get('/profile', [App\Http\Controllers\Api\ProfileController::class, 'index']);

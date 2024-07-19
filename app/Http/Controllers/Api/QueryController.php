@@ -15,6 +15,7 @@ class QueryController extends Controller
     {
         try {
             $user = auth()->user();
+            // dd($user->id);
             $validator = Validator::make($request->all(), [
                 'product_id' => 'required|exists:products,id',
                 'query_message' => 'nullable|string',
@@ -25,9 +26,10 @@ class QueryController extends Controller
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
+            // dd('here');
 
             $product = Product::where('id', $request->product_id)->first();
-
+            // dd('here2');
 
             $startDate = $request->start;
             $endDate = $request->end;
@@ -36,6 +38,7 @@ class QueryController extends Controller
             if (empty($endDate)) {
                 $endDate = $startDate;
             }
+            // dd('here3');
 
             $query = Query::create([
                 'user_id' => $user->id,
@@ -45,6 +48,7 @@ class QueryController extends Controller
                 'status' => 'PENDING',
                 'date_range' => $startDate . ' - ' . $endDate,
             ]);
+            // dd('problem',$query);
 
             return response()->json([
                 'status' => true,
@@ -174,11 +178,11 @@ class QueryController extends Controller
 
 
 
-    public function updateQueryStatus($id, $type)
+    public function updateQueryStatus(Request $request, $id, $type)
     {
         // dd('here');
         try {
-            $query = Query::findOrFail($id);
+            $query_details = Query::findOrFail($id);
 
             if ($type == 'ACCEPTED') {
                 $query = Query::where('id', $id)->update(['status' => 'ACCEPTED']);
@@ -193,6 +197,19 @@ class QueryController extends Controller
                     'status' => true,
                     'message' => 'Query status updated successfully',
                     'data' => $query,
+                ], 200);
+            } elseif ($type == 'price') {
+                $validator = Validator::make($request->all(), [
+                    'price' => 'required',
+                ]);
+                if ($validator->fails()) {
+                    return response()->json(['errors' => $validator->errors()], 422);
+                }
+                $query = Query::where('id', $id)->update(['price' => $request->price]);
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Query price updated successfully',
+                    'data' => $query_details,
                 ], 200);
             } else {
                 return response()->json([
