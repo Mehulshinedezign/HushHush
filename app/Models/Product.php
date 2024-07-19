@@ -317,4 +317,38 @@ class Product extends Model
 
         return $price;
     }
+
+    public function getCalculatedPrice($dateRange)
+    {
+        [$startDateStr, $endDateStr] = explode(' - ', $dateRange);
+        $startDate = Carbon::createFromFormat('d-m-Y', trim($startDateStr));
+        $endDate = Carbon::createFromFormat('d-m-Y', trim($endDateStr));
+
+        $days = $startDate->diffInDays($endDate) + 1;
+        // dd($days);
+
+        $rent_day = $this->rent_day ?? 0;
+        $rent_week = $this->rent_week ?? 0;
+        $rent_month = $this->rent_month ?? 0;
+
+        if ($days > 30) {
+            $months = intdiv($days, 30);
+            $remainingDays = $days % 30;
+            if ($remainingDays > 7) {
+                $weeks = intdiv($remainingDays, 7);
+                $remainingDays = $remainingDays % 7;
+                $price = ($months * $rent_month) + ($weeks * $rent_week) + ($remainingDays * $rent_day);
+            } else {
+                $price = ($months * $rent_month) + ($remainingDays * $rent_day);
+            }
+        } elseif ($days > 7) {
+            $weeks = intdiv($days, 7);
+            $remainingDays = $days % 7;
+            $price = ($weeks * $rent_week) + ($remainingDays * $rent_day);
+        } else {
+            $price = $days * $rent_day;
+        }
+
+        return $price;
+    }
 }
