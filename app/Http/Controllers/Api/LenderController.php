@@ -110,14 +110,12 @@ class LenderController extends Controller
 
     private function getSecurityDeposit($productId)
     {
-
         return Product::where('id', $productId)->first()->security_deposit ?? 0;
     }
 
     public function confirmPayment(Request $request, $bookingId)
     {
         try{
-
             // dd('here');
             $validator=Validator::make($request->all(),[
                 'payment_method_id' => 'required|string',
@@ -125,25 +123,22 @@ class LenderController extends Controller
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
-
-
             $user = auth()->user();
             // dd($user);
-
             $booking = Query::where('id', $bookingId)->where('user_id', $user->id)->firstOrFail();
             $productDetails =Product::where('id', $booking->product_id)->first();
+            $amountInCents = isset($booking->negotiate_price) ? $booking->negotiate_price * 100 : $productDetails->getCalculatedPrice($booking->date_range) * 100;
 
+            // dd($booking,($productDetails->getCalculatedPrice($booking->date_range))*100);
             Stripe::setApiKey(env('STRIPE_SECRET'));
-
             $paymentIntent = PaymentIntent::create([
-                'amount' => $booking->price * 100 ?? $productDetails->getCalculatedPrice($booking->date_range) *100,
+                'amount' => $amountInCents,
                 'currency' => 'usd',
                 'payment_method' => $request->payment_method_id,
                 'confirmation_method' => 'manual',
                 'confirm' => true,
             ]);
-            dd($paymentIntent);
-
+            // dd($paymentIntent->id);
             $booking->update(['status' => 'CONFIRMED']);
 
             return response()->json([

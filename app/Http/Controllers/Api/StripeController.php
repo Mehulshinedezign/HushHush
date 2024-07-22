@@ -36,6 +36,7 @@ class StripeController extends Controller
                 'source' => $request->source,
                 'description' => $request->description,
             ]);
+            dd($charge);
 
             return response()->json(['status' => true, 'data' => $charge], 200);
         } catch (\Exception $e) {

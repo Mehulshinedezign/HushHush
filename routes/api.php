@@ -60,12 +60,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/queries/{id}/status/{type}', [App\Http\Controllers\Api\QueryController::class, 'updateQueryStatus']);
 
 
-
     Route::post('/borrow/{bookingId}/confirm', [App\Http\Controllers\Api\LenderController::class, 'confirmPayment']);
-
-
-
-
     Route::post('/stripe/charge', [App\Http\Controllers\Api\StripeController::class, 'createCharge']);
 
     //profile APIs

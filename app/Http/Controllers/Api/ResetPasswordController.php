@@ -13,10 +13,10 @@ class ResetPasswordController extends Controller
     public function resetPassword(Request $request)
     {
         try {
-          
+
             $validator = Validator::make($request->all(), [
                 'user_id' => 'required|exists:users,id',
-                'password' => 'required|min:8|confirmed', 
+                'password' => 'required|min:8',
             ]);
 
             if ($validator->fails()) {
