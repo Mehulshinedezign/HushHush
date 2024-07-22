@@ -96,6 +96,8 @@ class QueryController extends Controller
                         'name' => $product->name ?? null,
                         'product_image_url' => $product->thumbnailImage->file_path ?? null,
                         'lender' => $lender->name ?? null,
+                        'lender_profile_pic' => $lender->frontend_profile_url,
+                        'lender_id' => $lender->id,
                     ];
                 });
 
@@ -152,6 +154,8 @@ class QueryController extends Controller
                         'name' => $product->name ?? null,
                         'product_image_url' => $product->thumbnailImage->file_path ?? null,
                         'borrower' => $borrower->name ?? null,
+                        'borrower_profile_pic' => $borrower->frontend_profile_url,
+                        'borrower_id' => $borrower->id,
                     ];
                 });
 
@@ -205,7 +209,7 @@ class QueryController extends Controller
                 if ($validator->fails()) {
                     return response()->json(['errors' => $validator->errors()], 422);
                 }
-                $query = Query::where('id', $id)->update(['price' => $request->price]);
+                $query = Query::where('id', $id)->update(['negotiate_price' => $request->price]);
                 return response()->json([
                     'status' => true,
                     'message' => 'Query price updated successfully',

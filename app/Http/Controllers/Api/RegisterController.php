@@ -63,7 +63,7 @@ class RegisterController extends Controller
 
 
             // $phoneOtp = $this->otpService->generateOtp($user);
-            $phoneOtp='777777';
+            $phoneOtp = '777777';
             PhoneOtp::updateOrCreate(['user_id' => $user->id], [
                 'otp' => $phoneOtp,
                 'expires_at' => now()->addMinutes(15),
@@ -90,6 +90,9 @@ class RegisterController extends Controller
             $response = [
                 'token' => $user->createToken('login')->plainTextToken,
                 'user_id' => $user->id,
+                'profile_pc' => $user->frontend_profile_url,
+                'name' => $user->name,
+
             ];
 
             return $this->apiResponse($apiResponse, $statusCode, $message, $response, null);

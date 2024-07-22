@@ -4,8 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Query;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Stripe\Stripe;
+use Stripe\PaymentIntent;
 
 class LenderController extends Controller
 {
@@ -97,4 +102,62 @@ class LenderController extends Controller
         }
         return null;
     }
+
+    // private function getInsuranceCost($productId)
+    // {
+    //     return Insurance::where('product_id', $productId)->first()->cost ?? 0;
+    // }
+
+    private function getSecurityDeposit($productId)
+    {
+
+        return Product::where('id', $productId)->first()->security_deposit ?? 0;
+    }
+
+    public function confirmPayment(Request $request, $bookingId)
+    {
+        try{
+
+            // dd('here');
+            $validator=Validator::make($request->all(),[
+                'payment_method_id' => 'required|string',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+
+            $user = auth()->user();
+            // dd($user);
+
+            $booking = Query::where('id', $bookingId)->where('user_id', $user->id)->firstOrFail();
+            $productDetails =Product::where('id', $booking->product_id)->first();
+
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+
+            $paymentIntent = PaymentIntent::create([
+                'amount' => $booking->price * 100 ?? $productDetails->getCalculatedPrice($booking->date_range) *100,
+                'currency' => 'usd',
+                'payment_method' => $request->payment_method_id,
+                'confirmation_method' => 'manual',
+                'confirm' => true,
+            ]);
+            dd($paymentIntent);
+
+            $booking->update(['status' => 'CONFIRMED']);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Payment confirmed and booking completed',
+                'data' => $booking,
+            ], 200);
+        }
+        catch (Exception $e) {
+            return response()->json([
+                'status'=> false,
+                'message'=> $e->getMessage(),
+                ],500);
+            }
+    }
 }
+

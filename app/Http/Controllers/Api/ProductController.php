@@ -446,6 +446,7 @@ class ProductController extends Controller
                 'longitude' => $locationData['longitude'],
                 'product_complete_location' => $locationData['formatted_address'],
                 'raw_address' => $request->pickup_location,
+                'manul_pickup_location' => $request->manul_pickup_location,
             ]);
 
             if ($request->has('disable_dates')) {
@@ -597,6 +598,7 @@ class ProductController extends Controller
                     'longitude' => $locationData['longitude'],
                     'complete_pickup_location' => $locationData['formatted_address'],
                     'raw_address' => $request->pickup_location,
+                    'manul_pickup_location' =>$request->manul_pickup_location,
                 ]
             );
 
@@ -1241,7 +1243,7 @@ class ProductController extends Controller
             ];
 
             // Determine the price
-            $price = $query->price ?? $productDetails->getCalculatedPrice($query->date_range);
+            $price = $query->negotiate_price ?? $productDetails->getCalculatedPrice($query->date_range);
 
             return response()->json([
                 'status' => true,

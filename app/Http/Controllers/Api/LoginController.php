@@ -102,6 +102,8 @@ class LoginController extends Controller
                         'otp_is_verified' => $user->otp_is_verified,
                         'email' => $user->email,
                         'phone' => $user->country_code . $user->phone_number,
+                        'name' => $user->frontend_profile_url,
+                        'profile_pic' => $user->name,
                     ];
 
                     return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
@@ -119,6 +121,8 @@ class LoginController extends Controller
                         'otp_is_verified' => $user->otp_is_verified,
                         'email' => $user->email,
                         'phone' => $user->country_code . $user->phone_number,
+                        'name' => $user->frontend_profile_url,
+                        'profile_pic' => $user->name,
                     ];
 
                     return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
@@ -135,6 +139,8 @@ class LoginController extends Controller
                     'otp_is_verified' => $user->otp_is_verified,
                     'email' => $user->email,
                     'phone' => $user->country_code . $user->phone_number,
+                    'profile_pc' => $user->frontend_profile_url,
+                    'name' => $user->name,
                 ];
                 return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
             } else {
