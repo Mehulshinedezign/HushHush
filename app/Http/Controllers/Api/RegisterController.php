@@ -5,21 +5,15 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\EmailOtp;
 use App\Models\PhoneOtp;
+use App\Models\PushToken;
 use App\Models\User;
-use App\Models\UserDetail;
-use App\Models\UserDocuments;
 use App\Notifications\EmailOtpVerification;
-use App\Notifications\VerificationEmail;
 use App\Services\OtpService;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -30,10 +24,8 @@ class RegisterController extends Controller
         $this->otpService = $otpService;
     }
 
-
     public function register(Request $request)
     {
-        // dd('hello');
         $validator = $this->validator($request->all());
 
         if ($validator->fails()) {
@@ -61,16 +53,13 @@ class RegisterController extends Controller
             $number = $request->phone_number;
             $full_number = $country_code . $number;
 
-
-            // $phoneOtp = $this->otpService->generateOtp($user);
+            // Generate and save OTPs
             $phoneOtp = '777777';
             PhoneOtp::updateOrCreate(['user_id' => $user->id], [
                 'otp' => $phoneOtp,
                 'expires_at' => now()->addMinutes(15),
                 'status' => '0',
             ]);
-
-            // $this->otpService->sendOtp($phoneOtp, $full_number);
 
             $emailOtp = $this->otpService->generateOtp($user);
             EmailOtp::updateOrCreate(['user_id' => $user->id], [
@@ -80,6 +69,14 @@ class RegisterController extends Controller
             ]);
 
             $user->notify(new EmailOtpVerification($user, $emailOtp));
+
+            // Save push token
+            PushToken::create([
+                'user_id' => $user->id,
+                'fcm_token' => $request->fcm_token,
+                'device_id' => $request->device_id,
+                'device_type' => $request->device_type,
+            ]);
 
             DB::commit();
 
@@ -92,7 +89,9 @@ class RegisterController extends Controller
                 'user_id' => $user->id,
                 'profile_pc' => $user->frontend_profile_url,
                 'name' => $user->name,
-
+                'device_type' =>$user->pushToken->device_type,
+                'device_id'=> $user->pushToken->device_id,
+                'fcm_token'=> $user->pushToken->fcm_token,
             ];
 
             return $this->apiResponse($apiResponse, $statusCode, $message, $response, null);
@@ -102,25 +101,21 @@ class RegisterController extends Controller
         }
     }
 
-
-
     protected function validator(array $data)
     {
-
         $emailRegex = "/^[a-zA-Z]+[a-zA-Z0-9_\.\-]*@[a-zA-Z]+(\.[a-zA-Z]+)*[\.]{1}[a-zA-Z]{2,10}$/";
         $validation = [
-            // 'username' => 'required|min:3|max:50|unique:users',
             'name' => 'required|string|min:3|max:50',
             'email' => 'required|string|email|max:255|unique:users|regex:' . $emailRegex,
             'phone_number' => 'required|digits:' . config('validation.phone_minlength') . '|min:' . config('validation.phone_minlength') . '|max:' . config('validation.phone_maxlength'),
             'password' => 'required|string|min:8|max:32|confirmed',
-            // 'complete_address' => 'required',
-            // 'gov_id' => 'required|file|mimes:jpg,png,jpeg,pdf|max:2048',
-            'country_code' => 'required'
+            'country_code' => 'required',
+            'fcm_token' => 'required|string',
+            'device_id' => 'required|string',
+            'device_type' => 'required|string',
         ];
 
         $message = [
-            // 'username.required' => __('customvalidation.user.username.required'),
             'name.required' => __('user.validations.nameRequired'),
             'name.string' => __('user.validations.nameString'),
             'name.min' => __('user.validations.nameMin'),
@@ -140,20 +135,16 @@ class RegisterController extends Controller
             'password.min' => 'Password must be 8-32 characters long',
             'password.max' => 'Password must be 8-32 characters long',
             'password.confirmed' => __('user.validations.passwordConfirmed'),
-
-            // 'complete_address' => __('customvalidation.user.complete_address.required'),
-            // 'complete_address.min' => __('user.validations.completeAddressMin'),
-            // 'complete_address.max' => __('user.validations.completeAddressMax'),
-
-            // 'gov_id' => __('customvalidation.user.gov_id.required'),
-            // 'gov_id.file' => __('customvalidation.user.gov_id.file'),
-            // 'gov_id.max' => __('customvalidation.user.gov_id.max_size'),
-
+            'fcm_token.required' => 'FCM token is required',
+            'fcm_token.string' => 'FCM token must be a string',
+            'device_id.required' => 'Device ID is required',
+            'device_id.string' => 'Device ID must be a string',
+            'device_type.required' => 'Device type is required',
+            'device_type.string' => 'Device type must be a string',
         ];
 
         return Validator::make($data, $validation, $message);
     }
-
 
     public function verifyOtp(Request $request, $type)
     {

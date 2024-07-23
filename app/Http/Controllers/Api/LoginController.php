@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\EmailOtp;
 use App\Models\PhoneOtp;
+use App\Models\PushToken;
 use App\Notifications\EmailOtpVerification;
 use Illuminate\Http\Request;
 use App\Notifications\VerificationEmail;
@@ -40,6 +41,14 @@ class LoginController extends Controller
 
                 $isVerified = !is_null($user->email_verified_at) && $user->otp_is_verified == 1;
                 $isActive = $user->status == 1;
+                PushToken::updateOrCreate(
+                    ['user_id' => $user->id],
+                    [
+                        'fcm_token' => $request->fcm_token,
+                        'device_id' => $request->device_id,
+                        'device_type' => $request->device_type,
+                    ]
+                );
 
                 // Check verification and send OTP if needed
                 if (!$isVerified) {
@@ -141,6 +150,9 @@ class LoginController extends Controller
                     'phone' => $user->country_code . $user->phone_number,
                     'profile_pc' => $user->frontend_profile_url,
                     'name' => $user->name,
+                    'fcm_token' => $user->pushToken->fcm_token,
+                    'device_type' => $user->pushToken->device_type,
+                    'device_id' => $user->pushToken->device_id,
                 ];
                 return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
             } else {

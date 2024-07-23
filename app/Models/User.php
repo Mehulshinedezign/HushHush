@@ -242,4 +242,9 @@ class User extends Authenticatable
     {
         return Country::find($value)->country_value;
     }
+
+    public function pushToken()
+    {
+        return $this->hasOne(PushToken::class);
+    }
 }
