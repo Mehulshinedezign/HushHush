@@ -1,5 +1,5 @@
 @extends('layouts.front')
-@section('title', 'My query')
+@section('title', 'Receive Query')
 @section('links')
     @php
         $user = auth()->user();
@@ -32,17 +32,18 @@
                                             <th>Name</th>
                                             <th>Query</th>
                                             <th>date</th>
+                                            <th>Set price</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($querydatas as $query)
-                                            <tr>
+                                            <tr class="user_query-{{$query->id}}">
                                                 <td>
                                                     <a href="#" class="user-table-profile">
                                                         <div class="table-profile ">
                                                             @if ($query->product)
-                                                                <img src="{{ $query->product->thumbnailImage->file_path }}"
+                                                                <img src="{{ $query->product->thumbnailImage->file_path ?? '' }}"
                                                                     alt="tb-profile" width="26" height="27">
                                                             @else
                                                                 <img src="{{ asset('front/images/table-profile1.png') }}"
@@ -62,12 +63,21 @@
                                                     <p class="Inquiry-desc">{{ $query->query_message ?? '' }}</p>
                                                 </td>
                                                 <td>{{ $query->date_range ?? '' }}</td>
+                                                <td>
+                                                    <input type="text" id="negotiate_price_{{ $query->id }}"
+                                                        placeholder="Enter negotiate price">
+                                                </td>
                                                 <td class="user-active">
                                                     <div class="inquiry-actions">
-                                                        <a href="#" class="button accept-btn small-btn"><i
-                                                                class="fa-solid fa-circle-check"></i> Accept</a>
-                                                        <a href="#" class="button reject-btn small-btn"><i
-                                                                class="fa-solid fa-ban"></i> Reject</a>
+
+                                                        <a href="javascript:void(0)" class="button accept-btn small-btn"
+                                                            onclick="acceptQuery('{{ $query->id }}')">
+                                                            <i class="fa-solid fa-circle-check"></i> Accept
+                                                        </a>
+                                                        <a href="javascript:void(0)" class="button reject-btn small-btn"
+                                                            onclick="confirmReject(event, '{{ $query->id }}')">
+                                                            <i class="fa-solid fa-circle-check"></i> Reject
+                                                        </a>
                                                         <a href="#" class="button outline-btn small-btn"><i
                                                                 class="fa-solid fa-comments"></i> Chat</a>
                                                         <a href="{{ route('query_view') }}"
@@ -90,7 +100,7 @@
                 @else
                     <div class="list-empty-box">
                         <img src="{{ asset('front/images/no-products.svg') }}">
-                        <h3 class="text-center">Your Query is empty</h3>
+                        <h3 class="text-center">Receive Query is empty</h3>
                     </div>
                 @endif
             </div>
@@ -137,5 +147,41 @@
                 });
             });
         });
+
+        // accept query
+        function acceptQuery(queryId) {
+            var price = document.getElementById('negotiate_price_' + queryId).value;
+            var encodedPrice = (price);
+            var url = `{{ url('/accept_query') }}/${queryId}?negotiate_price=${encodedPrice}`;
+            window.location.href = url;
+        }
+
+        // reject query
+        function confirmReject(event, queryId) {
+            event.preventDefault();
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure you want to reject this product?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#1B1B1B',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, reject it!',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('body').addClass('loading');
+                    rejectQuery(queryId);
+                }
+            });
+        }
+
+        function rejectQuery(queryId) {
+            var url = `{{ url('/reject_query') }}/${queryId}`;
+            window.location.href = url;
+            $('.user_query-'+queryId).remove();
+        }
     </script>
 @endpush

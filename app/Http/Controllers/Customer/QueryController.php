@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Query;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -18,6 +19,8 @@ class QueryController extends Controller
 
         $request->validate([
             'rental_dates' => 'required',
+            'product_id' => 'required',
+            'rental_dates' => 'required',
             'description' => 'required|string',
         ]);
 
@@ -27,7 +30,7 @@ class QueryController extends Controller
             $user = auth()->user();
             $foruser = jsdecode_userdata($request->for_user);
             $product_id = jsdecode_userdata($request->product_id);
-
+            // dd($request);
             $data = [
                 'user_id' => $user->id,
                 'product_id' => $product_id,
@@ -36,7 +39,7 @@ class QueryController extends Controller
                 'status' => 'PENDING',
                 'date_range' => $request->rental_dates,
             ];
-
+            // dd($data);
             $qur = Query::create($data);
 
             // create chat
@@ -61,6 +64,8 @@ class QueryController extends Controller
 
     public function myQuery(Request $request)
     {
+    public function myQuery(Request $request)
+    {
         $user = auth()->user();
         $querydatas = Query::where('user_id', $user->id)->get();
 
@@ -72,12 +77,9 @@ class QueryController extends Controller
         $product_id = $request->product_id;
         $product = Product::findOrFail($product_id);
 
+
         $view = view('customer.query_product', compact('product'))->render();
 
         return response()->json(['success' => true, 'data' => $view]);
-    }
-
-    public function querychat()
-    {
     }
 }

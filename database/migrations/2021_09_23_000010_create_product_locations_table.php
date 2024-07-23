@@ -24,6 +24,7 @@ class CreateProductLocationsTable extends Migration
             $table->string('postcode')->nullable();
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
+            $table->json('raw_address')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -8,7 +8,7 @@
         // const url = action1+'/'+action2;
         
         $.validator.addMethod("completeAddress", function(value, element) {
-                return $('#product_country').val() !== '' && $('#product_state').val() !== '' && $('#product_city').val() !== '';
+                return $('#product_address1').val() !== ''&& $('#product_address2').val() !== ''&& $('#product_country').val() !== '' && $('#product_state').val() !== '' && $('#product_city').val() !== '';
             }, "Please enter the complete address");
         const rules = {
             name: {
@@ -56,9 +56,9 @@
                     return $.trim(value);
                 }
             },
-            pick_up_location: {
-                required: true,
-            },
+            // pick_up_location: {
+            //     required: true,
+            // },
             price: {
                 required: true,
                 min: priceMinLength,
@@ -145,9 +145,9 @@
             // city: {
             //     required: `{{ __('customvalidation.product.city.required') }}`,
             // },
-            pick_up_location: {
-                required: `{{ __('customvalidation.product.pick_up_location.required') }}`,
-            },
+            // pick_up_location: {
+            //     required: `{{ __('customvalidation.product.pick_up_location.required') }}`,
+            // },
             description: {
                 required: `{{ __('customvalidation.product.description.required') }}`,
                 minlength: `{{ __('customvalidation.product.description.min', ['min' => '${descMinLength}', 'max' => '${descMaxLength}']) }}`,
@@ -219,7 +219,7 @@
         });
         
         
-        $('#product_country, #product_state, #product_city').on('change', function() {
+        $('#product_address1,#product_address12, #product_country, #product_state, #product_city').on('change', function() {
             $('#product_address').valid();
         });
 

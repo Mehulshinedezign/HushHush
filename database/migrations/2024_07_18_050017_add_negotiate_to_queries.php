@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_disable_dates', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->date('disable_date');
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::table('queries', function (Blueprint $table) {
+            $table->integer('negotiate_price')->nullable()->after('status');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_disable_dates');
+        Schema::table('queries', function (Blueprint $table) {
+            $table->dropColumn('negotiate');
+        });
     }
 };

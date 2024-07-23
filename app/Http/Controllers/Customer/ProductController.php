@@ -8,7 +8,7 @@ use App\Notifications\ItemYouLike;
 use Illuminate\Http\Request;
 use App\Http\Requests\Customer\FavoriteRequest;
 use App\Http\Traits\ProductTrait;
-use App\Models\{User, Product, ProductFavorite, Category, NeighborhoodCity, Order};
+use App\Models\{User, Product, ProductFavorite, Category, NeighborhoodCity, Order, Query};
 use Illuminate\Support\Facades\Cookie;
 
 class ProductController extends Controller
@@ -148,8 +148,9 @@ class ProductController extends Controller
 
         $productImages = $product->allImages;
         // dd("DONE",$product);
-     
-        return view('product-detail', compact('product','productImages'));
+        $querydates = Query::where('user_id',auth()->user()->id,'PENDING')->get();
+            
+        return view('product-detail', compact('product','productImages','querydates'));
     }
 
 

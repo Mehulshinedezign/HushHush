@@ -1435,3 +1435,14 @@ img.chat-pro-img {
 }
 
 /* ============================ Chat CSS ================================= */
+.product_manual_location {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.product_manual_location .form-switch .form-check-input {
+    width: 2.5em;
+    height: 20px;
+    margin-right: 5px;
+}

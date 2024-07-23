@@ -70,6 +70,20 @@
 
                             </div>
                         </div>
+
+                        @if (!$user->userBankInfo)
+                            <div class="col-md-12">
+                                <div class="my-pro-detail">
+                                    <div class="my-pro-detail-left">
+                                        <div class="my-pro-detail-para">
+                                            <h4>Your bank account details is not store please submit your bank details. <a href="{{ route('stripe.onboarding.redirect') }}">Submit</a> </h4>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        @endif
                         {{-- <div class="col-md-12">
                             <div class="my-pro-detail">
                                 <div class="my-pro-detail-left">
