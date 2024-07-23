@@ -181,6 +181,12 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
             Route::get('payment-success', [App\Http\Controllers\StripeController::class, 'success'])->name('paymentsuccess');
             Route::get('payment-failed', [App\Http\Controllers\StripeController::class, 'failed'])->name('paymentfailed');
 
+            // card payment
+            Route::get('card/details/{query?}/{price?}', [App\Http\Controllers\BookingController::class, 'cardDetail'])->name('card.details');
+
+            Route::post('charge', [App\Http\Controllers\BookingController::class, 'charge'])->name('charge');
+
+
             Route::get('userimage', [App\Http\Controllers\ChatController::class, 'userImage'])->name('userimage');
             Route::post('store/chat', [App\Http\Controllers\ChatController::class, 'storeChat'])->name('store.chat');
             Route::post('chat/messages', [App\Http\Controllers\ChatController::class, 'chatMessages'])->name('chat.messages');
@@ -217,13 +223,12 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
             Route::get('order/{order}/chat', [App\Http\Controllers\Customer\OrderController::class, 'orderChat'])->name('orderchat');
 
             // Query section code here
-            Route::post('query',[App\Http\Controllers\Customer\QueryController::class,'store'])->name('query');
-            Route::get('my_query',[App\Http\Controllers\Customer\QueryController::class,'myQuery'])->name('my_query');
+            Route::post('query', [App\Http\Controllers\Customer\QueryController::class, 'store'])->name('query');
+            Route::get('my_query', [App\Http\Controllers\Customer\QueryController::class, 'myQuery'])->name('my_query');
             Route::get('query_view', [App\Http\Controllers\Customer\QueryController::class, 'view'])->name('query_view');
-            Route::get('receive_query',[App\Http\Controllers\Customer\QueryController::class,'receiveQuery'])->name('receive_query');
+            Route::get('receive_query', [App\Http\Controllers\Customer\QueryController::class, 'receiveQuery'])->name('receive_query');
             Route::get('accept_query/{id}', [App\Http\Controllers\Customer\QueryController::class, 'acceptQuery'])->name('accept_query');
             Route::get('reject_query/{id}', [App\Http\Controllers\Customer\QueryController::class, 'rejectQuery'])->name('reject_query');
-
         });
     });
 });

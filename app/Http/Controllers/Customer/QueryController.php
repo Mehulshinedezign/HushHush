@@ -17,7 +17,7 @@ class QueryController extends Controller
         // Validate incoming request
 
         $request->validate([
-            'rental_dates' =>'required',
+            'rental_dates' => 'required',
             'product_id' => 'required',
             'description' => 'required|string',
         ]);
@@ -28,7 +28,7 @@ class QueryController extends Controller
             $user = auth()->user();
             $foruser = jsdecode_userdata($request->for_user);
             $product_id = jsdecode_userdata($request->product_id);
-
+            // dd($request);
             $data = [
                 'user_id' => $user->id,
                 'product_id' => $product_id,
@@ -37,7 +37,7 @@ class QueryController extends Controller
                 'status' => 'PENDING',
                 'date_range' => $request->rental_dates,
             ];
-
+            // dd($data);
             $qur = Query::create($data);
 
             DB::commit();
@@ -48,10 +48,11 @@ class QueryController extends Controller
         }
     }
 
-    public function myQuery(Request $request){
+    public function myQuery(Request $request)
+    {
         $user = auth()->user();
-        $querydatas = Query::where('user_id',$user->id)->get();
-        return view('customer.my_query_list',compact('querydatas'));
+        $querydatas = Query::where('user_id', $user->id)->get();
+        return view('customer.my_query_list', compact('querydatas'));
     }
 
     public function view(Request $request)
@@ -63,20 +64,21 @@ class QueryController extends Controller
         $view = view('customer.query_product', compact('product'))->render();
 
         return response()->json(['success' => true, 'data' => $view]);
-
     }
 
-    public function receiveQuery(Request $request){
+    public function receiveQuery(Request $request)
+    {
         $user = auth()->user();
         $querydatas = Query::where(['for_user' => $user->id, 'status' => 'PENDING'])->get();
-       
-        return view('customer.receive_query_list',compact('querydatas'));
+
+        return view('customer.receive_query_list', compact('querydatas'));
     }
 
-    public function acceptQuery(Request $request,$id){
+    public function acceptQuery(Request $request, $id)
+    {
 
 
-        $query_product = Query::where('id',$id)->first();
+        $query_product = Query::where('id', $id)->first();
 
         // dd($query_product);
         $data = [
@@ -94,10 +96,11 @@ class QueryController extends Controller
         return redirect()->back()->with('success', 'Query accepted successfully.');
     }
 
-    public function rejectQuery(Request $request,$id){
+    public function rejectQuery(Request $request, $id)
+    {
 
-    
-        $query_product = Query::where('id',$id)->first();
+
+        $query_product = Query::where('id', $id)->first();
 
         $data = [
             'user_id' => $query_product->user_id,

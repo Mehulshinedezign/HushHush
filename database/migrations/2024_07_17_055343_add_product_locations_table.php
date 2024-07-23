@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('product_locations', function (Blueprint $table) {
-            $table->string('address1')->nullable()->after('product_id');
-            $table->string('address2')->nullable()->after('address1');
-            $table->enum('manul_pickup_location',['0','1'])->default(0)->after('address2');
+            $table->string('address1')->after('product_id')->nullable();
+            $table->string('address2')->after('address1')->nullable();
+            $table->enum('manul_pickup_location', ['0', '1'])->default(0)->after('address2');
         });
     }
 
