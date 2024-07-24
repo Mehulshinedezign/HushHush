@@ -114,9 +114,9 @@
                                                                     {{ $query->negotiate_price }}$</a>
                                                             @endif
                                                         @endif
-                                                        {{-- <a href="javascript:void(0)" class="button outline-btn small-btn"
+                                                        <a href="javascript:void(0)" class="button outline-btn small-btn"
                                                             data-toggle="modal" data-rating_product_id="{{$query->product_id}}" data-target="#rating_review">Rating &
-                                                            Review</a> --}}
+                                                            Review</a>
 
 
                                                     </div>

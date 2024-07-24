@@ -217,8 +217,8 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
             Route::get('order/{order}/chat', [App\Http\Controllers\Customer\OrderController::class, 'orderChat'])->name('orderchat');
 
             // Query section code here
-            Route::post('query', [App\Http\Controllers\Customer\QueryController::class, 'store'])->name('query');
-            Route::get('my_query', [App\Http\Controllers\Customer\QueryController::class, 'myQuery'])->name('my_query');
+            Route::post('query',[App\Http\Controllers\Customer\QueryController::class,'store'])->name('query');
+            Route::get('my_query',[App\Http\Controllers\Customer\QueryController::class,'myQuery'])->name('my_query');
             Route::get('query_view', [App\Http\Controllers\Customer\QueryController::class, 'view'])->name('query_view');
             Route::get('receive_query',[App\Http\Controllers\Customer\QueryController::class,'receiveQuery'])->name('receive_query');
             Route::get('accept_query/{id}', [App\Http\Controllers\Customer\QueryController::class, 'acceptQuery'])->name('accept_query');
@@ -228,6 +228,9 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
             Route::post('order/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
             //common chat
             Route::get('/chat', [App\Http\Controllers\ChatController::class, 'common_chat'])->name('common.chat');
+
+
+            Route::post('order/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
         });
     });
 });
