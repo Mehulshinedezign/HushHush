@@ -50,7 +50,6 @@ class LoginController extends Controller
                     ]
                 );
 
-                // Check verification and send OTP if needed
                 if (!$isVerified) {
                     if (is_null($user->email_verified_at) && $user->otp_is_verified != 1) {
                         // Generate OTP for both email and phone
@@ -118,7 +117,6 @@ class LoginController extends Controller
                     return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
                 }
 
-                // Check if user status is active
                 if (!$isActive) {
                     $message = 'Your account status is inactive';
                     $apiResponse = 'success';
@@ -137,7 +135,6 @@ class LoginController extends Controller
                     return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
                 }
 
-                // If verified and active, login successfully
                 $apiResponse = 'success';
                 $statusCode = 200;
                 $message = 'Login Success';
@@ -188,11 +185,12 @@ class LoginController extends Controller
                 $apiResponse = 'error';
                 $statusCode = '401';
                 $message = 'Unauthorized';
+                $data = [];
             }
 
-            return $this->apiResponse($apiResponse, $statusCode, $message);
+            return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
         } catch (\Throwable $e) {
-            return $this->apiResponse('error', '404', $e->getMessage(), ['errors' => $e->getMessage()]);
+            return $this->apiResponse('error', '404', $e->getMessage(), ['errors' => $e->getMessage()], null);
         }
     }
 }

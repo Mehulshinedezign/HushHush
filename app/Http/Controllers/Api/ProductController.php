@@ -8,11 +8,13 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\NeighborhoodCity;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductDisableDate;
 use App\Models\ProductFavorite;
 use App\Models\ProductImage;
 use App\Models\ProductLocation;
+use App\Models\ProductRating;
 use App\Models\ProductUnavailability;
 use App\Models\Query;
 use App\Models\Size;
@@ -677,7 +679,7 @@ class ProductController extends Controller
             $response = [
                 'apiResponse' => 'error',
                 'statusCode' => 500,
-                'message' => "dsfsdffsdf",
+                'message' => $e->getMessage(),
                 'data' => [],
             ];
             return $this->apiResponse($response['apiResponse'], $response['statusCode'], $response['message'], $response['data'], null);
@@ -965,11 +967,6 @@ class ProductController extends Controller
     }
 
 
-
-
-
-
-
     /**
      * listing of user product.
      */
@@ -1155,9 +1152,6 @@ class ProductController extends Controller
     }
 
 
-
-
-
     public function editProduct(Request $request, $id)
     {
         try {
@@ -1194,7 +1188,6 @@ class ProductController extends Controller
             $product_id = $query->product_id;
             $productDetails = $this->getProduct($product_id);
 
-            // Fetch and map all images with complete file paths
             $productDetails->all_images = $productDetails->allImages->map(function ($image) {
                 return [
                     'id' => $image->id,
@@ -1206,7 +1199,6 @@ class ProductController extends Controller
                 ];
             })->toArray();
 
-            // Prepare product details
             $productDetailsArray = [
                 'id' => $productDetails->id,
                 'name' => $productDetails->name,
@@ -1242,7 +1234,6 @@ class ProductController extends Controller
                 'favourites' => !is_null($productDetails->favorites),
             ];
 
-            // Determine the price
             $price = $query->negotiate_price ?? $productDetails->getCalculatedPrice($query->date_range);
 
             return response()->json([
@@ -1254,6 +1245,40 @@ class ProductController extends Controller
                     'price' => $price,
                 ],
             ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to fetch product details',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+    public function ratings(Request $request, $id)
+    {
+        try {
+
+            $user = auth()->user();
+            $validator = Validator::make($request->all(), [
+                'rating' => 'required|integer|min:1|max:5',
+                'review' => 'nullable|string',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['status' => false, 'errors' => $validator->errors()], 422);
+            }
+            $product = Product::find($id);
+            $order = Order::where('product_id', $id)->where('user_id', $user->id)->first();
+            if (!$product) {
+                return response()->json(['status' => false, 'message' => 'Product not found'], 404);
+            }
+
+            $rating = ProductRating::updateOrCreate(
+                ['user_id' => $user->id, 'product_id' => $id, 'order_id' => $order->id],
+                ['rating' => $request->rating, 'review' => $request->review]
+            );
+
+            return response()->json(['status' => True, 'message' => 'Rating submitted successfully', 'data' => $rating], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,

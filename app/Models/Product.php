@@ -291,7 +291,6 @@ class Product extends Model
         $endDate = Carbon::createFromFormat('d-m-Y', trim($endDateStr));
 
         $days = $startDate->diffInDays($endDate) + 1;
-        // dd($days);
 
         $rent_day = $this->rent_day ?? 0;
         $rent_week = $this->rent_week ?? 0;
@@ -317,5 +316,4 @@ class Product extends Model
 
         return $price;
     }
-
 }

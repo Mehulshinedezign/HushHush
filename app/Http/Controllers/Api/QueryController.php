@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Query;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,31 +17,21 @@ class QueryController extends Controller
     {
         try {
             $user = auth()->user();
-            // dd($user->id);
             $validator = Validator::make($request->all(), [
                 'product_id' => 'required|exists:products,id',
                 'query_message' => 'nullable|string',
                 'start' => 'required',
                 'end' => 'required',
             ]);
-
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
-            // dd('here');
-
             $product = Product::where('id', $request->product_id)->first();
-            // dd('here2');
-
             $startDate = $request->start;
             $endDate = $request->end;
-
-
             if (empty($endDate)) {
                 $endDate = $startDate;
             }
-            // dd('here3');
-
             $query = Query::create([
                 'user_id' => $user->id,
                 'product_id' => $request->product_id,
@@ -48,8 +40,6 @@ class QueryController extends Controller
                 'status' => 'PENDING',
                 'date_range' => $startDate . ' - ' . $endDate,
             ]);
-            // dd('problem',$query);
-
             return response()->json([
                 'status' => true,
                 'message' => 'Query created successfully',
@@ -180,28 +170,15 @@ class QueryController extends Controller
     }
 
 
-
-
     public function updateQueryStatus(Request $request, $id, $type)
     {
-        // dd('here');
         try {
             $query_details = Query::findOrFail($id);
 
             if ($type == 'ACCEPTED') {
-                $query = Query::where('id', $id)->update(['status' => 'ACCEPTED']);
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Query status updated successfully',
-                    'data' => $query,
-                ], 200);
+                $query_details->update(['status' => 'ACCEPTED']);
             } elseif ($type == 'REJECTED') {
-                $query = Query::where('id', $id)->update(['status' => 'REJECTED']);
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Query status updated successfully',
-                    'data' => $query,
-                ], 200);
+                $query_details->update(['status' => 'REJECTED']);
             } elseif ($type == 'price') {
                 $validator = Validator::make($request->all(), [
                     'price' => 'required',
@@ -209,12 +186,7 @@ class QueryController extends Controller
                 if ($validator->fails()) {
                     return response()->json(['errors' => $validator->errors()], 422);
                 }
-                $query = Query::where('id', $id)->update(['negotiate_price' => $request->price]);
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Query price updated successfully',
-                    'data' => $query_details,
-                ], 200);
+                $query_details->update(['negotiate_price' => $request->price, 'status' => 'ACCEPTED']);
             } else {
                 return response()->json([
                     'status' => false,
@@ -222,11 +194,134 @@ class QueryController extends Controller
                     'errors' => ['type' => 'The status type must be either ACCEPTED or REJECTED.'],
                 ], 400);
             }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Query status updated successfully',
+                'data' => $query_details,
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),
                 'errors' => [],
+            ], 500);
+        }
+    }
+
+
+    public function orderManagement()
+    {
+        $user = auth()->user();
+        try {
+            $queries = Query::where('user_id', $user->id)->where('status', 'completed')
+                ->whereNull('deleted_at')
+                ->get();
+            // dd($queries);
+            if ($queries->count() > 0) {
+                $queries = $queries->map(function ($query) {
+                    [$startDate, $endDate] = explode(' - ', $query->date_range);
+                    $productId = $query->product_id;
+                    $product = Product::where('id', $productId)
+                        ->whereNull('deleted_at')
+                        ->first();
+                    $lender = User::where('id', $query->for_user)->first();
+
+                    if (now() > $endDate) {
+                        $status = 'COMPLETED';
+                    } elseif (now() < $startDate) {
+                        $status = 'PAID';
+                    } else {
+                        $status = 'ACTIVE';
+                    }
+
+                    return [
+                        'id' => $query->id,
+                        'user_id' => $query->user_id,
+                        'product_id' => $query->product_id,
+                        'for_user' => $query->for_user,
+                        'query_message' => $query->query_message,
+                        'status' => $status,
+                        'date_range' => [
+                            'start' => $startDate,
+                            'end' => $endDate,
+                        ],
+                        'name' => $product->name ?? null,
+                        'product_image_url' => $product->thumbnailImage->file_path ?? null,
+                        'lender' => $lender->name ?? null,
+                        'lender_profile_pic' => $lender->frontend_profile_url,
+                        'lender_id' => $lender->id,
+                    ];
+                });
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Order management data fetched successfully!',
+                    'data' => $queries,
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'No queries available for order management',
+                    'data' => [],
+                ], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function bookings(Request $request, $id)
+    {
+        try {
+
+            $query = Query::find($id);
+
+            if (!$query) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Query not found',
+                ], 404);
+            }
+
+            $paymentResponse = $request->input('payment_response');
+
+            $paymentStatus = $paymentResponse['status'];
+            $transactionId = $paymentResponse['transaction_id'];
+
+            $orderStatus = ($paymentStatus === 'succeeded') ? 'Pending' : 'Failed';
+
+            [$fromDate, $toDate] = explode(' - ', $query->date_range);
+            $fromDateTime = Carbon::parse($fromDate);
+            $toDateTime = Carbon::parse($toDate);
+
+            $order = Order::create([
+                'user_id' => $query->user_id,
+                'location_id' => $query->product_id,
+                'transaction_id' => $transactionId,
+                'from_date' => $fromDateTime->toDateString(),
+                'to_date' => $toDateTime->toDateString(),
+                'from_hour' => $fromDateTime->format('H'),
+                'from_minute' => $fromDateTime->format('i'),
+                'to_hour' => $toDateTime->format('H'),
+                'to_minute' => $toDateTime->format('i'),
+                'order_date' => now()->toDateString(),
+                'status' => $orderStatus,
+            ]);
+            $query->update(['status' => 'COMPLETED']);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Booking recorded successfully',
+                'data' => $order,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
             ], 500);
         }
     }

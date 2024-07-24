@@ -59,6 +59,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/queries/for-user', [App\Http\Controllers\Api\QueryController::class, 'queriesForUser']);
     Route::post('/queries/{id}/status/{type}', [App\Http\Controllers\Api\QueryController::class, 'updateQueryStatus']);
 
+    Route::post('/bookings', [App\Http\Controllers\Api\QueryController::class, 'bookings']);
+    Route::get('/orders', [App\Http\Controllers\Api\QueryController::class, 'orderManagement']);
+    Route::post('products/{id}/ratings', [App\Http\Controllers\Api\ProductController::class, 'ratings']);
 
     Route::post('/borrow/{bookingId}/confirm', [App\Http\Controllers\Api\LenderController::class, 'confirmPayment']);
     Route::post('/stripe/charge', [App\Http\Controllers\Api\StripeController::class, 'createCharge']);
