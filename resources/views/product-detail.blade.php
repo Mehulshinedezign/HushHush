@@ -61,7 +61,7 @@
                             </div>
                             <div class="product-review-main">
                                 <div class="product-review-heading">
-                                    <p>120 Reviews</p>
+                                    <p>{{ $product->ratings_count }} Ratings & Reviews</p>
                                     <div class="form-group">
                                         <div class="formfield">
                                             <select name="" id="">
@@ -75,107 +75,43 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="product-review-body">
-                                    <ul class="product-review-list">
-                                        <li>
-                                            <div class="product-review-box">
-                                                <div class="product-review-profile">
-                                                    <div class="review-profile-box">
-                                                        <div class="sm-dp-box">
-                                                            <img src="{{ asset('front/images/pro-1.png') }}" alt="img">
-                                                        </div>
-                                                        <div class="sm-dp-data">
-                                                            <h3>Desirae Vaccaro</h3>
-                                                            <div class="review-profile-rating-box">
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
+
+                                @if (count($product->ratings) > 0)
+                                    @foreach ($product->ratings as $rating)
+                                        <div class="product-review-body">
+                                            <ul class="product-review-list">
+                                                <li>
+                                                    <div class="product-review-box">
+                                                        <div class="product-review-profile">
+                                                            <div class="review-profile-box">
+                                                                <div class="sm-dp-box">
+                                                                    @if ($rating->user->profile_file)
+                                                                        <img src="{{ asset('storage/' . $rating->user->profile_file) }}" alt="img">
+                                                                    @else
+                                                                        <img src="{{ asset('front/images/pro-1.png') }}" alt="img">
+                                                                    @endif
+                                                                </div>
+                                                                <div class="sm-dp-data">
+                                                                    <h3>{{ @$rating->user->name }}</h3>
+                                                                    <div class="review-profile-rating-box">
+                                                                        @for ($i = 0; $i < $rating->rating; $i++)
+                                                                        <i class="fa-sharp fa-solid fa-star"></i>
+                                                                        @endfor
+                                                                    </div>
+                                                                </div>
                                                             </div>
+                                                            <p>{{ @$rating->created_at->format('M d, Y') }}</p>
+                                                        </div>
+                                                        <div class="product-review-message">
+                                                            <p>{{ @$rating->review }}</p>
                                                         </div>
                                                     </div>
-                                                    <p>June 11, 2023</p>
-                                                </div>
-                                                <div class="product-review-message">
-                                                    <p>Safer For The Environment: Our denim factory partner recycles 98% of
-                                                        their water using reverse osmosis filtration and keeps byproducts
-                                                        out of the environment by mixing.</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="product-review-box">
-                                                <div class="product-review-profile">
-                                                    <div class="review-profile-box">
-                                                        <div class="sm-dp-box">
-                                                            <img src="{{ asset('front/images/pro-1.png') }}" alt="img">
-                                                        </div>
-                                                        <div class="sm-dp-data">
-                                                            <h3>Desirae Vaccaro</h3>
-                                                            <div class="review-profile-rating-box">
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <p>June 11, 2023</p>
-                                                </div>
-                                                <div class="product-review-message">
-                                                    <p>Safer For The Environment: Our denim factory partner recycles 98% of
-                                                        their water using reverse osmosis filtration and keeps byproducts
-                                                        out of the environment by mixing.</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="product-review-box">
-                                                <div class="product-review-profile">
-                                                    <div class="review-profile-box">
-                                                        <div class="sm-dp-box">
-                                                            <img src="{{ asset('front/images/pro-1.png') }}"
-                                                                alt="img">
-                                                        </div>
-                                                        <div class="sm-dp-data">
-                                                            <h3>Desirae Vaccaro</h3>
-                                                            <div class="review-profile-rating-box">
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <p>June 11, 2023</p>
-                                                </div>
-                                                <div class="product-review-message">
-                                                    <p>Safer For The Environment: Our denim factory partner recycles 98% of
-                                                        their water using reverse osmosis filtration and keeps byproducts
-                                                        out of the environment by mixing.</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
+                                                </li>
+                                            </ul>
+                                        </div>  
+                                    @endforeach
+                                    
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -294,57 +230,58 @@
                             <div class="pro-dec-rating-main">
                                 <div class="pro-rating-head">
                                     <h4>Ratings & Reviews</h4>
-                                    <a href="javascript:void(0)">Leave Review</a>
+                                    <a href="javascript:void(0)" data-toggle="modal" data-rating_product_id="{{$product->id}}"
+                                         data-target="#rating_review">Leave Review</a>
                                 </div>
                                 <div class="pro-rating-body">
                                     <div class="pro-rating-left">
-                                        <h3>4.3</h3>
-                                        <p>4,376 Ratings & 311 Reviews</p>
+                                        <h3>{{ $product->average_rating }}</h3>
+                                        <p>{{$product->ratings()->count()}} & {{ $product->ratings()->count() }} Reviews</p>
                                     </div>
                                     <div class="pro-rating-right">
                                         <ul>
                                             <li>
                                                 <p>5</p>
-                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <i class="fa-solid fa-star"></i>
                                                 <div class="progress">
-                                                    <div class="progress-bar w-100" style="background-color: #517B5D;"
-                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                    <div class="progress-bar " role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['fivestar'] }}%" aria-valuenow="100" aria-valuemin="0"
                                                         aria-valuemax="100"></div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <p>4</p>
-                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <i class="fa-solid fa-star"></i>
                                                 <div class="progress">
-                                                    <div class="progress-bar w-75" style="background-color: #517B5D;"
-                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['fourstar'] }}%" aria-valuenow="100" aria-valuemin="0"
                                                         aria-valuemax="100"></div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <p>3</p>
-                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <i class="fa-solid fa-star"></i>
                                                 <div class="progress">
-                                                    <div class="progress-bar w-50" style="background-color: #517B5D;"
-                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['threestar'] }}%" aria-valuenow="100" aria-valuemin="0"
                                                         aria-valuemax="100"></div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <p>2</p>
-                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <i class="fa-solid fa-star"></i>
                                                 <div class="progress">
-                                                    <div class="progress-bar w-25" style="background-color: #CC9C55"
-                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['twostar'] }}%" aria-valuenow="100" aria-valuemin="0"
                                                         aria-valuemax="100"></div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <p>1</p>
-                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <i class="fa-solid fa-star"></i>
                                                 <div class="progress">
-                                                    <div class="progress-bar w-25" style="background-color: #C66060"
-                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['onestar'] }}%" aria-valuenow="100" aria-valuemin="0"
                                                         aria-valuemax="100"></div>
                                                 </div>
                                             </li>

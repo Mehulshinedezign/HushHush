@@ -10,7 +10,7 @@ return [
         ],
         'password' => [
             'required' => __('This field is required.'),
-            'min' => __('Password must be 8-32 characters and contain at least one of the following characters !@#$%^&*'),
+            'min' => __('Enter valid password.'),
             'max' => __('Password can be :min - :max characters.'),
             'regex' => 'Password can be alphanumeric and (@#$%^&*) these special characters *At least one uppercase *One lowercase *One numeric.',
 
@@ -187,7 +187,7 @@ return [
             'required' => __('This field is required.'),
             'min' => __('Password must be between 8-32 characters.'),
             'max' => __('Password must be between 8-32 characters.'),
-            'regex' => __("Please enter only numeric or alphabetical values or @#$%^&*. At least one uppercase, lowercase and numeric value required."),
+            'regex' => __("The password must contain at least one uppercase , one lowercase , one numeric digit and one special character from the following: @#$%^&*."),
 
         ],
         'confirm_password' => [
@@ -222,7 +222,7 @@ return [
         // ],
         'gov_id' => [
            'required' =>  __('This field is required.'),
-           'max_size' => 'The government ID may not be greater than 2MB.',
+           'max_size' => 'The government ID should not be greater than 2MB..',
            'file' => 'The government ID must be a file of type: jpg, png, jpeg, pdf.',
         ],
 

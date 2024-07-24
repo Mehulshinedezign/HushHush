@@ -134,7 +134,7 @@ class ProductController extends Controller
         $insurance = $this->getInsuranceAmount($product);
         $rating_progress = $this->getratingprogress($product);
         $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
-            ->where('id', '<>', $product->id)
+            ->where('id',$product->id)
             ->where('category_id', $product->category_id)->whereHas('category', function ($q) {
                 $q->where('status', '1');
             })
@@ -145,10 +145,9 @@ class ProductController extends Controller
 
         $layout_class = 'single_product';
 
-
         $productImages = $product->allImages;
         $querydates = Query::where(['user_id' => auth()->user()->id, 'product_id'=>$id, 'status'=> 'PENDING'])->get();
-        return view('product-detail', compact('product','productImages','querydates'));
+        return view('product-detail', compact('product','productImages','querydates','relatedProducts','rating_progress'));
     }
 
 
