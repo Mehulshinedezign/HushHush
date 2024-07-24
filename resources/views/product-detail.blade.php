@@ -600,7 +600,7 @@
                 minDate: moment().startOf('day'),
                 isInvalidDate: function(date) {
                     return disabledDateRanges.some(function(range) {
-                        return date.isBetween(range.start, range.end, null, '[]');
+                        return date.isSame(range.start, 'day') || date.isSame(range.end, 'day');
                     });
                 }
             }).on('apply.daterangepicker', function(ev, picker) {
@@ -620,7 +620,7 @@
                 minDate: moment().startOf('day'),
                 isInvalidDate: function(date) {
                     return disabledDateRanges.some(function(range) {
-                        return date.isBetween(range.start, range.end, null, '[]');
+                        return date.isSame(range.start, 'day') || date.isSame(range.end, 'day');
                     });
                 }
             }).on('apply.daterangepicker', function(ev, picker) {

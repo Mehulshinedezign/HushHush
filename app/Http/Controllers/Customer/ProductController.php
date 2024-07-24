@@ -147,9 +147,7 @@ class ProductController extends Controller
 
 
         $productImages = $product->allImages;
-        // dd("DONE",$product);
-        $querydates = Query::where('user_id',auth()->user()->id,'PENDING')->get();
-            
+        $querydates = Query::where(['user_id' => auth()->user()->id, 'product_id'=>$id, 'status'=> 'PENDING'])->get();
         return view('product-detail', compact('product','productImages','querydates'));
     }
 
