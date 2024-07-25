@@ -171,9 +171,10 @@
                             </div> --}}
                             {{-- <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
                                 data-bs-target="#bookitem-sidebar" aria-controls="offcanvasRight">Book Now</a> --}}
-
-                            <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                                data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Ask Query</a>
+                            @if (@$product->user_id != auth()->user()->id)
+                                <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
+                                    data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Ask Query</a>   
+                            @endif
 
                             <div class="pro-info-accordian">
                                 <div class="accordion" id="accordionExample">

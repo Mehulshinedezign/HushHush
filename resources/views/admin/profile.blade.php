@@ -105,9 +105,9 @@
                                                 <label>{{ __('user.fields.email') }}</label>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
-                                                        {{-- <div class="input-group-text icon">
+                                                        <div class="input-group-text icon">
                                                             <i class="fas fa-envelope"></i>
-                                                        </div> --}}
+                                                        </div>
                                                     </div>
                                                     {{-- <input type="email" name="email"
                                                         class="form-control @error('email') is-invalid @enderror"
