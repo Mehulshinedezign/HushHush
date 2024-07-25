@@ -18,7 +18,7 @@
                             <i class="fa fa-caret-down"></i>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-primary filter">
+                    {{-- <button type="button" class="btn btn-primary filter">
                         <svg class="mr-2" width="19" height="15" viewBox="0 0 19 15" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -31,7 +31,7 @@
                                 d="M13.2552 12.6808C13.2552 13.4266 12.6369 14.029 11.8714 14.029H7.13179C6.36636 14.029 5.74805 13.4266 5.74805 12.6808C5.74805 11.9372 6.36636 11.3325 7.13179 11.3325H11.8714C12.6369 11.3325 13.2552 11.935 13.2552 12.6808Z"
                                 fill="white" />
                         </svg>Apply
-                    </button>
+                    </button> --}}
                     <button type="button" class="btn btn-dark clear">Clear Filter</button>
                 </div>
             </div>
@@ -159,42 +159,48 @@
 @endsection
 
 @push('scripts')
-    <script>
-        const date = '{{ request()->get('date') }}';
-        //console.log("data",data.split('to')[0]);
-        var currentUrl = new URL(window.location.href);
-        var setDateRange = '';
-        jQuery(function() {
-            jQuery('button.filter').click(function() {
-                setDateRange = jQuery('#daterange').val();
-                currentUrl.searchParams.set("date", setDateRange);
-                window.location.replace(currentUrl.href)
-            });
+<script>
+    const date = '{{ request()->get('date') }}';
+    var currentUrl = new URL(window.location.href);
+    var setDateRange = '';
+    const customDateFormat = 'MM/DD/YYYY';
 
-            jQuery('button.clear').click(function() {
-                currentUrl.searchParams.delete("date");
-                window.location.replace(currentUrl.href)
-            });
+    jQuery(function() {
+        jQuery('button.filter').click(function() {
+            setDateRange = jQuery('#daterange').val();
+            currentUrl.searchParams.set("date", setDateRange);
+            window.location.href = currentUrl.href;
+        });
 
-            if (date) {
-                var start = date.split('to')[0];
-                var end = date.split('to')[1];
-            } else {
-                var start = moment();
-                var end = moment();
-            }
-            jQuery('#daterange').daterangepicker({
-                startDate: start,
-                endDate: end,
-                locale: {
-                    format: dateFormat,
-                    separator: dateSeparator,
-                },
-            }).on('change', function() {
-                // setDateRange = jQuery('#daterange').val();
-                // currentUrl.searchParams.set("date", setDateRange);
-                // window.location.replace(currentUrl.href)
-            });
-        })
-    </script>
+        jQuery('button.clear').click(function() {
+            currentUrl.searchParams.delete("date");
+            window.location.href = currentUrl.href;
+        });
+
+        let start, end;
+        if (date) {
+            const dateParts = date.split(' - ').map(part => part.trim());
+            start = moment(dateParts[0], customDateFormat);
+            end = moment(dateParts[1], customDateFormat);
+        } else {
+            start = moment();
+            end = moment();
+        }
+
+        jQuery('#daterange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            locale: {
+                format: customDateFormat,
+                separator: ' - ',
+            },
+        }).on('apply.daterangepicker', function(ev, picker) {
+            setDateRange = picker.startDate.format(customDateFormat) + ' - ' + picker.endDate.format(customDateFormat);
+            currentUrl.searchParams.set("date", setDateRange);
+            window.location.href = currentUrl.href;
+        });
+    });
+</script>
+
+
 @endpush

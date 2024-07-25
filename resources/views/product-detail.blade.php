@@ -129,14 +129,14 @@
                                 <div class="pro-desc-prize">
                                     <h3>${{ $product->rent_week }}</h3>
                                     <div class="badge day-badge">
-                                        Per month
+                                        Per week
                                     </div>
 
                                 </div>
                                 <div class="pro-desc-prize">
                                     <h3>${{ $product->rent_month }}</h3>
                                     <div class="badge day-badge">
-                                        Per Year
+                                        Per month
                                     </div>
 
                                 </div>
@@ -318,26 +318,26 @@
                         @endif
                     </div>
                     <div class="book-item-profile-info">
-                        <h3>Pennington Dress</h3>
+                        <h3>{{ @$product->name}}</h3>
                         <div class="pro-desc-prize-wrapper">
                             <div class="pro-desc-prize">
-                                <h3>$23</h3>
+                                <h3>${{ @$product->rent_day }}</h3>
                                 <div class="badge day-badge">
                                     Per day
                                 </div>
 
                             </div>
                             <div class="pro-desc-prize">
-                                <h3>$23</h3>
+                                <h3>${{ @$product->rent_week }}</h3>
                                 <div class="badge day-badge">
-                                    Per month
+                                    Per week
                                 </div>
 
                             </div>
                             <div class="pro-desc-prize">
-                                <h3>$32</h3>
+                                <h3>${{ @$product->rent_month }}</h3>
                                 <div class="badge day-badge">
-                                    Per Year
+                                    Per month
                                 </div>
 
                             </div>

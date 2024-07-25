@@ -350,15 +350,15 @@ return [
             'range' => 'Please enter the days from 1 to 30.',
         ],
         'rent_price_day' =>[
-            'required' => 'Please enter Rental price day.',
+            'required' => 'Please enter Rental price per day.',
             'regex' => 'Please enter only digit values.',
         ],
         'rent_price_week' =>[
-            'required' => 'Please enter Rental price week.',
+            'required' => 'Please enter Rental price per week.',
             'regex' => 'Please enter only digit values.',
         ],
         'rent_price_month' =>[
-            'required' => 'Please enter Rental price month.',
+            'required' => 'Please enter Rental price per month.',
             'regex' => 'Please enter only digit values.',
         ],
         'product_complete_location' => [

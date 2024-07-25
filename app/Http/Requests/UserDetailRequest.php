@@ -38,10 +38,11 @@ class UserDetailRequest extends FormRequest
                 'profile_pic' => 'mimes:jpg,jpeg,png|max:2000',
                 'proof' => 'mimes:pdf,jpg,jpeg,png|max:2000',
             ]);
-        } else {
-            $emailRegex = "/^[a-zA-Z]+[a-zA-Z0-9_\.\-]*@[a-zA-Z]+(\.[a-zA-Z]+)*[\.]{1}[a-zA-Z]{2,10}$/";
-            $requestArray['email'] = 'required|email|regex:' . $emailRegex;
         }
+        //  else {
+        //     $emailRegex = "/^[a-zA-Z]+[a-zA-Z0-9_\.\-]*@[a-zA-Z]+(\.[a-zA-Z]+)*[\.]{1}[a-zA-Z]{2,10}$/";
+        //     $requestArray['email'] = 'required|email|regex:' . $emailRegex;
+        // }
 
         return $requestArray;
     }
@@ -55,10 +56,10 @@ class UserDetailRequest extends FormRequest
     {
         return [
             'name.required' =>  __('user.validations.nameRequired'),
-            'email.required' => __('user.validations.emailRequired'),
-            'email.string' => __('user.validations.emailString'),
-            'email.email' => __('user.validations.emailType'),
-            'email.regex' => __('user.validations.emailType'),
+            // 'email.required' => __('user.validations.emailRequired'),
+            // 'email.string' => __('user.validations.emailString'),
+            // 'email.email' => __('user.validations.emailType'),
+            // 'email.regex' => __('user.validations.emailType'),
             'phone_number.required' =>  __('user.validations.phoneRequired'),
             'phone_number.regex' =>  __('user.validations.phoneRegex'),
             // 'address1.required' =>  __('user.validations.address1Required'),
