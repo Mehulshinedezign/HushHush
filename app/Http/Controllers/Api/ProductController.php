@@ -1187,6 +1187,9 @@ class ProductController extends Controller
             $query = Query::findOrFail($id);
             $product_id = $query->product_id;
             $productDetails = $this->getProduct($product_id);
+            $user_id=$productDetails->user_id;
+            $user=User::findOrFail($user_id);
+            // dd($user);
 
             $productDetails->all_images = $productDetails->allImages->map(function ($image) {
                 return [
@@ -1232,6 +1235,8 @@ class ProductController extends Controller
                 'product_image_url' => $productDetails->thumbnailImage->file_path ?? null,
                 'all_images' => $productDetails->all_images,
                 'favourites' => !is_null($productDetails->favorites),
+
+
             ];
 
             $price = $query->negotiate_price ?? $productDetails->getCalculatedPrice($query->date_range);
@@ -1241,6 +1246,8 @@ class ProductController extends Controller
                 'message' => 'Product details fetched successfully',
                 'data' => [
                     'product' => $productDetailsArray,
+                    'lender' =>$user,
+                    'locations'=>$productDetails->locations,
                     'queries' => $query,
                     'price' => $price,
                 ],

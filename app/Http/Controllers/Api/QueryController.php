@@ -20,18 +20,21 @@ class QueryController extends Controller
             $validator = Validator::make($request->all(), [
                 'product_id' => 'required|exists:products,id',
                 'query_message' => 'nullable|string',
-                'start' => 'required',
-                'end' => 'required',
+                'start' => 'required|date',
+                'end' => 'required|date',
             ]);
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
             }
             $product = Product::where('id', $request->product_id)->first();
-            $startDate = $request->start;
-            $endDate = $request->end;
+
+            $startDate = Carbon::parse($request->start)->format('d-m-Y');
+            $endDate = Carbon::parse($request->end)->format('d-m-Y');
+
             if (empty($endDate)) {
                 $endDate = $startDate;
             }
+
             $query = Query::create([
                 'user_id' => $user->id,
                 'product_id' => $request->product_id,
@@ -40,6 +43,7 @@ class QueryController extends Controller
                 'status' => 'PENDING',
                 'date_range' => $startDate . ' - ' . $endDate,
             ]);
+
             return response()->json([
                 'status' => true,
                 'message' => 'Query created successfully',
@@ -52,6 +56,7 @@ class QueryController extends Controller
             ], 500);
         }
     }
+
 
     public function queriesByUser(Request $request)
     {

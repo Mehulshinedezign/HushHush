@@ -65,6 +65,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/borrow/{bookingId}/confirm', [App\Http\Controllers\Api\LenderController::class, 'confirmPayment']);
     Route::post('/stripe/charge', [App\Http\Controllers\Api\StripeController::class, 'createCharge']);
+    Route::post('/payment-intent/{id}', [App\Http\Controllers\Api\StripeController::class, 'createPaymentIntent']);
 
     //profile APIs
     Route::get('/profile', [App\Http\Controllers\Api\ProfileController::class, 'index']);
@@ -75,4 +76,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Bank Deatils APIs
     Route::post('/bank-account', [App\Http\Controllers\Api\BankAccountController::class, 'addOrUpdateBankAccount']);
     Route::get('/bank-account/details', [App\Http\Controllers\Api\BankAccountController::class, 'getDetails']);
+
+
+    Route::post('/stripe/onboarding/redirect', [App\Http\Controllers\Api\StripeController::class, 'redirectToStripe'])->name('api.stripe.onboarding.redirect');
+    Route::get('/stripe/onboarding/refresh', [App\Http\Controllers\Api\StripeController::class, 'refreshOnboarding'])->name('api.stripe.onboarding.refresh');
+    Route::get('/stripe/onboarding/complete', [App\Http\Controllers\Api\StripeController::class, 'completeOnboarding'])->name('api.stripe.onboarding.complete');
 });
