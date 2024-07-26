@@ -11,12 +11,12 @@
                             <form id="paymentform" action="{{ route('charge') }}" method="POST">
                                 @csrf
                                 <label for="security">Security</label>
-                                <input type="radio" name="security_option" checked
-                                    value="{{ $security->value }}">${{ $security->value }}
+                                <input type="radio" name="security_option" checked value="{{ $security->value }}"
+                                    data-type="{{ $security->type }}">${{ $security->value }}
                                 <br>
                                 <label for="insurance">Insurance</label>
-                                <input type="radio" name="security_option"
-                                    value="{{ $insurance->value }}">${{ $insurance->value }}
+                                <input type="radio" name="security_option" value="{{ $insurance->value }}"
+                                    data-type="{{ $insurance->type }}">${{ $insurance->value }}
                                 <div class="">
                                     <div class="row">
                                         <div class="col-md-12">
@@ -62,12 +62,14 @@
                                     </div>
                                 </div>
                                 <input type="hidden" value="{{ $price + $security->value }}" id="total_payment">
+                                <input type="hidden" value="{{ $query->id }}" id="query">
+                                <input type="hidden" value="{{ $security->type }}" id="security_option_type">
+                                <input type="hidden" value="{{ $security->value }}" id="security_option_value">
                                 <button type="submit" id="payNow" class="btn full-btn">Pay Now
                                     ${{ $price + $security->value }}
                                 </button>
                             </form>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -75,18 +77,6 @@
     </section>
 @endsection
 @push('scripts')
-    <script>
-        jQuery(document).on("click", 'input[name="security_option"]', function() {
-            $('input[name="security_option"]').attr("checked", false);
-            $(this).attr("checked", true);
-            var amount = parseFloat($("input[name='security_option']:checked").val());
-            var price = {{ $price }};
-            var totalamount = price + amount;
-            $("#payNow").text('Pay Now ' + '$' + totalamount);
-            $('#total_payment').val(totalamount);
-
-        });
-    </script>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
         const stripe = Stripe('{{ env('STRIPE_KEY') }}')
@@ -162,7 +152,10 @@
         const form = document.getElementById('paymentform')
         const cardBtn = document.getElementById('payNow')
         const cardHolderName = document.getElementById('cardName')
-        const totalPayment = document.getElementById('total_payment').value;
+        var totalPayment = document.getElementById('total_payment').value;
+        var query = document.getElementById('query').value;
+        var securityOptionType = document.getElementById('security_option_type').value;
+        var securityOptionValue = document.getElementById('security_option_value').value;
 
 
         form.addEventListener('submit', async (e) => {
@@ -207,6 +200,24 @@
             paymentElement.setAttribute('name', 'total_payment')
             paymentElement.setAttribute('value', totalPayment)
             form.appendChild(paymentElement)
+
+            let queryElement = document.createElement('input')
+            queryElement.setAttribute('type', 'hidden')
+            queryElement.setAttribute('name', 'query_id')
+            queryElement.setAttribute('value', query)
+            form.appendChild(queryElement)
+
+            let securityOptionTypeElement = document.createElement('input')
+            securityOptionTypeElement.setAttribute('type', 'hidden')
+            securityOptionTypeElement.setAttribute('name', 'security_option_type')
+            securityOptionTypeElement.setAttribute('value', securityOptionType)
+            form.appendChild(securityOptionTypeElement)
+
+            let securityOptionValueElement = document.createElement('input')
+            securityOptionValueElement.setAttribute('type', 'hidden')
+            securityOptionValueElement.setAttribute('name', 'security_option_value')
+            securityOptionValueElement.setAttribute('value', securityOptionValue)
+            form.appendChild(securityOptionValueElement)
             form.submit();
             jQuery('.page-loader').removeClass('d-none'); //for loader
         }
@@ -242,5 +253,21 @@
                 return false;
             }
         }
+
+        jQuery(document).on("click", 'input[name="security_option"]', function() {
+            $('input[name="security_option"]').attr("checked", false);
+            $(this).attr("checked", true);
+
+            var amount = parseFloat($("input[name='security_option']:checked").val());
+            var securityoptiontype = $("input[name='security_option']:checked").attr('data-type');
+            // alert(securityoptiontype);
+            var price = {{ $price }};
+            var totalamount = price + amount;
+            $("#payNow").text('Pay Now ' + '$' + totalamount);
+            $('#total_payment').val(totalamount);
+            $('#security_option_type').val(securityoptiontype);
+            $('#security_option_value').val(amount);
+
+        });
     </script>
 @endpush

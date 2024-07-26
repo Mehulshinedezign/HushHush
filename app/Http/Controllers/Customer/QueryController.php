@@ -48,10 +48,10 @@ class QueryController extends Controller
             $receiver_id = $product->user_id;
             $sent_by = auth()->user()->role_id == '3' ? 'Customer' : 'Retailer';
 
-            if (check_chat_exist_or_not($receiver_id))
-                $chat = check_chat_exist_or_not($receiver_id);
-            else
-                $chat = auth()->user()->chat()->create(['chatid' => str::random(10), 'retailer_id' => $receiver_id, 'order_id' => null, 'sent_by' => $sent_by]);
+            // if (check_chat_exist_or_not($receiver_id))
+            //     $chat = check_chat_exist_or_not($receiver_id);
+            // else
+            //     $chat = auth()->user()->chat()->create(['chatid' => str::random(10), 'retailer_id' => $receiver_id, 'order_id' => null, 'sent_by' => $sent_by]);
 
 
             DB::commit();
@@ -62,14 +62,13 @@ class QueryController extends Controller
         }
     }
 
-    public function myQuery(Request $request)
-    {
+
     public function myQuery(Request $request)
     {
         $user = auth()->user();
         $querydatas = Query::where('user_id', $user->id)->get();
 
-        return view('customer.query_list', compact('querydatas'));
+        return view('customer.my_query_list', compact('querydatas'));
     }
 
     public function view(Request $request)
@@ -81,5 +80,52 @@ class QueryController extends Controller
         $view = view('customer.query_product', compact('product'))->render();
 
         return response()->json(['success' => true, 'data' => $view]);
+    }
+
+    public function receiveQuery(Request $request)
+    {
+        $user = auth()->user();
+        $querydatas = Query::where(['for_user' => $user->id, 'status' => 'PENDING'])->get();
+
+        return view('customer.receive_query_list', compact('querydatas'));
+    }
+
+    public function acceptQuery(Request $request, $id)
+    {
+        $query_product = Query::where('id', $id)->first();
+
+        // dd($query_product);
+        $data = [
+            'user_id' => $query_product->user_id,
+            'product_id' => $query_product->product_id,
+            'negotiate_price' => $request->negotiate_price ?? null,
+            'for_user' => $query_product->for_user,
+            'query_message' => $query_product->query_message,
+            'status' => 'ACCEPTED',
+            'date_range' => $query_product->date_range,
+        ];
+
+        $query_product->update($data);
+
+        return redirect()->back()->with('success', 'Query accepted successfully.');
+    }
+    public function rejectQuery(Request $request, $id)
+    {
+
+
+        $query_product = Query::where('id', $id)->first();
+
+        $data = [
+            'user_id' => $query_product->user_id,
+            'product_id' => $query_product->product_id,
+            'for_user' => $query_product->for_user,
+            'query_message' => $query_product->query_message,
+            'status' => 'REJECTED',
+            'date_range' => $query_product->date_range,
+        ];
+
+        $query_product->update($data);
+
+        return redirect()->back()->with('success', 'Query rejected successfully.');
     }
 }

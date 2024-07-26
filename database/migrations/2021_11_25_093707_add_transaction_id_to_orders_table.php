@@ -14,7 +14,7 @@ class AddTransactionIdToOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->after('location_id', function ($table) {
+            $table->after('id', function ($table) {
                 $table->foreignId('transaction_id')->nullable()->constrained('transactions');
             });
         });
