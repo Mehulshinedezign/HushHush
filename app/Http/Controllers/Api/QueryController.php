@@ -231,6 +231,7 @@ class QueryController extends Controller
                         ->whereNull('deleted_at')
                         ->first();
                     $lender = User::where('id', $query->for_user)->first();
+                    $price = $query->negotiate_price ?? $product->getCalculatedPrice($query->date_range);
 
                     if (now() > $endDate) {
                         $status = 'COMPLETED';
@@ -256,6 +257,9 @@ class QueryController extends Controller
                         'lender' => $lender->name ?? null,
                         'lender_profile_pic' => $lender->frontend_profile_url,
                         'lender_id' => $lender->id,
+                        'brand' =>$product->get_brand->name,
+                        'size' =>$product->get_size->name,
+                        'price'=>$price,
                     ];
                 });
 
