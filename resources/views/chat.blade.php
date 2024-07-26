@@ -12,8 +12,8 @@
 @endsection
 
 @push('scripts')
-    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    {{-- <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script>
         const firebaseConfig = {
             apiKey: "{{ env('APIKEY') }}",
@@ -35,5 +35,38 @@
         var search_url = APP_URL + '/retailer/chat/search/';
         var chat_image_store_url = APP_URL + '/retailer/chat/image';
     </script>
-    <script defer src="{{ asset('js/custom/chat.js') }}"></script>
+    <script defer src="{{ asset('js/custom/chat2.js') }}"></script>
+    <script defer src="{{ asset('js/custom/chatlist.js') }}"></script> --}}
+
+    <script type="module">
+        import {
+            database
+        } from './js/test.js';
+
+        // function sendMessage() {
+        //     const message = document.getElementById('message').value;
+        //     const newMessageRef = database.ref('messages').push();
+        //     newMessageRef.set({
+        //         text: message
+        //     });
+        //     document.getElementById('message').value = '';
+        // }
+        database.ref('\users/3').child('11').set({
+
+            id: "3",
+            name: "CHUTIYA",
+            image: "URL",
+            lastmsg: "LUND LELE MERA",
+            created: "timestamp",
+            sender: "2",
+            isSeen: '1',
+            a_remove: '0',
+            msgtype: 'one',
+        });
+        // database.ref('\users').on('child_added', (snapshot) => {
+        //     const message = snapshot.val();
+        //     const messagesDiv = document.getElementById('messages');
+        //     messagesDiv.innerHTML += `<p>${message.text}</p>`;
+        // });
+    </script>
 @endpush

@@ -322,8 +322,7 @@ function _lastMsgUpdate(chatId) {
 
 function insertChatId() {
     var params = { 'order_id': $('.chat-list-profile.activecht').attr('data-orderId'), 'receiver_id': $('.chat-list-profile.activecht').attr('data-receiverId'), _token: $('meta[name="csrf-token"]').attr('content') };
-    console.log(params);
-    alert(params);
+
     let response = ajaxCall(chat_store_url, "post", params);
     response.then(handleStateData).catch(handleStateError)
     function handleStateData(response) {
