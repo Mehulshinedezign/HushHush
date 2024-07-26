@@ -146,7 +146,8 @@ class ProductController extends Controller
         $layout_class = 'single_product';
 
         $productImages = $product->allImages;
-        $querydates = Query::where(['user_id' => auth()->user()->id, 'product_id'=>$id, 'status'=> 'PENDING'])->get();
+        $querydates = Query::where(['product_id'=>$id, 'status'=> 'ACCEPTED'])->get();
+
         return view('product-detail', compact('product','productImages','querydates','relatedProducts','rating_progress'));
     }
 

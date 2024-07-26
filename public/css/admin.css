@@ -2212,3 +2212,11 @@ button.btn.btn-primary.filter {
 select.form-control.selectric {
   color: #878A92 !important;
 }
+.formfield {
+  position: relative;
+}
+.form-icon{
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}

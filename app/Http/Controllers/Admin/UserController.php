@@ -42,27 +42,40 @@ class UserController extends Controller
     public function edit_user(User $user)
     {
         $user = User::with('userDetail', 'notification')->find($user->id);
-        if (isset($user->userDetail->country_id)) {
-            $selectedCountryId = $user->userDetail->country_id;
+        if (isset($user->userDetail->country)) {
+            $selectedCountryName = $user->userDetail->country;
+            $selectedStateName = $user->userDetail->state;
+            // dd($selectedStateName);
         } else {
-
-            $selectedCountryId = Country::where('iso_code', 'US')->pluck('id')->first();
+            $selectedCountryName = Country::where('iso_code', 'US')->pluck('id')->first();
+            $selectedStateName = State::where('country_id','231')->first();
         }
         $countries = Country::all();
-        $states = State::where('country_id', $selectedCountryId)->get();
-        $cities = City::where('state_id', $user->state_id)->get();
+        // dd($selectedStateName);
+
+        $selectedCountry = Country::where('name',$selectedCountryName)->orWhere('id',$selectedCountryName)->first();
+ 
+        $states = State::where('country_id', $selectedCountry->id)->get();
+        // dd($selectedStateName);
+        $state = State::where('name',$selectedStateName)->first();
+        
+        $cities = City::where('state_id', $state->id)->get();
         $notAvailable = 'N/A';
         // if ($user->role->name == 'customer') {
         $file = 'admin.customer.edit';
         // } 
         // else {
-        //     $file = 'admin.retailer.edit';
+            // $file = 'admin.retailer.edit';
         // }
-        return view($file, compact('user', 'selectedCountryId', 'countries', 'states', 'cities', 'notAvailable'));
+        // dd($selectedCountryId);
+
+        // dd($cities);
+        return view($file, compact('user', 'selectedCountryName', 'countries', 'states', 'cities', 'notAvailable'));
     }
 
     public function update_profile(UserDetailRequest $request, User $user)
     {
+        // dd("here",$request->all());
         $data = [
             'name' => $request->name,
             'phone_number' => $request->phone_number,
@@ -74,9 +87,9 @@ class UserController extends Controller
             'user_id' => $user->id,
             'address1' => $request->address1,
             'address2' => $request->address2,
-            'country_id' => $request->country,
-            'state_id' => $request->state,
-            'city_id' => $request->city,
+            'country' => $request->country,
+            'state' => $request->state,
+            'city' => $request->city,
             'about' => $request->about
         ];
 
@@ -128,7 +141,7 @@ class UserController extends Controller
         }
 
 
-        return redirect()->route('admin.customers');
+        return redirect()->route('admin.customers')->with('success', 'User profile updated successfully');;
     }
     public function approveCustomer(User $user)
     {

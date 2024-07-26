@@ -133,7 +133,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
 
         // country state city routes
         Route::get('states/{country}', [App\Http\Controllers\AjaxController::class, 'states'])->name('states');
-        Route::get('cities', [App\Http\Controllers\AjaxController::class, 'cities'])->name('cities');
+        Route::get('cities/{stateId}', [App\Http\Controllers\AjaxController::class, 'cities'])->name('cities');
 
         Route::any('stripe/onboarding', [StripeOnboardingController::class, 'redirectToStripe'])->name('stripe.onboarding.redirect');
         Route::get('stripe/onboarding/refresh', [StripeOnboardingController::class, 'refreshOnboarding'])->name('stripe.onboarding.refresh');
@@ -213,6 +213,10 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
             Route::post('order/images', [App\Http\Controllers\Customer\OrderController::class, 'store_imges'])->name('customer.orderimage');
 
             // end
+            // card payment
+            Route::get('card/details/{query?}/{price?}', [App\Http\Controllers\BookingController::class, 'cardDetail'])->name('card.details');
+
+            Route::post('charge', [App\Http\Controllers\BookingController::class, 'charge'])->name('charge');
 
             Route::get('order/{order}/chat', [App\Http\Controllers\Customer\OrderController::class, 'orderChat'])->name('orderchat');
 
