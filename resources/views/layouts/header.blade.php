@@ -316,13 +316,10 @@
                             @endif
 
                         </li>
-                        <div><a href="{{ route('common.chat') }}"><i class="fa-regular fa-user"></i></a></div>
-
                         <li><a href="{{ route('wishlist') }}"><i class="fa-regular fa-heart"></i>
                                 <p class="d-inline-block d-lg-none">Wishlist</p>
                             </a></li>
                         <li>
-
                             <div class="dropdown">
                                 <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -338,15 +335,17 @@
                                                 alt="img">My Products</a></li>
 
                                     <li><a class="dropdown-item" href="{{ route('my_query') }}"><img width="15"
-                                                    height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
-                                                    alt="img">My Query</a></li>
+                                                height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
+                                                alt="img">My Query</a></li>
                                     <li><a class="dropdown-item" href="{{ route('receive_query') }}"><img width="15"
-                                        height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
-                                        alt="img">Receive Query</a></li>
+                                                height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
+                                                alt="img">Receive Query</a></li>
                                     <li><a class="dropdown-item" href="{{ route('profile') }}"><img
                                                 src="{{ asset('front/images/user-icon.svg') }}"
                                                 alt="img">Profile</a></li>
-                                    <!-- <li><a class="dropdown-item" href="{{ route('orders') }}"><img src="{{ asset('front/images/order-history-icon.svg') }}" alt="img">Order History</a></li> -->
+                                    <li><a class="dropdown-item" href="{{ route('orders') }}"><img
+                                                src="{{ asset('front/images/order-history-icon.svg') }}"
+                                                alt="img">Order History</a></li>
                                     <!-- <li><a class="dropdown-item" href="{{ route('rental-request') }}"><img src="{{ asset('front/images/rent-req-icon.svg') }}" alt="img">Rental Request</a></li> -->
                                     <!-- <li><a class="dropdown-item" href="#"><img src="{{ asset('front/images/notification-icon.svg') }}" alt="img">Notifications</a></li> -->
                                     <!-- <li><a class="dropdown-item" href="#"><img src="{{ asset('front/images/saved-icon.svg') }}" alt="img">Saved Items</a></li> -->
@@ -354,6 +353,12 @@
                                     <li><a class="dropdown-item" href="{{ route('user.changePassword') }}"><i
                                                 style="color: #606060" class="fa-solid fa-lock"></i></i>Change
                                             password</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('common.chat') }}"><i
+                                                style="color: #606060" class="fa-solid fa-lock"></i></i>Chat
+                                        </a></li>
+                                    {{-- <li><a class="dropdown-item" href="{{ route('') }}"><i
+                                                style="color: #606060" class="fa-solid fa-lock"></i></i>my
+                                            order</a></li> --}}
                                     <li><a class="dropdown-item" href="{{ route('logout') }}"><img
                                                 src="{{ asset('front/images/logout-icon.svg') }}"
                                                 alt="img">Logout</a></li>

@@ -47,10 +47,10 @@ class QueryController extends Controller
             $receiver_id = $product->user_id;
             $sent_by = auth()->user()->role_id == '3' ? 'Customer' : 'Retailer';
 
-            if (check_chat_exist_or_not($receiver_id))
-                $chat = check_chat_exist_or_not($receiver_id);
-            else
-                $chat = auth()->user()->chat()->create(['chatid' => str::random(10), 'retailer_id' => $receiver_id, 'order_id' => null, 'sent_by' => $sent_by]);
+            // if (check_chat_exist_or_not($receiver_id))
+            //     $chat = check_chat_exist_or_not($receiver_id);
+            // else
+            //     $chat = auth()->user()->chat()->create(['chatid' => str::random(10), 'retailer_id' => $receiver_id, 'order_id' => null, 'sent_by' => $sent_by]);
 
 
             DB::commit();

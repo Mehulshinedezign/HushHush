@@ -29,7 +29,7 @@ class OrderController extends Controller
             }
         }
         // dd($fromDate, $toDate);
-        $orders = Order::with('item.product.thumbnailImage', 'item.retailer', 'item.product.category', 'transaction')
+        $orders = Order::with('product.thumbnailImage', 'product.retailer', 'product.category', 'transaction', 'customerquery', 'product.nonAvailableDates')
             ->when((!is_null($request->status) && $request->status != 'all' && $request->status != 'disputed'), function ($q) use ($request) {
                 $q->where('status', $request->status);
                 $q->whereIn('dispute_status', ['No', 'Resolved']);
@@ -51,10 +51,10 @@ class OrderController extends Controller
         // if ('retailer' == $request->type) {
         //     return view('retailer.order_list', compact('orders'));
         // }
-        // dd($orders);
+        // dd($orders->toArray());
 
 
-        return view('customer.order_history');
+        return view('customer.order_history', compact('orders'));
         // previous code
         // return view('customer.order_list', compact('orders'));
     }
@@ -670,8 +670,9 @@ class OrderController extends Controller
     }
 
     // rental request 
-    public function rental_request(Request $request){
-        
+    public function rental_request(Request $request)
+    {
+
         return view('customer.rental_request');
     }
 }
