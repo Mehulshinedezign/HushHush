@@ -213,10 +213,6 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
             Route::post('order/images', [App\Http\Controllers\Customer\OrderController::class, 'store_imges'])->name('customer.orderimage');
 
             // end
-            // card payment
-            Route::get('card/details/{query?}/{price?}', [App\Http\Controllers\BookingController::class, 'cardDetail'])->name('card.details');
-
-            Route::post('charge', [App\Http\Controllers\BookingController::class, 'charge'])->name('charge');
 
             Route::get('order/{order}/chat', [App\Http\Controllers\Customer\OrderController::class, 'orderChat'])->name('orderchat');
 
