@@ -44,6 +44,7 @@
                     'admin.vendors',
                     'admin.view-retailer-completed-orders',
                     'view-customer-completed-orders',
+                    'admin.edit.user'
                 ])) active @endif">
                 <a href="{{ route('admin.customers') }}" class="nav-link"><i
                         data-feather="user-check"></i><span>{{ __('Users') }}</span></a>
