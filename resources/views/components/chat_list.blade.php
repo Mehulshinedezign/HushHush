@@ -9,8 +9,9 @@
         </div>
     </form>
     <ul>
-        @foreach ($chatlist as $chat)
-            <li>
+        {{-- @foreach ($chatlist as $chat) --}}
+        <div class="chatlist">
+            {{-- <li>
 
                 <div class="chat-list-profile @if ($loop->first) activecht @endif"
                     data-orderId="{{ jsencode_userdata(@$chat->order_id) }}" data-chatId="{{ @$chat->chatid }}"
@@ -42,7 +43,8 @@
                     </div>
                     <span>{{ date('h:i a', strtotime(@$chat->last_msg_datetime)) }}</span>
                 </div>
-            </li>
-        @endforeach
+            </li> --}}
+        </div>
+        {{-- @endforeach --}}
     </ul>
 </div>
