@@ -191,7 +191,23 @@ if (!function_exists('check_chat_exist')) {
         })->first();
     }
 }
-
+// testing chat
+if (!function_exists('check_chat_exist_or_not')) {
+    function check_chat_exist_or_not($receiver_id)
+    {
+        return DB::table('chats')->where(function ($q) use ($receiver_id) {
+            $q->where([
+                ['user_id', '=', auth()->user()->id],
+                ['retailer_id', '=', $receiver_id],
+                // ['order_id', '=', $order_id],
+            ])->orwhere([
+                ['retailer_id', '=', auth()->user()->id],
+                ['user_id', '=', $receiver_id],
+                // ['order_id', '=', $order_id],
+            ]);
+        })->first();
+    }
+}
 //
 if (!function_exists('leaveReview')) {
     function leaveReview($id)

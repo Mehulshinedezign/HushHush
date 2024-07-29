@@ -38,7 +38,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($querydatas as $query)
-                                            <tr class="user_query-{{$query->id}}">
+                                            <tr class="user_query-{{ $query->id }}">
                                                 <td>
                                                     <a href="#" class="user-table-profile">
                                                         <div class="table-profile ">
@@ -78,8 +78,15 @@
                                                             onclick="confirmReject(event, '{{ $query->id }}')">
                                                             <i class="fa-solid fa-circle-check"></i> Reject
                                                         </a>
-                                                        <a href="#" class="button outline-btn small-btn"><i
-                                                                class="fa-solid fa-comments"></i> Chat</a>
+
+                                                        <a href="javascript:void(0)"
+                                                            class="button outline-btn small-btn chat-list-profile"
+                                                            data-senderId="{{ auth()->user()->id }}"
+                                                            data-receverId="{{ $query->user_id }}"
+                                                            data-adminName = "{{ auth()->user()->name }}"
+                                                            data-adminimage="{{ Storage::url(auth()->user()->profile_file) }}"><i
+                                                                class="fa-solid fa-comments"></i>
+                                                            Chat</a>
                                                         <a href="{{ route('query_view') }}"
                                                             class="button primary-btn small-btn single_query_Modal"
                                                             data-bs-toggle="modal"
@@ -123,7 +130,8 @@
 @endsection
 
 @push('scripts')
-    @includeFirst(['validation'])
+    {{-- @includeFirst(['validation']) --}}
+
     <script>
         $(document).ready(function() {
             $('.single_query_Modal').on('click', function(event) {
@@ -181,7 +189,9 @@
         function rejectQuery(queryId) {
             var url = `{{ url('/reject_query') }}/${queryId}`;
             window.location.href = url;
-            $('.user_query-'+queryId).remove();
+            $('.user_query-' + queryId).remove();
         }
     </script>
+
+    {{-- chat --}}
 @endpush

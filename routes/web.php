@@ -225,7 +225,12 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
             Route::get('reject_query/{id}', [App\Http\Controllers\Customer\QueryController::class, 'rejectQuery'])->name('reject_query');
             Route::get('/fetch-queries', [App\Http\Controllers\Customer\QueryController::class,'fetchQueries'])->name('fetch.queries');
 
-            
+
+            Route::post('order/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
+            //common chat
+            Route::get('/chat', [App\Http\Controllers\ChatController::class, 'common_chat'])->name('common.chat');
+
+
             Route::post('order/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
         });
     });

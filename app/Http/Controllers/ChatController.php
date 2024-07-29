@@ -208,4 +208,25 @@ class ChatController extends Controller
             ]
         ]);
     }
+    public function common_chat(Request $request)
+    {
+        // $receiver_id = $request->receiver_id;
+        // $order_id = jsdecode_userdata($request->order_id);
+        // $sent_by = auth()->user()->role_id == '3' ? 'Customer' : 'Retailer';
+
+        // if (check_chat_exist($receiver_id, $order_id))
+        //     $chat = check_chat_exist($receiver_id, $order_id);
+        // else
+        //     $chat = auth()->user()->chat()->create(['chatid' => Str::random(10), 'retailer_id' => $receiver_id, 'order_id' => $order_id, 'sent_by' => $sent_by]);
+
+        // return response()->json([
+        //     'status' => 'success',
+        //     'message' => "Chat inserted successfully",
+        //     'chat' => ($chat) ? $chat : '',
+        // ], 200);
+
+        $chatlist = Chat::where('user_id', auth()->user()->id)->orWhere('retailer_id', auth()->user()->id)->get();
+
+        return view('chat', compact('chatlist'));
+    }
 }
