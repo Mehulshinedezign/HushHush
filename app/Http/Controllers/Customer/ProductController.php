@@ -41,11 +41,48 @@ class ProductController extends Controller
         $selectedcondition = (isset($request->condition)) ? $request->condition : [];
         $selectedbrands = (isset($request->brand)) ? $request->brand : [];
         $selectedsize = (isset($request->size)) ? $request->size : [];
-        $rentalType = $request->rental_type ?? '';
-        $product = $this->getProducts($request);
-        $products = $product->get();
+        // $rentalType = $request->rental_type ?? '';
+        // $product = $this->getProducts($request);
+        // $products = $product->get();
 
-        $city = (isset($request->neighborhoodcity)) ? $request->neighborhoodcity : [];
+        // $city = (isset($request->neighborhoodcity)) ? $request->neighborhoodcity : [];
+
+
+        $authUserId = auth()->user()->id;
+
+            $query = Product::where('user_id', '!=', $authUserId);
+
+            // if ($request->has('Category')) {
+            //     $categories = explode(',', $request->input('Category'));
+            //     $query->filterByCategories($categories);
+            // }
+
+            // if ($request->has('Brand')) {
+            //     $brands = explode(',', $request->input('Brand'));
+            //     $query->filterByBrands($brands);
+            // }
+
+            // if ($request->has('Size')) {
+            //     $sizes = explode(',', $request->input('Size'));
+            //     $query->filterBySizes($sizes);
+            // }
+
+            // if ($request->has('Color')) {
+            //     $colors = explode(',', $request->input('Color'));
+            //     $query->filterByColors($colors);
+            // }
+
+            // if ($request->has('Price')) {
+            //     $priceRange = explode(',', $request->input('Price'));
+            //     $query->filterByPriceRange($priceRange);
+            // }
+
+            // if ($request->has('Condition')) {
+            //     $conditions = explode(',', $request->input('Condition'));
+            //     $query->filterByCondition($conditions);
+            // }
+
+            $products = $query->get();
         // dd($request->neighborhoodcity,  $city);
 
         // dd($request->global_product_pagination);
@@ -88,7 +125,7 @@ class ProductController extends Controller
     // public function view(Request $request, $id)
     // {
 
-      
+
     //     $id = jsdecode_userdata($id);
     //     // dd("TODAY prodcut id is : ",$id);
     //     $product = $this->getProduct($request, $id);
@@ -123,10 +160,11 @@ class ProductController extends Controller
     public function view(Request $request, $id)
     {
 
-      
         $id = jsdecode_userdata($id);
 
-        $product = $this->getProduct($request, $id);
+        // $product = $this->getProduct($request, $id);
+        $product = Product::findOrFail($id);
+        // dd('here',$id,$product);
         if (is_null($product)) {
             return redirect()->back()->with('message', __('product.messages.notAvailable'));
         }
@@ -243,7 +281,7 @@ class ProductController extends Controller
         } else {
             $message = __('product.messages.notAvailable');
         }
-        // $product1 = $this->checkTimeAvailablity($request, $id);  
+        // $product1 = $this->checkTimeAvailablity($request, $id);
         // dd($request->toArray(),$id, $product1);
         $location = $this->productNearestLocation($request->latitude, $request->longitude, $id);
         if (is_null($location)) {
@@ -318,12 +356,12 @@ class ProductController extends Controller
     }
 
     /**
-     * Add Product 
+     * Add Product
      */
 
     public function lenderInfo(Request $request,$id){
 
-        
+
         $retailer = User::whereId(jsdecode_userdata($id))->first();
         $products = Product::with('ratings', 'thumbnailImage')->where('user_id', $retailer->id)->paginate($request->global_pagination);
         $ratedProducts = $products->where('average_rating', '>', '0');
@@ -334,5 +372,5 @@ class ProductController extends Controller
 
         return view('customer.profile',compact('products'));
     }
-    
+
 }
