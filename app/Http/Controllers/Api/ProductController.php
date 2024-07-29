@@ -1187,8 +1187,8 @@ class ProductController extends Controller
             $query = Query::findOrFail($id);
             $product_id = $query->product_id;
             $productDetails = $this->getProduct($product_id);
-            $user_id=$productDetails->user_id;
-            $user=User::findOrFail($user_id);
+            $user_id = $productDetails->user_id;
+            $user = User::findOrFail($user_id);
             // dd($user);
 
             $productDetails->all_images = $productDetails->allImages->map(function ($image) {
@@ -1246,8 +1246,8 @@ class ProductController extends Controller
                 'message' => 'Product details fetched successfully',
                 'data' => [
                     'product' => $productDetailsArray,
-                    'lender' =>$user,
-                    'locations'=>$productDetails->locations,
+                    'lender' => $user,
+                    'locations' => $productDetails->locations,
                     'queries' => $query,
                     'price' => $price,
                 ],
@@ -1291,6 +1291,46 @@ class ProductController extends Controller
                 'status' => false,
                 'message' => 'Failed to fetch product details',
                 'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function orderDetails(Request $request, $id)
+    {
+        try {
+            $user = auth()->user();
+            $query = Query::where('id', $id)->first();
+            $product = Product::where('id', $query->product_id)->firstOrFail();
+            $order = Order::where('query_id', $query->id)->firstOrFail();
+            $productUser = User::where('id', $product->user_id)->firstOrFail();
+            $productDetails = $this->getProduct($order->product_id);
+            $productDetails->all_images = $productDetails->allImages->map(function ($image) {
+                return [
+                    'id' => $image->id,
+                    'product_id' => $image->product_id,
+                    'file_name' => $image->file_name,
+                    'file_path' => storage_path($image->file_path),
+                    'created_at' => $image->created_at,
+                    'updated_at' => $image->updated_at
+                ];
+            });
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Order details fetched successfully',
+                'data' => [
+                    'product' => $productDetails,
+                    'queries' => $query, // Include queries data
+                    'user ' => $productUser,
+                ],
+            ], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [
+                    'errors' => []
+                ]
             ], 500);
         }
     }

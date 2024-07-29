@@ -63,6 +63,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/orders', [App\Http\Controllers\Api\QueryController::class, 'orderManagement']);
     Route::get('/your-product-booked', [App\Http\Controllers\Api\QueryController::class, 'booked']);
     Route::post('products/{id}/ratings', [App\Http\Controllers\Api\ProductController::class, 'ratings']);
+    Route::get('/order/details/{id}', [App\Http\Controllers\Api\ProductController::class, 'orderDetails']);
 
     Route::post('/borrow/{bookingId}/confirm', [App\Http\Controllers\Api\LenderController::class, 'confirmPayment']);
     Route::post('/stripe/charge', [App\Http\Controllers\Api\StripeController::class, 'createCharge']);
