@@ -21,95 +21,20 @@
                         </div>
                     </div>
                 </div>
-                @if ($querydatas->isNotEmpty())
-                    <div class="inquiry-list-main mt-4">
-                        <div class="db-table">
-                            <div class=" tb-table">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Name</th>
-                                            <th>Query</th>
-                                            <th>date</th>
-                                            <th>Set price</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($querydatas as $query)
-                                            <tr class="user_query-{{ $query->id }}">
-                                                <td>
-                                                    <a href="#" class="user-table-profile">
-                                                        <div class="table-profile ">
-                                                            @if ($query->product)
-                                                                <img src="{{ $query->product->thumbnailImage->file_path ?? '' }}"
-                                                                    alt="tb-profile" width="26" height="27">
-                                                            @else
-                                                                <img src="{{ asset('front/images/table-profile1.png') }}"
-                                                                    alt="tb-profile" width="26" height="27">
-                                                            @endif
-
-                                                        </div>
-                                                    </a>
-
-                                                </td>
-                                                <td>
-                                                    <div class="user-table-head">
-                                                        <h5>{{ $query->product->name ?? '' }}</h5>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p class="Inquiry-desc">{{ $query->query_message ?? '' }}</p>
-                                                </td>
-                                                <td>{{ $query->date_range ?? '' }}</td>
-                                                <td>
-                                                    <input type="text" id="negotiate_price_{{ $query->id }}"
-                                                        placeholder="Enter negotiate price">
-                                                </td>
-                                                <td class="user-active">
-                                                    <div class="inquiry-actions">
-
-                                                        <a href="javascript:void(0)" class="button accept-btn small-btn"
-                                                            onclick="acceptQuery('{{ $query->id }}')">
-                                                            <i class="fa-solid fa-circle-check"></i> Accept
-                                                        </a>
-                                                        <a href="javascript:void(0)" class="button reject-btn small-btn"
-                                                            onclick="confirmReject(event, '{{ $query->id }}')">
-                                                            <i class="fa-solid fa-circle-check"></i> Reject
-                                                        </a>
-
-                                                        <a href="javascript:void(0)"
-                                                            class="button outline-btn small-btn chat-list-profile"
-                                                            data-senderId="{{ auth()->user()->id }}"
-                                                            data-receverId="{{ $query->user_id }}"
-                                                            data-adminName = "{{ auth()->user()->name }}"
-                                                            data-adminimage="{{ Storage::url(auth()->user()->profile_file) }}"><i
-                                                                class="fa-solid fa-comments"></i>
-                                                            Chat</a>
-                                                        <a href="{{ route('query_view') }}"
-                                                            class="button primary-btn small-btn single_query_Modal"
-                                                            data-bs-toggle="modal"
-                                                            data-product-id="{{ $query->product_id }}">
-                                                            <i class="fa-solid fa-eye"></i> View
-                                                        </a>
-
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                <div class="custom-tab">
+                    <ul class="custom-tab-list">
+                        <li class="tab-item active" data-status="ACCEPTED" data-user="lender"><a href="javascript:void(0)">Accept</a></li>
+                        <li class="tab-item" data-status="REJECTED" data-user="lender"><a href="javascript:void(0)">Reject</a></li>
+                        <li class="tab-item" data-status="PENDING" data-user="lender"><a href="javascript:void(0)">Pending</a></li>
+                    </ul>
+                </div>
+                <div id="query-list-container">
+                    <div id="query-list-container">
+                        <x-receive-query :querydatas="$querydatas" :accept="$accept" />
                     </div>
-                @else
-                    <div class="list-empty-box">
-                        <img src="{{ asset('front/images/no-products.svg') }}">
-                        <h3 class="text-center">Receive Query is empty</h3>
-                    </div>
-                @endif
+                    
+                </div>  
+                
             </div>
         </div>
     </section>

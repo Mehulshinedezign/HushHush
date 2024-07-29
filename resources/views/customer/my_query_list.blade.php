@@ -23,19 +23,14 @@
                 </div>
                 <div class="custom-tab">
                     <ul class="custom-tab-list">
-                        <li class="tab-item active" data-status="ACCEPTED"><a href="#">Accept</a></li>
-                        <li class="tab-item" data-status="REJECTED"><a href="#">Reject</a></li>
-                        <li class="tab-item" data-status="PENDING"><a href="#">Pending</a></li>
+                        <li class="tab-item active" data-status="ACCEPTED" data-user="borrower"><a href="javascript:void(0)">Accept</a></li>
+                        <li class="tab-item" data-status="REJECTED" data-user="borrower"><a href="javascript:void(0)">Reject</a></li>
+                        <li class="tab-item" data-status="PENDING" data-user="borrower"><a href="javascript:void(0)">Pending</a></li>
                     </ul>
                 </div>
-                @if ($querydatas->isNotEmpty())
+                <div id="query-list-container">
                     <x-product-query :querydatas="$querydatas" />
-                @else
-                    <div class="list-empty-box">
-                        <img src="{{ asset('front/images/no-products.svg') }}">
-                        <h3 class="text-center">Your Query is empty</h3>
-                    </div>
-                @endif    
+                </div>    
             </div>
         </div>
     </section>
@@ -134,45 +129,7 @@
 
 
             // Accept Reject and Pendding
-            function fetchQueries(status) {
-                $.ajax({
-                    url: '/fetch-queries',
-                    type: 'GET',
-                    data: { status: status },
-                    beforeSend: function() {
-                        $('body').addClass('loading');
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#query-list-container').html(response.html);
-                        } else {
-                            $('#query-list-container').html('<div class="error">Failed to load queries.</div>');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error:', error);
-                        $('#query-list-container').html('<div class="error">An error occurred. Please try again.</div>');
-                    },
-                    complete: function() {
-                        $('body').removeClass('loading');
-                    }
-                });
-            }
-
-            $('.tab-item').on('click', function(e) {
-                e.preventDefault();
-                
-                $('.tab-item').removeClass('active');
-                $(this).addClass('active');
-                var status = $(this).data('status');
-
-                fetchQueries(status);
-            });
-
-            var initialStatus = $('.tab-item.active').data('status');
-            fetchQueries(initialStatus);
-
-
+         
         });
 
 

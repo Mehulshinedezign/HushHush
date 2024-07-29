@@ -200,7 +200,10 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
                 Route::get('order/{order}/confirm-return', [App\Http\Controllers\Customer\OrderController::class, 'confirmReturn'])->name('confirmreturn');
                 // Route::post('order/{order}/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
 
+                // card payment
+                Route::get('card/details/{query?}/{price?}', [App\Http\Controllers\BookingController::class, 'cardDetail'])->name('card.details');
 
+                Route::post('charge', [App\Http\Controllers\BookingController::class, 'charge'])->name('charge');
 
 
                 //Cancel Order
