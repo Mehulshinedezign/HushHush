@@ -333,8 +333,8 @@
                                         <div class="form-group">
                                             <label for="">Product market value*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="text" class="form-control"
-                                                    name="product_market_value" value="">
+                                                <input type="number" class="form-control"
+                                                    name="product_market_value" value="" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
                                         </div>
@@ -354,8 +354,8 @@
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days*</label>
                                             <div class="formfield ">
-                                                <input type="text" class="form-control" name="min_rent_days"
-                                                    placeholder="Rental days" value="">
+                                                <input type="number" class="form-control" name="min_rent_days"
+                                                    placeholder="Rental days" value="" min="1">
                                             </div>
                                         </div>
                                     </div>
@@ -366,8 +366,8 @@
                                         <div class="form-group">
                                             <label for="">Rent Price/Day*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="text" name="rent_price_day" id=""
-                                                    placeholder="" class="form-control">
+                                                <input type="number" name="rent_price_day" id=""
+                                                    placeholder="" class="form-control" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
                                         </div>
@@ -376,8 +376,8 @@
                                         <div class="form-group ">
                                             <label for="">Rent Price/Week*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="text" name="rent_price_week" id=""
-                                                    placeholder="" class="form-control">
+                                                <input type="number" name="rent_price_week" id=""
+                                                    placeholder="" class="form-control" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
                                         </div>
@@ -386,8 +386,8 @@
                                         <div class="form-group ">
                                             <label for="">Rent Price/Month*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="text" name="rent_price_month" id=""
-                                                    placeholder="" class="form-control">
+                                                <input type="number" name="rent_price_month" id=""
+                                                    placeholder="" class="form-control" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
                                         </div>
@@ -774,6 +774,10 @@
             }
 
 
+            // after account details open a modal
+            @if (session('showModal'))
+                $('#addproduct-Modal').modal('show');
+            @endif
 
         });
     </script>

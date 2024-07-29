@@ -39,6 +39,7 @@
                                     <tbody>
                                         @foreach ($querydatas as $query)
                                             <tr class="user_query-{{ $query->id }}">
+                                            <tr class="user_query-{{ $query->id }}">
                                                 <td>
                                                     <a href="#" class="user-table-profile">
                                                         <div class="table-profile ">
@@ -132,6 +133,8 @@
 @push('scripts')
     {{-- @includeFirst(['validation']) --}}
 
+    {{-- @includeFirst(['validation']) --}}
+
     <script>
         $(document).ready(function() {
             $('.single_query_Modal').on('click', function(event) {
@@ -190,8 +193,11 @@
             var url = `{{ url('/reject_query') }}/${queryId}`;
             window.location.href = url;
             $('.user_query-' + queryId).remove();
+            $('.user_query-' + queryId).remove();
         }
     </script>
+
+    {{-- chat --}}
 
     {{-- chat --}}
 @endpush

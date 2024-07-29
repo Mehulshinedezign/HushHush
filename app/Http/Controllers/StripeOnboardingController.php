@@ -18,7 +18,7 @@ class StripeOnboardingController extends Controller
      */
     public function redirectToStripe()
     {
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey(config('services.stripe.secret'));
 
         $account = Account::create([
             'type' => 'express',
@@ -75,20 +75,24 @@ class StripeOnboardingController extends Controller
     {
         $user = Auth::user();
 
-        Stripe::setApiKey(env('STRIPE_SECRET'));
+        Stripe::setApiKey(config('services.stripe.secret'));
         $account = Account::retrieve($user->stripe_id);
 
         // Check if the account is fully set up
         if ($account->details_submitted) {
             // Store the bank details in the database
-            UserBankDetail::create([
-                'user_id' => $user->id,
-                'stripe_id' => $user->stripe_id,
-                'country' => $account->country,
-                'raw_data' => json_encode($account),
-            ]);
+            UserBankDetail::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'stripe_id' => $user->stripe_id,
+                    'country' => $account->country,
+                    'raw_data' => json_encode($account),
+                ]
+            );
 
-            
+
+            session()->flash('showModal', true);
+
             return redirect()->route('index')->with('success', 'Your account is created and your bank details have been stored.');
         } else {
             return redirect()->route('index')->with('error', 'Your Stripe account setup is incomplete. Please complete the onboarding process.');

@@ -133,7 +133,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
 
         // country state city routes
         Route::get('states/{country}', [App\Http\Controllers\AjaxController::class, 'states'])->name('states');
-        Route::get('cities', [App\Http\Controllers\AjaxController::class, 'cities'])->name('cities');
+        Route::get('cities/{stateId}', [App\Http\Controllers\AjaxController::class, 'cities'])->name('cities');
 
         Route::any('stripe/onboarding', [StripeOnboardingController::class, 'redirectToStripe'])->name('stripe.onboarding.redirect');
         Route::get('stripe/onboarding/refresh', [StripeOnboardingController::class, 'refreshOnboarding'])->name('stripe.onboarding.refresh');
@@ -181,12 +181,6 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
             Route::get('payment-success', [App\Http\Controllers\StripeController::class, 'success'])->name('paymentsuccess');
             Route::get('payment-failed', [App\Http\Controllers\StripeController::class, 'failed'])->name('paymentfailed');
 
-            // card payment
-            Route::get('card/details/{query?}/{price?}', [App\Http\Controllers\BookingController::class, 'cardDetail'])->name('card.details');
-
-            Route::post('charge', [App\Http\Controllers\BookingController::class, 'charge'])->name('charge');
-
-
             Route::get('userimage', [App\Http\Controllers\ChatController::class, 'userImage'])->name('userimage');
             Route::post('store/chat', [App\Http\Controllers\ChatController::class, 'storeChat'])->name('store.chat');
             Route::post('chat/messages', [App\Http\Controllers\ChatController::class, 'chatMessages'])->name('chat.messages');
@@ -204,7 +198,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
                 Route::get('order/{order}/chat/{chat}/download', [App\Http\Controllers\Customer\OrderController::class, 'downloadImage'])->name('downloadchatattachment');
                 Route::get('order/{order}/confirm-pick-up', [App\Http\Controllers\Customer\OrderController::class, 'confirmPickUp'])->name('confirmpickup');
                 Route::get('order/{order}/confirm-return', [App\Http\Controllers\Customer\OrderController::class, 'confirmReturn'])->name('confirmreturn');
-                Route::post('order/{order}/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
+                // Route::post('order/{order}/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
 
 
 
@@ -229,8 +223,15 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
             Route::get('receive_query', [App\Http\Controllers\Customer\QueryController::class, 'receiveQuery'])->name('receive_query');
             Route::get('accept_query/{id}', [App\Http\Controllers\Customer\QueryController::class, 'acceptQuery'])->name('accept_query');
             Route::get('reject_query/{id}', [App\Http\Controllers\Customer\QueryController::class, 'rejectQuery'])->name('reject_query');
+            Route::get('/fetch-queries', [App\Http\Controllers\Customer\QueryController::class, 'fetchQueries'])->name('fetch.queries');
 
+
+            Route::post('order/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
+            //common chat
             Route::get('/chat', [App\Http\Controllers\ChatController::class, 'common_chat'])->name('common.chat');
+
+
+            Route::post('order/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
         });
     });
 });

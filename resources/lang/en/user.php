@@ -40,9 +40,9 @@ return [
         'city' => 'City',
     ],
     'placeholders' => [
-        'name' => 'Full Name*',
+        'name' => 'Full Name',
         'email' => 'Enter the email',
-        'phone' => 'Phone Number*',
+        'phone' => 'Phone Number',
         'uploadProfilePic' => 'Upload the profile picture',
         'currentPassword' => 'Enter the current password',
         'newPassword' => 'Enter the new password',
@@ -50,8 +50,8 @@ return [
         'address1' => 'Address 1',
         'address2' => 'Address 2',
         'zip' => 'Zip Code*',
-        'country' => 'Country*',
-        'state' => 'State*',
+        'country' => 'Country',
+        'state' => 'State',
         'city' => 'City',
     ],
     'validations'    =>  [

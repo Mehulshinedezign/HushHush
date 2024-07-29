@@ -93,7 +93,7 @@
                                                     </div>
                                                     <input type="text"
                                                         class="form-control @error('name') is-invalid @enderror"
-                                                        name="name" value="{{ $user->name }}">
+                                                        name="name" value="{{ $user->name }}" placeholder="Enter name">
                                                     @error('name')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
@@ -109,9 +109,10 @@
                                                             <i class="fas fa-envelope"></i>
                                                         </div>
                                                     </div>
-                                                    <input type="email" name="email"
+                                                    {{-- <input type="email" name="email"
                                                         class="form-control @error('email') is-invalid @enderror"
-                                                        value="{{ $user->email }}">
+                                                        value="{{ $user->email }}" placeholder="Enter email address"> --}}
+                                                        <p class="form-control">{{$user->email}}</p>
                                                     @error('email')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
@@ -131,7 +132,7 @@
                                                     </div>
                                                     <input id="phone_number" type="text"
                                                         class="form-control @error('phone_number') is-invalid @enderror"
-                                                        name="phone_number" value="{{ $user->phone_number }}">
+                                                        name="phone_number" value="{{ $user->phone_number }}" placeholder="Enter phone number">
                                                     @error('phone_number')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
