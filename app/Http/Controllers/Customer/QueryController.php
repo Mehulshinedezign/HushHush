@@ -77,10 +77,8 @@ class QueryController extends Controller
     public function acceptQuery(Request $request, $id)
     {
 
-
         $query_product = Query::where('id', $id)->first();
 
-        // dd($query_product);
         $data = [
             'user_id' => $query_product->user_id,
             'product_id' => $query_product->product_id,

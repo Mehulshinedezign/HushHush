@@ -34,8 +34,10 @@
         @if (@$product->querydata->user_id != auth()->user()->id)
             <div class="col-md-4 my_query_details">
                 <div class="inquiry-actions">
-                    <a href="{{ route('accept_query', ['id' => $product->querydata->id]) }}" class="button accept-btn full-btn mb-2"><i class="fa-solid fa-circle-check"></i>
-                        Accept</a>
+                    <a href="javascript:void(0)" class="button accept-btn full-btn mb-2"
+                    onclick="confirmAccept(event, '{{ $product->querydata->id }}','{{$product->querydata->date_range}}','{{$product->rent_day}}','{{$product->rent_week}}','{{$product->rent_month}}')">
+                    <i class="fa-solid fa-circle-check"></i> Accept
+                </a>
                 </div>
             </div>
             <div class="col-md-4 my_query_details">
