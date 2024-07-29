@@ -283,50 +283,67 @@ class QueryController extends Controller
         }
     }
 
-    public function bookings(Request $request, $id)
+
+    public function booked()
     {
+        $user = auth()->user();
         try {
+            $queries = Query::where('for_user', $user->id)->where('status', 'completed')
+                ->whereNull('deleted_at')
+                ->get();
+            // dd($queries);
+            if ($queries->count() > 0) {
+                $queries = $queries->map(function ($query) {
+                    [$startDate, $endDate] = explode(' - ', $query->date_range);
+                    $productId = $query->product_id;
+                    $product = Product::where('id', $productId)
+                        ->whereNull('deleted_at')
+                        ->first();
+                    $borrower = User::where('id', $query->user_id)->first();
+                    $price = $query->negotiate_price ?? $product->getCalculatedPrice($query->date_range);
 
-            $query = Query::find($id);
+                    if (now() > $endDate) {
+                        $status = 'COMPLETED';
+                    } elseif (now() < $startDate) {
+                        $status = 'PAID';
+                    } else {
+                        $status = 'ACTIVE';
+                    }
 
-            if (!$query) {
+                    return [
+                        'id' => $query->id,
+                        'user_id' => $query->user_id,
+                        'product_id' => $query->product_id,
+                        'for_user' => $query->for_user,
+                        'query_message' => $query->query_message,
+                        'status' => $status,
+                        'date_range' => [
+                            'start' => $startDate,
+                            'end' => $endDate,
+                        ],
+                        'name' => $product->name ?? null,
+                        'product_image_url' => $product->thumbnailImage->file_path ?? null,
+                        'borrower' => $borrower->name ?? null,
+                        'borrower_profile_pic' => $borrower->frontend_profile_url,
+                        'borrower_id' => $borrower->id,
+                        'brand' =>$product->get_brand->name,
+                        'size' =>$product->get_size->name,
+                        'price'=>$price,
+                    ];
+                });
+
                 return response()->json([
-                    'status' => false,
-                    'message' => 'Query not found',
-                ], 404);
+                    'status' => true,
+                    'message' => 'Order management data fetched successfully!',
+                    'data' => $queries,
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'No queries available for order management',
+                    'data' => [],
+                ], 200);
             }
-
-            $paymentResponse = $request->input('payment_response');
-
-            $paymentStatus = $paymentResponse['status'];
-            $transactionId = $paymentResponse['transaction_id'];
-
-            $orderStatus = ($paymentStatus === 'succeeded') ? 'Pending' : 'Failed';
-
-            [$fromDate, $toDate] = explode(' - ', $query->date_range);
-            $fromDateTime = Carbon::parse($fromDate);
-            $toDateTime = Carbon::parse($toDate);
-
-            $order = Order::create([
-                'user_id' => $query->user_id,
-                'location_id' => $query->product_id,
-                'transaction_id' => $transactionId,
-                'from_date' => $fromDateTime->toDateString(),
-                'to_date' => $toDateTime->toDateString(),
-                'from_hour' => $fromDateTime->format('H'),
-                'from_minute' => $fromDateTime->format('i'),
-                'to_hour' => $toDateTime->format('H'),
-                'to_minute' => $toDateTime->format('i'),
-                'order_date' => now()->toDateString(),
-                'status' => $orderStatus,
-            ]);
-            $query->update(['status' => 'COMPLETED']);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Booking recorded successfully',
-                'data' => $order,
-            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
@@ -334,4 +351,60 @@ class QueryController extends Controller
             ], 500);
         }
     }
+
+
+    // public function bookings(Request $request, $id)
+    // {
+    //     try {
+
+    //         $query = Query::find($id);
+
+    //         if (!$query) {
+    //             return response()->json([
+    //                 'status' => false,
+    //                 'message' => 'Query not found',
+    //             ], 404);
+    //         }
+
+    //         $paymentResponse = $request->input('payment_response');
+
+    //         $paymentStatus = $paymentResponse['status'];
+    //         $transactionId = $paymentResponse['transaction_id'];
+
+    //         $orderStatus = ($paymentStatus === 'succeeded') ? 'Pending' : 'Failed';
+
+    //         [$fromDate, $toDate] = explode(' - ', $query->date_range);
+    //         $fromDateTime = Carbon::parse($fromDate);
+    //         $toDateTime = Carbon::parse($toDate);
+
+    //         $order = Order::create([
+    //             'user_id' => $query->user_id,
+    //             'location_id' => $query->product_id,
+    //             'transaction_id' => $transactionId,
+    //             'from_date' => $fromDateTime->toDateString(),
+    //             'to_date' => $toDateTime->toDateString(),
+    //             'from_hour' => $fromDateTime->format('H'),
+    //             'from_minute' => $fromDateTime->format('i'),
+    //             'to_hour' => $toDateTime->format('H'),
+    //             'to_minute' => $toDateTime->format('i'),
+    //             'order_date' => now()->toDateString(),
+    //             'status' => $orderStatus,
+    //         ]);
+    //         $query->update(['status' => 'COMPLETED']);
+
+    //         return response()->json([
+    //             'status' => true,
+    //             'message' => 'Booking recorded successfully',
+    //             'data' => $order,
+    //         ], 200);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
+
+
+
 }
