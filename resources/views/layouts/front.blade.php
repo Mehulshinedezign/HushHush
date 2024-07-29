@@ -774,6 +774,10 @@
             }
 
 
+            // after account details open a modal
+            @if (session('showModal'))
+                $('#addproduct-Modal').modal('show');
+            @endif
 
         });
     </script>

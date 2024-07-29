@@ -88,7 +88,8 @@ class StripeOnboardingController extends Controller
                 'raw_data' => json_encode($account),
             ]);
 
-            
+            session()->flash('showModal', true);
+
             return redirect()->route('index')->with('success', 'Your account is created and your bank details have been stored.');
         } else {
             return redirect()->route('index')->with('error', 'Your Stripe account setup is incomplete. Please complete the onboarding process.');
