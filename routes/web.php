@@ -223,6 +223,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
             Route::get('receive_query',[App\Http\Controllers\Customer\QueryController::class,'receiveQuery'])->name('receive_query');
             Route::get('accept_query/{id}', [App\Http\Controllers\Customer\QueryController::class, 'acceptQuery'])->name('accept_query');
             Route::get('reject_query/{id}', [App\Http\Controllers\Customer\QueryController::class, 'rejectQuery'])->name('reject_query');
+            Route::get('/fetch-queries', [App\Http\Controllers\Customer\QueryController::class,'fetchQueries'])->name('fetch.queries');
 
             
             Route::post('order/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');

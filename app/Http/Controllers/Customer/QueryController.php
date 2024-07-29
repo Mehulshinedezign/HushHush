@@ -115,4 +115,12 @@ class QueryController extends Controller
 
         return redirect()->back()->with('success', 'Query rejected successfully.');
     }
+
+    public function fetchQueries(Request $request)
+    {
+        $status = $request->input('status', 'ACCEPTED');
+        dd("here",$status);
+     
+
+    }
 }
