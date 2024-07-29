@@ -83,8 +83,8 @@
                                                             class="button outline-btn small-btn chat-list-profile"
                                                             data-senderId="{{ auth()->user()->id }}"
                                                             data-receverId="{{ $query->user_id }}"
-                                                            data-adminName = "{{ auth()->user()->name }}"
-                                                            data-adminimage="{{ Storage::url(auth()->user()->profile_file) }}"><i
+                                                            data-receverName = "{{ $query->user->name }}"
+                                                            data-receverImage="{{ Storage::url($query->user->profile_file) }}"><i
                                                                 class="fa-solid fa-comments"></i>
                                                             Chat</a>
                                                         <a href="{{ route('query_view') }}"

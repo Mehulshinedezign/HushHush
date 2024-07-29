@@ -38,7 +38,7 @@
     <script defer src="{{ asset('js/custom/chat2.js') }}"></script>
     <script defer src="{{ asset('js/custom/chatlist.js') }}"></script> --}}
 
-    <script type="module">
+    {{-- <script type="module">
         import {
             database
         } from './js/test.js';
@@ -68,5 +68,5 @@
         //     const messagesDiv = document.getElementById('messages');
         //     messagesDiv.innerHTML += `<p>${message.text}</p>`;
         // });
-    </script>
+    </script> --}}
 @endpush

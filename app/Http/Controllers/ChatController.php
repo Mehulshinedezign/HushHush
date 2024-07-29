@@ -6,7 +6,7 @@ use App\Models\ProductRating;
 use App\Notifications\LenderFirstMsg;
 use App\Notifications\RenterFirstMsg;
 use Illuminate\Http\Request;
-use App\Models\{User, OrderItem, ConversationMedia, Chat, Product};
+use App\Models\{User, OrderItem, ConversationMedia, Chat, Product, Query};
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use DB;
@@ -227,6 +227,8 @@ class ChatController extends Controller
 
         $chatlist = Chat::where('user_id', auth()->user()->id)->orWhere('retailer_id', auth()->user()->id)->get();
 
-        return view('chat', compact('chatlist'));
+        $query = Query::with('user')->where('for_user', auth()->user()->id)->first();
+        // dd($query);
+        return view('chat', compact('chatlist', 'query'));
     }
 }

@@ -67,11 +67,12 @@
     </div>
     <form id="chatForm" class="chatwindowform">
         <div class="chat-text-area-field">
-            <textarea class="commentarea" id="message" placeholder="Type a Message"></textarea>
+            <textarea class="commentarea" id="message" data-senderId="{{ auth()->user()->id }}"
+                data-receverId="{{ $query->user_id }}" placeholder="Type a Message"></textarea>
             <div class="upload-img-chat">
                 <label for="upload-img">
                     <img src="images/img-upload-svg.svg" alt="">
-                    <input type="file" id="attachment" />
+                    {{-- <input type="file" id="attachment" /> --}}
                 </label>
             </div>
     </form>

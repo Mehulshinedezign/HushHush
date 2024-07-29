@@ -85,8 +85,7 @@ class QueryController extends Controller
     public function receiveQuery(Request $request)
     {
         $user = auth()->user();
-        $querydatas = Query::where(['for_user' => $user->id, 'status' => 'PENDING'])->get();
-
+        $querydatas = Query::with('user')->where(['for_user' => $user->id, 'status' => 'PENDING'])->get();
         return view('customer.receive_query_list', compact('querydatas'));
     }
 
