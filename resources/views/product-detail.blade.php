@@ -517,7 +517,7 @@
 
 
             // date range jquery
-   var queryDates = @json($querydates);
+            var queryDates = @json($querydates);
 
 
             var disabledDateRanges = queryDates.map(function(query) {
@@ -565,6 +565,60 @@
                 $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
             });
 
+
+
+                        // none available dates 
+            // var disableDates = @json($disable_dates);
+
+            // var disabledDateRanges = disableDates.map(function(dateRange) {
+            //     var dates = dateRange.split(' - ');
+            //     return {
+            //         start: moment(dates[0]),
+            //         end: moment(dates[1])
+            //     };
+            // }).filter(function(range) {
+            //     return range !== null;
+            // });
+            // function isDateInDisabledRange(date) {
+            //     return disabledDateRanges.some(function(range) {
+            //         return date.isBetween(range.start, range.end, 'day', '[]');
+            //     });
+            // }
+
+            // // Initialize daterangepicker for rental dates
+            // $('.rent_dates').daterangepicker({
+            //     autoUpdateInput: false,
+            //     locale: {
+            //         format: 'YYYY-MM-DD'
+            //     },
+            //     drops: 'down',
+            //     opens: 'right',
+            //     minDate: moment().startOf('day'),
+            //     isInvalidDate: function(date) {
+            //         return isDateInDisabledRange(date);
+            //     }
+            // }).on('apply.daterangepicker', function(ev, picker) {
+            //     $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            // });
+
+            // // Initialize daterangepicker for ranges
+            // $('.daterange-btn').daterangepicker({
+            //     ranges: {
+            //         'Today': [moment(), moment()],
+            //         'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            //         'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            //         'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            //         'This Month': [moment().startOf('month'), moment().endOf('month')],
+            //         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            //     },
+            //     autoUpdateInput: false,
+            //     minDate: moment().startOf('day'),
+            //     isInvalidDate: function(date) {
+            //         return isDateInDisabledRange(date);
+            //     }
+            // }).on('apply.daterangepicker', function(ev, picker) {
+            //     $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
+            // });
         });
     </script>
 @endpush

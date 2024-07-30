@@ -41,13 +41,7 @@
                     <i class="fa-solid fa-eye"></i> View
             </a>
 
-            @if ($query->status == 'PENDING')
-                <a href="#" class="button outline-btn small-btn">Status
-                    Pending...</a>
-            @elseif ($query->status == 'REJECTED')
-                <a href="#" class="button outline-btn small-btn">Status
-                    Rejected...</a>
-            @else
+            @if ($query->status == 'ACCEPTED')
                 @if (is_null($query->negotiate_price))
                     @php
                         $price = $query->getCalculatedPrice($query->date_range);

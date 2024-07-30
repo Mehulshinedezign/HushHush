@@ -110,6 +110,11 @@
                                                     accept="image/*" class="d-none">
                                             </label>
                                         </div>
+                                        @error('images')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                         <div class="upload-img-preview-box">
                                             <div class="upload-img-preview">
                                                 {{-- <img src="{{asset('front/images/pro10.png')}}" alt="img"> --}}
@@ -126,6 +131,9 @@
                                                 <input type="text" name="product_name" id=""
                                                     placeholder="Enter Name" class="form-control">
                                             </div>
+                                            @error('product_name')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -147,6 +155,9 @@
                                                             alt="img">
                                                     </span>
                                                 </div>
+                                                @error('category')
+                                                    <span class="invalid-feedback" role="alert">
+                                                @enderror
                                                 <div class="formfield">
                                                     <select name="subcategory" id="subcategory">
                                                         <option value="">Subcategory</option>
@@ -156,6 +167,9 @@
                                                             alt="img">
                                                     </span>
                                                 </div>
+                                                @error('subcategory')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -173,6 +187,9 @@
                                                         alt="img">
                                                 </span>
                                             </div>
+                                            @error('subcategory')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -191,6 +208,9 @@
                                                         alt="img">
                                                 </span>
                                             </div>
+                                            @error('brand')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -209,6 +229,9 @@
                                                         alt="img">
                                                 </span>
                                             </div>
+                                            @error('color')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
@@ -238,6 +261,9 @@
                                                     placeholder="address line 1" name="address1"
                                                     id="product_address1">
                                             </div>
+                                            @error('address1')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-3 col-sm-12 product_sub_data">
@@ -248,6 +274,9 @@
                                                     placeholder="address line 2" name="address2"
                                                     id="product_address2">
                                             </div>
+                                            @error('address2')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
@@ -257,6 +286,9 @@
                                                 <input type="text" class="form-control" placeholder="country"
                                                     name="country" id="product_country">
                                             </div>
+                                            @error('country')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
@@ -266,6 +298,9 @@
                                                 <input type="text" class="form-control" placeholder="state"
                                                     name="state" id="product_state">
                                             </div>
+                                            @error('state')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
@@ -275,6 +310,9 @@
                                                 <input type="text" class="form-control" placeholder="city"
                                                     name="city" id="product_city">
                                             </div>
+                                            @error('city')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -289,6 +327,9 @@
                                                         alt="img">
                                                 </span>
                                             </div>
+                                            @error('non_available_dates')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -310,6 +351,9 @@
                                                         alt="img">
                                                 </span>
                                             </div>
+                                            @error('product_condtion')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
                                     {{-- <div class="col-lg-4 col-md-4 col-sm-12">
@@ -326,6 +370,9 @@
                                             <div class="formfield">
                                                 <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description"></textarea>
                                             </div>
+                                            @error('description')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -337,6 +384,9 @@
                                                     name="product_market_value" value="" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
+                                            @error('product_market_value')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -357,6 +407,9 @@
                                                 <input type="number" class="form-control" name="min_rent_days"
                                                     placeholder="Rental days" value="" min="1">
                                             </div>
+                                            @error('min_rent_days')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -370,6 +423,9 @@
                                                     placeholder="" class="form-control" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
+                                            @error('rent_price_day')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -380,6 +436,9 @@
                                                     placeholder="" class="form-control" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
+                                            @error('rent_price_week')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -390,6 +449,9 @@
                                                     placeholder="" class="form-control" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
+                                            @error('rent_price_month')
+                                                <span class="invalid-feedback" role="alert">
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-md-12">

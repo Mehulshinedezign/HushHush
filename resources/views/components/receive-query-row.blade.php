@@ -22,7 +22,7 @@
     </td>
     <td>{{ $query->date_range ?? '' }}</td>
 
-    @if ($query->status !='ACCEPTED')
+    @if ($query->status == 'PENDING')
         <td>
             <input type="text" id="negotiate_price_{{ $query->id }}"
                 placeholder="Enter negotiate price" class="negotiation_price_{{ $query->id }}">
@@ -30,7 +30,7 @@
     @endif
     <td class="user-active">
         <div class="inquiry-actions">
-            @if ($query->status != 'ACCEPTED')
+            @if ($query->status == 'PENDING')
                 <a href="javascript:void(0)" class="button accept-btn small-btn"
                     onclick="confirmAccept(event, '{{ $query->id }}','{{$query->date_range}}','{{$query->product->rent_day}}','{{$query->product->rent_week}}','{{$query->product->rent_month}}')">
                     <i class="fa-solid fa-circle-check"></i> Accept
