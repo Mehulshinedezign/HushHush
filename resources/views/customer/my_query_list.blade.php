@@ -13,12 +13,12 @@
                 <div class="rental-header">
                     <h2>My query List</h2>
                     <div class="form-group">
-                        <div class="formfield">
+                        {{-- <div class="formfield">
                             <input type="text" placeholder="Select Date" class="form-control">
                             <span class="form-icon">
                                 <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img" class="cal-icon">
                             </span>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="custom-tab">
