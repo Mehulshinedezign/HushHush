@@ -184,7 +184,7 @@ class ProductController extends Controller
         $layout_class = 'single_product';
 
         $productImages = $product->allImages;
-        $querydates = Query::where(['product_id'=>$id, 'status'=> 'ACCEPTED'])->get();
+        $querydates = Query::where(['product_id'=>$id, 'status'=> 'PENDING','user_id' =>auth()->user()->id])->get();
 
         $disabledDates = $product->disableDates;
 
@@ -201,7 +201,7 @@ class ProductController extends Controller
         }
 
 
-
+        // dd($querydates,$disable_dates);
         return view('product-detail', compact('product','productImages','querydates','relatedProducts','rating_progress','disable_dates'));
     }
 
