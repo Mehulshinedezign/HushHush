@@ -1462,6 +1462,25 @@ input[type=number] {
 
 }
 
+.custom-tab .custom-tab-list {
+    border-bottom: 1px solid #C0C0C0;
+    display: flex;
+    grid-gap: 13px;
+}
+
+.custom-tab .custom-tab-list li {
+    position: relative;
+    padding: 10px;
+    padding-left: 15px;
+}
+
+.custom-tab .custom-tab-list li a {
+    color: #606060;
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: 400;
+}
+
 
 /* ============================ Chat CSS ================================= */
 

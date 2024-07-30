@@ -9,13 +9,16 @@
                             <th>Name</th>
                             <th>Query</th>
                             <th>Date</th>
-                            <th>Status</th>
+
+                            @if (!$accept)
+                            <th>Set Price</th>       
+                            @endif
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($querydatas as $query)
-                            <x-query-row :query="$query" />
+                        <x-receive-query-row :query="$query" />
                         @endforeach
                     </tbody>
                 </table>
@@ -25,6 +28,6 @@
 @else
     <div class="list-empty-box">
         <img src="{{ asset('front/images/no-products.svg') }}">
-        <h3 class="text-center">Your Query is empty</h3>
+        <h3 class="text-center">Receive Query is empty</h3>
     </div>
 @endif

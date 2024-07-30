@@ -184,9 +184,25 @@ class ProductController extends Controller
         $layout_class = 'single_product';
 
         $productImages = $product->allImages;
-        $querydates = Query::where(['product_id'=>$id, 'status'=> 'ACCEPTED'])->get();
+        $querydates = Query::where(['product_id'=>$id, 'status'=> 'PENDING','user_id' =>auth()->user()->id])->get();
 
-        return view('product-detail', compact('product','productImages','querydates','relatedProducts','rating_progress'));
+        $disabledDates = $product->disableDates;
+
+        // dd("here",$disabledDates);
+        $disable_dates = [];
+        if ($disabledDates->isNotEmpty()) {
+            $sortedDates = $disabledDates->sortBy('disable_date');
+            $firstDate = \Carbon\Carbon::parse($sortedDates->first()->disable_date)->format('Y-m-d');
+            $lastDate = \Carbon\Carbon::parse($sortedDates->last()->disable_date)->format('Y-m-d');
+        
+            $disable_dates[] = $firstDate . ' - ' . $lastDate;
+        } else {
+            $disable_dates[] = '';
+        }
+
+
+        // dd($querydates,$disable_dates);
+        return view('product-detail', compact('product','productImages','querydates','relatedProducts','rating_progress','disable_dates'));
     }
 
 

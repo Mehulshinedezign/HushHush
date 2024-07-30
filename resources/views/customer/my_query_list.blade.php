@@ -23,19 +23,14 @@
                 </div>
                 <div class="custom-tab">
                     <ul class="custom-tab-list">
-                        <li class="tab-item active" data-status="ACCEPTED"><a href="#">Accept</a></li>
-                        <li class="tab-item" data-status="REJECTED"><a href="#">Reject</a></li>
-                        <li class="tab-item" data-status="PENDING"><a href="#">Pending</a></li>
+                        <li class="tab-item active" data-status="ACCEPTED" data-user="borrower"><a href="javascript:void(0)">Accept</a></li>
+                        <li class="tab-item" data-status="REJECTED" data-user="borrower"><a href="javascript:void(0)">Reject</a></li>
+                        <li class="tab-item" data-status="PENDING" data-user="borrower"><a href="javascript:void(0)">Pending</a></li>
                     </ul>
                 </div>
-                @if ($querydatas->isNotEmpty())
+                <div id="query-list-container">
                     <x-product-query :querydatas="$querydatas" />
-                @else
-                    <div class="list-empty-box">
-                        <img src="{{ asset('front/images/no-products.svg') }}">
-                        <h3 class="text-center">Your Query is empty</h3>
-                    </div>
-                @endif
+                </div>    
             </div>
         </div>
     </section>
@@ -108,28 +103,38 @@
     @includeFirst(['validation'])
     <script>
         $(document).ready(function() {
-            $('.single_query_Modal').on('click', function(event) {
+            var singleQueryModal = new bootstrap.Modal(document.getElementById('single_query_Modal'));
+
+            $(document).on('click', '.single_query_Modal', function(event) {
                 event.preventDefault();
                 var url = $(this).attr('href');
-                var productId = $(this).data('product-id');
+                var queryId = $(this).data('query-id');
 
                 $.ajax({
                     url: url,
                     type: 'GET',
                     data: {
-                        product_id: productId
+                        query_id: queryId
                     },
                     success: function(response) {
                         $('#single_query_Modal .modal-body').html(response.data);
-                        $('#single_query_Modal').modal('show');
+                        singleQueryModal.show();
                     },
                     error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
+                        console.error('Error loading query details:', error);
                     }
                 });
             });
 
             $('.my_query_details').hide();
+
+            $(document).on('click', '.query_btn_close', function() {
+                singleQueryModal.hide();
+            });
+            $('#single_query_Modal').on('hidden.bs.modal', function () {
+                $('#single_query_Modal .modal-body').html('');
+            });
+         
 
 
             // Accept Reject and Pendding

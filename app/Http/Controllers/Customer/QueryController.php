@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class QueryController extends Controller
 {
@@ -42,18 +41,6 @@ class QueryController extends Controller
             // dd($data);
             $qur = Query::create($data);
 
-            // create chat
-
-            $product = Product::where('id', $product_id)->first();
-            $receiver_id = $product->user_id;
-            $sent_by = auth()->user()->role_id == '3' ? 'Customer' : 'Retailer';
-
-            // if (check_chat_exist_or_not($receiver_id))
-            //     $chat = check_chat_exist_or_not($receiver_id);
-            // else
-            //     $chat = auth()->user()->chat()->create(['chatid' => str::random(10), 'retailer_id' => $receiver_id, 'order_id' => null, 'sent_by' => $sent_by]);
-
-
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Query send successfully']);
         } catch (\Exception $e) {
@@ -66,18 +53,16 @@ class QueryController extends Controller
     public function myQuery(Request $request)
     {
         $user = auth()->user();
-        $querydatas = Query::where('user_id', $user->id)->get();
-
+        $querydatas = Query::where(['user_id' => $user->id, 'status' => 'ACCEPTED'])->get();
         return view('customer.my_query_list', compact('querydatas'));
     }
 
     public function view(Request $request)
     {
-        $product_id = $request->product_id;
-        $product = Product::findOrFail($product_id);
+        $query_id = $request->query_id;
+        $query = Query::findOrFail($query_id);
 
-
-        $view = view('customer.query_product', compact('product'))->render();
+        $view = view('customer.query_product', compact('query'))->render();
 
         return response()->json(['success' => true, 'data' => $view]);
     }
@@ -85,15 +70,16 @@ class QueryController extends Controller
     public function receiveQuery(Request $request)
     {
         $user = auth()->user();
-        $querydatas = Query::with('user')->where(['for_user' => $user->id, 'status' => 'PENDING'])->get();
-        return view('customer.receive_query_list', compact('querydatas'));
+        $querydatas = Query::where(['for_user' => $user->id, 'status' => 'ACCEPTED'])->get();
+        $accept = true;
+        return view('customer.receive_query_list', compact('querydatas', 'accept'));
     }
 
     public function acceptQuery(Request $request, $id)
     {
+
         $query_product = Query::where('id', $id)->first();
 
-        // dd($query_product);
         $data = [
             'user_id' => $query_product->user_id,
             'product_id' => $query_product->product_id,
@@ -130,7 +116,20 @@ class QueryController extends Controller
 
     public function fetchQueries(Request $request)
     {
-        $status = $request->input('status', 'ACCEPTED');
-        dd("here", $status);
+        $userType = $request->user;
+        $status = $request->status;
+        if ($userType == 'borrower') {
+            $queries = Query::where(['status' => $status, 'user_id' => auth()->user()->id])->get();
+            $html = view('components.product-query', ['querydatas' => $queries])->render();
+        } else {
+            $accept = ($status == 'ACCEPTED') || ($status == 'REJECTED') ? true : false;
+            $queries = Query::where(['status' => $status, 'for_user' => auth()->user()->id])->get();
+            $html = view('components.receive-query', ['querydatas' => $queries, 'accept' => $accept])->render();
+        }
+
+        return response()->json([
+            'success' => true,
+            'html' => $html,
+        ]);
     }
 }
