@@ -11,7 +11,7 @@
         <div class="container">
             <div class="rental-request-wrapper">
                 <div class="rental-header">
-                    <h2>Query List</h2>
+                    <h2>My query List</h2>
                     <div class="form-group">
                         <div class="formfield">
                             <input type="text" placeholder="Select Date" class="form-control">
@@ -23,9 +23,9 @@
                 </div>
                 <div class="custom-tab">
                     <ul class="custom-tab-list">
-                        <li class="tab-item active" data-status="ACCEPTED" data-user="borrower"><a href="javascript:void(0)">Accept</a></li>
+                        <li class="tab-item" data-status="ACCEPTED" data-user="borrower"><a href="javascript:void(0)">Accept</a></li>
                         <li class="tab-item" data-status="REJECTED" data-user="borrower"><a href="javascript:void(0)">Reject</a></li>
-                        <li class="tab-item" data-status="PENDING" data-user="borrower"><a href="javascript:void(0)">Pending</a></li>
+                        <li class="tab-item active" data-status="PENDING" data-user="borrower"><a href="javascript:void(0)">Pending</a></li>
                     </ul>
                 </div>
                 <div id="query-list-container">
@@ -177,8 +177,8 @@
                 fetchQueries(status);
             });
 
-            var initialStatus = $('.tab-item.active').data('status');
-            fetchQueries(initialStatus);
+            // var initialStatus = $('.tab-item.active').data('status');
+            // fetchQueries(initialStatus);
 
 
         });

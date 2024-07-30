@@ -35,16 +35,10 @@
             <a href="{{ route('common.chat') }}" class="button outline-btn small-btn"><i
                     class="fa-solid fa-comments"></i> Chat</a>
             <a href="{{ route('query_view') }}" class="button primary-btn small-btn single_query_Modal"
-                data-bs-toggle="modal" data-product-id="{{ $query->product_id }}">
+                data-bs-toggle="modal" data-query-id="{{ $query->id }}">
                 <i class="fa-solid fa-eye"></i> View
             </a>
-            @if ($query->status == 'PENDING')
-                <a href="#" class="button outline-btn small-btn">Status
-                    Pending...</a>
-            @elseif ($query->status == 'REJECTED')
-                <a href="#" class="button outline-btn small-btn">Status
-                    Rejected...</a>
-            @else
+            @if ($query->status == 'ACCEPTED')
                 @if (is_null($query->negotiate_price))
                     @php
                         $price = $query->getCalculatedPrice($query->date_range);
@@ -55,7 +49,8 @@
                         {{ $price }}$</a>
                 @else
                     <a href="{{ route('card.details', ['query' => $query->id, 'price' => $query->negotiate_price]) }}"
-                        class="button outline-btn small-btn" data-price="{{ $query->negotiate_price }}">Book now for
+                        class="button outline-btn small-btn" data-toggle="modal"
+                        data-price="{{ $query->negotiate_price }}">Book now for
                         {{ $query->negotiate_price }}$</a>
                 @endif
             @endif
