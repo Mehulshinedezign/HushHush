@@ -82,7 +82,7 @@ class BookingController extends Controller
             // 'metadata' => [
             //     'cart_id' => jsencode_userdata($cart->id), // Add your custom order ID as metadata
             // ],
-            'return_url' => route('index')
+            'return_url' => route('orders')
         ]);
 
         $transaction = Transaction::create([
@@ -98,7 +98,7 @@ class BookingController extends Controller
 
         if ($status->status == "succeeded") {
             $order->update(['transaction_id' => $transaction->id]);
-            return redirect()->route('index');
+            return redirect()->route('orders');
         }
     }
 }
