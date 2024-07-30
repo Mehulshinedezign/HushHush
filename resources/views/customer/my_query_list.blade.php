@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-    <section class="rental-request-bx">
+    <section class="rental-request-bx min-height-100">
         <div class="container">
             <div class="rental-request-wrapper">
                 <div class="rental-header">

@@ -70,7 +70,7 @@
         </div>
         <img src="{{asset('front/images/leaf-img.svg')}}" alt="leaf" class="banner-laef-img">
     </section>
-    <section class="product-slider-sec">
+    <section class="product-slider-sec product-slider-sec-min-height">
         <div class="container">
             <div class="profile-detail-box">
                 <div class="row align-items-center">
