@@ -859,6 +859,8 @@
             measurementId: "{{ env('MEASUREMENTID') }}"
         };
         var senderId = "{{ auth()->user()->id }}";
+        const authUserId = "{{ auth()->user()->id }}";
+        const authUserprofile = "{{ auth()->user()->profile_file }}";
         var userImage = "{{ route('retaileruserimage') }}";
         var imagePath = "{{ asset('storage/') }}";
         var chat_store_url = "{{ route('retailerstore.chat') }}";

@@ -8,10 +8,10 @@ dbRef.once("value").then(snap => {
                     data-senderId="${message.val().id}">
                     <div class="chat-profile-img-box">
                         <div class="chat-profile-img">
-                            <img src="${message.val().image}">
+                            <img src="${message.val().image}" class="img">
 
                         </div>
-                        <p>
+                        <p class="getname">
                        ${message.val().name}
                         </p>
                     </div>

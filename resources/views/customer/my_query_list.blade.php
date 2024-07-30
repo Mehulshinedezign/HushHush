@@ -50,7 +50,8 @@
                     <div class="cancellation-popup-sec">
                         <div class="popup-head rating_pop_head">
                             <h6>Write Review</h6>
-                            <button type="button" class="btn-close query_btn_close close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="btn-close query_btn_close close" data-dismiss="modal"
+                                aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -68,11 +69,9 @@
                                         <label for="four"><i class="fa fa-star"></i></label>
                                         <input type="radio" name="rating" value="3" id="three" class="star">
                                         <label for="three"><i class="fa fa-star"></i></label>
-                                        <input type="radio" name="rating" value="2" id="two"
-                                            class="star">
+                                        <input type="radio" name="rating" value="2" id="two" class="star">
                                         <label for="two"><i class="fa fa-star"></i></label>
-                                        <input type="radio" name="rating" value="1" id="one"
-                                            class="star">
+                                        <input type="radio" name="rating" value="1" id="one" class="star">
                                         <label for="one"><i class="fa fa-star"></i></label>
                                     </div>
                                 </div>
@@ -80,8 +79,8 @@
                             <textarea class="form-control mb-3" name="review" rows="3" placeholder="Please write product review here...."></textarea>
                             <p class="popup-p">By submitting review you give us consent to publish and process personal
                                 information in accordance with Term of use and Privacy Policy</p>
-                            <button type="submit" class="button full-btn primary-btn submit mt-3" id="rating_btn">Submit&nbsp;<i
-                                    class="fa-solid fa-circle-notch fa-spin show-loader"
+                            <button type="submit" class="button full-btn primary-btn submit mt-3"
+                                id="rating_btn">Submit&nbsp;<i class="fa-solid fa-circle-notch fa-spin show-loader"
                                     style="display:none;"></i></button>
                         </form>
                     </div>
@@ -138,7 +137,9 @@
                 $.ajax({
                     url: '/fetch-queries',
                     type: 'GET',
-                    data: { status: status },
+                    data: {
+                        status: status
+                    },
                     beforeSend: function() {
                         $('body').addClass('loading');
                     },
@@ -146,12 +147,14 @@
                         if (response.success) {
                             $('#query-list-container').html(response.html);
                         } else {
-                            $('#query-list-container').html('<div class="error">Failed to load queries.</div>');
+                            $('#query-list-container').html(
+                                '<div class="error">Failed to load queries.</div>');
                         }
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', error);
-                        $('#query-list-container').html('<div class="error">An error occurred. Please try again.</div>');
+                        $('#query-list-container').html(
+                            '<div class="error">An error occurred. Please try again.</div>');
                     },
                     complete: function() {
                         $('body').removeClass('loading');
@@ -176,7 +179,7 @@
         });
 
 
-        $('#rating_review').on('show.bs.modal', function (event) {
+        $('#rating_review').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var productId = button.data('rating_product_id');
             $('#rating_product_id').val(productId);
@@ -232,7 +235,6 @@
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error('Error:', error);
                         iziToast.error({
                             message: 'An error occurred. Please try again.',
                             position: 'topRight'

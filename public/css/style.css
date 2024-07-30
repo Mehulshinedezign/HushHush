@@ -2381,7 +2381,8 @@ li.star {
     gap: 16px;
 }
 
-.chat-list-profile {
+.chat-list-profile,
+.chat-list {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -2393,7 +2394,8 @@ li.star {
     transition: all 0.3s ease;
 }
 
-.chat-list-profile:hover {
+.chat-list-profile:hover,
+.chat-list:hover {
     border: 1px solid #3A3A3A;
     border-radius: 5px;
     background-color: #Fff;
@@ -2405,7 +2407,8 @@ li.star {
     margin: 0;
 }
 
-.chat-list-profile span {
+.chat-list-profile span,
+.chat-list span {
     font-size: 14px;
     line-height: 23px;
     color: #606060;

@@ -85,7 +85,9 @@
                                                             data-senderId="{{ auth()->user()->id }}"
                                                             data-receverId="{{ $query->user_id }}"
                                                             data-receverName = "{{ $query->user->name }}"
-                                                            data-receverImage="{{ Storage::url($query->user->profile_file) }}"><i
+                                                            data-receverImage="{{ isset($query->user->profile_file) ? Storage::url($query->user->profile_file) : asset('img/avatar.png') }}"
+                                                            data-profile="{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}"
+                                                            data-name="{{ auth()->user()->name }}"><i
                                                                 class="fa-solid fa-comments"></i>
                                                             Chat</a>
                                                         <a href="{{ route('query_view') }}"

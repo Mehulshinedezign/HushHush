@@ -214,7 +214,7 @@ function loadMessages(chatId) {
                 // console.log(sender, message,currentTime )
 
                 //console.log(sender, senderId)
-                if (sender == senderId) {
+                if (parseInt(sender) == parseInt(senderId)) {
                     // console.log('hey')
                     messageList += '<div class="chat-screen-right-wrapper">';
                     messageList += '<div class="chat-screenmsg-wrapper">';

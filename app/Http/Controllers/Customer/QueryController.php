@@ -131,8 +131,6 @@ class QueryController extends Controller
     public function fetchQueries(Request $request)
     {
         $status = $request->input('status', 'ACCEPTED');
-        dd("here",$status);
-     
-
+        dd("here", $status);
     }
 }

@@ -90,6 +90,10 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
         Route::get('view/{slug}', [App\Http\Controllers\Customer\CmsController::class, 'cms'])->name('view');
     });
 
+    // card payment
+    Route::get('card/details/{query?}/{price?}', [App\Http\Controllers\BookingController::class, 'cardDetail'])->name('card.details');
+    Route::post('charge', [App\Http\Controllers\BookingController::class, 'charge'])->name('charge');
+
     Route::middleware('auth')->group(function () {
         //Retailer order
         Route::match(['get', 'post'], 'retailer/order', [App\Http\Controllers\Retailer\OrderController::class, 'index'])->name('retailercustomer');
@@ -177,7 +181,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
             // checkout page
             Route::post('checkout/{product}', [App\Http\Controllers\StripeController::class, 'checkout'])->name('checkout');
             Route::get('billing/{token}', [App\Http\Controllers\StripeController::class, 'billing'])->name('billing');
-            Route::post('charge', [App\Http\Controllers\StripeController::class, 'charge'])->name('charge');
+            // Route::post('charge', [App\Http\Controllers\StripeController::class, 'charge'])->name('charge');
             Route::get('payment-success', [App\Http\Controllers\StripeController::class, 'success'])->name('paymentsuccess');
             Route::get('payment-failed', [App\Http\Controllers\StripeController::class, 'failed'])->name('paymentfailed');
 

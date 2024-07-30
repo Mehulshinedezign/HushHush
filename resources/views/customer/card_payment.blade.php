@@ -1,76 +1,79 @@
 @extends('layouts.front')
 @section('content')
-    <section class="page-content-sec section-padding">
+    <section class="payment-page-section">
         <div class="container">
             <div class="page-content-wrapper">
-                <div class="row g-3">
-                    <div class="col-xl-8 col-lg-12 col-md-12 payment-page">
-                        <div class="order-summary cstm-card">
-                            <h3>Payment</h3>
-                            <p>All transactions are secure and encrypted.</p>
-                            <form id="paymentform" action="{{ route('charge') }}" method="POST">
-                                @csrf
-                                <label for="security">Security</label>
-                                <input type="radio" name="security_option" checked value="{{ $security->value }}"
-                                    data-type="{{ $security->type }}">${{ $security->value }}
-                                <br>
-                                <label for="insurance">Insurance</label>
-                                <input type="radio" name="security_option" value="{{ $insurance->value }}"
-                                    data-type="{{ $insurance->type }}">${{ $insurance->value }}
-                                <div class="">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="">Card Number</label>
-                                                <div class="form-field" id="cardNumberElement">
-                                                    <input type="text" class="form-control" placeholder="Card-number">
-                                                    <label for="card-number" class="stripe-error-messages"></label>
-                                                </div>
-                                                <div class="is-invalid stripe-error" id="cardNumberError"></div>
-                                            </div>
+                <div class="order-summary cstm-card">
+                    <div class="payment-heading-box">
+                        <h3>Payment</h3>
+                        <p>All transactions are secure and encrypted.</p>
+                    </div>
+                    <form id="paymentform" action="{{ route('charge') }}" method="POST">
+                        @csrf
+                        <div class="payment-sec-tabs">
+                            <div class="payment-tab-box">
+                                <label for="security">Security ${{ $security->value }}</label>
+                                <input type="radio" name="security_option" id="security" checked
+                                    value="{{ $security->value }}" data-type="{{ $security->type }}">
+                            </div>
+                            <div class="payment-tab-box">
+                                <label for="insurance">Insurance ${{ $insurance->value }}</label>
+                                <input type="radio" name="security_option" id="insurance" value="{{ $insurance->value }}"
+                                    data-type="{{ $insurance->type }}">
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="">Card Number</label>
+                                        <div class="form-field payment-field" id="cardNumberElement">
+                                            {{-- <input type="text" class="form-control" placeholder="Card-number"> --}}
+                                            <label for="card-number" class="stripe-error-messages"></label>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="">Card Expiration Date</label>
-                                                <div class="form-field" id="cardExpiryElement">
-                                                    <input type="text" class="form-control" placeholder="MM / YY">
-                                                    <label for="card-expiry" class="stripe-error-messages"></label>
-                                                </div>
-                                                <div class="is-invalid stripe-error" id="cardExpiryError"></div>
-                                            </div>
+                                        <div class="is-invalid stripe-error" id="cardNumberError"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="">Card Expiration Date</label>
+                                        <div class="form-field payment-field" id="cardExpiryElement">
+                                            {{-- <input type="text" class="form-control" placeholder="MM / YY"> --}}
+                                            <label for="card-expiry" class="stripe-error-messages"></label>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="">Card Security Code</label>
-                                                <div class="form-field" id="cardCVCElement" class="form-control">
-                                                    <input type="password" class="form-control" placeholder="****">
-                                                </div>
-                                                <div class="is-invalid stripe-error" id="cardCVVError"></div>
+                                        <div class="is-invalid stripe-error" id="cardExpiryError"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="">Card Security Code</label>
+                                        <div class="form-field payment-field" id="cardCVCElement" class="form-control">
+                                            {{-- <input type="password" class="form-control" placeholder="****"> --}}
+                                        </div>
+                                        <div class="is-invalid stripe-error" id="cardCVVError"></div>
 
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="">Card Holder Name</label>
-                                                <div class="form-field">
-                                                    <input type="text" name="cardname" id="cardName"
-                                                        class="form-control" placeholder="John Doe">
-                                                    <label class="cardName-error" for="card-name" id="cardname"></label>
-                                                </div>
-                                            </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="">Card Holder Name</label>
+                                        <div class="form-field">
+                                            <input type="text" name="cardname" id="cardName" class="form-control"
+                                                placeholder="John Doe">
+                                            <label class="cardName-error" for="card-name" id="cardname"></label>
                                         </div>
                                     </div>
                                 </div>
-                                <input type="hidden" value="{{ $price + $security->value }}" id="total_payment">
-                                <input type="hidden" value="{{ $query->id }}" id="query">
-                                <input type="hidden" value="{{ $security->type }}" id="security_option_type">
-                                <input type="hidden" value="{{ $security->value }}" id="security_option_value">
-                                <button type="submit" id="payNow" class="btn full-btn">Pay Now
-                                    ${{ $price + $security->value }}
-                                </button>
-                            </form>
+                            </div>
                         </div>
-                    </div>
+                        <input type="hidden" value="{{ $price + $security->value }}" id="total_payment">
+                        <input type="hidden" value="{{ $query->id }}" id="query">
+                        <input type="hidden" value="{{ $security->type }}" id="security_option_type">
+                        <input type="hidden" value="{{ $security->value }}" id="security_option_value">
+                        <button type="submit" id="payNow" class="button primary-btn  full-btn">Pay Now
+                            ${{ $price + $security->value }}
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -91,17 +94,17 @@
                 border: '1px solid #000',
                 lineHeight: '40px',
                 fontWeight: 300,
-                fontFamily: 'Helvetica Neue',
+                // fontFamily: 'Helvetica Neue',
                 fontSize: '15px',
                 '::placeholder': {
                     color: '#CFD7E0',
                 },
                 iconStyle: 'solid',
             },
-            invalid: {
-                color: "#000",
-                fontSize: "20px",
-            },
+            // invalid: {
+            //     color: "#000",
+            //     fontSize: "20px",
+            // },
         };
 
         // Customize Stripe Card
