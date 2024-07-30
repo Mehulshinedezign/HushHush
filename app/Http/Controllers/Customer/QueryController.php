@@ -57,11 +57,10 @@ class QueryController extends Controller
 
     public function view(Request $request)
     {
-        $product_id = $request->product_id;
-        $product = Product::findOrFail($product_id);
+        $query_id = $request->query_id;
+        $query = Query::findOrFail($query_id);
 
-
-        $view = view('customer.query_product', compact('product'))->render();
+        $view = view('customer.query_product', compact('query'))->render();
 
         return response()->json(['success' => true, 'data' => $view]);
     }

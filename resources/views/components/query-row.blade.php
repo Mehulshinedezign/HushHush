@@ -33,10 +33,14 @@
     <td class="user-active">
         <div class="inquiry-actions">
             <a href="#" class="button outline-btn small-btn"><i class="fa-solid fa-comments"></i> Chat</a>
-            <a href="{{ route('query_view') }}" class="button primary-btn small-btn single_query_Modal"
-                data-bs-toggle="modal" data-product-id="{{ $query->product_id }}">
-                <i class="fa-solid fa-eye"></i> View
+
+            <a href="{{ route('query_view') }}" 
+                class="button primary-btn small-btn single_query_Modal"
+                data-bs-toggle="modal" 
+                data-query-id="{{ $query->id }}">
+                    <i class="fa-solid fa-eye"></i> View
             </a>
+
             @if ($query->status == 'PENDING')
                 <a href="#" class="button outline-btn small-btn">Status
                     Pending...</a>

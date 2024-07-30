@@ -104,31 +104,37 @@
     @includeFirst(['validation'])
     <script>
         $(document).ready(function() {
-            $('.single_query_Modal').on('click', function(event) {
+            var singleQueryModal = new bootstrap.Modal(document.getElementById('single_query_Modal'));
+
+            $(document).on('click', '.single_query_Modal', function(event) {
                 event.preventDefault();
                 var url = $(this).attr('href');
-                var productId = $(this).data('product-id');
+                var queryId = $(this).data('query-id');
 
                 $.ajax({
                     url: url,
                     type: 'GET',
                     data: {
-                        product_id: productId
+                        query_id: queryId
                     },
                     success: function(response) {
                         $('#single_query_Modal .modal-body').html(response.data);
-                        $('#single_query_Modal').modal('show');
+                        singleQueryModal.show();
                     },
                     error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
+                        console.error('Error loading query details:', error);
                     }
                 });
             });
 
             $('.my_query_details').hide();
 
-
-            // Accept Reject and Pendding
+            $(document).on('click', '.query_btn_close', function() {
+                singleQueryModal.hide();
+            });
+            $('#single_query_Modal').on('hidden.bs.modal', function () {
+                $('#single_query_Modal .modal-body').html('');
+            });
          
         });
 

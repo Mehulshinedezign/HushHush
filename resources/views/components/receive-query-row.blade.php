@@ -50,9 +50,9 @@
                 <i class="fa-solid fa-comments"></i> Chat
             </a>
             <a href="{{ route('query_view') }}"
-                class="button primary-btn small-btn single_query_Modal"
+                class="button primary-btn small-btn single_query"
                 data-bs-toggle="modal"
-                data-product-id="{{ $query->product_id }}">
+                data-query-id="{{ $query->id }}">
                 <i class="fa-solid fa-eye"></i> View
             </a>
         </div>
