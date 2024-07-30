@@ -44,13 +44,12 @@
                         $price = $query->getCalculatedPrice($query->date_range);
                     @endphp
                     <a href="{{ route('card.details', ['query' => $query->id, 'price' => $price]) }}"
-                        class="button outline-btn small-btn" data-toggle="modal" data-price="{{ $price }}">Book
+                        class="button outline-btn small-btn" data-price="{{ $price }}">Book
                         now for
                         {{ $price }}$</a>
                 @else
                     <a href="{{ route('card.details', ['query' => $query->id, 'price' => $query->negotiate_price]) }}"
-                        class="button outline-btn small-btn" data-toggle="modal"
-                        data-price="{{ $query->negotiate_price }}">Book now for
+                        class="button outline-btn small-btn" data-price="{{ $query->negotiate_price }}">Book now for
                         {{ $query->negotiate_price }}$</a>
                 @endif
             @endif

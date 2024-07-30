@@ -18,7 +18,7 @@ class CheckCustomerOrderMiddleware
     {
         $order = $request->route()->parameters();
         // dd('here');
-        if ($order['order']->user_id != auth()->user()->id) {
+        if (isset($order['order']->user_id) && $order['order']->user_id != auth()->user()->id) {
             return redirect()->route('orders');
         }
 
