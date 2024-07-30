@@ -148,7 +148,7 @@
                                 </div>
                                 <div class="pro-desc-info-box">
                                     <h4>Size:</h4>
-                                    <p>{{ $product->get_size->name ?? 'L' }}</p>
+                                    <p>{{ @$product->size ?? 'L' }}</p>
                                 </div>
 
                             </div>
