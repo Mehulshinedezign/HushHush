@@ -239,5 +239,6 @@
             });
 
     });
+});
     // Initialize form validation
 </script>

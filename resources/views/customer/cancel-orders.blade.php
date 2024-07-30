@@ -60,7 +60,7 @@
     @endforeach
 
 </div>
-<div class="pagination-main">
+{{-- <div class="pagination-main">
     <a href="javascript:void(0)" class="pagination-box">
         01
     </a>
@@ -76,4 +76,4 @@
     <a href="javascript:void(0)" class="pagination-box">
         05
     </a>
-</div>
+</div> --}}
