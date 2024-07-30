@@ -23,14 +23,14 @@
                 </div>
                 <div class="custom-tab">
                     <ul class="custom-tab-list">
+                        <li class="tab-item active" data-status="PENDING" data-user="borrower"><a href="javascript:void(0)">Pending</a></li>
                         <li class="tab-item" data-status="ACCEPTED" data-user="borrower"><a href="javascript:void(0)">Accept</a></li>
                         <li class="tab-item" data-status="REJECTED" data-user="borrower"><a href="javascript:void(0)">Reject</a></li>
-                        <li class="tab-item active" data-status="PENDING" data-user="borrower"><a href="javascript:void(0)">Pending</a></li>
                     </ul>
                 </div>
                 <div id="query-list-container">
                     <x-product-query :querydatas="$querydatas" />
-                </div>    
+                </div>
             </div>
         </div>
     </section>
@@ -134,7 +134,7 @@
             $('#single_query_Modal').on('hidden.bs.modal', function () {
                 $('#single_query_Modal .modal-body').html('');
             });
-         
+
 
 
             // Accept Reject and Pendding

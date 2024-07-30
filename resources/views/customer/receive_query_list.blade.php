@@ -24,12 +24,13 @@
                 </div>
                 <div class="custom-tab">
                     <ul class="custom-tab-list">
+                        <li class="tab-item active" data-status="PENDING" data-user="lender"><a
+                            href="javascript:void(0)">Pending</a></li>
                         <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a
                                 href="javascript:void(0)">Accept</a></li>
                         <li class="tab-item" data-status="REJECTED" data-user="lender"><a
                                 href="javascript:void(0)">Reject</a></li>
-                        <li class="tab-item active" data-status="PENDING" data-user="lender"><a
-                                href="javascript:void(0)">Pending</a></li>
+
                     </ul>
                 </div>
                 <div id="query-list-container">

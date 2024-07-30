@@ -43,7 +43,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
     });
 
     // verify otp
-    Route::middleware('auth')->group(function () {
+    Route::middleware('auth','CheckStatus')->group(function () {
         // verifi otp flow
         Route::get('verify-otp', [App\Http\Controllers\VerifyOtpController::class, 'showVerifyOtpForm'])->name('auth.verify_otp_form');
         Route::post('/verify/email/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyEmailOtp'])->name('verify.email.otp');
@@ -53,7 +53,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
     });
 
 
-    Route::middleware('auth', 'restrict-admin-retailer', 'VerifyOtp')->group(function () {
+    Route::middleware('auth', 'restrict-admin-retailer', 'VerifyOtp','CheckStatus')->group(function () {
 
 
         Route::get('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index');
@@ -94,7 +94,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
     Route::get('card/details/{query?}/{price?}', [App\Http\Controllers\BookingController::class, 'cardDetail'])->name('card.details');
     Route::post('charge', [App\Http\Controllers\BookingController::class, 'charge'])->name('charge');
 
-    Route::middleware('auth')->group(function () {
+    Route::middleware('auth','CheckStatus')->group(function () {
         //Retailer order
         Route::match(['get', 'post'], 'retailer/order', [App\Http\Controllers\Retailer\OrderController::class, 'index'])->name('retailercustomer');
         Route::get('order/{order}', [App\Http\Controllers\Retailer\OrderController::class, 'viewOrder'])->name('retailervieworder');
@@ -144,7 +144,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
         Route::get('stripe/onboarding/complete', [StripeOnboardingController::class, 'completeOnboarding'])->name('stripe.onboarding.complete');
     });
     // logged in routes
-    Route::middleware(['auth', 'customer'])->group(function () {
+    Route::middleware(['auth', 'customer','CheckStatus'])->group(function () {
         Route::get('retailer/chat/{order}', [App\Http\Controllers\Retailer\OrderController::class, 'orderChat'])->name('retalerorderchat');
 
         Route::post('add-favorite', [App\Http\Controllers\Customer\ProductController::class, 'addFavorite'])->name('addfavorite');
