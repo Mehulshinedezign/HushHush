@@ -57,8 +57,7 @@ $(document).ready(function () {
 
         var element = $(this);
         var data = userData(element);
-        // console.log(data['id']);
-        // alert(data['id']);
+
         createUser(data['id'], data['receiverId'], data['created'], data['image'], data['name'], data);
         createUser(data['receiverId'], data['id'], data['created'], data['authprofile'], data['authName'], data);
 
@@ -117,7 +116,6 @@ $(document).ready(function () {
             }).then(() => window.location.href = APP_URL + '/chat')
                 .catch(function (error) {
                     reject(error)
-                    // jQuery('#sendMessage').prop('disabled', false);
                     console.log('error', error);
                 })
         });
@@ -127,69 +125,11 @@ $(document).ready(function () {
 document.getElementById("chatForm").addEventListener("submit", submitForm);
 
 function submitForm(e) {
-    // console.log('submit form')
     e.preventDefault();
 
 
-
-    //console.log(messageData, messageData.message, 'data')
-    // if (attachmentInput.value == '' && message == '') {
-    //     return;
-    // }
-    // console.log(messageData, 'DATA');
-    // jQuery('#sendMessage').prop('disabled', true);
-    // jQuery('#sendMessage').html(loaderIcon);
-
-    // const attachmentInput = document.getElementById("attachment");
-
-    // if (typeof attachmentInput.value != 'undefined' && attachmentInput.value != '') {
-
-    //     jQuery('#sendMessage').prop('disabled', true);
-    //     var formData = new FormData();
-    //     formData.append('attachment', attachmentInput.files[0]);
-    //     formData.append('Id', Id);
-    //     chatImage(formData, chat_image_store_url)
-    //     async function chatImage(formData, chat_image_store_url) {
-    //         const response = await fetch(chat_image_store_url, {
-    //             method: 'POST',
-    //             body: formData,
-    //             headers: {
-    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //             },
-    //         })
-    //             .then((response) => {
-    //                 if (response.ok) {
-    //                     return response.json();
-    //                 }
-    //                 return response.json().then(function (errorBody) {
-    //                     // console.log(errorBody.message);
-    //                     throw new Error(errorBody.message);
-    //                 });
-
-    //             })
-    //             .then((responseJson) => {
-    //                 jQuery('#message').val(responseJson.data.name);
-    //                 messageData.attachment = responseJson.data.url;
-    //                 jQuery('#message').val('')
-    //                 jQuery('#attachment').val('')
-    //                 console.log("messageData", messageData);
-    //                 sendMessage(chatId, timestamp, messageData);
-
-    //             })
-    //             .catch((error) => {
-    //                 return iziToast.error({
-    //                     title: 'Error!',
-    //                     message: error.message,
-    //                     position: 'topRight'
-    //                 });
-    //             });
-    //         jQuery('#sendMessage').prop('disabled', false);
-    // }
-    // } else {
-
     if (messageData.message != '') {
 
-        //console.log("messageData",messageData);
         var messagedata = messageData();
 
         sendMessage(messagedata['sender'], messagedata['reciever'], messagedata['created'], messagedata['img'], messagedata);
@@ -263,17 +203,6 @@ $(document).on('click', '.chat-list', function () {
 
     var element = jQuery(this);
     element.addClass('activecht');
-    // element.find('p.chat-txt').addClass('chatmsg'); 
-    // element.find('.time-count-deta span').addClass('chatdate'); 
-
-    // jQuery('#sendMessage').attr('disabled', false);
-
-    // if ($('.chat-list-profile.activecht').attr('data-chatId') == '')
-    //     insertChatId();
-    // var formData = new FormData();
-    // formData.append('receiverId', jQuery(".chat-list-profile.activecht").attr('data-receiverId'));
-    // formData.append('orderId', jQuery(".chat-list-profile.activecht").attr('data-orderId'));
-    // //console.log(get_chat_url)
     getMessages(element);
 });
 
@@ -299,25 +228,11 @@ function loadMessages(sender, reciever, userImage) {
     }
     //console.log('hiiii',chatId);
     jQuery('#chatWindow').html('');
-    // if (fireBaseListener)
-    //     fireBaseListener();
-    // fireBaseListener = db.collection(chatId).onSnapshot((snapshot) => {
+
     var messageList = '',
         allSenders = [];
     messageList += '<p class="text-center date_cht">Today, ' + moment(new Date()).format('MMMM MM') + '</p>'
     messageList += '<p class="text-center date_cht"></p>';
-
-
-    // snapshot.docChanges().forEach((change) => {
-    //     //console.log("change",change);
-    //     if (change.type === "added") {
-
-    // let sender = change.doc.data().senderId;
-    // let message = change.doc.data().message;
-    // let currentTime = change.doc.data().currentTime;
-    // let attachment = ('attachment' in change.doc.data()) ? change.doc.data().attachment : '';
-
-
 
     var dbRef = db.ref('messages/' + `${sender}_${reciever}`);
     dbRef.once("value").then(snap => {
@@ -332,10 +247,9 @@ function loadMessages(sender, reciever, userImage) {
                 var time = msgDate;
             }
 
-            // console.log(sender, message.val().sender, 'there');
-            // alert(sender, message.val().sender);
+
             if (parseInt(authUserId) == parseInt(message.val().sender)) {
-                // console.log('hey')
+
                 messageList += '<div class="chat-screen-right-wrapper">';
                 messageList += '<div class="chat-screenmsg-wrapper">';
                 messageList += '<div class="chat-screen-name-time">';
@@ -370,90 +284,5 @@ function loadMessages(sender, reciever, userImage) {
     }).catch(error => {
         console.log("error".error)
     })
-    // console.log(dbRef, "hererere");
-    // alert(dbRef);
-    // var msgDate = moment(new Date(currentTime)).format('YYYY-MM-DD');
-    // let date = moment(new Date()).format('YYYY-MM-DD');
-    // if (date == msgDate) {
-    //     var time = moment(new Date(currentTime)).format('h:mm a');
-
-    // } else {
-    //     var time = msgDate;
-    // }
-    // // console.log(sender, message,currentTime )
-
-    // //console.log(sender, senderId)
-    // if (sender == senderId) {
-    //     // console.log('hey')
-    //     messageList += '<div class="chat-screen-right-wrapper">';
-    //     messageList += '<div class="chat-screenmsg-wrapper">';
-    //     messageList += '<div class="chat-screen-name-time">';
-    //     messageList += '<span>' + time + '</span><p>You</p></div>';
-    //     if (attachment)
-    //         messageList += '<div class="msg_media"><img src="' + attachment + '"></div>';
-    //     if (message)
-    //         messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message)) + '</div></div>';
-    //     messageList += '<div class="chat-screen-img"><img src="' + userImage + '?id=' + sender + '"></div>';
-    //     messageList += '</div>';
-
-    // }
-    // else {
-    //     messageList += '<div class="chat-screen-left-wrapper">';
-    //     messageList += '<div class="chat-screen-img"><img src="' + userImage + '?id=' + sender + '"></div>';
-    //     messageList += '<div class="msg-data"><div class="pro_name d-flex">';
-    //     messageList += `<p>{{USERNAME-${sender}}}</p>`;
-    //     messageList += '<span>' + time + '</span></div>';
-    //     if (attachment)
-    //         messageList += '<div class="msg_media"><img src="' + attachment + '"></div>';
-    //     if (message)
-    //         messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message)) + '</div>';
-    //     messageList += '</div></div>';
-
-
-    // }
-    //messageList += `<p>{{USERNAME-${sender}}}</p>`;
-    // allSenders.push(sender);
-
-    // return false;
-    // } else if (change.type === "modified") {
-    //     // console.log('modified')
-    // } else if (change.type === "removed") {
-    //     // console.log('removed')
-    // }
-    // });
-
-    //jQuery('#chatWindow').append(messageList);
-    //_lastMsgUpdate(chatId);
-    // console.log(allSenders);
-    // response = fetch(get_user_names, {
-    //     method: 'POST',
-    //     headers: {
-    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({
-    //         user_id: allSenders
-    //     })
-    // })
-    //     .then((response) => {
-    //         if (response.ok) {
-    //             return response.json();
-    //         }
-    //         throw new Error('error');
-    //     })
-    //     .then((responseJson) => {
-    //         var data = responseJson.data;
-    //         //console.log("data",data);
-    //         for (const index in data) {
-    //             messageList = messageList.replace(new RegExp(`{{USERNAME-${index}}}`, "g"), data[index]);
-    //         }
-
-    //         jQuery('#chatWindow').append(messageList);
-    //         _lastMsgUpdate(chatId);
-    //         //jQuery('#chatWindow').scrollTop(jQuery('#chatWindow')[0].scrollHeight);
-
-    //     });
-    // });
-
 
 }
