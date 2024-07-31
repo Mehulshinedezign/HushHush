@@ -1,5 +1,6 @@
 var dbRef = db.ref(`/users/` + senderId);
 let first = true;
+
 dbRef.once("value").then(snap => {
     snap.forEach(message => {
         let activeClass = first ? 'activecht' : '';

@@ -185,7 +185,7 @@ function sendMessage(sender, reciever, created, img, data) {
         var test = 'messages/' + `${sender}_${reciever}`;
         db.ref(test).push(data).then(() => {
             console.log('Message updated.');
-            loadMessages(sender, reciever, img);
+            // loadMessages(sender, reciever, img);
             resolve(); // Resolve the promise on success
         }).catch((error) => {
             reject(error);
@@ -206,6 +206,7 @@ $(document).on('click', '.chat-list', function () {
     element.addClass('activecht');
     getMessages(element);
 });
+
 
 function getMessages(element) {
     var sender = element.attr('data-senderId');
@@ -246,6 +247,7 @@ function loadMessages(sender, reciever, userImage) {
         console.log('sadfasfasd', snap.val());
         var message = snap;
         var messageList = '';
+
         let date = moment(new Date()).format('YYYY-MM-DD');
 
         var msgDate = moment(new Date(parseInt(message.val().created))).format('YYYY-MM-DD');
