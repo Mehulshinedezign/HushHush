@@ -30,6 +30,7 @@
                                 href="javascript:void(0)">Accept</a></li>
                         <li class="tab-item" data-status="REJECTED" data-user="lender"><a
                                 href="javascript:void(0)">Reject</a></li>
+                        <li class="tab-item" data-status="COMPLETED" data-user="lender"><a href="javascript:void(0)">Completed</a></li>
 
                     </ul>
                 </div>
