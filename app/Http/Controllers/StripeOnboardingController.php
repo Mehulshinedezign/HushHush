@@ -24,9 +24,9 @@ class StripeOnboardingController extends Controller
             'type' => 'express',
         ]);
 
-        $user = Auth::user();
-        $user->stripe_id = $account->id;
-        $user->save();
+        // $user = Auth::user();
+        // $user->stripe_id = $account->id;
+        // $user->save();
 
         $accountLink = AccountLink::create([
             'account' => $account->id,
