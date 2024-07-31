@@ -21,7 +21,7 @@
     </td>
     <td>
         <div class="user-table-head">
-            <h5>{{ $query->getCalculatedPrice($query->date_range) }}</h5>
+            <h5>${{ $query->getCalculatedPrice($query->date_range) }}</h5>
         </div>
     </td>
     <td>

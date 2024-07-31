@@ -240,4 +240,9 @@ class Order extends Model
             return $q->where('to_date',  date('Y-m-d'));
         }
     }
+
+    public function queryOf()
+    {
+        return $this->hasOne(Query::class,"id","query_id");
+    }
 }
