@@ -24,8 +24,8 @@
                 <div class="custom-tab">
                     <ul class="custom-tab-list">
                         <li class="tab-item active" data-status="PENDING" data-user="borrower"><a href="javascript:void(0)">Pending</a></li>
-                        <li class="tab-item" data-status="ACCEPTED" data-user="borrower"><a href="javascript:void(0)">Accept</a></li>
-                        <li class="tab-item" data-status="REJECTED" data-user="borrower"><a href="javascript:void(0)">Reject</a></li>
+                        <li class="tab-item" data-status="ACCEPTED" data-user="borrower"><a href="javascript:void(0)">Accepted</a></li>
+                        <li class="tab-item" data-status="REJECTED" data-user="borrower"><a href="javascript:void(0)">Rejected</a></li>
                         <li class="tab-item" data-status="COMPLETED" data-user="borrower"><a href="javascript:void(0)">Completed</a></li>
                     </ul>
                 </div>

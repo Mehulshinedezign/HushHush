@@ -474,9 +474,7 @@
                         success: function(response) {
                             var modalContent = '';
                             if (response.success) {
-                                modalContent =
-                                    '<div class="alert alert-success" role="alert">' + response
-                                    .message + '</div>';
+                                modalContent = `<div class="success-text" role="alert"><img src="`+ "{{asset('assets/img/query.png')}}"+`" style="max-width: 180px;">`+ response.message +`</div>`;
                             } else {
                                 modalContent = '<div class="alert alert-danger" role="alert">' +
                                     response.message + '</div>';
@@ -569,7 +567,7 @@
 
             var queryDates = @json($querydates);
             var disableDates = @json($disable_dates);
-
+            console.log(queryDates);
             var disabledDateRanges = queryDates.map(function(query) {
                 var dateRange = query.date_range.split(' - ');
                 return {
@@ -590,7 +588,7 @@
 
             function isDateDisabled(date) {
                 var inQueryDates = disabledDateRanges.some(function(range) {
-                    return date.isSame(range.start, 'day') || date.isSame(range.end, 'day');
+                    return date.isBetween(range.start, range.end, 'day', '[]');
                 });
 
                 var inDisableDates = noneAvailableDates.some(function(range) {

@@ -41,7 +41,7 @@
         </div>
         @endif
 
-        @if (@$query->status == 'PENDING')
+        {{-- @if (@$query->status == 'PENDING')
             @if (@$query->user_id != auth()->user()->id)
                 <div class="col-md-4 my_query_details">
                     <div class="inquiry-actions">
@@ -53,7 +53,6 @@
                 </div>
                 <div class="col-md-4 my_query_details">
                     <div class="inquiry-actions">
-                        {{-- <a href="{{ route('reject_query', ['id' => $product->querydata->id]) }}" class="button reject-btn full-btn mb-2" onclick="confirmReject(event)"><i class="fa-solid fa-ban"></i> Reject</a> --}}
                         <a href="javascript:void(0)" class="button reject-btn full-btn mb-2"
                             onclick="confirmReject(event, '{{ $query->id }}')"><i class="fa-solid fa-circle-check"></i> Reject</a>
                     </div>
@@ -69,6 +68,7 @@
             </div>
         </div>
         @endif
+        --}}
 
     </div>
 </div>

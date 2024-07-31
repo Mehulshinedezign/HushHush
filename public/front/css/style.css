@@ -583,7 +583,7 @@ a.navbar-brand {
 
 .bottom-nav {
     position: relative;
-
+    min-height: 70px;
 }
 
 .bottom-nav .navbar-nav .dropdown .dropdown-toggle {
@@ -1871,4 +1871,12 @@ input[type=number] {
 .product-slider-sec-min-height {
     padding: 75px 0px;
     min-height: calc(100vh - 476px);
+}
+
+.success-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    font-size: 32px;
 }

@@ -27,9 +27,9 @@
                         <li class="tab-item active" data-status="PENDING" data-user="lender"><a
                             href="javascript:void(0)">Pending</a></li>
                         <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a
-                                href="javascript:void(0)">Accept</a></li>
+                                href="javascript:void(0)">Accepted</a></li>
                         <li class="tab-item" data-status="REJECTED" data-user="lender"><a
-                                href="javascript:void(0)">Reject</a></li>
+                                href="javascript:void(0)">Rejected</a></li>
                         <li class="tab-item" data-status="COMPLETED" data-user="lender"><a href="javascript:void(0)">Completed</a></li>
 
                     </ul>

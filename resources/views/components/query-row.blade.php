@@ -20,6 +20,11 @@
         </div>
     </td>
     <td>
+        <div class="user-table-head">
+            <h5>{{ $query->getCalculatedPrice($query->date_range) }}</h5>
+        </div>
+    </td>
+    <td>
         <p class="Inquiry-desc">{{ $query->query_message ?? '' }}</p>
     </td>
     <td>{{ $query->date_range ?? '' }}</td>
