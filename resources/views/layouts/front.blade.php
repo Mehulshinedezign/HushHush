@@ -133,7 +133,7 @@
                                             </div>
                                             @error('product_name')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -157,19 +157,19 @@
                                                 </div>
                                                 @error('category')
                                                     <span class="invalid-feedback" role="alert">
-                                                @enderror
-                                                <div class="formfield">
-                                                    <select name="subcategory" id="subcategory">
-                                                        <option value="">Subcategory</option>
-                                                    </select>
-                                                    <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
-                                                    </span>
-                                                </div>
-                                                @error('subcategory')
-                                                <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                    @enderror
+                                                    <div class="formfield">
+                                                        <select name="subcategory" id="subcategory">
+                                                            <option value="">Subcategory</option>
+                                                        </select>
+                                                        <span class="form-icon">
+                                                            <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                                alt="img">
+                                                        </span>
+                                                    </div>
+                                                    @error('subcategory')
+                                                        <span class="invalid-feedback" role="alert">
+                                                        @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -189,7 +189,7 @@
                                             </div>
                                             @error('subcategory')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -210,7 +210,7 @@
                                             </div>
                                             @error('brand')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -231,7 +231,7 @@
                                             </div>
                                             @error('color')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
@@ -263,7 +263,7 @@
                                             </div>
                                             @error('address1')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-3 col-sm-12 product_sub_data">
@@ -276,7 +276,7 @@
                                             </div>
                                             @error('address2')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
@@ -288,7 +288,7 @@
                                             </div>
                                             @error('country')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
@@ -300,7 +300,7 @@
                                             </div>
                                             @error('state')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
@@ -312,7 +312,7 @@
                                             </div>
                                             @error('city')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -329,7 +329,7 @@
                                             </div>
                                             @error('non_available_dates')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -353,7 +353,7 @@
                                             </div>
                                             @error('product_condtion')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     {{-- <div class="col-lg-4 col-md-4 col-sm-12">
@@ -372,7 +372,7 @@
                                             </div>
                                             @error('description')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
 
@@ -386,7 +386,7 @@
                                             </div>
                                             @error('product_market_value')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
 
@@ -409,7 +409,7 @@
                                             </div>
                                             @error('min_rent_days')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
 
@@ -425,7 +425,7 @@
                                             </div>
                                             @error('rent_price_day')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -438,7 +438,7 @@
                                             </div>
                                             @error('rent_price_week')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -451,7 +451,7 @@
                                             </div>
                                             @error('rent_price_month')
                                                 <span class="invalid-feedback" role="alert">
-                                            @enderror
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -922,7 +922,8 @@
         };
         var senderId = "{{ auth()->user()->id }}";
         const authUserId = "{{ auth()->user()->id }}";
-        const authUserprofile = "{{ auth()->user()->profile_file }}";
+        const authUserprofile =
+            "{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}";
         var userImage = "{{ route('retaileruserimage') }}";
         var imagePath = "{{ asset('storage/') }}";
         var chat_store_url = "{{ route('retailerstore.chat') }}";

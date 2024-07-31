@@ -238,7 +238,7 @@ function loadMessages(sender, reciever, userImage) {
     dbRef.once("value").then(snap => {
         snap.forEach(message => {
             var msgDate = moment(new Date(parseInt(message.val().created))).format('YYYY-MM-DD');
-            console.log(msgDate);
+
             let date = moment(new Date()).format('YYYY-MM-DD');
             if (date == msgDate) {
                 var time = moment(new Date(parseInt(message.val().created))).format('h:mm a');
@@ -259,9 +259,8 @@ function loadMessages(sender, reciever, userImage) {
                 //     messageList += '<div class="msg_media"><img src="' + attachment + '"></div>';
                 if (message.val().msg)
                     messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message.val().msg)) + '</div></div>';
-                messageList += '<div class="chat-screen-img"><img src="' + userImage + '?id=' + message.val() + '"></div>';
+                messageList += '<div class="chat-screen-img"><img src="' + authUserprofile + '?id=' + message.val() + '"></div>';
                 messageList += '</div>';
-
 
             }
             else {
