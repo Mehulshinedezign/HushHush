@@ -1059,11 +1059,10 @@ class ProductController extends Controller
                 ], 404);
             }
 
-
             $authUserId = auth()->user()->id;
 
-            $queries = Query::where('product_id', $id)->where('user_id', $authUserId)->first();
-            //  $queries = (object)$query;
+            $queries = Query::where('product_id', $id)->where('user_id', $authUserId)->get();
+
             $categories = getParentCategory();
             $brands = getBrands();
             $sizes = getAllsizes();
@@ -1137,7 +1136,20 @@ class ProductController extends Controller
                     'sizes' => $sizeData,
                     'colors' => $colorData,
                     'conditions' => $conditionData,
-                    'queries' => $queries, // Include queries data
+                    'queries' => $queries->map(function ($query) {
+                        return [
+                            'id' => $query->id,
+                            'user_id' => $query->user_id,
+                            'product_id' => $query->product_id,
+                            'for_user' => $query->for_user,
+                            'query_message' => $query->query_message,
+                            'status' => $query->status,
+                            'date_range' => $query->date_range,
+                            'start_date' => $query->start_date,
+                            'end_date' => $query->end_date,
+                            'negotiate_price' => $query->negotiate_price,
+                        ];
+                    }),
                 ],
             ], 200);
         } catch (\Throwable $e) {
@@ -1150,6 +1162,8 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
+
 
 
     public function editProduct(Request $request, $id)

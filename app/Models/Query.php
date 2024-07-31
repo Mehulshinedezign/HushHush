@@ -37,4 +37,18 @@ class Query extends Model
 
         return $query;
     }
+
+    public function getStartDateAttribute()
+    {
+        return explode(' - ', $this->date_range)[0] ?? null;
+    }
+
+    public function getEndDateAttribute()
+    {
+        return explode(' - ', $this->date_range)[1] ?? null;
+    }
 }
+
+
+
+

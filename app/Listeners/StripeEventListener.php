@@ -33,7 +33,7 @@ class StripeEventListener implements ShouldQueue
 
                 // Check if the account is fully set up
                 if ($account['details_submitted']) {
-                    $user = User::where('stripe_id', $account['id'])->first();
+                    $user = User::where('stripe_account_id', $account['id'])->first();
 
                     if ($user) {
                         UserBankDetail::updateOrCreate(
