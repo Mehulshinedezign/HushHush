@@ -103,6 +103,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserDocuments::class);
     }
+    
+    public function document()
+    {
+        return $this->hasOne(UserDocuments::class);
+    }
 
     /**
      * User notification setting
@@ -163,31 +168,36 @@ class User extends Authenticatable
         $request = request();
         $query->when(!empty($request->filter_by_name), function ($q) use ($request) {
             $q->where('name', 'like', '%' . $request->filter_by_name . '%');
-        })->when(!is_null($request->dates), function ($q) use ($request) {
+        });
+        $query->when(!is_null($request->dates), function ($q) use ($request) {
             $dates = explode(' - ', $request->dates);
-            $dateFrom = $dates[0];
-            $dateTo = $dates[1];
-            $q->where(function ($query) use ($dateFrom, $dateTo) {
-                $query->whereDate('created_at', '>=', $dateFrom);
-                $query->whereDate('created_at', '<=', $dateTo);
-            });
-        })->when(!is_null($request->filter_by_status), function ($q) use ($request) {
+            if (count($dates) === 2) {
+                $dateFrom = $dates[0];
+                $dateTo = $dates[1];
+                $q->whereBetween('created_at', [$dateFrom, $dateTo]);
+            }
+        });
+        $query->when(!is_null($request->filter_by_status), function ($q) use ($request) {
             switch ($request->filter_by_status) {
-                case ('Active');
+                case 'Active':
                     $q->where('status', '1');
                     break;
-                case ('Inactive');
+                case 'Inactive':
                     $q->where('status', '0');
                     break;
                 default:
                     return;
             }
-        })->when(!is_null($request->status) && in_array($request->status, ['approved', 'pending']), function ($q) use ($request) {
-            $isApproved = ($request->status == 'approved') ? '1' : '0';
+        });
+        $query->when(!is_null($request->status) && in_array($request->status, ['approved', 'pending']), function ($q) use ($request) {
+            $isApproved = ($request->status === 'approved') ? '1' : '0';
             $q->where('is_approved', $isApproved);
-        })->when(!is_null($request->search), function ($q) use ($request) {
-            $q->where(function ($query) use ($request) {
-                $query->where("name", "like", strtolower($request->search) . "%")->orWhere("email", "like", strtolower($request->search) . "%");
+        });
+        $query->when(!is_null($request->search), function ($q) use ($request) {
+            $searchTerm = '%' . strtolower($request->search) . '%';
+            $q->where(function ($query) use ($searchTerm) {
+                $query->where('name', 'like', $searchTerm)
+                      ->orWhere('email', 'like', $searchTerm);
             });
         });
     }

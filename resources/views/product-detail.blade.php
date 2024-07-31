@@ -494,6 +494,7 @@
                             // Add click event to close button
                             $('#closeModalBtn').on('click', function() {
                                 $('#query_msg').modal('hide');
+                                location.reload();
                             });
                         },
                         error: function(response) {
@@ -507,14 +508,13 @@
                             // Add click event to close button
                             $('#closeModalBtn').on('click', function() {
                                 $('#query_msg').modal('hide');
+                                location.reload();
                             });
                         }
                     });
 
                 }
             })
-
-
 
             // date range jquery
             
