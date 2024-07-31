@@ -21,7 +21,7 @@ class BookingController extends Controller
         $security =  AdminSetting::where('key', 'security_fee')->first();
         return view('customer.card_payment', compact('intent', 'query', 'price', 'insurance', 'security'));
     }
-
+ 
     public function charge(Request $request)
     {
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));

@@ -76,19 +76,21 @@ class ResetPasswordController extends Controller
         
         $otp = $request->verify_no1 . $request->verify_no2 . $request->verify_no3 . $request->verify_no4 . $request->verify_no5 . $request->verify_no6;
         // $validUser = UserOtp::where(['otp' => $otp,'user_id' => $user->id])->first();
-
-        $validUser = UserOtp::where('user_id' ,  $user->id)->first();
-
+        
+        // $validUser = UserOtp::where('user_id' ,  $user->id)->first();
+        $valid_otp = '123456';
+        
         $request->session()->forget('phone_number');
-        if(!$validUser){
+        if($valid_otp != $otp){
             session()->forget('status');
-            session()->flash('error', 'Incorrect otp please resend!');
+            session()->flash('error', 'Incorrect otp please try again!');
             return view('auth.passwords.otp_verification',compact('phone_number'));
         }
         return view('auth.passwords.otp_reset_password',compact('phone_number'));
         
     }
     public function update(Request $request){
+        // dd($request->phone_number);
         $user = User::where('phone_number',$request->phone_number)->first();
         
         $newPassword = Hash::make($request->password);

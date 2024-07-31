@@ -8,6 +8,8 @@ use Stripe\Stripe;
 use Stripe\Account;
 use Stripe\AccountLink;
 use App\Models\UserBankDetail; // Make sure to import your UserBankDetail model
+use Illuminate\Support\Facades\Log;
+use Stripe\Customer;
 
 class StripeOnboardingController extends Controller
 {
@@ -24,9 +26,7 @@ class StripeOnboardingController extends Controller
             'type' => 'express',
         ]);
 
-        // $user = Auth::user();
-        // $user->stripe_id = $account->id;
-        // $user->save();
+        auth()->user()->update(['stripe_account_id'=>$account->id]);
 
         $accountLink = AccountLink::create([
             'account' => $account->id,
@@ -74,17 +74,17 @@ class StripeOnboardingController extends Controller
     public function completeOnboarding()
     {
         $user = Auth::user();
-
         Stripe::setApiKey(config('services.stripe.secret'));
-        $account = Account::retrieve($user->stripe_id);
+        
+        $account = Account::retrieve($user->stripe_account_id);
 
         // Check if the account is fully set up
         if ($account->details_submitted) {
             // Store the bank details in the database
             UserBankDetail::updateOrCreate(
-                ['user_id' => $user->id],
+                ['user_id' => $user->id ],
                 [
-                    'stripe_id' => $user->stripe_id,
+                    'stripe_id' => $user->stripe_account_id,
                     'country' => $account->country,
                     'raw_data' => json_encode($account),
                 ]

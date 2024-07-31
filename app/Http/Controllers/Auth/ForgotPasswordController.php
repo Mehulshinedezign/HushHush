@@ -60,7 +60,6 @@ class ForgotPasswordController extends Controller
         if (!$this->otpService) {
             return response()->json(['message' => 'OTP service not available'], 500);
         }
-
         $user = User::where('phone_number', $main_number)->first();
 
         if (!$user) {
