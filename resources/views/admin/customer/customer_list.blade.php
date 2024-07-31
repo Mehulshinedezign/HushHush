@@ -69,11 +69,11 @@
                                                 {{-- <a class="btn btn-primary" href="{{ route('admin.viewcustomer', [$customer->id]) }}" title="View">
                                             <i class="fa fa-eye"></i>
                                         </a> --}}
-                                                 <a class="btn btn-success"
+                                                 {{-- <a class="btn btn-success"
                                                     href="{{ route('admin.edit.user', [$customer->id]) }}"
                                                     title="Edit User">
                                                     <i class="fa fa-pencil"></i>
-                                                </a> 
+                                                </a>  --}}
                                                 <a class="btn btn-danger delete-user"
                                                     href="{{ route('admin.delete.user', [$customer->id]) }}"
                                                     title="Delete">
