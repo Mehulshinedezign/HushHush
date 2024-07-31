@@ -1,9 +1,11 @@
 var dbRef = db.ref(`/users/` + senderId);
 let first = true;
-dbRef.once("value").then(snap => {
-    snap.forEach(message => {
-        let activeClass = first ? 'activecht' : '';
-        $('.chatlist').append(`<li>
+let response = new Promise((resolve, reject) => {
+
+    dbRef.once("value").then(snap => {
+        snap.forEach(message => {
+            let activeClass = first ? 'activecht' : '';
+            $('.chatlist').append(`<li>
                 <div class="chat-list ${activeClass}"
                     data-receiverId=${message.key}
                     data-senderId="${message.val().id}">
@@ -18,9 +20,16 @@ dbRef.once("value").then(snap => {
                     </div>
                 </div>
             </li>`);
-        first = false;
-    });
-}).catch(error => {
-    console.log("error".error)
-})
+            first = false;
+        });
+    }).then(() => getFirstChatData())
+        .catch(error => {
+            console.log("error".error)
+        })
 
+});
+
+function getFirstChatData() {
+    element = $('.activecht');
+    getMessages(element);
+}
