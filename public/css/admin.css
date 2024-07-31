@@ -2220,3 +2220,7 @@ select.form-control.selectric {
   right: 15px;
   top: 15px;
 }
+img#customer-img {
+  height: 40px;
+  width: 40px;
+}

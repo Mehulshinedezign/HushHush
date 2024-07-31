@@ -219,9 +219,10 @@
         });
         
         
-        $('#product_address1,#product_address2, #product_country, #product_state, #product_city').on('change', function() {
+        $('#product_address1,#product_address2').on('change', function() {
             // alert('hello');
             // $('#product_address').valid();
+            handleValidation('addProduct', rules, messages);
             $('#addProduct').validate({
                 rules: rules,
                 messages: messages,
@@ -237,8 +238,7 @@
                     $(element).removeClass('is-invalid');
                 }
             });
-
+        });
     });
-});
     // Initialize form validation
 </script>

@@ -1,8 +1,5 @@
 jQuery(document).ready(function () {
 
-    var passwordMinLength = 8; 
-    var passwordMaxLength = 20; 
-    var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d!@#$%^&*]{8,32}$/; 
 
     jQuery('form#userDetail').validate({
         errorClass: 'error-messages',
@@ -13,11 +10,11 @@ jQuery(document).ready(function () {
                 maxlength: 50,
                 regex: /^[a-zA-Z]+[a-zA-Z\s]+$/,
             },
-            email: {
-                required: true,
-                email: true,
-                regex: /^[a-zA-Z]+[a-zA-Z0-9_\.\-]*@[a-zA-Z]+(\.[a-zA-Z]+)*[\.]{1}[a-zA-Z]{2,10}$/,
-            },
+            // email: {
+            //     required: true,
+            //     email: true,
+            //     regex: /^[a-zA-Z]+[a-zA-Z0-9_\.\-]*@[a-zA-Z]+(\.[a-zA-Z]+)*[\.]{1}[a-zA-Z]{2,10}$/,
+            // },
             phone_number: {
                 required: true,
                 regex: /^[(]?[0-9]{3}[)]?[-]?[0-9]{3}[-]?[0-9]{4}$/
@@ -49,29 +46,29 @@ jQuery(document).ready(function () {
             address2: {
                 required: true,
             },
-            password: {
-                required: true,
-                minlength: passwordMinLength,
-                maxlength: passwordMaxLength,
-                regex: passwordRegex,
-            },
-            confirm_password: {
-                required: true,
-                equalTo: "[name='password']"
-            },
+            // password: {
+            //     required: true,
+            //     minlength: passwordMinLength,
+            //     maxlength: passwordMaxLength,
+            //     regex: passwordRegex,
+            // },
+            // confirm_password: {
+            //     required: true,
+            //     equalTo: "[name='password']"
+            // },
         },
         messages: {
             name: {
                 required: 'This field is required.',
                 minlength: 'Name must be 3-50 characters long.',
                 maxlength: 'Name must be 3-50 characters long.',
-                regex: 'Name contains alphabets and space only.',
+                regex: 'Name should contain alphabets and in-between space only.',
             },
-            email: {
-                required: 'This field is required.',
-                email: 'Invalid email address.',
-                regex: 'Invalid email address',
-            },
+            // email: {
+            //     required: 'This field is required.',
+            //     email: 'Invalid email address.',
+            //     regex: 'Invalid email address',
+            // },
             phone_number: {
                 required: 'This field is required.',
                 regex: "Invalid phone number"
@@ -103,16 +100,16 @@ jQuery(document).ready(function () {
             address2: {
                 required: 'This field is required.',
             },
-            password: {
-                required: 'This field is required.',
-                minlength: 'Password must be at least ' + passwordMinLength + ' characters long.',
-                maxlength: 'Password cannot exceed ' + passwordMaxLength + ' characters.',
-                regex: 'The password must contain at least one uppercase , one lowercase , one numeric digit and one special character from the following: @#$%^&*.',
-            },
-            confirm_password: {
-                equalTo: 'Passwords must match.',
-                required: 'This field is required.',
-            },
+            // password: {
+            //     required: 'This field is required.',
+            //     minlength: 'Password must be at least ' + passwordMinLength + ' characters long.',
+            //     maxlength: 'Password cannot exceed ' + passwordMaxLength + ' characters.',
+            //     regex: 'The password must contain at least one uppercase , one lowercase , one numeric digit and one special character from the following: @#$%^&*.',
+            // },
+            // confirm_password: {
+            //     equalTo: 'Passwords must match.',
+            //     required: 'This field is required.',
+            // },
         },
         errorPlacement: function (label, element) {
             if (element.is("textarea")) {
