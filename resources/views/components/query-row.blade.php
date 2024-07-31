@@ -26,14 +26,19 @@
             ACCEPTED
         @elseif($query->status == 'PENDING')
             PENDING
-        @else
+        @elseif($query->status == 'REJECTED')
             REJECTED
+        @elseif($query->status == 'COMPLETED')
+        COMPLETED
+        
         @endif
     </td>
     <td class="user-active">
         <div class="inquiry-actions">
+            @if( $query->status != 'COMPLETED')
             <a href="{{ route('common.chat') }}" class="button outline-btn small-btn"><i
                     class="fa-solid fa-comments"></i> Chat</a>
+            @endif
             <a href="{{ route('query_view') }}" class="button primary-btn small-btn single_query_Modal"
                 data-bs-toggle="modal" data-query-id="{{ $query->id }}">
                 <i class="fa-solid fa-eye"></i> View

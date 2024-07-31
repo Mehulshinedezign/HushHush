@@ -52,12 +52,13 @@
             
         @endif
 
-
+        @if (@$query->status != 'COMPLETED')
         <div class="col-md-4">
             <div class="inquiry-actions">
                 <a href="#" class="button outline-btn full-btn"><i class="fa-solid fa-comments"></i> Chat</a>
             </div>
         </div>
+        @endif
 
     </div>
 </div>
