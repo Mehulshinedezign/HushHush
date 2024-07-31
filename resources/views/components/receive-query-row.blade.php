@@ -3,8 +3,11 @@
         <a href="#" class="user-table-profile">
             <div class="table-profile">
                 @if ($query->product)
+                <a href="{{ route('viewproduct', jsencode_userdata($query->product->id)) }}">
+                
                     <img src="{{ $query->product->thumbnailImage->file_path ?? '' }}" alt="tb-profile" width="26"
                         height="27">
+                    </a>
                 @else
                     <img src="{{ asset('front/images/table-profile1.png') }}" alt="tb-profile" width="26"
                         height="27">

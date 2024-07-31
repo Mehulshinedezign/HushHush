@@ -227,6 +227,9 @@ class ChatController extends Controller
 
         $chatlist = Chat::where('user_id', auth()->user()->id)->orWhere('retailer_id', auth()->user()->id)->get();
 
+        $query = Query::with('user', 'product.thumbnailImage')->where('for_user', auth()->user()->id)->update([
+            'chat_enabled'=> true,
+        ]);
         $query = Query::with('user', 'product.thumbnailImage')->where('for_user', auth()->user()->id)->first();
         // dd($query->toArray());
         return view('chat', compact('chatlist', 'query'));

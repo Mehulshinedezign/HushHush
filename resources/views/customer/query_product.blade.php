@@ -30,6 +30,16 @@
                 @endif
             </div>
         </div>
+        @if (@$query->user_id != auth()->user()->id)
+        <div class="col-md-12">
+            <div class="query-detail-info">
+                <h3>Customer</h3>
+                @if ($query)
+                    <p>{{ $query->user->name ?? '' }}</p>
+                @endif
+            </div>
+        </div>
+        @endif
 
         @if (@$query->status == 'PENDING')
             @if (@$query->user_id != auth()->user()->id)

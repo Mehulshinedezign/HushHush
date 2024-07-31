@@ -12,7 +12,7 @@ class Query extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'product_id', 'for_user', 'query_message', 'status', 'date_range', 'negotiate_price',
+        'user_id', 'product_id', 'for_user', 'query_message', 'status', 'date_range', 'negotiate_price', 'chat_enabled'
     ];
 
     public function product()

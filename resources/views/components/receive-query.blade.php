@@ -10,7 +10,7 @@
                             <th>Query</th>
                             <th>Date</th>
 
-                            @if (!$accept)
+                            @if ($accept)
                             <th>Set Price</th>       
                             @endif
                             <th>Action</th>

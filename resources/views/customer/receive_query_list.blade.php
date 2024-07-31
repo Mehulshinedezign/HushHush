@@ -133,6 +133,15 @@
             if (!price) {
                 price = calculatePrice(date_range, rentDay, rentWeek, rentMonth);
             }
+            if(price<= 0 || isNaN(price))
+            {
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Please enter a valid price',
+                    'position': 'topRight',
+                });
+                return false;
+            }
 
             Swal.fire({
                 title: 'Are you sure?',
