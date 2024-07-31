@@ -176,6 +176,7 @@ function messageData() {
     return messageData;
 }
 
+
 function sendMessage(sender, reciever, created, img, data) {
 
     jQuery('#message').val('');
@@ -220,6 +221,8 @@ function getMessages(element) {
 }
 
 
+fireBaseListener = null;
+
 // fireBaseListener = null;
 function loadMessages(sender, reciever, userImage) {
     if (!sender) {
@@ -228,60 +231,67 @@ function loadMessages(sender, reciever, userImage) {
     }
     //console.log('hiiii',chatId);
     jQuery('#chatWindow').html('');
+    if (fireBaseListener)
+        fireBaseListener();
 
-    var messageList = '',
-        allSenders = [];
-    messageList += '<p class="text-center date_cht">Today, ' + moment(new Date()).format('MMMM MM') + '</p>'
-    messageList += '<p class="text-center date_cht"></p>';
+    // var messageList = '',
+    //     allSenders = [];
+    // messageList += '<p class="text-center date_cht">Today, ' + moment(new Date()).format('MMMM MM') + '</p>'
+    // messageList += '<p class="text-center date_cht"></p>';
 
-    var dbRef = db.ref('messages/' + `${sender}_${reciever}`);
-    dbRef.once("value").then(snap => {
-        snap.forEach(message => {
-            var msgDate = moment(new Date(parseInt(message.val().created))).format('YYYY-MM-DD');
+    // snap.forEach(message => {
+    //     console.log('sadfasd', message.val(), "sdfsfsdfsd");
 
-            let date = moment(new Date()).format('YYYY-MM-DD');
-            if (date == msgDate) {
-                var time = moment(new Date(parseInt(message.val().created))).format('h:mm a');
+    var fireBaseListener = db.ref('messages/' + `${sender}_${reciever}`).on("child_added", (snap) => {
+        console.log('sadfasfasd', snap.val());
+        var message = snap;
+        var messageList = '';
+        let date = moment(new Date()).format('YYYY-MM-DD');
 
-            } else {
-                var time = msgDate;
-            }
+        var msgDate = moment(new Date(parseInt(message.val().created))).format('YYYY-MM-DD');
 
+        if (date == msgDate) {
+            var time = moment(new Date(parseInt(message.val().created))).format('h:mm a');
 
-            if (parseInt(authUserId) == parseInt(message.val().sender)) {
-
-                messageList += '<div class="chat-screen-right-wrapper">';
-                messageList += '<div class="chat-screenmsg-wrapper">';
-                messageList += '<div class="chat-screen-name-time">';
-                messageList += '<span>' + time + '</span><p>You</p></div>';
-
-                // if (attachment)
-                //     messageList += '<div class="msg_media"><img src="' + attachment + '"></div>';
-                if (message.val().msg)
-                    messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message.val().msg)) + '</div></div>';
-                messageList += '<div class="chat-screen-img"><img src="' + authUserprofile + '?id=' + message.val() + '"></div>';
-                messageList += '</div>';
-
-            }
-            else {
-                messageList += '<div class="chat-screen-left-wrapper">';
-                messageList += '<div class="chat-screen-img"><img src="' + userImage + '?id=' + message.val() + '"></div>';
-                messageList += '<div class="msg-data"><div class="pro_name d-flex">';
-                // messageList += `<p>USERNAME-${message.val().name}</p>`;
-                messageList += '<span>' + time + '</span></div>';
-                // if (attachment)
-                //     messageList += '<div class="msg_media"><img src="' + attachment + '"></div>';
-                if (message.val().msg)
-                    messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message.val().msg)) + '</div>';
-                messageList += '</div></div>';
-
-            }
+        } else {
+            var time = msgDate;
+        }
 
 
-        });
+        if (parseInt(authUserId) == parseInt(message.val().sender)) {
+
+            messageList += '<div class="chat-screen-right-wrapper">';
+            messageList += '<div class="chat-screenmsg-wrapper">';
+            messageList += '<div class="chat-screen-name-time">';
+            messageList += '<span>' + time + '</span><p>You</p></div>';
+
+            // if (attachment)
+            //     messageList += '<div class="msg_media"><img src="' + attachment + '"></div>';
+            if (message.val().msg)
+                messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message.val().msg)) + '</div></div>';
+            messageList += '<div class="chat-screen-img"><img src="' + authUserprofile + '?id=' + message.val() + '"></div>';
+            messageList += '</div>';
+
+        }
+        else {
+            messageList += '<div class="chat-screen-left-wrapper">';
+            messageList += '<div class="chat-screen-img"><img src="' + userImage + '?id=' + message.val() + '"></div>';
+            messageList += '<div class="msg-data"><div class="pro_name d-flex">';
+            // messageList += `<p>USERNAME-${message.val().name}</p>`;
+            messageList += '<span>' + time + '</span></div>';
+            // if (attachment)
+            //     messageList += '<div class="msg_media"><img src="' + attachment + '"></div>';
+            if (message.val().msg)
+                messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message.val().msg)) + '</div>';
+            messageList += '</div></div>';
+
+        }
+
+
+        // });
+
+
         jQuery('#chatWindow').append(messageList);
-    }).catch(error => {
-        console.log("error".error)
-    })
+    });
 
 }

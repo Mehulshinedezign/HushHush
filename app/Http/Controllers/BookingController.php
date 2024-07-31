@@ -87,7 +87,6 @@ class BookingController extends Controller
 
         $transaction = Transaction::create([
             'payment_id' => $status->id,
-            'order_id' => $order->id,
             'user_id' => $user->id,
             'total' => $request->total_payment,
             'date' => $date,

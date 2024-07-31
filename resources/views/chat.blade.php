@@ -12,6 +12,12 @@
 @endsection
 
 @push('scripts')
+    <script>
+        $(window).on('load', function() {
+            // Focus on the element with class 'focus-me'
+            $('.activecht').focus();
+        });
+    </script>
     {{-- <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script>
