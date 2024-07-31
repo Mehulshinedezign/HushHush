@@ -128,9 +128,8 @@ function submitForm(e) {
     e.preventDefault();
 
 
-    if (messageData.message != '') {
-
-        var messagedata = messageData();
+    var messagedata = messageData();
+    if (messagedata.msg != '') {
 
         sendMessage(messagedata['sender'], messagedata['reciever'], messagedata['created'], messagedata['img'], messagedata);
         sendMessage(messagedata['reciever'], messagedata['sender'], messagedata['created'], messagedata['img'], messagedata);

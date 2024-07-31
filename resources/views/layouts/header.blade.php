@@ -335,7 +335,7 @@
                                                 alt="img">My Products</a></li>
 
                                     <li><a class="dropdown-item" href="{{ route('my_query') }}"><img width="15"
-                                                height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
+                                                height="14" src="{{ asset('front/images/myQuery.svg') }}"
                                                 alt="img">My Query</a></li>
                                     <li><a class="dropdown-item" href="{{ route('receive_query') }}"><img width="15"
                                                 height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
@@ -354,7 +354,7 @@
                                                 style="color: #606060" class="fa-solid fa-lock"></i></i>Change
                                             password</a></li>
                                     <li><a class="dropdown-item" href="{{ route('common.chat') }}"><i
-                                                style="color: #606060" class="fa-solid fa-lock"></i></i>Chat
+                                                style="color: #606060" class="fa-solid fa-comments"></i>Chat
                                         </a></li>
                                     {{-- <li><a class="dropdown-item" href="{{ route('') }}"><i
                                                 style="color: #606060" class="fa-solid fa-lock"></i></i>my
