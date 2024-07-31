@@ -19,6 +19,12 @@ use App\Http\Controllers\StripeOnboardingController;
 //     return redirect()->route('login');
 // });
 
+    // verify otp
+    Route::get('verify-otp', [App\Http\Controllers\VerifyOtpController::class, 'showVerifyOtpForm'])->name('auth.verify_otp_form');
+    Route::post('/verify/email/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyEmailOtp'])->name('verify.email.otp');
+    Route::post('/verify/phone/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyPhoneOtp'])->name('verify.phone.otp');
+    Route::get('/resend-otp/{type}', [App\Http\Controllers\VerifyOtpController::class, 'resendOtp'])->name('resend.otp');
+
 Route::middleware('localization', 'prevent-back-history',)->group(function () {
 
     Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
@@ -42,15 +48,6 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
         return redirect()->back();
     });
 
-    // verify otp
-    Route::middleware('auth','CheckStatus')->group(function () {
-        // verifi otp flow
-        Route::get('verify-otp', [App\Http\Controllers\VerifyOtpController::class, 'showVerifyOtpForm'])->name('auth.verify_otp_form');
-        Route::post('/verify/email/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyEmailOtp'])->name('verify.email.otp');
-        Route::post('/verify/phone/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyPhoneOtp'])->name('verify.phone.otp');
-        Route::get('/resend-otp/{type}', [App\Http\Controllers\VerifyOtpController::class, 'resendOtp'])->name('resend.otp');
-        // end
-    });
 
 
     Route::middleware('auth', 'restrict-admin-retailer', 'VerifyOtp','CheckStatus')->group(function () {

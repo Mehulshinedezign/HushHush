@@ -80,6 +80,7 @@
         $(document).ready(function() {
             $('#emailOtpVerify').submit(function(e) {
                 e.preventDefault();
+                // alert("hello");
                 var url = $(this).attr('action');
                 var formData = new FormData($(this)[0]);
                 response = ajaxCall(url, 'post', formData)
