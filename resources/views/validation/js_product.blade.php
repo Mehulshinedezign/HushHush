@@ -219,10 +219,26 @@
         });
         
         
-        $('#product_address1,#product_address12, #product_country, #product_state, #product_city').on('change', function() {
-            $('#product_address').valid();
-        });
+        $('#product_address1,#product_address2, #product_country, #product_state, #product_city').on('change', function() {
+            // alert('hello');
+            // $('#product_address').valid();
+            $('#addProduct').validate({
+                rules: rules,
+                messages: messages,
+                errorElement: 'span',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
 
     });
+});
     // Initialize form validation
 </script>

@@ -42,7 +42,7 @@
                                 </button>
                             </li>
                         </ul>
-                        <div class="form-group m-0">
+                        {{-- <div class="form-group m-0">
                             <div class="formfield">
                                 <select name="" id="" class="form">
                                     <option value="">Past 2 Months</option>
@@ -53,7 +53,7 @@
                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="dorpdown" width="13">
                                 </span>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
 
 

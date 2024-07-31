@@ -194,7 +194,7 @@ class ProductController extends Controller
             $sortedDates = $disabledDates->sortBy('disable_date');
             $firstDate = \Carbon\Carbon::parse($sortedDates->first()->disable_date)->format('Y-m-d');
             $lastDate = \Carbon\Carbon::parse($sortedDates->last()->disable_date)->format('Y-m-d');
-        
+
             $disable_dates[] = $firstDate . ' - ' . $lastDate;
         } else {
             $disable_dates[] = '';

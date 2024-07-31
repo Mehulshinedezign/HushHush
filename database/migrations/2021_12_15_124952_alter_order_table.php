@@ -14,7 +14,6 @@ class AlterOrderTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn(['commission_type', 'commission_value']);
             $table->enum('security_option', ['security', 'insurance'])->after('discounted_amount')->nullable();
             $table->enum('security_option_type', ['Percentage', 'Fixed'])->after('security_option')->nullable();
             $table->decimal('security_option_value')->after('security_option_type')->nullable();

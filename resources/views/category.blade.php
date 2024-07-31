@@ -417,7 +417,7 @@
 </section>
 
 
-<section class="three-feature-sec">
+<!-- <section class="three-feature-sec">
     <div class="container">
         <div class="three-feature-wrapper">
             <div class="three-feature-box">
@@ -437,7 +437,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 
 
