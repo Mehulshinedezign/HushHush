@@ -77,6 +77,7 @@ class Kernel extends HttpKernel
         'restrict-admin-retailer' => \App\Http\Middleware\RestrictAdminRetailerMiddleware::class,
         'localization' => \App\Http\Middleware\Localization::class,
         'VerifyOtp' => \App\Http\Middleware\VerifyOtpMiddleware::class,
+        'CheckStatus' => \App\Http\Middleware\CheckStatus::class,
 
     ];
     protected $commands = [

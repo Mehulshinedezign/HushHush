@@ -61,7 +61,7 @@
                             </div>
                             <div class="product-review-main">
                                 <div class="product-review-heading">
-                                    <p>120 Reviews</p>
+                                    <p>{{ $product->ratings_count }} Ratings & Reviews</p>
                                     <div class="form-group">
                                         <div class="formfield">
                                             <select name="" id="">
@@ -75,107 +75,43 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="product-review-body">
-                                    <ul class="product-review-list">
-                                        <li>
-                                            <div class="product-review-box">
-                                                <div class="product-review-profile">
-                                                    <div class="review-profile-box">
-                                                        <div class="sm-dp-box">
-                                                            <img src="{{ asset('front/images/pro-1.png') }}" alt="img">
-                                                        </div>
-                                                        <div class="sm-dp-data">
-                                                            <h3>Desirae Vaccaro</h3>
-                                                            <div class="review-profile-rating-box">
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
+
+                                @if (count($product->ratings) > 0)
+                                    @foreach ($product->ratings as $rating)
+                                        <div class="product-review-body">
+                                            <ul class="product-review-list">
+                                                <li>
+                                                    <div class="product-review-box">
+                                                        <div class="product-review-profile">
+                                                            <div class="review-profile-box">
+                                                                <div class="sm-dp-box">
+                                                                    @if ($rating->user->profile_file)
+                                                                        <img src="{{ asset('storage/' . $rating->user->profile_file) }}" alt="img">
+                                                                    @else
+                                                                        <img src="{{ asset('front/images/pro-1.png') }}" alt="img">
+                                                                    @endif
+                                                                </div>
+                                                                <div class="sm-dp-data">
+                                                                    <h3>{{ @$rating->user->name }}</h3>
+                                                                    <div class="review-profile-rating-box">
+                                                                        @for ($i = 0; $i < $rating->rating; $i++)
+                                                                        <i class="fa-sharp fa-solid fa-star"></i>
+                                                                        @endfor
+                                                                    </div>
+                                                                </div>
                                                             </div>
+                                                            <p>{{ @$rating->created_at->format('M d, Y') }}</p>
+                                                        </div>
+                                                        <div class="product-review-message">
+                                                            <p>{{ @$rating->review }}</p>
                                                         </div>
                                                     </div>
-                                                    <p>June 11, 2023</p>
-                                                </div>
-                                                <div class="product-review-message">
-                                                    <p>Safer For The Environment: Our denim factory partner recycles 98% of
-                                                        their water using reverse osmosis filtration and keeps byproducts
-                                                        out of the environment by mixing.</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="product-review-box">
-                                                <div class="product-review-profile">
-                                                    <div class="review-profile-box">
-                                                        <div class="sm-dp-box">
-                                                            <img src="{{ asset('front/images/pro-1.png') }}" alt="img">
-                                                        </div>
-                                                        <div class="sm-dp-data">
-                                                            <h3>Desirae Vaccaro</h3>
-                                                            <div class="review-profile-rating-box">
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <p>June 11, 2023</p>
-                                                </div>
-                                                <div class="product-review-message">
-                                                    <p>Safer For The Environment: Our denim factory partner recycles 98% of
-                                                        their water using reverse osmosis filtration and keeps byproducts
-                                                        out of the environment by mixing.</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="product-review-box">
-                                                <div class="product-review-profile">
-                                                    <div class="review-profile-box">
-                                                        <div class="sm-dp-box">
-                                                            <img src="{{ asset('front/images/pro-1.png') }}"
-                                                                alt="img">
-                                                        </div>
-                                                        <div class="sm-dp-data">
-                                                            <h3>Desirae Vaccaro</h3>
-                                                            <div class="review-profile-rating-box">
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                                <a href="#"><i class="fa-solid fa-star"
-                                                                        style="color: #DEE0E3;"></i></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <p>June 11, 2023</p>
-                                                </div>
-                                                <div class="product-review-message">
-                                                    <p>Safer For The Environment: Our denim factory partner recycles 98% of
-                                                        their water using reverse osmosis filtration and keeps byproducts
-                                                        out of the environment by mixing.</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    @endforeach
+
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -193,14 +129,14 @@
                                 <div class="pro-desc-prize">
                                     <h3>${{ $product->rent_week }}</h3>
                                     <div class="badge day-badge">
-                                        Per month
+                                        Per week
                                     </div>
 
                                 </div>
                                 <div class="pro-desc-prize">
                                     <h3>${{ $product->rent_month }}</h3>
                                     <div class="badge day-badge">
-                                        Per Year
+                                        Per month
                                     </div>
 
                                 </div>
@@ -212,7 +148,7 @@
                                 </div>
                                 <div class="pro-desc-info-box">
                                     <h4>Size:</h4>
-                                    <p>{{ $product->get_size->name ?? 'L' }}</p>
+                                    <p>{{ @$product->size ?? 'L' }}</p>
                                 </div>
 
                             </div>
@@ -235,9 +171,10 @@
                             </div> --}}
                             {{-- <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
                                 data-bs-target="#bookitem-sidebar" aria-controls="offcanvasRight">Book Now</a> --}}
-
-                            <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                                data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Ask Query</a>
+                            @if (@$product->user_id != auth()->user()->id)
+                                <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
+                                    data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Ask Query</a>
+                            @endif
 
                             <div class="pro-info-accordian">
                                 <div class="accordion" id="accordionExample">
@@ -294,57 +231,58 @@
                             <div class="pro-dec-rating-main">
                                 <div class="pro-rating-head">
                                     <h4>Ratings & Reviews</h4>
-                                    <a href="javascript:void(0)">Leave Review</a>
+                                    <a href="javascript:void(0)" data-toggle="modal" data-rating_product_id="{{$product->id}}"
+                                         data-target="#rating_review">Leave Review</a>
                                 </div>
                                 <div class="pro-rating-body">
                                     <div class="pro-rating-left">
-                                        <h3>4.3</h3>
-                                        <p>4,376 Ratings & 311 Reviews</p>
+                                        <h3>{{ $product->average_rating }}</h3>
+                                        <p>{{$product->ratings()->count()}} & {{ $product->ratings()->count() }} Reviews</p>
                                     </div>
                                     <div class="pro-rating-right">
                                         <ul>
                                             <li>
                                                 <p>5</p>
-                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <i class="fa-solid fa-star"></i>
                                                 <div class="progress">
-                                                    <div class="progress-bar w-100" style="background-color: #517B5D;"
-                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                    <div class="progress-bar " role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['fivestar'] }}%" aria-valuenow="100" aria-valuemin="0"
                                                         aria-valuemax="100"></div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <p>4</p>
-                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <i class="fa-solid fa-star"></i>
                                                 <div class="progress">
-                                                    <div class="progress-bar w-75" style="background-color: #517B5D;"
-                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['fourstar'] }}%" aria-valuenow="100" aria-valuemin="0"
                                                         aria-valuemax="100"></div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <p>3</p>
-                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <i class="fa-solid fa-star"></i>
                                                 <div class="progress">
-                                                    <div class="progress-bar w-50" style="background-color: #517B5D;"
-                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['threestar'] }}%" aria-valuenow="100" aria-valuemin="0"
                                                         aria-valuemax="100"></div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <p>2</p>
-                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <i class="fa-solid fa-star"></i>
                                                 <div class="progress">
-                                                    <div class="progress-bar w-25" style="background-color: #CC9C55"
-                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['twostar'] }}%" aria-valuenow="100" aria-valuemin="0"
                                                         aria-valuemax="100"></div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <p>1</p>
-                                                <i class="fa-solid fa-star" style="color: #DEE0E3;"></i>
+                                                <i class="fa-solid fa-star"></i>
                                                 <div class="progress">
-                                                    <div class="progress-bar w-25" style="background-color: #C66060"
-                                                        role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['onestar'] }}%" aria-valuenow="100" aria-valuemin="0"
                                                         aria-valuemax="100"></div>
                                                 </div>
                                             </li>
@@ -357,115 +295,115 @@
                 </div>
             </div>
         </div>
+        <div class="offcanvas offcanvas-end inquiry-sidebar" tabindex="-1" id="inquiry-sidebar"
+            aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Ask query</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div class="book-item-sidebar">
+                    <div class="book-item-main">
+                        <div class="book-item-profile">
+                            <div class="book-item-profile-img">
+                                <!-- <img src="images/style-single2.png" alt="img"> -->
+                                @if ($productImages->isNotEmpty())
+                                    @foreach ($productImages as $image)
+                                        <div><img src="{{ $image->file_path }}" alt="" loading="lazy"></div>
+                                    @endforeach
+                                @else
+                                    <div><img src="{{ asset('front/images/pro-description-img.png') }}" alt="img"></div>
+                                @endif
+                            </div>
+                            <div class="book-item-profile-info">
+                                <h3>{{ @$product->name}}</h3>
+                                <div class="pro-desc-prize-wrapper">
+                                    <div class="pro-desc-prize">
+                                        <h3>${{ @$product->rent_day }}</h3>
+                                        <div class="badge day-badge">
+                                            Per day
+                                        </div>
+
+                                    </div>
+                                    <div class="pro-desc-prize">
+                                        <h3>${{ @$product->rent_week }}</h3>
+                                        <div class="badge day-badge">
+                                            Per week
+                                        </div>
+
+                                    </div>
+                                    <div class="pro-desc-prize">
+                                        <h3>${{ @$product->rent_month }}</h3>
+                                        <div class="badge day-badge">
+                                            Per month
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- <x-alert /> --}}
+                        <form id="Sendquery">
+                            @csrf
+                            <input type="hidden" name="for_user" value="{{ jsencode_userdata($product->user_id) }}">
+                            <input type="hidden" name="product_id" value="{{ jsencode_userdata($product->id) }}">
+                            <div class="book-item-date">
+                                <div class="form-group">
+                                    <label for="">Select your Rental date</label>
+                                    <div class="formfield">
+                                        <input type="text" name="rental_dates"
+                                            class="form-control rent_dates form-class @error('rental_dates') is-invalid @enderror"
+                                            placeholder="Select rental date">
+                                        <span class="form-icon">
+                                            <!-- <img src="images/calender-icon.svg" alt="img"> -->
+                                            <img src="{{ asset('front/images//calender-icon.svg') }}" alt="img">
+                                        </span>
+                                    </div>
+                                    @error('rental_dates')
+                                        <span class="invalid-feedback" role="alert">
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group my-3">
+                                    <label for="">Description</label>
+                                    <div class="formfield">
+                                        <textarea name="description" id="" cols="30" rows="5"
+                                            class="form-control form-class @error('description') is-invalid @enderror" placeholder="Description"></textarea>
+                                    </div>
+                                    @error('description')
+                                        <span class="invalid-feedback" role="alert">
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="item-pickup-loc-main">
+
+                                    <h4>Pick up Location</h4>
+                                    @if(@$product->productCompleteLocation->manul_pickup_location == '1')
+                                        <p>{{ $product->productCompleteLocation->pick_up_location ?? '' }}</p>
+                                    @endif
+
+                                </div>
+                            </div>
+
+                            <button type="button" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
+                                data-bs-target="#checkout-sidebar" aria-controls="offcanvasRight"
+                                id="Askquery">Next</button>
+
+                        </form>
+                        {{-- <div class="book-item-footer">
+                            <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
+                                data-bs-target="#checkout-sidebar" aria-controls="offcanvasRight">Next</a>
+                        </div> --}}
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 @endsection
 
-<div class="offcanvas offcanvas-end inquiry-sidebar" tabindex="-1" id="inquiry-sidebar"
-    aria-labelledby="offcanvasExampleLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Ask query</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        <div class="book-item-sidebar">
-            <div class="book-item-main">
-                <div class="book-item-profile">
-                    <div class="book-item-profile-img">
-                        <!-- <img src="images/style-single2.png" alt="img"> -->
-                        @if ($productImages->isNotEmpty())
-                            @foreach ($productImages as $image)
-                                <div><img src="{{ $image->file_path }}" alt="" loading="lazy"></div>
-                            @endforeach
-                        @else
-                            <div><img src="{{ asset('front/images/pro-description-img.png') }}" alt="img"></div>
-                        @endif
-                    </div>
-                    <div class="book-item-profile-info">
-                        <h3>Pennington Dress</h3>
-                        <div class="pro-desc-prize-wrapper">
-                            <div class="pro-desc-prize">
-                                <h3>$23</h3>
-                                <div class="badge day-badge">
-                                    Per day
-                                </div>
-
-                            </div>
-                            <div class="pro-desc-prize">
-                                <h3>$23</h3>
-                                <div class="badge day-badge">
-                                    Per month
-                                </div>
-
-                            </div>
-                            <div class="pro-desc-prize">
-                                <h3>$32</h3>
-                                <div class="badge day-badge">
-                                    Per Year
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {{-- <x-alert /> --}}
-                <form id="Sendquery">
-                    @csrf
-                    <input type="hidden" name="for_user" value="{{ jsencode_userdata($product->user_id) }}">
-                    <input type="hidden" name="product_id" value="{{ jsencode_userdata($product->id) }}">
-                    <div class="book-item-date">
-                        <div class="form-group">
-                            <label for="">Select your Rental date</label>
-                            <div class="formfield">
-                                <input type="text" name="rental_dates"
-                                    class="form-control rent_dates form-class @error('rental_dates') is-invalid @enderror"
-                                    placeholder="Select rental date">
-                                <span class="form-icon">
-                                    <!-- <img src="images/calender-icon.svg" alt="img"> -->
-                                    <img src="{{ asset('front/images//calender-icon.svg') }}" alt="img">
-                                </span>
-                            </div>
-                            @error('rental_dates')
-                                <span class="invalid-feedback" role="alert">
-                                    {{ $message }}
-                                </span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group my-3">
-                            <label for="">Description</label>
-                            <div class="formfield">
-                                <textarea name="description" id="" cols="30" rows="5"
-                                    class="form-control form-class @error('description') is-invalid @enderror" placeholder="Description"></textarea>
-                            </div>
-                            @error('description')
-                                <span class="invalid-feedback" role="alert">
-                                    {{ $message }}
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="item-pickup-loc-main">
-
-                            <h4>Pick up Location</h4>
-                            @if(@$product->productCompleteLocation->manul_pickup_location == '1')
-                                <p>{{ $product->productCompleteLocation->pick_up_location ?? '' }}</p>
-                            @endif
-
-                        </div>
-                    </div>
-
-                    <button type="button" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                        data-bs-target="#checkout-sidebar" aria-controls="offcanvasRight"
-                        id="Askquery">Next</button>
-
-                </form>
-                {{-- <div class="book-item-footer">
-                    <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                        data-bs-target="#checkout-sidebar" aria-controls="offcanvasRight">Next</a>
-                </div> --}}
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -536,9 +474,7 @@
                         success: function(response) {
                             var modalContent = '';
                             if (response.success) {
-                                modalContent =
-                                    '<div class="alert alert-success" role="alert">' + response
-                                    .message + '</div>';
+                                modalContent = `<div class="success-text" role="alert"><img src="`+ "{{asset('assets/img/query.png')}}"+`" style="max-width: 180px;">`+ response.message +`</div>`;
                             } else {
                                 modalContent = '<div class="alert alert-danger" role="alert">' +
                                     response.message + '</div>';
@@ -552,10 +488,11 @@
                             $('#query_msg').modal('show');
                             $('#Askquery').prop('disabled', false);
                             $("#Sendquery")[0].reset();
-
+                            // location.reload();
                             // Add click event to close button
                             $('#closeModalBtn').on('click', function() {
                                 $('#query_msg').modal('hide');
+                                location.reload();
                             });
                         },
                         error: function(response) {
@@ -565,10 +502,11 @@
                                 '<div class="alert alert-danger" role="alert">Please fill all fields or processing your request.</div>'
                             );
                             $('#query_msg').modal('show');
-
+                            // location.reload();
                             // Add click event to close button
                             $('#closeModalBtn').on('click', function() {
                                 $('#query_msg').modal('hide');
+                                location.reload();
                             });
                         }
                     });
@@ -576,12 +514,60 @@
                 }
             })
 
-
-
             // date range jquery
+
+            // var queryDates = @json($querydates);
+
+            // console.log(queryDates);
+            // var disabledDateRanges = queryDates.map(function(query) {
+            //     var dateRange = query.date_range.split(' - ');
+            //     return {
+            //         start: moment(dateRange[0]),
+            //         end: moment(dateRange[1])
+            //     };
+            // });
+
+            // $('.rent_dates').daterangepicker({
+            //     autoUpdateInput: false,
+            //     locale: {
+            //         format: 'YYYY-MM-DD'
+            //     },
+            //     drops: 'down',
+            //     opens: 'right',
+            //     minDate: moment().startOf('day'),
+            //     isInvalidDate: function(date) {
+            //         return disabledDateRanges.some(function(range) {
+            //             return date.isSame(range.start, 'day') || date.isSame(range.end, 'day');
+            //         });
+            //     }
+            // }).on('apply.daterangepicker', function(ev, picker) {
+            //     $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            // });
+
+            // $('.daterange-btn').daterangepicker({
+            //     ranges: {
+            //         'Today': [moment(), moment()],
+            //         'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            //         'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            //         'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            //         'This Month': [moment().startOf('month'), moment().endOf('month')],
+            //         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            //     },
+            //     autoUpdateInput: false,
+            //     minDate: moment().startOf('day'),
+            //     isInvalidDate: function(date) {
+            //         return disabledDateRanges.some(function(range) {
+            //             return date.isSame(range.start, 'day') || date.isSame(range.end, 'day');
+            //         });
+            //     }
+            // }).on('apply.daterangepicker', function(ev, picker) {
+            //     $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
+            // });
+
+
             var queryDates = @json($querydates);
-
-
+            var disableDates = @json($disable_dates);
+            console.log(queryDates);
             var disabledDateRanges = queryDates.map(function(query) {
                 var dateRange = query.date_range.split(' - ');
                 return {
@@ -589,6 +575,28 @@
                     end: moment(dateRange[1])
                 };
             });
+
+            var noneAvailableDates = disableDates.map(function(dateRange) {
+                var dates = dateRange.split(' - ');
+                return {
+                    start: moment(dates[0]),
+                    end: moment(dates[1])
+                };
+            }).filter(function(range) {
+                return range !== null;
+            });
+
+            function isDateDisabled(date) {
+                var inQueryDates = disabledDateRanges.some(function(range) {
+                    return date.isBetween(range.start, range.end, 'day', '[]');
+                });
+
+                var inDisableDates = noneAvailableDates.some(function(range) {
+                    return date.isBetween(range.start, range.end, 'day', '[]');
+                });
+
+                return inQueryDates || inDisableDates;
+            }
 
             $('.rent_dates').daterangepicker({
                 autoUpdateInput: false,
@@ -598,16 +606,20 @@
                 drops: 'down',
                 opens: 'right',
                 minDate: moment().startOf('day'),
-                isInvalidDate: function(date) {
-                    return disabledDateRanges.some(function(range) {
-                        return date.isBetween(range.start, range.end, null, '[]');
-                    });
-                }
+                isInvalidDate: isDateDisabled
             }).on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
             });
 
             $('.daterange-btn').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                drops: 'down',
+                opens: 'right',
+                minDate: moment().startOf('day'),
+                isInvalidDate: isDateDisabled,
                 ranges: {
                     'Today': [moment(), moment()],
                     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -615,13 +627,6 @@
                     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                     'This Month': [moment().startOf('month'), moment().endOf('month')],
                     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                },
-                autoUpdateInput: false,
-                minDate: moment().startOf('day'),
-                isInvalidDate: function(date) {
-                    return disabledDateRanges.some(function(range) {
-                        return date.isBetween(range.start, range.end, null, '[]');
-                    });
                 }
             }).on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));

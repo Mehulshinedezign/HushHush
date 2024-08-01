@@ -7,102 +7,40 @@
 @endsection
 
 @section('content')
-    <section class="rental-request-bx">
+    <section class="rental-request-bx min-height-100">
         <div class="container">
             <div class="rental-request-wrapper">
                 <div class="rental-header">
-                    <h2>Query List</h2>
+                    {{-- @dd($user); --}}
+                    <h2>Receive query List</h2>
                     <div class="form-group">
-                        <div class="formfield">
+                        {{-- <div class="formfield">
                             <input type="text" placeholder="Select Date" class="form-control">
                             <span class="form-icon">
                                 <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img" class="cal-icon">
                             </span>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
-                @if ($querydatas->isNotEmpty())
-                    <div class="inquiry-list-main mt-4">
-                        <div class="db-table">
-                            <div class=" tb-table">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Name</th>
-                                            <th>Query</th>
-                                            <th>date</th>
-                                            <th>Set price</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($querydatas as $query)
-                                            <tr class="user_query-{{$query->id}}">
-                                                <td>
-                                                    <a href="#" class="user-table-profile">
-                                                        <div class="table-profile ">
-                                                            @if ($query->product)
-                                                                <img src="{{ $query->product->thumbnailImage->file_path ?? '' }}"
-                                                                    alt="tb-profile" width="26" height="27">
-                                                            @else
-                                                                <img src="{{ asset('front/images/table-profile1.png') }}"
-                                                                    alt="tb-profile" width="26" height="27">
-                                                            @endif
+                <div class="custom-tab">
+                    <ul class="custom-tab-list">
+                        <li class="tab-item active" data-status="PENDING" data-user="lender"><a
+                            href="javascript:void(0)">Pending</a></li>
+                        <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a
+                                href="javascript:void(0)">Accepted</a></li>
+                        <li class="tab-item" data-status="REJECTED" data-user="lender"><a
+                                href="javascript:void(0)">Rejected</a></li>
+                        <li class="tab-item" data-status="COMPLETED" data-user="lender"><a href="javascript:void(0)">Completed</a></li>
 
-                                                        </div>
-                                                    </a>
-
-                                                </td>
-                                                <td>
-                                                    <div class="user-table-head">
-                                                        <h5>{{ $query->product->name ?? '' }}</h5>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p class="Inquiry-desc">{{ $query->query_message ?? '' }}</p>
-                                                </td>
-                                                <td>{{ $query->date_range ?? '' }}</td>
-                                                <td>
-                                                    <input type="text" id="negotiate_price_{{ $query->id }}"
-                                                        placeholder="Enter negotiate price">
-                                                </td>
-                                                <td class="user-active">
-                                                    <div class="inquiry-actions">
-
-                                                        <a href="javascript:void(0)" class="button accept-btn small-btn"
-                                                            onclick="acceptQuery('{{ $query->id }}')">
-                                                            <i class="fa-solid fa-circle-check"></i> Accept
-                                                        </a>
-                                                        <a href="javascript:void(0)" class="button reject-btn small-btn"
-                                                            onclick="confirmReject(event, '{{ $query->id }}')">
-                                                            <i class="fa-solid fa-circle-check"></i> Reject
-                                                        </a>
-                                                        <a href="#" class="button outline-btn small-btn"><i
-                                                                class="fa-solid fa-comments"></i> Chat</a>
-                                                        <a href="{{ route('query_view') }}"
-                                                            class="button primary-btn small-btn single_query_Modal"
-                                                            data-bs-toggle="modal"
-                                                            data-product-id="{{ $query->product_id }}">
-                                                            <i class="fa-solid fa-eye"></i> View
-                                                        </a>
-
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    </ul>
+                </div>
+                <div id="query-list-container">
+                    <div id="query-list-container">
+                        <x-receive-query :querydatas="$querydatas" :accept="$accept" />
                     </div>
-                @else
-                    <div class="list-empty-box">
-                        <img src="{{ asset('front/images/no-products.svg') }}">
-                        <h3 class="text-center">Receive Query is empty</h3>
-                    </div>
-                @endif
+
+                </div>
+
             </div>
         </div>
     </section>
@@ -123,38 +61,41 @@
 @endsection
 
 @push('scripts')
-    @includeFirst(['validation'])
+    {{-- @includeFirst(['validation']) --}}
     <script>
         $(document).ready(function() {
-            $('.single_query_Modal').on('click', function(event) {
+            var myModal = new bootstrap.Modal(document.getElementById('single_query_Modal'));
+
+            $(document).on('click', '.single_query', function(event) {
                 event.preventDefault();
+                console.log("Query view clicked");
                 var url = $(this).attr('href');
-                var productId = $(this).data('product-id');
+                var queryId = $(this).data('query-id');
 
                 $.ajax({
                     url: url,
                     type: 'GET',
                     data: {
-                        product_id: productId
+                        query_id: queryId
                     },
                     success: function(response) {
                         $('#single_query_Modal .modal-body').html(response.data);
-                        $('#single_query_Modal').modal('show');
+                        myModal.show();
                     },
                     error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
+                        console.error('Error loading query details:', error);
                     }
                 });
             });
         });
 
         // accept query
-        function acceptQuery(queryId) {
-            var price = document.getElementById('negotiate_price_' + queryId).value;
-            var encodedPrice = (price);
-            var url = `{{ url('/accept_query') }}/${queryId}?negotiate_price=${encodedPrice}`;
-            window.location.href = url;
-        }
+        // function acceptQuery(queryId) {
+        //     var price = document.getElementById('negotiate_price_' + queryId).value;
+        //     var encodedPrice = (price);
+        //     var url = `{{ url('/accept_query') }}/${queryId}?negotiate_price=${encodedPrice}`;
+        //     window.location.href = url;
+        // }
 
         // reject query
         function confirmReject(event, queryId) {
@@ -181,7 +122,85 @@
         function rejectQuery(queryId) {
             var url = `{{ url('/reject_query') }}/${queryId}`;
             window.location.href = url;
-            $('.user_query-'+queryId).remove();
+            $('.user_query-' + queryId).remove();
+        }
+
+
+        function confirmAccept(event, queryId, date_range, rentDay, rentWeek, rentMonth) {
+            event.preventDefault();
+            let price = $(`.negotiation_price_${queryId}`).val();
+
+            if (!price) {
+                price = calculatePrice(date_range, rentDay, rentWeek, rentMonth);
+            }
+            if(price<= 0 || isNaN(price))
+            {
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Please enter a valid price',
+                    'position': 'topRight',
+                });
+                return false;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: `Are you sure you want to accept this product $${price} `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#1B1B1B',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, accept it!',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('body').addClass('loading');
+                    acceptQuery(queryId, price);
+                }
+            });
+        }
+
+        function acceptQuery(queryId, price) {
+            const encodedPrice = encodeURIComponent(price);
+            const url = `{{ url('/accept_query') }}/${queryId}?negotiate_price=${encodedPrice}`;
+            window.location.href = url;
+        }
+
+        function calculatePrice(dateRange, rentDay, rentWeek, rentMonth) {
+            const [startDateStr, endDateStr] = dateRange.split(' - ');
+            const startDate = new Date(startDateStr.trim());
+            const endDate = new Date(endDateStr.trim());
+
+            const days = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+
+            let price = 0;
+
+            if (days > 30) {
+                const months = Math.floor(days / 30);
+                let remainingDays = days % 30;
+                if (remainingDays > 7) {
+                    const weeks = Math.floor(remainingDays / 7);
+                    remainingDays = remainingDays % 7;
+                    price = (months * rentMonth) + (weeks * rentWeek) + (remainingDays * rentDay);
+                } else {
+                    price = (months * rentMonth) + (remainingDays * rentDay);
+                }
+            } else if (days > 7) {
+                const weeks = Math.floor(days / 7);
+                const remainingDays = days % 7;
+                price = (weeks * rentWeek) + (remainingDays * rentDay);
+            } else {
+                price = days * rentDay;
+            }
+
+            return price;
+
+
         }
     </script>
+
+    {{-- chat --}}
+
+    {{-- chat --}}
 @endpush

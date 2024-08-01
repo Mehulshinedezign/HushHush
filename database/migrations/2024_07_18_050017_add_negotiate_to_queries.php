@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->enum('order_status', ['0', '1', '2'])->default('0')->after('status');
+        Schema::table('queries', function (Blueprint $table) {
+            $table->integer('negotiate_price')->nullable()->after('status');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            //
+        Schema::table('queries', function (Blueprint $table) {
+            $table->dropColumn('negotiate');
         });
     }
 };

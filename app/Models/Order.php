@@ -16,7 +16,7 @@ class Order extends Model
      * @var string[]
      */
     protected $fillable = [
-        'user_id', 'location_id', 'transaction_id', 'from_date', 'to_date', 'from_hour', 'from_minute', 'to_hour', 'to_minute', 'order_date', 'cancelled_date', 'pickedup_date', 'returned_date', 'promocode', 'discount_type', 'discount_percentage', 'discounted_amount', 'subtotal', 'tax', 'taxrate', 'total', 'status', 'order_status', 'dispute_status', 'dispute_date', 'customer_confirmed_pickedup', 'retailer_confirmed_pickedup', 'customer_confirmed_returned', 'retailer_confirmed_returned', 'security_option', 'security_option_value', 'security_option_type', 'security_option_amount', 'customer_transaction_fee_type', 'customer_transaction_fee_value', 'customer_transaction_fee_amount', 'order_commission_type', 'order_commission_value', 'order_commission_amount', 'vendor_received_amount', 'cancellation_note','product_id','query_id'
+        'user_id', 'query_id', 'product_id', 'transaction_id', 'from_date', 'to_date', 'from_hour', 'from_minute', 'order_date', 'cancelled_date', 'pickedup_date', 'returned_date', 'promocode', 'discount_type', 'discount_percentage', 'discounted_amount', 'subtotal', 'tax', 'taxrate', 'total', 'status', 'customer_confirmed_pickedup', 'retailer_confirmed_pickedup', 'customer_confirmed_returned', 'retailer_confirmed_returned', 'cancellation_note', 'dispute_status', 'dispute_date'
     ];
 
     protected $appends = ['cancellation_time_left'];
@@ -123,6 +123,15 @@ class Order extends Model
      * @var object
      */
 
+    public function product()
+    {
+        return $this->belongsTo(Product::class)->withTrashed();
+    }
+
+    public function customerquery()
+    {
+        return $this->belongsTo(Query::class, 'query_id');
+    }
     public function customerPickedUpImages()
     {
         return $this->hasMany(OrderImage::class)->where('type', 'pickedup')->where('uploaded_by', 'customer')->orderByDesc('id');
@@ -230,5 +239,10 @@ class Order extends Model
         } else {
             return $q->where('to_date',  date('Y-m-d'));
         }
+    }
+
+    public function queryOf()
+    {
+        return $this->hasOne(Query::class,"id","query_id");
     }
 }

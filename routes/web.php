@@ -19,6 +19,12 @@ use App\Http\Controllers\StripeOnboardingController;
 //     return redirect()->route('login');
 // });
 
+    // verify otp
+    Route::get('verify-otp', [App\Http\Controllers\VerifyOtpController::class, 'showVerifyOtpForm'])->name('auth.verify_otp_form');
+    Route::post('/verify/email/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyEmailOtp'])->name('verify.email.otp');
+    Route::post('/verify/phone/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyPhoneOtp'])->name('verify.phone.otp');
+    Route::get('/resend-otp/{type}', [App\Http\Controllers\VerifyOtpController::class, 'resendOtp'])->name('resend.otp');
+
 Route::middleware('localization', 'prevent-back-history',)->group(function () {
 
     Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
@@ -42,18 +48,9 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
         return redirect()->back();
     });
 
-    // verify otp
-    Route::middleware('auth')->group(function () {
-        // verifi otp flow
-        Route::get('verify-otp', [App\Http\Controllers\VerifyOtpController::class, 'showVerifyOtpForm'])->name('auth.verify_otp_form');
-        Route::post('/verify/email/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyEmailOtp'])->name('verify.email.otp');
-        Route::post('/verify/phone/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyPhoneOtp'])->name('verify.phone.otp');
-        Route::get('/resend-otp/{type}', [App\Http\Controllers\VerifyOtpController::class, 'resendOtp'])->name('resend.otp');
-        // end
-    });
 
 
-    Route::middleware('auth', 'restrict-admin-retailer', 'VerifyOtp')->group(function () {
+    Route::middleware('auth', 'restrict-admin-retailer', 'VerifyOtp','CheckStatus')->group(function () {
 
 
         Route::get('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index');
@@ -90,7 +87,11 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
         Route::get('view/{slug}', [App\Http\Controllers\Customer\CmsController::class, 'cms'])->name('view');
     });
 
-    Route::middleware('auth')->group(function () {
+    // card payment
+    Route::get('card/details/{query?}/{price?}', [App\Http\Controllers\BookingController::class, 'cardDetail'])->name('card.details');
+    Route::post('charge', [App\Http\Controllers\BookingController::class, 'charge'])->name('charge');
+
+    Route::middleware('auth','CheckStatus')->group(function () {
         //Retailer order
         Route::match(['get', 'post'], 'retailer/order', [App\Http\Controllers\Retailer\OrderController::class, 'index'])->name('retailercustomer');
         Route::get('order/{order}', [App\Http\Controllers\Retailer\OrderController::class, 'viewOrder'])->name('retailervieworder');
@@ -133,14 +134,14 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
 
         // country state city routes
         Route::get('states/{country}', [App\Http\Controllers\AjaxController::class, 'states'])->name('states');
-        Route::get('cities', [App\Http\Controllers\AjaxController::class, 'cities'])->name('cities');
+        Route::get('cities/{stateId}', [App\Http\Controllers\AjaxController::class, 'cities'])->name('cities');
 
         Route::any('stripe/onboarding', [StripeOnboardingController::class, 'redirectToStripe'])->name('stripe.onboarding.redirect');
         Route::get('stripe/onboarding/refresh', [StripeOnboardingController::class, 'refreshOnboarding'])->name('stripe.onboarding.refresh');
         Route::get('stripe/onboarding/complete', [StripeOnboardingController::class, 'completeOnboarding'])->name('stripe.onboarding.complete');
     });
     // logged in routes
-    Route::middleware(['auth', 'customer'])->group(function () {
+    Route::middleware(['auth', 'customer','CheckStatus'])->group(function () {
         Route::get('retailer/chat/{order}', [App\Http\Controllers\Retailer\OrderController::class, 'orderChat'])->name('retalerorderchat');
 
         Route::post('add-favorite', [App\Http\Controllers\Customer\ProductController::class, 'addFavorite'])->name('addfavorite');
@@ -177,7 +178,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
             // checkout page
             Route::post('checkout/{product}', [App\Http\Controllers\StripeController::class, 'checkout'])->name('checkout');
             Route::get('billing/{token}', [App\Http\Controllers\StripeController::class, 'billing'])->name('billing');
-            Route::post('charge', [App\Http\Controllers\StripeController::class, 'charge'])->name('charge');
+            // Route::post('charge', [App\Http\Controllers\StripeController::class, 'charge'])->name('charge');
             Route::get('payment-success', [App\Http\Controllers\StripeController::class, 'success'])->name('paymentsuccess');
             Route::get('payment-failed', [App\Http\Controllers\StripeController::class, 'failed'])->name('paymentfailed');
 
@@ -198,9 +199,12 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
                 Route::get('order/{order}/chat/{chat}/download', [App\Http\Controllers\Customer\OrderController::class, 'downloadImage'])->name('downloadchatattachment');
                 Route::get('order/{order}/confirm-pick-up', [App\Http\Controllers\Customer\OrderController::class, 'confirmPickUp'])->name('confirmpickup');
                 Route::get('order/{order}/confirm-return', [App\Http\Controllers\Customer\OrderController::class, 'confirmReturn'])->name('confirmreturn');
-                Route::post('order/{order}/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
+                // Route::post('order/{order}/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
 
+                // card payment
+                Route::get('card/details/{query?}/{price?}', [App\Http\Controllers\BookingController::class, 'cardDetail'])->name('card.details');
 
+                Route::post('charge', [App\Http\Controllers\BookingController::class, 'charge'])->name('charge');
 
 
                 //Cancel Order
@@ -217,13 +221,21 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
             Route::get('order/{order}/chat', [App\Http\Controllers\Customer\OrderController::class, 'orderChat'])->name('orderchat');
 
             // Query section code here
-            Route::post('query',[App\Http\Controllers\Customer\QueryController::class,'store'])->name('query');
-            Route::get('my_query',[App\Http\Controllers\Customer\QueryController::class,'myQuery'])->name('my_query');
+            Route::post('query', [App\Http\Controllers\Customer\QueryController::class, 'store'])->name('query');
+            Route::get('my_query', [App\Http\Controllers\Customer\QueryController::class, 'myQuery'])->name('my_query');
             Route::get('query_view', [App\Http\Controllers\Customer\QueryController::class, 'view'])->name('query_view');
-            Route::get('receive_query',[App\Http\Controllers\Customer\QueryController::class,'receiveQuery'])->name('receive_query');
+            Route::get('receive_query', [App\Http\Controllers\Customer\QueryController::class, 'receiveQuery'])->name('receive_query');
             Route::get('accept_query/{id}', [App\Http\Controllers\Customer\QueryController::class, 'acceptQuery'])->name('accept_query');
             Route::get('reject_query/{id}', [App\Http\Controllers\Customer\QueryController::class, 'rejectQuery'])->name('reject_query');
+            Route::get('/fetch-queries', [App\Http\Controllers\Customer\QueryController::class, 'fetchQueries'])->name('fetch.queries');
 
+
+            Route::post('order/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
+            //common chat
+            Route::get('/chat', [App\Http\Controllers\ChatController::class, 'common_chat'])->name('common.chat');
+
+
+            Route::post('order/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
         });
     });
 });

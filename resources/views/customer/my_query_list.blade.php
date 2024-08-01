@@ -72,7 +72,7 @@
                                                         REJECTED
                                                     @endif
                                                 </td>
-                                                    
+
                                                 <td class="user-active">
                                                     <div class="inquiry-actions">
                                                         {{-- <a href="#" class="button accept-btn small-btn"><i

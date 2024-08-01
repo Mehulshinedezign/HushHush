@@ -82,19 +82,17 @@ class ProfileController extends Controller
             $userdetail = [
                 'address1' => $request->address1,
                 'address2' => $request->address2,
-                'country_id' => $request->country,
-                'state_id' => $request->state,
-                'city_id' => $request->city,
+                'country' => $request->country,
+                'state' => $request->state,
+                'city' => $request->city,
                 'about' => $request->about
             ];
 
-            if (auth()->user()->role->name == 'admin') {
-                $data['email'] = $request->email;
-            }
-
+            // if (auth()->user()->role->name == 'admin') {
+            //     $data['email'] = $request->email;
+            // }
             if ($request->hasFile('profile_pic')) {
                 $profile = s3_store_image($request->file('profile_pic'), 'profiles');
-                // dd($profile);
                 $data['profile_file'] = $profile['name'];
                 $data['profile_url'] = $profile['url'];
                 if (!is_null($user->profile_url)) {
@@ -153,8 +151,8 @@ class ProfileController extends Controller
             //         return redirect()->route("index");
             //     }
             // }
-
-            return redirect()->route('edit-account', ['tab' => 'nav-home'])->with('message', __('user.messages.profileUpdated'));
+            return redirect()->back()->with('success', __('user.messages.profileUpdated'));
+            // return redirect()->route('edit-account', ['tab' => 'nav-home'])->with('message', __('user.messages.profileUpdated'));
         } catch (Exception $exception) {
             return redirect()->back();
         }

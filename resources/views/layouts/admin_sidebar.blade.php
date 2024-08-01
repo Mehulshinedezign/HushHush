@@ -44,6 +44,7 @@
                     'admin.vendors',
                     'admin.view-retailer-completed-orders',
                     'view-customer-completed-orders',
+                    'admin.edit.user'
                 ])) active @endif">
                 <a href="{{ route('admin.customers') }}" class="nav-link"><i
                         data-feather="user-check"></i><span>{{ __('Users') }}</span></a>
@@ -56,7 +57,7 @@
                 </ul>
             </li> --}}
             <li class="dropdown @if (Route::current()->getName() == 'admin.commission') active @endif">
-                <a href="{{ route('admin.commission') }}" class="nav-link"><i
+                <a href="#" class="nav-link"><i
                         data-feather="dollar-sign"></i><span>{{ __('adminsidebar.commission') }}</span></a>
             </li>
             <li class="dropdown @if (Route::current()->getName() == 'admin.cms') active @endif">

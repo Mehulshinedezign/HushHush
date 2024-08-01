@@ -78,7 +78,8 @@
                 rules: {
                     name: {
                         required: true,
-                        pattern: /^[a-zA-Z0-9]+$/
+                        pattern: /^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/
+
                     },
                     category_image: 'required',
                     'type[]': 'required',

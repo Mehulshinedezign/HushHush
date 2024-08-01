@@ -17,8 +17,9 @@ class QueryController extends Controller
         // Validate incoming request
 
         $request->validate([
-            'rental_dates' =>'required',
+            'rental_dates' => 'required',
             'product_id' => 'required',
+            'rental_dates' => 'required',
             'description' => 'required|string',
         ]);
 
@@ -28,7 +29,7 @@ class QueryController extends Controller
             $user = auth()->user();
             $foruser = jsdecode_userdata($request->for_user);
             $product_id = jsdecode_userdata($request->product_id);
-
+            // dd($request);
             $data = [
                 'user_id' => $user->id,
                 'product_id' => $product_id,
@@ -37,7 +38,7 @@ class QueryController extends Controller
                 'status' => 'PENDING',
                 'date_range' => $request->rental_dates,
             ];
-
+            // dd($data);
             $qur = Query::create($data);
 
             DB::commit();
@@ -48,37 +49,37 @@ class QueryController extends Controller
         }
     }
 
-    public function myQuery(Request $request){
+
+    public function myQuery(Request $request)
+    {
         $user = auth()->user();
-        $querydatas = Query::where('user_id',$user->id)->get();
-        return view('customer.my_query_list',compact('querydatas'));
+        $querydatas = Query::where(['user_id' => $user->id, 'status' => 'PENDING'])->get();
+        return view('customer.my_query_list', compact('querydatas'));
     }
 
     public function view(Request $request)
     {
-        $product_id = $request->product_id;
-        $product = Product::findOrFail($product_id);
+        $query_id = $request->query_id;
+        $query = Query::findOrFail($query_id);
 
-
-        $view = view('customer.query_product', compact('product'))->render();
+        $view = view('customer.query_product', compact('query'))->render();
 
         return response()->json(['success' => true, 'data' => $view]);
-
     }
 
-    public function receiveQuery(Request $request){
+    public function receiveQuery(Request $request)
+    {
         $user = auth()->user();
         $querydatas = Query::where(['for_user' => $user->id, 'status' => 'PENDING'])->get();
-       
-        return view('customer.receive_query_list',compact('querydatas'));
+        $accept = true;
+        return view('customer.receive_query_list', compact('querydatas', 'accept'));
     }
 
-    public function acceptQuery(Request $request,$id){
+    public function acceptQuery(Request $request, $id)
+    {
 
+        $query_product = Query::where('id', $id)->first();
 
-        $query_product = Query::where('id',$id)->first();
-
-        // dd($query_product);
         $data = [
             'user_id' => $query_product->user_id,
             'product_id' => $query_product->product_id,
@@ -93,11 +94,11 @@ class QueryController extends Controller
 
         return redirect()->back()->with('success', 'Query accepted successfully.');
     }
+    public function rejectQuery(Request $request, $id)
+    {
 
-    public function rejectQuery(Request $request,$id){
 
-    
-        $query_product = Query::where('id',$id)->first();
+        $query_product = Query::where('id', $id)->first();
 
         $data = [
             'user_id' => $query_product->user_id,
@@ -111,5 +112,24 @@ class QueryController extends Controller
         $query_product->update($data);
 
         return redirect()->back()->with('success', 'Query rejected successfully.');
+    }
+
+    public function fetchQueries(Request $request)
+    {
+        $userType = $request->user;
+        $status = $request->status;
+        if ($userType == 'borrower') {
+            $queries = Query::where(['status' => $status, 'user_id' => auth()->user()->id])->get();
+            $html = view('components.product-query', ['querydatas' => $queries])->render();
+        } else {
+            $accept = ($status == 'ACCEPTED') || ($status == 'REJECTED') || ($status == 'COMPLETED') ? false : true;
+            $queries = Query::where(['status' => $status, 'for_user' => auth()->user()->id])->get();
+            $html = view('components.receive-query', ['querydatas' => $queries, 'accept' => $accept])->render();
+        }
+
+        return response()->json([
+            'success' => true,
+            'html' => $html,
+        ]);
     }
 }

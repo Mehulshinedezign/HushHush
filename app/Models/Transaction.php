@@ -15,7 +15,7 @@ class Transaction extends Model
      * @var string[]
      */
     protected $fillable = [
-        'payment_id', 'order_id', 'user_id', 'payment_method', 'total', 'date', 'status', 'gateway_response'
+        'payment_id', 'user_id', 'payment_method', 'total', 'date', 'status', 'gateway_response'
     ];
 
     /**

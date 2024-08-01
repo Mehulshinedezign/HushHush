@@ -29,7 +29,7 @@
 
     <script>
         const APP_URL = "{{ url('') }}";
-        const login_url = '{{ route("login") }}';
+        const login_url = '{{ route('login') }}';
         const userId = '{{ jsencode_userdata(auth()->id()) }}';
         const url = "{{ route('addfavorite') }}";
         const errorTitle = "{{ __('favorite.error') }}";
@@ -110,6 +110,11 @@
                                                     accept="image/*" class="d-none">
                                             </label>
                                         </div>
+                                        @error('images')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                         <div class="upload-img-preview-box">
                                             <div class="upload-img-preview">
                                                 {{-- <img src="{{asset('front/images/pro10.png')}}" alt="img"> --}}
@@ -126,6 +131,9 @@
                                                 <input type="text" name="product_name" id=""
                                                     placeholder="Enter Name" class="form-control">
                                             </div>
+                                            @error('product_name')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -136,7 +144,8 @@
                                                     <select name="category" class="parent_category">
                                                         <option value="">Category</option>
                                                         @foreach (getParentCategory() as $category)
-                                                            <option value="{{ jsencode_userdata($category->id) }}" data-fetchsize="{{ $category->name }}">
+                                                            <option value="{{ jsencode_userdata($category->id) }}"
+                                                                data-fetchsize="{{ $category->name }}">
                                                                 {{ $category->name }}
                                                             </option>
                                                         @endforeach
@@ -146,15 +155,21 @@
                                                             alt="img">
                                                     </span>
                                                 </div>
-                                                <div class="formfield">
-                                                    <select name="subcategory" id="subcategory">
-                                                        <option value="">Subcategory</option>
-                                                    </select>
-                                                    <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
-                                                    </span>
-                                                </div>
+                                                @error('category')
+                                                    <span class="invalid-feedback" role="alert">
+                                                    @enderror
+                                                    <div class="formfield">
+                                                        <select name="subcategory" id="subcategory">
+                                                            <option value="">Subcategory</option>
+                                                        </select>
+                                                        <span class="form-icon">
+                                                            <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                                alt="img">
+                                                        </span>
+                                                    </div>
+                                                    @error('subcategory')
+                                                        <span class="invalid-feedback" role="alert">
+                                                        @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -165,13 +180,16 @@
                                             <div class="formfield">
                                                 <select class="form-control" name="size">
                                                     <option value="">Size</option>
-                                                   
+
                                                 </select>
                                                 <span class="form-icon">
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                         alt="img">
                                                 </span>
                                             </div>
+                                            @error('subcategory')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -190,6 +208,9 @@
                                                         alt="img">
                                                 </span>
                                             </div>
+                                            @error('brand')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -208,6 +229,9 @@
                                                         alt="img">
                                                 </span>
                                             </div>
+                                            @error('color')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
@@ -216,12 +240,16 @@
                                                 <label for="">Pickup Location*</label>
 
                                                 <div class="form-check form-switch">
-                                                    <label class="form-check-label" for="flexSwitchCheckChecked">Manual Pickup location</label>
-                                                    <input class="form-check-input" type="checkbox" role="switch" name="manual_location" id="flexSwitchCheckChecked" checked>
+                                                    <label class="form-check-label"
+                                                        for="flexSwitchCheckChecked">Manual Pickup location</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                        name="manual_location" id="flexSwitchCheckChecked" checked>
                                                 </div>
                                             </div>
                                             <div class="form-field">
-                                                <input type="text" class="form-control" name="product_complete_location" placeholder="Address" id="product_address">
+                                                <input type="text" class="form-control"
+                                                    name="product_complete_location" placeholder="Address"
+                                                    id="product_address">
                                             </div>
                                         </div>
                                     </div>
@@ -229,40 +257,62 @@
                                         <div class="form-group">
                                             <label for="">Address line 1*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" placeholder="address line 1" name="address1" id="product_address1">
+                                                <input type="text" class="form-control"
+                                                    placeholder="address line 1" name="address1"
+                                                    id="product_address1">
                                             </div>
+                                            @error('address1')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-3 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">Address line 2*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" placeholder="address line 2" name="address2" id="product_address2">
+                                                <input type="text" class="form-control"
+                                                    placeholder="address line 2" name="address2"
+                                                    id="product_address2">
                                             </div>
+                                            @error('address2')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">Country*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" placeholder="country" name="country" id="product_country">
+                                                <input type="text" class="form-control" placeholder="country"
+                                                    name="country" id="product_country">
                                             </div>
+                                            @error('country')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">State*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" placeholder="state" name="state" id="product_state">
+                                                <input type="text" class="form-control" placeholder="state"
+                                                    name="state" id="product_state">
                                             </div>
+                                            @error('state')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">City*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" placeholder="city" name="city" id="product_city">
+                                                <input type="text" class="form-control" placeholder="city"
+                                                    name="city" id="product_city">
                                             </div>
+                                            @error('city')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -277,6 +327,9 @@
                                                         alt="img">
                                                 </span>
                                             </div>
+                                            @error('non_available_dates')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -298,6 +351,9 @@
                                                         alt="img">
                                                 </span>
                                             </div>
+                                            @error('product_condtion')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
                                     {{-- <div class="col-lg-4 col-md-4 col-sm-12">
@@ -314,6 +370,9 @@
                                             <div class="formfield">
                                                 <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description"></textarea>
                                             </div>
+                                            @error('description')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
 
@@ -321,10 +380,13 @@
                                         <div class="form-group">
                                             <label for="">Product market value*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="text" class="form-control"
-                                                    name="product_market_value" value="">
+                                                <input type="number" class="form-control"
+                                                    name="product_market_value" value="" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
+                                            @error('product_market_value')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
 
@@ -342,9 +404,12 @@
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days*</label>
                                             <div class="formfield ">
-                                                <input type="text" class="form-control" name="min_rent_days"
-                                                    placeholder="Rental days" value="">
+                                                <input type="number" class="form-control" name="min_rent_days"
+                                                    placeholder="Rental days" value="" min="1">
                                             </div>
+                                            @error('min_rent_days')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
 
@@ -354,30 +419,39 @@
                                         <div class="form-group">
                                             <label for="">Rent Price/Day*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="text" name="rent_price_day" id=""
-                                                    placeholder="" class="form-control">
+                                                <input type="number" name="rent_price_day" id=""
+                                                    placeholder="" class="form-control" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
+                                            @error('rent_price_day')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group ">
                                             <label for="">Rent Price/Week*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="text" name="rent_price_week" id=""
-                                                    placeholder="" class="form-control">
+                                                <input type="number" name="rent_price_week" id=""
+                                                    placeholder="" class="form-control" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
+                                            @error('rent_price_week')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group ">
                                             <label for="">Rent Price/Month*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="text" name="rent_price_month" id=""
-                                                    placeholder="" class="form-control">
+                                                <input type="number" name="rent_price_month" id=""
+                                                    placeholder="" class="form-control" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
+                                            @error('rent_price_month')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -394,7 +468,8 @@
         </div>
     </div>
 
-    <div class="modal fade addbank-Modal" id="addbank-Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade addbank-Modal" id="addbank-Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
@@ -404,11 +479,13 @@
                         <img src="{{ asset('front/images/bank-img.png') }}" alt="">
                         <div class="profile-select-box border-disabled">
                             <div class="profile-check-list">
-                             
-                                <a href="javascript:void(0)" data-bs-dismiss="modal" arial-label="Close" class="button outline-btn full-btn">Cancel</a>
-                               
-                                <button type="submit" class="button primary-btn full-btn" id="bank_info">Yes</button>
-                       
+
+                                <a href="javascript:void(0)" data-bs-dismiss="modal" arial-label="Close"
+                                    class="button outline-btn full-btn">Cancel</a>
+
+                                <button type="submit" class="button primary-btn full-btn"
+                                    id="bank_info">Yes</button>
+
                             </div>
                         </div>
                     </form>
@@ -418,10 +495,11 @@
         </div>
     </div>
 
-{{-- Query modal section success and error  --}}
-    <div class="modal fade query_msg" id="query_msg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    {{-- Query modal section success and error  --}}
+    <div class="modal fade query_msg" id="query_msg" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content"> 
+            <div class="modal-content">
                 <div class="modal-body">
                     @if (session()->has('success'))
                         <div class="alert-container">
@@ -433,15 +511,18 @@
                                         <p>{{ session()->get('success') }}</p>
                                     </div>
                                     <a class="alert-cross close" data-bs-dismiss="alert" aria-label="Close">
-                                        <svg width="7" height="7" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M6.66033 0.947986C6.61823 0.906277 6.56822 0.873185 6.51316 0.850607C6.4581 0.828028 6.39907 0.816406 6.33946 0.816406C6.27985 0.816406 6.22083 0.828028 6.16577 0.850607C6.11071 0.873185 6.06069 0.906277 6.01859 0.947986L3.81264 3.12833L1.60668 0.947986C1.52158 0.863874 1.40616 0.81662 1.28581 0.81662C1.16546 0.81662 1.05004 0.863874 0.96494 0.947986C0.87984 1.0321 0.832031 1.14618 0.832031 1.26513C0.832031 1.38408 0.87984 1.49816 0.96494 1.58228L3.1709 3.76262L0.96494 5.94296C0.922803 5.98461 0.889378 6.03405 0.866573 6.08847C0.843769 6.14288 0.832031 6.20121 0.832031 6.26011C0.832031 6.31901 0.843769 6.37733 0.866573 6.43174C0.889378 6.48616 0.922803 6.5356 0.96494 6.57725C1.00708 6.6189 1.0571 6.65194 1.11216 6.67448C1.16721 6.69702 1.22622 6.70862 1.28581 6.70862C1.3454 6.70862 1.40441 6.69702 1.45946 6.67448C1.51452 6.65194 1.56454 6.6189 1.60668 6.57725L3.81264 4.39691L6.01859 6.57725C6.06073 6.6189 6.11075 6.65194 6.16581 6.67448C6.22086 6.69702 6.27987 6.70862 6.33946 6.70862C6.39905 6.70862 6.45806 6.69702 6.51311 6.67448C6.56817 6.65194 6.61819 6.6189 6.66033 6.57725C6.70247 6.5356 6.73589 6.48616 6.7587 6.43174C6.7815 6.37733 6.79324 6.31901 6.79324 6.26011C6.79324 6.20121 6.7815 6.14288 6.7587 6.08847C6.73589 6.03405 6.70247 5.98461 6.66033 5.94296L4.45438 3.76262L6.66033 1.58228C6.70253 1.54066 6.73601 1.49123 6.75885 1.43681C6.7817 1.38239 6.79346 1.32405 6.79346 1.26513C6.79346 1.20621 6.7817 1.14787 6.75885 1.09345C6.73601 1.03903 6.70253 0.9896 6.66033 0.947986Z" fill="#898383" />
+                                        <svg width="7" height="7" viewBox="0 0 7 7" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M6.66033 0.947986C6.61823 0.906277 6.56822 0.873185 6.51316 0.850607C6.4581 0.828028 6.39907 0.816406 6.33946 0.816406C6.27985 0.816406 6.22083 0.828028 6.16577 0.850607C6.11071 0.873185 6.06069 0.906277 6.01859 0.947986L3.81264 3.12833L1.60668 0.947986C1.52158 0.863874 1.40616 0.81662 1.28581 0.81662C1.16546 0.81662 1.05004 0.863874 0.96494 0.947986C0.87984 1.0321 0.832031 1.14618 0.832031 1.26513C0.832031 1.38408 0.87984 1.49816 0.96494 1.58228L3.1709 3.76262L0.96494 5.94296C0.922803 5.98461 0.889378 6.03405 0.866573 6.08847C0.843769 6.14288 0.832031 6.20121 0.832031 6.26011C0.832031 6.31901 0.843769 6.37733 0.866573 6.43174C0.889378 6.48616 0.922803 6.5356 0.96494 6.57725C1.00708 6.6189 1.0571 6.65194 1.11216 6.67448C1.16721 6.69702 1.22622 6.70862 1.28581 6.70862C1.3454 6.70862 1.40441 6.69702 1.45946 6.67448C1.51452 6.65194 1.56454 6.6189 1.60668 6.57725L3.81264 4.39691L6.01859 6.57725C6.06073 6.6189 6.11075 6.65194 6.16581 6.67448C6.22086 6.69702 6.27987 6.70862 6.33946 6.70862C6.39905 6.70862 6.45806 6.69702 6.51311 6.67448C6.56817 6.65194 6.61819 6.6189 6.66033 6.57725C6.70247 6.5356 6.73589 6.48616 6.7587 6.43174C6.7815 6.37733 6.79324 6.31901 6.79324 6.26011C6.79324 6.20121 6.7815 6.14288 6.7587 6.08847C6.73589 6.03405 6.70247 5.98461 6.66033 5.94296L4.45438 3.76262L6.66033 1.58228C6.70253 1.54066 6.73601 1.49123 6.75885 1.43681C6.7817 1.38239 6.79346 1.32405 6.79346 1.26513C6.79346 1.20621 6.7817 1.14787 6.75885 1.09345C6.73601 1.03903 6.70253 0.9896 6.66033 0.947986Z"
+                                                fill="#898383" />
                                         </svg>
                                     </a>
                                 </div>
                             </div>
                         </div>
                     @endif
-    
+
                     @if (session()->has('error'))
                         <div class="alert-container">
                             <div class="container-box">
@@ -452,20 +533,23 @@
                                         <p>{{ session()->get('error') }}</p>
                                     </div>
                                     <a class="alert-cross close" data-bs-dismiss="alert" aria-label="Close">
-                                        <svg width="7" height="7" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M6.66033 0.947986C6.61823 0.906277 6.56822 0.873185 6.51316 0.850607C6.4581 0.828028 6.39907 0.816406 6.33946 0.816406C6.27985 0.816406 6.22083 0.828028 6.16577 0.850607C6.11071 0.873185 6.06069 0.906277 6.01859 0.947986L3.81264 3.12833L1.60668 0.947986C1.52158 0.863874 1.40616 0.81662 1.28581 0.81662C1.16546 0.81662 1.05004 0.863874 0.96494 0.947986C0.87984 1.0321 0.832031 1.14618 0.832031 1.26513C0.832031 1.38408 0.87984 1.49816 0.96494 1.58228L3.1709 3.76262L0.96494 5.94296C0.922803 5.98461 0.889378 6.03405 0.866573 6.08847C0.843769 6.14288 0.832031 6.20121 0.832031 6.26011C0.832031 6.31901 0.843769 6.37733 0.866573 6.43174C0.889378 6.48616 0.922803 6.5356 0.96494 6.57725C1.00708 6.6189 1.0571 6.65194 1.11216 6.67448C1.16721 6.69702 1.22622 6.70862 1.28581 6.70862C1.3454 6.70862 1.40441 6.69702 1.45946 6.67448C1.51452 6.65194 1.56454 6.6189 1.60668 6.57725L3.81264 4.39691L6.01859 6.57725C6.06073 6.6189 6.11075 6.65194 6.16581 6.67448C6.22086 6.69702 6.27987 6.70862 6.33946 6.70862C6.39905 6.70862 6.45806 6.69702 6.51311 6.67448C6.56817 6.65194 6.61819 6.6189 6.66033 6.57725C6.70247 6.5356 6.73589 6.48616 6.7587 6.43174C6.7815 6.37733 6.79324 6.31901 6.79324 6.26011C6.79324 6.20121 6.7815 6.14288 6.7587 6.08847C6.73589 6.03405 6.70247 5.98461 6.66033 5.94296L4.45438 3.76262L6.66033 1.58228C6.70253 1.54066 6.73601 1.49123 6.75885 1.43681C6.7817 1.38239 6.79346 1.32405 6.79346 1.26513C6.79346 1.20621 6.7817 1.14787 6.75885 1.09345C6.73601 1.03903 6.70253 0.9896 6.66033 0.947986Z" fill="#898383" />
+                                        <svg width="7" height="7" viewBox="0 0 7 7" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M6.66033 0.947986C6.61823 0.906277 6.56822 0.873185 6.51316 0.850607C6.4581 0.828028 6.39907 0.816406 6.33946 0.816406C6.27985 0.816406 6.22083 0.828028 6.16577 0.850607C6.11071 0.873185 6.06069 0.906277 6.01859 0.947986L3.81264 3.12833L1.60668 0.947986C1.52158 0.863874 1.40616 0.81662 1.28581 0.81662C1.16546 0.81662 1.05004 0.863874 0.96494 0.947986C0.87984 1.0321 0.832031 1.14618 0.832031 1.26513C0.832031 1.38408 0.87984 1.49816 0.96494 1.58228L3.1709 3.76262L0.96494 5.94296C0.922803 5.98461 0.889378 6.03405 0.866573 6.08847C0.843769 6.14288 0.832031 6.20121 0.832031 6.26011C0.832031 6.31901 0.843769 6.37733 0.866573 6.43174C0.889378 6.48616 0.922803 6.5356 0.96494 6.57725C1.00708 6.6189 1.0571 6.65194 1.11216 6.67448C1.16721 6.69702 1.22622 6.70862 1.28581 6.70862C1.3454 6.70862 1.40441 6.69702 1.45946 6.67448C1.51452 6.65194 1.56454 6.6189 1.60668 6.57725L3.81264 4.39691L6.01859 6.57725C6.06073 6.6189 6.11075 6.65194 6.16581 6.67448C6.22086 6.69702 6.27987 6.70862 6.33946 6.70862C6.39905 6.70862 6.45806 6.69702 6.51311 6.67448C6.56817 6.65194 6.61819 6.6189 6.66033 6.57725C6.70247 6.5356 6.73589 6.48616 6.7587 6.43174C6.7815 6.37733 6.79324 6.31901 6.79324 6.26011C6.79324 6.20121 6.7815 6.14288 6.7587 6.08847C6.73589 6.03405 6.70247 5.98461 6.66033 5.94296L4.45438 3.76262L6.66033 1.58228C6.70253 1.54066 6.73601 1.49123 6.75885 1.43681C6.7817 1.38239 6.79346 1.32405 6.79346 1.26513C6.79346 1.20621 6.7817 1.14787 6.75885 1.09345C6.73601 1.03903 6.70253 0.9896 6.66033 0.947986Z"
+                                                fill="#898383" />
                                         </svg>
                                     </a>
                                 </div>
                             </div>
                         </div>
                     @endif
-                   
+
                 </div>
             </div>
         </div>
     </div>
-    
+
 
 
     {{-- Notifications --}}
@@ -512,7 +596,9 @@
     <script src="{{ asset('js/daterangepicker.js') }}"></script>
     <script src="{{ asset('js/jquery-validation.min.js') }}"></script>
     <script src="{{ asset('js/additional-methods.min.js') }}"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places"> </script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places">
+    </script>
     </script>
     <!-- Include DateRangePicker JS -->
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -592,20 +678,20 @@
                 var categoryId = $(this).val();
                 var route = '{{ url('sub_category') }}/' + categoryId;
 
-                
-                
+
+
                 if (categoryId) {
                     $.ajax({
                         type: 'GET',
                         url: route,
                         // data: {
-                            //     categoryId: categoryId
-                            // },
-                            dataType: 'json',
-                            headers: {
-                                'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                            },
-                        success: function(data,size) {
+                        //     categoryId: categoryId
+                        // },
+                        dataType: 'json',
+                        headers: {
+                            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(data, size) {
                             $('#subcategory').empty();
                             $('#subcategory').append('<option value="">Subcategory</option>');
 
@@ -623,8 +709,8 @@
                     $('#subcategory').append('<option value="">Subcategory</option>');
                 }
 
-                
-                var sizes = @json(config('size'));     
+
+                var sizes = @json(config('size'));
                 var fetchSize = $(this).find('option:selected').data('fetchsize');
 
                 var sizeOptions = sizes[fetchSize] || [];
@@ -632,22 +718,23 @@
                 sizeSelect.empty();
                 sizeSelect.append('<option value="">Size</option>');
 
-                if(sizeOptions.length === 0){
+                if (sizeOptions.length === 0) {
                     var bydefaultSizes = sizes['bydefault'];
                     $.each(bydefaultSizes, function(index, size) {
                         sizeSelect.append('<option value="' + size + '">' + size + '</option>');
                     });
-                }else{
+                } else {
                     $.each(sizeOptions, function(key, options) {
                         $.each(options, function(index, size) {
-                            sizeSelect.append('<option value="' + size + '">' + size + '</option>');
+                            sizeSelect.append('<option value="' + size + '">' + size +
+                                '</option>');
                         });
-                    });   
+                    });
                 }
-                
+
             });
 
-            
+
             $('.daterange-cus').daterangepicker({
                 autoUpdateInput: false,
                 locale: {
@@ -657,7 +744,8 @@
                 opens: 'right',
                 minDate: moment().startOf('day') // Disable previous dates
             }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format(
+                    'YYYY-MM-DD'));
             });
 
             $('.daterange-btn').daterangepicker({
@@ -667,12 +755,14 @@
                     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
                     'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                     'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
+                        'month').endOf('month')]
                 },
                 autoUpdateInput: false,
                 minDate: moment().startOf('day') // Disable previous dates
             }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
+                $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format(
+                    'MMMM D, YYYY'));
             });
 
             $('.productLink').on('click', function() {
@@ -681,7 +771,7 @@
             });
 
 
-            // Google place api 
+            // Google place api
             $('.product_sub_data').hide();
 
             $('#product_address').on('focus', function() {
@@ -693,7 +783,8 @@
                 if ($(this).val() === '') {
                     $(".product_sub_data").slideUp("slow");
                     // $('#country, #state, #city').val('');
-                    $(' #product_address1,#product_address2,#product_country, #product_state, #product_city').val('');
+                    $(' #product_address1,#product_address2,#product_country, #product_state, #product_city')
+                        .val('');
                 }
             });
 
@@ -701,19 +792,21 @@
                 var input = document.getElementById('product_address');
                 var autocomplete = new google.maps.places.Autocomplete(input);
 
-                $('#product_address1,#product_address2,#product_country, #product_state, #product_city').prop('readonly', true);
+                $('#product_address1,#product_address2,#product_country, #product_state, #product_city').prop(
+                    'readonly', true);
 
                 autocomplete.addListener('place_changed', function() {
                     var place = autocomplete.getPlace();
 
-                    $(' #product_address1,#product_address2,#product_country, #product_state, #product_city').val('');
+                    $(' #product_address1,#product_address2,#product_country, #product_state, #product_city')
+                        .val('');
 
                     for (var i = 0; i < place.address_components.length; i++) {
                         var addressType = place.address_components[i].types[0];
-                        if(addressType === 'street_number'){
+                        if (addressType === 'street_number') {
                             $('#product_address1').val(place.address_components[i].long_name);
                         }
-                        if(addressType === 'route'){
+                        if (addressType === 'route') {
                             $('#product_address2').val(place.address_components[i].long_name);
                         }
                         if (addressType === 'country') {
@@ -743,6 +836,10 @@
             }
 
 
+            // after account details open a modal
+            @if (session('showModal'))
+                $('#addproduct-Modal').modal('show');
+            @endif
 
         });
     </script>
@@ -808,6 +905,37 @@
         });
     </script>
     {{-- end header --}}
+
+    {{-- chat --}}
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "{{ env('APIKEY') }}",
+            authDomain: "{{ env('AUTHDOMAIN') }}",
+            databaseURL: "{{ env('DATABASEURL') }}",
+            projectId: "{{ env('PROJECTID') }}",
+            storageBucket: "{{ env('STORAGEBUCKET') }}",
+            messagingSenderId: "{{ env('MESSAGINGSENDERID') }}",
+            appId: "{{ env('APPID') }}",
+            measurementId: "{{ env('MEASUREMENTID') }}"
+        };
+        var senderId = "{{ auth()->user()->id }}";
+        const authUserId = "{{ auth()->user()->id }}";
+        const authUserprofile =
+            "{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}";
+        var userImage = "{{ route('retaileruserimage') }}";
+        var imagePath = "{{ asset('storage/') }}";
+        var chat_store_url = "{{ route('retailerstore.chat') }}";
+        var get_chat_url = APP_URL + '/retailer/chat/messages';
+        var get_user_names = APP_URL + '/retailer/getuser/names';
+        var last_msg_update_url = APP_URL + '/retailer/lastchat/update';
+        var search_url = APP_URL + '/retailer/chat/search/';
+        var chat_image_store_url = APP_URL + '/retailer/chat/image';
+    </script>
+    <script defer src="{{ asset('js/custom/chat2.js') }}"></script>
+    <script defer src="{{ asset('js/custom/chatlist.js') }}"></script>
+    {{-- end chat --}}
 
     @include('validation')
     @include('validation.js_product')

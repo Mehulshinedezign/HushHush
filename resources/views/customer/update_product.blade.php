@@ -270,8 +270,8 @@
                                         <div class="form-group">
                                             <label for="">Product market value*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="text" class="form-control" name="product_market_value"
-                                                    value="{{ number_format($product->product_market_value, 0, '', '') }}">
+                                                <input type="number" class="form-control" name="product_market_value"
+                                                    value="{{ number_format($product->product_market_value, 0, '', '') }}" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
                                         </div>
@@ -291,8 +291,8 @@
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days*</label>
                                             <div class="formfield ">
-                                                <input type="text" class="form-control" name="min_rent_days"
-                                                    value="{{ $product->min_days_rent_item }}">
+                                                <input type="number" class="form-control" name="min_rent_days"
+                                                    value="{{ $product->min_days_rent_item }}" min="1">
                                             </div>
                                         </div>
                                     </div>
@@ -300,9 +300,9 @@
                                         <div class="form-group">
                                             <label for="">Rent Price/Day*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="text" name="rent_price_day" id=""
+                                                <input type="number" name="rent_price_day" id=""
                                                     placeholder="" class="form-control"
-                                                    value="{{ $product->rent_day }}">
+                                                    value="{{ $product->rent_day }}" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
                                         </div>
@@ -311,9 +311,9 @@
                                         <div class="form-group ">
                                             <label for="">Rent Price/Week*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="text" name="rent_price_week" id=""
+                                                <input type="number" name="rent_price_week" id=""
                                                     placeholder="" class="form-control"
-                                                    value="{{ $product->rent_week }}">
+                                                    value="{{ $product->rent_week }}" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
                                         </div>
@@ -322,9 +322,9 @@
                                         <div class="form-group ">
                                             <label for="">Rent Price/Month*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="text" name="rent_price_month" id=""
+                                                <input type="number" name="rent_price_month" id=""
                                                     placeholder="" class="form-control"
-                                                    value="{{ $product->rent_month }}">
+                                                    value="{{ $product->rent_month }}" min="1">
                                                 <span class="form-icon">$</span>
                                             </div>
                                         </div>

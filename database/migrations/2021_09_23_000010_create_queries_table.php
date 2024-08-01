@@ -14,16 +14,16 @@ return new class extends Migration
         Schema::create('queries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
+
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade')->onUpdate('cascade');
+
             $table->foreignId('for_user')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
+
             $table->text('query_message')->nullable();
             $table->enum('status', ['ACCEPTED', 'REJECTED', 'PENDING', 'COMPLETED'])->default('PENDING');
             $table->string('date_range');
-            $table->integer('negotiate_price')->nullable();
             $table->timestamps();
             $table->softDeletes();
-
-
         });
     }
 

@@ -2055,5 +2055,7 @@ span.left-form-icon {
     min-height: 22px;
     opacity: 1;
 }
-
-
+.product-slider-sec-min-height {
+    padding: 75px 0px;
+    min-height: calc(100vh - 476px);
+}

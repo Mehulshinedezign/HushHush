@@ -5,7 +5,7 @@
              <div class="col-12 col-md-12 col-lg-12">
                  <div class="card">
                      <form action="{{ route('admin.update.user', ['user' => $user->id]) }}" method="post"
-                         enctype="multipart/form-data">
+                         enctype="multipart/form-data" id="userDetail">
                          @csrf
                          <div class="card-body">
                              <div class="form-row divider-bottom">
@@ -13,7 +13,7 @@
                                      <label>{{ __('user.fields.name') }}<span class="text-danger">*</span></label>
                                      <input type="text" name="name"
                                          class="form-control @error('name') is-invalid @enderror"
-                                         value="{{ $user->name }}" placeholder="{{ __('category.placeholders.name') }}">
+                                         value="{{ $user->name }}" placeholder="{{ __('user.placeholders.name') }}">
                                      @error('name')
                                          <span class="invalid-feedback" role="alert">
                                              <strong>{{ $message }}</strong>
@@ -23,9 +23,10 @@
                                  <!-- <div class="form-row"> -->
                                  <div class="form-group col-md-4">
                                      <label>{{ __('user.fields.email') }}<span class="text-danger">*</span></label>
-                                     <input type="email" name="email"
+                                     {{-- <input type="email" name="email"
                                          class="form-control @error('name') is-invalid @enderror"
-                                         value="{{ $user->email }}" placeholder="{{ __('user.placeholders.email') }}">
+                                         value="{{ $user->email }}" placeholder="{{ __('user.placeholders.email') }}"> --}}
+                                         <p class="form-control"> {{ $user->email }}</p>
                                      @error('email')
                                          <span class="invalid-feedback" role="alert">
                                              <strong>{{ $message }}</strong>
@@ -39,7 +40,7 @@
                                      <input type="text" name="phone_number"
                                          class="form-control @error('name') is-invalid @enderror"
                                          value="{{ $user->phone_number }}"
-                                         placeholder="{{ __('user.placeholders.phone_number') }}">
+                                         placeholder="{{ __('user.placeholders.phone') }}">
                                      @error('phone_number')
                                          <span class="invalid-feedback" role="alert">
                                              <strong>{{ $message }}</strong>
@@ -55,7 +56,13 @@
                                          class="form-control @error('name') is-invalid @enderror"
                                          placeholder="{{ __('user.placeholders.profile_pic') }}"
                                          accept="image/png, image/jpeg, image/jpg">
-                                     {{-- <img src="{{ $user->profile_url }}" alt="img"> --}}
+                                         {{-- @if ($user->profile_file)
+                                            <img id="preview-img" src="{{ asset('storage/' . $user->profile_file) }}"
+                                                alt="Profile Picture">
+                                        @else
+                                            <img id="preview-img" src="{{ asset('front/images/pro3.png') }}"
+                                                alt="Default Image">
+                                        @endif --}}
                                      @error('profile_pic')
                                          <span class="invalid-feedback" role="alert">
                                              <strong>{{ $message }}</strong>
@@ -96,10 +103,10 @@
                                      <label>{{ __('user.fields.country') }}</label>
                                      <select name="country" id="country"
                                          class="form-control @error('main_category') is-invalid @enderror">
-                                         <option selected>{{ __('user.placeholders.country') }}</option>
+                                         <option value="">Select country</option>
                                          @foreach ($countries as $country)
-                                             <option value="{{ $country->id }}"
-                                                 @if ($country->id == $selectedCountryId) selected @endif>{{ $country->name }}
+                                             <option value="{{ $country->name }}" data-country_id="{{$country->id}}"
+                                                 @if ($country->name == $selectedCountryName) selected @endif>{{ $country->name }}
                                              </option>
                                          @endforeach
                                      </select>
@@ -108,17 +115,17 @@
                                      @enderror
                                      </select>
                                  </div>
-
                                  <div class="form-group col-md-4">
                                      <label>{{ __('user.fields.state') }}</label>
                                      <select name="state" id="state"
                                          class="form-control @error('main_category') is-invalid @enderror">
-                                         <option selected>{{ __('user.placeholders.state') }}</option>
+                                         <option value="">Select state</option>
                                          @foreach ($states as $state)
-                                             <option value="{{ $state->id }}"
-                                                 @if ($state->id == !is_null($user->userDetail) ? $user->userDetail->state_id : '') selected @endif>{{ $state->name }}
-                                             </option>
-                                         @endforeach
+                                            <option value="{{ $state->name }}" data-state_id="{{$state->id}}"
+                                                @if ($state->name == (isset($user->userDetail) ? $user->userDetail->state : '')) selected @endif>
+                                                {{ $state->name }}
+                                            </option>
+                                        @endforeach
                                      </select>
                                      @error('state')
                                          <label class="error-messages">{{ $message }}</label>
@@ -130,10 +137,11 @@
                                      <label>{{ __('user.fields.city') }}</label>
                                      <select name="city" id="city"
                                          class="form-control @error('main_category') is-invalid @enderror">
-                                         <option selected>{{ __('user.placeholders.city') }}</option>
+                                         <option value="">Select city</option>
                                          @foreach ($cities as $city)
-                                             <option value="{{ $city->id }}"
-                                                 @if ($city->id == !is_null($user->userDetail) ? $user->userDetail->city_id : '') selected @endif>{{ $city->name }}
+                                             <option value="{{ $city->name }}"
+                                                @if ($city->name == (isset($user->userDetail) ? $user->userDetail->city : '')) selected @endif>
+                                                {{ $city->name }}
                                              </option>
                                          @endforeach
                                      </select>
@@ -144,10 +152,29 @@
                                  </div>
 
                                  <div class="form-group col-md-4">
+                                    <label>Gov Id</label>
+                                    <div class="formfield">
+                                       <input type="file" name="gov_id"
+                                           class="form-control @error('gov_id') is-invalid @enderror"
+                                           placeholder="Gov Id">
+                                    </div>
+                                    @error('gov_id')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+
+                                 <div class="form-group col-md-4">
                                      <label>Password</label>
-                                     <input type="password" name="password"
-                                         class="form-control @error('password') is-invalid @enderror"
-                                         placeholder="Password">
+                                     <div class="formfield">
+                                        <input type="password" name="password"
+                                            class="form-control @error('password') is-invalid @enderror"
+                                            placeholder="Password">
+                                            <span class="form-icon extra-icon">
+                                                <i class="fa-solid fa-lock togglePassword"></i>
+                                            </span>
+                                     </div>
                                      @error('password')
                                          <span class="invalid-feedback" role="alert">
                                              <strong>{{ $message }}</strong>
@@ -157,9 +184,14 @@
 
                                  <div class="form-group col-md-4">
                                      <label>Confirm password</label>
-                                     <input type="password" name="confirm_password"
-                                         class="form-control @error('confirm_password') is-invalid @enderror"
-                                         placeholder="Confirm password">
+                                     <div class="formfield">
+                                        <input type="password" name="confirm_password"
+                                            class="form-control @error('confirm_password') is-invalid @enderror"
+                                            placeholder="Confirm password">
+                                            <span class="form-icon extra-icon">
+                                                <i class="fa-solid fa-lock togglePassword"></i>
+                                            </span>
+                                     </div>
                                      @error('confirm_password')
                                          <span class="invalid-feedback" role="alert">
                                              <strong>{{ $message }}</strong>
@@ -301,13 +333,14 @@
  @endsection
 
  @push('scripts')
-     {{-- <script src="{{ asset('js/custom/profile.js') }}"></script> --}}
-     <script src="{{ asset('js/custom/notification-setting.js') }}"></script>
+ @includeFirst(['validation.js_show_password'])
+     <script src="{{ asset('js/custom/profile.js') }}"></script>
+     {{-- <script src="{{ asset('js/custom/notification-setting.js') }}"></script>
      <script src="{{ asset('js/custom/toggle-password.js') }}"></script>
      <script src="{{ asset('js/custom/profile.js') }}"></script>
      <script src="{{ asset('js/sweetalert.min.js') }}"></script>
      <script>
          const stateId = '{{ auth()->user()->userDetail ? auth()->user()->userDetail->state_id : '' }}';
          const cityId = '{{ auth()->user()->userDetail ? auth()->user()->userDetail->city_id : '' }}';
-     </script>
+     </script> --}}
  @endpush

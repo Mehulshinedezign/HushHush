@@ -29,7 +29,7 @@ class OrderController extends Controller
             }
         }
         // dd($fromDate, $toDate);
-        $orders = Order::with('item.product.thumbnailImage', 'item.retailer', 'item.product.category', 'transaction')
+        $orders = Order::with('product.thumbnailImage', 'product.retailer', 'product.category', 'transaction', 'customerquery', 'product.nonAvailableDates')
             ->when((!is_null($request->status) && $request->status != 'all' && $request->status != 'disputed'), function ($q) use ($request) {
                 $q->where('status', $request->status);
                 $q->whereIn('dispute_status', ['No', 'Resolved']);
@@ -51,10 +51,10 @@ class OrderController extends Controller
         // if ('retailer' == $request->type) {
         //     return view('retailer.order_list', compact('orders'));
         // }
-        // dd($orders);
+        // dd($orders->toArray());
 
 
-        return view('customer.order_history');
+        return view('customer.order_history', compact('orders'));
         // previous code
         // return view('customer.order_list', compact('orders'));
     }
@@ -387,31 +387,32 @@ class OrderController extends Controller
     }
 
 
-    public function addReview(RatingRequest $request, Order $order)
+    public function addReview(RatingRequest $request)
     {
-        $url = route('orders');
-
-        $chk_review = ProductRating::whereOrderId($order->id)->whereUserId(auth()->user()->id)->exists();
+        // $url = route('orders');
+        $product_id = $request->product_id;
+        // dd("here",$product_id);
+        // $chk_review = ProductRating::whereOrderId(1)->whereUserId(auth()->user()->id)->whereProductId($product_id)->exists();
+        $chk_review = ProductRating::whereUserId(auth()->user()->id)->whereProductId($product_id)->exists();
         if ($chk_review) {
             return response()->json([
                 'success'    =>  false,
-                'msg'       =>   'Review already added'
+                'messages'       =>   'Review already added'
             ], 200);
         }
-
-        ProductRating::updateOrCreate([
-            'order_id' => $order->id,
+        
+        ProductRating::create([
+            'order_id' => 1, 
             'user_id' => auth()->user()->id,
-        ], [
-            'product_id' => $order->item->product_id,
+            'product_id' => $product_id,
             'rating' => $request->rating,
             'review' => $request->review,
         ]);
 
-        session()->flash('success', "Review added successfully");
         return response()->json([
             'success'    =>  true,
-            'url'       =>   $url
+            'messages' => 'Review added successfully',
+            // 'url'       =>   $url
         ], 200);
     }
 
@@ -669,8 +670,9 @@ class OrderController extends Controller
     }
 
     // rental request 
-    public function rental_request(Request $request){
-        
+    public function rental_request(Request $request)
+    {
+
         return view('customer.rental_request');
     }
 }

@@ -709,3 +709,49 @@ $(document).on("focusout","input[name='min'],input[name='max']",function(){
 // 	captionText.innerHTML = dots[slideIndex-1].alt;
 //   }
   // gallery slider end
+  $('form').on('focus', 'input[type=number]', function (e) {
+    $(this).on('wheel.disableScroll', function (e) {
+      e.preventDefault()
+    })
+  })
+  $('form').on('blur', 'input[type=number]', function (e) {
+    $(this).off('wheel.disableScroll')
+  })
+ 
+  
+  function fetchQueries(status,user) {
+    // alert("hello");
+    $.ajax({
+        url: '/fetch-queries',
+        type: 'GET',
+        data: { status: status ,'user':user},
+        beforeSend: function() {
+            $('body').addClass('loading');
+        },
+        success: function(response) {
+            if (response.success) {
+                $('#query-list-container').html(response.html);
+            } else {
+                $('#query-list-container').html('<div class="error">Failed to load queries.</div>');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+            $('#query-list-container').html('<div class="error">An error occurred. Please try again.</div>');
+        },
+        complete: function() {
+            $('body').removeClass('loading');
+        }
+    });
+}
+
+$('.tab-item').on('click', function(e) {
+    e.preventDefault();
+    
+    $('.tab-item').removeClass('active');
+    $(this).addClass('active');
+    var status = $(this).data('status');
+    var user = $(this).data('user');
+
+    fetchQueries(status,user);
+});

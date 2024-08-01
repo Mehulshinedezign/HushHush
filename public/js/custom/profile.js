@@ -1,5 +1,6 @@
 jQuery(document).ready(function () {
 
+
     jQuery('form#userDetail').validate({
         errorClass: 'error-messages',
         rules: {
@@ -9,27 +10,24 @@ jQuery(document).ready(function () {
                 maxlength: 50,
                 regex: /^[a-zA-Z]+[a-zA-Z\s]+$/,
             },
-            email: {
-                required: true,
-                email: true,
-                regex: /^[a-zA-Z]+[a-zA-Z0-9_\.\-]*@[a-zA-Z]+(\.[a-zA-Z]+)*[\.]{1}[a-zA-Z]{2,10}$/,
-            },
+            // email: {
+            //     required: true,
+            //     email: true,
+            //     regex: /^[a-zA-Z]+[a-zA-Z0-9_\.\-]*@[a-zA-Z]+(\.[a-zA-Z]+)*[\.]{1}[a-zA-Z]{2,10}$/,
+            // },
             phone_number: {
                 required: true,
                 regex: /^[(]?[0-9]{3}[)]?[-]?[0-9]{3}[-]?[0-9]{4}$/
             },
-            // address1: {
-            //     required: true,
-            // },
             country: {
                 required: true,
             },
             state: {
                 required: true,
             },
-            // city: {
-            //     required: true,
-            // },
+            city: {
+                required: true,
+            },
             postcode: {
                 required: true,
             },
@@ -38,38 +36,52 @@ jQuery(document).ready(function () {
                 filesize: uploadFileSize
             },
             profile_pic: {
+                // required: true,
                 accept: allowedExtensionMessage,
                 filesize: uploadFileSize
-            }
+            },
+            address1: {
+                required: true,
+            },
+            address2: {
+                required: true,
+            },
+            // password: {
+            //     required: true,
+            //     minlength: passwordMinLength,
+            //     maxlength: passwordMaxLength,
+            //     regex: passwordRegex,
+            // },
+            // confirm_password: {
+            //     required: true,
+            //     equalTo: "[name='password']"
+            // },
         },
         messages: {
             name: {
                 required: 'This field is required.',
                 minlength: 'Name must be 3-50 characters long.',
                 maxlength: 'Name must be 3-50 characters long.',
-                regex: 'Name contains alphabets and space only.',
+                regex: 'Name should contain alphabets and in-between space only.',
             },
-            email: {
-                required: 'This field is required.',
-                email: 'Invalid email address.',
-                regex: 'Invalid email address',
-            },
+            // email: {
+            //     required: 'This field is required.',
+            //     email: 'Invalid email address.',
+            //     regex: 'Invalid email address',
+            // },
             phone_number: {
                 required: 'This field is required.',
                 regex: "Invalid phone number"
             },
-            // address1: {
-            //     required: 'This field is required.',
-            // },
             country: {
-                required: 'This field is required.',
+                required: 'Please select a country.',
             },
             state: {
-                required: 'This field is required.',
+                required: 'Please select a state.',
             },
-            // city: {
-            //     required: 'Please select the city',
-            // },
+            city: {
+                required: 'Please select a city.',
+            },
             postcode: {
                 required: 'This field is required.',
             },
@@ -78,16 +90,35 @@ jQuery(document).ready(function () {
                 filesize: 'File size should not be more than ' + uploadFileSizeInMb
             },
             profile_pic: {
+                // required: 'This field is required.',
                 accept: 'Please upload only ' + allowedExtensionMessage,
                 filesize: 'File size should not be more than ' + uploadFileSizeInMb
-            }
+            },
+            address1: {
+                required: 'This field is required.',
+            },
+            address2: {
+                required: 'This field is required.',
+            },
+            // password: {
+            //     required: 'This field is required.',
+            //     minlength: 'Password must be at least ' + passwordMinLength + ' characters long.',
+            //     maxlength: 'Password cannot exceed ' + passwordMaxLength + ' characters.',
+            //     regex: 'The password must contain at least one uppercase , one lowercase , one numeric digit and one special character from the following: @#$%^&*.',
+            // },
+            // confirm_password: {
+            //     equalTo: 'Passwords must match.',
+            //     required: 'This field is required.',
+            // },
         },
         errorPlacement: function (label, element) {
             if (element.is("textarea")) {
                 label.insertAfter(element.next());
-            } else if (element.attr('type') == 'file') {
-                label.insertAfter(jQuery(element).parent())
-            } else if (jQuery(element).hasClass('form-class')) {
+            }
+            //  else if (element.attr('type') == 'file') {
+            //     label.insertAfter(jQuery(element).parent())
+            // }
+             else if (jQuery(element).hasClass('form-class')) {
                 label.insertAfter($(element).parent())
             } else if (jQuery(element).hasClass('form-select')) {
                 label.insertAfter($(element).parent())
@@ -96,6 +127,7 @@ jQuery(document).ready(function () {
             }
         }
     });
+
 
     jQuery('form#changePassword').validate({
         errorClass: "error-messages",
@@ -135,53 +167,71 @@ jQuery(document).ready(function () {
     });
 
     jQuery('#country').change(function () {
-        let countryId = jQuery(this).val();
-        let url = APP_URL + '/states/' + countryId;
-        if (jQuery.isNumeric(countryId) && countryId > 0) {
-            const result = ajaxCall(url, 'get', {});
-            result.then(handleCountryData).catch(handleCountryError)
-        }
-    })
 
+        let selectedOption = jQuery(this).find('option:selected');
+        let countryId = selectedOption.data('country_id');
+        // alert(countryId);
+        let url = `${APP_URL}/states/${countryId}`;
+    
+        if (countryId) {
+            ajaxCall(url, 'get', {})
+                .then(handleCountryData)
+                .catch(handleCountryError);
+        } else {
+            jQuery('#state').html('<option value="">Select State</option>');
+            jQuery('#city').html('<option value="">Select City</option>');
+        }
+    });
+    
     function handleCountryData(response) {
         let options = '<option value="">Select State</option>';
         jQuery('#state').html(options);
         jQuery('#city').html('<option value="">Select City</option>');
-        response.data.forEach(state => {
-            options += '<option value="' + state.id + '">' + state.name + '</option>';
-        });
-        jQuery('#state').html(options);
-    }
-
-    function handleCountryError(error) {
-        console.log('error', error)
-    }
-
-
-    jQuery('#state').change(function () {
-        let stateId = jQuery(this).val();
-        let url = APP_URL + '/cities/' + stateId;
-        if (jQuery.isNumeric(stateId) && stateId > 0) {
-            const result = ajaxCall(url, 'get', {});
-            result.then(handleStateData).catch(handleStateError)
+    
+        if (Array.isArray(response)) {
+            response.forEach(state => {
+                options += `<option value="${state.name}" data-state_id="${state.id}">${state.name}</option>`;
+            });
+            jQuery('#state').html(options);
+        } else {
+            console.error('Unexpected response format:', response);
         }
-    })
-
-
-
-    function handleStateData(response) {
-        let options = '<option value="">Select City</option>';
-        jQuery('#city').html(options);
-        response.data.forEach(city => {
-            if (cityId == city.id) {
-                var selected = 'selected';
+    }
+    
+    function handleCountryError(error) {
+        console.error('Error fetching states:', error);
+    }
+    
+        jQuery('#state').change(function () {
+            // let stateId = $(this).val();
+            let selectedOption = jQuery(this).find('option:selected');
+            let stateId = selectedOption.data('state_id');
+    
+            if (stateId) {
+                let url = `${APP_URL}/cities/${stateId}`;
+                ajaxCall(url, 'GET', {})
+                    .then(handleStateData)
+                    .catch(handleStateError);
+            } else {
+                jQuery('#city').html('<option value="">Select City</option>');
             }
-            options += '<option ' + selected + ' value="' + city.id + '">' + city.name + '</option>';
         });
-        jQuery('#city').html(options);
-    }
+    
+        function handleStateData(response) {
+            if (Array.isArray(response)) {
+                let options = '<option value="">Select City</option>';
+                response.forEach(city => {
+                    if (city && city.name) {
+                        options += `<option value="${city.name}">${city.name}</option>`;
+                    }
+                });
+                jQuery('#city').html(options);
+            } else {
+                console.error('Unexpected response format:', response);
+            }
+        }
+        function handleStateError(error) {
+            console.error('Error fetching cities:', error);
+        }
 
-    function handleStateError(error) {
-        console.log('error', error)
-    }
-})
+});
