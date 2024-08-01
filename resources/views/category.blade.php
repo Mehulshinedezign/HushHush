@@ -64,8 +64,8 @@
                                 @endforeach
                             </div>
                         </div>
-                
-                         {{-- <div class="home-filter-inner"> 
+
+                         {{-- <div class="home-filter-inner">
                              <h4>Price Range</h4>
                             <div class="filter-categories">
                                 <div class="">
@@ -91,7 +91,7 @@
                                     </div>
                                 </div>
                             </div>  --}}
-                            <div class="home-filter-inner"> 
+                            <div class="home-filter-inner">
                                 <h4>Price</h4>
                                     <div class="custom-wrapper">
                                         <div class="price-input-container">
@@ -124,7 +124,7 @@
                                         </div>
                                     </div>
                             </div>
-                            
+
                             {{-- <h4>Status</h4>
                             <div class="filter-categories">
                                 <div class="stock-status">
@@ -156,7 +156,7 @@
                                     @endforeach
                                 </div>
 
-                            </div>        
+                            </div>
                         <!-- </div> -->
                         <div class="home-filter-inner">
                             <h4>Rating</h4>
@@ -212,7 +212,7 @@
                                             {{-- <input type="text" placeholder="Your Location" class="form-control"
                                                 id="filter_address" name="complete_address" value="{{request()->country request()->state request()->city}}"> --}}
                                                 <input type="text" placeholder="Your Location" class="form-control"
-                                                id="filter_address" name="complete_address" 
+                                                id="filter_address" name="complete_address"
                                                 value="{{ request()->country ? request()->country . ' ' : '' }}{{ request()->state ? request()->state . ' ' : '' }}{{ request()->city ? request()->city : '' }}">
 
                                         </div>
@@ -802,7 +802,7 @@
         // disable the enter keyword
         $(document).ready(function() {
             $(document).on('keypress', 'input', function(e) {
-                if (e.which === 13) { 
+                if (e.which === 13) {
                     e.preventDefault();
                     return false;
                 }
@@ -817,7 +817,7 @@
                 console.log("value is : ",value);
                 $('.filter-rating-inner').removeClass('active');
                 $(this).addClass('active').prevAll().addClass('active');
-                
+
                 $('#rating').val(value);
             });
         });
