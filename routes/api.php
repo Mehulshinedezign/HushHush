@@ -70,6 +70,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     Route::post('/payment-intent/{id}', [App\Http\Controllers\Api\StripeController::class, 'createPaymentIntent']);
+    Route::get('/user-intent', [App\Http\Controllers\Api\StripeController::class, 'createIntent']);
 
     //profile APIs
     Route::get('/profile', [App\Http\Controllers\Api\ProfileController::class, 'index']);

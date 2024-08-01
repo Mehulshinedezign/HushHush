@@ -41,6 +41,7 @@ class User extends Authenticatable
         'push_notifications',
         'country_code',
         'stripe_account_id',
+        'email_verified_at'
     ];
 
     /**
@@ -256,5 +257,10 @@ class User extends Authenticatable
     public function bankAccount()
     {
         return $this->hasOne(UserBankDetail::class, 'user_id','id');
+    }
+
+    public function pushToken()
+    {
+        return $this->hasOne(PushToken::class);
     }
 }
