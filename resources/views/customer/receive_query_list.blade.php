@@ -129,6 +129,9 @@
         function confirmAccept(event, queryId, date_range, rentDay, rentWeek, rentMonth) {
             event.preventDefault();
             let price = $(`.negotiation_price_${queryId}`).val();
+            let shipping_charges = $(`.shipping_charges_${queryId}`).val();
+            let cleaning_charges = $(`.cleaning_charges_${queryId}`).val();
+
 
             if (!price) {
                 price = calculatePrice(date_range, rentDay, rentWeek, rentMonth);
@@ -143,9 +146,28 @@
                 return false;
             }
 
+            if(cleaning_charges<= 0 || !cleaning_charges)
+            {
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Please enter a valid cleaning charge',
+                    'position': 'topRight',
+                });
+                return false;
+            }
+            if(shipping_charges<= 0 || !shipping_charges)
+            {
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Please enter a valid shipping charge',
+                    'position': 'topRight',
+                });
+                return false;
+            }
+
             Swal.fire({
                 title: 'Are you sure?',
-                text: `Are you sure you want to accept this product $${price} `,
+                text: `Are you sure you want to accept this product $${parseInt(price) + parseInt(shipping_charges) + parseInt(cleaning_charges)} `,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#1B1B1B',
@@ -156,14 +178,17 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $('body').addClass('loading');
-                    acceptQuery(queryId, price);
+                    acceptQuery(queryId, price , shipping_charges, cleaning_charges);
                 }
             });
         }
 
-        function acceptQuery(queryId, price) {
+        function acceptQuery(queryId, price , shipping_charges, cleaning_charges) {
             const encodedPrice = encodeURIComponent(price);
-            const url = `{{ url('/accept_query') }}/${queryId}?negotiate_price=${encodedPrice}`;
+            const encodedshipping_charges = encodeURIComponent(shipping_charges);
+            const encodedcleaning_charges = encodeURIComponent(cleaning_charges);
+
+            const url = `{{ url('/accept_query') }}/${queryId}?negotiate_price=${encodedPrice}&shipping_charges=${encodedshipping_charges}&cleaning_charges=${encodedcleaning_charges}`;
             window.location.href = url;
         }
 

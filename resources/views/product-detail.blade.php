@@ -567,7 +567,6 @@
 
             var queryDates = @json($querydates);
             var disableDates = @json($disable_dates);
-            console.log(queryDates);
             var disabledDateRanges = queryDates.map(function(query) {
                 var dateRange = query.date_range.split(' - ');
                 return {
@@ -577,10 +576,10 @@
             });
 
             var noneAvailableDates = disableDates.map(function(dateRange) {
-                var dates = dateRange.split(' - ');
+                // var dates = dateRange.split(' - ');
                 return {
-                    start: moment(dates[0]),
-                    end: moment(dates[1])
+                    start: moment(dateRange),
+                    end: moment(dateRange)
                 };
             }).filter(function(range) {
                 return range !== null;
@@ -592,7 +591,7 @@
                 });
 
                 var inDisableDates = noneAvailableDates.some(function(range) {
-                    return date.isBetween(range.start, range.end, 'day', '[]');
+                    return date.isSame(range.start, 'day') || date.isSame(range.end, 'day');
                 });
 
                 return inQueryDates || inDisableDates;

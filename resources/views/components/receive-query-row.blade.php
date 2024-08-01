@@ -4,7 +4,7 @@
             <div class="table-profile">
                 @if ($query->product)
                 <a href="{{ route('viewproduct', jsencode_userdata($query->product->id)) }}">
-                
+
                     <img src="{{ $query->product->thumbnailImage->file_path ?? '' }}" alt="tb-profile" width="26"
                         height="27">
                     </a>
@@ -25,15 +25,38 @@
             <h5>${{ $query->getCalculatedPrice($query->date_range) }}</h5>
         </div>
     </td>
+    @if ($query->status != 'PENDING')
+    <td>
+        <div class="user-table-head">
+            <h5>${{ $query->negotiate_price ?? '0' }}</h5>
+        </div>
+    </td>
+
+    <td>
+        <div class="user-table-head">
+            <h5>${{ $query->cleaning_charges ?? '0' }}</h5>
+        </div>
+    </td>
+    <td>
+        <div class="user-table-head">
+            <h5>${{ $query->shipping_charges ?? '0' }}</h5>
+        </div>
+    </td>
+    @endif
+
     <td>
         <p class="Inquiry-desc">{{ $query->query_message ?? '' }}</p>
     </td>
     <td>{{ $query->date_range ?? '' }}</td>
 
     @if ($query->status == 'PENDING')
-        <td>
-            <input type="text" id="negotiate_price_{{ $query->id }}" placeholder="Enter negotiate price"
+        <td class = "negotiation-price-td">
+            <input type="number" id="negotiate_price_{{ $query->id }}" placeholder="Enter negotiate price"  min='0'
                 class="negotiation_price_{{ $query->id }}">
+            <input type="number" id="cleaning_charges_{{ $query->id }}" placeholder="Enter cleaning charges"  min='0'
+                class="cleaning_charges_{{ $query->id }}">
+            <input type="number" id="shipping_charges_{{ $query->id }}" placeholder="Enter shipping charges" min='0'
+                class="shipping_charges_{{ $query->id }}">
         </td>
     @endif
     <td class="user-active">
