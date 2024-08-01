@@ -2066,3 +2066,6 @@ section.od-table-section {
     opacity: 0;
     cursor: pointer;
 }
+.filter-categories {
+    overflow: auto;
+}

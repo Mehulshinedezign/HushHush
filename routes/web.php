@@ -53,7 +53,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
     Route::middleware('auth', 'restrict-admin-retailer', 'VerifyOtp','CheckStatus')->group(function () {
 
 
-        Route::get('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index');
+        Route::any('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index');
         Route::get('products', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('products');
         Route::get('product/{id}', [App\Http\Controllers\Customer\ProductController::class, 'view'])->name('viewproduct');
         Route::get('lender_info/{id}', [App\Http\Controllers\Customer\ProductController::class, 'lenderInfo'])->name('lenderProfile');
