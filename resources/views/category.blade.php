@@ -124,7 +124,6 @@
                                         </div>
                                     </div>
                             </div>
-
                             {{-- <h4>Status</h4>
                             <div class="filter-categories">
                                 <div class="stock-status">
