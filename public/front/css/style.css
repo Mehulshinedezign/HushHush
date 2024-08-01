@@ -2027,6 +2027,10 @@ input[type="range"]::-webkit-slider-thumb {
 		margin-bottom: 10px;
 	}
 }
+.filter-categories {
+    overflow: auto;
+}
+
 
 .success-text {
     display: flex;

@@ -395,7 +395,6 @@ class Product extends Model
     }
 
 
-
     public function getCalculatedPrice($dateRange)
     {
         [$startDateStr, $endDateStr] = explode(' - ', $dateRange);
