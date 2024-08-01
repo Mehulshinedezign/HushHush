@@ -243,7 +243,7 @@ class Product extends Model
     public function scopeFilterBySizes($query, $sizes)
     {
         if (!empty($sizes)) {
-            return $query->whereIn('size', $sizes);
+            return $query->where('size', $sizes);
         }
         return $query;
     }
@@ -256,19 +256,15 @@ class Product extends Model
         return $query;
     }
 
-    public function scopeFilterByPriceRange($query, $priceRange)
+    public function scopeFilterByPriceRange($query, $minPrice,$maxPrice)
     {
-        if (in_array('1', $priceRange)) {
-            $query->orWhere('price', '<', 1000);
-        }
-        if (in_array('2', $priceRange)) {
-            $query->orWhereBetween('price', [1000, 2000]);
-        }
-        if (in_array('3', $priceRange)) {
-            $query->orWhereBetween('price', [2000, 3000]);
-        }
-        if (in_array('4', $priceRange)) {
-            $query->orWhere('price', '>', 3000);
+
+        if (isset($minPrice) && isset($maxPrice)) {
+            return $query->whereBetween('rent_day', [$minPrice, $maxPrice]);
+        } elseif (isset($maxPrice)) {
+            return $query->where('rent_day', '<=', $maxPrice);
+        } elseif (isset($minPrice)) {
+            return $query->where('rent_day', '<=', $minPrice);
         }
         return $query;
     }

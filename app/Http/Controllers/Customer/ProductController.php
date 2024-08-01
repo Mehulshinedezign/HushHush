@@ -36,6 +36,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+        // dd('here',$request->filter_date);
         $categories = Category::where('status', 'Active')->get();
         $selectedCategories = (isset($request->category)) ? $request->category : [];
         $selectedcolor = (isset($request->filtercolor)) ? $request->filtercolor : [];
