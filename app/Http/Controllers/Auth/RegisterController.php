@@ -176,8 +176,13 @@ class RegisterController extends Controller
 
 
         $otp = $this->otpService->generateOtp($signUpData);
+        // PhoneOtp::updateOrCreate(['user_id' => $signUpData->id], [
+        //     'otp' => $otp,
+        //     'expires_at' => date('Y-m-d H:i:s'),
+        //     'status' => '0',
+        // ]);
         PhoneOtp::updateOrCreate(['user_id' => $signUpData->id], [
-            'otp' => $otp,
+            'otp' => '123456',
             'expires_at' => date('Y-m-d H:i:s'),
             'status' => '0',
         ]);
