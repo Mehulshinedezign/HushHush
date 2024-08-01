@@ -37,35 +37,33 @@ class OrderController extends Controller
             $toDate = DateTime::createFromFormat($request->global_date_format, $fromAndToDate[1])->format('Y-m-d');
         }
 
-        $orderItems = OrderItem::with('order.user', 'product.thumbnailImage')
-            ->when((!is_null($request->status) && $request->status != 'all'), function ($q) use ($request) {
-                $q->whereHas('order', function ($q) use ($request) {
-                    if ($request->status == 'disputed') {
-                        $q->where('dispute_status', 'Yes');
-                    } else {
-                        $q->where('status', $request->status);
-                        $q->whereIn('dispute_status', ['No', 'Resolved']);
-                    }
-                });
+        $orders = Order::with('product.thumbnailImage', 'product.retailer', 'product.category', 'transaction', 'customerquery', 'product.nonAvailableDates')
+            ->when((!is_null($request->status) && $request->status != 'all' && $request->status != 'disputed'), function ($q) use ($request) {
+                $q->where('status', $request->status);
+                $q->whereIn('dispute_status', ['No', 'Resolved']);
             })
-            ->when((!is_null($request->order) && $request->order > '0'), function ($q) use ($request) {
-                $q->where('order_id', $request->order);
+            ->when((!is_null($request->status) && $request->status == 'disputed'), function ($q) {
+                $q->where('dispute_status', 'Yes');
+            })
+            ->when((!is_null($request->order) && $request->order > 0), function ($q) use ($request) {
+                $q->where('id', $request->order);
             })
             ->when(!is_null($fromDate) && !is_null($toDate), function ($q) use ($fromDate, $toDate) {
-                $q->whereDate('date', '>=', $fromDate);
-                $q->whereDate('date', '<=', $toDate);
+                $q->whereDate('from_date', '>=', $fromDate);
+                $q->whereDate('to_date', '<=', $toDate);
             })
-            ->retailerOrders()
-            ->orderByDesc('order_id')
+            ->where('retailer_id', auth()->user()->id)
+            ->orderByDesc('id')
             ->paginate($request->global_pagination);
-
-        $waitingCount = OrderItem::retailerOrders()->where('dispute_status', '<>', 'Yes')->where('status', 'Pending')->count();
+        dd($orders);
+        $waitingCount = OrderItem::retailerOrders()->where('dispute_status', '<>', 'Yes')->where('status', 'Watting')->count();
         $pickedUpCount = OrderItem::retailerOrders()->where('dispute_status', '<>', 'Yes')->where('status', 'Picked Up')->count();
         $completedCount = OrderItem::retailerOrders()->where('dispute_status', '<>', 'Yes')->where('status', 'Completed')->count();
         $cancelledCount = OrderItem::retailerOrders()->where('dispute_status', '<>', 'Yes')->where('status', 'Cancelled')->count();
         $disputedCount = OrderItem::retailerOrders()->where('dispute_status', 'Yes')->count();
 
-        return view('retailer.order_list', compact('orderItems', 'waitingCount', 'pickedUpCount', 'completedCount', 'cancelledCount', 'disputedCount'));
+        // return view('retailer.order_list', compact('orderItems', 'waitingCount', 'pickedUpCount', 'completedCount', 'cancelledCount', 'disputedCount'));
+        return view('retailer.order_history', compact('orders'));
     }
 
     public function viewOrder(Order $order)

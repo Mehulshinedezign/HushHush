@@ -10,7 +10,7 @@
                     </div>
                     <form id="paymentform" action="{{ route('charge') }}" method="POST">
                         @csrf
-                        <div class="payment-sec-tabs">
+                        {{-- <div class="payment-sec-tabs">
                             <div class="payment-tab-box">
                                 <label for="security">Security ${{ $security->value }}</label>
                                 <input type="radio" name="security_option" id="security" checked
@@ -21,7 +21,7 @@
                                 <input type="radio" name="security_option" id="insurance" value="{{ $insurance->value }}"
                                     data-type="{{ $insurance->type }}">
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="">
                             <div class="row">
                                 <div class="col-md-12">
@@ -66,12 +66,12 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" value="{{ $price + $security->value }}" id="total_payment">
+                        <input type="hidden" value="{{ $price }}" id="total_payment">
                         <input type="hidden" value="{{ $query->id }}" id="query">
-                        <input type="hidden" value="{{ $security->type }}" id="security_option_type">
-                        <input type="hidden" value="{{ $security->value }}" id="security_option_value">
+                        {{-- <input type="hidden" value="{{ $security->type }}" id="security_option_type">
+                        <input type="hidden" value="{{ $security->value }}" id="security_option_value"> --}}
                         <button type="submit" id="payNow" class="button primary-btn  full-btn">Pay Now
-                            ${{ $price + $security->value }}
+                            ${{ $price }}
                         </button>
                     </form>
                 </div>
@@ -157,8 +157,8 @@
         const cardHolderName = document.getElementById('cardName')
         var totalPayment = document.getElementById('total_payment').value;
         var query = document.getElementById('query').value;
-        var securityOptionType = document.getElementById('security_option_type').value;
-        var securityOptionValue = document.getElementById('security_option_value').value;
+        // var securityOptionType = document.getElementById('security_option_type').value;
+        // var securityOptionValue = document.getElementById('security_option_value').value;
 
 
         form.addEventListener('submit', async (e) => {
@@ -210,17 +210,17 @@
             queryElement.setAttribute('value', query)
             form.appendChild(queryElement)
 
-            let securityOptionTypeElement = document.createElement('input')
-            securityOptionTypeElement.setAttribute('type', 'hidden')
-            securityOptionTypeElement.setAttribute('name', 'security_option_type')
-            securityOptionTypeElement.setAttribute('value', securityOptionType)
-            form.appendChild(securityOptionTypeElement)
+            // let securityOptionTypeElement = document.createElement('input')
+            // securityOptionTypeElement.setAttribute('type', 'hidden')
+            // securityOptionTypeElement.setAttribute('name', 'security_option_type')
+            // securityOptionTypeElement.setAttribute('value', securityOptionType)
+            // form.appendChild(securityOptionTypeElement)
 
-            let securityOptionValueElement = document.createElement('input')
-            securityOptionValueElement.setAttribute('type', 'hidden')
-            securityOptionValueElement.setAttribute('name', 'security_option_value')
-            securityOptionValueElement.setAttribute('value', securityOptionValue)
-            form.appendChild(securityOptionValueElement)
+            // let securityOptionValueElement = document.createElement('input')
+            // securityOptionValueElement.setAttribute('type', 'hidden')
+            // securityOptionValueElement.setAttribute('name', 'security_option_value')
+            // securityOptionValueElement.setAttribute('value', securityOptionValue)
+            // form.appendChild(securityOptionValueElement)
             form.submit();
             jQuery('.page-loader').removeClass('d-none'); //for loader
         }
@@ -257,20 +257,20 @@
             }
         }
 
-        jQuery(document).on("click", 'input[name="security_option"]', function() {
-            $('input[name="security_option"]').attr("checked", false);
-            $(this).attr("checked", true);
+        // jQuery(document).on("click", 'input[name="security_option"]', function() {
+        //     $('input[name="security_option"]').attr("checked", false);
+        //     $(this).attr("checked", true);
 
-            var amount = parseFloat($("input[name='security_option']:checked").val());
-            var securityoptiontype = $("input[name='security_option']:checked").attr('data-type');
-            // alert(securityoptiontype);
-            var price = {{ $price }};
-            var totalamount = price + amount;
-            $("#payNow").text('Pay Now ' + '$' + totalamount);
-            $('#total_payment').val(totalamount);
-            $('#security_option_type').val(securityoptiontype);
-            $('#security_option_value').val(amount);
+        //     var amount = parseFloat($("input[name='security_option']:checked").val());
+        //     var securityoptiontype = $("input[name='security_option']:checked").attr('data-type');
+        //     // alert(securityoptiontype);
+        //     var price = {{ $price }};
+        //     var totalamount = price + amount;
+        //     $("#payNow").text('Pay Now ' + '$' + totalamount);
+        //     $('#total_payment').val(totalamount);
+        //     $('#security_option_type').val(securityoptiontype);
+        //     $('#security_option_value').val(amount);
 
-        });
+        // });
     </script>
 @endpush

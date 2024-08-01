@@ -212,7 +212,7 @@ function getMessages(element) {
     var reciever = element.attr('data-receiverId');
     userImage = element.find('img').attr('src');
     var name = element.find('p').html()
-    // alert(name);
+
     var Chatimg = `<img src="${userImage}" class="chat-pro-img"><span>${name}</span>`;
     $('.chat-product-profile').html(Chatimg);
     // var reciever = jQuery()
@@ -229,7 +229,7 @@ function loadMessages(sender, reciever, userImage) {
         //console.log('HELLLLL')
         return;
     }
-    //console.log('hiiii',chatId);
+
     jQuery('#chatWindow').html('');
     if (fireBaseListener)
         fireBaseListener();
