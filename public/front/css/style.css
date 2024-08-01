@@ -1870,3 +1870,6 @@ input[type=number] {
     padding: 75px 0px;
     min-height: calc(100vh - 476px);
 }
+.filter-categories {
+    overflow: auto;
+}
