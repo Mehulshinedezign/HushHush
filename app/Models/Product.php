@@ -269,7 +269,7 @@ class Product extends Model
 
     public function scopeFilterByDateRange($query, $startDate, $endDate)
     {
-        
+
         if (!empty($startDate) && !empty($endDate)) {
 
             // dd($startDate,$endDate);
@@ -296,7 +296,7 @@ class Product extends Model
 
 
     }
-  
+
 
     public function getCalculatedPrice($dateRange)
     {
