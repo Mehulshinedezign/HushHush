@@ -145,7 +145,7 @@ class StripeController extends Controller
                     'from_minute' => $fromDateTime->format('i'),
                     'to_hour' => $toDateTime->format('H'),
                     'to_minute' => $toDateTime->format('i'),
-                    'order_date' => now()->toDateString(),
+                    'order_date' => date('Y-m-d H:i:s'),
                     'status' => $orderStatus,
                 ]);
 

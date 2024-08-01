@@ -65,7 +65,7 @@
     <section class="profile-banner-sec">
         <div class="container">
             <div class="profile-banner-name">
-                <h2>{{$user->name}}'s profile</h2>
+                <h2>{{$retailer->name}}'s profile</h2>
             </div>
         </div>
         <img src="{{asset('front/images/leaf-img.svg')}}" alt="leaf" class="banner-laef-img">
@@ -78,13 +78,13 @@
                         <div class="profile-personal-detail">
                             <div class="profile-personal-img">
                                 @if ($user->profile_file)
-                                    <img src="{{ asset ('storage/'. $user->profile_file) }}" alt="Profile Picture">
+                                    <img src="{{ asset ('storage/'. $retailer->profile_file) }}" alt="Profile Picture">
                                 @else
                                     <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
                                 @endif
                                 {{-- <img src="{{asset('front/images/profile.png')}}" alt="img"> --}}
                             </div>
-                            <h3>{{$user->name}}</h3>
+                            <h3>{{$retailer->name}}</h3>
                             {{-- <p><img src="{{asset('front/images/us-flag.svg')}}" alt="img"> Los Angeles , USA</p> --}}
                         </div>
                     </div>
@@ -92,8 +92,8 @@
                         <div class="profile-about-detail">
                             <h4>About me</h4>
 
-                            @if ( ($user) && ($user->userDetail))
-                                <p>{{ $user->userDetail->about }}</p>  
+                            @if ( ($retailer) && ($retailer->userDetail))
+                                <p>{{ $retailer->userDetail->about }}</p>
                             @else
                                 <p>Safer For The Environment: Our denim factory partner recycles 98% of their water using
                                     reverse osmosis filtration and keeps byproducts out of the environment by mixing them with
@@ -118,8 +118,8 @@
                             <div class="profile-address-data">
                                 <h3>Address</h3>
 
-                                @if($user && $user->userDetail)
-                                    <p>{{ $user->userDetail->address1 }}</p>
+                                @if($retailer && $retailer->userDetail)
+                                    <p>{{ $retailer->userDetail->address1 }}</p>
                                 @endif
 
                                 {{-- <p>Akshya Nagar 1st Block 1st Cross, Rammurthy nagar Los Angeles , USA</p> --}}
@@ -389,11 +389,11 @@ $(document).ready(function () {
     $('.product-slider').slick({
         dots: false,
         infinite: false,
-        draggable: true, 
+        draggable: true,
         arrow: true,
         slidesToShow: 4,
         prevArrow: $('.prev-product-btn'),
-        nextArrow: $('.next-product-btn'),  
+        nextArrow: $('.next-product-btn'),
         responsive: [
             {
                 breakpoint: 1400,
@@ -406,7 +406,7 @@ $(document).ready(function () {
                 breakpoint: 992,
                 settings: {
                     slidesToShow: 3,
-                    slidesToScroll: 1, 
+                    slidesToScroll: 1,
                 }
             },
             {
@@ -425,11 +425,11 @@ $(document).ready(function () {
     $('.host-cal-slider').slick({
         dots: false,
         infinite: true,
-        draggable: true, 
+        draggable: true,
         arrow: true,
         slidesToShow: 1,
         prevArrow: $('.prev-banner-btn'),
-        nextArrow: $('.next-banner-btn'),  
+        nextArrow: $('.next-banner-btn'),
         responsive: [
             {
                 breakpoint: 1400,
@@ -456,5 +456,5 @@ $(document).ready(function () {
         ]
     });
 });
-</script> 
+</script>
 @endpush

@@ -386,7 +386,7 @@ class ProductController extends Controller
             $averageRating = $ratedProducts->sum('average_rating') / count($ratedProducts);
         }
 
-        return view('customer.profile',compact('products'));
+        return view('customer.profile',compact('products','retailer'));
     }
 
 }
