@@ -36,7 +36,6 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        // dd('here',$request->min_value,$request->max_value);
         $categories = Category::where('status', 'Active')->get();
         $selectedCategories = (isset($request->category)) ? $request->category : [];
         $selectedcolor = (isset($request->filtercolor)) ? $request->filtercolor : [];
@@ -54,9 +53,9 @@ class ProductController extends Controller
 
             // $query = Product::where('user_id', '!=', $authUserId);
             $products = Product::with('disableDates')->where('user_id', '!=', $authUserId)->applyFilters()->get();
-       
+
             // dd($startDate,$endDate);
-            
+
 
             // if ($request->has('Color')) {
             //     $colors = explode(',', $request->input('Color'));
