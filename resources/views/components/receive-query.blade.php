@@ -8,11 +8,17 @@
                             <th>Product</th>
                             <th>Name</th>
                             <th>Actual Price</th>
+                            @if($querydatas->first()->status != 'PENDING')
+                            <th>Negotiation Price</th>
+                            <th>Cleaning Price</th>
+                            <th>Shipping Price</th>
+
+                            @endif
                             <th>Query</th>
                             <th>Date</th>
 
                             @if ($accept)
-                            <th>Set Price</th>       
+                            <th>Set Price</th>
                             @endif
                             <th>Action</th>
                         </tr>

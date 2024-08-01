@@ -177,19 +177,21 @@ class ProductController extends Controller
         $productImages = $product->allImages;
         $querydates = Query::where(['product_id'=>$id, 'status'=> 'PENDING','user_id' =>auth()->user()->id])->get();
 
-        $disabledDates = $product->disableDates;
+        $disable_dates = $product->disableDates->pluck('disable_date')->toArray();
+
+        // dd($disabledDates);
 
         // dd("here",$disabledDates);
-        $disable_dates = [];
-        if ($disabledDates->isNotEmpty()) {
-            $sortedDates = $disabledDates->sortBy('disable_date');
-            $firstDate = \Carbon\Carbon::parse($sortedDates->first()->disable_date)->format('Y-m-d');
-            $lastDate = \Carbon\Carbon::parse($sortedDates->last()->disable_date)->format('Y-m-d');
+        // $disable_dates = [];
+        // if ($disabledDates->isNotEmpty()) {
+        //     $sortedDates = $disabledDates->sortBy('disable_date');
+        //     $firstDate = \Carbon\Carbon::parse($sortedDates->first()->disable_date)->format('Y-m-d');
+        //     $lastDate = \Carbon\Carbon::parse($sortedDates->last()->disable_date)->format('Y-m-d');
 
-            $disable_dates[] = $firstDate . ' - ' . $lastDate;
-        } else {
-            $disable_dates[] = '';
-        }
+        //     $disable_dates[] = $firstDate . ' - ' . $lastDate;
+        // } else {
+        //     $disable_dates[] = '';
+        // }
 
 
         // dd($querydates,$disable_dates);
