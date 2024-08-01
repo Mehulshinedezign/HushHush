@@ -36,7 +36,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        // dd('here',$request->filter_date);
+        // dd('here',$request->min_value,$request->max_value);
         $categories = Category::where('status', 'Active')->get();
         $selectedCategories = (isset($request->category)) ? $request->category : [];
         $selectedcolor = (isset($request->filtercolor)) ? $request->filtercolor : [];
@@ -52,50 +52,9 @@ class ProductController extends Controller
 
         $authUserId = auth()->user()->id;
 
-            $query = Product::where('user_id', '!=', $authUserId);
-
-            if ($request->has('Category') || $request->has('Brand') || $request->has('Size') || ($request->min) || ($request->max)) {
-                $query->where(function($q) use ($request) {
-                    if ($request->has('Category')) {
-                        $categoriesInput = $request->input('Category');
-                        $categories = is_array($categoriesInput) ? $categoriesInput : explode(',', $categoriesInput);
-                        $q->filterByCategories($categories);
-                    }
-                    
-                    if ($request->has('Brand')) {
-                        $brandsInput = $request->input('Brand');
-                        $brands = is_array($brandsInput) ? $brandsInput : explode(',', $brandsInput);
-                        $q->orWhere(function($subQ) use ($brands) {
-                            $subQ->filterByBrands($brands);
-                        });
-                    }
-                    
-                    if ($request->has('Size')) {
-                        $sizes = $request->input('Size');
-                        $q->orWhere(function($subQ) use ($sizes) {
-                            $subQ->filterBySizes($sizes);
-                        });
-                    }
-
-                    if (($request->min && $request->max) || ($request->min || $request->max)) {
-                        $minPrice = $request->input('min');
-                        $maxPrice = $request->input('max');
-                        $q->orWhere(function($subQ) use ($minPrice,$maxPrice) {
-                            $subQ->FilterByPriceRange($minPrice,$maxPrice);
-                        });
-                    }
-                });
-            }
-            
-            if($request->filter_date){
-                $dateRange = $request->filter_date;
-                $dates = explode(' - ', $dateRange);
-                $startDate = $dates[0];
-                $endDate = $dates[1];
-                $query->FilterByDateRange($startDate,$endDate);
-            }
-            
-            
+            // $query = Product::where('user_id', '!=', $authUserId);
+            $products = Product::with('disableDates')->where('user_id', '!=', $authUserId)->applyFilters()->get();
+       
             // dd($startDate,$endDate);
             
 
@@ -114,7 +73,7 @@ class ProductController extends Controller
             //     $query->filterByCondition($conditions);
             // }
 
-            $products = $query->get();
+            // $products = $query->get();
         // dd($request->neighborhoodcity,  $city);
 
         // dd($request->global_product_pagination);
