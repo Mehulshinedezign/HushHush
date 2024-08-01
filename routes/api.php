@@ -65,8 +65,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('products/{id}/ratings', [App\Http\Controllers\Api\ProductController::class, 'ratings']);
     Route::get('/order/details/{id}', [App\Http\Controllers\Api\ProductController::class, 'orderDetails']);
 
-    Route::post('/borrow/{bookingId}/confirm', [App\Http\Controllers\Api\LenderController::class, 'confirmPayment']);
-    Route::post('/stripe/charge', [App\Http\Controllers\Api\StripeController::class, 'createCharge']);
+    // Route::post('/borrow/{bookingId}/confirm', [App\Http\Controllers\Api\LenderController::class, 'confirmPayment']);
+    // Route::post('/stripe/charge', [App\Http\Controllers\Api\StripeController::class, 'createCharge']);
+
+
     Route::post('/payment-intent/{id}', [App\Http\Controllers\Api\StripeController::class, 'createPaymentIntent']);
 
     //profile APIs
