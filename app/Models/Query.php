@@ -12,7 +12,7 @@ class Query extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'product_id', 'for_user', 'query_message', 'status', 'date_range', 'negotiate_price',
+        'user_id', 'product_id', 'for_user', 'query_message', 'status', 'date_range', 'negotiate_price', 'chat_enabled'
     ];
 
     public function product()
@@ -74,4 +74,15 @@ class Query extends Model
         // dd("price is : ",$price);
         return $price;
     }
+
+    public function getStartDateAttribute()
+    {
+        return explode(' - ', $this->date_range)[0] ?? null;
+    }
+
+    public function getEndDateAttribute()
+    {
+        return explode(' - ', $this->date_range)[1] ?? null;
+    }
+
 }

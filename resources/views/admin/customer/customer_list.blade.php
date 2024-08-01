@@ -23,6 +23,7 @@
                                         <th>{{ __('user.product') }}</th>
                                         <th>{{ __('user.products rented') }}</th>
                                         <th>{{ __('user.email') }}</th>
+                                        <th>Gov Id</th>
                                         <th>{{ __('user.active') }}</th>
                                         <th>{{ __('Date Joined') }}</th>
                                         <th>{{ __('common.action') }}</th>
@@ -45,6 +46,16 @@
                                             @endif --}}
                                             <td>{{ count($customer->orderitem) }}</td>
                                             <td>{{ $customer->email }}</td>
+                                            
+                                            <td>
+                                                @if (@$customer->document)
+                                                    <img id="customer-img" src="{{ asset('storage/' . $customer->document->url) }}"
+                                                        alt="Profile Picture">
+                                                @else
+                                                    <img id="customer-img" src="{{ asset('front/images/pro3.png') }}"
+                                                        alt="Default Image">
+                                                @endif
+                                            </td>
                                             <td>
                                                 <label>
                                                     <input type="checkbox" class="custom-switch-input"
@@ -58,11 +69,11 @@
                                                 {{-- <a class="btn btn-primary" href="{{ route('admin.viewcustomer', [$customer->id]) }}" title="View">
                                             <i class="fa fa-eye"></i>
                                         </a> --}}
-                                                <!-- <a class="btn btn-success"
+                                                 {{-- <a class="btn btn-success"
                                                     href="{{ route('admin.edit.user', [$customer->id]) }}"
                                                     title="Edit User">
                                                     <i class="fa fa-pencil"></i>
-                                                </a> -->
+                                                </a>  --}}
                                                 <a class="btn btn-danger delete-user"
                                                     href="{{ route('admin.delete.user', [$customer->id]) }}"
                                                     title="Delete">

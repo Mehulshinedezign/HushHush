@@ -11,6 +11,8 @@ use App\Services\StripeService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use App\Models\Product;
+use App\Observers\ProductObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
             return new StripeService();
         });
     }
+
 
     /**
      * Bootstrap any application services.
@@ -55,6 +58,8 @@ class AppServiceProvider extends ServiceProvider
             $cms = CmsPage::where('status', 1)->get();
             $view->with('cms', $cms);
         });
+
+        Product::observe(ProductObserver::class);
     }
 
     // private function isMobileDevice()
@@ -62,3 +67,4 @@ class AppServiceProvider extends ServiceProvider
     //     return preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]);
     // }
 }
+

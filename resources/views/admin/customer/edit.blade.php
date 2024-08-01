@@ -23,9 +23,10 @@
                                  <!-- <div class="form-row"> -->
                                  <div class="form-group col-md-4">
                                      <label>{{ __('user.fields.email') }}<span class="text-danger">*</span></label>
-                                     <input type="email" name="email"
+                                     {{-- <input type="email" name="email"
                                          class="form-control @error('name') is-invalid @enderror"
-                                         value="{{ $user->email }}" placeholder="{{ __('user.placeholders.email') }}">
+                                         value="{{ $user->email }}" placeholder="{{ __('user.placeholders.email') }}"> --}}
+                                         <p class="form-control"> {{ $user->email }}</p>
                                      @error('email')
                                          <span class="invalid-feedback" role="alert">
                                              <strong>{{ $message }}</strong>
@@ -114,12 +115,11 @@
                                      @enderror
                                      </select>
                                  </div>
-                                
                                  <div class="form-group col-md-4">
                                      <label>{{ __('user.fields.state') }}</label>
                                      <select name="state" id="state"
                                          class="form-control @error('main_category') is-invalid @enderror">
-                                         <option selected>{{ __('user.placeholders.state') }}</option>
+                                         <option value="">Select state</option>
                                          @foreach ($states as $state)
                                             <option value="{{ $state->name }}" data-state_id="{{$state->id}}"
                                                 @if ($state->name == (isset($user->userDetail) ? $user->userDetail->state : '')) selected @endif>
@@ -137,7 +137,7 @@
                                      <label>{{ __('user.fields.city') }}</label>
                                      <select name="city" id="city"
                                          class="form-control @error('main_category') is-invalid @enderror">
-                                         <option>Select city</option>
+                                         <option value="">Select city</option>
                                          @foreach ($cities as $city)
                                              <option value="{{ $city->name }}"
                                                 @if ($city->name == (isset($user->userDetail) ? $user->userDetail->city : '')) selected @endif>
@@ -150,6 +150,20 @@
                                      @enderror
                                      </select>
                                  </div>
+
+                                 <div class="form-group col-md-4">
+                                    <label>Gov Id</label>
+                                    <div class="formfield">
+                                       <input type="file" name="gov_id"
+                                           class="form-control @error('gov_id') is-invalid @enderror"
+                                           placeholder="Gov Id">
+                                    </div>
+                                    @error('gov_id')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
 
                                  <div class="form-group col-md-4">
                                      <label>Password</label>

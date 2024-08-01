@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\EmailOtp;
+use App\Models\PhoneOtp;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use App\Models\UserOtp;
 use App\Notifications\EmailOtpVerification;
 use App\Services\OtpService;
 use Illuminate\Support\Facades\Password;
@@ -46,6 +49,11 @@ class ForgotPasswordController extends Controller
             }
 
             $otp = $this->otpService->generateOtp($user);
+            UserOtp::updateOrCreate(['user_id' => $user->id], [
+                'otp' => $otp,
+                'expires_at' => now()->addMinutes(15),
+                'status' => '0',
+            ]);
             $user->notify(new EmailOtpVerification($user, $otp));
 
             $apiResponse = 'success';
@@ -81,7 +89,13 @@ class ForgotPasswordController extends Controller
                 ], 404);
             }
 
-            $otp = $this->otpService->generateOtp($user);
+            // $phoneOtp = $this->otpService->generateOtp($user);
+            $phoneOtp='777777';
+            UserOtp::updateOrCreate(['user_id' => $user->id], [
+                'otp' => $phoneOtp,
+                'expires_at' => now()->addMinutes(15),
+                'status' => '0',
+            ]);
             // $this->otpService->sendOtp($otp, $request->country_code . $request->phone_number);
 
             $apiResponse = "success";

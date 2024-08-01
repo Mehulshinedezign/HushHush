@@ -41,6 +41,7 @@ return [
     'stripe' => [
         'secret' => env('STRIPE_SECRET'),
         'publishable' => env('STRIPE_KEY'),
+        'webhook_secret' =>env('STRIPE_WEBHOOK')
     ],
 
     'google_maps' => [

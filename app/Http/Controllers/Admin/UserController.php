@@ -51,14 +51,17 @@ class UserController extends Controller
             $selectedStateName = State::where('country_id','231')->first();
         }
         $countries = Country::all();
-        // dd($selectedStateName);
-
+        // dd($selectedCountryName);
         $selectedCountry = Country::where('name',$selectedCountryName)->orWhere('id',$selectedCountryName)->first();
- 
-        $states = State::where('country_id', $selectedCountry->id)->get();
-        // dd($selectedStateName);
-        $state = State::where('name',$selectedStateName)->first();
-        
+        $states = State::where('country_id', $selectedCountry->id)->orWhere('id',$selectedStateName)->get();
+
+
+        // $state = State::where('name',$selectedStateName)->orWhere('id',$selectedStateName->id)->first();
+        if (is_string($selectedStateName)) {
+            $state = State::where('name', $selectedStateName)->first();
+        } else {
+            $state = State::where('id', $selectedStateName->id)->first();
+        }
         $cities = City::where('state_id', $state->id)->get();
         $notAvailable = 'N/A';
         // if ($user->role->name == 'customer') {
@@ -67,10 +70,10 @@ class UserController extends Controller
         // else {
             // $file = 'admin.retailer.edit';
         // }
-        // dd($selectedCountryId);
+        // dd($selectedCountry);
 
-        // dd($cities);
-        return view($file, compact('user', 'selectedCountryName', 'countries', 'states', 'cities', 'notAvailable'));
+        // dd($state->name);
+        return view($file, compact('user', 'selectedCountryName', 'countries', 'states', 'cities', 'notAvailable','state'));
     }
 
     public function update_profile(UserDetailRequest $request, User $user)
@@ -93,9 +96,10 @@ class UserController extends Controller
             'about' => $request->about
         ];
 
-        if (auth()->user()->role->name == 'admin') {
-            $data['email'] = $request->email;
-        }
+        // if (auth()->user()->role->name == 'admin') {
+        //     $data['email'] = $request->email;
+        // }
+
 
         if ($request->hasFile('profile_pic')) {
             // $path = $request->file('profile_pic')->store('profiles', 's3');

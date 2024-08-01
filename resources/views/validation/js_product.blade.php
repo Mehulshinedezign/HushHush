@@ -6,7 +6,7 @@
         // var action1 = segments[1];
         // var action2 = segments[2];
         // const url = action1+'/'+action2;
-        
+
         $.validator.addMethod("completeAddress", function(value, element) {
                 return $('#product_address1').val() !== ''&& $('#product_address2').val() !== ''&& $('#product_country').val() !== '' && $('#product_state').val() !== '' && $('#product_city').val() !== '';
             }, "Please enter the complete address");
@@ -202,13 +202,13 @@
         // });
 
 
-        
+
         $('#addProduct').submit(function(e) {
             e.preventDefault(); // Prevent form submission
-            
+
             // Perform form validation
             handleValidation('addProduct', rules, messages);
-            
+
             // Check if the form is valid
             if ($('#addProduct').valid()) {
                 $('body').addClass('loading');
@@ -217,11 +217,12 @@
                 }, 1000); // Adjust delay as needed
             }
         });
-        
-        
-        $('#product_address1,#product_address2, #product_country, #product_state, #product_city').on('change', function() {
+
+
+        $('#product_address1,#product_address2').on('change', function() {
             // alert('hello');
             // $('#product_address').valid();
+            handleValidation('addProduct', rules, messages);
             $('#addProduct').validate({
                 rules: rules,
                 messages: messages,
@@ -237,8 +238,7 @@
                     $(element).removeClass('is-invalid');
                 }
             });
-
+        });
     });
-});
     // Initialize form validation
 </script>

@@ -16,12 +16,13 @@ class BookingController extends Controller
     public function cardDetail(Query $query = null, $price = null)
     {
         $user = auth()->user();
+        $stripeCustomer = $user->createOrGetStripeCustomer();
         $intent = $user->createSetupIntent();
         $insurance =  AdminSetting::where('key', 'insurance_fee')->first();
         $security =  AdminSetting::where('key', 'security_fee')->first();
         return view('customer.card_payment', compact('intent', 'query', 'price', 'insurance', 'security'));
     }
-
+ 
     public function charge(Request $request)
     {
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));

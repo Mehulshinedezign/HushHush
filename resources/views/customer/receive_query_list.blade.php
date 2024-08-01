@@ -27,9 +27,10 @@
                         <li class="tab-item active" data-status="PENDING" data-user="lender"><a
                             href="javascript:void(0)">Pending</a></li>
                         <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a
-                                href="javascript:void(0)">Accept</a></li>
+                                href="javascript:void(0)">Accepted</a></li>
                         <li class="tab-item" data-status="REJECTED" data-user="lender"><a
-                                href="javascript:void(0)">Reject</a></li>
+                                href="javascript:void(0)">Rejected</a></li>
+                        <li class="tab-item" data-status="COMPLETED" data-user="lender"><a href="javascript:void(0)">Completed</a></li>
 
                     </ul>
                 </div>
@@ -131,6 +132,15 @@
 
             if (!price) {
                 price = calculatePrice(date_range, rentDay, rentWeek, rentMonth);
+            }
+            if(price<= 0 || isNaN(price))
+            {
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Please enter a valid price',
+                    'position': 'topRight',
+                });
+                return false;
             }
 
             Swal.fire({

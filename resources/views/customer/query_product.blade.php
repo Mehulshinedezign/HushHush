@@ -30,8 +30,18 @@
                 @endif
             </div>
         </div>
+        @if (@$query->user_id != auth()->user()->id)
+        <div class="col-md-12">
+            <div class="query-detail-info">
+                <h3>Customer</h3>
+                @if ($query)
+                    <p>{{ $query->user->name ?? '' }}</p>
+                @endif
+            </div>
+        </div>
+        @endif
 
-        @if (@$query->status == 'PENDING')
+        {{-- @if (@$query->status == 'PENDING')
             @if (@$query->user_id != auth()->user()->id)
                 <div class="col-md-4 my_query_details">
                     <div class="inquiry-actions">
@@ -43,21 +53,22 @@
                 </div>
                 <div class="col-md-4 my_query_details">
                     <div class="inquiry-actions">
-                        {{-- <a href="{{ route('reject_query', ['id' => $product->querydata->id]) }}" class="button reject-btn full-btn mb-2" onclick="confirmReject(event)"><i class="fa-solid fa-ban"></i> Reject</a> --}}
                         <a href="javascript:void(0)" class="button reject-btn full-btn mb-2"
                             onclick="confirmReject(event, '{{ $query->id }}')"><i class="fa-solid fa-circle-check"></i> Reject</a>
                     </div>
                 </div>
             @endif
-            
+
         @endif
 
-
+        @if (@$query->status != 'COMPLETED')
         <div class="col-md-4">
             <div class="inquiry-actions">
                 <a href="#" class="button outline-btn full-btn"><i class="fa-solid fa-comments"></i> Chat</a>
             </div>
         </div>
+        @endif
+        --}}
 
     </div>
 </div>

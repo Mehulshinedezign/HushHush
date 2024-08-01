@@ -3,20 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\EmailOtp;
+use App\Models\PhoneOtp;
+use App\Models\PushToken;
 use App\Models\User;
-use App\Models\UserDetail;
-use App\Models\UserDocuments;
 use App\Notifications\EmailOtpVerification;
-use App\Notifications\VerificationEmail;
 use App\Services\OtpService;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -29,7 +26,6 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        // dd('hello');
         $validator = $this->validator($request->all());
 
         if ($validator->fails()) {
@@ -39,6 +35,8 @@ class RegisterController extends Controller
             ], 422);
         }
 
+        DB::beginTransaction();
+
         try {
             $user = User::create([
                 'username' => $request->username,
@@ -47,75 +45,77 @@ class RegisterController extends Controller
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
                 'password' => Hash::make($request->password),
-                // 'zipcode' => $request->zipcode,
                 'email_verification_token' => Str::random(50),
                 'country_code' => $request->country_code,
             ]);
 
-            // UserDetail::create([
-            //     'user_id' => $user->id,
-            //     'address1' => $request->complete_address ?? NULL,
-            //     'about' => $request->about ?? NULL,
-            // ]);
-
-
-            // $path = $request->gov_id->store('user_documents');
-            // $filePath = str_replace("public/", "", $path);
-            // $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
-
-            // UserDocuments::create([
-            //     'user_id' => $user->id,
-            //     'file' => $fileExtension,
-            //     'url' => $filePath,
-            // ]);
-
             $country_code = $request->country_code;
             $number = $request->phone_number;
-            // dd($country_code);
             $full_number = $country_code . $number;
 
-            $phoneOtp = $this->otpService->generateOtp($user);
-            // $this->otpService->sendOtp($otp, $full_number);
+            // Generate and save OTPs
+            $phoneOtp = '777777';
+            PhoneOtp::updateOrCreate(['user_id' => $user->id], [
+                'otp' => $phoneOtp,
+                'expires_at' => now()->addMinutes(15),
+                'status' => '0',
+            ]);
 
             $emailOtp = $this->otpService->generateOtp($user);
+            EmailOtp::updateOrCreate(['user_id' => $user->id], [
+                'otp' => $emailOtp,
+                'expires_at' => now()->addMinutes(15),
+                'status' => '0',
+            ]);
+
             $user->notify(new EmailOtpVerification($user, $emailOtp));
+
+            // Save push token
+            PushToken::create([
+                'user_id' => $user->id,
+                'fcm_token' => $request->fcm_token,
+                'device_id' => $request->device_id,
+                'device_type' => $request->device_type,
+            ]);
+
+            DB::commit();
 
             $apiResponse = 'success';
             $statusCode = '200';
-            $message = "User Registration successful. Please verify your email address or phone number .";
+            $message = "User registration successful. Please verify your email address or phone number.";
 
             $response = [
                 'token' => $user->createToken('login')->plainTextToken,
                 'user_id' => $user->id,
-
+                'profile_pc' => $user->frontend_profile_url,
+                'name' => $user->name,
+                'device_type' =>$user->pushToken->device_type,
+                'device_id'=> $user->pushToken->device_id,
+                'fcm_token'=> $user->pushToken->fcm_token,
             ];
+
             return $this->apiResponse($apiResponse, $statusCode, $message, $response, null);
         } catch (\Throwable $e) {
+            DB::rollBack();
             return $this->apiResponse('error', '500', $e->getMessage(), ['errors' => $e->getMessage()], null);
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Something went wrong while sending the email verification. Please try again later.'
-            ], 500);
         }
     }
 
     protected function validator(array $data)
     {
-
         $emailRegex = "/^[a-zA-Z]+[a-zA-Z0-9_\.\-]*@[a-zA-Z]+(\.[a-zA-Z]+)*[\.]{1}[a-zA-Z]{2,10}$/";
         $validation = [
-            // 'username' => 'required|min:3|max:50|unique:users',
             'name' => 'required|string|min:3|max:50',
             'email' => 'required|string|email|max:255|unique:users|regex:' . $emailRegex,
             'phone_number' => 'required|digits:' . config('validation.phone_minlength') . '|min:' . config('validation.phone_minlength') . '|max:' . config('validation.phone_maxlength'),
             'password' => 'required|string|min:8|max:32|confirmed',
-            // 'complete_address' => 'required',
-            // 'gov_id' => 'required|file|mimes:jpg,png,jpeg,pdf|max:2048',
-            'country_code' => 'required'
+            'country_code' => 'required',
+            'fcm_token' => 'required|string',
+            'device_id' => 'required|string',
+            'device_type' => 'required|string',
         ];
 
         $message = [
-            // 'username.required' => __('customvalidation.user.username.required'),
             'name.required' => __('user.validations.nameRequired'),
             'name.string' => __('user.validations.nameString'),
             'name.min' => __('user.validations.nameMin'),
@@ -135,25 +135,20 @@ class RegisterController extends Controller
             'password.min' => 'Password must be 8-32 characters long',
             'password.max' => 'Password must be 8-32 characters long',
             'password.confirmed' => __('user.validations.passwordConfirmed'),
-
-            // 'complete_address' => __('customvalidation.user.complete_address.required'),
-            // 'complete_address.min' => __('user.validations.completeAddressMin'),
-            // 'complete_address.max' => __('user.validations.completeAddressMax'),
-
-            // 'gov_id' => __('customvalidation.user.gov_id.required'),
-            // 'gov_id.file' => __('customvalidation.user.gov_id.file'),
-            // 'gov_id.max' => __('customvalidation.user.gov_id.max_size'),
-
+            'fcm_token.required' => 'FCM token is required',
+            'fcm_token.string' => 'FCM token must be a string',
+            'device_id.required' => 'Device ID is required',
+            'device_id.string' => 'Device ID must be a string',
+            'device_type.required' => 'Device type is required',
+            'device_type.string' => 'Device type must be a string',
         ];
 
         return Validator::make($data, $validation, $message);
     }
 
-    public function verifyOtp(Request $request,$type)
+    public function verifyOtp(Request $request, $type)
     {
-        // dd('here');
         try {
-
             $validator = Validator::make($request->all(), [
                 'user_id' => 'required|exists:users,id',
                 'otp' => 'required|digits:6',
@@ -170,12 +165,11 @@ class RegisterController extends Controller
             $user = User::find($request->input('user_id'));
             $otp = $request->input('otp');
 
-            if ($this->otpService->verifyOtp($user, $otp)) {
-                $user->update(['status' => '1']);
-
+            if ($this->otpService->verifyOtpByType($user, $otp, $type)) {
                 $apiResponse = 'success';
                 $statusCode = 200;
                 $message = 'OTP verified successfully.';
+
                 $response = [
                     'token' => $user->createToken('login')->plainTextToken,
                     'user_id' => $user->id,

@@ -3,8 +3,10 @@
         <a href="#" class="user-table-profile">
             <div class="table-profile ">
                 @if ($query->product)
+                <a href="{{ route('viewproduct', jsencode_userdata($query->product->id)) }}">
                     <img src="{{ $query->product->thumbnailImage->file_path ?? '' }}" alt="tb-profile" width="26"
                         height="27">
+                </a>
                 @else
                     <img src="{{ asset('front/images/table-profile1.png') }}" alt="tb-profile" width="26"
                         height="27">
@@ -18,6 +20,11 @@
         </div>
     </td>
     <td>
+        <div class="user-table-head">
+            <h5>${{ $query->getCalculatedPrice($query->date_range) }}</h5>
+        </div>
+    </td>
+    <td>
         <p class="Inquiry-desc">{{ $query->query_message ?? '' }}</p>
     </td>
     <td>{{ $query->date_range ?? '' }}</td>
@@ -26,14 +33,19 @@
             ACCEPTED
         @elseif($query->status == 'PENDING')
             PENDING
-        @else
+        @elseif($query->status == 'REJECTED')
             REJECTED
+        @elseif($query->status == 'COMPLETED')
+        COMPLETED
+        
         @endif
     </td>
     <td class="user-active">
         <div class="inquiry-actions">
+            @if( $query->status != 'COMPLETED')
             <a href="{{ route('common.chat') }}" class="button outline-btn small-btn"><i
                     class="fa-solid fa-comments"></i> Chat</a>
+            @endif
             <a href="{{ route('query_view') }}" class="button primary-btn small-btn single_query_Modal"
                 data-bs-toggle="modal" data-query-id="{{ $query->id }}">
                 <i class="fa-solid fa-eye"></i> View

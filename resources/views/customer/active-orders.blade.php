@@ -29,9 +29,6 @@
                             <p>{{ $order->product->name }}</p>
                             <div class="pro-desc-prize">
                                 <h3>${{ $order->product->rent_day }}</h3>
-                                <div class="badge day-badge">
-                                    Per day
-                                </div>
 
                             </div>
                             <div class="order-pro-details">

@@ -697,7 +697,7 @@
 
                             $.each(data, function(key, value) {
                                 $('#subcategory').append('<option value="' + value.id +
-                                    '">' + value.name + '</option>');
+                                '">' + value.name + '</option>');
                             });
                         },
                         error: function(xhr, status, error) {
@@ -771,7 +771,7 @@
             });
 
 
-            // Google place api 
+            // Google place api
             $('.product_sub_data').hide();
 
             $('#product_address').on('focus', function() {

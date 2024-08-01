@@ -24,8 +24,9 @@
                 <div class="custom-tab">
                     <ul class="custom-tab-list">
                         <li class="tab-item active" data-status="PENDING" data-user="borrower"><a href="javascript:void(0)">Pending</a></li>
-                        <li class="tab-item" data-status="ACCEPTED" data-user="borrower"><a href="javascript:void(0)">Accept</a></li>
-                        <li class="tab-item" data-status="REJECTED" data-user="borrower"><a href="javascript:void(0)">Reject</a></li>
+                        <li class="tab-item" data-status="ACCEPTED" data-user="borrower"><a href="javascript:void(0)">Accepted</a></li>
+                        <li class="tab-item" data-status="REJECTED" data-user="borrower"><a href="javascript:void(0)">Rejected</a></li>
+                        <li class="tab-item" data-status="COMPLETED" data-user="borrower"><a href="javascript:void(0)">Completed</a></li>
                     </ul>
                 </div>
                 <div id="query-list-container">
@@ -100,7 +101,7 @@
 
 @push('scripts')
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    @includeFirst(['validation'])
+    {{-- @includeFirst(['validation']) --}}
     <script>
         $(document).ready(function() {
             var singleQueryModal = new bootstrap.Modal(document.getElementById('single_query_Modal'));
@@ -138,44 +139,44 @@
 
 
             // Accept Reject and Pendding
-            function fetchQueries(status) {
-                $.ajax({
-                    url: '/fetch-queries',
-                    type: 'GET',
-                    data: {
-                        status: status
-                    },
-                    beforeSend: function() {
-                        $('body').addClass('loading');
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#query-list-container').html(response.html);
-                        } else {
-                            $('#query-list-container').html(
-                                '<div class="error">Failed to load queries.</div>');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error:', error);
-                        $('#query-list-container').html(
-                            '<div class="error">An error occurred. Please try again.</div>');
-                    },
-                    complete: function() {
-                        $('body').removeClass('loading');
-                    }
-                });
-            }
+            // function fetchQueries(status) {
+            //     $.ajax({
+            //         url: '/fetch-queries',
+            //         type: 'GET',
+            //         data: {
+            //             status: status
+            //         },
+            //         beforeSend: function() {
+            //             $('body').addClass('loading');
+            //         },
+            //         success: function(response) {
+            //             if (response.success) {
+            //                 $('#query-list-container').html(response.html);
+            //             } else {
+            //                 $('#query-list-container').html(
+            //                     '<div class="error">Failed to load queries.</div>');
+            //             }
+            //         },
+            //         error: function(xhr, status, error) {
+            //             console.error('Error:', error);
+            //             $('#query-list-container').html(
+            //                 '<div class="error">An error occurred. Please try again.</div>');
+            //         },
+            //         complete: function() {
+            //             $('body').removeClass('loading');
+            //         }
+            //     });
+            // }
 
-            $('.tab-item').on('click', function(e) {
-                e.preventDefault();
+            // $('.tab-item').on('click', function(e) {
+            //     e.preventDefault();
 
-                $('.tab-item').removeClass('active');
-                $(this).addClass('active');
-                var status = $(this).data('status');
+            //     $('.tab-item').removeClass('active');
+            //     $(this).addClass('active');
+            //     var status = $(this).data('status');
 
-                fetchQueries(status);
-            });
+            //     fetchQueries(status);
+            // });
 
             // var initialStatus = $('.tab-item.active').data('status');
             // fetchQueries(initialStatus);

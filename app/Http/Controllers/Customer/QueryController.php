@@ -122,7 +122,7 @@ class QueryController extends Controller
             $queries = Query::where(['status' => $status, 'user_id' => auth()->user()->id])->get();
             $html = view('components.product-query', ['querydatas' => $queries])->render();
         } else {
-            $accept = ($status == 'ACCEPTED') || ($status == 'REJECTED') ? true : false;
+            $accept = ($status == 'ACCEPTED') || ($status == 'REJECTED') || ($status == 'COMPLETED') ? false : true;
             $queries = Query::where(['status' => $status, 'for_user' => auth()->user()->id])->get();
             $html = view('components.receive-query', ['querydatas' => $queries, 'accept' => $accept])->render();
         }

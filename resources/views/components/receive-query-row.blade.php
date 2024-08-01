@@ -3,8 +3,11 @@
         <a href="#" class="user-table-profile">
             <div class="table-profile">
                 @if ($query->product)
+                <a href="{{ route('viewproduct', jsencode_userdata($query->product->id)) }}">
+                
                     <img src="{{ $query->product->thumbnailImage->file_path ?? '' }}" alt="tb-profile" width="26"
                         height="27">
+                    </a>
                 @else
                     <img src="{{ asset('front/images/table-profile1.png') }}" alt="tb-profile" width="26"
                         height="27">
@@ -15,6 +18,11 @@
     <td>
         <div class="user-table-head">
             <h5>{{ $query->product->name ?? '' }}</h5>
+        </div>
+    </td>
+    <td>
+        <div class="user-table-head">
+            <h5>${{ $query->getCalculatedPrice($query->date_range) }}</h5>
         </div>
     </td>
     <td>
@@ -41,6 +49,7 @@
                 </a>
             @endif
 
+            @if( $query->status != 'COMPLETED')
             <a href="javascript:void(0)" class="button outline-btn small-btn chat-list-profile"
                 data-senderId="{{ auth()->user()->id }}" data-receverId="{{ $query->user_id }}"
                 data-receverName = "{{ $query->user->name }}"
@@ -48,6 +57,7 @@
                 data-profile="{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}"
                 data-name="{{ auth()->user()->name }}"><i class="fa-solid fa-comments"></i>
                 Chat</a>
+            @endif
             <a href="{{ route('query_view') }}" class="button primary-btn small-btn single_query"
                 data-bs-toggle="modal" data-query-id="{{ $query->id }}">
                 <i class="fa-solid fa-eye"></i> View
