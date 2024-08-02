@@ -94,7 +94,10 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
-
+    public function retailer()
+    {
+        return $this->belongsTo(User::class, 'retailer_id');
+    }
     /**
      * Transaction
      *
@@ -243,6 +246,6 @@ class Order extends Model
 
     public function queryOf()
     {
-        return $this->hasOne(Query::class,"id","query_id");
+        return $this->hasOne(Query::class, "id", "query_id");
     }
 }

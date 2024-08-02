@@ -1,36 +1,7 @@
-{{-- <div class="b_req p-0">
-    <div class="wrapper_table">
-        <table class="rwd-table">
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Price per Day</th>
-                    <th>Total</th>
-                    <th>Rental Period</th>
-                    <th>Pickup Date</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($orderItems as $index => $orderItem)
-                    @if ($orderItem->order->status == 'Completed')
-                        @include('retailer.order-row')
-                    @endif
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    @if (check_order_list_paginate_retailer('Completed') > 10)
-        {{ $orderItems->links('pagination::product-list') }}
-    @endif
-</div> --}}
-
-
 <div class="order-his-card-box">
     <div class="row g-3">
         @foreach ($orders as $order)
-            @if ($order->status == 'Completed')
+            @if ($order->status == 'Waiting')
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="order-his-card">
                         <div class="order-card-top">
@@ -40,9 +11,6 @@
                             <p>{{ $order->product->name }}</p>
                             <div class="pro-desc-prize">
                                 <h3>${{ $order->product->rent_day }}</h3>
-                                <div class="badge day-badge">
-                                    Per day
-                                </div>
 
                             </div>
                             <div class="order-pro-details">
@@ -70,8 +38,8 @@
                         </div>
                         <div class="order-card-footer">
                             <a href="#" class="button outline-btn full-btn" data-bs-toggle="modal"
-                                data-bs-target="#write-review-Modal">Write
-                                Review</a>
+                                data-bs-target="#cancel-order-Modal">Cancel
+                                order</a>
                         </div>
                     </div>
                 </div>
@@ -79,21 +47,4 @@
         @endforeach
 
     </div>
-    {{-- <div class="pagination-main">
-        <a href="javascript:void(0)" class="pagination-box">
-            01
-        </a>
-        <a href="javascript:void(0)" class="pagination-box">
-            02
-        </a>
-        <a href="javascript:void(0)" class="pagination-box active">
-            03
-        </a>
-        <a href="javascript:void(0)" class="pagination-box">
-            04
-        </a>
-        <a href="javascript:void(0)" class="pagination-box">
-            05
-        </a>
-    </div> --}}
 </div>
