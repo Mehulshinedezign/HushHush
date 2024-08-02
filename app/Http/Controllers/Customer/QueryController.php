@@ -17,16 +17,15 @@ class QueryController extends Controller
         // Validate incoming request
 
 
-        $request->validate([
-            'rental_dates' => 'required',
-            'product_id' => 'required',
-            'rental_dates' => 'required',
-            'description' => 'required|string',
-        ]);
-
         DB::beginTransaction();
 
         try {
+            $request->validate([
+                'rental_dates' => 'required',
+                'product_id' => 'required',
+                'rental_dates' => 'required',
+                'description' => 'required|string',
+            ]);
             $user = auth()->user();
             $foruser = jsdecode_userdata($request->for_user);
             $product_id = jsdecode_userdata($request->product_id);
@@ -40,17 +39,30 @@ class QueryController extends Controller
                 'date_range' => $request->rental_dates,
             ];
 
-            // $dates = explode(' - ', $request->rental_dates);
-            // $startDate = date('Y-m-d', strtotime($dates[0]));
-            // $endDate = date('Y-m-d', strtotime($dates[1]));
+            $dates = explode(' - ', $request->rental_dates);
+            $startDate = date('Y-m-d', strtotime($dates[0]));
+            $endDate = date('Y-m-d', strtotime($dates[1]));
+
+            // dd($dates, $startDate, $endDate);
 
 
-            // $product = Product::findorfail($product_id);
-            // foreach($product->disableDates as $disabled_date)
-            // {
-            //     if($startDate<= $disabled_date && $endDate>= $disabled_date )
-            //     throw new \Exception("Product is not available in this date range");
-            // }
+            $product = Product::findorfail($product_id);
+            foreach($product->disableDates as $disabled_date)
+            {
+                if($startDate <= $disabled_date->disable_date && $endDate>= $disabled_date->disable_date )
+                throw new \Exception("Product is not available in this date range");
+            }
+
+            $querydates = Query::where(['product_id'=>$product_id, 'status'=> 'PENDING','user_id' =>auth()->user()->id])->get()->pluck('date_range');
+             foreach($querydates as $query_date)
+             {
+                $dates = explode(' - ', $query_date);
+                $querystartDate = date('Y-m-d', strtotime($dates[0]));
+                $queryendDate = date('Y-m-d', strtotime($dates[1]));
+
+                if($startDate <= $querystartDate && $endDate>= $queryendDate )
+                throw new \Exception("Product is not available in this date range");
+             }
 
 
             // dd($data);
@@ -60,7 +72,7 @@ class QueryController extends Controller
             return response()->json(['success' => true, 'message' => 'Query send successfully']);
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['success' => false, 'message' => 'There was an error processing your request: ' . $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => $e->getMessage() ]);
         }
     }
 

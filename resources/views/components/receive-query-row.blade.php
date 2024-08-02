@@ -64,7 +64,7 @@
             @if ($query->status == 'PENDING')
                 <a href="javascript:void(0)" class="button accept-btn small-btn"
                     onclick="confirmAccept(event, '{{ $query->id }}','{{ $query->date_range }}','{{ $query->product->rent_day }}','{{ $query->product->rent_week }}','{{ $query->product->rent_month }}')">
-                    <i class="fa-solid fa-circle-check"></i> Accept
+                    <i class="fa-solid fa-circle-check"></i> Send Offer
                 </a>
                 <a href="javascript:void(0)" class="button reject-btn small-btn"
                     onclick="confirmReject(event, '{{ $query->id }}')">
