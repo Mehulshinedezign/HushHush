@@ -26,6 +26,9 @@
             </div>
             <div class="home-filter-product">
                 <form action="{{ route('index') }}" method="GET">
+                    <input type="hidden" name="country" id="country">
+                    <input type="hidden" name="state" id="state">
+                    <input type="hidden" name="city" id="city">
                     @csrf
                     <div class="home-filter-box">
                         <div class="filter-head">
@@ -205,7 +208,7 @@
                                                 alt="img"> Use current
                                             Location</label>
                                         <div class="formfield">
-                                            <input type="text" placeholder="Your Location" class="form-control">
+                                            <input type="text" placeholder="Your Location" class="form-control" id="filter_address" name="complete_address">
                                         </div>
                                     </div>
                                 </div>
@@ -588,5 +591,37 @@
             } 
         }
     
+    </script>
+    <script>
+        
+        function initAutocomplete() {
+            
+            var input = document.getElementById('filter_address');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+
+            autocomplete.addListener('place_changed', function() {
+                var place = autocomplete.getPlace();
+
+
+                for (var i = 0; i < place.address_components.length; i++) {
+                    var addressType = place.address_components[i].types[0];
+            
+                    if (addressType === 'country') {
+                        $('#country').val(place.address_components[i].long_name);
+                    }
+                    if (addressType === 'administrative_area_level_1') {
+                        $('#state').val(place.address_components[i].long_name);
+                    }
+                    if (addressType === 'locality') {
+                        $('#city').val(place.address_components[i].long_name);
+                    }
+                }
+            });
+        }
+
+        initAutocomplete();
+
+
+
     </script>
 @endpush
