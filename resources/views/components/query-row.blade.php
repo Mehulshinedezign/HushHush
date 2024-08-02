@@ -24,6 +24,24 @@
             <h5>${{ $query->getCalculatedPrice($query->date_range) }}</h5>
         </div>
     </td>
+    @if ($query->status != 'PENDING')
+    <td>
+        <div class="user-table-head">
+            <h5>${{ $query->negotiate_price ?? '0' }}</h5>
+        </div>
+    </td>
+
+    <td>
+        <div class="user-table-head">
+            <h5>${{ $query->cleaning_charges ?? '0' }}</h5>
+        </div>
+    </td>
+    <td>
+        <div class="user-table-head">
+            <h5>${{ $query->shipping_charges ?? '0' }}</h5>
+        </div>
+    </td>
+    @endif
     <td>
         <p class="Inquiry-desc">{{ $query->query_message ?? '' }}</p>
     </td>
@@ -37,7 +55,7 @@
             REJECTED
         @elseif($query->status == 'COMPLETED')
         COMPLETED
-        
+
         @endif
     </td>
     <td class="user-active">
@@ -61,8 +79,8 @@
                         {{ $price }}$</a>
                 @else
                     <a href="{{ route('card.details', ['query' => $query->id, 'price' => $query->negotiate_price]) }}"
-                        class="button outline-btn small-btn" data-price="{{ $query->negotiate_price }}">Book now for
-                        {{ $query->negotiate_price }}$</a>
+                        class="button outline-btn small-btn" data-price="{{ $query->totalBookPrice() }}">Book now for
+                        {{ $query->totalBookPrice() }}$</a>
                 @endif
             @endif
         </div>
