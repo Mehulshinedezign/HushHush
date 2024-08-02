@@ -2348,7 +2348,12 @@ input[type="range"]::-webkit-slider-thumb {
     left: 0;
     top: 20px;
 }
-
+.single-img-slider .slider.slider-content {
+    margin-bottom: 0 !important;
+}
+.product-desc-box:has(.single-img-slider) .product-review-main {
+    margin-top: 50px !important;
+}
 @media screen and (max-width: 768px) {
 	.main {
 		width: 80%;

@@ -218,15 +218,15 @@ class ProductController extends Controller
 
             $product_complete_location = $request->input('product_complete_location');
             $address = urlencode($product_complete_location);
-            
+
             $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=" . config('services.google_maps.api_key');
             $response = file_get_contents($url);
             $raw_address = json_decode($response, true);
-            
+
             if (!empty($raw_address['results'])) {
                 $formatted_address = json_encode($raw_address['results'][0]);
             }
-            
+
 
             $userId = auth()->user()->id;
 
@@ -293,7 +293,7 @@ class ProductController extends Controller
                 list($startDateStr, $endDateStr) = explode(' - ', $dateRange);
                 $startDate = Carbon::createFromFormat('Y-m-d', $startDateStr);
                 $endDate = Carbon::createFromFormat('Y-m-d', $endDateStr);
-            
+
                 for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
                     ProductDisableDate::create([
                         'product_id' => $product->id,
@@ -385,7 +385,7 @@ class ProductController extends Controller
             $sortedDates = $disabledDates->sortBy('disable_date');
             $firstDate = \Carbon\Carbon::parse($sortedDates->first()->disable_date)->format('Y-m-d');
             $lastDate = \Carbon\Carbon::parse($sortedDates->last()->disable_date)->format('Y-m-d');
-        
+
             $formattedDates = $firstDate . ' - ' . $lastDate;
         } else {
             $formattedDates = '';
@@ -563,14 +563,14 @@ class ProductController extends Controller
         // }
 
         // dd("NOt slected");
-     
+
         $product_complete_location = $request->input('product_complete_location');
         $address = urlencode($product_complete_location);
-        
+
         $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=" . config('services.google_maps.api_key');
         $response = file_get_contents($url);
         $raw_address = json_decode($response, true);
-        
+
         if (!empty($raw_address['results'])) {
             $formatted_address = json_encode($raw_address['results'][0]);
         }
@@ -642,14 +642,14 @@ class ProductController extends Controller
 
             if ($request->has('non_available_dates')) {
                 ProductDisableDate::where('product_id', $product->id)->delete();
-        
+
                 $dateRange = $request->non_available_dates;
-        
+
                 if (!empty($dateRange)) {
                     list($startDateStr, $endDateStr) = explode(' - ', $dateRange);
                     $startDate = Carbon::createFromFormat('Y-m-d', $startDateStr);
                     $endDate = Carbon::createFromFormat('Y-m-d', $endDateStr);
-        
+
                     for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
                         ProductDisableDate::create([
                             'product_id' => $product->id,
@@ -727,10 +727,13 @@ class ProductController extends Controller
             }
             $product->locations()->delete();
 
-            $product->delete();
+
+
+            $product->update(['deleted_at'=>carbon::now()]);
 
             return redirect()->back()->with('success', "Product and associated data have been deleted successfully.");
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }
     }

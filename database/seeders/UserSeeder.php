@@ -2,10 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\EmailOtp;
+use App\Models\PhoneOtp;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -25,13 +28,32 @@ class UserSeeder extends Seeder
             'password' => Hash::make('Shine@123'),
             'remember_token' => Str::random(10),
             'phone_number' => rand(1234567890, 9999999999),
-            'status' => '1'
+            'status' => '1',
+            'otp_is_verified'=>true,
         ];
 
-        User::create($data);
-        
-        // $count = (int) $this->command->ask('Number of users to be created?', 10);
-        // User::factory()->count($count)->create();
-        // $this->command->info($count . ' users have been created');
+        $user=User::create($data);
+
+        $emailData=[
+            'user_id'=> $user->id,
+            'otp'=>'123456',
+            'expires_at'=>Carbon::now(),
+            'status'=>True,
+
+        ];
+        $emailOtp=EmailOtp::updateOrCreate($emailData);
+
+        $phoneData=[
+            'user_id'=> $user->id,
+            'otp'=>'123456',
+            'expires_at'=>Carbon::now(),
+            'status'=>True,
+
+        ];
+        $phoneOtp=PhoneOtp::updateOrCreate($emailData);
+
+
+
+
     }
 }
