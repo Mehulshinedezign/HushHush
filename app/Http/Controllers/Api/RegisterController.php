@@ -60,6 +60,7 @@ class RegisterController extends Controller
                 'expires_at' => now()->addMinutes(15),
                 'status' => '0',
             ]);
+            // $this->otpService->sendOtp($phoneOtp, $full_number);
 
             $emailOtp = $this->otpService->generateOtp($user);
             EmailOtp::updateOrCreate(['user_id' => $user->id], [
@@ -77,6 +78,7 @@ class RegisterController extends Controller
                 'device_id' => $request->device_id,
                 'device_type' => $request->device_type,
             ]);
+            // dd($request->all(),$user->pushToken);
 
             DB::commit();
 

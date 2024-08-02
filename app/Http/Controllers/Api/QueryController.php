@@ -28,8 +28,8 @@ class QueryController extends Controller
             }
             $product = Product::where('id', $request->product_id)->first();
 
-            $startDate = Carbon::parse($request->start)->format('d-m-Y');
-            $endDate = Carbon::parse($request->end)->format('d-m-Y');
+            $startDate = Carbon::parse($request->start)->format('Y-m-d');
+            $endDate = Carbon::parse($request->end)->format('Y-m-d');
 
             if (empty($endDate)) {
                 $endDate = $startDate;
@@ -67,16 +67,19 @@ class QueryController extends Controller
                 ->whereNull('deleted_at')
                 ->filterByStatus($status)
                 ->get();
+                // dd($queries);
 
             if (count($queries) > 0) {
                 $queries = $queries->map(function ($query) {
                     [$startDate, $endDate] = explode(' - ', $query->date_range);
+                    // dd( $startDate , $endDate );
                     $productId = $query->product_id;
                     $product = Product::where('id', $productId)
                         ->whereNull('deleted_at')
                         ->first();
                     $lender = User::where('id', $query->for_user)->first();
-                    $price = $query->negotiate_price ?? $product->getCalculatedPrice($query->date_range);
+                    $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
+                    // dd($price);
 
                     return [
                         'id' => $query->id,
@@ -137,7 +140,7 @@ class QueryController extends Controller
                         ->whereNull('deleted_at')
                         ->first();
                     $borrower = User::where('id', $query->user_id)->first();
-                    $price = $query->negotiate_price ?? $product->getCalculatedPrice($query->date_range);
+                    $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
                     return [
                         'id' => $query->id,
                         'user_id' => $query->user_id,
@@ -241,7 +244,7 @@ class QueryController extends Controller
                         ->whereNull('deleted_at')
                         ->first();
                     $lender = User::where('id', $query->for_user)->first();
-                    $price = $query->negotiate_price ?? $product->getCalculatedPrice($query->date_range);
+                    $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
                     $now = Carbon::now()->format('Y-m-d');
                     if ($now > $endDate) {
                         $status = 'COMPLETED';
@@ -316,7 +319,7 @@ class QueryController extends Controller
                         ->whereNull('deleted_at')
                         ->first();
                     $borrower = User::where('id', $query->user_id)->first();
-                    $price = $query->negotiate_price ?? $product->getCalculatedPrice($query->date_range);
+                    $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
 
                     $now = Carbon::now()->format('Y-m-d');
 

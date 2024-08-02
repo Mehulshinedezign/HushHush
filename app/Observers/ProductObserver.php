@@ -57,7 +57,7 @@ class ProductObserver
      */
     protected function clearExpiredDisableDates(Product $product)
     {
-        ProductDisableDate::where('disable_date', '<', Carbon::today())->delete();
+        ProductDisableDate::where('disable_date', '<', Carbon::today()->addDay())->delete();
     }
 }
 

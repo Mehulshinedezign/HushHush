@@ -15,8 +15,8 @@ class OtpService
 {
     public function generateOtp($user)
     {
-        $otp = mt_rand(100000, 999999);
-        // $otp = '123456';
+        // $otp = mt_rand(100000, 999999);
+        $otp = '123456';
 
 
 

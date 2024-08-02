@@ -96,7 +96,7 @@ class StripeController extends Controller
     public function createPaymentIntent(Request $request, $id)
     {
         // dd('here');
-        $user=auth()->user();
+        $user = auth()->user();
         $validator = Validator::make($request->all(), [
             'amount' => 'required|numeric',
             'currency' => 'required|string',
@@ -145,7 +145,7 @@ class StripeController extends Controller
                     'from_minute' => $fromDateTime->format('i'),
                     'to_hour' => $toDateTime->format('H'),
                     'to_minute' => $toDateTime->format('i'),
-                    'order_date' => now()->toDateString(),
+                    'order_date' => date('Y-m-d H:i:s'),
                     'status' => $orderStatus,
                 ]);
 
@@ -169,6 +169,18 @@ class StripeController extends Controller
             } else {
                 return response()->json(['status' => false, 'message' => 'Payment failed', 'paymentIntent' => $paymentIntent], 400);
             }
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function createIntent(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $stripeCustomer = $user->createOrGetStripeCustomer();
+            $intent = $user->createSetupIntent();
+            return response()->json(['status' => true, 'message' => 'Intent Created Succesfully', 'intent' => $intent], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
