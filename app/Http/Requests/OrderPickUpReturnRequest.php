@@ -28,26 +28,31 @@ class OrderPickUpReturnRequest extends FormRequest
     {
         $order = request()->route()->parameters();
         // dd($order);
-        if ('Pending' == $order['order']->status) {
-            $this->maxImageCount = request()->global_max_picked_up_image_count;
-            $this->minImageCount = request()->global_min_picked_up_image_count;
+        if ('Waiting' == $order['order']->status) {
+            $this->maxImageCount = 5;
+            $this->minImageCount = 1;
         } else {
-            $this->maxImageCount = request()->global_max_returned_image_count;
-            $this->minImageCount = request()->global_min_returned_image_count;
+            $this->maxImageCount = 5;
+            $this->minImageCount = 1;
         }
 
         $counter = 0;
         $validate = [];
-        for ($i = 1; $i <= $this->maxImageCount; $i++) {
+        if (!isset(request()->images)) {
+            $validate['images'] = 'required';
+            return $validate;
+        }
+        if ($counter < $this->minImageCount && count(request()->images) < $this->minImageCount) {
+            $validate['images'] = 'required';
+        }
+        for ($i = 1; $i <= count(request()->images); $i++) {
             if (!is_null(request()->file('image' . $i))) {
                 $counter++;
-                $validate['image' . $i] =  'mimes:' . request()->global_php_image_extension . '|max:' . request()->global_php_file_size;
+                $validate['image' . $i] =  'mimes:' . 'jpg,jpeg,png' . '|max:' . '4096';
             }
         }
 
-        if ($counter < $this->minImageCount && request()->uploaded_image_count < $this->minImageCount) {
-            $validate['error'] = 'required';
-        }
+
 
         return $validate;
     }
@@ -60,15 +65,15 @@ class OrderPickUpReturnRequest extends FormRequest
     public function messages()
     {
         $messages = [
-            'error.required' =>  'Please upload atleast ' . $this->minImageCount . ' images',
+            'images.required' =>  'Please upload atleast ' . $this->minImageCount . ' images',
         ];
 
-        for ($i = 1; $i <= $this->maxImageCount; $i++) {
-            if (!is_null(request()->file('image' . $i))) {
-                $messages['image' . $i . '.mimes'] =  'Please upload only ' . request()->global_php_image_extension;
-                $messages['image' . $i . '.max'] =  'File size should not be more than ' . (request()->global_php_file_size / 1000) . 'MB';
-            }
-        }
+        // for ($i = 1; $i <= $this->maxImageCount; $i++) {
+        //     if (!is_null(request()->file('image' . $i))) {
+        //         $messages['image' . $i . '.mimes'] =  'Please upload only ' . request()->global_php_image_extension;
+        //         $messages['image' . $i . '.max'] =  'File size should not be more than ' . (request()->global_php_file_size / 1000) . 'MB';
+        //     }
+        // }
 
         return $messages;
     }
