@@ -10,6 +10,7 @@ use App\Http\Requests\Customer\FavoriteRequest;
 use App\Http\Traits\ProductTrait;
 use App\Models\{User, Product, ProductFavorite, Category, NeighborhoodCity, Order, Query};
 use Illuminate\Support\Facades\Cookie;
+use Carbon\Carbon;
 
 class ProductController extends Controller
 {
@@ -50,22 +51,11 @@ class ProductController extends Controller
 
         $authUserId = auth()->user()->id;
 
-            $query = Product::where('user_id', '!=', $authUserId);
+            // $query = Product::where('user_id', '!=', $authUserId);
+            $products = Product::with('disableDates')->where('user_id', '!=', $authUserId)->applyFilters()->get();
 
-            // if ($request->has('Category')) {
-            //     $categories = explode(',', $request->input('Category'));
-            //     $query->filterByCategories($categories);
-            // }
+            // dd($startDate,$endDate);
 
-            // if ($request->has('Brand')) {
-            //     $brands = explode(',', $request->input('Brand'));
-            //     $query->filterByBrands($brands);
-            // }
-
-            // if ($request->has('Size')) {
-            //     $sizes = explode(',', $request->input('Size'));
-            //     $query->filterBySizes($sizes);
-            // }
 
             // if ($request->has('Color')) {
             //     $colors = explode(',', $request->input('Color'));
@@ -82,7 +72,7 @@ class ProductController extends Controller
             //     $query->filterByCondition($conditions);
             // }
 
-            $products = $query->get();
+            // $products = $query->get();
         // dd($request->neighborhoodcity,  $city);
 
         // dd($request->global_product_pagination);
@@ -186,19 +176,21 @@ class ProductController extends Controller
         $productImages = $product->allImages;
         $querydates = Query::where(['product_id'=>$id, 'status'=> 'PENDING','user_id' =>auth()->user()->id])->get();
 
-        $disabledDates = $product->disableDates;
+        $disable_dates = $product->disableDates->pluck('disable_date')->toArray();
+
+        // dd($disabledDates);
 
         // dd("here",$disabledDates);
-        $disable_dates = [];
-        if ($disabledDates->isNotEmpty()) {
-            $sortedDates = $disabledDates->sortBy('disable_date');
-            $firstDate = \Carbon\Carbon::parse($sortedDates->first()->disable_date)->format('Y-m-d');
-            $lastDate = \Carbon\Carbon::parse($sortedDates->last()->disable_date)->format('Y-m-d');
+        // $disable_dates = [];
+        // if ($disabledDates->isNotEmpty()) {
+        //     $sortedDates = $disabledDates->sortBy('disable_date');
+        //     $firstDate = \Carbon\Carbon::parse($sortedDates->first()->disable_date)->format('Y-m-d');
+        //     $lastDate = \Carbon\Carbon::parse($sortedDates->last()->disable_date)->format('Y-m-d');
 
-            $disable_dates[] = $firstDate . ' - ' . $lastDate;
-        } else {
-            $disable_dates[] = '';
-        }
+        //     $disable_dates[] = $firstDate . ' - ' . $lastDate;
+        // } else {
+        //     $disable_dates[] = '';
+        // }
 
 
         // dd($querydates,$disable_dates);

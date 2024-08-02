@@ -682,7 +682,7 @@ span.left-form-icon {
     justify-content: space-between;
     align-items: center;
     margin: 0 0 24px;
-} 
+}
 .pro-rating-head a{
     text-decoration: underline !important;
 }
@@ -1274,7 +1274,7 @@ span.left-form-icon {
 }
 .rental-history-box .db-table{
     max-width: 70%;
-} 
+}
 .rental-profile-outer {
     display: flex;
     align-items: flex-start;
@@ -2058,4 +2058,10 @@ span.left-form-icon {
 .product-slider-sec-min-height {
     padding: 75px 0px;
     min-height: calc(100vh - 476px);
+}
+.negotiation-price-td
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
