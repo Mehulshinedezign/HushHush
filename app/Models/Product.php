@@ -325,6 +325,7 @@ class Product extends Model
     {
         $request = request();
 
+        // dd($request->Category,$request->country,$request->state,$request->city);
             $query->when($request->Category, function ($q) use ($request) {
                 $q->whereIn('category_id',  $request->Category);
 
@@ -337,9 +338,18 @@ class Product extends Model
             ->when($request->filled(['min_value', 'max_value']), function ($q) use ($request) {
                 $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
             })
+            ->when($request->filled(['country','state','city']),function ($q) use ($request){
+                $q->where(['city'=>$request->city]);
+            })
+            ->when($request->filled(['country','state']) && !$request->filled(['city']),function ($q) use ($request){
+                $q->where(['state'=>$request->state]);
+            })
+            ->when($request->country && !$request->filled(['state','city']),function ($q) use ($request){
+                $q->where('country',$request->country);
+            })
             ->when($request->filled(['Category', 'Brand', 'Size', 'min_value', 'max_value']), function ($q) use ($request) {
                 return $q->whereIn('category_id',  $request->Category);
-                $q->whereIn('brand')->whereIn($request->Brand);
+                $q->whereIn('brand',$request->Brand);
                 $q->whereIn('size',  $request->Size);
                 $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
             })
@@ -355,6 +365,55 @@ class Product extends Model
                 return $q->whereIn('category_id',  $request->Category);
                 $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
             })
+            ->when($request->filled(['Category','country','state','city']),function($q) use ($request){
+                return $q->whereIn('category_id',$request->Category);
+                $q->where(['city'=>$request->city]);
+            })
+            ->when($request->filled(['Category','country','state']) && !$request->filled(['city']),function($q) use ($request){
+                return $q->whereIn('category_id',$request->Category);
+                $q->where(['state'=>$request->state]);
+            })
+            ->when($request->filled(['Category','country']) && !$request->filled(['state','city']),function($q) use ($request){
+                return $q->whereIn('category_id',$request->Category);
+                $q->where(['country'=>$request->country]);
+            })
+            ->when($request->filled(['Brand','country','state','city']),function($q) use ($request){
+                return $q->whereIn('brand',$request->Brand);
+                $q->where(['city'=>$request->city]);
+            })
+            ->when($request->filled(['Brand','country','state']) && !$request->filled(['city']),function($q) use ($request){
+                return $q->whereIn('brand',$request->Brand);
+                $q->where(['state'=>$request->state]);
+            })
+            ->when($request->filled(['Brand','country']) && !$request->filled(['state','city']),function($q) use ($request){
+                return $q->whereIn('brand',$request->Brand);
+                $q->where(['country'=>$request->country]);
+            })
+            ->when($request->filled(['Size','country','state','city']),function($q) use ($request){
+                return $q->whereIn('size',  $request->Size);
+                $q->where(['city'=>$request->city]);
+            })
+            ->when($request->filled(['Size','country','state']) && !$request->filled(['city']),function($q) use ($request){
+                return $q->whereIn('size',  $request->Size);
+                $q->where(['state'=>$request->state]);
+            })
+            ->when($request->filled(['Size','country']) && !$request->filled(['state','city']),function($q) use ($request){
+                return $q->whereIn('size',  $request->Size);
+                $q->where(['country'=>$request->country]);
+            })
+            ->when($request->filled(['min_value', 'max_value','country','state','city']),function($q) use ($request){
+                $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
+                $q->where(['city'=>$request->city]);
+            })
+            ->when($request->filled(['min_value', 'max_value','country','state']) && !$request->filled(['city']),function($q) use ($request){
+                $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
+                $q->where(['state'=>$request->state]);
+            })
+            ->when($request->filled(['min_value', 'max_value','country']) && !$request->filled(['state','city']),function($q) use ($request){
+                $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
+                $q->where(['country'=>$request->country]);
+            })
+           
             ->when($request->filled('filter_date'), function ($q) use ($request) {
                 $dateRange = $request->filter_date;
                 $dates = explode(' - ', $dateRange);

@@ -208,8 +208,12 @@
                                                 alt="img"> Use current
                                             Location</label>
                                         <div class="formfield">
-                                            <input type="text" placeholder="Your Location" class="form-control"
-                                                id="filter_address" name="complete_address">
+                                            {{-- <input type="text" placeholder="Your Location" class="form-control"
+                                                id="filter_address" name="complete_address" value="{{request()->country request()->state request()->city}}"> --}}
+                                                <input type="text" placeholder="Your Location" class="form-control"
+                                                id="filter_address" name="complete_address" 
+                                                value="{{ request()->country ? request()->country . ' ' : '' }}{{ request()->state ? request()->state . ' ' : '' }}{{ request()->city ? request()->city : '' }}">
+
                                         </div>
                                     </div>
                                 </div>
