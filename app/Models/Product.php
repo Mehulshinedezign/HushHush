@@ -331,34 +331,5 @@ class Product extends Model
         return $price;
     }
 
-    public function scopeFilterByDateRange($query, $startDate, $endDate)
-    {
-
-        if (!empty($startDate) && !empty($endDate)) {
-
-            // dd($startDate,$endDate);
-            return $query->whereDoesntHave('disableDates', function ($q) use ($startDate, $endDate) {
-                $q->whereBetween('disable_date', [$startDate, $endDate]);
-            });
-            // return $query->where(function ($query) use ($startDate, $endDate) {
-            //     $query->whereHas('disableDates', function ($q) use ($startDate, $endDate) {
-            //         $q->whereNotBetween('disable_date', [$startDate, $endDate]);
-            //     })->orWhereDoesntHave('disableDates');
-            // });
-            // dd("one");
-            // $query->where(function ($query) use ($startDate, $endDate) {
-            //     $query->whereHas('disableDates', function ($q) use ($startDate, $endDate) {
-            //         $q->where(function ($subQuery) use ($startDate, $endDate) {
-            //             $subQuery->where('disable_date', '!=', $startDate)
-            //                      ->where('disable_date', '!=', $endDate);
-            //         });
-            //     });
-            //     // ->orWhereDoesntHave('disableDates');
-            // });
-        }
-        return $query;
-
-
-    }
 
 }
