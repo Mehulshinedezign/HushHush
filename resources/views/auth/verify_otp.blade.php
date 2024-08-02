@@ -96,6 +96,13 @@
                         //     position: 'topRight'
                         // });
                     }
+                    else{
+                        return iziToast.error({
+                            message: response.message,
+                            position: 'topRight'
+                        });
+                        // alert(response.message);
+                    }
 
                 })
 
@@ -116,6 +123,13 @@
                         //     message: response.message,
                         //     position: 'topRight'
                         // });
+                    }
+                    else{
+                        return iziToast.error({
+                            message: response.message,
+                            position: 'topRight'
+                        });
+                        // alert(response.message);
                     }
 
                 })

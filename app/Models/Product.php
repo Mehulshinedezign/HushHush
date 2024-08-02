@@ -286,8 +286,8 @@ class Product extends Model
     public function getCalculatedPrice($dateRange)
     {
         [$startDateStr, $endDateStr] = explode(' - ', $dateRange);
-        $startDate = Carbon::createFromFormat('d-m-Y', trim($startDateStr));
-        $endDate = Carbon::createFromFormat('d-m-Y', trim($endDateStr));
+        $startDate = Carbon::createFromFormat('Y-m-d', trim($startDateStr));
+        $endDate = Carbon::createFromFormat('Y-m-d', trim($endDateStr));
 
         $days = $startDate->diffInDays($endDate) + 1;
 
