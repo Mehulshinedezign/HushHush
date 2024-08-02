@@ -70,10 +70,11 @@ class OrderController extends Controller
     public function viewOrder(Order $order)
     {
         $order->load(['user', 'rating', 'location', 'item.product', 'transaction', 'customerPickedUpImages', 'customerReturnedImages', 'retailerPickedUpImages', 'retailerReturnedImages', 'disputedOrderImages']);
-        $transaction = Transaction::where('order_id', $order->id)->first();
+        // $transaction = Transaction::where('order_id', $order->id)->first();
 
-        $neighborhoodcity = NeighborhoodCity::where('id', $order->item->product->neighborhood_city)->first();
-        return view('customer.order_detail', compact('order', 'transaction', 'neighborhoodcity'));
+        // $neighborhoodcity = NeighborhoodCity::where('id', $order->item->product->neighborhood_city)->first();
+        // return view('customer.order_detail', compact('order'));
+        return view('customer.order_view', compact('order'));
     }
 
     public function orderChat(Request $request, $order = null)
@@ -119,13 +120,13 @@ class OrderController extends Controller
         return view('customer.order_success')->with('order', $order);
     }
 
-    public function orderPickUp(OrderPickUpReturnRequest $request, Order $order)
+    public function orderPickUp(Request $request, Order $order)
     {
         if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
             return redirect()->back()->with("warning", "You can not pickedup the dispute order");
         }
 
-        if ($order->status != "Pending") {
+        if ($order->status != "Waiting") {
             return redirect()->back()->with("warning", 'Order must be in waiting state to upload the images.');
         }
 
@@ -133,44 +134,45 @@ class OrderController extends Controller
             $userId = auth()->user()->id;
             $removedImageIds = explode(',', $request->removed_images);
             $images = [];
-            for ($i = 1; $i <= $request->global_max_picked_up_image_count; $i++) {
-                if ($request->hasFile('image' . $i)) {
-                    $image = s3_store_image($request->file('image' . $i), 'products/images');
-                    if ($image != null) {
-                        $images[] = [
-                            'order_id' => $order->id,
-                            'user_id' => $userId,
-                            'url' => $image['url'],
-                            'file' => $image['name'],
-                            'type' => 'pickedup',
-                            'uploaded_by' => 'customer',
-                        ];
-                    }
-                    // $file = $request->file('image'.$i);
-                    // $path = $file->store('orders/pickup', 's3');
-                    // $url = Storage::disk('s3')->url($path);
-                    // $images[] = [
-                    //     'order_id' => $order->id,
-                    //     'user_id' => $userId,
-                    //     'url' => $url,
-                    //     'file' => $path,
-                    //     'type' => 'pickedup',
-                    //     'uploaded_by' => 'customer',
-                    // ];
+            foreach ($request->images as $file) {
+                // dd($request);
+                // if ($request->hasFile('image' . $i)) {
+                //     $image = s3_store_image($request->file('image' . $i), 'products/images');
+                if ($file != null) {
+                    $images[] = [
+                        'order_id' => $order->id,
+                        'user_id' => $userId,
+                        'url' => Storage::disk('public')->put('orders/pickup', $file),
+                        'file' => $file->getClientOriginalName(),
+                        'type' => 'pickedup',
+                        'uploaded_by' => 'customer',
+                    ];
                 }
+                // $file = $request->file('image'.$i);
+                // $path = $file->store('orders/pickup', 's3');
+                // $url = Storage::disk('s3')->url($path);
+                // $images[] = [
+                //     'order_id' => $order->id,
+                //     'user_id' => $userId,
+                //     'url' => $url,
+                //     'file' => $path,
+                //     'type' => 'pickedup',
+                //     'uploaded_by' => 'customer',
+                // ];
             }
 
-            if (count($images) || count($removedImageIds)) {
-                $orderImages = OrderImage::where('order_id', $order->id)->whereIn('id', $removedImageIds)->where('user_id', $userId)->where('type', 'pickedup')->where('uploaded_by', 'customer')->get();
-                foreach ($orderImages as $orderImage) {
-                    Storage::disk('s3')->delete('products/images' . $orderImage->file);
-                    // $orderImage->delete();
-                }
 
-                if (count($images)) {
-                    OrderImage::insert($images);
-                }
+            // if (count($images) || count($removedImageIds)) {
+            //     $orderImages = OrderImage::where('order_id', $order->id)->whereIn('id', $removedImageIds)->where('user_id', $userId)->where('type', 'pickedup')->where('uploaded_by', 'customer')->get();
+            //     foreach ($orderImages as $orderImage) {
+            //         Storage::disk('s3')->delete('products/images' . $orderImage->file);
+            //         // $orderImage->delete();
+            //     }
+
+            if (count($images)) {
+                OrderImage::insert($images);
             }
+            // }
 
             return redirect()->back()->with('success', 'Images uploaded successfully');
         }
@@ -185,7 +187,7 @@ class OrderController extends Controller
             return redirect()->back()->with("warning", "You can not confirm the dispute order pickup");
         }
 
-        if ($order->status != "Pending") {
+        if ($order->status != "Waiting") {
             return redirect()->back()->with("warning", 'Order must be in waiting state to confirm the pick up');
         }
 
@@ -200,42 +202,31 @@ class OrderController extends Controller
             if ($order->retailer_confirmed_pickedup == '1') {
                 $data['status'] = 'Picked Up';
                 $data['pickedup_date'] = $dateTime;
-                OrderItem::where("order_id", $order->id)->update(["status" => "Picked Up"]);
+                Order::where("order_id", $order->id)->update(["status" => "Picked Up"]);
                 $user = auth()->user();
-                // check the customer order pickup status before sending the notification
-                if (@$user->notification->order_pickup == 'on') {
-                    // send mail to retailer of order picked up successfully
-                    $user->notify(new OrderPickUp($order));
-                }
-
-                // check the retailer order pickup status before sending the notification
-                if (@$order->item->retailer->notification->order_pickup == 'on') {
-                    // send mail to retailer of order picked up successfully
-                    $order->item->retailer->notify(new VendorOrderPickedUp($order));
-                }
             }
 
             $order->update($data);
 
-            $data = [
-                [
-                    'order_id' => $order->id,
-                    'sender_id' => $order->user_id,
-                    'receiver_id' => $order->item->retailer->id,
-                    'action_type' => 'Order Picked Up',
-                    'created_at' => $dateTime,
-                    'message' => 'Order #' . $order->id . ' has been picked up by customer successfully'
-                ],
-                [
-                    'order_id' => $order->id,
-                    'sender_id' => null,
-                    'receiver_id' => $order->user_id,
-                    'action_type' => 'Order Picked Up',
-                    'created_at' => $dateTime,
-                    'message' => 'You have successfully confirmed the picked up order #' . $order->id
-                ]
-            ];
-            $this->sendNotification($data);
+            // $data = [
+            //     [
+            //         'order_id' => $order->id,
+            //         'sender_id' => $order->user_id,
+            //         'receiver_id' => $order->item->retailer->id,
+            //         'action_type' => 'Order Picked Up',
+            //         'created_at' => $dateTime,
+            //         'message' => 'Order #' . $order->id . ' has been picked up by customer successfully'
+            //     ],
+            //     [
+            //         'order_id' => $order->id,
+            //         'sender_id' => null,
+            //         'receiver_id' => $order->user_id,
+            //         'action_type' => 'Order Picked Up',
+            //         'created_at' => $dateTime,
+            //         'message' => 'You have successfully confirmed the picked up order #' . $order->id
+            //     ]
+            // ];
+            // $this->sendNotification($data);
 
             return redirect()->back()->with('success', 'Picked up confirmed successfully');
         }
@@ -243,7 +234,7 @@ class OrderController extends Controller
         return redirect()->route('vieworder', [$order->id]);
     }
 
-    public function orderReturn(OrderPickUpReturnRequest $request, Order $order)
+    public function orderReturn(Request $request, Order $order)
     {
         if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
             return redirect()->back()->with("warning", "You can not upload the image of disputed order");
@@ -400,9 +391,9 @@ class OrderController extends Controller
                 'messages'       =>   'Review already added'
             ], 200);
         }
-        
+
         ProductRating::create([
-            'order_id' => 1, 
+            'order_id' => 1,
             'user_id' => auth()->user()->id,
             'product_id' => $product_id,
             'rating' => $request->rating,

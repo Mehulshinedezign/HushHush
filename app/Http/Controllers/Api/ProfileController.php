@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -82,6 +83,7 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
+        DB::beginTransaction();
         try {
             $user = auth()->user();
 
@@ -123,7 +125,6 @@ class ProfileController extends Controller
             //     ], 422);
             // }
 
-
             if ($request->hasFile('profile_pic')) {
                 $profilePicPath = $request->file('profile_pic')->store('profile_pictures', 'public');
                 $user['profile_url'] = $profilePicPath;
@@ -155,13 +156,14 @@ class ProfileController extends Controller
                 'user' => $user,
                 'address' => $userDetails,
             ];
-
+            DB::commit();
             return response()->json([
                 'status' => true,
                 'message' => 'User updated successfully',
                 'data' => $response
             ], 200);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage(),

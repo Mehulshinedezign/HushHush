@@ -19,19 +19,18 @@
 <div class="order-his-card-box">
     <div class="row g-3">
         @foreach ($orders as $order)
-            @if ($order->status == 'Waiting')
+            @if ($order->status == 'Waiting' || ($order->status = 'Picked Up'))
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="order-his-card">
                         <div class="order-card-top">
                             <div class="order-card-img">
-                                <img src="{{ $order->product->thumbnailImage->file_path }}" alt="profile">
+                                <a href="{{ route('vieworder', ['order' => $order->id]) }}">
+                                    <img src="{{ $order->product->thumbnailImage->file_path }}" alt="profile">
+                                </a>
                             </div>
                             <p>{{ $order->product->name }}</p>
                             <div class="pro-desc-prize">
                                 <h3>${{ $order->product->rent_day }}</h3>
-                                <div class="badge day-badge">
-                                    Per day
-                                </div>
 
                             </div>
                             <div class="order-pro-details">

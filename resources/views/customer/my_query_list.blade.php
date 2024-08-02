@@ -23,10 +23,14 @@
                 </div>
                 <div class="custom-tab">
                     <ul class="custom-tab-list">
-                        <li class="tab-item active" data-status="PENDING" data-user="borrower"><a href="javascript:void(0)">Pending</a></li>
-                        <li class="tab-item" data-status="ACCEPTED" data-user="borrower"><a href="javascript:void(0)">Accept</a></li>
-                        <li class="tab-item" data-status="REJECTED" data-user="borrower"><a href="javascript:void(0)">Reject</a></li>
-                        <li class="tab-item" data-status="COMPLETED" data-user="borrower"><a href="javascript:void(0)">Completed</a></li>
+                        <li class="tab-item active" data-status="PENDING" data-user="borrower"><a
+                                href="javascript:void(0)">Pending</a></li>
+                        <li class="tab-item" data-status="ACCEPTED" data-user="borrower"><a
+                                href="javascript:void(0)">Accepted</a></li>
+                        <li class="tab-item" data-status="REJECTED" data-user="borrower"><a
+                                href="javascript:void(0)">Rejected</a></li>
+                        <li class="tab-item" data-status="COMPLETED" data-user="borrower"><a
+                                href="javascript:void(0)">Completed</a></li>
                     </ul>
                 </div>
                 <div id="query-list-container">
@@ -85,8 +89,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="single_query_Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="single_query_Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body" id="data-query">
@@ -132,7 +135,7 @@
             $(document).on('click', '.query_btn_close', function() {
                 singleQueryModal.hide();
             });
-            $('#single_query_Modal').on('hidden.bs.modal', function () {
+            $('#single_query_Modal').on('hidden.bs.modal', function() {
                 $('#single_query_Modal .modal-body').html('');
             });
 

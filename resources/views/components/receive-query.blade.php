@@ -7,6 +7,7 @@
                         <tr>
                             <th>Product</th>
                             <th>Name</th>
+                            <th>Actual Price</th>
                             <th>Query</th>
                             <th>Date</th>
 

@@ -40,6 +40,8 @@ class User extends Authenticatable
         'email_notifications',
         'push_notifications',
         'country_code',
+        'stripe_account_id',
+        'email_verified_at'
     ];
 
     /**
@@ -103,7 +105,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserDocuments::class);
     }
-    
+
     public function document()
     {
         return $this->hasOne(UserDocuments::class);
@@ -250,5 +252,15 @@ class User extends Authenticatable
     public function getCountryAttribute($value)
     {
         return Country::find($value)->country_value;
+    }
+
+    public function bankAccount()
+    {
+        return $this->hasOne(UserBankDetail::class, 'user_id','id');
+    }
+
+    public function pushToken()
+    {
+        return $this->hasOne(PushToken::class);
     }
 }

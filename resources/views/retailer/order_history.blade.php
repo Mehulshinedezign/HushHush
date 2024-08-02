@@ -1,12 +1,13 @@
 @extends('layouts.front')
 @section('title', 'My Orders')
 @section('content')
-    <section class="rental-request-bx min-height-100">
+    <section class="rental-request-bx">
         <div class="container">
             <div class="rental-request-wrapper">
                 <div class="rental-header">
-                    <h2>My Order History</h2>
+                    <h2>Receive Order History</h2>
                 </div>
+
                 <div class="rental-request-tb mb-4">
                     <div class="order-his-tab-head">
                         <ul class="nav nav-pills " id="pills-tab" role="tablist">
@@ -60,17 +61,16 @@
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
                             aria-labelledby="pills-home-tab" tabindex="0">
-                            @include('customer.active-orders')
-
+                            @include('retailer.active-orders')
                         </div>
                         <div class="tab-pane fade" id="pills-complete" role="tabpanel" aria-labelledby="pills-complete-tab"
                             tabindex="0">
-                            @include('customer.complete-orders')
+                            @include('retailer.complete-orders')
 
                         </div>
                         <div class="tab-pane fade  " id="pills-canceled" role="tabpanel"
                             aria-labelledby="pills-canceled-tab" tabindex="0">
-                            @include('customer.cancel-orders')
+                            @include('retailer.cancel-orders')
                         </div>
                     </div>
                 </div>
@@ -79,8 +79,8 @@
     </section>
 @endsection
 
-@push('scripts')
+{{-- @push('scripts')
     @includeFirst(['validation'])
     @includeFirst(['validation.js_cancel_order'])
     @includeFirst(['validation.js_product_review'])
-@endpush
+@endpush --}}

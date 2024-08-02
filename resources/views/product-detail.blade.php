@@ -108,9 +108,9 @@
                                                     </div>
                                                 </li>
                                             </ul>
-                                        </div>  
+                                        </div>
                                     @endforeach
-                                    
+
                                 @endif
                             </div>
                         </div>
@@ -173,7 +173,7 @@
                                 data-bs-target="#bookitem-sidebar" aria-controls="offcanvasRight">Book Now</a> --}}
                             @if (@$product->user_id != auth()->user()->id)
                                 <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                                    data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Ask Query</a>   
+                                    data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Ask Query</a>
                             @endif
 
                             <div class="pro-info-accordian">
@@ -323,21 +323,21 @@
                                         <div class="badge day-badge">
                                             Per day
                                         </div>
-        
+
                                     </div>
                                     <div class="pro-desc-prize">
                                         <h3>${{ @$product->rent_week }}</h3>
                                         <div class="badge day-badge">
                                             Per week
                                         </div>
-        
+
                                     </div>
                                     <div class="pro-desc-prize">
                                         <h3>${{ @$product->rent_month }}</h3>
                                         <div class="badge day-badge">
                                             Per month
                                         </div>
-        
+
                                     </div>
                                 </div>
                             </div>
@@ -365,7 +365,7 @@
                                         </span>
                                     @enderror
                                 </div>
-        
+
                                 <div class="form-group my-3">
                                     <label for="">Description</label>
                                     <div class="formfield">
@@ -379,19 +379,19 @@
                                     @enderror
                                 </div>
                                 <div class="item-pickup-loc-main">
-        
+
                                     <h4>Pick up Location</h4>
                                     @if(@$product->productCompleteLocation->manul_pickup_location == '1')
                                         <p>{{ $product->productCompleteLocation->pick_up_location ?? '' }}</p>
                                     @endif
-        
+
                                 </div>
                             </div>
-        
+
                             <button type="button" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
                                 data-bs-target="#checkout-sidebar" aria-controls="offcanvasRight"
                                 id="Askquery">Next</button>
-        
+
                         </form>
                         {{-- <div class="book-item-footer">
                             <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
@@ -474,9 +474,7 @@
                         success: function(response) {
                             var modalContent = '';
                             if (response.success) {
-                                modalContent =
-                                    '<div class="alert alert-success" role="alert">' + response
-                                    .message + '</div>';
+                                modalContent = `<div class="success-text" role="alert"><img src="`+ "{{asset('assets/img/query.png')}}"+`" style="max-width: 180px;">`+ response.message +`</div>`;
                             } else {
                                 modalContent = '<div class="alert alert-danger" role="alert">' +
                                     response.message + '</div>';
@@ -517,7 +515,7 @@
             })
 
             // date range jquery
-            
+
             // var queryDates = @json($querydates);
 
             // console.log(queryDates);
@@ -569,7 +567,7 @@
 
             var queryDates = @json($querydates);
             var disableDates = @json($disable_dates);
-
+            console.log(queryDates);
             var disabledDateRanges = queryDates.map(function(query) {
                 var dateRange = query.date_range.split(' - ');
                 return {
@@ -590,7 +588,7 @@
 
             function isDateDisabled(date) {
                 var inQueryDates = disabledDateRanges.some(function(range) {
-                    return date.isSame(range.start, 'day') || date.isSame(range.end, 'day');
+                    return date.isBetween(range.start, range.end, 'day', '[]');
                 });
 
                 var inDisableDates = noneAvailableDates.some(function(range) {
@@ -633,7 +631,7 @@
             }).on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
             });
-            
+
         });
     </script>
 @endpush
