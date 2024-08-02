@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductImage extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
     protected $fillable = [
         'product_id', 'file_name', 'file_path'

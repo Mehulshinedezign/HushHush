@@ -363,6 +363,7 @@ class AdminController extends Controller
     public function viewCustomerCompletedOrders(Request $request, User $customer)
     {
 
+        // dd($request->global_pagination);
 
         // $customer->load(["vendorBankDetails", "vendorCompletedOrderedItems.order", "vendorPayout"]);
 
@@ -371,7 +372,7 @@ class AdminController extends Controller
             ["user_id", "=", $customer->id],
             ["status", "=", "Completed"],
             ["dispute_status", "=", "No"],
-            ["security_option", "=", "security"],
+            // ["security_option", "=", "security"],
         ])->paginate($request->global_pagination);
 
         $orders = $orders->filter(function ($value, $key) {

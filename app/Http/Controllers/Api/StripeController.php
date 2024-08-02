@@ -136,17 +136,19 @@ class StripeController extends Controller
 
                 $order = Order::create([
                     'user_id' => $query->user_id,
+                    'retailer_id' => $query->for_user,
                     'transaction_id' => null,
                     'product_id' => $query->product_id,
                     'query_id' => $query->id,
                     'from_date' => $fromDateTime->toDateString(),
                     'to_date' => $toDateTime->toDateString(),
-                    'from_hour' => $fromDateTime->format('H'),
-                    'from_minute' => $fromDateTime->format('i'),
-                    'to_hour' => $toDateTime->format('H'),
-                    'to_minute' => $toDateTime->format('i'),
+                    // 'from_hour' => $fromDateTime->format('H'),
+                    // 'from_minute' => $fromDateTime->format('i'),
+                    // 'to_hour' => $toDateTime->format('H'),
+                    // 'to_minute' => $toDateTime->format('i'),
                     'order_date' => date('Y-m-d H:i:s'),
                     'status' => $orderStatus,
+                    'total'=>$request->amount,
                 ]);
 
                 $query->update(['status' => 'COMPLETED']);

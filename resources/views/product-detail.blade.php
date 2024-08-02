@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="col-lg-8 col-md-12">
                         <div class="product-desc-box">
-                            <div class="product-desc-slider">
+                            <div class="product-desc-slider single-img-slider">
                                 <div class="container">
 
                                     <div class="slider slider-content">
@@ -30,18 +30,16 @@
                                     </div>
                                     <!-- <div class="product-desc-slider-small"> -->
                                     <div class="slider slider-thumb">
-                                        @if ($productImages->isNotEmpty())
+                                        @if ($productImages->isNotEmpty() && count($productImages)>1)
                                             @foreach ($productImages as $image)
                                                 <div><img src="{{ $image->file_path }}" alt="" loading="lazy"></div>
                                             @endforeach
-                                        @else
-                                            <div><img src="{{ asset('front/images/pro-description-img.png') }}"
-                                                    alt="img"></div>
+
                                         @endif
 
                                     </div>
                                 </div>
-                                <div class="prev-prodec-btn">
+                                <div class="prev-prodec-btn {{ count($productImages)>1 ? '':'d-none' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="18"
                                         viewBox="0 0 26 18" fill="none">
                                         <path
@@ -49,7 +47,7 @@
                                             fill="#1B1B1B"></path>
                                     </svg>
                                 </div>
-                                <div class="next-prodec-btn">
+                                <div class="next-prodec-btn {{ count($productImages)>1 ? '':'d-none' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="18"
                                         viewBox="0 0 26 18" fill="none">
                                         <path
@@ -211,6 +209,41 @@
                                         </div>
                                     </div> --}}
                                 </div>
+                                <div class="pro-info-accordian">
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingOne">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#collapseTwo" aria-expanded="true"
+                                                    aria-controls="collapseTwo">
+                                                    Pickup Location
+                                                </button>
+                                            </h2>
+                                            <div id="collapseTwo" class="accordion-collapse collapse show"
+                                                aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    {{ $product->productCompleteLocation->pick_up_location }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwo">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                    aria-expanded="false" aria-controls="collapseTwo">
+                                                    Additional information
+                                                </button>
+                                            </h2>
+                                            <div id="collapseTwo" class="accordion-collapse collapse"
+                                                aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    Safer For The Environment: Our denim factory partner recycles 98% of their
+                                                    water using reverse osmosis filtration and keeps byproducts out of the
+                                                    environment by mixing them with concrete.
+                                                </div>
+                                            </div>
+                                        </div> --}}
+                                    </div>
                             </div>
                             <div class="lender-profile">
                                 <p>Lender</p>
