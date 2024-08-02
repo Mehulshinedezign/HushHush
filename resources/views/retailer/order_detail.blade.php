@@ -23,7 +23,7 @@
                     <div class="order-detail-status">
                         <span class="mr-2 w-500">Status:</span>
                         @if ($order->dispute_status == 'No' || $order->dispute_status == 'Resolved')
-                            @if ($order->status == 'Pending')
+                            @if ($order->status == 'Waiting')
                                 <span class="info status">{{ $order->status }}</span>
                             @elseif ($order->status == 'Completed')
                                 <span class="success status">{{ $order->status }}</span>
@@ -41,14 +41,14 @@
                     <div class="left-order">
                         <div class="product-order-detail d-flex align-items-center">
                             <div class="product-picture">
-                                @if (isset($order->item->product->thumbnailImage->url))
-                                    <img src="{{ @$order->item->product->thumbnailImage->url }}" alt="product-img">
+                                @if (isset($order->product->thumbnailImage->url))
+                                    <img src="{{ @$order->product->thumbnailImage->url }}" alt="product-img">
                                 @else
                                     <img src="{{ asset('img/default-product.png') }}" alt="product-img">
                                 @endif
                             </div>
                             <div class="product-name">
-                                <p class="black-text w-500 mb-2">{{ $order->item->product->name }}</p>
+                                <p class="black-text w-500 mb-2">{{ $order->product->name }}</p>
                                 <ul class="listing-row">
                                     {{-- <li class="list-col auto-width mb-2">
                                         <span class="list-item w-500">Rental Period:</span>
@@ -139,7 +139,7 @@
                             </li>
                             <li class="summary-item">
                                 <span class="list-item w-500">Rental Amount: </span>
-                                <span>${{ number_format((float) ($order->item->rent_per_day * $order->item->total_rental_days), 2, '.', '') }}</span>
+                                {{-- <span>${{ number_format((float) ($order->item->rent_per_day * $order->item->total_rental_days), 2, '.', '') }}</span> --}}
                             </li>
                             <li class="summary-item">
                                 <span class="list-item w-500">
@@ -161,7 +161,7 @@
                             </li> --}}
                             <li class="summary-item price-total">
                                 <span class="list-item w-500">Total Earnings: </span>
-                                <span class="value">${{ $order->item->total }}</span>
+                                <span class="value">${{ $order->total }}</span>
                             </li>
                         </ul>
                     </div>
@@ -182,10 +182,10 @@
                     </div> --}}
 
 
-                <div class="order-detail-photo @if (is_null($transaction)) d-none @endif">
+                <div class="order-detail-photo">
                     <div class="row g-4 imageupload" id="accept">
                         <!-- Start of picked up section -->
-                        @if ('No' == $order->dispute_status && $order->status == 'Pending' && $order->customer_confirmed_pickedup == 0)
+                        @if ('No' == $order->dispute_status && $order->status == 'Waiting' && $order->customer_confirmed_pickedup == 0)
                             <!-- Retailer uploaded picked up images also update the image till customer confirmed the picked up -->
                             <div class="col-12 col-sm-12 col-md-6 mb-4 ">
                                 <form method="post" action="{{ route('retailerorderpickup', [$order->id]) }}"
@@ -245,7 +245,7 @@
                                             @endforeach
                                         </ul>
                                         <button
-                                            class="btn btn-dark justify-content-center upload-img @if ($order->retailerPickedUpImages->count() >= $global_max_picked_up_image_count) d-none @endif"
+                                            class="btn btn-dark justify-content-center upload-img @if ($order->retailerPickedUpImages->count() >= 10) d-none @endif"
                                             type="submit"><i class="fa-solid fa-upload"></i> Upload</button>
                                     </div>
                                 </form>

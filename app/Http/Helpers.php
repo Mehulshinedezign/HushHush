@@ -328,4 +328,18 @@ if (!function_exists('check_order_list_paginate_retailer')) {
             return $status->status == 1 ? false : true;
         }
     }
+
+    if (!function_exists('diffBetweenToDate')) {
+        function diffBetweenToDate($fromDate, $toDate)
+        {
+            $date = Carbon::parse($fromDate);
+            $now = Carbon::parse($toDate);
+            if ($date == $now) {
+                return 1;
+            }
+            $diff = $date->diffInDays($now);
+
+            return $diff;
+        }
+    }
 }

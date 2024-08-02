@@ -337,6 +337,9 @@
                                     <li><a class="dropdown-item" href="{{ route('my_query') }}">
                                             <i class="fa fa-question-circle" aria-hidden="true"></i>
                                             My Query</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('retailercustomer') }}">
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                            Receive order</a></li>
                                     <li><a class="dropdown-item" href="{{ route('receive_query') }}"><img width="15"
                                                 height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
                                                 alt="img">Receive Query</a></li>
