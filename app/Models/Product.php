@@ -347,23 +347,27 @@ class Product extends Model
             ->when($request->country && !$request->filled(['state','city']),function ($q) use ($request){
                 $q->where('country',$request->country);
             })
-            ->when($request->filled(['Category', 'Brand', 'Size', 'min_value', 'max_value']), function ($q) use ($request) {
+            ->when($request->filled(['Category', 'Brand', 'Size', 'min_value', 'max_value','Category','country','state']), function ($q) use ($request) {
                 return $q->whereIn('category_id',  $request->Category);
                 $q->whereIn('brand',$request->Brand);
                 $q->whereIn('size',  $request->Size);
                 $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
+                $q->where(['city'=>$request->city]);
             })
-            ->when($request->filled(['Category', 'Brand']) && !$request->filled(['Size', 'min_value', 'max_value']), function ($q) use ($request) {
+            ->when($request->filled(['Category', 'Brand','Category','country','state']) && !$request->filled(['Size', 'min_value', 'max_value']), function ($q) use ($request) {
                 return $q->whereIn('category_id',  $request->Category);
                 $q->whereIn('brand')->whereIn($request->Brand);
+                $q->where(['city'=>$request->city]);
             })
-            ->when($request->filled(['Category', 'Size']) && !$request->filled(['Brand', 'min_value', 'max_value']), function ($q) use ($request) {
+            ->when($request->filled(['Category', 'Size','country','state','city']) && !$request->filled(['Brand', 'min_value', 'max_value']), function ($q) use ($request) {
                 return $q->whereIn('category_id',  $request->Category);
                 $q->whereIn('size',  $request->Size);
+                $q->where(['city'=>$request->city]);
             })
-            ->when($request->filled(['Category', 'min_value', 'max_value']) && !$request->filled(['Brand', 'Size']), function ($q) use ($request) {
+            ->when($request->filled(['Category', 'min_value', 'max_value','country','state','city']) && !$request->filled(['Brand', 'Size']), function ($q) use ($request) {
                 return $q->whereIn('category_id',  $request->Category);
                 $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
+                $q->where(['city'=>$request->city]);
             })
             ->when($request->filled(['Category','country','state','city']),function($q) use ($request){
                 return $q->whereIn('category_id',$request->Category);
