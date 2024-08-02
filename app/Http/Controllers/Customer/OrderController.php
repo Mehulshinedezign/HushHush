@@ -120,7 +120,7 @@ class OrderController extends Controller
         return view('customer.order_success')->with('order', $order);
     }
 
-    public function orderPickUp(Request $request, Order $order)
+    public function orderPickUp(OrderPickUpReturnRequest $request, Order $order)
     {
         if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
             return redirect()->back()->with("warning", "You can not pickedup the dispute order");
@@ -202,7 +202,7 @@ class OrderController extends Controller
             if ($order->retailer_confirmed_pickedup == '1') {
                 $data['status'] = 'Picked Up';
                 $data['pickedup_date'] = $dateTime;
-                Order::where("order_id", $order->id)->update(["status" => "Picked Up"]);
+                Order::where("id", $order->id)->update(["status" => "Picked Up"]);
                 $user = auth()->user();
             }
 
@@ -234,7 +234,7 @@ class OrderController extends Controller
         return redirect()->route('vieworder', [$order->id]);
     }
 
-    public function orderReturn(Request $request, Order $order)
+    public function orderReturn(OrderPickUpReturnRequest $request, Order $order)
     {
         if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
             return redirect()->back()->with("warning", "You can not upload the image of disputed order");
@@ -246,49 +246,66 @@ class OrderController extends Controller
 
         if ($order->retailer_confirmed_returned == 0) {
             $userId = auth()->user()->id;
-            $removedImageIds = explode(',', $request->removed_images);
+            // $removedImageIds = explode(',', $request->removed_images);
             $images = [];
-            for ($i = 1; $i <= $request->global_max_returned_image_count; $i++) {
-                if ($request->hasFile('image' . $i)) {
-                    $image = s3_store_image($request->file('image' . $i), 'products/images');
-                    if ($image != null) {
-                        $images[] = [
-                            'order_id' => $order->id,
-                            'user_id' => $userId,
-                            'url' => $image['url'],
-                            'file' => $image['name'],
-                            'type' => 'returned',
-                            'uploaded_by' => 'customer',
-                        ];
-                    }
-                    // $file = $request->file('image'.$i);
-                    // $path = $file->store('orders/return', 's3');
-                    // $url = Storage::disk('s3')->url($path);
-                    // $images[] = [
-                    //     'order_id' => $order->id,
-                    //     'user_id' => $userId,
-                    //     'url' => $url,
-                    //     'file' => $path,
-                    //     'type' => 'returned',
-                    //     'uploaded_by' => 'customer',
-                    // ];
+            // for ($i = 1; $i <= $request->global_max_returned_image_count; $i++) {
+            //     if ($request->hasFile('image' . $i)) {
+            //         $image = s3_store_image($request->file('image' . $i), 'products/images');
+            //         if ($image != null) {
+            //             $images[] = [
+            //                 'order_id' => $order->id,
+            //                 'user_id' => $userId,
+            //                 'url' => $image['url'],
+            //                 'file' => $image['name'],
+            //                 'type' => 'returned',
+            //                 'uploaded_by' => 'customer',
+            //             ];
+            //         }
+
+            $images = [];
+            foreach ($request->images as $file) {
+                // dd($request);
+                // if ($request->hasFile('image' . $i)) {
+                //     $image = s3_store_image($request->file('image' . $i), 'products/images');
+                if ($file != null) {
+                    $images[] = [
+                        'order_id' => $order->id,
+                        'user_id' => $userId,
+                        'url' => Storage::disk('public')->put('orders/return', $file),
+                        'file' => $file->getClientOriginalName(),
+                        'type' => 'returned',
+                        'uploaded_by' => 'customer',
+                    ];
                 }
+
+                // $file = $request->file('image'.$i);
+                // $path = $file->store('orders/return', 's3');
+                // $url = Storage::disk('s3')->url($path);
+                // $images[] = [
+                //     'order_id' => $order->id,
+                //     'user_id' => $userId,
+                //     'url' => $url,
+                //     'file' => $path,
+                //     'type' => 'returned',
+                //     'uploaded_by' => 'customer',
+                // ];
             }
-
-            if (count($images) || count($removedImageIds)) {
-                $orderImages = OrderImage::where('order_id', $order->id)->whereIn('id', $removedImageIds)->where('user_id', $userId)->where('type', 'returned')->where('uploaded_by', 'customer')->get();
-                foreach ($orderImages as $orderImage) {
-                    Storage::disk('s3')->delete('products/images/' . $orderImage->file);
-                    // $orderImage->delete();
-                }
-
-                if (count($images)) {
-                    OrderImage::insert($images);
-                }
-            }
-
-            return redirect()->back()->with('success', 'Images uploaded successfully');
         }
+
+        // if (count($images) || count($removedImageIds)) {
+        //     $orderImages = OrderImage::where('order_id', $order->id)->whereIn('id', $removedImageIds)->where('user_id', $userId)->where('type', 'returned')->where('uploaded_by', 'customer')->get();
+        //     foreach ($orderImages as $orderImage) {
+        //         Storage::disk('s3')->delete('products/images/' . $orderImage->file);
+        //         // $orderImage->delete();
+        //     }
+
+        if (count($images)) {
+            OrderImage::insert($images);
+        }
+        // }
+
+        return redirect()->back()->with('success', 'Images uploaded successfully');
+        // }
 
         return redirect()->route('vieworder', [$order->id]);
     }
@@ -304,11 +321,11 @@ class OrderController extends Controller
             return redirect()->back()->with("warning", 'Order must be picked up before confirm the returned');
         }
         $order_item = OrderItem::where('order_id', $order->id)->first();
-        $product = Product::with('thumbnailImage', 'retailer.notification')->where('id', $order_item->product_id)->first();
+        // $product = Product::with('thumbnailImage', 'retailer.notification')->where('id', $order_item->product_id)->first();
         $image = OrderImage::where('order_id', $order->id)->where('type', 'returned')->where('uploaded_by', 'retailer')->first();
         $dateTime = date('Y-m-d H:i:s');
 
-        $user = User::with('notification')->where('id', auth()->user()->id)->first();
+        $user = User::where('id', auth()->user()->id)->first();
 
         if (!is_null($image) && $order->customer_confirmed_returned == 0) {
             $data = [
@@ -319,56 +336,56 @@ class OrderController extends Controller
             if ($order->retailer_confirmed_returned == 1) {
                 $data['status'] = 'Completed';
                 $data['returned_date'] = $dateTime;
-                OrderItem::where("order_id", $order->id)->update(["status" => "Completed"]);
+                Order::where("id", $order->id)->update(["status" => "Completed"]);
 
                 // send mail to customer whe lender verify product
                 // mail
-                $user->notify(new RefundCustomerSecuirty($user));
+                // $user->notify(new RefundCustomerSecuirty($user));
                 // end
 
                 // check the customer order return status before sending the notification
-                if (@$user->notification->order_return == 'on') {
-                    // send mail to retailer of order picked up successfully
-                    $user->notify(new OrderReturn($order));
-                }
+                // if (@$user->notification->order_return == 'on') {
+                //     // send mail to retailer of order picked up successfully
+                //     $user->notify(new OrderReturn($order));
+                // }
 
                 // check the retailer order return status before sending the notification
-                if (@$order->item->retailer->notification->order_return == 'on') {
-                    // send mail to retailer of order picked up successfully
-                    $order->item->retailer->notify(new VendorOrderReturn($order));
-                }
+                // if (@$order->item->retailer->notification->order_return == 'on') {
+                //     // send mail to retailer of order picked up successfully
+                //     $order->item->retailer->notify(new VendorOrderReturn($order));
+                // }
             }
 
 
-            if (@$user->notification->rate_your_experience == 'on') {
-                $user->notify(new CustomerExperience($user, $product));
-            }
-            if (@$user->notification->order_return == 'on') {
-                $user->notify(new RentalComplete($user));
-            }
-            if (@$user->notification->feedback == 'on') {
-                $user->notify(new RentalFeedback($user));
-            }
+            // if (@$user->notification->rate_your_experience == 'on') {
+            //     $user->notify(new CustomerExperience($user, $product));
+            // }
+            // if (@$user->notification->order_return == 'on') {
+            //     $user->notify(new RentalComplete($user));
+            // }
+            // if (@$user->notification->feedback == 'on') {
+            //     $user->notify(new RentalFeedback($user));
+            // }
             $order->update($data);
-            $data = [
-                [
-                    'order_id' => $order->id,
-                    'sender_id' => $order->user_id,
-                    'receiver_id' => $order->item->retailer->id,
-                    'action_type' => 'Order Return',
-                    'created_at' => $dateTime,
-                    'message' => 'Order #' . $order->id . ' has been returned by customer successfully'
-                ],
-                [
-                    'order_id' => $order->id,
-                    'sender_id' => null,
-                    'receiver_id' => $order->user_id,
-                    'action_type' => 'Order Return',
-                    'created_at' => $dateTime,
-                    'message' => 'You have successfully returned the order #' . $order->id
-                ]
-            ];
-            $this->sendNotification($data);
+            // $data = [
+            //     [
+            //         'order_id' => $order->id,
+            //         'sender_id' => $order->user_id,
+            //         'receiver_id' => $order->item->retailer->id,
+            //         'action_type' => 'Order Return',
+            //         'created_at' => $dateTime,
+            //         'message' => 'Order #' . $order->id . ' has been returned by customer successfully'
+            //     ],
+            //     [
+            //         'order_id' => $order->id,
+            //         'sender_id' => null,
+            //         'receiver_id' => $order->user_id,
+            //         'action_type' => 'Order Return',
+            //         'created_at' => $dateTime,
+            //         'message' => 'You have successfully returned the order #' . $order->id
+            //     ]
+            // ];
+            // $this->sendNotification($data);
 
 
             return redirect()->back()->with('success', 'Return confirmed successfully');
@@ -393,7 +410,7 @@ class OrderController extends Controller
         }
 
         ProductRating::create([
-            'order_id' => 1,
+            'order_id' => $request->order_id,
             'user_id' => auth()->user()->id,
             'product_id' => $product_id,
             'rating' => $request->rating,
