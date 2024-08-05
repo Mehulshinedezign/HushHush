@@ -401,7 +401,8 @@ class ProductController extends Controller
             }
 
             $user = $request->user();
-            $is_bankdetail = $user->vendorBankDetails;
+            // dd($user->vendorBankDetails);
+            $is_bankdetail = $user->bankAccount;
 
             if (is_null($is_bankdetail)) {
                 $apiResponse = 'error';

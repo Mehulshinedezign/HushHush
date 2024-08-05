@@ -39,7 +39,7 @@ class StripeEventListener implements ShouldQueue
                         UserBankDetail::updateOrCreate(
                             ['user_id' => $user->id],
                             [
-                                'stripe_id' => $user->stripe_id,
+                                'stripe_id' => $user->stripe_account_id,
                                 'country' => $account['country'],
                                 'raw_data' => json_encode($account),
                             ]
