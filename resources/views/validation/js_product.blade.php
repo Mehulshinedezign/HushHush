@@ -83,11 +83,11 @@
                 // required: true,
                 url:'/^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/',
             },
-            min_rent_days: {
-                required: true,
-                regex: minDaysItemRegex,
-                range: [1, 30],
-            },
+            // min_rent_days: {
+            //     required: true,
+            //     regex: minDaysItemRegex,
+            //     range: [1, 30],
+            // },
             rent_price_day: {
                 required: true,
                 regex: OnlydigitRegex,

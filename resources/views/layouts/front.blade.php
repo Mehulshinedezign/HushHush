@@ -404,8 +404,13 @@
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days*</label>
                                             <div class="formfield ">
-                                                <input type="number" class="form-control" name="min_rent_days"
-                                                    placeholder="Rental days" value="" min="1">
+                                                <select class="form-control" name="min_rent_days">
+                                                    <option value="">Select Rental days</option>
+                                                    <option value="4 Days">4 Days</option>
+                                                    <option value="7 Days">7 Days</option>
+                                                    <option value="14 Days">14 Days</option>
+                                                    {{-- <option value="Fair">Fair condition</option> --}}
+                                                </select>
                                             </div>
                                             @error('min_rent_days')
                                                 <span class="invalid-feedback" role="alert">

@@ -301,12 +301,14 @@ class ProductController extends Controller
                     ]);
                 }
             }
+            // dd($request->min_rent_days,$data);
 
 
             return redirect()->route('product')->with('success', "Your product has been uploaded successfully.");
 
             // return redirect()->back()->with('success', "Your product has been uploaded successfully.");
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
