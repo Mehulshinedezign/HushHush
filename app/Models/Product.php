@@ -286,7 +286,7 @@ class Product extends Model
     {
         $request = request();
 
-        // dd($request->Category,$request->country,$request->state,$request->city);
+        // dd($request->rating,$request->country,$request->state,$request->city);
             $query->when($request->Category, function ($q) use ($request) {
                 $q->whereIn('category_id',  $request->Category);
 
@@ -308,75 +308,128 @@ class Product extends Model
             ->when($request->country && !$request->filled(['state','city']),function ($q) use ($request){
                 $q->where('country',$request->country);
             })
-            ->when($request->filled(['Category', 'Brand', 'Size', 'min_value', 'max_value','Category','country','state']), function ($q) use ($request) {
+            ->when($request->rating, function ($q) use ($request) {
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
+            })
+            ->when($request->filled(['Category', 'Brand', 'Size', 'min_value', 'max_value','Category','country','state','rating']), function ($q) use ($request) {
                 return $q->whereIn('category_id',  $request->Category);
                 $q->whereIn('brand',$request->Brand);
                 $q->whereIn('size',  $request->Size);
                 $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
                 $q->where(['city'=>$request->city]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
-            ->when($request->filled(['Category', 'Brand','Category','country','state']) && !$request->filled(['Size', 'min_value', 'max_value']), function ($q) use ($request) {
+            ->when($request->filled(['Category', 'Brand','Category','country','state','rating']) && !$request->filled(['Size', 'min_value', 'max_value']), function ($q) use ($request) {
                 return $q->whereIn('category_id',  $request->Category);
                 $q->whereIn('brand')->whereIn($request->Brand);
                 $q->where(['city'=>$request->city]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
-            ->when($request->filled(['Category', 'Size','country','state','city']) && !$request->filled(['Brand', 'min_value', 'max_value']), function ($q) use ($request) {
+            ->when($request->filled(['Category', 'Size','country','state','city','rating']) && !$request->filled(['Brand', 'min_value', 'max_value']), function ($q) use ($request) {
                 return $q->whereIn('category_id',  $request->Category);
                 $q->whereIn('size',  $request->Size);
                 $q->where(['city'=>$request->city]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
-            ->when($request->filled(['Category', 'min_value', 'max_value','country','state','city']) && !$request->filled(['Brand', 'Size']), function ($q) use ($request) {
+            ->when($request->filled(['Category', 'min_value', 'max_value','country','state','city','rating']) && !$request->filled(['Brand', 'Size']), function ($q) use ($request) {
                 return $q->whereIn('category_id',  $request->Category);
                 $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
                 $q->where(['city'=>$request->city]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
-            ->when($request->filled(['Category','country','state','city']),function($q) use ($request){
+            ->when($request->filled(['Category','country','state','city','rating']),function($q) use ($request){
                 return $q->whereIn('category_id',$request->Category);
                 $q->where(['city'=>$request->city]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
-            ->when($request->filled(['Category','country','state']) && !$request->filled(['city']),function($q) use ($request){
+            ->when($request->filled(['Category','country','state','rating']) && !$request->filled(['city']),function($q) use ($request){
                 return $q->whereIn('category_id',$request->Category);
                 $q->where(['state'=>$request->state]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
-            ->when($request->filled(['Category','country']) && !$request->filled(['state','city']),function($q) use ($request){
+            ->when($request->filled(['Category','country','rating']) && !$request->filled(['state','city']),function($q) use ($request){
                 return $q->whereIn('category_id',$request->Category);
                 $q->where(['country'=>$request->country]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
-            ->when($request->filled(['Brand','country','state','city']),function($q) use ($request){
+            ->when($request->filled(['Brand','country','state','city','rating']),function($q) use ($request){
                 return $q->whereIn('brand',$request->Brand);
                 $q->where(['city'=>$request->city]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
-            ->when($request->filled(['Brand','country','state']) && !$request->filled(['city']),function($q) use ($request){
+            ->when($request->filled(['Brand','country','state','rating']) && !$request->filled(['city']),function($q) use ($request){
                 return $q->whereIn('brand',$request->Brand);
                 $q->where(['state'=>$request->state]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
-            ->when($request->filled(['Brand','country']) && !$request->filled(['state','city']),function($q) use ($request){
+            ->when($request->filled(['Brand','country','rating']) && !$request->filled(['state','city']),function($q) use ($request){
                 return $q->whereIn('brand',$request->Brand);
                 $q->where(['country'=>$request->country]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
-            ->when($request->filled(['Size','country','state','city']),function($q) use ($request){
+            ->when($request->filled(['Size','country','state','city','rating']),function($q) use ($request){
                 return $q->whereIn('size',  $request->Size);
                 $q->where(['city'=>$request->city]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
-            ->when($request->filled(['Size','country','state']) && !$request->filled(['city']),function($q) use ($request){
+            ->when($request->filled(['Size','country','state','rating']) && !$request->filled(['city']),function($q) use ($request){
                 return $q->whereIn('size',  $request->Size);
                 $q->where(['state'=>$request->state]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);;
+                });
             })
-            ->when($request->filled(['Size','country']) && !$request->filled(['state','city']),function($q) use ($request){
+            ->when($request->filled(['Size','country','rating']) && !$request->filled(['state','city']),function($q) use ($request){
                 return $q->whereIn('size',  $request->Size);
                 $q->where(['country'=>$request->country]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
-            ->when($request->filled(['min_value', 'max_value','country','state','city']),function($q) use ($request){
+            ->when($request->filled(['min_value', 'max_value','country','state','city','rating']),function($q) use ($request){
                 $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
                 $q->where(['city'=>$request->city]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
-            ->when($request->filled(['min_value', 'max_value','country','state']) && !$request->filled(['city']),function($q) use ($request){
+            ->when($request->filled(['min_value', 'max_value','country','state','rating']) && !$request->filled(['city']),function($q) use ($request){
                 $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
                 $q->where(['state'=>$request->state]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
-            ->when($request->filled(['min_value', 'max_value','country']) && !$request->filled(['state','city']),function($q) use ($request){
+            ->when($request->filled(['min_value', 'max_value','country','rating']) && !$request->filled(['state','city']),function($q) use ($request){
                 $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
                 $q->where(['country'=>$request->country]);
+                $q->whereHas('ratings', function ($q) use ($request) {
+                    $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                });
             })
            
             ->when($request->filled('filter_date'), function ($q) use ($request) {
@@ -386,6 +439,7 @@ class Product extends Model
                 $endDate = date('Y-m-d', strtotime($dates[1]));
                 return $q->filterByDateRange($startDate, $endDate);
             });
+
     }
 
     // public function scopeApplyFilters($query)
