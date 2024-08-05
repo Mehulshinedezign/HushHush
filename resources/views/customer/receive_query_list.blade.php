@@ -165,12 +165,12 @@
 
             Swal.fire({
                 title: 'Are you sure?',
-                text: `Are you sure you want to accept this product $${parseInt(price) + parseInt(shipping_charges) + parseInt(cleaning_charges)} `,
+                text: `Are you sure you want to send offer for this product at $${parseInt(price) + parseInt(shipping_charges) + parseInt(cleaning_charges)} `,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#1B1B1B',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, accept it!',
+                confirmButtonText: 'Yes, send it!',
                 cancelButtonText: 'Cancel',
                 reverseButtons: true
             }).then((result) => {

@@ -69,19 +69,19 @@
                 <i class="fa-solid fa-eye"></i> View
             </a>
             @if ($query->status == 'ACCEPTED')
-                @if (is_null($query->negotiate_price))
+                {{-- @if (is_null($query->negotiate_price)) --}}
                     @php
                         $price = $query->getCalculatedPrice($query->date_range);
                     @endphp
                     <a href="{{ route('card.details', ['query' => $query->id, 'price' => $price]) }}"
-                        class="button outline-btn small-btn" data-price="{{ $price }}">Book
-                        now for
+                        class="button outline-btn small-btn" data-price="{{ $price }}">Accept
+                        offer for
                         {{ $price }}$</a>
-                @else
+                {{-- @else
                     <a href="{{ route('card.details', ['query' => $query->id, 'price' => $query->negotiate_price]) }}"
-                        class="button outline-btn small-btn" data-price="{{ $query->totalBookPrice() }}">Book now for
+                        class="button outline-btn small-btn" data-price="{{ $query->totalBookPrice() }}">Accept offer for
                         {{ $query->totalBookPrice() }}$</a>
-                @endif
+                @endif --}}
             @endif
         </div>
     </td>
