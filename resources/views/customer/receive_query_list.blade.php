@@ -25,12 +25,13 @@
                 <div class="custom-tab">
                     <ul class="custom-tab-list">
                         <li class="tab-item active" data-status="PENDING" data-user="lender"><a
-                            href="javascript:void(0)">Pending</a></li>
+                                href="javascript:void(0)">Pending</a></li>
                         <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a
                                 href="javascript:void(0)">Accepted</a></li>
                         <li class="tab-item" data-status="REJECTED" data-user="lender"><a
                                 href="javascript:void(0)">Rejected</a></li>
-                        <li class="tab-item" data-status="COMPLETED" data-user="lender"><a href="javascript:void(0)">Completed</a></li>
+                        <li class="tab-item" data-status="COMPLETED" data-user="lender"><a
+                                href="javascript:void(0)">Completed</a></li>
 
                     </ul>
                 </div>
@@ -136,8 +137,7 @@
             if (!price) {
                 price = calculatePrice(date_range, rentDay, rentWeek, rentMonth);
             }
-            if(price<= 0 || isNaN(price))
-            {
+            if (price <= 0 || isNaN(price)) {
                 iziToast.error({
                     title: 'Error',
                     message: 'Please enter a valid price',
@@ -146,8 +146,7 @@
                 return false;
             }
 
-            if(cleaning_charges<= 0 || !cleaning_charges)
-            {
+            if (cleaning_charges <= 0 || !cleaning_charges) {
                 iziToast.error({
                     title: 'Error',
                     message: 'Please enter a valid cleaning charge',
@@ -155,8 +154,7 @@
                 });
                 return false;
             }
-            if(shipping_charges<= 0 || !shipping_charges)
-            {
+            if (shipping_charges <= 0 || !shipping_charges) {
                 iziToast.error({
                     title: 'Error',
                     message: 'Please enter a valid shipping charge',
@@ -178,17 +176,18 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $('body').addClass('loading');
-                    acceptQuery(queryId, price , shipping_charges, cleaning_charges);
+                    acceptQuery(queryId, price, shipping_charges, cleaning_charges);
                 }
             });
         }
 
-        function acceptQuery(queryId, price , shipping_charges, cleaning_charges) {
+        function acceptQuery(queryId, price, shipping_charges, cleaning_charges) {
             const encodedPrice = encodeURIComponent(price);
             const encodedshipping_charges = encodeURIComponent(shipping_charges);
             const encodedcleaning_charges = encodeURIComponent(cleaning_charges);
 
-            const url = `{{ url('/accept_query') }}/${queryId}?negotiate_price=${encodedPrice}&shipping_charges=${encodedshipping_charges}&cleaning_charges=${encodedcleaning_charges}`;
+            const url =
+                `{{ url('/accept_query') }}/${queryId}?negotiate_price=${encodedPrice}&shipping_charges=${encodedshipping_charges}&cleaning_charges=${encodedcleaning_charges}`;
             window.location.href = url;
         }
 
@@ -224,8 +223,4 @@
 
         }
     </script>
-
-    {{-- chat --}}
-
-    {{-- chat --}}
 @endpush

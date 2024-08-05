@@ -8,13 +8,13 @@
 
                     <div class="order-detail-summary d-flex justify-content-between">
                         <div class="detail-summary left-detail">
-                            <h6 class="order-detail-heading">Lender Details</h6>
+                            <h6 class="order-detail-heading">Customer Details</h6>
                             <div class="od-profile-bx">
                                 <div class="product-picture">
                                     <img src="{{ $order->product->thumbnailImage->file_path }}" alt="tent">
                                 </div>
                                 <div class="order-detail-name">
-                                    <span class=""><b>Name:</b> {{ @$order->retailer->name }}</span>
+                                    <span class=""><b>Name:</b> {{ @$order->user->name }}</span>
                                 </div>
                             </div>
 

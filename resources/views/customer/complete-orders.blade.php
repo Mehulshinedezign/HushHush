@@ -24,7 +24,9 @@
                     <div class="order-his-card">
                         <div class="order-card-top">
                             <div class="order-card-img">
-                                <img src="{{ $order->product->thumbnailImage->file_path }}" alt="profile">
+                                <a href="{{ route('vieworder', ['order' => $order->id]) }}">
+                                    <img src="{{ $order->product->thumbnailImage->file_path }}" alt="profile">
+                                </a>
                             </div>
                             <p>{{ $order->product->name }}</p>
                             <div class="pro-desc-prize">
