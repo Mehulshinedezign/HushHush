@@ -35,7 +35,9 @@
                     <div class="order-his-card">
                         <div class="order-card-top">
                             <div class="order-card-img">
-                                <img src="{{ $order->product->thumbnailImage->file_path }}" alt="profile">
+                                <a href="{{ route('retailervieworder', ['order' => $order->id]) }}">
+                                    <img src="{{ $order->product->thumbnailImage->file_path }}" alt="profile">
+                                </a>
                             </div>
                             <p>{{ $order->product->name }}</p>
                             <div class="pro-desc-prize">
@@ -68,11 +70,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="order-card-footer">
-                            <a href="#" class="button outline-btn full-btn" data-bs-toggle="modal"
-                                data-bs-target="#write-review-Modal">Write
-                                Review</a>
-                        </div>
+                        @if ($order->product->user_id != auth()->id())
+                            <div class="order-card-footer">
+                                <a href="#" class="button outline-btn full-btn" data-bs-toggle="modal"
+                                    data-bs-target="#write-review-Modal">Write
+                                    Review</a>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endif

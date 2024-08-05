@@ -31,7 +31,9 @@
             <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="order-card-top">
                     <div class="order-card-img">
-                        <img src="{{ $order->product->thumbnailImage->file_path }}" alt="profile">
+                        <a href="{{ route('retailervieworder', ['order' => $order->id]) }}">
+                            <img src="{{ $order->product->thumbnailImage->file_path }}" alt="profile">
+                        </a>
                     </div>
                     <p>{{ $order->product->name }}</p>
                     <div class="pro-desc-prize">
