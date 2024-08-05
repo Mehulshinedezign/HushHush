@@ -63,9 +63,9 @@
                                 @endforeach
                             </div>
                         </div>
-
-                        <div class="home-filter-inner">
-                            {{-- <h4>Price Range</h4>
+                
+                         {{-- <div class="home-filter-inner"> 
+                             <h4>Price Range</h4>
                             <div class="filter-categories">
                                 <div class="">
                                     <div class="price-range-box">
@@ -89,41 +89,41 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> --}}
-                            <div class="interior-filter-box">
+                            </div>  --}}
+                            <div class="home-filter-inner"> 
                                 <h4>Price</h4>
-                                <div class="custom-wrapper">
-                                    <div class="price-input-container">
-                                        <div class="price-input">
-                                            <div class="price-field left">
-                                                <input type="number" name="min_value" id="selectedMinValue"
-                                                    class="min-input"
-                                                    value="{{ request()->has('min_value') ? request()->min_value : '0' }}">
+                                    <div class="custom-wrapper">
+                                        <div class="price-input-container">
+                                            <div class="price-input">
+                                                <div class="price-field left">
+                                                    <input type="number" name="min_value" id="selectedMinValue"
+                                                        class="min-input"
+                                                        value="{{ request()->has('min_value') ? request()->min_value : '0' }}">
+                                                </div>
+                                                <div class="price-field right">
+                                                    <input type="number" name="max_value" id="selectedMaxValue"
+                                                        class="max-input"
+                                                        value="{{ request()->has('max_value') ? request()->max_value : '10000' }}">
+                                                </div>
                                             </div>
-                                            <div class="price-field right">
-                                                <input type="number" name="max_value" id="selectedMaxValue"
-                                                    class="max-input"
-                                                    value="{{ request()->has('max_value') ? request()->max_value : '10000' }}">
+                                            <div class="slider-container">
+                                                <div class="price-slider"
+                                                    style = "@if (request()->has('style')) {{ request()->style }} @endif">
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="slider-container">
-                                            <div class="price-slider"
-                                                style = "@if (request()->has('style')) {{ request()->style }} @endif">
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <!-- Slider -->
-                                    <div class="range-input">
-                                        <input type="range" class="min-range" min="0" max="10000"
-                                            value="{{ request()->has('min_value') ? request()->min_value : '0' }}"
-                                            step="1">
-                                        <input type="range" class="max-range" min="0" max="10000"
-                                            value="{{ request()->has('max_value') ? request()->max_value : '10000' }}"
-                                            step="1">
+                                        <div class="range-input">
+                                            <input type="range" class="min-range" min="0" max="10000"
+                                                value="{{ request()->has('min_value') ? request()->min_value : '0' }}"
+                                                step="1">
+                                            <input type="range" class="max-range" min="0" max="10000"
+                                                value="{{ request()->has('max_value') ? request()->max_value : '10000' }}"
+                                                step="1">
+                                        </div>
                                     </div>
-                                </div>
                             </div>
+                            
                             {{-- <h4>Status</h4>
                             <div class="filter-categories">
                                 <div class="stock-status">
@@ -155,31 +155,31 @@
                                     @endforeach
                                 </div>
 
-                            </div>
-                        </div>
+                            </div>        
+                        <!-- </div> -->
                         <div class="home-filter-inner">
                             <h4>Rating</h4>
                             <div class="filter-categories">
                                 <div class="filter-rating-box">
-                                    <div class="filter-rating-inner">
+                                    <div class="filter-rating-inner filter_rating1">
                                         <i class="fa-solid fa-star"></i>
                                     </div>
-                                    <div class="filter-rating-inner">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                    </div>
-                                    <div class="filter-rating-inner">
-                                        <i class="fa-solid fa-star"></i>
+                                    <div class="filter-rating-inner filter_rating2">
                                         <i class="fa-solid fa-star"></i>
                                         <i class="fa-solid fa-star"></i>
                                     </div>
-                                    <div class="filter-rating-inner">
-                                        <i class="fa-solid fa-star"></i>
+                                    <div class="filter-rating-inner filter_rating3">
                                         <i class="fa-solid fa-star"></i>
                                         <i class="fa-solid fa-star"></i>
                                         <i class="fa-solid fa-star"></i>
                                     </div>
-                                    <div class="filter-rating-inner active">
+                                    <div class="filter-rating-inner filter_rating4">
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                    </div>
+                                    <div class="filter-rating-inner filter_rating5 active">
                                         <i class="fa-solid fa-star"></i>
                                         <i class="fa-solid fa-star"></i>
                                         <i class="fa-solid fa-star"></i>
@@ -189,7 +189,7 @@
                                 </div>
                             </div>
                             <h4>Date range</h4>
-                            <div class="form-group">
+                            <div class="form-group date-range-field">
                                 <div class="formfield">
                                     <input type="text" name="filter_date" id="daterange"
                                         placeholder="Enter date range" class="form-control daterange-cus">
@@ -229,7 +229,7 @@
                         </div>
                         <div class="home-filter-fotter">
                             <div class="filter-fotter-btns">
-                                <a href="{{ route('index') }}" class="button outline-btn">Cancel</a>
+                                <a href="{{ route('index') }}"  id="actionButton" class="button outline-btn">Cancel</a>
                                 {{-- <a href="javascript:void(0)" class="button primary-btn">Apply Filter</a> --}}
                                 <button type="submit" class="button primary-btn">Apply Filter</button>
                             </div>
@@ -622,5 +622,19 @@
         }
 
         initAutocomplete();
+
+        // disable the enter keyword
+        $(document).ready(function() {
+            $(document).on('keypress', 'input', function(e) {
+                if (e.which === 13) { 
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+            if (window.location.search) {
+                $('#actionButton').text('Clear');
+            }
+        });
     </script>
 @endpush
