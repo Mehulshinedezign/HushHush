@@ -639,12 +639,27 @@
 
             $('.filter-rating-inner').click(function() {
                 var value = $(this).data('value');
-                console.log("value is : ",value);
                 $('.filter-rating-inner').removeClass('active');
-                $(this).addClass('active').prevAll().addClass('active');
+                $(this).addClass('active').addClass('active');
                 
                 $('#rating').val(value);
             });
+
+            function getQueryParam(param) {
+                var urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
+            var rating = getQueryParam('rating');
+            if (rating) {
+                $('.filter-rating-inner').each(function() {
+                    if ($(this).data('value') == rating) {
+                        $('#rating').val(rating);
+                        $(this).addClass('active');
+                    }
+                });
+            }
+
+
         });
     </script>
 @endpush
