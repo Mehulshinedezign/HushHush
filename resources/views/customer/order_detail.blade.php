@@ -297,7 +297,7 @@
                                                 <li><span class="remove-preview-img" data-index="{{ $index + 1 }}"
                                                         data-id="{{ $image->id }}"><i class="fas fa-times"></i></span>
                                                     <div class="product-image-box"><img src="{{ $image->url }}"
-                                                            alt="img" /></div>
+                                                            alt="img" height="100px" width="100px" /></div>
                                                 </li>
                                             @endforeach
                                         </ul>

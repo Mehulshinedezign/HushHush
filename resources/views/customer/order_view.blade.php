@@ -62,7 +62,7 @@
                         <div class="row g-4">
                             @if ('No' == $order->dispute_status && $order->status == 'Waiting' && $order->retailer_confirmed_pickedup == 0)
                                 <div class="col-12 col-sm-12 col-md-6">
-                                    <form method="post" action="{{ route('orderpickup', [$order->id]) }}"
+                                    <form id="orderDetail" method="post" action="{{ route('orderpickup', [$order->id]) }}"
                                         enctype="multipart/form-data" id="imageForm">
                                         @csrf
                                         <h6 class="order-detail-heading">Picked Up Attached Files by You</h6>
@@ -70,10 +70,14 @@
 
                                             <div class="multi-file-upload">
                                                 <input type="file" name="images[]" multiple
-                                                    class="customerImages  upload-pending" id="upload-image"
-                                                    upload-image-count="0" data-order="1" value=""
+                                                    class="customerImages  upload-pending @error('images') is-invalid @enderror"
+                                                    id="upload-image" upload-image-count="0" data-order="1" value=""
                                                     accept="image/jpeg, image/png, image/jpg">
-
+                                                @error('images')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
                                                 {{-- <span><img src="http://192.168.0.59:8000/img/upload-multi.svg"
                                                     alt="upload-multi">
                                             </span> --}}
@@ -87,9 +91,21 @@
                                                         5MB)</span>
 
                                                 </p>
-                                            </div>
-                                            <div class="upload-img-preview">
 
+                                            </div>
+
+                                            <div class="upload-img-preview">
+                                                @foreach ($order->customerPickedUpImages as $index => $image)
+                                                    <li>
+                                                        {{-- <span class="remove-preview-img" data-index="{{ $index + 1 }}"
+                                                            data-id="{{ $image->id }}"><i
+                                                                class="fas fa-times"></i></span> --}}
+                                                        <div class="product-image-box"><img
+                                                                src="{{ Storage::url($image->url) }}" alt="img"
+                                                                height="100px" width="100px" />
+                                                        </div>
+                                                    </li>
+                                                @endforeach
                                             </div>
 
                                             <button class="btn btn-dark " type="submit"><i class="fa-solid fa-upload"></i>
@@ -106,9 +122,9 @@
                                                 <div>
                                                     <img src="{{ Storage::url($customerPickedUpImage->url) }}"
                                                         alt="picked-up-img" />
-                                                    <a class="download-uploaded-file"
+                                                    {{-- <a class="download-uploaded-file"
                                                         href="{{ route('downloadattachment', [$customerPickedUpImage->order_id, $customerPickedUpImage->id]) }}"
-                                                        target="_blank"> <i class="fas fa-download"></i></a>
+                                                        target="_blank"> <i class="fas fa-download"></i></a> --}}
                                                 </div>
                                             @endforeach
                                         </div>
@@ -127,9 +143,9 @@
                                                 <div>
                                                     <img src="{{ Storage::url($retailerPickedUpImage->url) }}"
                                                         alt="retailer-pickedup-img" />
-                                                    <a class="download-uploaded-file"
+                                                    {{-- <a class="download-uploaded-file"
                                                         href="{{ route('downloadattachment', [$retailerPickedUpImage->order_id, $retailerPickedUpImage->id]) }}"
-                                                        target="_blank"> <i class="fas fa-download"></i></a>
+                                                        target="_blank"> <i class="fas fa-download"></i></a> --}}
                                                 </div>
                                             @endforeach
                                         </div>
@@ -141,42 +157,11 @@
                                     @endif
                                 </div>
                             @endif
-                            {{-- <div class="col-12 col-sm-12 col-md-6">
-                                <form>
 
-                                    <h6 class="order-detail-heading">Picked Up Attached Files by You</h6>
-                                    <div class="product-pic-gallery">
-
-
-                                        <div class="multi-file-upload">
-                                            <input type="file" name="image1" class="customerImages  upload-pending  "
-                                                data-order="1" value="" accept="image/jpeg, image/png, image/jpg">
-
-                                            <span><img src="http://192.168.0.59:8000/img/upload-multi.svg"
-                                                    alt="upload-multi">
-                                            </span>
-                                            <p class="medFont m-0">
-                                                <span class="limit-reached-text">
-                                                    Select File to upload...
-                                                </span>
-                                                <span class="smallFont">(Min upload:
-                                                    2, Max upload:
-                                                    5, Max file size:
-                                                    5MB)</span>
-
-                                            </p>
-                                        </div>
-
-
-                                        <button class="btn btn-dark " type="submit"><i class="fa-solid fa-upload"></i>
-                                            Upload</button>
-                                    </div>
-                                </form>
-                            </div> --}}
-
+                            {{-- return --}}
                             @if ('No' == $order->dispute_status && $order->status == 'Picked Up' && $order->retailer_confirmed_returned == 0)
                                 <div class="col-12 col-sm-12 col-md-6">
-                                    <form method="post" action="{{ route('orderreturn', [$order->id]) }}"
+                                    <form id="orderReturn" method="post" action="{{ route('orderreturn', [$order->id]) }}"
                                         enctype="multipart/form-data" id="imageForm">
                                         @csrf
                                         <h6 class="order-detail-heading">Picked Up Attached Files by You</h6>
@@ -184,11 +169,15 @@
 
                                             <div class="multi-file-upload">
                                                 <input type="file" name="images[]" multiple
-                                                    class="customerImages  upload-pending" id="upload-image"
-                                                    upload-image-count="0" data-order="1" value=""
+                                                    class="customerImages  upload-pending @error('images') is-invalid @enderror"
+                                                    id="upload-image" upload-image-count="0" data-order="1" value=""
                                                     accept="image/jpeg, image/png, image/jpg">
 
-
+                                                @error('images')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
                                                 <p class="medFont m-0">
                                                     <span class="limit-reached-text">
                                                         Select File to upload...
@@ -201,7 +190,17 @@
                                                 </p>
                                             </div>
                                             <div class="upload-img-preview">
-
+                                                @foreach ($order->customerReturnedImages as $index => $image)
+                                                    <li>
+                                                        {{-- <span class="remove-preview-img" data-index="{{ $index + 1 }}"
+                                                            data-id="{{ $image->id }}"><i
+                                                                class="fas fa-times"></i></span> --}}
+                                                        <div class="product-image-box"><img
+                                                                src="{{ Storage::url($image->url) }}" alt="img"
+                                                                height="100px" width="100px" />
+                                                        </div>
+                                                    </li>
+                                                @endforeach
                                             </div>
 
                                             <button class="btn btn-dark " type="submit"><i class="fa-solid fa-upload"></i>
@@ -218,9 +217,9 @@
                                                 <div>
                                                     <img src="{{ Storage::url($customerReturnedImage->url) }}"
                                                         alt="customer-returned-img" />
-                                                    <a class="download-uploaded-file"
+                                                    {{-- <a class="download-uploaded-file"
                                                         href="{{ route('downloadattachment', [$customerReturnedImage->order_id, $customerReturnedImage->id]) }}"
-                                                        target="_blank"> <i class="fas fa-download"></i></a>
+                                                        target="_blank"> <i class="fas fa-download"></i></a> --}}
                                                 </div>
                                             @endforeach
                                         </div>
@@ -228,7 +227,31 @@
                                 </div>
                             @endif
 
-
+                            <!-- Retailer uploaded picked up images -->
+                            @if ($order->retailerReturnedImages->isNotEmpty())
+                                <div class="col-12 col-sm-12 col-md-6">
+                                    <h6 class="largeFont w-600 mb-3">Returned Attached Files by
+                                        {{ config('constants.lender') }}</h6>
+                                    <div class="product-pic-gallery">
+                                        <div class="gallery-box">
+                                            @foreach ($order->retailerReturnedImages as $retailerReturnedImage)
+                                                <div>
+                                                    <img src="{{ Storage::url($retailerReturnedImage->url) }}"
+                                                        alt="retailer-returned-img" />
+                                                    {{-- <a class="download-uploaded-file"
+                                                        href="{{ route('downloadattachment', [$retailerReturnedImage->order_id, $retailerReturnedImage->id]) }}"
+                                                        target="_blank"> <i class="fas fa-download"></i></a> --}}
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                    @if ($order->dispute_status == 'No' && $order->status == 'Picked Up' && $order->customer_confirmed_returned == 0)
+                                        <a href="{{ route('confirmreturn', [$order->id]) }}"
+                                            class="verify-product btn btn-dark mt-3 justify-content-center">Verify
+                                            Product</a>
+                                    @endif
+                                </div>
+                            @endif
 
                         </div>
                     </div>
@@ -240,54 +263,109 @@
 @endsection
 
 @push('scripts')
-    {{-- function readURL(input) {
-    if (input.files && input.files[0]) {
-    var reader = new FileReader();
-    reader.onload = function (e) {
-    // Here I need to use $(this) to target only the second list item's img.preview
-    $('.preview').attr('src', e.target.result);
-    };
-
-    reader.readAsDataURL(input.files[0]);
-    }
-    } --}}
     <script>
-        $(function() {
-            // Multiple images preview with JavaScript
-            var previewImages = function(input, imgPreviewPlaceholder) {
-                if (input.files) {
-                    var filesAmount = input.files.length;
-                    for (i = 0; i < filesAmount; i++) {
-                        var reader = new FileReader();
-                        reader.onload = function(event) {
-                            var element =
-                                '<div class="upload-img-box"><img src="' + event.target.result +
-                                '" alt="img"> <div class = "upload-img-cross" > <i class = "fa-regular fa-circle-xmark remove_uploaded"></i></div></div>';
-                            // console.log(element);
-                            jQuery(element).appendTo(imgPreviewPlaceholder);
-                        }
-                        reader.readAsDataURL(input.files[i]);
-                    }
+        $(document).ready(function() {
+            // const MAX_IMAGES = 5;
+            let selectedFiles = [];
 
-                    var noimage = $('#upload-image').attr('upload-image-count');
+            function previewImages(input, imgPreviewPlaceholder) {
+                const files = Array.from(input.files);
+                const currentCount = selectedFiles.length;
 
-                    totalimg = parseInt(noimage) + filesAmount;
-                    console.log(noimage, totalimg, filesAmount, 'hererre');
-                    $('#upload-image').attr('upload-image-count', totalimg)
-                }
-            };
+                // if (currentCount + files.length > MAX_IMAGES) {
+                //     alert(`You can upload up to ${MAX_IMAGES} images.`);
+                //     return;
+                // }
+
+                files.forEach((file) => {
+                    selectedFiles.push(file);
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const element = `
+            <div class="upload-img-box">
+                <img src="${event.target.result}" alt="img">
+                <div class="upload-img-cross">
+                    <i class="fa-regular fa-circle-xmark remove_uploaded"></i>
+                </div>
+            </div>`;
+                        $(imgPreviewPlaceholder).append(element);
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                updateFileInput();
+            }
+
+            function updateFileInput() {
+                const dataTransfer = new DataTransfer();
+                selectedFiles.forEach((file) => dataTransfer.items.add(file));
+                $('#upload-image')[0].files = dataTransfer.files;
+            }
+
+            function updateImageCount(change) {
+                const $uploadImage = $('#upload-image');
+                let currentCount = parseInt($uploadImage.attr('upload-image-count') || 0);
+                currentCount += change;
+                $uploadImage.attr('upload-image-count', currentCount);
+            }
+
             $('#upload-image').on('change', function() {
                 previewImages(this, 'div.upload-img-preview');
             });
 
             $(document).on('click', '.remove_uploaded', function() {
-                totalimage = $('#upload-image').attr('upload-image-count');
-                remaningimg = parseInt(totalimage) - 1;
-                totalimage = $('#upload-image').attr('upload-image-count', remaningimg);
+                const index = $(this).closest('.upload-img-box').index();
+                selectedFiles.splice(index, 1);
+                $(this).closest('.upload-img-box').remove();
+                updateFileInput();
+                updateImageCount(-1);
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            const rules = {
+                'images[]': {
+                    required: true,
+                    accept: "image/*",
+                    minfiles: 1,
+                    maxfiles: 5,
+                },
+            };
+            const messages = {
+                'images[]': {
+                    required: "Please upload at least one image",
+                    accept: "Please upload only image files",
+                    minfiles: "You can upload a maximum of 5 images",
+                    maxfiles: "You can upload a maximum of 5 images",
+                },
+            };
 
-                $(this).parent('div').parent('div').remove();
+            handleValidation('orderDetail', rules, messages);
+
+            $('#orderDetail').submit(function(e) {
+                e.preventDefault(); // Prevent form submission
+
+                // Perform form validation
+
+                // Check if the form is valid
+                if ($('#orderDetail').valid()) {
+                    $('#orderDetail').submit(); // Submit form
+                }
             });
 
-        });
+            handleValidation('orderReturn', rules, messages);
+            $('#orderReturn').submit(function(e) {
+                e.preventDefault(); // Prevent form submission
+
+                // Perform form validation
+
+                // Check if the form is valid
+                if ($('#orderReturn').valid()) {
+                    $('#orderReturn').submit(); // Submit form
+                }
+            });
+
+        })
     </script>
 @endpush

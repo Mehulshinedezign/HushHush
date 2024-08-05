@@ -19,7 +19,7 @@
 <div class="order-his-card-box">
     <div class="row g-3">
         @foreach ($orders as $order)
-            @if ($order->status == 'Waiting' || ($order->status = 'Picked Up'))
+            @if ($order->status == 'Waiting' || $order->status == 'Picked Up')
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="order-his-card">
                         <div class="order-card-top">
@@ -30,8 +30,7 @@
                             </div>
                             <p>{{ $order->product->name }}</p>
                             <div class="pro-desc-prize">
-                                <h3>${{ $order->product->rent_day }}</h3>
-
+                                <h3>${{ $order->total }}</h3>
                             </div>
                             <div class="order-pro-details">
                                 <div class="order-details-list">
