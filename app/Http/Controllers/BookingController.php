@@ -29,8 +29,8 @@ class BookingController extends Controller
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         $user = auth()->user();
         $stripeCustomer = $user->createOrGetStripeCustomer();
-        $query =  Query::where('id', $request->query_id)->first();
-
+        $query =  Query::with('forUser', 'product')->where('id', $request->query_id)->first();
+        $order_commission = AdminSetting::where('key', 'order_commission')->first();
         //testing
 
         $fromAndToDate = array_map('trim', explode(' - ', $query->date_range));
@@ -91,6 +91,29 @@ class BookingController extends Controller
             // ],
             'return_url' => route('orders')
         ]);
+
+        // testing
+        if (isset($query->negotiate_price)) {
+            $amount = $query->negotiate_price * ($order_commission->value / 100);
+            $dealerAmount = $request->total_payment - $amount;
+        } else {
+            $amount = $query->getCalculatedPrice($query->date_range) * ($order_commission->value / 100);
+            $dealerAmount = $request->total_payment - $amount;
+        }
+        $paymentIntent = PaymentIntent::create([
+            'amount' => floatval($request->total_payment) * 100,
+            'currency' => 'usd',
+            'customer' => $stripeCustomer->id,
+            'payment_method' => $request->token,
+            'confirmation_method' => 'manual',
+            'confirm' => true,
+            'transfer_data' => [
+                'destination' => $query->forUser->stripe_account_id,
+                'amount' => $dealerAmount * 100,
+            ],
+            'return_url' => route('orders')
+        ]);
+
 
         $transaction = Transaction::create([
             'payment_id' => $status->id,
