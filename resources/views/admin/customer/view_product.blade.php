@@ -10,7 +10,7 @@
                             <div class="profile-big-image">
 
                             @if (isset($product->thumbnailImage->file_path))
-                                <img src="{{ asset('storage/'. $product->thumbnailImage->file_path) }}" alt="" loading="lazy">
+                                <img src="{{ $product->thumbnailImage->file_path}}" alt="" loading="lazy">
                             @else
                                 <img src="{{asset('front/images/pro-0.png')}}" alt="img">
                             @endif

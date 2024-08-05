@@ -22,8 +22,8 @@
             "phone_number[main]": {
                 required: true,
                 digits: true,
-                minlength: phoneMinLength,
-                maxlength: phoneMaxLength,
+                // minlength: phoneMinLength,
+                // maxlength: phoneMaxLength,
                 isValidPhoneNumber: true,
                 normalizer: function(value) {
                     return $.trim(value);

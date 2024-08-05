@@ -69,7 +69,7 @@
             },
             password_confirmation: {
                 required: true,
-                // equalTo: "#password_confirmation"
+                equalTo: "#password"
             },
         }
         const messages = {

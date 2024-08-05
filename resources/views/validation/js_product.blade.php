@@ -100,9 +100,9 @@
                 required: true,
                 regex: OnlydigitRegex,
             },
-            non_available_dates: {
-                required: true,
-            },
+            // non_available_dates: {
+            //     required: true,
+            // },
             // country:{
             //     required:true,
             // },

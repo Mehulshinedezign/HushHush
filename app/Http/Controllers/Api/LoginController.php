@@ -41,14 +41,14 @@ class LoginController extends Controller
 
                 $isVerified = !is_null($user->email_verified_at) && $user->otp_is_verified == 1;
                 $isActive = $user->status == 1;
-                PushToken::updateOrCreate(
-                    ['user_id' => $user->id],
-                    [
-                        'fcm_token' => $request->fcm_token,
-                        'device_id' => $request->device_id,
-                        'device_type' => $request->device_type,
-                    ]
-                );
+                // PushToken::updateOrCreate(
+                //     ['user_id' => $user->id],
+                //     [
+                //         'fcm_token' => $request->fcm_token,
+                //         'device_id' => $request->device_id,
+                //         'device_type' => $request->device_type,
+                //     ]
+                // );
 
                 if (!$isVerified) {
                     if (is_null($user->email_verified_at) && $user->otp_is_verified != 1) {
