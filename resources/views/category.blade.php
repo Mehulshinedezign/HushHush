@@ -29,6 +29,7 @@
                     <input type="hidden" name="country" id="country">
                     <input type="hidden" name="state" id="state">
                     <input type="hidden" name="city" id="city">
+                    <input type="hidden" name="rating" id="rating">
                     @csrf
                     <div class="home-filter-box">
                         <div class="filter-head">
@@ -161,25 +162,25 @@
                             <h4>Rating</h4>
                             <div class="filter-categories">
                                 <div class="filter-rating-box">
-                                    <div class="filter-rating-inner filter_rating1">
+                                    <div class="filter-rating-inner" data-value="1">
                                         <i class="fa-solid fa-star"></i>
                                     </div>
-                                    <div class="filter-rating-inner filter_rating2">
-                                        <i class="fa-solid fa-star"></i>
-                                        <i class="fa-solid fa-star"></i>
-                                    </div>
-                                    <div class="filter-rating-inner filter_rating3">
-                                        <i class="fa-solid fa-star"></i>
+                                    <div class="filter-rating-inner" data-value="2">
                                         <i class="fa-solid fa-star"></i>
                                         <i class="fa-solid fa-star"></i>
                                     </div>
-                                    <div class="filter-rating-inner filter_rating4">
-                                        <i class="fa-solid fa-star"></i>
+                                    <div class="filter-rating-inner" data-value="3">
                                         <i class="fa-solid fa-star"></i>
                                         <i class="fa-solid fa-star"></i>
                                         <i class="fa-solid fa-star"></i>
                                     </div>
-                                    <div class="filter-rating-inner filter_rating5 active">
+                                    <div class="filter-rating-inner" data-value="4">
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                        <i class="fa-solid fa-star"></i>
+                                    </div>
+                                    <div class="filter-rating-inner" data-value="5">
                                         <i class="fa-solid fa-star"></i>
                                         <i class="fa-solid fa-star"></i>
                                         <i class="fa-solid fa-star"></i>
@@ -635,6 +636,15 @@
             if (window.location.search) {
                 $('#actionButton').text('Clear');
             }
+
+            $('.filter-rating-inner').click(function() {
+                var value = $(this).data('value');
+                console.log("value is : ",value);
+                $('.filter-rating-inner').removeClass('active');
+                $(this).addClass('active').prevAll().addClass('active');
+                
+                $('#rating').val(value);
+            });
         });
     </script>
 @endpush
