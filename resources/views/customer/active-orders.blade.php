@@ -57,7 +57,7 @@
                         </div>
                         <div class="order-card-footer">
                             <a href="#" class="button outline-btn full-btn" data-bs-toggle="modal"
-                                data-bs-target="#cancel-order-Modal">Cancel
+                                data-bs-target="#cancellation-note">Cancel
                                 order</a>
                         </div>
                     </div>
@@ -83,4 +83,28 @@
             05
         </a>
     </div> --}}
+</div>
+<div class="modal fade" id="cancellation-note" tabindex="-1" aria-labelledby="cancellation-noteLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="ajax-response"></div>
+                <form method="post" id="cancel-order">
+                    @csrf
+                    <div class="cancellation-popup-sec">
+                        <div class="popup-head">
+                            <h6>Cancellation Note</h6>
+                            <button type="button" class="close" data-bs-dismiss="modal"><i
+                                    class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <textarea class="form-control" name="cancellation_note" rows="5"
+                            placeholder="Please write cancellation note here"></textarea>
+                        <button type="submit" class="primary-btn width-full submit">Submit&nbsp;<i
+                                class="fa-solid fa-circle-notch fa-spin show-loader" style="display:none;"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
