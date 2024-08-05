@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\{User, AdminSetting, CmsPage, RetailerPayout, Order, DisputeOrder, OrderItem, ProductUnavailability, RefundSecurity, Product};
 use App\Notifications\Payment;
 use DateTime, DB, Exception, Stripe;
+use Illuminate\Support\Facades\Schema;
 
 class AdminController extends Controller
 {
@@ -102,7 +103,7 @@ class AdminController extends Controller
 
     public function cms()
     {
-        $pages = CmsPage::whereNotIn('id', array( 8))->get();
+        $pages = CmsPage::whereNotIn('id', array(8))->get();
 
         return view('admin.cms.cms_list', compact('pages'));
     }
@@ -217,7 +218,7 @@ class AdminController extends Controller
 
     public function orders(Request $request)
     {
-        $orders = Order::with(["user", "transaction", "item.retailer"])
+        $ordersQuery = Order::with(["user", "transaction", "item.retailer"])
             ->when(!is_null($request->customer), function ($q) use ($request) {
                 $q->whereHas('user', function ($q) use ($request) {
                     $q->where("email", "like", strtolower($request->customer) . "%");
@@ -238,17 +239,23 @@ class AdminController extends Controller
             })
             ->when(!is_null($request->status) && $request->status != 'all', function ($q) use ($request) {
                 $q->where('status', $request->status);
-            })
-            ->where("dispute_status", "No")
-            ->paginate($request->global_pagination);
+            });
+
+        // Conditionally add where clause if the column exists
+        if (Schema::hasColumn('orders', 'dispute_status')) {
+            $ordersQuery->where('dispute_status', 'No');
+        }
+
+        $orders = $ordersQuery->paginate($request->global_pagination);
         $title = "All Orders";
 
         return view('admin.orders', compact('orders', 'title'));
     }
 
+
     public function disputedOrders(Request $request)
     {
-        $orders = Order::with(["user", "transaction", "item.retailer"])
+        $ordersQuery = Order::with(["user", "transaction", "item.retailer"])
             ->when(!is_null($request->customer), function ($q) use ($request) {
                 $q->whereHas('user', function ($q) use ($request) {
                     $q->where("email", "like", strtolower($request->customer) . "%");
@@ -266,13 +273,20 @@ class AdminController extends Controller
             })
             ->when(!is_null($request->order), function ($q) use ($request) {
                 $q->where('id', $request->order);
-            })
-            ->where("dispute_status", "Yes")
-            ->paginate($request->global_pagination);
+            });
+
+        // Conditionally add where clause if the column exists
+        if (Schema::hasColumn('orders', 'dispute_status')) {
+            $ordersQuery->where('dispute_status', 'Yes');
+        }
+
+        $orders = $ordersQuery->paginate($request->global_pagination);
+
         $title = "Disputed Orders";
 
         return view('admin.orders', compact('orders', 'title'));
     }
+
 
     public function viewOrder(Request $request, Order $order)
     {
@@ -362,31 +376,41 @@ class AdminController extends Controller
 
     public function viewCustomerCompletedOrders(Request $request, User $customer)
     {
+        // Loading customer related data
+        $customer->load(["vendorBankDetails", "vendorCompletedOrderedItems.order", "vendorPayout"]);
 
-        // dd($request->global_pagination);
+        // Fetching orders with conditions and pagination
+        $ordersQuery = Order::with(['refundSecurityDetails'])
+            ->where('user_id', $customer->id)
+            ->where('status', 'Completed');
 
-        // $customer->load(["vendorBankDetails", "vendorCompletedOrderedItems.order", "vendorPayout"]);
+        // Conditionally add where clauses if the columns exist
+        if (Schema::hasColumn('orders', 'dispute_status')) {
+            $ordersQuery->where(function ($query) {
+                $query->where('dispute_status', 'No')
+                    ->orWhereNull('dispute_status');
+            });
+        }
 
-        // dd($customer->toArray());
-        $orders = Order::with(['refundSecurityDetails'])->where([
-            ["user_id", "=", $customer->id],
-            ["status", "=", "Completed"],
-            ["dispute_status", "=", "No"],
-            // ["security_option", "=", "security"],
-        ])->paginate($request->global_pagination);
+        if (Schema::hasColumn('orders', 'security_option')) {
+            $ordersQuery->where(function ($query) {
+                $query->where('security_option', 'security')
+                    ->orWhereNull('security_option');
+            });
+        }
 
+        $orders = $ordersQuery->paginate($request->global_pagination);
+
+        // Filtering orders where refundSecurityDetails is null
         $orders = $orders->filter(function ($value, $key) {
             return is_null($value->refundSecurityDetails);
         });
-        // dd($customer->toArray());
 
-        // retailer page
-        $customer->load(["vendorBankDetails", "vendorCompletedOrderedItems.order", "vendorPayout"]);
-        // dd($customer->toArray());
+        // Getting paid order IDs
         $paidOrderIds = [];
         if ($customer->vendorPayout->isNotEmpty()) {
             foreach ($customer->vendorPayout->pluck("order_id")->toArray() as $orderIds) {
-                if (count($orderIds) > 1) {
+                if (is_array($orderIds) && count($orderIds) > 1) {
                     foreach ($orderIds as $id) {
                         $paidOrderIds[] = $id;
                     }
@@ -396,6 +420,7 @@ class AdminController extends Controller
             }
         }
 
+        // Returning the view with necessary data
         return view('admin.customer.view_customer_completed_orders', compact('customer', 'orders', 'paidOrderIds'));
     }
 
