@@ -79,8 +79,8 @@
     </section>
 @endsection
 
-{{-- @push('scripts')
-    @includeFirst(['validation'])
+@push('scripts')
+    {{-- @includeFirst(['validation'])
     @includeFirst(['validation.js_cancel_order'])
-    @includeFirst(['validation.js_product_review'])
-@endpush --}}
+    @includeFirst(['validation.js_product_review']) --}}
+@endpush

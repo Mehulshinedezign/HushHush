@@ -55,12 +55,22 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="order-card-footer">
-                            <a href="#" data-url="{{ route('cancel-order', $order->id) }}"
-                                class="button outline-btn full-btn cancel-order" data-toggle="modal"
-                                data-bs-target="#cancellation-note">Cancel
-                                order</a>
-                        </div>
+                        @if ($order->status == 'Waiting')
+                            <div class="order-card-footer">
+                                <a href="#" data-url="{{ route('cancel-order', $order->id) }}"
+                                    class="button outline-btn full-btn cancel-order" data-toggle="modal"
+                                    data-bs-target="#cancellation-note">Cancel
+                                    order</a>
+                            </div>
+                        @else
+                            <div class="order-card-footer">
+                                <div class="btn-dispute-holder">
+                                    <a href="javascript:void(0);" data-url="{{ route('orderdispute', [$order->id]) }}"
+                                        class="btn btn-dark justify-content-center dispute-order full-btn"
+                                        data-bs-toggle="modal" data-bs-target="#orderDisputeModal">Raise a dispute</a>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endif
@@ -112,6 +122,82 @@
     </div>
 </div>
 @push('scripts')
+    {{-- dispute order --}}
+    <div class="modal fade book-product-modal" id="orderDisputeModal" tabindex="-1" role="dialog"
+        aria-labelledby="orderDisputeModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row no-gutters">
+                        <div class="col-12 col-sm-12 col-md-12">
+                            <div class="modal-body-content">
+                                <div class="modal-head popup-head">
+                                    <h5 class="mb-0">Order Dispute</h5>
+                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                                    </button>
+                                </div>
+                                @php
+                                    $openDisputeModal = 'No';
+                                @endphp
+                                <form class="filter-form" id="disputeOrder" method="post" id="disputeForm"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label>Reason</label>
+                                        <select name="subject" class="form-control">
+                                            <option value="">Select Reason</option>
+                                            <option value="product damage">Product damage</option>
+                                            <option value="product lost">Product lost</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                        @error('subject')
+                                            <label class="error-messages">{{ $message }}</label>
+                                            @php
+                                                $openDisputeModal = 'Yes';
+                                            @endphp
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                        <textarea name="description" id="description" cols="30" rows="5" class="form-control"></textarea>
+                                        @error('description')
+                                            <label class="error-messages">{{ $message }}</label>
+                                            @php
+                                                $openDisputeModal = 'Yes';
+                                            @endphp
+                                        @enderror
+                                    </div>
+
+                                    <div class="product-pic-gallery">
+                                        <div class="multi-file-upload">
+                                            <label for="">upload images</label>
+                                            <input type="file" name="images[]" multiple
+                                                class="customerImages  upload-pending @error('images') is-invalid @enderror"
+                                                id="upload-image" upload-image-count="0" data-order="1" value=""
+                                                accept="image/jpeg, image/png, image/jpg">
+                                            @error('images')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+
+                                        </div>
+                                        <div class="upload-img-preview">
+
+                                        </div>
+                                    </div>
+                                    <button type="submit"
+                                        class="btn btn-dark justify-content-center med-btn mt-2 upload-img full-btn">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- end dispute order --}}
     <script>
         $(document).ready(function() {
 
@@ -135,6 +221,71 @@
                         }
                     });
             })
+        });
+    </script>
+
+    <script>
+        $('.dispute-order').on('click', function() {
+            var url = $(this).attr('data-url');
+            $('#disputeOrder').attr('action', url);
+        });
+
+        $(document).ready(function() {
+            // const MAX_IMAGES = 5;
+            let selectedFiles = [];
+
+            function previewImages(input, imgPreviewPlaceholder) {
+                const files = Array.from(input.files);
+                const currentCount = selectedFiles.length;
+
+                // if (currentCount + files.length > MAX_IMAGES) {
+                //     alert(`You can upload up to ${MAX_IMAGES} images.`);
+                //     return;
+                // }
+
+                files.forEach((file) => {
+                    selectedFiles.push(file);
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const element = `
+        <div class="upload-img-box">
+            <img src="${event.target.result}" alt="img">
+            <div class="upload-img-cross">
+                <i class="fa-regular fa-circle-xmark remove_uploaded"></i>
+            </div>
+        </div>`;
+                        $(imgPreviewPlaceholder).append(element);
+                    };
+                    reader.readAsDataURL(file);
+                });
+
+                updateFileInput();
+            }
+
+            function updateFileInput() {
+                const dataTransfer = new DataTransfer();
+                selectedFiles.forEach((file) => dataTransfer.items.add(file));
+                $('#upload-image')[0].files = dataTransfer.files;
+            }
+
+            function updateImageCount(change) {
+                const $uploadImage = $('#upload-image');
+                let currentCount = parseInt($uploadImage.attr('upload-image-count') || 0);
+                currentCount += change;
+                $uploadImage.attr('upload-image-count', currentCount);
+            }
+
+            $('#upload-image').on('change', function() {
+                previewImages(this, 'div.upload-img-preview');
+            });
+
+            $(document).on('click', '.remove_uploaded', function() {
+                const index = $(this).closest('.upload-img-box').index();
+                selectedFiles.splice(index, 1);
+                $(this).closest('.upload-img-box').remove();
+                updateFileInput();
+                updateImageCount(-1);
+            });
         });
     </script>
 @endpush

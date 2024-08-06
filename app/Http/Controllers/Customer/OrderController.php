@@ -285,8 +285,6 @@ class OrderController extends Controller
             //                 'uploaded_by' => 'customer',
             //             ];
             //         }
-
-            $images = [];
             foreach ($request->images as $file) {
                 // dd($request);
                 // if ($request->hasFile('image' . $i)) {
@@ -643,7 +641,7 @@ class OrderController extends Controller
     }
 
     // dispute
-    public function orderDispute(DisputeRequest $request, Order $order)
+    public function orderDispute(Request $request, Order $order)
     {
         if (in_array($order->status, ['Completed', 'Cancelled'])) {
             return redirect()->back()->with("warning", "You can not raise a dispute for cancelled and completed orders");
@@ -656,33 +654,49 @@ class OrderController extends Controller
         $userId = auth()->user()->id;
         $dateTime = date('Y-m-d H:i:s');
         $images = [];
-        for ($i = 1; $i <= $request->global_max_dispute_image_count; $i++) {
-            if ($request->hasFile('dispute_image' . $i)) {
-                $image = s3_store_image($request->file('dispute_image' . $i), 'products/images');
-                if ($image != null) {
-                    $images[] = [
-                        'order_id' => $order->id,
-                        'user_id' => $userId,
-                        'url' => $image['url'],
-                        'file' => $image['name'],
-                        'type' => 'disputed',
-                        'uploaded_by' => 'customer',
-                    ];
-                }
+        // for ($i = 1; $i <= $request->global_max_dispute_image_count; $i++) {
+        //     // if ($request->hasFile('dispute_image' . $i)) {
+        //         // $image = s3_store_image($request->file('dispute_image' . $i), 'products/images');
+        //         if ($image != null) {
+        //             $images[] = [
+        //                 'order_id' => $order->id,
+        //                 'user_id' => $userId,
+        //                 'url' => $image['url'],
+        //                 'file' => $image['name'],
+        //                 'type' => 'disputed',
+        //                 'uploaded_by' => 'customer',
+        //             ];
+        //         }
 
-                // $file = $request->file('dispute_image'.$i);
-                // $path = $file->store('orders/dispute', 's3');
-                // $url = Storage::disk('s3')->url($path);                
-                // $images[] = [
-                //     'order_id' => $order->id,
-                //     'user_id' => $userId,
-                //     'url' => $url,
-                //     'file' => $path,
-                //     'type' => 'disputed',
-                //     'uploaded_by' => 'customer',
-                // ];
+
+        foreach ($request->images as $file) {
+            // dd($request);
+            // if ($request->hasFile('image' . $i)) {
+            //     $image = s3_store_image($request->file('image' . $i), 'products/images');
+            if ($file != null) {
+                $images[] = [
+                    'order_id' => $order->id,
+                    'user_id' => $userId,
+                    'url' => Storage::disk('public')->put('orders/dispute', $file),
+                    'file' => $file->getClientOriginalName(),
+                    'type' => 'disputed',
+                    'uploaded_by' => 'customer',
+                ];
             }
         }
+        // $file = $request->file('dispute_image'.$i);
+        // $path = $file->store('orders/dispute', 's3');
+        // $url = Storage::disk('s3')->url($path);                
+        // $images[] = [
+        //     'order_id' => $order->id,
+        //     'user_id' => $userId,
+        //     'url' => $url,
+        //     'file' => $path,
+        //     'type' => 'disputed',
+        //     'uploaded_by' => 'customer',
+        // ];
+        // }
+        // }
 
         if (count($images)) {
             DisputeOrder::create([
@@ -698,29 +712,29 @@ class OrderController extends Controller
                 'dispute_date' => $dateTime
             ];
 
-            OrderItem::where('order_id', $order->id)->update($disputeData);
+            // OrderItem::where('order_id', $order->id)->update($disputeData);
             $order->update($disputeData);
         }
 
-        $data = [
-            [
-                'order_id' => $order->id,
-                'sender_id' => $order->user_id,
-                'receiver_id' => $order->item->retailer->id,
-                'action_type' => 'Order Dispute',
-                'created_at' => $dateTime,
-                'message' => 'A dispute has been raised on Order #' . $order->id . ' by customer'
-            ],
-            [
-                'order_id' => $order->id,
-                'sender_id' => null,
-                'receiver_id' => $order->user_id,
-                'action_type' => 'Order Dispute',
-                'created_at' => $dateTime,
-                'message' => 'You have reported a dispute for the order #' . $order->id
-            ]
-        ];
-        $this->sendNotification($data);
+        // $data = [
+        //     [
+        //         'order_id' => $order->id,
+        //         'sender_id' => $order->user_id,
+        //         'receiver_id' => $order->item->retailer->id,
+        //         'action_type' => 'Order Dispute',
+        //         'created_at' => $dateTime,
+        //         'message' => 'A dispute has been raised on Order #' . $order->id . ' by customer'
+        //     ],
+        //     [
+        //         'order_id' => $order->id,
+        //         'sender_id' => null,
+        //         'receiver_id' => $order->user_id,
+        //         'action_type' => 'Order Dispute',
+        //         'created_at' => $dateTime,
+        //         'message' => 'You have reported a dispute for the order #' . $order->id
+        //     ]
+        // ];
+        // $this->sendNotification($data);
 
         return redirect()->back()->with('success', 'Your dispute submitted successfully. We will contact you soon');
     }
