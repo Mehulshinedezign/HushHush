@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\RetailerPayout;
 use App\Notifications\RentalCancelorder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\{ChatRequest, DisputeRequest, OrderPickUpReturnRequest, RatingRequest};
-use App\Models\{Order, Chat, OrderImage, ProductRating, OrderItem, Transaction, DisputeOrder, ProductUnavailability, User, Product, NeighborhoodCity};
+use App\Models\{AdminSetting, Order, Chat, OrderImage, ProductRating, OrderItem, Transaction, DisputeOrder, ProductUnavailability, User, Product, NeighborhoodCity, Query};
 use App\Notifications\{OrderCancelled, OrderPickUp, OrderReturn, VendorOrderCancelled, VendorOrderPickedUp, VendorOrderReturn, CustomerExperience, RefundCustomerSecuirty, RentalFeedback, RefundSecurity, RentalComplete};
 use Stripe, Exception, DateTime;
 
@@ -320,7 +321,7 @@ class OrderController extends Controller
         if ($order->status != "Picked Up") {
             return redirect()->back()->with("warning", 'Order must be picked up before confirm the returned');
         }
-        $order_item = OrderItem::where('order_id', $order->id)->first();
+        // $order_item = OrderItem::where('order_id', $order->id)->first();
         // $product = Product::with('thumbnailImage', 'retailer.notification')->where('id', $order_item->product_id)->first();
         $image = OrderImage::where('order_id', $order->id)->where('type', 'returned')->where('uploaded_by', 'retailer')->first();
         $dateTime = date('Y-m-d H:i:s');
@@ -337,7 +338,7 @@ class OrderController extends Controller
                 $data['status'] = 'Completed';
                 $data['returned_date'] = $dateTime;
                 Order::where("id", $order->id)->update(["status" => "Completed"]);
-
+                $this->payToRetailer($order);
                 // send mail to customer whe lender verify product
                 // mail
                 // $user->notify(new RefundCustomerSecuirty($user));
@@ -394,7 +395,42 @@ class OrderController extends Controller
         return redirect()->route('vieworder', [$order->id]);
     }
 
+    private function payToRetailer($order)
+    {
+        $order->load(["transaction", "retailer", "queryOf"]);
+        $order_commission = AdminSetting::where('key', 'order_commission')->first();
 
+        if (isset($order->queryOf->negotiate_price)) {
+            $amount = $order->queryOf->negotiate_price * ($order_commission->value / 100);
+            $dealerAmount = $order->total - $amount;
+        } else {
+            $amount = $order->queryOf->getCalculatedPrice($order->queryOf->date_range) * ($order_commission->value / 100);
+            $dealerAmount = $order->total - $amount;
+        }
+
+        $payoutData = [
+            "amount" => floatval($dealerAmount) * 100,
+            "currency" => "usd",
+            "destination" => $order->queryOf->forUser->stripe_account_id,
+            "metadata" => [
+                "order_ids" => $order->id
+            ]
+        ];
+        $stripe = new Stripe\StripeClient(env('STRIPE_SECRET'));
+        $transfer = $stripe->transfers->create([
+            $payoutData
+        ]);
+
+        $retaileramount = RetailerPayout::create([
+            "retailer_id" => $order->queryOf->forUser->id,
+            "transaction_id" => $transfer['id'],
+            "order_id" => $order->id,
+            "amount" => $transfer['amount'] / 100,
+            "gateway_response" => str_replace("Stripe\Transfer JSON: ", "", $transfer)
+
+        ]);
+        return true;
+    }
     public function addReview(RatingRequest $request)
     {
         // $url = route('orders');
@@ -438,7 +474,10 @@ class OrderController extends Controller
 
     public function cancelOrder(Request $request, Order $order)
     {
-        $order->load(["transaction"]);
+
+        $order->load(["transaction", "retailer", "queryOf"]);
+
+        $order_commission = AdminSetting::where('key', 'order_commission')->first();
         $url = route('orders');
         if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
             session()->flash('warning', "You can not cancel the disputed order");
@@ -447,7 +486,7 @@ class OrderController extends Controller
                 'url'       =>   $url
             ], 201);
         }
-        if ($order->status != "Pending") {
+        if ($order->status != "Waiting") {
             session()->flash('warning', __("order.messages.cancel.notAllowed"));
             return response()->json([
                 'success'    =>  false,
@@ -463,13 +502,13 @@ class OrderController extends Controller
             ], 201);
         }
 
-        if ($order->cancellation_time_left <= 2) {
-            session()->flash('warning', 'Your cancellation time period has gone');
-            return response()->json([
-                'success'    =>  false,
-                'url'       =>   $url
-            ], 201);
-        }
+        // if ($order->cancellation_time_left <= 2) {
+        //     session()->flash('warning', 'Your cancellation time period has gone');
+        //     return response()->json([
+        //         'success'    =>  false,
+        //         'url'       =>   $url
+        //     ], 201);
+        // }
 
         $stripe = new Stripe\StripeClient(env('STRIPE_SECRET'));
 
@@ -488,10 +527,25 @@ class OrderController extends Controller
         //dd('hhsadsaa');
         /*REFUND PAYMENT*/
         // dd($paymentIntentData->latest_charge);
+
+
+        if (isset($order->queryOf->negotiate_price)) {
+            $amount = $order->queryOf->negotiate_price * ($order_commission->value / 100);
+            $customerAmount = $order->total - $amount;
+        } else {
+            $amount = $order->queryOf->getCalculatedPrice($order->queryOf->date_range) * ($order_commission->value / 100);
+            $customerAmount = $order->total - $amount;
+        }
+
         try {
-            $refundStatus = $stripe->refunds->create([
-                'charge' => $paymentIntentData->latest_charge,
-            ]);
+
+            $refundStatus = $stripe->refunds->create(
+                [
+                    'charge' => $paymentIntentData->latest_charge,
+                    'amount' => ($order->cancellation_time_left >= 2) ? floatval($customerAmount) * 100 : floatval($customerAmount / 2) * 100,
+                ],
+
+            );
         } catch (Exception $e) {
             session()->flash('error', str_replace("Charge " . $paymentIntentData->latest_charge, "Order ", $e->getMessage()));
             return response()->json([
@@ -500,7 +554,7 @@ class OrderController extends Controller
             ], 201);
         }
 
-        //dd($refundStatus);
+
 
         if ($refundStatus->status == "succeeded") {
             $updateData = [
@@ -515,57 +569,19 @@ class OrderController extends Controller
             ]);
 
             /*UPDATE ORDER ITEMS*/
-            OrderItem::where("order_id", $order->id)->update($updateData);
+            // OrderItem::where("order_id", $order->id)->update($updateData);
 
+            // dd($order->transaction);
+            $order->transaction->update($updateData);
             /*UPDATE TRANSACTION*/
-            Transaction::where("order_id", $order->id)->update($updateData);
+            // Transaction::where("order_id", $order->id)->update($updateData);
 
             /*REMOVE PRODUCT UNAVAILABLE DATES*/
             ProductUnavailability::where("order_id", $order->id)->delete();
 
-            $data = [
-                [
-                    'order_id' => $order->id,
-                    'sender_id' => $order->user_id,
-                    'receiver_id' => $order->item->retailer->id,
-                    'action_type' => 'Order Cancelled',
-                    'created_at' => $dateTime,
-                    'message' => 'Order #' . $order->id . ' has been cancelled by customer successfully.'
-                ],
-                [
-                    'order_id' => $order->id,
-                    'sender_id' => null,
-                    'receiver_id' => $order->user_id,
-                    'action_type' => 'Order Cancelled',
-                    'created_at' => $dateTime,
-                    'message' => 'You have successfully cancelled the order #' . $order->id
-                ]
-            ];
-            $this->sendNotification($data);
+
             $user = auth()->user();
-            // check the customer order return status before sending the notification
-            if (isset($user->notification) && $user->notification->order_cancelled == 'on') {
-                // send mail to customer of order cancelled successfully
-                $user->notify(new OrderCancelled($order));
-            }
 
-            $order_item = OrderItem::where('order_id', $order->id)->first();
-            $product = Product::with('thumbnailImage', 'retailer.notification')->where('id', $order_item->product_id)->first();
-            $emaildata = [
-                'order' => $order,
-                'order_item' => $order_item,
-                'product' => $product,
-            ];
-
-            // $retailer =  $emaildata['product']['retailer'];
-            // $retailer->notify(new RentalCancelorder($emaildata));
-
-            // check the retailer order cancelled status before sending the notification
-
-            // if (isset($order->item->retailer->notification) && $order->item->retailer->notification->order_cancelled == 'on') {
-            //     // send mail to retailer of order picked up successfully
-            //     $order->item->retailer->notify(new VendorOrderCancelled($order));
-            // }
 
             session()->flash('success', __("order.messages.cancel.success"));
             return response()->json([

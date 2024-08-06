@@ -83,4 +83,15 @@
     @includeFirst(['validation'])
     @includeFirst(['validation.js_cancel_order'])
     @includeFirst(['validation.js_product_review'])
+
+    <script>
+        // $(document).ready(function() {
+        //     $('.cancelbtn').on('click', function(e) {
+        //         e.preventDefault();
+        //         var url = $('.cancelorder').attr('data-url')
+        //         alert(url);
+        //         response = ajaxCall(url, 'post');
+        //     })
+        // });
+    </script>
 @endpush

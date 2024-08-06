@@ -12,7 +12,7 @@ use App\Models\Transaction;
 use Stripe, Exception, DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\{BillingToken, Order, Chat, CustomerBillingDetails, CustomerRating, DisputeOrder, OrderImage, OrderItem, Product, User};
+use App\Models\{AdminSetting, BillingToken, Order, Chat, CustomerBillingDetails, CustomerRating, DisputeOrder, OrderImage, OrderItem, Product, User, RetailerPayout};
 use App\Notifications\{OrderPickUp, OrderReturn, VendorOrderPickedUp, VendorOrderReturn, RateYourExperience};
 
 
@@ -225,6 +225,7 @@ class OrderController extends Controller
         return redirect()->route('retailer.vieworder', [$order->id]);
     }
 
+
     public function orderReturn(OrderPickUpReturnRequest $request, Order $order)
     {
         if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
@@ -325,7 +326,7 @@ class OrderController extends Controller
                 $data['status'] = 'Completed';
                 $data['returned_date'] = $dateTime;
                 Order::where("id", $order->id)->update(["status" => "Completed"]);
-
+                $this->payToRetailer($order);
                 // check the retailer order return status before sending the notification
                 // if (@$user->notification->order_return == 'on') {
                 //     // send mail to retailer of order picked up successfully
@@ -380,7 +381,42 @@ class OrderController extends Controller
 
         return redirect()->route('retailer.vieworder', [$order->id]);
     }
+    private function payToRetailer($order)
+    {
+        $order->load(["transaction", "retailer", "queryOf"]);
+        $order_commission = AdminSetting::where('key', 'order_commission')->first();
 
+        if (isset($order->queryOf->negotiate_price)) {
+            $amount = $order->queryOf->negotiate_price * ($order_commission->value / 100);
+            $dealerAmount = $order->total - $amount;
+        } else {
+            $amount = $order->queryOf->getCalculatedPrice($order->queryOf->date_range) * ($order_commission->value / 100);
+            $dealerAmount = $order->total - $amount;
+        }
+
+        $payoutData = [
+            "amount" => floatval($dealerAmount) * 100,
+            "currency" => "usd",
+            "destination" => $order->queryOf->forUser->stripe_account_id,
+            "metadata" => [
+                "order_ids" => $order->id
+            ]
+        ];
+        $stripe = new Stripe\StripeClient(env('STRIPE_SECRET'));
+        $transfer = $stripe->transfers->create([
+            $payoutData
+        ]);
+
+        $retaileramount = RetailerPayout::create([
+            "retailer_id" => $order->queryOf->forUser->id,
+            "transaction_id" => $transfer['id'],
+            "order_id" => $order->id,
+            "amount" => $transfer['amount'] / 100,
+            "gateway_response" => str_replace("Stripe\Transfer JSON: ", "", $transfer)
+
+        ]);
+        return true;
+    }
     // store customer rating
     public function addReview(RatingRequest $request, Order $order)
     {
@@ -522,13 +558,13 @@ class OrderController extends Controller
             ], 201);
         }
 
-        // if ($order->cancellation_time_left <= 2) {
-        //     session()->flash('warning', 'Your cancellation time period has gone');
-        //     return response()->json([
-        //         'success'    =>  false,
-        //         'url'       =>   $url
-        //     ], 201);
-        // }
+        if ($order->cancellation_time_left < 1) {
+            session()->flash('warning', 'Your cancellation time period has gone');
+            return response()->json([
+                'success'    =>  false,
+                'url'       =>   $url
+            ], 201);
+        }
         // dd(env('STRIPE_SECRET'));
         $stripe = new Stripe\StripeClient(env('STRIPE_SECRET'));
         /*RETRIEVE PAYMENT INTENT DETAILS*/

@@ -56,7 +56,8 @@
                             </div>
                         </div>
                         <div class="order-card-footer">
-                            <a href="#" class="button outline-btn full-btn" data-bs-toggle="modal"
+                            <a href="#" data-url="{{ route('cancel-order', $order->id) }}"
+                                class="button outline-btn full-btn cancel-order" data-toggle="modal"
                                 data-bs-target="#cancellation-note">Cancel
                                 order</a>
                         </div>
@@ -84,8 +85,8 @@
         </a>
     </div> --}}
 </div>
-<div class="modal fade" id="cancellation-note" tabindex="-1" aria-labelledby="cancellation-noteLabel"
-    aria-hidden="true">
+<div class="modal fade cencel-order-modal" id="cancellation-note" tabindex="-1"
+    aria-labelledby="cancellation-noteLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
@@ -95,16 +96,45 @@
                     <div class="cancellation-popup-sec">
                         <div class="popup-head">
                             <h6>Cancellation Note</h6>
-                            <button type="button" class="close" data-bs-dismiss="modal"><i
+                            <button type="" class="close" data-bs-dismiss="modal"><i
                                     class="fa-solid fa-xmark"></i></button>
                         </div>
-                        <textarea class="form-control" name="cancellation_note" rows="5"
+                        <textarea class="form-control mt-3" name="cancellation_note" rows="5"
                             placeholder="Please write cancellation note here"></textarea>
-                        <button type="submit" class="primary-btn width-full submit">Submit&nbsp;<i
-                                class="fa-solid fa-circle-notch fa-spin show-loader" style="display:none;"></i></button>
+                        <button type="submit" class="button primary-btn full-btn mt-3  submit"
+                            id="cancel-order">Submit&nbsp;<i class="fa-solid fa-circle-notch fa-spin show-loader"
+                                style="display:none;"></i>
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+
+            $('.cancel-order').on('click', function() {
+                // $('.modal fade').addClass('d-none');
+
+                swal({
+                        title: 'Order Cancelled',
+                        text: 'The platform charges has been deducted by stripe',
+                        icon: 'warning',
+                        buttons: true,
+                        dangerMode: true,
+                        buttons: ["No", "Yes"],
+                    })
+                    .then((willOpen) => {
+                        if (willOpen) {
+                            // $('.modal fade').removeClass('d-none');
+                            $('#cancellation-note').modal('show');
+                        } else {
+                            jQuery('body').removeClass('modal-open');
+                        }
+                    });
+            })
+        });
+    </script>
+@endpush
