@@ -46,7 +46,7 @@
         <p class="Inquiry-desc">{{ $query->query_message ?? '' }}</p>
     </td>
     <td>{{ $query->date_range ?? '' }}</td>
-    <td>
+    <!-- <td>
         @if ($query->status == 'ACCEPTED')
             ACCEPTED
         @elseif($query->status == 'PENDING')
@@ -57,7 +57,7 @@
         COMPLETED
 
         @endif
-    </td>
+    </td> -->
     <td class="user-active">
         <div class="inquiry-actions">
             @if( $query->status != 'COMPLETED')
@@ -72,6 +72,7 @@
                 {{-- @if (is_null($query->negotiate_price)) --}}
                     @php
                         $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
+                        $price = $price + ($query->shipping_charges) + ($query->cleaning_charges);
                     @endphp
                     <a href="{{ route('card.details', ['query' => $query->id, 'price' => $price]) }}"
                         class="button outline-btn small-btn" data-price="{{ $price }}">Accept

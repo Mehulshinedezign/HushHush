@@ -15,7 +15,7 @@
                             @endif
                             <th>Query</th>
                             <th>Date</th>
-                            <th>Status</th>
+                            <!-- <th>Status</th> -->
                             <th>Action</th>
                         </tr>
                     </thead>

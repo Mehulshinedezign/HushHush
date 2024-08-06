@@ -72,7 +72,8 @@
                         {{-- <input type="hidden" value="{{ $security->type }}" id="security_option_type">
                         <input type="hidden" value="{{ $security->value }}" id="security_option_value"> --}}
                         <button type="submit" id="payNow" class="button primary-btn  full-btn">Pay Now
-                            ${{ $price + $query->shipping_charges + $query->cleaning_charges }}
+                            <!-- ${{ $price + $query->shipping_charges + $query->cleaning_charges }} -->
+                             ${{$price}}
                         </button>
                     </form>
                 </div>
