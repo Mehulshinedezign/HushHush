@@ -89,26 +89,26 @@ class BookingController extends Controller
         ]);
 
         // testing
-        if (isset($query->negotiate_price)) {
-            $amount = $query->negotiate_price * ($order_commission->value / 100);
-            $dealerAmount = $request->total_payment - $amount;
-        } else {
-            $amount = $query->getCalculatedPrice($query->date_range) * ($order_commission->value / 100);
-            $dealerAmount = $request->total_payment - $amount;
-        }
-        $paymentIntent = PaymentIntent::create([
-            'amount' => floatval($request->total_payment) * 100,
-            'currency' => 'usd',
-            'customer' => $stripeCustomer->id,
-            'payment_method' => $request->token,
-            'confirmation_method' => 'manual',
-            'confirm' => true,
-            'transfer_data' => [
-                'destination' => $query->forUser->stripe_account_id,
-                'amount' => $dealerAmount * 100,
-            ],
-            'return_url' => route('orders')
-        ]);
+        // if (isset($query->negotiate_price)) {
+        //     $amount = $query->negotiate_price * ($order_commission->value / 100);
+        //     $dealerAmount = $request->total_payment - $amount;
+        // } else {
+        //     $amount = $query->getCalculatedPrice($query->date_range) * ($order_commission->value / 100);
+        //     $dealerAmount = $request->total_payment - $amount;
+        // }
+        // $paymentIntent = PaymentIntent::create([
+        //     'amount' => floatval($request->total_payment) * 100,
+        //     'currency' => 'usd',
+        //     'customer' => $stripeCustomer->id,
+        //     'payment_method' => $request->token,
+        //     'confirmation_method' => 'manual',
+        //     'confirm' => true,
+        //     'transfer_data' => [
+        //         'destination' => $query->forUser->stripe_account_id,
+        //         'amount' => $dealerAmount * 100,
+        //     ],
+        //     'return_url' => route('orders')
+        // ]);
 
 
         $transaction = Transaction::create([

@@ -82,7 +82,7 @@
             </div>
 
             <!-- Modal -->
-            <div class="modal fade" id="cancellation-note" tabindex="-1" aria-labelledby="cancellation-noteLabel"
+            {{-- <div class="modal fade" id="cancellation-note" tabindex="-1" aria-labelledby="cancellation-noteLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -106,7 +106,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- Review Modal -->
             @include('review-modal')

@@ -12,25 +12,25 @@ function ajaxCall(url, method, params) {
             method: method,
             data: params,
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
                 resolve(response)
             },
-            error: function(error) {
+            error: function (error) {
                 reject(error)
             }
         })
-    });            
+    });
 }
 
 // End of the ajax
 
 // read more and read less
-jQuery('.read-more').click(function() {
+jQuery('.read-more').click(function () {
     jQuery('.read-more-content').addClass('d-none');
     jQuery('.read-less-content').removeClass('d-none');
 });
 
-jQuery('.read-less').click(function() {
+jQuery('.read-less').click(function () {
     jQuery('.read-less-content').addClass('d-none');
     jQuery('.read-more-content').removeClass('d-none');
 });
@@ -39,7 +39,7 @@ jQuery('.read-less').click(function() {
 // show file name when uploaded
 jQuery(document).ready(function () {
     jQuery('[data-toggle="tooltip"]').tooltip();
-    jQuery('input[type="file"]').change(function() {
+    jQuery('input[type="file"]').change(function () {
         if (!jQuery(this).attr('multiple') && !jQuery(this).attr('data-order')) {
             if (this.files.length == 1 && this.files[0].name != '') {
                 let fileName = this.files[0].name;
@@ -60,28 +60,28 @@ jQuery.validator.addMethod('filesize', function (value, element, param) {
     return this.optional(element) || (element.files[0].size <= param)
 }, 'File size must be less than {0}');
 
-jQuery.validator.addMethod("numeric", function(value, element, regexp) {
-    return value.match(regexp)    
+jQuery.validator.addMethod("numeric", function (value, element, regexp) {
+    return value.match(regexp)
 }, "Please check your input.");
 
-jQuery.validator.addMethod("inarray", function(value, element, param) {
+jQuery.validator.addMethod("inarray", function (value, element, param) {
     return this.optional(element) || $.inArray(value, param) >= 0;
 }, "Invalid selection");
 
-jQuery.validator.addMethod("regex", function(value, element, regexp) {
+jQuery.validator.addMethod("regex", function (value, element, regexp) {
     if (regexp.constructor != RegExp) {
         regexp = new RegExp(regexp);
     } else if (regexp.global) {
         regexp.lastIndex = 0;
     }
-        
+
     return this.optional(element) || regexp.test(value);
 }, "Invalid value");
 
 jQuery.validator.addClassRules("required", {
     required: true,
-    normalizer: function(value) {
-      return jQuery.trim(value);
+    normalizer: function (value) {
+        return jQuery.trim(value);
     }
 });
 // end of the jquery custom validations
@@ -91,7 +91,7 @@ jQuery.validator.addClassRules("required", {
 //     if (e.keyCode == 8 || e.keyCode == 46) {
 //         return false;
 //     }
-    
+
 //     var regex =/^[0-9]*$/;          
 //     var number = jQuery(this).val().split("-").join("");
 //     number = number.split("(").join("");
@@ -119,13 +119,13 @@ jQuery.validator.addClassRules("required", {
 // End of US phone number format
 
 // Daterange picker
-function initDateRangePicker(elem, options = {},dates = null) {
+function initDateRangePicker(elem, options = {}, dates = null) {
     // get data from and to attribute
     console.log("date picker");
     let dateFrom = jQuery(elem).attr('data-from');
     let dateTo = jQuery(elem).attr('data-to');
-    if(dates){
-        options["isInvalidDate"] = function(ele) {
+    if (dates) {
+        options["isInvalidDate"] = function (ele) {
             var currDate = moment(ele._d).format('MM/DD/YYYY');
             return non_available_dates.indexOf(currDate) != -1;
         }
@@ -143,7 +143,7 @@ function initDateRangePicker(elem, options = {},dates = null) {
         jQuery(elem).daterangepicker(options);
     }
 
-    jQuery(elem).on('apply.daterangepicker', function(ev, picker) {
+    jQuery(elem).on('apply.daterangepicker', function (ev, picker) {
         let fromDate, toDate = '';
         let setDateRange = '';
         if (!jQuery.isEmptyObject(options) && options.hasOwnProperty('locale') && options.locale.hasOwnProperty('format')) {
@@ -169,70 +169,70 @@ function initDateRangePicker(elem, options = {},dates = null) {
         jQuery(elem).attr('data-to', toDate);
         var days = picker.endDate.diff(picker.startDate, "days") + 1;
         $("input[name='security_option']").attr('days', days);
-        $("input[name='days']").val(days); 
-        if(rentPrice){
-            $(".amount_days").text('Amount ('+ days +' days)');
-            var rent_price = parseInt(rentPrice)*parseInt(days);
-            $(".total_amount").text('$'+rent_price+'.00');
-            get_transFee(rentPrice,days,rent_price);
+        $("input[name='days']").val(days);
+        if (rentPrice) {
+            $(".amount_days").text('Amount (' + days + ' days)');
+            var rent_price = parseInt(rentPrice) * parseInt(days);
+            $(".total_amount").text('$' + rent_price + '.00');
+            get_transFee(rentPrice, days, rent_price);
         }
     });
 
-    jQuery(elem).on('cancel.daterangepicker', function(ev, picker) {
+    jQuery(elem).on('cancel.daterangepicker', function (ev, picker) {
         jQuery(elem).removeAttr('value').removeAttr('data-from data-to');
     });
 }
 // end of the daterangepicker
 
-function get_transFee(rentPrice,days,rent_amount){
-    if(rentPrice){
+function get_transFee(rentPrice, days, rent_amount) {
+    if (rentPrice) {
         $.ajax({
             type: 'POST',
-            url: APP_URL+'/transfee',
-            data: {rentPrice:rentPrice, days:days},
+            url: APP_URL + '/transfee',
+            data: { rentPrice: rentPrice, days: days },
             success: function (result) {
                 //console.log("result",result);
                 if (result.status == true) {
-                    $(".trans_fee").text('$'+result.transactionFee);
-                    get_total_pay_amount(parseInt(rent_amount)+parseInt(result.transactionFee));
+                    $(".trans_fee").text('$' + result.transactionFee);
+                    get_total_pay_amount(parseInt(rent_amount) + parseInt(result.transactionFee));
                 }
             }
         });
     }
 }
 
-function get_total_pay_amount(total_pay_amount){
+function get_total_pay_amount(total_pay_amount) {
     var total_pay_amount = parseInt(total_pay_amount) + parseInt($("input[name='security_option']:checked").val());
-    $(".total_pay_amount").text('$'+(total_pay_amount).toFixed(2));
+    $(".total_pay_amount").text('$' + (total_pay_amount).toFixed(2));
 }
 
 // open menu on mobile
-$(document).ready(function() {
-    $('.navbar-toggler-icon').click(function() {
-      $(".navbar-toggler-icon").toggleClass("active");
-      $("body").toggleClass("body-fixed");
+$(document).ready(function () {
+    $('.navbar-toggler-icon').click(function () {
+        $(".navbar-toggler-icon").toggleClass("active");
+        $("body").toggleClass("body-fixed");
     });
-  });
+});
 // open menu on mobile end
 // Footer accordion start
-$(document).ready(function() {
-	// if (window.matchMedia("(max-width:575px)").matches) {
-		if( /Android|iPhone/i.test(navigator.userAgent) ) {
-		// if (screen.width <= 575) {
-			$(function() {
-                var Accordion = function(el, multiple) {
+$(document).ready(function () {
+    // if (window.matchMedia("(max-width:575px)").matches) {
+    if (/Android|iPhone/i.test(navigator.userAgent)) {
+        // if (screen.width <= 575) {
+        $(function () {
+            var Accordion = function (el, multiple) {
                 this.el = el || {};
                 this.multiple = multiple || false;
 
                 // Variables privadas
                 var links = this.el.find('.footer-navigation-title');
                 // Evento
-                links.on('click', {el: this.el, multiple: this.multiple}, this.dropdown)
+                links.on('click', { el: this.el, multiple: this.multiple }, this.dropdown)
             }
 
-            Accordion.prototype.dropdown = function(e) {
+            Accordion.prototype.dropdown = function (e) {
                 var $el = e.data.el;
-                    $this = $(this),
+                $this = $(this),
                     $next = $this.next();
 
                 $next.slideToggle();
@@ -241,11 +241,11 @@ $(document).ready(function() {
                 if (!e.data.multiple) {
                     $el.find('.submenu').not($next).slideUp().parent().removeClass('open');
                 };
-            }	
+            }
             var accordion = new Accordion($('#footer-accordion'), false);
         });
-	}
-    
+    }
+
 });
 
 // function handleValidation(form, rules, messages = {}, submitHandler = false) {
@@ -290,7 +290,7 @@ $(document).ready(function() {
 //                 label.insertAfter( $(element).parent().parent().parent() )  
 //             }else if( jQuery(element).hasClass('neighborhood') ){
 //                 label.insertAfter( $(element).parent().parent())
-                
+
 //             }else {
 //                 label.insertAfter(element)
 //             }
@@ -327,15 +327,15 @@ function handleValidation(form, rules, messages = {}, submitHandler = false) {
         },
         errorPlacement: function (label, element) {
             let target = element;
-            
+
             if (jQuery(element).hasClass('selectric')) {
                 target = jQuery(element).parent().siblings('.selectric');
                 label.removeClass('invalid-feedback').addClass('cstm-selectric-invalid');
-            } else if (jQuery(element).hasClass('select2-error') || 
-                       jQuery(element).hasClass('form-select') || 
-                       jQuery(element).hasClass('form-class') || 
-                       jQuery(element).hasClass('star') || 
-                       jQuery(element).hasClass('product-images')) {
+            } else if (jQuery(element).hasClass('select2-error') ||
+                jQuery(element).hasClass('form-select') ||
+                jQuery(element).hasClass('form-class') ||
+                jQuery(element).hasClass('star') ||
+                jQuery(element).hasClass('product-images')) {
                 target = $(element).parent();
             } else if (jQuery(element).hasClass('form-category')) {
                 target = $(element).parent().parent().parent();
@@ -354,10 +354,10 @@ function handleValidation(form, rules, messages = {}, submitHandler = false) {
             }
         }
     };
-    
+
     if (submitHandler)
         validationConfiguration.submitHandler = submitHandler;
-    
+
     form.validate(validationConfiguration);
 }
 function ajaxCall(url, method, params, loader = true) {
@@ -376,13 +376,13 @@ function ajaxCall(url, method, params, loader = true) {
                     // jQuery(".loader").fadeIn("slow");
                     // jQuery("body").addClass("loading");
                     // jQuery(".loader").addClass("loading");
-                    
+
                 },
                 complete: function (resp, status) {
                     // jQuery("body").removeClass("loading");
                     jQuery(".submit").attr("disabled", false);
                     jQuery(".show-loader").hide();
-                    
+
                 },
                 success: function (response) {
                     resolve(response)
@@ -391,12 +391,12 @@ function ajaxCall(url, method, params, loader = true) {
                     reject(error)
                 }
             };
-            if( params instanceof FormData ){
+            if (params instanceof FormData) {
                 requestObject.processData = requestObject.contentType = false;
                 delete requestObject.dataType;
             }
             // console.log( requestObject );
-            jQuery.ajax( requestObject );
+            jQuery.ajax(requestObject);
         });
     } else {
         return new Promise((resolve, reject) => {
@@ -442,17 +442,17 @@ function addUserAjaxCall(url, method, params, loader = true) {
                 },
                 success: function (data) {
                     if (data.success == true) {
-                        if(data.url) {
+                        if (data.url) {
                             window.location.replace(data.url);
-                        }    
-                    } else if(data.success == false){
-                        if('errortype' in data && data.errortype ){ 
-                            var response_ajax = jQuery(document).find(".ajax-response-"+data.errortype); 
-                        }else{ 
-                            var response_ajax = jQuery(document).find(".ajax-response"); 
-                            $("html, body").animate({ scrollTop: 0 }, "fast"); 
-                        } 
-                        response_ajax.html('<div class="alert alert-danger alert-dismissible fade show k" role="alert">'+ data.msg +'<button type="button" class="btn-close close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+                        }
+                    } else if (data.success == false) {
+                        if ('errortype' in data && data.errortype) {
+                            var response_ajax = jQuery(document).find(".ajax-response-" + data.errortype);
+                        } else {
+                            var response_ajax = jQuery(document).find(".ajax-response");
+                            $("html, body").animate({ scrollTop: 0 }, "fast");
+                        }
+                        response_ajax.html('<div class="alert alert-danger alert-dismissible fade show k" role="alert">' + data.msg + '<button type="button" class="btn-close close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
                     }
                 },
                 error: function (error) {
@@ -483,7 +483,7 @@ function addUserAjaxCall(url, method, params, loader = true) {
 
 function toggleStatus(element, model, id, field = null, message = null) {
     jQuery(element).attr('disabled', true)
-    let params = { 'id': id, 'model': model, 'field':field, 'message':message };
+    let params = { 'id': id, 'model': model, 'field': field, 'message': message };
     let url = APP_URL + "/admin/status";
     let response = ajaxCall(url, 'get', params);
     response.then(function (result) {
@@ -516,7 +516,7 @@ function toggleStatus(element, model, id, field = null, message = null) {
 }
 
 // common delete function
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
     jQuery(".delete").click(function (e) {
         e.preventDefault();
         jQuery('body').addClass('modal-open');
@@ -524,7 +524,7 @@ jQuery(document).ready(function() {
         var getAttr = jQuery(this).attr('data');
         var get_title = 'Are you sure?';
         var get_text = 'You want to delete.';
-        if(getAttr && getAttr == 'product'){
+        if (getAttr && getAttr == 'product') {
             get_title = 'Are you sure you want to delete this product?';
             get_text = 'This cannot be undone.';
         }
@@ -536,46 +536,48 @@ jQuery(document).ready(function() {
             dangerMode: true,
             buttons: ["No", "Yes"],
         })
-        .then((willDelete) => {
-            if (willDelete) {
-                window.location.replace(url)
-            } else {
-                jQuery('body').removeClass('modal-open');
-            }
-        });
+            .then((willDelete) => {
+                if (willDelete) {
+                    window.location.replace(url)
+                } else {
+                    jQuery('body').removeClass('modal-open');
+                }
+            });
     });
 });
 
 // Cancel order
 jQuery(".cancel-order").click(function (e) {
+
     $("#cancel-order").attr('action', $(this).attr("data-url"));
+
 });
 $('#cancel-order').submit(function (e) {
     e.preventDefault();
     if ($('#cancel-order').valid()) {
         var formData = new FormData($('form#cancel-order').get(0));
         ajaxCall($("#cancel-order").attr("action"), 'post', formData)
-            .then(function(response){
-            if( response ){
-                //console.log(response.url)
-                window.location.replace(response.url);
-            }
-            else{
+            .then(function (response) {
+                if (response) {
+                    //console.log(response.url)
+                    window.location.replace(response.url);
+                }
+                else {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Something went wrong!',
+                        position: 'topRight'
+                    });
+                }
+            }, function () {
                 iziToast.error({
                     title: 'Error',
                     message: 'Something went wrong!',
                     position: 'topRight'
                 });
-            }
-        },function(){
-            iziToast.error({
-                title: 'Error',
-                message: 'Something went wrong!',
-                position: 'topRight'
+            }).finally(function () {
+                console.log("error");
             });
-        }).finally(function(){
-            console.log("error");
-        });
     }
 });
 // End
@@ -584,9 +586,9 @@ $('#cancel-order').submit(function (e) {
 jQuery(".get-review").click(function (e) {
     var orderId = $(this).attr('data-orderId');
     $("#review").attr('action', $(this).attr("data-url"));
-    if(orderId){
+    if (orderId) {
         $.ajax({
-            url: APP_URL + '/product/review/'+orderId,
+            url: APP_URL + '/product/review/' + orderId,
             success: function (result) {
                 //console.log("result",result);
                 if (result.status == true) {
@@ -597,7 +599,7 @@ jQuery(".get-review").click(function (e) {
     }
 });
 
-jQuery(document).on("click", 'input[name="rating"]', function() {
+jQuery(document).on("click", 'input[name="rating"]', function () {
     $('input[name="rating"]').attr("checked", false);
     $(this).attr("checked", true);
 });
@@ -609,34 +611,34 @@ $('#review').submit(function (e) {
     if ($('#review').valid()) {
         var formData = new FormData($('form#review').get(0));
         ajaxCall($("#review").attr("action"), 'post', formData)
-            .then(function(response){
-            if( response.success == true ){
-                //console.log(response)
-                window.location.replace(response.url);
-            }
-            else{
+            .then(function (response) {
+                if (response.success == true) {
+                    //console.log(response)
+                    window.location.replace(response.url);
+                }
+                else {
+                    iziToast.error({
+                        title: 'Review',
+                        message: response.msg,
+                        position: 'topRight'
+                    });
+                }
+            }, function () {
                 iziToast.error({
-                    title: 'Review',
-                    message: response.msg,
+                    title: 'Error',
+                    message: 'Something went wrong!',
                     position: 'topRight'
                 });
-            }
-        },function(){
-            iziToast.error({
-                title: 'Error',
-                message: 'Something went wrong!',
-                position: 'topRight'
+            }).finally(function () {
+                console.log("error");
             });
-        }).finally(function(){
-            console.log("error");
-        });
     }
 });
 // End
 
 
 // cookie start
-function setCookie(key, value, expiry){
+function setCookie(key, value, expiry) {
     var expires = new Date();
     expires.setTime(expires.getTime() + (expiry * 24 * 60 * 60 * 1000));
     document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
@@ -644,23 +646,23 @@ function setCookie(key, value, expiry){
 // cookie end
 
 // for search mobile toggle
-$(".search-mb").click(function(){
+$(".search-mb").click(function () {
     $("body").toggleClass("search-active")
 });
 
 // End
 
-$(document).on("focusout","input[name='min'],input[name='max']",function(){
-    if ($("input[name='min']").val()){
-        if(!$.isNumeric($("input[name='min']").val())){
+$(document).on("focusout", "input[name='min'],input[name='max']", function () {
+    if ($("input[name='min']").val()) {
+        if (!$.isNumeric($("input[name='min']").val())) {
             $("input[name='min']").val('');
             return;
-        }           
+        }
         $("input[name='min']").val(parseFloat($("input[name='min']").val()).toFixed(2));
     }
-            
-    if ($("input[name='max']").val()){
-        if(!$.isNumeric($("input[name='max']").val())){
+
+    if ($("input[name='max']").val()) {
+        if (!$.isNumeric($("input[name='max']").val())) {
             $("input[name='max']").val('');
             return;
         }
@@ -675,22 +677,22 @@ $(document).on("focusout","input[name='min'],input[name='max']",function(){
 // function openModal() {
 // 	document.getElementById("myModal").style.display = "block";
 //   }
-  
+
 //   function closeModal() {
 // 	document.getElementById("myModal").style.display = "none";
 //   }
-  
+
 //   var slideIndex = 1;
 //   showSlides(slideIndex);
-  
+
 //   function plusSlides(n) {
 // 	showSlides(slideIndex += n);
 //   }
-  
+
 //   function currentSlide(n) {
 // 	showSlides(slideIndex = n);
 //   }
-  
+
 //   function showSlides(n) {
 // 	var i;
 // 	var slides = document.getElementsByClassName("mySlides");
@@ -708,50 +710,50 @@ $(document).on("focusout","input[name='min'],input[name='max']",function(){
 // 	dots[slideIndex-1].className += " active";
 // 	captionText.innerHTML = dots[slideIndex-1].alt;
 //   }
-  // gallery slider end
-  $('form').on('focus', 'input[type=number]', function (e) {
+// gallery slider end
+$('form').on('focus', 'input[type=number]', function (e) {
     $(this).on('wheel.disableScroll', function (e) {
-      e.preventDefault()
+        e.preventDefault()
     })
-  })
-  $('form').on('blur', 'input[type=number]', function (e) {
+})
+$('form').on('blur', 'input[type=number]', function (e) {
     $(this).off('wheel.disableScroll')
-  })
- 
-  
-  function fetchQueries(status,user) {
+})
+
+
+function fetchQueries(status, user) {
     // alert("hello");
     $.ajax({
         url: '/fetch-queries',
         type: 'GET',
-        data: { status: status ,'user':user},
-        beforeSend: function() {
+        data: { status: status, 'user': user },
+        beforeSend: function () {
             $('body').addClass('loading');
         },
-        success: function(response) {
+        success: function (response) {
             if (response.success) {
                 $('#query-list-container').html(response.html);
             } else {
                 $('#query-list-container').html('<div class="error">Failed to load queries.</div>');
             }
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.error('Error:', error);
             $('#query-list-container').html('<div class="error">An error occurred. Please try again.</div>');
         },
-        complete: function() {
+        complete: function () {
             $('body').removeClass('loading');
         }
     });
 }
 
-$('.tab-item').on('click', function(e) {
+$('.tab-item').on('click', function (e) {
     e.preventDefault();
-    
+
     $('.tab-item').removeClass('active');
     $(this).addClass('active');
     var status = $(this).data('status');
     var user = $(this).data('user');
 
-    fetchQueries(status,user);
+    fetchQueries(status, user);
 });
