@@ -19,11 +19,11 @@ use App\Http\Controllers\StripeOnboardingController;
 //     return redirect()->route('login');
 // });
 
-    // verify otp
-    Route::get('verify-otp', [App\Http\Controllers\VerifyOtpController::class, 'showVerifyOtpForm'])->name('auth.verify_otp_form');
-    Route::post('/verify/email/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyEmailOtp'])->name('verify.email.otp');
-    Route::post('/verify/phone/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyPhoneOtp'])->name('verify.phone.otp');
-    Route::get('/resend-otp/{type}', [App\Http\Controllers\VerifyOtpController::class, 'resendOtp'])->name('resend.otp');
+// verify otp
+Route::get('verify-otp', [App\Http\Controllers\VerifyOtpController::class, 'showVerifyOtpForm'])->name('auth.verify_otp_form');
+Route::post('/verify/email/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyEmailOtp'])->name('verify.email.otp');
+Route::post('/verify/phone/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyPhoneOtp'])->name('verify.phone.otp');
+Route::get('/resend-otp/{type}', [App\Http\Controllers\VerifyOtpController::class, 'resendOtp'])->name('resend.otp');
 
 Route::middleware('localization', 'prevent-back-history',)->group(function () {
 
@@ -50,7 +50,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
 
 
 
-    Route::middleware('auth', 'restrict-admin-retailer', 'VerifyOtp','CheckStatus')->group(function () {
+    Route::middleware('auth', 'restrict-admin-retailer', 'VerifyOtp', 'CheckStatus')->group(function () {
 
 
         Route::any('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index');
@@ -62,7 +62,6 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
         Route::post('transfee', [App\Http\Controllers\Customer\ProductController::class, 'get_transfee'])->name('transfee');
         Route::get('subcat/{id}', [App\Http\Controllers\AjaxController::class, 'get_subcat']);
         Route::get('sub_category/{id}', [App\http\Controllers\AjaxController::class, 'get_subcategory']);
-
         Route::get('neighborhoodcity/{id}', [App\Http\Controllers\AjaxController::class, 'get_city']);
 
         // add product
@@ -91,13 +90,14 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
     Route::get('card/details/{query?}/{price?}', [App\Http\Controllers\BookingController::class, 'cardDetail'])->name('card.details');
     Route::post('charge', [App\Http\Controllers\BookingController::class, 'charge'])->name('charge');
 
-    Route::middleware('auth','CheckStatus')->group(function () {
+    Route::middleware('auth', 'CheckStatus')->group(function () {
         //Retailer order
         Route::match(['get', 'post'], 'retailer/order', [App\Http\Controllers\Retailer\OrderController::class, 'index'])->name('retailercustomer');
         Route::get('order/{order}', [App\Http\Controllers\Retailer\OrderController::class, 'viewOrder'])->name('retailervieworder');
         Route::post('retailer/order/{order}/pickup', [App\Http\Controllers\Retailer\OrderController::class, 'orderPickUp'])->name('retailerorderpickup');
         Route::get('retailer/order/{order}/confirm-pick-up', [App\Http\Controllers\Retailer\OrderController::class, 'confirmPickUp'])->name('retailer.confirmpickup');
         Route::post('retailer/order/{order}/return', [App\Http\Controllers\Retailer\OrderController::class, 'orderReturn'])->name('retailerorderreturn');
+        Route::post('order1/{order}/dispute', [App\Http\Controllers\Retailer\OrderController::class, 'orderDispute'])->name('retailer.orderdispute');
 
         Route::get('retailer/order/{order}/confirm-return', [App\Http\Controllers\Retailer\OrderController::class, 'confirmReturn'])->name('retailerconfirmreturn');
         Route::get('retailer/order/{order}/image/{image}/download', [App\Http\Controllers\Retailer\OrderController::class, 'downloadAttachment'])->name('retailer.downloadattachment');
@@ -110,8 +110,8 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
 
         Route::post('payment/approve', [App\Http\Controllers\StripeController::class, 'payment_transaction'])->name('paymentapprove');
         Route::post('reject/order', [App\Http\Controllers\StripeController::class, 'reject_order'])->name('rejectorder');
+
         // Route::post('order/{order}/return', [App\Http\Controllers\Retailer\OrderController::class, 'orderReturn'])->name('retailer.orderreturn');
-        Route::post('order/{order}/dispute', [App\Http\Controllers\Retailer\OrderController::class, 'orderDispute'])->name('retailer.orderdispute');
         Route::get('image/delete/{token}', [App\Http\Controllers\Retailer\OrderController::class, 'imagedelete'])->name('delete.image');
 
         // lender chat
@@ -141,7 +141,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
         Route::get('stripe/onboarding/complete', [StripeOnboardingController::class, 'completeOnboarding'])->name('stripe.onboarding.complete');
     });
     // logged in routes
-    Route::middleware(['auth', 'customer','CheckStatus'])->group(function () {
+    Route::middleware(['auth', 'customer', 'CheckStatus'])->group(function () {
         Route::get('retailer/chat/{order}', [App\Http\Controllers\Retailer\OrderController::class, 'orderChat'])->name('retalerorderchat');
 
         Route::post('add-favorite', [App\Http\Controllers\Customer\ProductController::class, 'addFavorite'])->name('addfavorite');
