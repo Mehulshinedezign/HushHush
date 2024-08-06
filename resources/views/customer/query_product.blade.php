@@ -38,6 +38,15 @@
                     <p>{{ $query->user->name ?? '' }}</p>
                 @endif
             </div>
+
+        </div>
+        <div class="col-md-12">
+            <div class="query-detail-info">
+                <h3>Customer Address</h3>
+                @if ($query)
+                    <p>{{ @$query->user->userDetail->complete_address ?? 'NA' }}</p>
+                @endif
+            </div>
         </div>
         @endif
 

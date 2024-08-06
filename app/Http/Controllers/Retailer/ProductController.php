@@ -254,7 +254,7 @@ class ProductController extends Controller
                 'status' => '1',
                 'modified_by' => $userId,
                 'modified_user_type' => 'Self',
-                'non_available_dates' => $request->non_available_dates ?? 1,
+                'non_available_dates' => $request->non_available_dates ?? 0,
             ];
 
             $product = Product::create($data);
@@ -288,7 +288,7 @@ class ProductController extends Controller
 
 
 
-            if ($request->has('non_available_dates')) {
+            if ($request->has('non_available_dates')&& $request->filled('non_available_dates') && count($request->non_available_dates)) {
                 $dateRange = $request->non_available_dates;
                 list($startDateStr, $endDateStr) = explode(' - ', $dateRange);
                 $startDate = Carbon::createFromFormat('Y-m-d', $startDateStr);

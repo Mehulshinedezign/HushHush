@@ -25,7 +25,16 @@
     <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}?ver={{ now() }}">
     <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
-
+    <!-- <script>document.addEventListener('contextmenu',function(e) {e.preventDefault(); }); 
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || 
+                (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+            }
+        });
+    </script> -->
+    
 
     <script>
         const APP_URL = "{{ url('') }}";
@@ -364,17 +373,7 @@
                                             </div>
                                         </div>
                                     </div> --}}
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="">Description*</label>
-                                            <div class="formfield">
-                                                <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description"></textarea>
-                                            </div>
-                                            @error('description')
-                                                <span class="invalid-feedback" role="alert">
-                                                @enderror
-                                        </div>
-                                    </div>
+                                    
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -404,8 +403,19 @@
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days*</label>
                                             <div class="formfield ">
-                                                <input type="number" class="form-control" name="min_rent_days"
-                                                    placeholder="Rental days" value="" min="1">
+                                                <!-- <input type="number" class="form-control" name="min_rent_days"
+                                                    placeholder="Rental days" value="" min="1"> -->
+                                                    <select class="form-control" name="min_rent_days">
+                                                    <option value="">Select Rental days</option>
+                                                    <option value="7">7 Days</option>
+                                                    <option value="14">14 Days</option>
+                                                    <option value="30">30 Days</option>
+                                                    <!-- <option value="Fair">Fair condition</option> -->
+                                                </select>
+                                                <span class="form-icon">
+                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                        alt="img">
+                                                </span>
                                             </div>
                                             @error('min_rent_days')
                                                 <span class="invalid-feedback" role="alert">
@@ -450,6 +460,17 @@
                                                 <span class="form-icon">$</span>
                                             </div>
                                             @error('rent_price_month')
+                                                <span class="invalid-feedback" role="alert">
+                                                @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="">Description*</label>
+                                            <div class="formfield">
+                                                <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description"></textarea>
+                                            </div>
+                                            @error('description')
                                                 <span class="invalid-feedback" role="alert">
                                                 @enderror
                                         </div>

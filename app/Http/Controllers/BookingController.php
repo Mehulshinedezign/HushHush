@@ -25,6 +25,7 @@ class BookingController extends Controller
 
     public function charge(Request $request)
     {
+        // dd($request->total_payment);
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         $user = auth()->user();
         $stripeCustomer = $user->createOrGetStripeCustomer();
@@ -64,6 +65,9 @@ class BookingController extends Controller
         ];
         DB::beginTransaction();
         $order = Order::create($orderData);
+        $query->update([
+            'status' => 'COMPLETED',
+        ]);
 
         ProductUnavailability::create([
             'product_id' => $query->product_id,

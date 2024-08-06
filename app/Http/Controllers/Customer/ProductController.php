@@ -52,8 +52,9 @@ class ProductController extends Controller
         $authUserId = auth()->user()->id;
 
             // $query = Product::where('user_id', '!=', $authUserId);
-            $products = Product::with('disableDates')->where('user_id', '!=', $authUserId)->applyFilters()->get();
+            $products = Product::with('disableDates','ratings')->where('user_id', '!=', $authUserId)->applyFilters()->get();
 
+            // dd($products->toArray());
             // dd($startDate,$endDate);
 
 
@@ -175,10 +176,22 @@ class ProductController extends Controller
 
         $productImages = $product->allImages;
         $querydates = Query::where(['product_id'=>$id, 'status'=> 'PENDING','user_id' =>auth()->user()->id])->get();
-
+        $product_buffer=$product->created_at->format('Y-m-d');
+        $carbonDate = Carbon::createFromFormat('Y-m-d', $product_buffer);
+        $array1= [];
+        array_push($array1,$product_buffer);
+        for ($i = 0; $i < 3; $i++) {
+            $newDate = $carbonDate->addDay();
+            $formattedDate = $newDate->format('Y-m-d');
+            array_push($array1,$formattedDate);
+        }
         $disable_dates = $product->disableDates->pluck('disable_date')->toArray();
+        $disable_dates = array_merge($array1,$disable_dates);
+        $disable_dates = array_unique($disable_dates);
+        sort($disable_dates);
+        
 
-        // dd($disabledDates);
+        // dd($disable_dates);
 
         // dd("here",$disabledDates);
         // $disable_dates = [];

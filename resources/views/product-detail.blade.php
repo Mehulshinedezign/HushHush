@@ -171,7 +171,7 @@
                                 data-bs-target="#bookitem-sidebar" aria-controls="offcanvasRight">Book Now</a> --}}
                             @if (@$product->user_id != auth()->user()->id)
                                 <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                                    data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Ask Query</a>
+                                    data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Send Request</a>
                             @endif
 
                             <div class="pro-info-accordian">
@@ -331,7 +331,7 @@
         <div class="offcanvas offcanvas-end inquiry-sidebar" tabindex="-1" id="inquiry-sidebar"
             aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Ask query</h5>
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Send Request</h5>
                 <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
@@ -532,7 +532,7 @@
                             $('#Askquery').prop('disabled', false);
                             $('#query_msg .modal-body').html(
                                 '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
-                                '<div class="alert alert-danger" role="alert">Please fill all fields or processing your request.</div>'
+                                '<div class="alert alert-danger" role="alert">'+response.message+'</div>'
                             );
                             $('#query_msg').modal('show');
                             // location.reload();
