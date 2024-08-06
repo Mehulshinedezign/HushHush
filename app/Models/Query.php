@@ -53,17 +53,17 @@ class Query extends Model
         $rent_month = $this->product->rent_month ?? 0;
 
         //   dd($rent_day,$rent_week,$rent_month);
-        if ($days > 30) {
+        if ($days >= 30) {
             $months = intdiv($days, 30);
             $remainingDays = $days % 30;
-            if ($remainingDays > 7) {
+            if ($remainingDays >= 7) {
                 $weeks = intdiv($remainingDays, 7);
                 $remainingDays = $remainingDays % 7;
                 $price = ($months * $rent_month) + ($weeks * $rent_week) + ($remainingDays * $rent_day);
             } else {
                 $price = ($months * $rent_month) + ($remainingDays * $rent_day);
             }
-        } elseif ($days > 7) {
+        } elseif ($days >= 7) {
             $weeks = intdiv($days, 7);
             $remainingDays = $days % 7;
             $price = ($weeks * $rent_week) + ($remainingDays * $rent_day);
