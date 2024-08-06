@@ -71,7 +71,7 @@
             @if ($query->status == 'ACCEPTED')
                 {{-- @if (is_null($query->negotiate_price)) --}}
                     @php
-                        $price = $query->getCalculatedPrice($query->date_range);
+                        $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
                     @endphp
                     <a href="{{ route('card.details', ['query' => $query->id, 'price' => $price]) }}"
                         class="button outline-btn small-btn" data-price="{{ $price }}">Accept
