@@ -8,8 +8,9 @@ use App\Notifications\RentalCancelorder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\{ChatRequest, DisputeRequest, OrderPickUpReturnRequest, RatingRequest};
-use App\Models\{AdminSetting, Order, Chat, OrderImage, ProductRating, OrderItem, Transaction, DisputeOrder, ProductUnavailability, User, Product, NeighborhoodCity, Query};
+use App\Models\{AdminSetting, Order, Chat, OrderImage, ProductRating, OrderItem, Transaction, DisputeOrder, ProductUnavailability, User, Product, NeighborhoodCity, ProductDisableDate, Query};
 use App\Notifications\{OrderCancelled, OrderPickUp, OrderReturn, VendorOrderCancelled, VendorOrderPickedUp, VendorOrderReturn, CustomerExperience, RefundCustomerSecuirty, RentalFeedback, RefundSecurity, RentalComplete};
+use Carbon\Carbon;
 use Stripe, Exception, DateTime;
 
 class OrderController extends Controller
@@ -577,8 +578,8 @@ class OrderController extends Controller
             // Transaction::where("order_id", $order->id)->update($updateData);
 
             /*REMOVE PRODUCT UNAVAILABLE DATES*/
-            ProductUnavailability::where("order_id", $order->id)->delete();
 
+            ProductDisableDate::where('product_id', $order->product_id)->where("disable_date", '>=', $order->from_date)->where("disable_date", '<=', $order->to_date)->delete();
 
             $user = auth()->user();
 

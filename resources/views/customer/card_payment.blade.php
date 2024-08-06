@@ -66,14 +66,13 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" value="{{ $price + $query->shipping_charges + $query->cleaning_charges }}"
-                            id="total_payment">
+                        <input type="hidden" value="{{ $price }}" id="total_payment">
                         <input type="hidden" value="{{ $query->id }}" id="query">
                         {{-- <input type="hidden" value="{{ $security->type }}" id="security_option_type">
                         <input type="hidden" value="{{ $security->value }}" id="security_option_value"> --}}
                         <button type="submit" id="payNow" class="button primary-btn  full-btn">Pay Now
-                            <!-- ${{ $price + $query->shipping_charges + $query->cleaning_charges }} -->
-                             ${{$price}}
+                            {{-- <!-- ${{ $price + $query->shipping_charges + $query->cleaning_charges }} --> --}}
+                            ${{ $price }}
                         </button>
                     </form>
                 </div>
