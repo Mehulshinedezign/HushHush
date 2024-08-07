@@ -40,7 +40,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-row">
+                            {{-- <div class="form-row">
 
                                 <div class="form-group col-md-4">
                                     <label>Icon</label>
@@ -50,7 +50,7 @@
                                             style="border-radius: 50%;" />
                                     @endif
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label>{{ __('category.fields.status') }}</label>
@@ -87,14 +87,14 @@
                 rules: {
                     name: {
                         required: true,
-                        pattern: /^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/
+                        // pattern: /^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/
                     },
                     'type[]': 'required',
                 },
                 messages: {
                     name: {
                         required: '{{ __('category.validations.name') }}',
-                        pattern: 'Category name only accept alphanumeric values.',
+                        // pattern: 'Category name only accept alphanumeric values.',
                     },
                     'type[]': {
                         required: '{{ __('category.validations.type') }}'

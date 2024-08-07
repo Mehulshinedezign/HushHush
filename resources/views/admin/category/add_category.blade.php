@@ -36,7 +36,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-row">
+                            {{-- <div class="form-row">
 
                                 <div class="form-group col-md-4">
                                     <label>Icon<span class="text-danger">*</span></label>
@@ -47,7 +47,7 @@
                                         </span>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="form-row">
                                 <div class="form-group col-md-4">
@@ -78,20 +78,20 @@
                 rules: {
                     name: {
                         required: true,
-                        pattern: /^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/
+                        // pattern: /^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/
 
                     },
-                    category_image: 'required',
+                    // category_image: 'required',
                     'type[]': 'required',
                 },
                 messages: {
                     name: {
                         required: '{{ __('category.validations.name') }}',
-                        pattern: 'Category name only accept alphanumeric values.'
+                        // pattern: 'Category name only accept alphanumeric values.'
                     },
-                    category_image: {
-                        required: '{{ __('category.validations.image') }}'
-                    },
+                    // category_image: {
+                    //     required: '{{ __('category.validations.image') }}'
+                    // },
                     'type[]': {
                         required: '{{ __('category.validations.type') }}'
                     }

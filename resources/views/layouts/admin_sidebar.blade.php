@@ -44,7 +44,7 @@
                     'admin.vendors',
                     'admin.view-retailer-completed-orders',
                     'view-customer-completed-orders',
-                    'admin.edit.user'
+                    'admin.edit.user',
                 ])) active @endif">
                 <a href="{{ route('admin.customers') }}" class="nav-link"><i
                         data-feather="user-check"></i><span>{{ __('Users') }}</span></a>
@@ -57,19 +57,19 @@
                 </ul>
             </li> --}}
             <li class="dropdown @if (Route::current()->getName() == 'admin.commission') active @endif">
-                <a href="#" class="nav-link"><i
+                <a href="{{ route('admin.commission') }}" class="nav-link"><i
                         data-feather="dollar-sign"></i><span>{{ __('adminsidebar.commission') }}</span></a>
             </li>
             <li class="dropdown @if (Route::current()->getName() == 'admin.cms') active @endif">
                 <a href="{{ route('admin.cms') }}" class="nav-link"><i
                         data-feather="file"></i><span>{{ __('adminsidebar.cms') }}</span></a>
             </li>
-            <li class="dropdown @if (in_array(Route::current()->getName(), [
-                    'admin.retailer-payouts',
-                    'admin.disputed-payouts',
-                    'admin.security-payouts',
-                ])) active @endif">
-                <a href="#" class="menu-toggle nav-link has-dropdown"><i
+            <li class="dropdown @if (Route::current()->getName() == 'admin.transaction') active @endif">
+                <a href="{{ route('admin.transaction') }}" class="nav-link"><i
+                        data-feather="file"></i><span>{{ __('adminsidebar.transaction') }}</span></a>
+            </li>
+            {{-- <li class="dropdown @if (in_array(Route::current()->getName(), ['admin.retailer-payouts', 'admin.disputed-payouts', 'admin.security-payouts'])) active @endif">
+                <a href="{{ route('admin.retailer-payouts') }}" class="menu-toggle nav-link has-dropdown"><i
                         data-feather="credit-card"></i><span>{{ __('adminsidebar.transaction') }}</span></a>
                 <ul class="dropdown-menu">
                     <li @if (in_array(Route::current()->getName(), ['admin.retailer-payouts'])) class="active" @endif><a
@@ -80,7 +80,7 @@
                     <li @if (in_array(Route::current()->getName(), ['admin.disputed-payouts'])) class="active" @endif><a
                             href="{{ route('admin.disputed-payouts') }}">Disputed Order Payouts</a></li>
                 </ul>
-            </li>
+            </li> --}}
             <li class="dropdown @if (in_array(Route::current()->getName(), ['admin.view-order', 'admin.orders', 'admin.disputed-orders'])) active @endif">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i
                         data-feather="package"></i><span>{{ __('adminsidebar.orders') }}</span></a>
@@ -109,7 +109,7 @@
                             href="{{ route('admin.addbrand') }}">{{ __('adminsidebar.addbrand') }}</a></li>
                 </ul>
             </li>
-            
+
         </ul>
     </aside>
 </div>

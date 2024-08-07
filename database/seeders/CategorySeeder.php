@@ -16,50 +16,50 @@ class CategorySeeder extends Seeder
     {
         $category = [
             [
-                'name' => 'New',
-                'category_image_name' => 'New',
-                'category_image_url' => 'admin/category/Accessories.svg',
+                'name' => 'clothing_size',
+                'category_image_name' => 'clothing_size',
+                // 'category_image_url' => 'admin/category/Accessories.svg',
             ],
             [
-                'name' => 'Dresses',
-                'category_image_name' => 'Dresses',
-                'category_image_url' => 'admin/category/Dresses.svg',
+                'name' => 'bra_size',
+                'category_image_name' => 'bra_size',
+                // 'category_image_url' => 'admin/category/Dresses.svg',
             ],
             [
-                'name' => 'Sets',
-                'category_image_name' => 'Sets',
-                'category_image_url' => 'admin/category/Sets.svg',
+                'name' => 'men_shoe',
+                'category_image_name' => 'men_shoe',
+                // 'category_image_url' => 'admin/category/Sets.svg',
             ],
             [
-                'name' => 'Tops',
-                'category_image_name' => 'Tops',
-                'category_image_url' => 'admin/category/Tops.svg',
+                'name' => 'women_shoe',
+                'category_image_name' => 'women_shoe',
+                // 'category_image_url' => 'admin/category/Tops.svg',
             ],
-            [
-                'name' => 'Bottoms',
-                'category_image_name' => 'Bottoms',
-                'category_image_url' => 'admin/category/Bottoms.svg',
-            ],
-            [
-                'name' => 'Shoes',
-                'category_image_name' => 'Shoes',
-                'category_image_url' => 'admin/category/Shoes.svg',
-            ],
-            [
-                'name' => 'Bags',
-                'category_image_name' => 'Bags',
-                'category_image_url' => 'admin/category/Bags.svg',
-            ],
-            [
-                'name' => 'Accessories',
-                'category_image_name' => 'Accessories',
-                'category_image_url' => 'admin/category/Accessories.svg',
-            ],
-            [
-                'name' => 'Outerwear',
-                'category_image_name' => 'Outerwear',
-                'category_image_url' => 'admin/category/Outerwear.svg',
-            ],
+            // [
+            //     'name' => 'Bottoms',
+            //     'category_image_name' => 'Bottoms',
+            //     'category_image_url' => 'admin/category/Bottoms.svg',
+            // ],
+            // [
+            //     'name' => 'Shoes',
+            //     'category_image_name' => 'Shoes',
+            //     'category_image_url' => 'admin/category/Shoes.svg',
+            // ],
+            // [
+            //     'name' => 'Bags',
+            //     'category_image_name' => 'Bags',
+            //     'category_image_url' => 'admin/category/Bags.svg',
+            // ],
+            // [
+            //     'name' => 'Accessories',
+            //     'category_image_name' => 'Accessories',
+            //     'category_image_url' => 'admin/category/Accessories.svg',
+            // ],
+            // [
+            //     'name' => 'Outerwear',
+            //     'category_image_name' => 'Outerwear',
+            //     'category_image_url' => 'admin/category/Outerwear.svg',
+            // ],
             // [
             //     'name' => 'Resort',
             //     'category_image_name' => 'Resort',
