@@ -13,7 +13,7 @@ use Stripe, Exception, DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\{AdminSetting, BillingToken, Order, Chat, CustomerBillingDetails, CustomerRating, DisputeOrder, OrderImage, OrderItem, Product, User, RetailerPayout};
-use App\Notifications\{OrderPickUp, OrderReturn, VendorOrderPickedUp, VendorOrderReturn, RateYourExperience};
+use App\Notifications\{CustomerImageUpload, CustomerImageUploadForReturn, CustomerOrderPickup, CutomerOrderReturn, LenderOrderPickup, LenderOrderReturn, OrderPickUp, OrderReturn, VendorOrderPickedUp, VendorOrderReturn, RateYourExperience};
 
 
 class OrderController extends Controller
@@ -164,6 +164,9 @@ class OrderController extends Controller
                 OrderImage::insert($images);
             }
             // }
+            $lender_name = $order->retailer->name;
+            $order->user->notify(new CustomerImageUpload($lender_name));
+
             return redirect()->back()->with('success', 'Images uploaded successfully');
         }
 
@@ -196,6 +199,27 @@ class OrderController extends Controller
                 $user = auth()->user();
 
                 // check the retailer order pickup status before sending the notification
+                $customer_info=[
+                    'user_name' => $order->user->name,
+                    'from_date' => $order->from_date,
+                    'to_date' => $order->to_date,
+                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+                ];
+
+                $lender_info=[
+                    'lender_name'=> $order->retailer->name,
+                    'from_date' => $order->from_date,
+                    'to_date' => $order->to_date,
+                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+
+                ];
+
+                if(@$order->user->usernotification->customer_order_pickup == '1'){
+                    $order->user->notify(new CustomerOrderPickup($customer_info));
+                }
+                if(@$order->retailer->usernotification->lender_order_pickup == '1'){
+                    $order->retailer->notify(new LenderOrderPickup($lender_info));
+                }
             }
 
             $order->update($data);
@@ -295,7 +319,8 @@ class OrderController extends Controller
         if (count($images)) {
             OrderImage::insert($images);
         }
-
+        $lender_name = $order->retailer->name;
+        $order->user->notify(new CustomerImageUploadForReturn($lender_name));
         return redirect()->back()->with('success', 'Images uploaded successfully');
         // }
         // }
@@ -327,6 +352,28 @@ class OrderController extends Controller
                 $data['returned_date'] = $dateTime;
                 Order::where("id", $order->id)->update(["status" => "Completed"]);
                 $this->payToRetailer($order);
+
+                $customer_info=[
+                    'user_name' => $order->user->name,
+                    'from_date' => $order->from_date,
+                    'to_date' => $order->to_date,
+                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+                ];
+
+                $lender_info=[
+                    'lender_name'=> $order->retailer->name,
+                    'from_date' => $order->from_date,
+                    'to_date' => $order->to_date,
+                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+
+                ];
+
+                if(@$order->user->usernotification->customer_order_return == '1'){
+                    $order->user->notify(new CutomerOrderReturn($customer_info));
+                }
+                if(@$order->retailer->usernotification->lender_order_return == '1'){
+                    $order->retailer->notify(new LenderOrderReturn($lender_info));
+                }
                 // check the retailer order return status before sending the notification
                 // if (@$user->notification->order_return == 'on') {
                 //     // send mail to retailer of order picked up successfully

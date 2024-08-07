@@ -442,49 +442,6 @@ class Product extends Model
 
     }
 
-    // public function scopeApplyFilters($query)
-    // {
-    //     $request = request();
-
-    //         $query->when($request->Category, function ($q) use ($request) {
-    //             $q->whereIn('category_id',  $request->Category);
-
-    //         }) ->when($request->Brand, function ($q) use ($request) {
-    //             $q->whereIn('brand',$request->Brand);
-    //         })
-    //         ->when($request->Size, function ($q) use ($request) {
-    //             $q->whereIn('size',  $request->Size);
-    //         })
-    //         ->when($request->filled(['min_value', 'max_value']), function ($q) use ($request) {
-    //             $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
-    //         })
-    //         ->when($request->filled(['Category', 'Brand', 'Size', 'min_value', 'max_value']), function ($q) use ($request) {
-    //             return $q->whereIn('category_id',  $request->Category);
-    //             $q->whereIn('brand')->whereIn($request->Brand);
-    //             $q->whereIn('size',  $request->Size);
-    //             $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
-    //         })
-    //         ->when($request->filled(['Category', 'Brand']) && !$request->filled(['Size', 'min_value', 'max_value']), function ($q) use ($request) {
-    //             return $q->whereIn('category_id',  $request->Category);
-    //             $q->whereIn('brand')->whereIn($request->Brand);
-    //         })
-    //         ->when($request->filled(['Category', 'Size']) && !$request->filled(['Brand', 'min_value', 'max_value']), function ($q) use ($request) {
-    //             return $q->whereIn('category_id',  $request->Category);
-    //             $q->whereIn('size',  $request->Size);
-    //         })
-    //         ->when($request->filled(['Category', 'min_value', 'max_value']) && !$request->filled(['Brand', 'Size']), function ($q) use ($request) {
-    //             return $q->whereIn('category_id',  $request->Category);
-    //             $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
-    //         })
-    //         ->when($request->filled('filter_date'), function ($q) use ($request) {
-    //             $dateRange = $request->filter_date;
-    //             $dates = explode(' - ', $dateRange);
-    //             $startDate = date('Y-m-d', strtotime($dates[0]));
-    //             $endDate = date('Y-m-d', strtotime($dates[1]));
-    //             return $q->filterByDateRange($startDate, $endDate);
-    //         });
-    // }
-
     public function scopeFilterByDateRange($query, $startDate, $endDate)
     {
 
@@ -494,21 +451,6 @@ class Product extends Model
             return $query->whereDoesntHave('disableDates', function ($q) use ($startDate, $endDate) {
                 $q->whereBetween('disable_date', [$startDate, $endDate]);
             });
-            // return $query->where(function ($query) use ($startDate, $endDate) {
-            //     $query->whereHas('disableDates', function ($q) use ($startDate, $endDate) {
-            //         $q->whereNotBetween('disable_date', [$startDate, $endDate]);
-            //     })->orWhereDoesntHave('disableDates');
-            // });
-            // dd("one");
-            // $query->where(function ($query) use ($startDate, $endDate) {
-            //     $query->whereHas('disableDates', function ($q) use ($startDate, $endDate) {
-            //         $q->where(function ($subQuery) use ($startDate, $endDate) {
-            //             $subQuery->where('disable_date', '!=', $startDate)
-            //                      ->where('disable_date', '!=', $endDate);
-            //         });
-            //     });
-            //     // ->orWhereDoesntHave('disableDates');
-            // });
         }
         return $query;
 
