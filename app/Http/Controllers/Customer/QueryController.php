@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Query;
+use App\Models\User;
+use App\Notifications\AcceptItem;
+use App\Notifications\QueryReceived;
+use App\Notifications\RejectItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
@@ -30,6 +34,7 @@ class QueryController extends Controller
             $foruser = jsdecode_userdata($request->for_user);
             $product_id = jsdecode_userdata($request->product_id);
             // dd($request);
+            $lender = User::where('id',$foruser)->first();
             $data = [
                 'user_id' => $user->id,
                 'product_id' => $product_id,
@@ -77,6 +82,15 @@ class QueryController extends Controller
             // dd($data);
             $qur = Query::create($data);
 
+            $product_date=[
+                'customer_name'=>$user->name,
+                'date' =>$request->rental_dates,
+                'query_message' => $request->description,
+                'lender_id' =>$foruser,
+            ];
+            if(@$lender->usernotification->query_receive == '1'){
+                $lender->notify(new QueryReceived($product_date));
+            }
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Query send successfully']);
         } catch (\Exception $e) {
@@ -152,7 +166,10 @@ class QueryController extends Controller
         }
 
 
-
+        $userId =jsencode_userdata($query_product->user->id);
+        if(@$query_product->user->usernotification->accept_item == '1'){
+            $query_product->user->notify(new AcceptItem($userId));
+        }
         return redirect()->back()->with('success', 'Query accepted successfully.');
     }
     public function rejectQuery(Request $request, $id)
@@ -172,6 +189,10 @@ class QueryController extends Controller
 
         $query_product->update($data);
 
+        $userId =jsencode_userdata($query_product->user->id);
+        if(@$query_product->user->usernotification->reject_item == '1'){
+            $query_product->user->notify(new RejectItem($userId));
+        }
         return redirect()->back()->with('success', 'Query rejected successfully.');
     }
 

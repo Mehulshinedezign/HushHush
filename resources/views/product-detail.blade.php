@@ -484,6 +484,12 @@ $user = auth()->user();
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
+                    beforeSend: function() {
+                        $('body').addClass('loading');
+                    },
+                    complete: function() {
+                        $('body').removeClass('loading');
+                    },
 
                     success: function(response) {
                         var modalContent = '';
