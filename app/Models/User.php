@@ -263,4 +263,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(PushToken::class);
     }
+
+    public function usernotification(){
+        return $this->hasone(UserNotification::class);
+    }
 }

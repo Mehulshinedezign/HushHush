@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\{ChatRequest, DisputeRequest, OrderPickUpReturnRequest, RatingRequest};
 use App\Models\{AdminSetting, Order, Chat, OrderImage, ProductRating, OrderItem, Transaction, DisputeOrder, ProductUnavailability, User, Product, NeighborhoodCity, ProductDisableDate, Query};
-use App\Notifications\{OrderCancelled, OrderPickUp, OrderReturn, VendorOrderCancelled, VendorOrderPickedUp, VendorOrderReturn, CustomerExperience, RefundCustomerSecuirty, RentalFeedback, RefundSecurity, RentalComplete};
+use App\Notifications\{OrderCancelled, OrderPickUp, OrderReturn, VendorOrderCancelled, VendorOrderPickedUp, VendorOrderReturn, CustomerExperience, CustomerOrderPickup, CutomerOrderReturn, LenderImageUpload, LenderImageUploadForReturn, LenderOrderPickup, LenderOrderReturn, RefundCustomerSecuirty, RentalFeedback, RefundSecurity, RentalComplete};
 use Carbon\Carbon;
 use Stripe, Exception, DateTime;
 
@@ -175,7 +175,8 @@ class OrderController extends Controller
                 OrderImage::insert($images);
             }
             // }
-
+            $customer_name = $order->user->name;
+            $order->retailer->notify(new LenderImageUpload($customer_name));
             return redirect()->back()->with('success', 'Images uploaded successfully');
         }
 
@@ -206,6 +207,27 @@ class OrderController extends Controller
                 $data['pickedup_date'] = $dateTime;
                 Order::where("id", $order->id)->update(["status" => "Picked Up"]);
                 $user = auth()->user();
+
+                $customer_info=[
+                    'user_name' => $order->user->name,
+                    'from_date' => $order->from_date,
+                    'to_date' => $order->to_date,
+                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+                ];
+
+                $lender_info=[
+                    'lender_name'=> $order->retailer->name,
+                    'from_date' => $order->from_date,
+                    'to_date' => $order->to_date,
+                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+
+                ];
+                if(@$order->user->usernotification->customer_order_pickup == '1'){
+                    $order->user->notify(new CustomerOrderPickup($customer_info));
+                }
+                if(@$order->retailer->usernotification->lender_order_pickup == '1'){
+                    $order->retailer->notify(new LenderOrderPickup($lender_info));
+                }
             }
 
             $order->update($data);
@@ -303,7 +325,8 @@ class OrderController extends Controller
             OrderImage::insert($images);
         }
         // }
-
+        $customer_name = $order->user->name;
+        $order->retailer->notify(new LenderImageUploadForReturn($customer_name));
         return redirect()->back()->with('success', 'Images uploaded successfully');
         // }
 
@@ -338,6 +361,27 @@ class OrderController extends Controller
                 $data['returned_date'] = $dateTime;
                 Order::where("id", $order->id)->update(["status" => "Completed"]);
                 $this->payToRetailer($order);
+
+                $customer_info=[
+                    'user_name' => $order->user->name,
+                    'from_date' => $order->from_date,
+                    'to_date' => $order->to_date,
+                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+                ];
+
+                $lender_info=[
+                    'lender_name'=> $order->retailer->name,
+                    'from_date' => $order->from_date,
+                    'to_date' => $order->to_date,
+                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+
+                ];
+                if(@$order->user->usernotification->customer_order_return == '1'){
+                    $order->user->notify(new CutomerOrderReturn($customer_info));
+                }
+                if(@$order->retailer->usernotification->lender_order_return == '1'){
+                    $order->retailer->notify(new LenderOrderReturn($lender_info));
+                }
                 // send mail to customer whe lender verify product
                 // mail
                 // $user->notify(new RefundCustomerSecuirty($user));
