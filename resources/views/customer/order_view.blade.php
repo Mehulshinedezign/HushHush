@@ -61,7 +61,7 @@
                     </div>
 
 
-                    <div class="order-detail-photo">
+                    <div class = "order-detail-photo">
                         <div class="row g-4">
                             @if ('No' == $order->dispute_status && $order->status == 'Waiting' && $order->retailer_confirmed_pickedup == 0)
                                 <div class="col-12 col-sm-12 col-md-6">
