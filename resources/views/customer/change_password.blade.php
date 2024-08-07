@@ -47,8 +47,9 @@
 @endsection
 
 @push('scripts')
+@includeFirst(['validation'])
+@includeFirst(['validation.js_changePassword'])
 @includeFirst(['validation.js_show_password'])
-    <script src="{{ asset('js/custom/toggle-password.js') }}"></script>
     <script src="{{ asset('js/custom/profile.js') }}"></script>
     <script src="{{ asset('js/sweetalert.min.js') }}"></script>
     <script src="{{ asset('js/custom/card.js') }}"></script>
