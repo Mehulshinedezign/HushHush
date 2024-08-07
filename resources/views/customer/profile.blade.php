@@ -65,7 +65,7 @@
     <section class="profile-banner-sec">
         <div class="container">
             <div class="profile-banner-name">
-                <h2>{{$retailer->name}}'s profile</h2>
+                <h2>{{$user->name}}'s profile</h2>
             </div>
         </div>
         <img src="{{asset('front/images/leaf-img.svg')}}" alt="leaf" class="banner-laef-img">
@@ -84,7 +84,7 @@
                                 @endif
                                 {{-- <img src="{{asset('front/images/profile.png')}}" alt="img"> --}}
                             </div>
-                            <h3>{{$retailer->name}}</h3>
+                            <h3>{{$user->name}}</h3>
                             {{-- <p><img src="{{asset('front/images/us-flag.svg')}}" alt="img"> Los Angeles , USA</p> --}}
                         </div>
                     </div>
@@ -92,8 +92,8 @@
                         <div class="profile-about-detail">
                             <h4>About me</h4>
 
-                            @if ( ($retailer) && ($retailer->userDetail))
-                                <p>{{ $retailer->userDetail->about }}</p>
+                            @if ( ($user) && ($user->userDetail))
+                                <p>{{ $user->userDetail->about }}</p>
                             @else
                                 <p>Safer For The Environment: Our denim factory partner recycles 98% of their water using
                                     reverse osmosis filtration and keeps byproducts out of the environment by mixing them with
@@ -118,8 +118,8 @@
                             <div class="profile-address-data">
                                 <h3>Address</h3>
 
-                                @if($retailer && $retailer->userDetail)
-                                    <p>{{ $retailer->userDetail->address1 }}</p>
+                                @if($user && $user->userDetail)
+                                    <p>{{ $user->userDetail->address1 }}</p>
                                 @endif
 
                                 {{-- <p>Akshya Nagar 1st Block 1st Cross, Rammurthy nagar Los Angeles , USA</p> --}}
