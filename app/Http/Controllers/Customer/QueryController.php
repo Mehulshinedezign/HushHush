@@ -48,6 +48,15 @@ class QueryController extends Controller
             $startDate = date('Y-m-d', strtotime($dates[0]));
             $endDate = date('Y-m-d', strtotime($dates[1]));
 
+            $totalDays = (strtotime($endDate) - strtotime($startDate)) / 86400 + 1;
+
+            $product = Product::findOrFail($product_id);
+            // dd($product);
+            // Check if the total days are less than the minimum rental days
+            if ($totalDays < $product->min_days_rent_item) {
+                throw new \Exception("The rental period must be at least {$product->min_days_rent_item} days.");
+            }
+
             // dd($dates, $startDate, $endDate);
 
 
