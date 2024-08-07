@@ -23,14 +23,14 @@ class AdminSettingSeeder extends Seeder
                 "value" => "15",
                 "type" => "Percentage",
             ],
-            "insurance_fee" => [
-                "value" => "25",
-                "type" => "Percentage",
-            ],
-            "security_fee" => [
-                "value" => "60",
-                "type" => "Percentage",
-            ]
+            // "insurance_fee" => [
+            //     "value" => "25",
+            //     "type" => "Percentage",
+            // ],
+            // "security_fee" => [
+            //     "value" => "60",
+            //     "type" => "Percentage",
+            // ]
         ];
 
         foreach ($keys as $key => $value) {

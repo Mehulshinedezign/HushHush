@@ -18,10 +18,8 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Name</th>
-                                        <!-- <th>Quantity</th> -->
                                         <th>Size</th>
                                         <th>Rent</th>
-                                        <!-- <th>Price</th> -->
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -29,10 +27,9 @@
                                         <tr>
                                             <td>{{ $index + 1 }}</th>
                                             <td>{{ $product->name }}</td>
-                                            <!-- <td>{{ $product->quantity }}</td> -->
-                                            <td>{{ $product->size }}</td>
-                                            <td>{{ $product->rent_day }}</td>
-                                            <!-- <td>{{ $product->price }}</td> -->
+                                            {{-- <td>{{ getsizes($product->size) }}</td> --}}
+                                            <td>{{ $product->rent_day }}, {{ $product->rent_week }},
+                                                {{ $product->rent_month }}</td>
 
                                             <td>
                                                 <label class="custom-switch">
@@ -52,18 +49,10 @@
                                                     href="{{ route('admin.deleteproduct', $product->id) }}" title="Delete">
                                                     <i class="fa fa-trash"></i>
                                                 </a>
-                                                {{-- <a class="btn btn-success" href="{{ route('admin.vendor-product-edit',$product->id) }}" title="Edit User">
-                                            <i class="fa fa-pencil"></i>
-                                        </a> --}}
+
                                             </td>
                                         </tr>
                                     @endforeach
-
-                                    <!-- @if ($products->count() == 0)
-    <tr>
-                                                                                                    <td colspan="7" class="text-center text-danger">{{ __('retailer.empty') }}</td>
-                                                                                                </tr>
-    @endif -->
                                 </table>
                             </div>
                         </div>

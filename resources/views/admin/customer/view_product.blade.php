@@ -8,16 +8,18 @@
                     <div class="profile-view-outer">
                         <div class="profile-header">
                             <div class="profile-big-image">
-
-                            @if (isset($product->thumbnailImage->file_path))
-                                <img src="{{ $product->thumbnailImage->file_path}}" alt="" loading="lazy">
-                            @else
-                                <img src="{{asset('front/images/pro-0.png')}}" alt="img">
-                            @endif
+                                {{-- @dd($product) --}}
+                                @if (isset($product->thumbnailImage->file_path))
+                                    <img src="{{ $product->thumbnailImage->file_path }}" alt="" loading="lazy">
+                                @else
+                                    <img src="{{ asset('front/images/pro-0.png') }}" alt="img">
+                                @endif
                             </div>
+
                             <div class="profile-detail">
                                 <h4>{{ $product->name }}</h4>
-                                <p>{{ $product->price }}</p>
+                                <p>{{ $product->rent_day ?? 'N/A' }},{{ $product->rent_day ?? 'N/A' }},{{ $product->rent_day ?? 'N/A' }}
+                                </p>
                             </div>
                         </div>
                         <div class="profile-view-body">
@@ -28,23 +30,25 @@
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item">Size:</span>
-                                    <span class="">{{ $product->size ?? 'N/A' }}</span>
+                                    {{-- <span class="">{{ getsizes($product->size) ?? 'N/A' }}</span> --}}
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item">Rent:</span>
-                                    <span class="">{{ $product->rent_day ?? 'N/A' }} </span>
+                                    <span
+                                        class="">{{ $product->rent_day ?? 'N/A' }},{{ $product->rent_day ?? 'N/A' }},{{ $product->rent_day ?? 'N/A' }}
+                                    </span>
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item">Condition:</span>
-                                    <span class="">{{ @$product->condition ?? 'N/A' }} </span>
+                                    <span class="">{{ @$product->product_condition ?? 'N/A' }} </span>
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item"> Brand:</span>
-                                    <span class="">{{ @$product->brand ?? 'N/A' }}</span>
+                                    <span class="">{{ getBrandsName(@$product->brand) ?? 'N/A' }}</span>
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item">Color:</span>
-                                    <span class="">{{ @$product->color ?? 'N/A' }}</span>
+                                    <span class="">{{ getColorsName(@$product->color) ?? 'N/A' }}</span>
                                 </li>
 
                                 {{-- <li class="list-col">

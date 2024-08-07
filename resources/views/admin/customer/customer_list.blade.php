@@ -12,7 +12,7 @@
                         </div>
                         <div class="card-body">
 
-                            <x-search-form :statusField="true" :dateField="false" :Export="true" />
+                            <x-search-form :statusField="true" :dateField="false" :Export="false" />
 
                             <div class="table-responsive">
                                 <table class="table table-striped table-md">
@@ -31,8 +31,8 @@
                                     @foreach ($customers as $index => $customer)
                                         <tr>
                                             <td>{{ $index + $sno }}</th>
-                                            <td><a
-                                                    @if ($customer->role_id == 3) href="{{ route('admin.view-customer-completed-orders', $customer->id) }}" @else href="{{ route('admin.view-retailer-completed-orders', $customer->id) }}" @endif>{{ $customer->name }}</a>
+                                            <td>
+                                                {{ $customer->name }}
                                             </td>
                                             {{-- <td>
                                         {{ ($customer->role_id == 3) ? config('constants.renter') : config('constants.lender') }}
@@ -46,10 +46,11 @@
                                             @endif --}}
                                             <td>{{ count($customer->orderitem) }}</td>
                                             <td>{{ $customer->email }}</td>
-                                            
+
                                             <td>
                                                 @if (@$customer->document)
-                                                    <img id="customer-img" src="{{ asset('storage/' . $customer->document->url) }}"
+                                                    <img id="customer-img"
+                                                        src="{{ asset('storage/' . $customer->document->url) }}"
                                                         alt="Profile Picture">
                                                 @else
                                                     <img id="customer-img" src="{{ asset('front/images/pro3.png') }}"
@@ -69,7 +70,7 @@
                                                 {{-- <a class="btn btn-primary" href="{{ route('admin.viewcustomer', [$customer->id]) }}" title="View">
                                             <i class="fa fa-eye"></i>
                                         </a> --}}
-                                                 {{-- <a class="btn btn-success"
+                                                {{-- <a class="btn btn-success"
                                                     href="{{ route('admin.edit.user', [$customer->id]) }}"
                                                     title="Edit User">
                                                     <i class="fa fa-pencil"></i>
