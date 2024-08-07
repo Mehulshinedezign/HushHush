@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\NotificationSetting;
 use App\Providers\RouteServiceProvider;
-use App\Models\{EmailOtp, Otp, PhoneOtp, User, Role, UserDetail, UserDocuments};
+use App\Models\{EmailOtp, Otp, PhoneOtp, User, Role, UserDetail, UserDocuments, UserNotification};
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -173,6 +173,8 @@ class RegisterController extends Controller
             'file' => $fileExtension,
             'url' => $filePath,
         ]);
+
+        UserNotification::updateOrCreate(['user_id'=>$signUpData->id]);
 
 
         $otp = $this->otpService->generateOtp($signUpData);

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Country, State, City, Notification, NotificationSetting, Product, RetailerBankInformation, UserDocuments, User, UserCard};
+use App\Models\{Country, State, City, Notification, NotificationSetting, Product, RetailerBankInformation, UserDocuments, User, UserCard, UserNotification};
 use Hash, Stripe, Exception, DateTime;
 use App\Http\Requests\{ProfileRequest, UserDetailRequest};
 use Illuminate\Support\Facades\Storage;
@@ -579,5 +579,42 @@ class ProfileController extends Controller
         }
     }
     
+    public function notificationPrefrence(Request $request){
 
+        $user = auth()->user();
+
+        try{
+            $fieldData = [
+                'query_receive' => 'query_receive',
+                'accept_item' => 'accept_item',
+                'reject_item' => 'reject_item',
+                'order_req' => 'order_req',
+                // 'customer_order_req' => 'customer_order_req',
+                'customer_order_pickup' => 'customer_order_pickup',
+                'lender_order_pickup' => 'lender_order_pickup',
+                'customer_order_return' => 'customer_order_return',
+                'lender_order_return' => 'lender_order_return',
+            ];
+    
+            $fieldToUpdate = $fieldData[$request->name] ?? null;
+    
+            if ($fieldToUpdate) {
+                $updateData = [$fieldToUpdate => $request->value];
+                UserNotification::updateOrCreate(
+                    ['user_id' => $user->id],
+                    $updateData
+                );
+            }
+            return response()->json([
+                'success'    =>  true,
+                'msg' =>'Notification set successfully!'
+            ], 200);
+        }catch (\Exception $e) {
+            return response()->json([
+                'success'    =>  false,
+                'msg'      =>  $e->getMessage()
+            ]);
+        }
+
+    }
 }

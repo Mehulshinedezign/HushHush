@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\ProductUnavailability;
 use App\Models\Query;
 use App\Models\Transaction;
+use App\Notifications\BookorderReq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Stripe\PaymentIntent;
@@ -124,7 +125,18 @@ class BookingController extends Controller
             'gateway_response' => $status
         ]);
         DB::commit();
+        $lender = $query->forUser;
 
+        $product_info=[
+            'customer_name'=>$user->name,
+            'from_date' =>$fromstartDate,
+            'to_date' =>$fromendDate,
+            'lender_id'=>$query->for_user
+        ];
+
+        if(@$lender->usernotification->order_req == '1'){
+            $lender->Notify(new BookorderReq($product_info));
+        }
         if ($status->status == "succeeded") {
             $order->update(['transaction_id' => $transaction->id]);
             return redirect()->route('orders');

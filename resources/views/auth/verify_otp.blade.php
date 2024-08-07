@@ -4,7 +4,7 @@
         <div class="form-setup login-form otp-form">
             <x-alert />
 
-            <h3>You have verify email and phone OTP</h3>
+            <h3>Verify your email and Phone number</h3>
             {{-- @if (emailValidate(auth()->user()->id)) --}}
             <form id="emailOtpVerify" class="form-inline emailverify" action="{{ route('verify.email.otp') }}" method="POST">
                 @csrf

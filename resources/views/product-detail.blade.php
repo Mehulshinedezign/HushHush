@@ -143,6 +143,14 @@ $user = auth()->user();
                             </div>
 
                         </div>
+                        <div class="pro-desc-info">
+                            <div class="pro-desc-info-box">
+                                <h4>Min Rental Days :</h4>
+                                <p>{{ $product->min_days_rent_item }}</p>
+                            </div>
+
+
+                        </div>
                         {{-- <div class="form-group">
                                 <label for="">Select your Rental date</label>
                                 <div class="formfield">
@@ -345,6 +353,13 @@ $user = auth()->user();
                                     </div>
 
                                 </div>
+
+                            </div>
+                            <div class="pro-desc-prize-wrapper">
+                                <label for="">Min Rental days: </label>
+                                <div class="min-rental-date">
+                                    <h3>{{ @$product->min_days_rent_item }}</h3>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -468,6 +483,12 @@ $user = auth()->user();
                     contentType: false,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    beforeSend: function() {
+                        $('body').addClass('loading');
+                    },
+                    complete: function() {
+                        $('body').removeClass('loading');
                     },
 
                     success: function(response) {
