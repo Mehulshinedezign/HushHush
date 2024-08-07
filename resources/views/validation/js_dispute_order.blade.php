@@ -1,25 +1,37 @@
 <script>
     jQuery(document).ready(function() {
-        const rules = {
-            images: {
+        const rule = {
+            subject: {
+                required: true,
+            },
+            description: {
+                required: true,
+            },
+            'images[]': {
                 required: true,
             },
         };
-        const messages = {
-            images: {
+        const message = {
+            subject: {
+                required: 'This field is required',
+            },
+            description: {
+                required: 'This field is required',
+            },
+            'images[]': {
                 required: 'This field is required',
             },
         };
 
-        handleValidation('disputeOrder', rules, messages);
+        handleValidation('disputeForm', rule, message);
 
-        $('#disputeOrder').submit(function(e) {
+        $('#disputeForm').submit(function(e) {
             e.preventDefault(); // Prevent form submission
 
             // Perform form validation
             // Check if the form is valid
-            if ($('#disputeOrder').valid()) {
-                $('form#disputeOrder').submit();
+            if ($('#disputeForm').valid()) {
+                $('form#disputeForm').submit();
             }
         });
     });

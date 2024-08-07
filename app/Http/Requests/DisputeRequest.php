@@ -24,12 +24,12 @@ class DisputeRequest extends FormRequest
     public function rules()
     {
         $counter = 0;
+        $validate = [];
+
         $validate = [
             'subject' => 'required',
             'description' => 'required',
         ];
-
-        $validate = [];
         if (!isset(request()->images)) {
             $validate['images'] = 'required';
             return $validate;
@@ -40,7 +40,7 @@ class DisputeRequest extends FormRequest
         for ($i = 1; $i <= count(request()->images); $i++) {
             if (!is_null(request()->file('image' . $i))) {
                 $counter++;
-                $validate['image' . $i] =  'mimes:' . 'jpg,jpeg,png' . '|max:' . '4096';
+                $validate['images' . $i] =  'mimes:' . 'jpg,jpeg,png' . '|max:' . '4096';
             }
         }
 

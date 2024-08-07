@@ -70,13 +70,23 @@
                             </div>
                         </div>
 
-                        <div class="order-card-footer">
-                            <div class="btn-dispute-holder">
-                                <a href="javascript:void(0);"class="btn btn-dark justify-content-center full-btn dispute-order"
-                                    data-url="{{ route('retailer.orderdispute', [$order->id]) }}" data-bs-toggle="modal"
-                                    data-bs-target="#orderDisputeModal">Raise a dispute</a>
+                        @if ($order->status == 'Waiting')
+                            <div class="order-card-footer">
+                                <a href="#" data-url="{{ route('cancel-order', $order->id) }}"
+                                    class="button outline-btn full-btn cancel-order" data-toggle="modal"
+                                    data-bs-target="#cancellation-note">Cancel
+                                    order</a>
                             </div>
-                        </div>
+                        @else
+                            <div class="order-card-footer">
+                                <div class="btn-dispute-holder">
+                                    <a href="javascript:void(0);"
+                                        data-url="{{ route('retailer.orderdispute', [$order->id]) }}"
+                                        class="btn btn-dark justify-content-center dispute-order full-btn"
+                                        data-bs-toggle="modal" data-bs-target="#orderDisputeModal">Raise a dispute</a>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endif
@@ -84,10 +94,37 @@
 
     </div>
 </div>
+
+<div class="modal fade cencel-order-modal" id="cancellation-note" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="cancellation-noteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="ajax-response"></div>
+                <form method="post" id="cancel-order">
+                    @csrf
+                    <div class="cancellation-popup-sec">
+                        <div class="popup-head">
+                            <h6>Cancellation Note</h6>
+                            <button type="" class="close" data-bs-dismiss="modal"><i
+                                    class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <textarea class="form-control mt-3" name="cancellation_note" rows="5"
+                            placeholder="Please write cancellation note here"></textarea>
+                        <button type="submit" class="button primary-btn full-btn mt-3  submit"
+                            id="cancel-order">Submit&nbsp;<i class="fa-solid fa-circle-notch fa-spin show-loader"
+                                style="display:none;"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @push('scripts')
     {{-- dispute order --}}
-    <div class="modal fade book-product-modal" id="orderDisputeModal" tabindex="-1" role="dialog"
-        aria-labelledby="orderDisputeModalTitle" aria-hidden="true">
+    <div class="modal fade book-product-modal" id="orderDisputeModal" data-bs-backdrop="static" tabindex="-1"
+        role="dialog" aria-labelledby="orderDisputeModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -103,8 +140,7 @@
                                 @php
                                     $openDisputeModal = 'No';
                                 @endphp
-                                <form class="filter-form" id="disputeOrder" method="post" id="disputeForm"
-                                    enctype="multipart/form-data">
+                                <form class="filter-form" method="post" id="disputeForm" enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-group">
                                         <label>Reason</label>
@@ -141,7 +177,7 @@
                                                 accept="image/jpeg, image/png, image/jpg">
                                             @error('images')
                                                 <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
+                                                    {{ $message }}
                                                 </span>
                                             @enderror
 
@@ -160,13 +196,44 @@
             </div>
         </div>
     </div>
+    @if ($errors->any())
+        <script>
+            $(document).ready(function() {
+                var element = $('#orderDisputeModal').modal('show');
+            });
+        </script>
+    @endif
     {{-- end dispute order --}}
+    <script>
+        $(document).ready(function() {
 
+            $('.cancel-order').on('click', function() {
+                // $('.modal fade').addClass('d-none');
+
+                swal({
+                        title: 'Order Cancel',
+                        text: 'The platform charges will be deducted by stripe',
+                        icon: 'warning',
+                        buttons: true,
+                        dangerMode: true,
+                        buttons: ["No", "Yes"],
+                    })
+                    .then((willOpen) => {
+                        if (willOpen) {
+                            // $('.modal fade').removeClass('d-none');
+                            $('#cancellation-note').modal('show');
+                        } else {
+                            jQuery('body').removeClass('modal-open');
+                        }
+                    });
+            })
+        });
+    </script>
 
     <script>
         $('.dispute-order').on('click', function() {
             var url = $(this).attr('data-url');
-            $('#disputeOrder').attr('action', url);
+            $('#disputeForm').attr('action', url);
         });
 
         $(document).ready(function() {

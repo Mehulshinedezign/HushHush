@@ -140,8 +140,7 @@
                                 @php
                                     $openDisputeModal = 'No';
                                 @endphp
-                                <form class="filter-form" id="disputeOrder" method="post" id="disputeForm"
-                                    enctype="multipart/form-data">
+                                <form class="filter-form" method="post" id="disputeForm" enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-group">
                                         <label>Reason</label>
@@ -227,7 +226,7 @@
     <script>
         $('.dispute-order').on('click', function() {
             var url = $(this).attr('data-url');
-            $('#disputeOrder').attr('action', url);
+            $('#disputeForm').attr('action', url);
         });
 
         $(document).ready(function() {

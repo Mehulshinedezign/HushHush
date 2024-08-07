@@ -446,8 +446,9 @@ class OrderController extends Controller
     }
 
     // dispute
-    public function orderDispute(Request $request, Order $order)
+    public function orderDispute(DisputeRequest $request, Order $order)
     {
+
         if (in_array($order->status, ['Completed', 'Cancelled'])) {
             return redirect()->back()->with("warning", "You can not raise a dispute for cancelled and completed orders");
         }
