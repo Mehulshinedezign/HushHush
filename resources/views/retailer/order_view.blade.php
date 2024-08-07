@@ -3,6 +3,9 @@
     <section class="od-table-section">
         <div class="container">
             <div class="od-table-wrapper">
+                <div class="back-block mb-2">
+                    <a href="{{ route('retailercustomer') }}"><i class="fa-solid fa-angle-left"></i> Back</a>
+                </div>
                 <div class="order-detail-box">
                     {{-- @dd($order->toArray()) --}}
 
