@@ -3,6 +3,9 @@
     <section class="od-table-section">
         <div class="container">
             <div class="od-table-wrapper">
+                <div class="back-block mb-2">
+                    <a href="{{ route('orders') }}"><i class="fa-solid fa-angle-left"></i> Back</a>
+                </div>
                 <div class="order-detail-box">
                     {{-- @dd($order->toArray()) --}}
 
@@ -203,7 +206,8 @@
                                                 @endforeach
                                             </div>
 
-                                            <button class="btn btn-dark " type="submit"><i class="fa-solid fa-upload"></i>
+                                            <button class="btn btn-dark " type="submit"><i
+                                                    class="fa-solid fa-upload"></i>
                                                 Upload</button>
                                         </div>
                                     </form>

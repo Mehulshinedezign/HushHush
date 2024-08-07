@@ -9,9 +9,9 @@ class AjaxController extends Controller
 {
     public function __construct(Request $request)
     {
-        if (!$request->ajax()) {
-            abort(404);
-        }
+        // if (!$request->ajax()) {
+        //     abort(404);
+        // }
     }
 
     public function menuSetup(Request $request)
@@ -37,7 +37,7 @@ class AjaxController extends Controller
         // return response()->json(['title' => 'Success', 'data' => $states, 'message' => 'States retrieved successfully']);
     }
 
-    public function cities(Request $request,$stateId)
+    public function cities(Request $request, $stateId)
     {
         // $stateId = $request->state_id;
         $cities = City::where('state_id', $stateId)->get();
@@ -167,7 +167,8 @@ class AjaxController extends Controller
         return $msg;
     }
 
-    public function get_subcategory($id){
+    public function get_subcategory($id)
+    {
         $id = jsdecode_userdata($id);
         if ((int) $id) {
             $category = Category::with(['size_type'])->where('status', '1')->where('id', $id)->first();
