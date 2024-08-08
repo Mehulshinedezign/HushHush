@@ -337,15 +337,15 @@
                                     <li><a class="dropdown-item" href="{{ route('my_query') }}">
                                             <i class="fa fa-question-circle" aria-hidden="true"></i>
                                             My Query</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('retailercustomer') }}">
-                                            <i class="fa fa-question-circle" aria-hidden="true"></i>
-                                            Receive order</a></li>
                                     <li><a class="dropdown-item" href="{{ route('receive_query') }}"><img width="15"
                                                 height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
                                                 alt="img">Receive Query</a></li>
                                     <li><a class="dropdown-item" href="{{ route('profile') }}">
                                             <i class="fa-solid fa-user"></i>
                                             Profile</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('retailercustomer') }}">
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                            Receive order</a></li>
                                     <li><a class="dropdown-item" href="{{ route('orders') }}"><i
                                                 class="fa-solid fa-file"></i>Order History</a></li>
                                     <!-- <li><a class="dropdown-item" href="{{ route('rental-request') }}"><img src="{{ asset('front/images/rent-req-icon.svg') }}" alt="img">Rental Request</a></li> -->

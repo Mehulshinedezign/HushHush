@@ -12,7 +12,7 @@ use App\Models\Transaction;
 use Stripe, Exception, DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\{AdminSetting, BillingToken, Order, Chat, CustomerBillingDetails, CustomerRating, DisputeOrder, OrderImage, OrderItem, Product, User, RetailerPayout};
+use App\Models\{AdminSetting, BillingToken, Order, Chat, CustomerBillingDetails, CustomerRating, DisputeOrder, OrderImage, OrderItem, Product, User, RetailerPayout, ProductDisableDate};
 use App\Notifications\{CustomerImageUpload, CustomerImageUploadForReturn, CustomerOrderPickup, CutomerOrderReturn, LenderOrderPickup, LenderOrderReturn, OrderPickUp, OrderReturn, VendorOrderPickedUp, VendorOrderReturn, RateYourExperience};
 
 
@@ -199,25 +199,25 @@ class OrderController extends Controller
                 $user = auth()->user();
 
                 // check the retailer order pickup status before sending the notification
-                $customer_info=[
+                $customer_info = [
                     'user_name' => $order->user->name,
                     'from_date' => $order->from_date,
                     'to_date' => $order->to_date,
-                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+                    'pickup_location' => $order->product->productCompleteLocation->pick_up_location,
                 ];
 
-                $lender_info=[
-                    'lender_name'=> $order->retailer->name,
+                $lender_info = [
+                    'lender_name' => $order->retailer->name,
                     'from_date' => $order->from_date,
                     'to_date' => $order->to_date,
-                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+                    'pickup_location' => $order->product->productCompleteLocation->pick_up_location,
 
                 ];
 
-                if(@$order->user->usernotification->customer_order_pickup == '1'){
+                if (@$order->user->usernotification->customer_order_pickup == '1') {
                     $order->user->notify(new CustomerOrderPickup($customer_info));
                 }
-                if(@$order->retailer->usernotification->lender_order_pickup == '1'){
+                if (@$order->retailer->usernotification->lender_order_pickup == '1') {
                     $order->retailer->notify(new LenderOrderPickup($lender_info));
                 }
             }
@@ -353,25 +353,25 @@ class OrderController extends Controller
                 Order::where("id", $order->id)->update(["status" => "Completed"]);
                 $this->payToRetailer($order);
 
-                $customer_info=[
+                $customer_info = [
                     'user_name' => $order->user->name,
                     'from_date' => $order->from_date,
                     'to_date' => $order->to_date,
-                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+                    'pickup_location' => $order->product->productCompleteLocation->pick_up_location,
                 ];
 
-                $lender_info=[
-                    'lender_name'=> $order->retailer->name,
+                $lender_info = [
+                    'lender_name' => $order->retailer->name,
                     'from_date' => $order->from_date,
                     'to_date' => $order->to_date,
-                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+                    'pickup_location' => $order->product->productCompleteLocation->pick_up_location,
 
                 ];
 
-                if(@$order->user->usernotification->customer_order_return == '1'){
+                if (@$order->user->usernotification->customer_order_return == '1') {
                     $order->user->notify(new CutomerOrderReturn($customer_info));
                 }
-                if(@$order->retailer->usernotification->lender_order_return == '1'){
+                if (@$order->retailer->usernotification->lender_order_return == '1') {
                     $order->retailer->notify(new LenderOrderReturn($lender_info));
                 }
                 // check the retailer order return status before sending the notification
@@ -595,9 +595,8 @@ class OrderController extends Controller
 
     public function cancelOrder(Request $request, Order $order)
     {
-
         $order->load(["transaction"]);
-        $url = route('retailer.orders');
+        $url = route('retailercustomer');
 
         if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
             session()->flash('warning', "You can not cancel the disputed order");
@@ -606,7 +605,7 @@ class OrderController extends Controller
                 'url'       =>   $url
             ], 201);
         }
-        if ($order->status != "Pending") {
+        if ($order->status != "Waiting") {
             session()->flash('warning', __("order.messages.cancel.notAllowed"));
             return response()->json([
                 'success'    =>  false,
@@ -672,45 +671,46 @@ class OrderController extends Controller
             ]);
 
             /*UPDATE ORDER ITEMS*/
-            OrderItem::where("order_id", $order->id)->update($updateData);
+            // OrderItem::where("order_id", $order->id)->update($updateData);
 
             /*UPDATE TRANSACTION*/
-            Transaction::where("order_id", $order->id)->update($updateData);
+            // Transaction::where("order_id", $order->id)->update($updateData);
 
             /*REMOVE PRODUCT UNAVAILABLE DATES*/
-            ProductUnavailability::where("order_id", $order->id)->delete();
+            // ProductUnavailability::where("order_id", $order->id)->delete();
+            ProductDisableDate::where('product_id', $order->product_id)->where("disable_date", '>=', $order->from_date)->where("disable_date", '<=', $order->to_date)->delete();
 
-            $data = [
-                [
-                    'order_id' => $order->id,
-                    'sender_id' => $order->user_id,
-                    'receiver_id' => $order->item->retailer->id,
-                    'action_type' => 'Order Cancelled',
-                    'created_at' => $dateTime,
-                    'message' => 'Order #' . $order->id . ' has been cancelled by customer successfully.'
-                ],
-                [
-                    'order_id' => $order->id,
-                    'sender_id' => null,
-                    'receiver_id' => $order->user_id,
-                    'action_type' => 'Order Cancelled',
-                    'created_at' => $dateTime,
-                    'message' => 'You have successfully cancelled the order #' . $order->id
-                ]
-            ];
-            $this->sendNotification($data);
+            // $data = [
+            //     [
+            //         'order_id' => $order->id,
+            //         'sender_id' => $order->user_id,
+            //         'receiver_id' => $order->item->retailer->id,
+            //         'action_type' => 'Order Cancelled',
+            //         'created_at' => $dateTime,
+            //         'message' => 'Order #' . $order->id . ' has been cancelled by customer successfully.'
+            //     ],
+            //     [
+            //         'order_id' => $order->id,
+            //         'sender_id' => null,
+            //         'receiver_id' => $order->user_id,
+            //         'action_type' => 'Order Cancelled',
+            //         'created_at' => $dateTime,
+            //         'message' => 'You have successfully cancelled the order #' . $order->id
+            //     ]
+            // ];
+            // $this->sendNotification($data);
             $user = auth()->user();
             // check the customer order return status before sending the notification
-            if (isset($user->notification) && $user->notification->order_cancelled == 'on') {
-                // send mail to customer of order cancelled successfully
-            }
+            // if (isset($user->notification) && $user->notification->order_cancelled == 'on') {
+            //     // send mail to customer of order cancelled successfully
+            // }
             // $user->notify(new OrderCancelled($order));
 
-            // check the retailer order cancelled status before sending the notification
-            if (isset($order->item->retailer->notification) && $order->item->retailer->notification->order_cancelled == 'on') {
-                // send mail to retailer of order picked up successfully
-                // $order->item->retailer->notify(new VendorOrderCancelled($order));
-            }
+            // // check the retailer order cancelled status before sending the notification
+            // if (isset($order->item->retailer->notification) && $order->item->retailer->notification->order_cancelled == 'on') {
+            //     // send mail to retailer of order picked up successfully
+            //     // $order->item->retailer->notify(new VendorOrderCancelled($order));
+            // }
 
             session()->flash('success', __("order.messages.cancel.success"));
             // dd($url);

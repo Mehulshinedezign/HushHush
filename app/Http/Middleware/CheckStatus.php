@@ -16,12 +16,11 @@ class CheckStatus
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->role->name == 'admin' || Auth::user()->status == '1') {
+        if (Auth::user()->id == 1 || Auth::user()->status == '1') {
             return $next($request);
         }
 
-            Auth::logout();
-            return redirect()->route("login")->with('error', 'Your account has been suspended. Please contact to site owner');
-
+        Auth::logout();
+        return redirect()->route("login")->with('error', 'Your account has been suspended. Please contact to site owner');
     }
 }
