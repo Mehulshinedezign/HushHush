@@ -342,4 +342,26 @@ if (!function_exists('check_order_list_paginate_retailer')) {
             return $diff;
         }
     }
+
+    if (!function_exists('getsizes')) {
+        function getsizes($id)
+        {
+            $sizeName =  Size::where('id', $id)->first();
+            return $sizeName->name;
+        }
+    }
+    if (!function_exists('getColorsName')) {
+        function getColorsName($id)
+        {
+            $colorName = Color::where('id', $id)->first();
+            return $colorName->name;
+        }
+    }
+    if (!function_exists('getBrandsName')) {
+        function getBrandsName($id)
+        {
+            $brandName = Brand::where('id', $id)->first();
+            return $brandName->name;
+        }
+    }
 }

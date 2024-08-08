@@ -51,29 +51,29 @@ class ProductController extends Controller
 
         $authUserId = auth()->user()->id;
 
-            // $query = Product::where('user_id', '!=', $authUserId);
-            $products = Product::with('disableDates','ratings')->where('user_id', '!=', $authUserId)->applyFilters()->get();
+        // $query = Product::where('user_id', '!=', $authUserId);
+        $products = Product::with('disableDates', 'ratings')->where('user_id', '!=', $authUserId)->applyFilters()->get();
 
-            // dd($products->toArray());
-            // dd($startDate,$endDate);
+        // dd($products->toArray());
+        // dd($startDate,$endDate);
 
 
-            // if ($request->has('Color')) {
-            //     $colors = explode(',', $request->input('Color'));
-            //     $query->filterByColors($colors);
-            // }
+        // if ($request->has('Color')) {
+        //     $colors = explode(',', $request->input('Color'));
+        //     $query->filterByColors($colors);
+        // }
 
-            // if ($request->has('Price')) {
-            //     $priceRange = explode(',', $request->input('Price'));
-            //     $query->filterByPriceRange($priceRange);
-            // }
+        // if ($request->has('Price')) {
+        //     $priceRange = explode(',', $request->input('Price'));
+        //     $query->filterByPriceRange($priceRange);
+        // }
 
-            // if ($request->has('Condition')) {
-            //     $conditions = explode(',', $request->input('Condition'));
-            //     $query->filterByCondition($conditions);
-            // }
+        // if ($request->has('Condition')) {
+        //     $conditions = explode(',', $request->input('Condition'));
+        //     $query->filterByCondition($conditions);
+        // }
 
-            // $products = $query->get();
+        // $products = $query->get();
         // dd($request->neighborhoodcity,  $city);
 
         // dd($request->global_product_pagination);
@@ -159,11 +159,11 @@ class ProductController extends Controller
         if (is_null($product)) {
             return redirect()->back()->with('message', __('product.messages.notAvailable'));
         }
-        $security = $this->getSecurityAmount($product);
-        $insurance = $this->getInsuranceAmount($product);
+        // $security = $this->getSecurityAmount($product);
+        // $insurance = $this->getInsuranceAmount($product);
         $rating_progress = $this->getratingprogress($product);
         $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
-            ->where('id',$product->id)
+            ->where('id', $product->id)
             ->where('category_id', $product->category_id)->whereHas('category', function ($q) {
                 $q->where('status', '1');
             })
@@ -175,21 +175,21 @@ class ProductController extends Controller
         $layout_class = 'single_product';
 
         $productImages = $product->allImages;
-        $querydates = Query::where(['product_id'=>$id, 'status'=> 'PENDING','user_id' =>auth()->user()->id])->get();
-        $product_buffer=$product->created_at->format('Y-m-d');
+        $querydates = Query::where(['product_id' => $id, 'status' => 'PENDING', 'user_id' => auth()->user()->id])->get();
+        $product_buffer = $product->created_at->format('Y-m-d');
         $carbonDate = Carbon::createFromFormat('Y-m-d', $product_buffer);
-        $array1= [];
-        array_push($array1,$product_buffer);
+        $array1 = [];
+        array_push($array1, $product_buffer);
         for ($i = 0; $i < 3; $i++) {
             $newDate = $carbonDate->addDay();
             $formattedDate = $newDate->format('Y-m-d');
-            array_push($array1,$formattedDate);
+            array_push($array1, $formattedDate);
         }
         $disable_dates = $product->disableDates->pluck('disable_date')->toArray();
-        $disable_dates = array_merge($array1,$disable_dates);
+        $disable_dates = array_merge($array1, $disable_dates);
         $disable_dates = array_unique($disable_dates);
         sort($disable_dates);
-        
+
 
         // dd($disable_dates);
 
@@ -207,7 +207,7 @@ class ProductController extends Controller
 
 
         // dd($querydates,$disable_dates);
-        return view('product-detail', compact('product','productImages','querydates','relatedProducts','rating_progress','disable_dates'));
+        return view('product-detail', compact('product', 'productImages', 'querydates', 'relatedProducts', 'rating_progress', 'disable_dates'));
     }
 
 
@@ -272,8 +272,8 @@ class ProductController extends Controller
     {
         // $products = ProductFavorite::with('product.thumbnailImage', 'product.category')->where('user_id', auth()->user()->id)->orderByDesc('id')->paginate($request->global_product_pagination);
         $products = ProductFavorite::with('product.thumbnailImage', 'product.category')
-        ->where('user_id', auth()->user()->id)
-        ->orderByDesc('id')->get();
+            ->where('user_id', auth()->user()->id)
+            ->orderByDesc('id')->get();
 
         $user = User::with('notification')->where('id', auth()->user()->id)->first();
         if (!$products->isEmpty() && @$user->notification->item_we_think_you_might_like == "on") {
@@ -380,7 +380,8 @@ class ProductController extends Controller
      * Add Product
      */
 
-    public function lenderInfo(Request $request,$id){
+    public function lenderInfo(Request $request, $id)
+    {
 
 
         $retailer = User::whereId(jsdecode_userdata($id))->first();
@@ -391,7 +392,6 @@ class ProductController extends Controller
             $averageRating = $ratedProducts->sum('average_rating') / count($ratedProducts);
         }
 
-        return view('customer.profile',compact('products','retailer'));
+        return view('customer.profile', compact('products', 'retailer'));
     }
-
 }

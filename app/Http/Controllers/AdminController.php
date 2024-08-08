@@ -112,7 +112,12 @@ class AdminController extends Controller
     {
         return view('admin.cms.cms_edit', compact('page'));
     }
+    public function transaction()
+    {
+        $orders = Order::with('transaction', 'retailer', 'user')->get();
 
+        return view('admin.transaction', compact('orders'));
+    }
     public function saveCms(Request $request, CmsPage $page)
     {
         $request->validate([
@@ -218,7 +223,7 @@ class AdminController extends Controller
 
     public function orders(Request $request)
     {
-        $ordersQuery = Order::with(["user", "transaction", "item.retailer"])
+        $ordersQuery = Order::with(["user", "transaction", "retailer"])
             ->when(!is_null($request->customer), function ($q) use ($request) {
                 $q->whereHas('user', function ($q) use ($request) {
                     $q->where("email", "like", strtolower($request->customer) . "%");

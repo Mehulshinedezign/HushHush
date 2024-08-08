@@ -15,23 +15,23 @@
                             </li>
                             <li class="d-flex align-items-center">
                                 <h6 class="mr-2 mb-0"> {{ config('constants.lender') }} Email :</h6>
-                                <span>{{ strtolower($order->item->retailer->email) }}</span>
+                                <span>{{ strtolower($order->retailer->email) }}</span>
                             </li>
                             <li>
                                 <div class="admin-block">
                                     <h3 class="admin-view-title">Order Detail : </h3>
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <ul class="list-unstyled admin-list listing-row">
-                                                <li class="list-col"><span class="list-item">Security Option </span> <span>
+                                        {{-- <div class="col-md-6"> --}}
+                                        {{-- <ul class="list-unstyled admin-list listing-row"> --}}
+                                        {{-- <li class="list-col"><span class="list-item">Security Option </span> <span>
                                                         {{ ucwords($order->security_option) }} </span></li>
                                                 <li class="list-col"><span class="list-item">Security Option Type </span>
                                                     <span> {{ ucwords($order->security_option_type) }} </span>
                                                 </li>
                                                 <li class="list-col"><span class="list-item">Security Option Value </span>
                                                     <span> {{ $order->security_option_value }} </span>
-                                                </li>
-                                                {{-- <li class="list-col"><span
+                                                </li> --}}
+                                        {{-- <li class="list-col"><span
                                                         class="list-item">{{ config('constants.renter') }} Transaction Fee
                                                         Type </span> <span> {{ $order->customer_transaction_fee_type }}
                                                     </span></li>
@@ -43,7 +43,7 @@
                                                         class="list-item">{{ config('constants.renter') }} Transaction Fee
                                                         Amount </span> <span>
                                                         ${{ $order->customer_transaction_fee_amount }} </span></li> --}}
-                                                <li class="list-col"><span class="list-item">Order Commission Type </span>
+                                        {{-- <li class="list-col"><span class="list-item">Order Commission Type </span>
                                                     <span> {{ $order->order_commission_type }} </span>
                                                 </li>
                                                 <li class="list-col"><span class="list-item">Order Commission Value </span>
@@ -54,10 +54,10 @@
                                                 </li>
                                                 <li class="list-col"><span
                                                         class="list-item">{{ config('constants.lender') }} Receieved Amount
-                                                    </span> <span> ${{ $order->item->vendor_received_amount }} </span></li>
+                                                    </span> <span> ${{ $order->item->vendor_received_amount }} </span></li> --}}
 
-                                            </ul>
-                                        </div>
+                                        {{-- </ul> --}}
+                                        {{-- </div> --}}
                                         <div class="col-md-6">
                                             <ul class="list-unstyled admin-list listing-row">
                                                 <li class="list-col"><span class="list-item"> Order Status :</span> <span>
@@ -132,7 +132,8 @@
                                         <div class="col-md-12 col-lg-12">
                                             <div class="disputed-img-outer">
                                                 @foreach ($order->customerPickedUpImages as $customerPickedUpImage)
-                                                    <img class="dispute-admin-img" src="{{ $customerPickedUpImage->url }}"
+                                                    <img class="dispute-admin-img"
+                                                        src="{{ Storage::url($customerPickedUpImage->url) }}"
                                                         height="25%" width="25%">
                                                 @endforeach
                                             </div>
@@ -153,7 +154,8 @@
                                         <div class="col-md-12 col-lg-12">
                                             <div class="disputed-img-outer">
                                                 @foreach ($order->retailerPickedUpImages as $retailerPickedUpImage)
-                                                    <img class="dispute-admin-img" src="{{ $retailerPickedUpImage->url }}"
+                                                    <img class="dispute-admin-img"
+                                                        src="{{ Storage::url($retailerPickedUpImage->url) }}"
                                                         height="25%" width="25%">
                                                 @endforeach
                                             </div>
@@ -174,7 +176,8 @@
                                         <div class="col-md-12 col-lg-12">
                                             <div class="disputed-img-outer">
                                                 @foreach ($order->customerReturnedImages as $customerReturnedImage)
-                                                    <img class="dispute-admin-img" src="{{ $customerReturnedImage->url }}"
+                                                    <img class="dispute-admin-img"
+                                                        src="{{ Storage::url($customerReturnedImage->url) }}"
                                                         height="25%" width="25%">
                                                 @endforeach
                                             </div>
@@ -195,7 +198,8 @@
                                         <div class="col-md-12 col-lg-12">
                                             <div class="disputed-img-outer">
                                                 @foreach ($order->retailerReturnedImages as $retailerReturnedImage)
-                                                    <img class="dispute-admin-img" src="{{ $retailerReturnedImage->url }}"
+                                                    <img class="dispute-admin-img"
+                                                        src="{{ Storage::url($retailerReturnedImage->url) }}"
                                                         height="25%" width="25%">
                                                 @endforeach
                                             </div>
@@ -257,10 +261,10 @@
                             <div class="card ">
                                 <div class="card-header">
                                     <h4>Dispute Details</h4>
-                                    @if (!is_null($order->disputeDetails) && $order->dispute_status == 'Yes')
+                                    {{-- @if (!is_null($order->disputeDetails) && $order->dispute_status == 'Yes')
                                         <button class="btn btn-success small-btn" data-toggle="modal"
                                             data-target="#resolveDispute">Resolve Dispute</button>
-                                    @endif
+                                    @endif --}}
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -313,8 +317,9 @@
                                         <div class="col-md-12 col-lg-6">
                                             <div class="disputed-img-outer">
                                                 @foreach ($order->disputedOrderImages as $disputedOrderImage)
-                                                    <img class="dispute-admin-img" src="{{ $disputedOrderImage->url }}"
-                                                        height="100" width="100">
+                                                    <img class="dispute-admin-img"
+                                                        src="{{ Storage::url($disputedOrderImage->url) }}" height="100"
+                                                        width="100">
                                                 @endforeach
                                             </div>
                                         </div>
