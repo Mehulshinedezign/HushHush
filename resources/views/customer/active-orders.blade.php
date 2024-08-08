@@ -204,7 +204,7 @@
                 // $('.modal fade').addClass('d-none');
 
                 swal({
-                        title: 'Order Cancel',
+                        title: 'Cancel Order',
                         text: 'The platform charges will be deducted by stripe',
                         icon: 'warning',
                         buttons: true,
