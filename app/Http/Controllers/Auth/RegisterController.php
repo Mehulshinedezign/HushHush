@@ -72,7 +72,7 @@ class RegisterController extends Controller
             // 'username' => ['required', 'min:3', 'max:50', 'unique:users'],
             'name' => ['required', 'string', 'min:3', 'max:50'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'regex: ' . $emailRegex],
-            'phone_number.main' => ['required', 'digits:' . config('validation.phone_minlength'), 'min:' . config('validation.phone_minlength'), 'max:' . config('validation.phone_maxlength')],
+            'phone_number.main' => ['required', 'min:' . config('validation.phone_minlength'), 'max:' . config('validation.phone_maxlength')],
             // 'zipcode' => ['required'],
             'password' => ['required', 'string', 'min:8', 'max:32', 'confirmed'],
             // 'complete_address' => 'required',
