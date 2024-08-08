@@ -18,7 +18,7 @@
 
                             <div class="profile-detail">
                                 <h4>{{ $product->name }}</h4>
-                                <p>{{ $product->rent_day ?? 'N/A' }},{{ $product->rent_day ?? 'N/A' }},{{ $product->rent_day ?? 'N/A' }}
+                                <p>{{ $product->rent_day ? $product->rent_day."/day" : 'N/A' }},{{ $product->rent_week ? $product->rent_week."/week" : 'N/A' }},{{ $product->rent_month ? $product->rent_month."/month" : 'N/A' }}
                                 </p>
                             </div>
                         </div>
@@ -35,7 +35,7 @@
                                 <li class="list-col">
                                     <span class="list-item">Rent:</span>
                                     <span
-                                        class="">{{ $product->rent_day ?? 'N/A' }},{{ $product->rent_day ?? 'N/A' }},{{ $product->rent_day ?? 'N/A' }}
+                                        class="">{{ $product->rent_day ? $product->rent_day."/day" : 'N/A' }},{{ $product->rent_week ? $product->rent_week."/week" : 'N/A' }},{{ $product->rent_month ? $product->rent_month."/month" : 'N/A' }}
                                     </span>
                                 </li>
                                 <li class="list-col">
@@ -44,11 +44,11 @@
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item"> Brand:</span>
-                                    <span class="">{{ getBrandsName(@$product->brand) ?? 'N/A' }}</span>
+                                    <span class="">{{ (@getBrandsName(@$product->brand)) ?? 'N/A' }}</span>
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item">Color:</span>
-                                    <span class="">{{ getColorsName(@$product->color) ?? 'N/A' }}</span>
+                                    <span class="">{{ @getColorsName(@$product->color) ?? 'N/A' }}</span>
                                 </li>
 
                                 {{-- <li class="list-col">
