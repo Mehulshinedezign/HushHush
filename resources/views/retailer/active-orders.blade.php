@@ -72,7 +72,7 @@
 
                         @if ($order->status == 'Waiting')
                             <div class="order-card-footer">
-                                <a href="#" data-url="{{ route('cancel-order', $order->id) }}"
+                                <a href="#" data-url="{{ route('retailer-cancel-order', $order->id) }}"
                                     class="button outline-btn full-btn cancel-order" data-toggle="modal"
                                     data-bs-target="#cancellation-note">Cancel
                                     order</a>
@@ -211,7 +211,7 @@
                 // $('.modal fade').addClass('d-none');
 
                 swal({
-                        title: 'Order Cancel',
+                        title: 'Cancel Order',
                         text: 'The platform charges will be deducted by stripe',
                         icon: 'warning',
                         buttons: true,
