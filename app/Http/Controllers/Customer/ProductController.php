@@ -52,7 +52,8 @@ class ProductController extends Controller
         $authUserId = auth()->user()->id;
 
         // $query = Product::where('user_id', '!=', $authUserId);
-        $products = Product::with('disableDates', 'ratings')->where('user_id', '!=', $authUserId)->applyFilters()->get();
+        $products = Product::with('disableDates', 'ratings')->where('user_id', '!=', $authUserId)->applyFilters()->orderBy('created_at', 'desc')->get();
+    
 
         // dd($products->toArray());
         // dd($startDate,$endDate);

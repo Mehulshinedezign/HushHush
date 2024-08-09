@@ -1,7 +1,7 @@
 @extends('layouts.front')
 @section('title', 'My Orders')
 @section('content')
-    <section class="rental-request-bx">
+    <section class="rental-request-bx min-hight-sec">
         <div class="container">
             <div class="rental-request-wrapper">
                 <div class="rental-header">

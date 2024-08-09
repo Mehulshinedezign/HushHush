@@ -103,7 +103,7 @@ class AdminController extends Controller
 
     public function cms()
     {
-        $pages = CmsPage::whereNotIn('id', array(8))->get();
+        $pages = CmsPage::get();
 
         return view('admin.cms.cms_list', compact('pages'));
     }

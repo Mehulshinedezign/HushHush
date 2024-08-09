@@ -19,10 +19,7 @@ class CmsController extends Controller
     }
     public function cms($slug){
         $page = CmsPage::where('slug', $slug)->first();
-        if($page->id==8){
-            return view('customer.contact_us', compact('page'));
-            
-        }
+       
         return view('customer.cms_page', compact('page'));
 
     }
