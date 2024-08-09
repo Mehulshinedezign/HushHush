@@ -20,7 +20,7 @@ class AdminSettingSeeder extends Seeder
                 "type" => "Percentage",
             ],
             "order_commission" => [
-                "value" => "15",
+                "value" => "1",
                 "type" => "Percentage",
             ],
             // "insurance_fee" => [

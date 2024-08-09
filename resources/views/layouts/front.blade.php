@@ -25,16 +25,19 @@
     <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}?ver={{ now() }}">
     <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
-    <!-- <script>document.addEventListener('contextmenu',function(e) {e.preventDefault(); }); 
+    <!-- <script>
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || 
+            if (e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
                 (e.ctrlKey && e.key === 'U')) {
                 e.preventDefault();
             }
         });
     </script> -->
-    
+
 
     <script>
         const APP_URL = "{{ url('') }}";
@@ -373,7 +376,7 @@
                                             </div>
                                         </div>
                                     </div> --}}
-                                    
+
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -405,7 +408,7 @@
                                             <div class="formfield ">
                                                 <!-- <input type="number" class="form-control" name="min_rent_days"
                                                     placeholder="Rental days" value="" min="1"> -->
-                                                    <select class="form-control" name="min_rent_days">
+                                                <select class="form-control" name="min_rent_days">
                                                     <option value="">Select Rental days</option>
                                                     <option value="7">7 Days</option>
                                                     <option value="14">14 Days</option>
@@ -423,16 +426,15 @@
                                         </div>
                                     </div>
 
-
-
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Rent Price/Day*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_day" id=""
-                                                    placeholder="" class="form-control" min="1">
+                                                    placeholder="" class="form-control">
                                                 <span class="form-icon">$</span>
                                             </div>
+                                            <div class="rentPerDay-error"></div>
                                             @error('rent_price_day')
                                                 <span class="invalid-feedback" role="alert">
                                                 @enderror
@@ -443,7 +445,7 @@
                                             <label for="">Rent Price/Week*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_week" id=""
-                                                    placeholder="" class="form-control" min="1">
+                                                    placeholder="" class="form-control">
                                                 <span class="form-icon">$</span>
                                             </div>
                                             @error('rent_price_week')
@@ -456,7 +458,7 @@
                                             <label for="">Rent Price/Month*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_month" id=""
-                                                    placeholder="" class="form-control" min="1">
+                                                    placeholder="" class="form-control">
                                                 <span class="form-icon">$</span>
                                             </div>
                                             @error('rent_price_month')
@@ -693,7 +695,19 @@
     {{-- Search the country and state  and GOogle place Api --}}
     <script>
         $(document).ready(function() {
-
+            // price manage
+            // const commission = "{{ adminsetting()->value }}"
+            // $('input[name="rent_price_day"]').on('change', function() {
+            //     var rentPerDay = $(this).val();
+            //     if (commission > rentPerDay) {
+            //         checkPerDayRent = 'Please enter the price grater than' + commission
+            //         $('.rentPerDay-error').text(checkPerDayRent);
+            //         $(document).find('button').prop('disabled', true);
+            //     } else {
+            //         $('.rentPerDay-error').text('');
+            //         $(document).find('button').prop('disabled', true);
+            //     }
+            // })
             // fetch the subcategory data
             $('.parent_category').change(function() {
                 var categoryId = $(this).val();
@@ -718,7 +732,7 @@
 
                             $.each(data, function(key, value) {
                                 $('#subcategory').append('<option value="' + value.id +
-                                '">' + value.name + '</option>');
+                                    '">' + value.name + '</option>');
                             });
                         },
                         error: function(xhr, status, error) {
