@@ -2592,3 +2592,6 @@ input[type="range"]::-webkit-slider-thumb {
     margin-bottom: 20px;
 }
 
+.payment-page-wrapper .form-group .form-field  label.errors{
+    color: red;
+}

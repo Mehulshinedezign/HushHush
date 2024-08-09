@@ -152,11 +152,28 @@
                                 </div>
 
                             </div>
+                            
+                            <div class="pro-desc-info">
+                                <div class="pro-desc-info-box">
+                                    <h4>Brand :</h4>
+                                    <p>{{ $product->get_brand->name ?? 'N/A' }}</p>
+                                </div>
+
+                                <div class="pro-desc-info-box">
+                                    <h4>Color :</h4>
+                                    <p>{{ $product->get_color->name ?? 'N/A' }}</p>
+                                </div>
+
+                            </div>
                             <div class="pro-desc-info">
                                 <div class="pro-desc-info-box">
                                     <h4>Min Rental Days :</h4>
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
+                                <!-- <div class="pro-desc-info-box">
+                                    <h4>Size :</h4>
+                                    <p>{{ $product->size ?? 'N/A' }}</p>
+                                </div> -->
 
 
                             </div>
