@@ -1,6 +1,6 @@
 <script>
     jQuery(document).ready(function() {
-        const rule = {
+        const rules = {
             subject: {
                 required: true,
             },
@@ -11,7 +11,7 @@
                 required: true,
             },
         };
-        const message = {
+        const messages = {
             subject: {
                 required: 'This field is required',
             },
@@ -23,16 +23,22 @@
             },
         };
 
-        handleValidation('disputeForm', rule, message);
+        handleValidation('disputeForm', rules, messages);
 
-        $('#disputeForm').submit(function(e) {
+        jQuery('#dispute').find('button').click(function(e) {
             e.preventDefault(); // Prevent form submission
-
-            // Perform form validation
-            // Check if the form is valid
             if ($('#disputeForm').valid()) {
                 $('form#disputeForm').submit();
             }
-        });
+        })
+        // $('#disputeForm').submit(function(e) {
+        //     e.preventDefault(); // Prevent form submission
+        //     // Check if the form is valid
+
+
+        //     if ($('#disputeForm').valid()) {
+        //         $('form#disputeForm').submit();
+        //     }
+        // });
     });
 </script>

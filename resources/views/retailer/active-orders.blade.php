@@ -31,7 +31,7 @@
 
 <div class="order-his-card-box">
     <div class="row g-3">
-        @foreach ($orders as $order)
+        @forelse ($orders as $order)
             @if ($order->status == 'Waiting' || $order->status == 'Picked Up')
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="order-his-card">
@@ -90,38 +90,44 @@
                     </div>
                 </div>
             @endif
-        @endforeach
-
+        @empty
+            <div class="">No data found</div>
+        @endforelse
     </div>
 </div>
 
-<div class="modal fade cencel-order-modal" id="cancellation-note" data-bs-backdrop="static" tabindex="-1"
-    aria-labelledby="cancellation-noteLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="ajax-response"></div>
-                <form method="post" id="cancel-order">
-                    @csrf
-                    <div class="cancellation-popup-sec">
-                        <div class="popup-head">
-                            <h6>Cancellation Note</h6>
-                            <button type="" class="close" data-bs-dismiss="modal"><i
-                                    class="fa-solid fa-xmark"></i></button>
+
+@push('scripts')
+    {{-- cancel --}}
+    <div class="modal fade cencel-order-modal" id="cancellation-note" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="cancellation-noteLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="ajax-response"></div>
+                    <form method="post" id="cancel-order">
+                        @csrf
+                        <div class="cancellation-popup-sec">
+                            <div class="popup-head">
+                                <h6>Cancellation Note</h6>
+                                <button type="" class="close" data-bs-dismiss="modal"><i
+                                        class="fa-solid fa-xmark"></i></button>
+                            </div>
+                            <textarea class="form-control mt-3" name="cancellation_note" rows="5"
+                                placeholder="Please write cancellation note here"></textarea>
+                            <button type="submit" class="button primary-btn full-btn mt-3  submit"
+                                id="cancel-order">Submit&nbsp;<i class="fa-solid fa-circle-notch fa-spin show-loader"
+                                    style="display:none;"></i>
+                            </button>
                         </div>
-                        <textarea class="form-control mt-3" name="cancellation_note" rows="5"
-                            placeholder="Please write cancellation note here"></textarea>
-                        <button type="submit" class="button primary-btn full-btn mt-3  submit"
-                            id="cancel-order">Submit&nbsp;<i class="fa-solid fa-circle-notch fa-spin show-loader"
-                                style="display:none;"></i>
-                        </button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-@push('scripts')
+    {{-- end --}}
+
+
     {{-- dispute order --}}
     <div class="modal fade book-product-modal" id="orderDisputeModal" data-bs-backdrop="static" tabindex="-1"
         role="dialog" aria-labelledby="orderDisputeModalTitle" aria-hidden="true">

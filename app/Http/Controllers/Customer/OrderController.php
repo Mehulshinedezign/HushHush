@@ -208,24 +208,24 @@ class OrderController extends Controller
                 Order::where("id", $order->id)->update(["status" => "Picked Up"]);
                 $user = auth()->user();
 
-                $customer_info=[
+                $customer_info = [
                     'user_name' => $order->user->name,
                     'from_date' => $order->from_date,
                     'to_date' => $order->to_date,
-                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+                    'pickup_location' => $order->product->productCompleteLocation->pick_up_location,
                 ];
 
-                $lender_info=[
-                    'lender_name'=> $order->retailer->name,
+                $lender_info = [
+                    'lender_name' => $order->retailer->name,
                     'from_date' => $order->from_date,
                     'to_date' => $order->to_date,
-                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+                    'pickup_location' => $order->product->productCompleteLocation->pick_up_location,
 
                 ];
-                if(@$order->user->usernotification->customer_order_pickup == '1'){
+                if (@$order->user->usernotification->customer_order_pickup == '1') {
                     $order->user->notify(new CustomerOrderPickup($customer_info));
                 }
-                if(@$order->retailer->usernotification->lender_order_pickup == '1'){
+                if (@$order->retailer->usernotification->lender_order_pickup == '1') {
                     $order->retailer->notify(new LenderOrderPickup($lender_info));
                 }
             }
@@ -362,24 +362,24 @@ class OrderController extends Controller
                 Order::where("id", $order->id)->update(["status" => "Completed"]);
                 $this->payToRetailer($order);
 
-                $customer_info=[
+                $customer_info = [
                     'user_name' => $order->user->name,
                     'from_date' => $order->from_date,
                     'to_date' => $order->to_date,
-                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+                    'pickup_location' => $order->product->productCompleteLocation->pick_up_location,
                 ];
 
-                $lender_info=[
-                    'lender_name'=> $order->retailer->name,
+                $lender_info = [
+                    'lender_name' => $order->retailer->name,
                     'from_date' => $order->from_date,
                     'to_date' => $order->to_date,
-                    'pickup_location' =>$order->product->productCompleteLocation->pick_up_location,
+                    'pickup_location' => $order->product->productCompleteLocation->pick_up_location,
 
                 ];
-                if(@$order->user->usernotification->customer_order_return == '1'){
+                if (@$order->user->usernotification->customer_order_return == '1') {
                     $order->user->notify(new CutomerOrderReturn($customer_info));
                 }
-                if(@$order->retailer->usernotification->lender_order_return == '1'){
+                if (@$order->retailer->usernotification->lender_order_return == '1') {
                     $order->retailer->notify(new LenderOrderReturn($lender_info));
                 }
                 // send mail to customer whe lender verify product

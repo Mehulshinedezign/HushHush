@@ -611,6 +611,7 @@
                 return range !== null;
             });
 
+
             function isDateDisabled(date) {
                 var inQueryDates = disabledDateRanges.some(function(range) {
                     return date.isBetween(range.start, range.end, 'day', '[]');
@@ -635,6 +636,22 @@
             }).on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format(
                     'YYYY-MM-DD'));
+                var dateRange = $(this).val().split(' - ');
+                var startDate = dateRange[0];
+                var endDate = dateRange[1];
+
+                // check range exit inbetween disabled date or not
+                // disableDates.map(function(dateRange) {
+                //     if (startDate < dateRange && endDate > dateRange) {
+                //         return iziToast.error({
+                //             title: 'Error',
+                //             message: 'this date range is not selectable',
+                //             position: 'topRight'
+                //         });
+                //     }
+                // }).filter(function(range) {
+                //     return range !== null;
+                // });
             });
 
             $('.daterange-btn').daterangepicker({

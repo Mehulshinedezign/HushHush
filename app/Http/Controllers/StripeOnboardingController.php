@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
@@ -26,7 +27,7 @@ class StripeOnboardingController extends Controller
             'type' => 'express',
         ]);
 
-        auth()->user()->update(['stripe_account_id'=>$account->id]);
+        auth()->user()->update(['stripe_account_id' => $account->id]);
 
         $accountLink = AccountLink::create([
             'account' => $account->id,
@@ -75,14 +76,14 @@ class StripeOnboardingController extends Controller
     {
         $user = Auth::user();
         Stripe::setApiKey(config('services.stripe.secret'));
-        
+
         $account = Account::retrieve($user->stripe_account_id);
 
         // Check if the account is fully set up
         if ($account->details_submitted) {
             // Store the bank details in the database
             UserBankDetail::updateOrCreate(
-                ['user_id' => $user->id ],
+                ['user_id' => $user->id],
                 [
                     'stripe_id' => $user->stripe_account_id,
                     'country' => $account->country,
@@ -97,5 +98,18 @@ class StripeOnboardingController extends Controller
         } else {
             return redirect()->route('index')->with('error', 'Your Stripe account setup is incomplete. Please complete the onboarding process.');
         }
+    }
+
+    public function transaction()
+    {
+        $orders = Order::with('product', 'retailer.vendorPayout', 'transaction')->where('user_id', auth()->id())->get();
+        return view('transaction-history', compact('orders'));
+    }
+
+    public function earningTransaction()
+    {
+        $orders = Order::with('product', 'retailer.vendorPayout', 'transaction')->where('retailer_id', auth()->id())->get();
+        // dd($orders);
+        return view('earning-transaction', compact('orders'));
     }
 }

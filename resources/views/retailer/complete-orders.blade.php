@@ -29,7 +29,7 @@
 
 <div class="order-his-card-box">
     <div class="row g-3">
-        @foreach ($orders as $order)
+        @forelse ($orders as $order)
             @if ($order->status == 'Completed')
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="order-his-card">
@@ -80,7 +80,9 @@
                     </div>
                 </div>
             @endif
-        @endforeach
+        @empty
+            <div>No data found</div>
+        @endforelse
 
     </div>
     {{-- <div class="pagination-main">

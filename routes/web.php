@@ -18,6 +18,8 @@ use App\Http\Controllers\StripeOnboardingController;
 // Route::get('/', function () {
 //     return redirect()->route('login');
 // });
+Route::get('order/earning/transaction', [StripeOnboardingController::class, 'earningtransaction'])->name('order.earning.transaction');
+Route::get('order/spent/transaction', [StripeOnboardingController::class, 'transaction'])->name('order.spent.transaction');
 
 // verify otp
 Route::get('verify-otp', [App\Http\Controllers\VerifyOtpController::class, 'showVerifyOtpForm'])->name('auth.verify_otp_form');
@@ -63,6 +65,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
         Route::get('subcat/{id}', [App\Http\Controllers\AjaxController::class, 'get_subcat']);
         Route::get('sub_category/{id}', [App\http\Controllers\AjaxController::class, 'get_subcategory']);
         Route::get('neighborhoodcity/{id}', [App\Http\Controllers\AjaxController::class, 'get_city']);
+
 
         // add product
         Route::get('/lend', [App\Http\Controllers\Customer\ProductController::class, 'openModel'])->name('open.model');
