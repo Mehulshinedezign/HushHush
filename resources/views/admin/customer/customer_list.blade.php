@@ -44,7 +44,7 @@
                                             {{-- @else
                                                 <td></td>
                                             @endif --}}
-                                            <td>{{ count($customer->orderitem) }}</td>
+                                            <td>{{ count($customer->orders) }}</td>
                                             <td>{{ $customer->email }}</td>
 
                                             <td>

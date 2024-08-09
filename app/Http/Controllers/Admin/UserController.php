@@ -14,7 +14,7 @@ use App\Models\State;
 use App\Models\UserDetail;
 use App\Notifications\DeleteUser;
 use Illuminate\Http\Request;
-use App\Models\{BillingToken, ProductImage, ProductLocation, Role, User};
+use App\Models\{BillingToken, Order, ProductImage, ProductLocation, Role, User};
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -24,15 +24,32 @@ class UserController extends Controller
 {
     public function customers(Request $request)
     {
-        $roleId = Role::where('name', 'customer')->pluck('id')->first();
-        $customers = User::with('orderitem')->where('role_id', '!=', '1')->Search()->orderBy('id', 'DESC')->paginate($request->global_pagination);
+        // Ensure global_pagination is set in the request, default to 15 if not present
+        $pagination = $request->input('global_pagination', 15);
 
-        $sno = (($customers->currentPage() * $customers->perPage()) - $request->global_pagination) + 1;
+        // Get the role ID for customers
+        $roleId = Role::where('name', 'customer')->pluck('id')->first();
+
+        // Fetch customers with their order items and paginate the results
+        $customers = User::with('orderitem')
+            ->where('role_id', $roleId)
+            ->orderBy('id', 'DESC')
+            ->paginate($pagination);
+
+        // Prepare serial number
+        $sno = (($customers->currentPage() * $customers->perPage()) - $pagination) + 1;
+
+        // Fetch orders for each customer
+        foreach ($customers as $customer) {
+            $customer->orders = Order::where('retailer_id', $customer->id)->get();
+            // dd($customer->orders);
+        }
 
         $active = "customers";
 
         return view('admin.customer.customer_list', compact('customers', 'active', 'sno'));
     }
+
 
     public function viewCustomer(User $user)
     {
@@ -48,12 +65,12 @@ class UserController extends Controller
             // dd($selectedStateName);
         } else {
             $selectedCountryName = Country::where('iso_code', 'US')->pluck('id')->first();
-            $selectedStateName = State::where('country_id','231')->first();
+            $selectedStateName = State::where('country_id', '231')->first();
         }
         $countries = Country::all();
         // dd($selectedCountryName);
-        $selectedCountry = Country::where('name',$selectedCountryName)->orWhere('id',$selectedCountryName)->first();
-        $states = State::where('country_id', $selectedCountry->id)->orWhere('id',$selectedStateName)->get();
+        $selectedCountry = Country::where('name', $selectedCountryName)->orWhere('id', $selectedCountryName)->first();
+        $states = State::where('country_id', $selectedCountry->id)->orWhere('id', $selectedStateName)->get();
 
 
         // $state = State::where('name',$selectedStateName)->orWhere('id',$selectedStateName->id)->first();
@@ -68,12 +85,12 @@ class UserController extends Controller
         $file = 'admin.customer.edit';
         // } 
         // else {
-            // $file = 'admin.retailer.edit';
+        // $file = 'admin.retailer.edit';
         // }
         // dd($selectedCountry);
 
         // dd($state->name);
-        return view($file, compact('user', 'selectedCountryName', 'countries', 'states', 'cities', 'notAvailable','state'));
+        return view($file, compact('user', 'selectedCountryName', 'countries', 'states', 'cities', 'notAvailable', 'state'));
     }
 
     public function update_profile(UserDetailRequest $request, User $user)
@@ -248,27 +265,27 @@ class UserController extends Controller
     {
         try {
             DB::beginTransaction();
-        
+
             $user = User::findOrFail($id);
-        
+
             $products = Product::where('user_id', $id)->get();
             foreach ($products as $product) {
                 $product->locations()->delete();
-                
+
                 foreach ($product->allImages as $image) {
                     Storage::disk('public')->delete($image->file_path);
                     $image->delete();
                 }
-                
+
                 $product->delete();
             }
-        
+
             UserDetail::where('user_id', $id)->delete();
-        
+
             $user->notify(new DeleteUser($user));
-        
+
             $user->delete();
-        
+
             DB::commit();
             return redirect()->back()->with('success', 'User deleted successfully');
         } catch (\Exception $e) {
