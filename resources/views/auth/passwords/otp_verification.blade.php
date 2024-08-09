@@ -29,3 +29,16 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function(){
+            $(".formfield input").on("input", function() {
+                var $input = $(this);
+                if ($input.val().length >= $input.attr("maxlength")) {
+                    $input.next('input').focus();
+                }
+            });
+        });
+    </script>
+@endpush

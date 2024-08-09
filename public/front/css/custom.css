@@ -20,6 +20,7 @@ section.home-sec {
 
 .home-filter-box {
     max-width: 83px;
+    min-width: 83px;
     width: 100%;
     background-color: #EFEFEF;
     border-radius: 10px;

@@ -93,7 +93,7 @@
                             </div>  --}}
                             <div class="home-filter-inner">
                                 <h4>Price</h4>
-                                    <div class="custom-wrapper">
+                                    <div class="custom-wrapper filter-range-wrapper">
                                         <div class="price-input-container">
                                             <div class="price-input">
                                                 <div class="price-field left">

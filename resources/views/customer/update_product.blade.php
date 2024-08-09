@@ -1,6 +1,6 @@
 @extends('layouts.front')
 @section('content')
-    <section class="my-profile-sec cust-form-bg fill-hight">
+    <section class="my-profile-sec cust-form-bg fill-hight update_product-modal">
         <div class="container">
             <div class="edit-product-main">
                 <h2>Edit Product</h2>
@@ -31,7 +31,12 @@
                                                 <p>Upload Images</p>
                                             </label>
                                             <input type="file" name="new_images[]" id="update-upload-image-five"
-                                                accept="image/*" class="d-none" multiple>
+                                                accept="image/*" class="d-none form-control form-class @error('new_images') is-invalid @enderror" multiple>
+                                                @error('new_images')
+                                                {{-- <span class="invalid-feedback" role="alert"> --}}
+                                                    <span class="text-danger" style="font-size: 14px;">{{ $message }}</span>
+                                                {{-- </span> --}}
+                                            @enderror
                                             <div class="upload-img-preview-box">
                                                 <div class="update-upload-img-preview"
                                                     data-images="{{ json_encode($product->allImages->pluck('file_path')->toArray()) }}">
@@ -55,8 +60,12 @@
                                             <label for="">Product Name*</label>
                                             <div class="formfield">
                                                 <input type="text" name="product_name" id=""
-                                                    placeholder="Enter Name" class="form-control"
+                                                    placeholder="Enter Name" class="produt_input form-control form-class @error('product_name') is-invalid @enderror"
                                                     value="{{ $product->name }}">
+                                                    @error('product_name')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -65,7 +74,7 @@
                                             <label for="">Category/Subcategory*</label>
                                             <div class="duel-select-field">
                                                 <div class="formfield">
-                                                    <select name="category" class="parent_category">
+                                                    <select name="category" class="parent_category produt_input form-class @error('category') is-invalid @enderror">
                                                         <option value="">Category</option>
                                                         @foreach (getParentCategory() as $category)
                                                             <option value="{{ jsencode_userdata($category->id) }}" data-fetchsize="{{ $category->name }}"
@@ -78,6 +87,10 @@
                                                         <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                             alt="img">
                                                     </span>
+                                                    @error('category')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            {{ $message }}
+                                                     @enderror
                                                 </div>
                                                 <div class="formfield">
                                                     <select name="subcategory" id="subcategory">
@@ -164,7 +177,11 @@
                                                 </div>
                                             </div>
                                             <div class="form-field">
-                                                <input type="text" class="form-control" placeholder="Address" name="product_complete_location" id="product_address" value="{{ $product->productCompleteLocation->pick_up_location ?? '' }}">
+                                                <input type="text" class="form-control produt_input form-class @error('product_complete_location') is-invalid @enderror" placeholder="Address" name="product_complete_location" id="product_address" value="{{ $product->productCompleteLocation->pick_up_location ?? '' }}">
+                                                @error('product_complete_location')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -172,7 +189,11 @@
                                         <div class="form-group">
                                             <label for="">Address line 1*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" placeholder="address line 1" name="address1" id="product_address1" value="{{ $product->productCompleteLocation->address1 ?? ''}}">
+                                                <input type="text" class="produt_input form-control form-class @error('address1') is-invalid @enderror" placeholder="address line 1" name="address1" id="product_address1" value="{{ $product->productCompleteLocation->address1 ?? ''}}">
+                                                @error('address1')
+                                                    <span class="invalid-feedback" role="alert">
+                                                    {{ $message }}
+                                                 @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -180,7 +201,11 @@
                                         <div class="form-group">
                                             <label for="">Address line 2*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" placeholder="address line 2" name="address2" id="product_address2" value="{{ $product->productCompleteLocation->address2 ?? ''}}">
+                                                <input type="text" class="produt_input form-control form-class @error('address2') is-invalid @enderror" placeholder="address line 2" name="address2" id="product_address2" value="{{ $product->productCompleteLocation->address2 ?? ''}}">
+                                                @error('address2')
+                                                <span class="invalid-feedback" role="alert">
+                                                {{ $message }}
+                                             @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -188,7 +213,11 @@
                                         <div class="form-group">
                                             <label for="">Country*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" placeholder="country" name="country" id="product_country" value="{{ $product->productCompleteLocation->country ?? ''}}">
+                                                <input type="text" class="produt_input form-control form-class @error('country') is-invalid @enderror" placeholder="country" name="country" id="product_country" value="{{ $product->productCompleteLocation->country ?? ''}}">
+                                                @error('country')
+                                                    <span class="invalid-feedback" role="alert">
+                                                    {{ $message }}
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -196,7 +225,11 @@
                                         <div class="form-group">
                                             <label for="">State*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" placeholder="state" name="state" id="product_state" value="{{ $product->productCompleteLocation->state ?? ''}}">
+                                                <input type="text" class="produt_input form-control form-class @error('state') is-invalid @enderror" placeholder="state" name="state" id="product_state" value="{{ $product->productCompleteLocation->state ?? ''}}">
+                                                @error('state')
+                                                    <span class="invalid-feedback" role="alert">
+                                                    {{ $message }}
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -204,7 +237,11 @@
                                         <div class="form-group">
                                             <label for="">City*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" placeholder="city" name="city" id="product_city" value="{{ $product->city}}">
+                                                <input type="text" class="produt_input form-control form-class @error('city') is-invalid @enderror" placeholder="city" name="city" id="product_city" value="{{ $product->city}}">
+                                                @error('city')
+                                                <span class="invalid-feedback" role="alert">
+                                                    {{$message}}
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -227,7 +264,7 @@
                                         <div class="form-group">
                                             <label for="">Condition*</label>
                                             <div class="formfield">
-                                                <select class="form-control" name="product_condition">
+                                                <select class="produt_input form-control form-class @error('product_condition') is-invalid @enderror" name="product_condition">
                                                     <option value="">Condition</option>
                                                     <option value="Hardly"
                                                         @if ($product->product_condition == 'Hardly') selected @endif>Hardly used
@@ -243,6 +280,10 @@
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                         alt="img">
                                                 </span>
+                                                @error('product_condition')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{$message}}
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -263,9 +304,13 @@
                                         <div class="form-group">
                                             <label for="">Product market value*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="number" class="form-control" name="product_market_value"
+                                                <input type="number" class="produt_input form-control form-class @error('product_market_value') is-invalid @enderror" name="product_market_value"
                                                     value="{{ number_format($product->product_market_value, 0, '', '') }}" min="1">
                                                 <span class="form-icon">$</span>
+                                                @error('product_market_value')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{$message}}
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -274,8 +319,12 @@
                                         <div class="form-group">
                                             <label for="">Product link</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" name="product_link"
+                                                <input type="text" class="produt_input form-control form-class @error('product_link') is-invalid @enderror" name="product_link"
                                                     value="{{ $product->product_link }}">
+                                                    @error('product_link')
+                                                        <span class="invalid-feedback" role="alert">
+                                                        {{$message}}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -287,7 +336,7 @@
                                                 <input type="number" class="form-control" name="min_rent_days"
                                                     value="{{ $product->min_days_rent_item }}" min="1">
                                             </div> -->
-                                            <select class="form-control" name="min_rent_days">
+                                            <select class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror" name="min_rent_days">
                                                     <option value="">Select rental days</option>
                                                     <option value="7"
                                                         @if ($product->min_days_rent_item == 7) selected @endif>7 Days
@@ -299,6 +348,11 @@
                                                         <!-- <option value="Fair"
                                                         @if ($product->product_condition == 'Fair') selected @endif>Fair condition</option> -->
                                                 </select>
+
+                                                @error('min_rent_days')
+                                                <span class="invalid-feedback" role="alert">
+                                                    {{$message}}
+                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -306,9 +360,13 @@
                                             <label for="">Rent Price/Day*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_day" id=""
-                                                    placeholder="" class="form-control"
+                                                    placeholder="" class="produt_input form-control form-class @error('rent_price_day') is-invalid @enderror"
                                                     value="{{ $product->rent_day }}" min="1">
                                                 <span class="form-icon">$</span>
+                                                @error('rent_price_day')
+                                                <span class="invalid-feedback" role="alert">
+                                                    {{$message}}
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -317,9 +375,13 @@
                                             <label for="">Rent Price/Week*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_week" id=""
-                                                    placeholder="" class="form-control"
+                                                    placeholder="" class="produt_input form-control form-class @error('rent_price_week') is-invalid @enderror"
                                                     value="{{ $product->rent_week }}" min="1">
                                                 <span class="form-icon">$</span>
+                                                @error('rent_price_week')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{$message}}
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -328,9 +390,13 @@
                                             <label for="">Rent Price/Month*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_month" id=""
-                                                    placeholder="" class="form-control"
+                                                    placeholder="" class="produt_input form-control form-class @error('rent_price_month') is-invalid @enderror"
                                                     value="{{ $product->rent_month }}" min="1">
                                                 <span class="form-icon">$</span>
+                                                @error('rent_price_month')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{$message}}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -338,7 +404,11 @@
                                         <div class="form-group">
                                             <label for="">Description*</label>
                                             <div class="formfield">
-                                                <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description">{{ $product->description }}</textarea>
+                                                <textarea name="description" id="" rows="4" class="produt_input form-control form-class @error('description') is-invalid @enderror" placeholder="Enter Description">{{ $product->description }}</textarea>
+                                                @error('description')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{$message}}
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>

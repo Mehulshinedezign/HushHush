@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\{Category, Product, ProductImage, ProductLocation, ProductUnavailability, Brand, City, RetailerBankInformation, Size, User, NeighborhoodCity, ProductDisableDate, State};
 use Carbon\Carbon;
@@ -210,7 +211,7 @@ class ProductController extends Controller
     //     }
     // }
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
 
         // dd($request->all());
