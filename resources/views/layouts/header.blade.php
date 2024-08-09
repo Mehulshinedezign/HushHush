@@ -358,6 +358,12 @@
                                     <li><a class="dropdown-item" href="{{ route('common.chat') }}"><i
                                                 class="fa-solid fa-comment"></i>Chat
                                         </a></li>
+                                    <li><a class="dropdown-item" href="{{ route('order.spent.transaction') }}"><i
+                                                class="fa-solid fa-comment"></i>Spent Transaction
+                                        </a></li>
+                                    <li><a class="dropdown-item" href="{{ route('order.earning.transaction') }}"><i
+                                                class="fa-solid fa-comment"></i>Earning Transaction
+                                        </a></li>
                                     {{-- <li><a class="dropdown-item" href="{{ route('') }}"><i
                                                 style="color: #606060" class="fa-solid fa-lock"></i></i>my
                                             order</a></li> --}}

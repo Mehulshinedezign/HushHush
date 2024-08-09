@@ -6,15 +6,16 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class order_status extends Component
+class transaction extends Component
 {
     /**
      * Create a new component instance.
      */
-    public $orders;
-    public function __construct($orders)
+    public $orders, $earnings;
+    public function __construct($orders, $earnings)
     {
         $this->orders = $orders;
+        $this->earnings = $earnings;
     }
 
     /**
@@ -22,6 +23,8 @@ class order_status extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.order_status');
+        $orders = $this->orders;
+        $earnings = $this->earnings;
+        return view('components.transaction', compact('orders', 'earnings'));
     }
 }
