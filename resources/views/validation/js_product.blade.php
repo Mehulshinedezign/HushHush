@@ -28,7 +28,8 @@
             'images[]': {
                 required: true,
                 accept: "image/*",
-                maxfiles: 5
+                maxfiles: 5,
+
             },
             product_name: {
                 required: true,

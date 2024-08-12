@@ -16,7 +16,7 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'images' => 'required|array|min:1|max:5',
-            'images.*' => 'image|mimes:jpeg,png,jpg',
+            'images.*' => 'image',
             'product_name' => 'required',
             'category' => 'required',
             'product_complete_location' => 'required',
@@ -32,7 +32,7 @@ class StoreProductRequest extends FormRequest
             'rent_price_day' => 'required|integer',
             'rent_price_week' => 'required|integer',
             'rent_price_month' => 'required',
-            
+
         ];
     }
 
@@ -63,9 +63,9 @@ class StoreProductRequest extends FormRequest
             'min_rent_days.integer' => 'Please enter a valid number.',
             'rent_price_day.integer' => 'Please enter a valid number.',
             'rent_price_week.integer' => 'Please enter a valid number.',
-            
+
         ];
-        
+
     }
     protected function failedValidation(Validator $validator)
     {

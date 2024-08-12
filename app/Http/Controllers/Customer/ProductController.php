@@ -37,77 +37,44 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $categories = Category::where('status', 'Active')->get();
-        $selectedCategories = (isset($request->category)) ? $request->category : [];
-        $selectedcolor = (isset($request->filtercolor)) ? $request->filtercolor : [];
-        $selectedcondition = (isset($request->condition)) ? $request->condition : [];
-        $selectedbrands = (isset($request->brand)) ? $request->brand : [];
-        $selectedsize = (isset($request->size)) ? $request->size : [];
-        // $rentalType = $request->rental_type ?? '';
-        // $product = $this->getProducts($request);
-        // $products = $product->get();
-
-        // $city = (isset($request->neighborhoodcity)) ? $request->neighborhoodcity : [];
-
+        $selectedCategories = $request->input('category', []);
+        $selectedcolor = $request->input('filtercolor', []);
+        $selectedcondition = $request->input('condition', []);
+        $selectedbrands = $request->input('brand', []);
+        $selectedsize = $request->input('size', []);
+        $searchKeyword = $request->input('search', '');
 
         $authUserId = auth()->user()->id;
 
-        // $query = Product::where('user_id', '!=', $authUserId);
-        $products = Product::with('disableDates', 'ratings')->where('user_id', '!=', $authUserId)->applyFilters()->orderBy('created_at', 'desc')->get();
-    
+        // Base product query
+        $query = Product::with('disableDates', 'ratings')->where('user_id', '!=', $authUserId);
 
-        // dd($products->toArray());
-        // dd($startDate,$endDate);
+        // Filter products by selected categories
+        if (!empty($selectedCategories)) {
+            $query->whereIn('category_id', (array) $selectedCategories);
+        }
 
+        if (!empty($searchKeyword)) {
+            $query->where('name', 'LIKE', '%' . $searchKeyword . '%');
+        }
 
-        // if ($request->has('Color')) {
-        //     $colors = explode(',', $request->input('Color'));
-        //     $query->filterByColors($colors);
-        // }
+        // Apply additional filters if necessary (e.g., colors, condition, etc.)
+        $query->applyFilters();
 
-        // if ($request->has('Price')) {
-        //     $priceRange = explode(',', $request->input('Price'));
-        //     $query->filterByPriceRange($priceRange);
-        // }
+        // Get filtered products
+        $products = $query->orderBy('created_at', 'desc')->get();
 
-        // if ($request->has('Condition')) {
-        //     $conditions = explode(',', $request->input('Condition'));
-        //     $query->filterByCondition($conditions);
-        // }
-
-        // $products = $query->get();
-        // dd($request->neighborhoodcity,  $city);
-
-        // dd($request->global_product_pagination);
-        // $allProducts = $products->get();
-        // $products = $products->paginate($request->global_product_pagination);
-        // $maxPrice = number_format((float)ceil(Product::max('rent')), 2, '.', '');
-        // $minPrice = number_format((float)floor(Product::min('rent')), 2, '.', '');
-        // $fourStar = $allProducts->whereBetween('average_rating', [3.1, 5])->count();
-        // $threeStar = $allProducts->whereBetween('average_rating', [2.1, 3])->count();
-        // $twoStar = $allProducts->whereBetween('average_rating', [1.1, 2])->count();
-        // $oneStar = $allProducts->whereBetween('average_rating', [0.1, 1])->count();
-        // $filters = [
-        //     // 'maxprice' => $maxPrice,
-        //     // 'minprice' => $minPrice,
-        //     'categories' => $selectedCategories,
-        //     'selectedcolor' => $selectedcolor,
-        //     'selectedcondition' => $selectedcondition,
-        //     'selectedbrands' => $selectedbrands,
-        //     'selectedsize' => $selectedsize,
-        //     'rental_type' => [$rentalType],
-        //     // 'rent' => $request->rent ?? $maxPrice,
-        //     'star1' => $oneStar,
-        //     'star2' => $twoStar,
-        //     'star3' => $threeStar,
-        //     'star4' => $fourStar,
-        //     'neighborhoodcity' => $city,
-        // ];
-        // dd($products, $filters, $filters['categories']);
-
-        // dd($products);
-        return view('index', compact('products', 'categories'))->with(['selectedLocation' => $this->selectedLocation]);
-        // return view('index', compact('products', 'categories', 'filters',))->with(['selectedLocation' => $this->selectedLocation]);
+        return view('index', compact('products', 'categories'))->with([
+            'selectedLocation' => $this->selectedLocation,
+            'selectedCategories' => $selectedCategories,
+            'selectedcolor' => $selectedcolor,
+            'selectedcondition' => $selectedcondition,
+            'selectedbrands' => $selectedbrands,
+            'selectedsize' => $selectedsize,
+        ]);
     }
+
+
 
     /**
      * Display a product detail
@@ -395,4 +362,6 @@ class ProductController extends Controller
 
         return view('customer.profile', compact('products', 'retailer'));
     }
+
+
 }
