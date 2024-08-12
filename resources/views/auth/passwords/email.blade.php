@@ -8,7 +8,7 @@
                     {{ session('status') }}
                 </div>
             @endif
-            <form class="form-inline" method="POST" action="{{ route('password.email') }}" id="login">
+            <form class="form-inline" method="POST" action="{{ route('password.email') }}" id="forget_password">
                 @csrf
                 <div class="recove-account">
                     <ul class="nav nav-pills" id="pills-tab" role="tablist">
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="button primary-btn full-btn">{{ __('Send Password Reset Link') }}</button>
+                <button type="submit" class="button primary-btn full-btn" id="reset_pass">{{ __('Send Password Reset Link') }}</button>
                 <p class="have-account"><a href="{{ route('login') }}">Back to Login</a></p>
             </form>
         </div>
@@ -83,6 +83,7 @@
 @endsection
 
 @push('scripts')
+@includeFirst(['validation'])
     <link href="//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/css/intlTelInput.min.css" rel="stylesheet" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
     <script>
@@ -95,16 +96,80 @@
         });
 
         $(document).ready(function() {
-            $("#login").on("submit", function(e) {
-                e.preventDefault();
-                if ($(this).valid()) {
+            const rules = {
+                email: {
+                    required: true,
+                    email: true,
+                    regex: emailRegex,
+                },
+                "phone_number[main]": {
+                    required: true,
+                    digits: true,
+                    isValidPhoneNumber: true,
+                    normalizer: function(value) {
+                        return $.trim(value);
+                    }
+                },
+            }
+            const messages = {
+                email: {
+                    required: `{{ __('customvalidation.user.email.required') }}`,
+                    email: `{{ __('customvalidation.user.email.email') }}`,
+                    regex: `{{ __('customvalidation.user.email.regex', ['regex' => '${emailRegex}']) }}`,
+                },
+                "phone_number[main]": {
+                    required: `{{ __('customvalidation.user.phone_number.required') }}`,
+                    digits: `{{ __('customvalidation.user.phone_number.digits') }}`,
+                    minlength: `{{ __('customvalidation.user.phone_number.min', ['min' => '${phoneMinLength}', 'max' => '${phoneMaxLength}']) }}`,
+                    maxlength: `{{ __('customvalidation.user.phone_number.max', ['min' => '${phoneMinLength}', 'max' => '${phoneMaxLength}']) }}`,
+                },
+            };
+            $.validator.addMethod("isValidPhoneNumber", function(value, element) {
+                return phone_number.isValidNumber();
+            }, "Please enter a valid phone number");
+
+
+            // handleValidation('forget_password', rules, messages, function(form) {
+            //     $('body').addClass('loading');
+            //     form.submit();
+            // });
+
+             // Handle validation
+            $('#forget_password').validate({
+                rules: rules,
+                messages: messages,
+                ignore: ":hidden",
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element) {
+                    $(element).removeClass('is-invalid');
+                },
+                submitHandler: function(form) {
                     $('body').addClass('loading');
-                    $(this).find('button[type="submit"]').prop('disabled', true);
-                    
-                    setTimeout(() => {
-                        this.submit();
-                    }, 10);
+                    form.submit();
                 }
+            });
+
+
+            $('button[data-bs-toggle="pill"]').on('click', function() {
+                const activeTab = $('.tab-pane.active').attr('id');
+                if (activeTab === 'recover-by-email') {
+                    $('#reset_pass').click(function(){
+                        $('#forget_password').validate().element('#email');
+                        $('#phone_number').removeClass('is-invalid');
+                    });
+                }else{
+                    $('#forget_password').validate().element('#phone_number');
+                    $('#email').removeClass('is-invalid');
+                } 
+                // else if (activeTab === 'recover-by-phone')
+                //  {
+                // }
             });
         });
     </script>
