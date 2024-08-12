@@ -108,7 +108,7 @@ class LoginController extends Controller
                         'otp_is_verified' => $user->otp_is_verified,
                         'email' => $user->email,
                         'phone' => $user->country_code . $user->phone_number,
-                        'profile_pc' => $user->frontend_profile_url,
+                        'profile_pic' => $user->frontend_profile_url,
                         'name' => $user->name,
                         'fcm_token' => $user->pushToken->fcm_token,
                         'device_type' => $user->pushToken->device_type,

@@ -89,7 +89,7 @@ class RegisterController extends Controller
             $response = [
                 'token' => $user->createToken('login')->plainTextToken,
                 'user_id' => $user->id,
-                'profile_pc' => $user->frontend_profile_url,
+                'profile_pic' => $user->frontend_profile_url,
                 'name' => $user->name,
                 'device_type' =>$user->pushToken->device_type,
                 'device_id'=> $user->pushToken->device_id,
