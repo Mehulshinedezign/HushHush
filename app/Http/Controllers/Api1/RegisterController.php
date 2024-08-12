@@ -72,12 +72,12 @@ class RegisterController extends Controller
             $user->notify(new EmailOtpVerification($user, $emailOtp));
 
             // Save push token
-            PushToken::create([
-                'user_id' => $user->id,
-                'fcm_token' => $request->fcm_token,
-                'device_id' => $request->device_id,
-                'device_type' => $request->device_type,
-            ]);
+            // PushToken::create([
+            //     'user_id' => $user->id,
+            //     'fcm_token' => $request->fcm_token,
+            //     'device_id' => $request->device_id,
+            //     'device_type' => $request->device_type,
+            // ]);
             // dd($request->all(),$user->pushToken);
 
             DB::commit();
@@ -91,9 +91,9 @@ class RegisterController extends Controller
                 'user_id' => $user->id,
                 'profile_pc' => $user->frontend_profile_url,
                 'name' => $user->name,
-                'device_type' =>$user->pushToken->device_type,
-                'device_id'=> $user->pushToken->device_id,
-                'fcm_token'=> $user->pushToken->fcm_token,
+                // 'device_type' =>$user->pushToken->device_type,
+                // 'device_id'=> $user->pushToken->device_id,
+                // 'fcm_token'=> $user->pushToken->fcm_token,
             ];
 
             return $this->apiResponse($apiResponse, $statusCode, $message, $response, null);
@@ -107,14 +107,14 @@ class RegisterController extends Controller
     {
         $emailRegex = "/^[a-zA-Z]+[a-zA-Z0-9_\.\-]*@[a-zA-Z]+(\.[a-zA-Z]+)*[\.]{1}[a-zA-Z]{2,10}$/";
         $validation = [
-            'name' => 'required|string|min:2|max:50',
+            'name' => 'required|string|min:3|max:50',
             'email' => 'required|string|email|max:255|unique:users|regex:' . $emailRegex,
             'phone_number' => 'required|digits:' . config('validation.phone_minlength') . '|min:' . config('validation.phone_minlength') . '|max:' . config('validation.phone_maxlength'),
             'password' => 'required|string|min:8|max:32|confirmed',
             'country_code' => 'required',
-            'fcm_token' => 'required|string',
-            'device_id' => 'required|string',
-            'device_type' => 'required|string',
+            // 'fcm_token' => 'required|string',
+            // 'device_id' => 'required|string',
+            // 'device_type' => 'required|string',
         ];
 
         $message = [
