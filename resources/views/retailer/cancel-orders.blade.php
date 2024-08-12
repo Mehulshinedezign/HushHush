@@ -26,7 +26,7 @@
     @endif
 </div> --}}
 <div class="row g-3">
-    @foreach ($orders as $order)
+    @forelse ($orders as $order)
         @if ($order->status == 'Cancelled')
             <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="order-card-top">
@@ -68,6 +68,8 @@
                 </div>
             </div>
         @endif
-    @endforeach
+    @empty
+        <div>No data found</div>
+    @endforelse
 
 </div>

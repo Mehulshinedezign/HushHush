@@ -1,8 +1,36 @@
 @extends('layouts.front')
+<style>
+    .stripe-error {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+
+.is-invalid .stripe-error {
+    color: red;
+    font-weight: bold;
+}
+
+.errors {
+    color: red;
+}
+
+.payment-field {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.payment-field.invalid {
+    border-color: red;
+}
+
+    </style>
 @section('content')
     <section class="payment-page-section">
         <div class="container">
-            <div class="page-content-wrapper">
+            <div class="page-content-wrapper payment-page-wrapper">
                 <div class="order-summary cstm-card">
                     <div class="payment-heading-box">
                         <h3>Payment</h3>
@@ -10,6 +38,17 @@
                     </div>
                     <form id="paymentform" action="{{ route('charge') }}" method="POST">
                         @csrf
+                        <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="">Card Holder Name</label>
+                                        <div class="form-field ">
+                                            <input type="text" name="cardname" id="cardName" class="form-control"
+                                                placeholder="John Doe">
+                                            <label class="cardName-error" for="card-name" id="cardname"></label>
+                                            <!-- <div class="is-invalid stripe-error" id="cardname"></div> -->
+                                        </div>
+                                    </div>
+                                </div>
                         {{-- <div class="payment-sec-tabs">
                             <div class="payment-tab-box">
                                 <label for="security">Security ${{ $security->value }}</label>
@@ -54,16 +93,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="">Card Holder Name</label>
-                                        <div class="form-field">
-                                            <input type="text" name="cardname" id="cardName" class="form-control"
-                                                placeholder="John Doe">
-                                            <label class="cardName-error" for="card-name" id="cardname"></label>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                         <input type="hidden" value="{{ $price }}" id="total_payment">

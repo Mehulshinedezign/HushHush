@@ -2589,3 +2589,41 @@ input[type="range"]::-webkit-slider-thumb {
 .home-filter-box.expand .filter-range-wrapper {
     display: block;
 }
+
+.payment-page-wrapper .form-group .form-field  label.errors{
+    color: red;
+}
+
+.order-trans-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.order-trans-wrap .inquiry-list-main table tr th:last-child {
+    float: unset;
+}
+
+.plus-earning {
+    color: green;
+    font-size: 18px !important;
+}
+
+.plus-minus {
+    color: red;
+    font-size: 18px !important;
+}
+
+.no-transation-txt {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 200px;
+    font-size: 20px;
+    font-weight: 700;
+
+}
+
+.min-hight-sec {
+    min-height: calc(100vh - 233px);
+}

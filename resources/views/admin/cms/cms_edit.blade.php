@@ -8,7 +8,7 @@
         <div class="section-body">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    <div class="card cms-card-body">
                         <div class="card-header">
                             <h4>CMS Page</h4>
                         </div>

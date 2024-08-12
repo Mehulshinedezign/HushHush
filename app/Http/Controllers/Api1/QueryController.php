@@ -67,7 +67,7 @@ class QueryController extends Controller
                 ->whereNull('deleted_at')
                 ->filterByStatus($status)
                 ->get();
-            // dd($queries);
+                // dd($queries);
 
             if (count($queries) > 0) {
                 $queries = $queries->map(function ($query) {
@@ -79,7 +79,6 @@ class QueryController extends Controller
                         ->first();
                     $lender = User::where('id', $query->for_user)->first();
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
-                    $price = $price+($query->cleaning_charges)+($query->shipping_charges);
                     // dd($price);
 
                     return [
@@ -196,20 +195,12 @@ class QueryController extends Controller
                 $query_details->update(['status' => 'REJECTED']);
             } elseif ($type == 'price') {
                 $validator = Validator::make($request->all(), [
-                    // 'price' => 'required',
-                    'cleaning_charges' =>'required',
-                    'shipping_charges' =>'required',
-
+                    'price' => 'required',
                 ]);
                 if ($validator->fails()) {
                     return response()->json(['errors' => $validator->errors()], 422);
                 }
-                $query_details->update([
-                    'negotiate_price' => $request->price ?? null,
-                    'shipping_charges' => $request->shipping_charges,
-                    'cleaning_charges' => $request->cleaning_charges,
-                    'status' => 'ACCEPTED',
-                ]);
+                $query_details->update(['negotiate_price' => $request->price, 'status' => 'ACCEPTED']);
             } else {
                 return response()->json([
                     'status' => false,
@@ -237,21 +228,24 @@ class QueryController extends Controller
     {
         $user = auth()->user();
         try {
-            $queries = Query::where('user_id', $user->id)
-                ->where('status', 'completed')
+            $queries = Query::where('user_id', $user->id)->where('status', 'completed')
                 ->whereNull('deleted_at')
                 ->get();
-
+            // dd($queries);
             if ($queries->count() > 0) {
                 $queries = $queries->map(function ($query) {
                     [$startDate, $endDate] = explode(' - ', $query->date_range);
 
+                    // Convert date format
+                    $startDate = Carbon::createFromFormat('d-m-Y', $startDate)->format('Y-m-d');
+                    $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->format('Y-m-d');
                     $productId = $query->product_id;
-                    $product = Product::withTrashed()->where('id', $productId)->first();
+                    $product = Product::where('id', $productId)
+                        ->whereNull('deleted_at')
+                        ->first();
                     $lender = User::where('id', $query->for_user)->first();
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
                     $now = Carbon::now()->format('Y-m-d');
-
                     if ($now > $endDate) {
                         $status = 'COMPLETED';
                     } elseif ($now < $startDate) {
@@ -276,8 +270,8 @@ class QueryController extends Controller
                         'lender' => $lender->name ?? null,
                         'lender_profile_pic' => $lender->frontend_profile_url,
                         'lender_id' => $lender->id,
-                        'brand' => $product->get_brand->name ?? null,
-                        'size' => $product->get_size->name ?? null,
+                        'brand' => $product->get_brand->name,
+                        'size' => $product->get_size->name,
                         'price' => $price,
                     ];
                 });
@@ -353,8 +347,8 @@ class QueryController extends Controller
                         'borrower' => $borrower->name ?? null,
                         'borrower_profile_pic' => $borrower->frontend_profile_url,
                         'borrower_id' => $borrower->id,
-                        'brand' => $product->get_brand->name ??'N/A',
-                        'size' => $product->get_size->name ?? "N/A",
+                        'brand' => $product->get_brand->name,
+                        'size' => $product->get_size->name,
                         'price' => $price,
                     ];
                 });

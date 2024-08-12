@@ -1016,3 +1016,11 @@ body:not(.sidebar-mini) .main-sidebar .sidebar-menu li ul.dropdown-menu {
         width: 100%;
     }
 }
+
+
+
+
+.cms-card-body .form-group .ql-editor {
+    min-height: 200px;
+    max-height: 200px;
+}

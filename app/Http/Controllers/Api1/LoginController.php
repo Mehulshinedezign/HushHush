@@ -39,14 +39,16 @@ class LoginController extends Controller
             if (Auth::attempt($credentials)) {
                 $user = Auth::user();
 
-                if ($user->role->name == 'admin') {
-                    Auth::logout();
-                    $isVerified = false;
-                    return $this->apiResponse('error', '500', 'Invalid Credentials', ['errors' =>'Invalid Credentials'], $isVerified);
-                }
-
                 $isVerified = !is_null($user->email_verified_at) && $user->otp_is_verified == 1;
                 $isActive = $user->status == 1;
+                // PushToken::updateOrCreate(
+                //     ['user_id' => $user->id],
+                //     [
+                //         'fcm_token' => $request->fcm_token,
+                //         'device_id' => $request->device_id,
+                //         'device_type' => $request->device_type,
+                //     ]
+                // );
 
                 if (!$isVerified) {
                     if (is_null($user->email_verified_at) && $user->otp_is_verified != 1) {
@@ -108,11 +110,8 @@ class LoginController extends Controller
                         'otp_is_verified' => $user->otp_is_verified,
                         'email' => $user->email,
                         'phone' => $user->country_code . $user->phone_number,
-                        'profile_pc' => $user->frontend_profile_url,
-                        'name' => $user->name,
-                        'fcm_token' => $user->pushToken->fcm_token,
-                        'device_type' => $user->pushToken->device_type,
-                        'device_id' => $user->pushToken->device_id,
+                        'name' => $user->frontend_profile_url,
+                        'profile_pic' => $user->name,
                     ];
 
                     return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
@@ -146,8 +145,11 @@ class LoginController extends Controller
                     'otp_is_verified' => $user->otp_is_verified,
                     'email' => $user->email,
                     'phone' => $user->country_code . $user->phone_number,
-                    'profile_pic' => $user->frontend_profile_url,
+                    'profile_pc' => $user->frontend_profile_url,
                     'name' => $user->name,
+                    'fcm_token' => $user->pushToken->fcm_token,
+                    'device_type' => $user->pushToken->device_type,
+                    'device_id' => $user->pushToken->device_id,
                 ];
                 return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
             } else {
@@ -163,7 +165,6 @@ class LoginController extends Controller
             return $this->apiResponse('error', '500', $e->getMessage(), ['errors' => $e->getMessage()], $isVerified);
         }
     }
-
 
 
 
