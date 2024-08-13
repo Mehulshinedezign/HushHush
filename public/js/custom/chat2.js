@@ -57,7 +57,7 @@ $(document).ready(function () {
 
         var element = $(this);
         var data = userData(element);
-
+        onlinePresence(data['id'], data['created']);
         createUser(data['id'], data['receiverId'], data['created'], data['image'], data['name'], data);
         createUser(data['receiverId'], data['id'], data['created'], data['authprofile'], data['authName'], data);
 
@@ -102,7 +102,7 @@ $(document).ready(function () {
 
         // jQuery('#sendMessage').prop('disabled', true);
         let response = new Promise((resolve, reject) => {
-            console.log(data);
+
             db.ref(`users/${adminId}`).child(`${receiverId}`).set({
                 id: adminId,
                 name: name,
@@ -122,17 +122,30 @@ $(document).ready(function () {
     }
 });
 
+// online Presence
+function onlinePresence($user, $created) {
+    let response = new Promise((resolve, reject) => {
+
+        db.ref(`/OnlinePresence/${adminId}`).set({
+            status: 'online',
+            time: $created,
+            id: $user,
+        }).then(() => console.log('Updated'))
+            .catch(function (error) {
+                reject(error)
+                console.log('error', error);
+            })
+    });
+}
 document.getElementById("chatForm").addEventListener("submit", submitForm);
 
 function submitForm(e) {
     e.preventDefault();
-
-
     var messagedata = messageData();
     if (messagedata.msg != '') {
 
-        sendMessage(messagedata['sender'], messagedata['reciever'], messagedata['created'], messagedata['img'], messagedata);
-        sendMessage(messagedata['reciever'], messagedata['sender'], messagedata['created'], messagedata['img'], messagedata);
+        sendMessage(messagedata['sender'], messagedata['reciever'], messagedata['created'], messagedata);
+        sendMessage(messagedata['reciever'], messagedata['sender'], messagedata['created'], messagedata);
     }
 }
 // }
@@ -166,7 +179,7 @@ function messageData() {
         sender: SenderId,
         reciever: ReceiverId,
         msg: message,
-        img: img,
+        // img: img,
         isSeen: 'isSeen',
         a_remove: '0',
         created: created,
@@ -176,12 +189,12 @@ function messageData() {
 }
 
 
-function sendMessage(sender, reciever, created, img, data) {
+function sendMessage(sender, reciever, created, data) {
 
     jQuery('#message').val('');
 
     let response = new Promise((resolve, reject) => {
-        var test = 'messages/' + `${sender}_${reciever}`;
+        var test = 'messeges/' + `${sender}_${reciever}`;
         db.ref(test).push(data).then(() => {
             console.log('Message updated.');
             // loadMessages(sender, reciever, img);
@@ -226,7 +239,7 @@ fireBaseListener = null;
 // fireBaseListener = null;
 function loadMessages(sender, reciever, userImage) {
     if (!sender) {
-        //console.log('HELLLLL')
+
         return;
     }
 
@@ -242,7 +255,7 @@ function loadMessages(sender, reciever, userImage) {
     // snap.forEach(message => {
     //     console.log('sadfasd', message.val(), "sdfsfsdfsd");
 
-    var fireBaseListener = db.ref('messages/' + `${sender}_${reciever}`).on("child_added", (snap) => {
+    var fireBaseListener = db.ref('messeges/' + `${sender}_${reciever}`).on("child_added", (snap) => {
         console.log('sadfasfasd', snap.val());
         var message = snap;
         var messageList = '';

@@ -1,17 +1,19 @@
 var dbRef = db.ref(`/users/` + senderId);
+var onlinePresence = db.ref(`/OnlinePresence/${senderId}`);
+
 let first = true;
 let response = new Promise((resolve, reject) => {
     dbRef.once("value").then(snap => {
         snap.forEach(message => {
             let activeClass = first ? 'activecht' : '';
+
             $('.chatlist').append(`<li>
-                <div class="chat-list ${activeClass}"
+                <div class="chat-list online ${activeClass}"
                     data-receiverId=${message.key}
                     data-senderId="${message.val().id}">
                     <div class="chat-profile-img-box">
                         <div class="chat-profile-img">
                             <img src="${message.val().image}" class="img">
-
                         </div>
                         <p class="getname">
                        ${message.val().name}

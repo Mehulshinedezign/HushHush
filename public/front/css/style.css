@@ -1202,7 +1202,7 @@ body.loading .overlay {
 .chat-profile-img {
     width: 46px;
     height: 46px;
-    overflow: hidden;
+    /* overflow: hidden; */
     border-radius: 50px;
 }
 
@@ -1514,7 +1514,7 @@ input[type=number] {
 .chat-profile-img {
     width: 46px;
     height: 46px;
-    overflow: hidden;
+    /* overflow: hidden; */
     border-radius: 50px;
 }
 
@@ -1522,6 +1522,9 @@ input[type=number] {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
 }
 
 .chat-profile-img-box {
@@ -2583,14 +2586,16 @@ input[type="range"]::-webkit-slider-thumb {
     font-size: 16px !important;
     font-weight: 500 !important;
 }
-.filter-range-wrapper{
+
+.filter-range-wrapper {
     display: none;
 }
+
 .home-filter-box.expand .filter-range-wrapper {
     display: block;
 }
 
-.payment-page-wrapper .form-group .form-field  label.errors{
+.payment-page-wrapper .form-group .form-field label.errors {
     color: red;
 }
 
@@ -2627,12 +2632,15 @@ input[type="range"]::-webkit-slider-thumb {
 .min-hight-sec {
     min-height: calc(100vh - 233px);
 }
-.icon-new-bx  .form-icon img {
+
+.icon-new-bx .form-icon img {
     width: 14px;
 }
+
 .close-icon-link {
     margin-left: 10px;
 }
-.icon-new-bx  .form-icon {
+
+.icon-new-bx .form-icon {
     right: 10px;
 }
