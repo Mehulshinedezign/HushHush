@@ -101,7 +101,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="ajax-response"></div>
-                <form method="post" id="cancel-order">
+                <form method="post">
                     @csrf
                     <div class="cancellation-popup-sec">
                         <div class="popup-head">

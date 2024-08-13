@@ -68,7 +68,7 @@
                                     <form id="orderDetail" method="post" action="{{ route('orderpickup', [$order->id]) }}"
                                         enctype="multipart/form-data" id="imageForm">
                                         @csrf
-                                        <h6 class="order-detail-heading">Picked Up Attached Files by You</h6>
+                                        <h6 class="order-detail-heading">Picked Up (Attached Files by You)</h6>
                                         <div class="product-pic-gallery">
 
                                             <div class="multi-file-upload">
@@ -89,7 +89,7 @@
                                                         Select File to upload...
                                                     </span>
                                                     <span class="smallFont">(Min upload:
-                                                        2, Max upload:
+                                                        1, Max upload:
                                                         5, Max file size:
                                                         5MB)</span>
 
@@ -118,7 +118,7 @@
                                 </div>
                             @elseif($order->customerPickedUpImages->isNotEmpty())
                                 <div class="col-12 col-sm-12 col-md-6">
-                                    <h6 class="largeFont w-600 mb-3">Picked Up Attached Files by You</h6>
+                                    <h6 class="largeFont w-600 mb-3">Picked Up (Attached Files by You)</h6>
                                     <div class="product-pic-gallery">
                                         <div class="gallery-box">
                                             @foreach ($order->customerPickedUpImages as $customerPickedUpImage)
@@ -138,8 +138,8 @@
 
                             @if ($order->retailerPickedUpImages->isNotEmpty())
                                 <div class="col-12 col-sm-12 col-md-6">
-                                    <h6 class="largeFont w-600 mb-3">Picked Up Attached Files by
-                                        {{ config('constants.lender') }}</h6>
+                                    <h6 class="largeFont w-600 mb-3">Picked Up (Attached Files by
+                                        {{ config('constants.lender') }})</h6>
                                     <div class="product-pic-gallery">
                                         <div class="gallery-box">
                                             @foreach ($order->retailerPickedUpImages as $retailerPickedUpImage)
@@ -167,7 +167,7 @@
                                     <form id="orderReturn" method="post" action="{{ route('orderreturn', [$order->id]) }}"
                                         enctype="multipart/form-data" id="imageForm">
                                         @csrf
-                                        <h6 class="order-detail-heading">Picked Up Attached Files by You</h6>
+                                        <h6 class="order-detail-heading">Picked Up (Attached Files by You)</h6>
                                         <div class="product-pic-gallery">
 
                                             <div class="multi-file-upload">
@@ -186,7 +186,7 @@
                                                         Select File to upload...
                                                     </span>
                                                     <span class="smallFont">(Min upload:
-                                                        2, Max upload:
+                                                        1, Max upload:
                                                         5, Max file size:
                                                         5MB)</span>
 
@@ -214,7 +214,7 @@
                                 </div>
                             @elseif ($order->customerReturnedImages->isNotEmpty())
                                 <div class="col-12 col-sm-12 col-md-6">
-                                    <h6 class="largeFont w-600 mb-3">Returned Attached Files by You</h6>
+                                    <h6 class="largeFont w-600 mb-3">Returned (Attached Files by You)</h6>
                                     <div class="product-pic-gallery">
                                         <div class="gallery-box">
                                             @foreach ($order->customerReturnedImages as $customerReturnedImage)
@@ -234,8 +234,8 @@
                             <!-- Retailer uploaded picked up images -->
                             @if ($order->retailerReturnedImages->isNotEmpty())
                                 <div class="col-12 col-sm-12 col-md-6">
-                                    <h6 class="largeFont w-600 mb-3">Returned Attached Files by
-                                        {{ config('constants.lender') }}</h6>
+                                    <h6 class="largeFont w-600 mb-3">Returned (Attached Files by
+                                        {{ config('constants.lender') }})</h6>
                                     <div class="product-pic-gallery">
                                         <div class="gallery-box">
                                             @foreach ($order->retailerReturnedImages as $retailerReturnedImage)
@@ -256,10 +256,8 @@
                                     @endif
                                 </div>
                             @endif
-
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

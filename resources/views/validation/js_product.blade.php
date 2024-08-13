@@ -6,10 +6,13 @@
         // var action1 = segments[1];
         // var action2 = segments[2];
         // const url = action1+'/'+action2;
+        const commission = parseInt("{{ adminsetting()->value }}");
 
         $.validator.addMethod("completeAddress", function(value, element) {
-                return $('#product_address1').val() !== ''&& $('#product_address2').val() !== ''&& $('#product_country').val() !== '' && $('#product_state').val() !== '' && $('#product_city').val() !== '';
-            }, "Please enter the complete address");
+            return $('#product_address1').val() !== '' && $('#product_address2').val() !== '' && $(
+                '#product_country').val() !== '' && $('#product_state').val() !== '' && $(
+                '#product_city').val() !== '';
+        }, "Please enter the complete address");
         const rules = {
             name: {
                 required: true,
@@ -82,7 +85,7 @@
             },
             product_link: {
                 // required: true,
-                url:'/^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/',
+                url: '/^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/',
             },
             min_rent_days: {
                 required: true,
@@ -92,14 +95,18 @@
             rent_price_day: {
                 required: true,
                 regex: OnlydigitRegex,
+                min: commission,
+
             },
             rent_price_week: {
                 required: true,
                 regex: OnlydigitRegex,
+                min: commission,
             },
             rent_price_month: {
                 required: true,
                 regex: OnlydigitRegex,
+                min: commission,
             },
             // non_available_dates: {
             //     required: true,
@@ -107,8 +114,8 @@
             // country:{
             //     required:true,
             // },
-            product_complete_location:{
-                required:true,
+            product_complete_location: {
+                required: true,
                 completeAddress: true,
             },
 
@@ -157,14 +164,19 @@
             rent_price_day: {
                 required: `{{ __('customvalidation.product.rent_price_day.required') }}`,
                 regex: `{{ __('customvalidation.product.rent_price_day.regex', ['regex' => '${OnlydigitRegex}']) }}`,
+                min: `Please enter the price greater than ${commission}`,
             },
             rent_price_week: {
                 required: `{{ __('customvalidation.product.rent_price_week.required') }}`,
                 regex: `{{ __('customvalidation.product.rent_price_week.regex', ['regex' => '${OnlydigitRegex}']) }}`,
+                min: `Please enter the price greater than ${commission}`,
+
             },
             rent_price_month: {
                 required: `{{ __('customvalidation.product.rent_price_month.required') }}`,
                 regex: `{{ __('customvalidation.product.rent_price_month.regex', ['regex' => '${OnlydigitRegex}']) }}`,
+                min: `Please enter the price greater than ${commission}`,
+
             },
             product_market_value: {
                 required: `{{ __('customvalidation.product.product_market_value.required') }}`,
@@ -182,7 +194,7 @@
             // country:{
             //     required: "Please enter country.",
             // },
-            product_complete_location:{
+            product_complete_location: {
                 required: `{{ __('customvalidation.product.product_complete_location.required') }}`,
                 completeAddress: 'Please enter the complete address',
             }

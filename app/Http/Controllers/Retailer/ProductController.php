@@ -217,7 +217,7 @@ class ProductController extends Controller
 
         // dd($request->all());
         try {
-            DB::transaction();
+            DB::beginTransaction();
 
             $product_complete_location = $request->input('product_complete_location');
             $address = urlencode($product_complete_location);

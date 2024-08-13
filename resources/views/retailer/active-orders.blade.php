@@ -115,9 +115,8 @@
                             </div>
                             <textarea class="form-control mt-3" name="cancellation_note" rows="5"
                                 placeholder="Please write cancellation note here"></textarea>
-                            <button type="submit" class="button primary-btn full-btn mt-3  submit"
-                                id="cancel-order">Submit&nbsp;<i class="fa-solid fa-circle-notch fa-spin show-loader"
-                                    style="display:none;"></i>
+                            <button type="submit" class="button primary-btn full-btn mt-3  submit">Submit&nbsp;<i
+                                    class="fa-solid fa-circle-notch fa-spin show-loader" style="display:none;"></i>
                             </button>
                         </div>
                     </form>
@@ -233,6 +232,35 @@
                         }
                     });
             })
+
+            $('#cancel-order').submit(function(e) {
+
+                e.preventDefault();
+                if ($('#cancel-order').valid()) {
+                    var formData = new FormData($('form#cancel-order').get(0));
+                    ajaxCall($("#cancel-order").attr("action"), 'post', formData)
+                        .then(function(response) {
+                            if (response) {
+                                //console.log(response.url)
+                                window.location.replace(response.url);
+                            } else {
+                                iziToast.error({
+                                    title: 'Error',
+                                    message: 'Something went wrong!',
+                                    position: 'topRight'
+                                });
+                            }
+                        }, function() {
+                            iziToast.error({
+                                title: 'Error',
+                                message: 'Something went wrong!',
+                                position: 'topRight'
+                            });
+                        }).finally(function() {
+                            console.log("error");
+                        });
+                }
+            });
         });
     </script>
 

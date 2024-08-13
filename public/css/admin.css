@@ -1981,11 +1981,13 @@ input[name=date][readonly] {
   font-family: var(--font);
   font-weight: normal;
 }
+
 .card.author-box .author-box-center {
   background: #E8E5DE;
   border-radius: 5px;
   padding: 20px;
 }
+
 .theme-white .nav-tabs .nav-item .nav-link {
   color: #1B1B1B;
   font-size: 16px;
@@ -2189,6 +2191,7 @@ button.btn.btn-primary.filter {
 .card.author-box .card-header button.btn.btn-success {
   background: var(--text-color) !important;
 }
+
 .card.author-box .card-body .py-4 p.clearfix:last-child {
   margin-bottom: 0;
 }
@@ -2197,6 +2200,7 @@ button.btn.btn-primary.filter {
   border-bottom: 1px dashed #ddd;
   padding-bottom: 10px;
 }
+
 .card-header button.btn.btn-success.small-btn {
   padding: 5px 20px;
   min-height: auto;
@@ -2204,23 +2208,50 @@ button.btn.btn-primary.filter {
   font-weight: normal;
   font-family: var(--font-medium);
 }
- 
-.icon i{
-  color:#929292;font-size: 13px;
+
+.icon i {
+  color: #929292;
+  font-size: 13px;
 }
 
 select.form-control.selectric {
   color: #878A92 !important;
 }
+
 .formfield {
   position: relative;
 }
-.form-icon{
+
+.form-icon {
   position: absolute;
   right: 15px;
   top: 15px;
 }
+
 img#customer-img {
   height: 40px;
   width: 40px;
+}
+
+.formfield {
+  position: relative;
+  width: 100%;
+}
+
+.formfield.symbol-formfield select {
+  padding-left: 40px !important;
+}
+
+.formfield.symbol-formfield .symbol {
+  position: absolute;
+  top: 14px;
+  left: 15px;
+}
+
+.commission-card .form-group label.invalid-feedback {
+  color: #df4655 !important;
+}
+
+.commission-card .form-group:has(.invalid-feedback) input {
+  background-image: unset !important;
 }
