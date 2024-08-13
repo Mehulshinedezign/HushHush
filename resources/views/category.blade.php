@@ -4,17 +4,17 @@
             @foreach (getParentCategory() as $k => $category)
             <div class="product-collection-slide @if (isset($filters) && in_array($category->id, $filters['categories'])) active @endif">
                 <a href="{{ route('index', ["category[$k]" => $category->id]) }}">
-                    @if ($category->category_image_url)
-                        <span><img src="{{ $category->category_image_url }}" alt="pro-img" title="{{$category->name}}"></span>
-                    @else
-                        <span><img src="{{ asset('img/Accessories.svg') }}" alt="pro-img" title="{{$category->name}}"></span>
-                    @endif
-                    <p>{{$category->name}}</p>
-                </a>
-            </div>
-            @endforeach
-        </div>
-    </div>
+@if ($category->category_image_url)
+<span><img src="{{ $category->category_image_url }}" alt="pro-img" title="{{$category->name}}"></span>
+@else
+<span><img src="{{ asset('img/Accessories.svg') }}" alt="pro-img" title="{{$category->name}}"></span>
+@endif
+<p>{{$category->name}}</p>
+</a>
+</div>
+@endforeach
+</div>
+</div>
 </div> --}}
 
 <section class="home-sec">
@@ -65,7 +65,7 @@
                             </div>
                         </div>
 
-                         {{-- <div class="home-filter-inner">
+                        {{-- <div class="home-filter-inner">
                              <h4>Price Range</h4>
                             <div class="filter-categories">
                                 <div class="">
@@ -76,55 +76,55 @@
                                                     class="form-control">
                                                 <span class="left-form-icon">
                                                     <img src="{{ asset('front/images/dollar-icon.svg') }}" alt="img">
-                                                </span>
-                                            </div>
+                        </span>
+                    </div>
+            </div>
+            <div class="form-group">
+                <div class="formfield">
+                    <input type="text" name="max" id="" placeholder="max"
+                        class="form-control">
+                    <span class="left-form-icon">
+                        <img src="{{ asset('front/images/dollar-icon.svg') }}" alt="img">
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div> --}}
+                        <div class="home-filter-inner">
+                            <h4>Price</h4>
+                            <div class="custom-wrapper filter-range-wrapper">
+                                <div class="price-input-container">
+                                    <div class="price-input">
+                                        <div class="price-field left">
+                                            <input type="number" name="min_value" id="selectedMinValue"
+                                                class="min-input" value="{{ request()->input('min_value', 0) }}"
+                                                readonly>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="formfield">
-                                                <input type="text" name="max" id="" placeholder="max"
-                                                    class="form-control">
-                                                <span class="left-form-icon">
-                                                    <img src="{{ asset('front/images/dollar-icon.svg') }}" alt="img">
-                                                </span>
-                                            </div>
+                                        <div class="price-field right">
+                                            <input type="number" name="max_value" id="selectedMaxValue"
+                                                class="max-input" value="{{ request()->input('max_value', 10000) }}"
+                                                readonly>
+                                        </div>
+                                    </div>
+                                    <div class="slider-container">
+                                        <div class="price-slider"
+                                            style="@if (request()->has('style')) {{ request()->style }} @endif">
                                         </div>
                                     </div>
                                 </div>
-                            </div>  --}}
-                            <div class="home-filter-inner">
-                                <h4>Price</h4>
-                                    <div class="custom-wrapper">
-                                        <div class="price-input-container">
-                                            <div class="price-input">
-                                                <div class="price-field left">
-                                                    <input type="number" name="min_value" id="selectedMinValue"
-                                                        class="min-input"
-                                                        value="{{ request()->has('min_value') ? request()->min_value : '0' }}">
-                                                </div>
-                                                <div class="price-field right">
-                                                    <input type="number" name="max_value" id="selectedMaxValue"
-                                                        class="max-input"
-                                                        value="{{ request()->has('max_value') ? request()->max_value : '10000' }}">
-                                                </div>
-                                            </div>
-                                            <div class="slider-container">
-                                                <div class="price-slider"
-                                                    style = "@if (request()->has('style')) {{ request()->style }} @endif">
-                                                </div>
-                                            </div>
-                                        </div>
 
-                                        <div class="range-input">
-                                            <input type="range" class="min-range" min="0" max="10000"
-                                                value="{{ request()->has('min_value') ? request()->min_value : '0' }}"
-                                                step="1">
-                                            <input type="range" class="max-range" min="0" max="10000"
-                                                value="{{ request()->has('max_value') ? request()->max_value : '10000' }}"
-                                                step="1">
-                                        </div>
-                                    </div>
+                                <div class="range-input">
+                                    <input type="range" class="min-range" min="0" max="10000"
+                                        value="{{ request()->input('min_value', 0) }}" step="1" readonly>
+                                    <input type="range" class="max-range" min="0" max="10000"
+                                        value="{{ request()->input('max_value', 10000) }}" step="1" readonly>
+                                </div>
                             </div>
-                            {{-- <h4>Status</h4>
+
+                        </div>
+
+                        {{-- <h4>Status</h4>
                             <div class="filter-categories">
                                 <div class="stock-status">
                                     <div class="form-check">
@@ -139,23 +139,23 @@
                                     </div>
                                 </div>
                             </div> --}}
-                            <div class="home-filter-inner">
-                                <h4>Size</h4>
-                                <div class="filter-categories category-hight-fix">
-                                    @foreach (getAllsizes() as $key => $size)
-                                        <div class="form-check">
-                                            <label for="size-filter-{{ $key }}" class="size-filter">
-                                                <input class="form-check-input" type="checkbox"
-                                                    value="{{ $size->name }}" id="size-check-{{ $key }}"
-                                                    name="Size[]" @if (in_array($size->name, request()->input('Size', []))) checked @endif>
-                                                <label class="form-check-label"
-                                                    for="size-check-{{ $key }}">{{ $size->name }}</label>
-                                            </label>
-                                        </div>
-                                    @endforeach
-                                </div>
-
+                        <div class="home-filter-inner">
+                            <h4>Size</h4>
+                            <div class="filter-categories category-hight-fix">
+                                @foreach (getAllsizes() as $key => $size)
+                                    <div class="form-check">
+                                        <label for="size-filter-{{ $key }}" class="size-filter">
+                                            <input class="form-check-input" type="checkbox" value="{{ $size->name }}"
+                                                id="size-check-{{ $key }}" name="Size[]"
+                                                @if (in_array($size->name, request()->input('Size', []))) checked @endif>
+                                            <label class="form-check-label"
+                                                for="size-check-{{ $key }}">{{ $size->name }}</label>
+                                        </label>
+                                    </div>
+                                @endforeach
                             </div>
+
+                        </div>
                         <!-- </div> -->
                         <div class="home-filter-inner">
                             <h4>Rating</h4>
@@ -193,11 +193,12 @@
                                 <div class="formfield">
                                     <input type="text" name="filter_date" id="daterange"
                                         placeholder="Enter date range" class="form-control daterange-cus">
-                                    <span class="form-icon">
+                                    <label for="daterange" class="form-icon">
                                         <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
-                                    </span>
+                                    </label>
                                 </div>
                             </div>
+
                         </div>
                         <div class="home-filter-inner">
                             <h4>Locations</h4>
@@ -210,7 +211,7 @@
                                         <div class="formfield">
                                             {{-- <input type="text" placeholder="Your Location" class="form-control"
                                                 id="filter_address" name="complete_address" value="{{request()->country request()->state request()->city}}"> --}}
-                                                <input type="text" placeholder="Your Location" class="form-control"
+                                            <input type="text" placeholder="Your Location" class="form-control"
                                                 id="filter_address" name="complete_address"
                                                 value="{{ request()->country ? request()->country . ' ' : '' }}{{ request()->state ? request()->state . ' ' : '' }}{{ request()->city ? request()->city : '' }}">
 
@@ -229,7 +230,8 @@
                         </div>
                         <div class="home-filter-fotter">
                             <div class="filter-fotter-btns">
-                                <a href="{{ route('index') }}"  id="actionButton" class="button outline-btn">Cancel</a>
+                                <a href="{{ route('index') }}" id="actionButton"
+                                    class="button outline-btn">Cancel</a>
                                 {{-- <a href="javascript:void(0)" class="button primary-btn">Apply Filter</a> --}}
                                 <button type="submit" class="button primary-btn">Apply Filter</button>
                             </div>
@@ -273,38 +275,43 @@
                 {{-- @dd($products); --}}
                 <div class="home-product-main">
                     <div class="home-product-box">
-                        @foreach ($products as $product)
-                            <div class="product-card">
-                                <div class="product-img-box">
-                                    <a href="{{ route('viewproduct', jsencode_userdata($product->id)) }}"
-                                        class="productLink">
-                                        @if (isset($product->thumbnailImage->file_path))
-                                            <img src="{{ $product->thumbnailImage->file_path }}"
-                                                alt="{{ $product->name }}">
-                                        @else
-                                            <img src="{{ asset('front/images/pro-0.png') }}"
-                                                alt="{{ $product->name }}">
-                                        @endif
-                                    </a>
-                                    <div class="product-card-like"
-                                        onclick="addToWishlist(this, {{ $product->id }})">
-                                        @if (!is_null($product->favorites))
-                                            <i class="fa-solid fa-heart active"></i>
-                                        @else
-                                            <i class="fa-regular fa-heart"></i>
-                                        @endif
+                        @if ($products && $products->count() > 0)
+                            @foreach ($products as $product)
+                                <div class="product-card">
+                                    <div class="product-img-box">
+                                        <a href="{{ route('viewproduct', jsencode_userdata($product->id)) }}"
+                                            class="productLink">
+                                            @if ($product->thumbnailImage && $product->thumbnailImage->file_path)
+                                                <img src="{{ $product->thumbnailImage->file_path }}"
+                                                    alt="{{ $product->name }}">
+                                            @else
+                                                <img src="{{ asset('front/images/pro-0.png') }}"
+                                                    alt="{{ $product->name }}">
+                                            @endif
+                                        </a>
+                                        <div class="product-card-like"
+                                            onclick="addToWishlist(this, {{ $product->id }})">
+                                            @if ($product->favorites && $product->favorites->count() > 0)
+                                                <i class="fa-solid fa-heart active"></i>
+                                            @else
+                                                <i class="fa-regular fa-heart"></i>
+                                            @endif
+                                        </div>
                                     </div>
-                                    {{-- <div class="product-card-status">
-                                    <p>In Stock</p>
-                                </div> --}}
+                                    <div class="product-card-detail">
+                                        <p>{{ $product->name }}</p>
+                                        <h4>${{ $product->rent_day }}/day</h4>
+                                    </div>
                                 </div>
-                                <div class="product-card-detail">
-                                    <p>{{ $product->name }}</p>
-                                    <h4>${{ $product->rent_day }}/day</h4>
-                                </div>
+                            @endforeach
+                        @else
+                            <div class="list-empty-box">
+                                <img src="{{ asset('front/images/no-products.svg') }}">
+                                <h3 class="text-center">Your Query is empty</h3>
                             </div>
-                        @endforeach
+                        @endif
                     </div>
+
                 </div>
 
             </div>
@@ -345,7 +352,8 @@
         const customDateFormat = 'MM/DD/YYYY';
 
         jQuery(function() {
-            const date = '{{ request()->get('filter_date') }}';
+            const date = '{{ request()->get('
+                    filter_date ') }}';
             let start, end;
 
             if (date) {
@@ -522,78 +530,74 @@
     </script>
     <script>
         const rangevalue = document.querySelector(".slider-container .price-slider");
-        const rangeInputvalue = document.querySelectorAll(".range-input input");
-        let priceGap = 500;
-        const priceInputvalue = document.querySelectorAll(".price-input input");
-        console.log(priceInputvalue, "sdsdsdsds")
-        for (let i = 0; i < priceInputvalue.length; i++) {
-            priceInputvalue[i].addEventListener("input", e => {
-                let minp = parseInt(priceInputvalue[0].value);
-                let maxp = parseInt(priceInputvalue[1].value);
-                let diff = maxp - minp
-                if (minp < 0) {
-                    alert("minimum price cannot be less than 0");
-                    priceInputvalue[0].value = 0;
-                    minp = 0;
-                }
-                if (maxp > 10000) {
-                    alert("maximum price cannot be greater than 10000");
-                    priceInputvalue[1].value = 10000;
-                    maxp = 10000;
-                }
-                if (minp > maxp - priceGap) {
-                    priceInputvalue[0].value = maxp - priceGap;
-                    minp = maxp - priceGap;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const priceInputValue = document.querySelectorAll(".price-input input");
+            const rangeInputValue = document.querySelectorAll(".range-input input");
+            const rangeValue = document.querySelector(".price-slider");
+            const priceGap = 100; // Define a minimum gap between min and max values
+
+            function updateRangePosition(minp, maxp) {
+                const value1 = rangeInputValue[0].max;
+                rangeValue.style.left = `${(minp / value1) * 100}%`;
+                rangeValue.style.right = `${100 - (maxp / value1) * 100}%`;
+            }
+
+            priceInputValue.forEach((input, index) => {
+                input.addEventListener("input", (e) => {
+                    let minp = parseInt(priceInputValue[0].value);
+                    let maxp = parseInt(priceInputValue[1].value);
 
                     if (minp < 0) {
-                        priceInputvalue[0].value = 0;
+                        alert("Minimum price cannot be less than 0");
+                        priceInputValue[0].value = 0;
                         minp = 0;
                     }
-                }
-                if (diff >= priceGap && maxp <= rangeInputvalue[1].max) {
-                    if (e.target.className === "min-input") {
-                        rangeInputvalue[0].value = minp;
-                        let value1 = rangeInputvalue[0].max;
-                        rangevalue.style.left = `${(minp / value1) * 100}%`;
-                    } else {
-                        rangeInputvalue[1].value = maxp;
-                        let value2 = rangeInputvalue[1].max;
-                        rangevalue.style.right =
-                            `${100 - (maxp / value2) * 100}%`;
+                    if (maxp > 10000) {
+                        alert("Maximum price cannot be greater than 10000");
+                        priceInputValue[1].value = 10000;
+                        maxp = 10000;
                     }
-                }
+                    if (minp > maxp - priceGap) {
+                        priceInputValue[0].value = maxp - priceGap;
+                        minp = maxp - priceGap;
+                    }
+
+                    if (e.target.classList.contains("min-input")) {
+                        rangeInputValue[0].value = minp;
+                    } else {
+                        rangeInputValue[1].value = maxp;
+                    }
+
+                    updateRangePosition(minp, maxp);
+                });
             });
-            for (let i = 0; i < rangeInputvalue.length; i++) {
-                rangeInputvalue[i].addEventListener("input", e => {
-                    let minVal =
-                        parseInt(rangeInputvalue[0].value);
-                    let maxVal =
-                        parseInt(rangeInputvalue[1].value);
-                    let diff = maxVal - minVal
-                    if (diff < priceGap) {
-                        if (e.target.className === "min-range") {
-                            rangeInputvalue[0].value = maxVal - priceGap;
+
+            rangeInputValue.forEach((range, index) => {
+                range.addEventListener("input", (e) => {
+                    let minVal = parseInt(rangeInputValue[0].value);
+                    let maxVal = parseInt(rangeInputValue[1].value);
+
+                    if (maxVal - minVal < priceGap) {
+                        if (e.target.classList.contains("min-range")) {
+                            rangeInputValue[0].value = maxVal - priceGap;
                         } else {
-                            rangeInputvalue[1].value = minVal + priceGap;
+                            rangeInputValue[1].value = minVal + priceGap;
                         }
                     } else {
-                        priceInputvalue[0].value = minVal;
-                        priceInputvalue[1].value = maxVal;
-                        $(document).find('#selectedMinValue').val(minVal);
-                        $(document).find('#selectedMaxValue').val(maxVal);
-                        rangevalue.style.left =
-                            `${(minVal / rangeInputvalue[0].max) * 100}%`;
-                        rangevalue.style.right =
-                            `${100 - (maxVal / rangeInputvalue[1].max) * 100}%`;
-                        $(document).find('#styleForSlider').val(
-                            `left:${(minVal / rangeInputvalue[0].max) * 100}%; right: ${100 - (maxVal / rangeInputvalue[1].max) * 100}%;`
-                            );
+                        priceInputValue[0].value = minVal;
+                        priceInputValue[1].value = maxVal;
 
-                        // $('#filters').submit();
+                        document.getElementById('selectedMinValue').value = minVal;
+                        document.getElementById('selectedMaxValue').value = maxVal;
+                        document.getElementById('styleForSlider').value =
+                            `left:${(minVal / rangeInputValue[0].max) * 100}%; right:${100 - (maxVal / rangeInputValue[1].max) * 100}%;`;
+
+                        updateRangePosition(minVal, maxVal);
                     }
                 });
-            }
-        }
+            });
+        });
     </script>
     <script>
         function initAutocomplete() {
@@ -640,7 +644,7 @@
                 var value = $(this).data('value');
                 $('.filter-rating-inner').removeClass('active');
                 $(this).addClass('active').addClass('active');
-                
+
                 $('#rating').val(value);
             });
 

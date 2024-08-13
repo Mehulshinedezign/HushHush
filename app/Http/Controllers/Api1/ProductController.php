@@ -9,7 +9,6 @@ use App\Models\Category;
 use App\Models\Color;
 use App\Models\NeighborhoodCity;
 use App\Models\Order;
-use App\Models\OrderImage;
 use App\Models\Product;
 use App\Models\ProductDisableDate;
 use App\Models\ProductFavorite;
@@ -109,20 +108,19 @@ class ProductController extends Controller
     public function wishlist(Request $request)
     {
         try {
-            
+
             $productFavorites = ProductFavorite::with(['product.thumbnailImage', 'product.category'])
-            ->where('user_id', auth()->user()->id)
-            ->whereHas('product', function ($query) {
-                $query->whereNull('deleted_at');
-            })
-            ->orderByDesc('id')
-            ->paginate($request->global_product_pagination);
-            
+                ->where('user_id', auth()->user()->id)
+                ->whereHas('product', function ($query) {
+                    $query->whereNull('deleted_at');
+                })
+                ->orderByDesc('id')
+                ->paginate($request->global_product_pagination);
+
             $wishlistProducts = $productFavorites->map(function ($productFavorite) {
                 $product = $productFavorite->product;
-                
+
                 if ($product) {
-                    // dd('here');
                     return [
                         'id' => $product->id,
                         'name' => $product->name,
@@ -140,9 +138,9 @@ class ProductController extends Controller
                         'status' => $product->status,
                         'other_size' => $product->other_size,
                         'condition' => $product->condition,
-                        'brand' => $product->get_brand->name??'N/A',
-                        'color' => $product->get_color->name??'N/A',
-                        'size' => $product->get_size->name??'N/A',
+                        'brand' => $product->get_brand->name,
+                        'color' => $product->get_color->name,
+                        'size' => $product->get_size->name,
                         'modified_by' => $product->modified_by,
                         'modified_user_type' => $product->modified_user_type,
                         'available' => $product->available,
@@ -170,26 +168,16 @@ class ProductController extends Controller
             $message = 'Wishlist product fetched successfully!';
 
             if ($wishlistProducts) {
-                // return $this->apiResponse($apiResponse, $statusCode, $message, $wishlistProducts, null);
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Wishlist product fetched successfully!',
-                    'data' => $wishlistProducts,
-                ], 200);
+                return $this->apiResponse($apiResponse, $statusCode, $message, $wishlistProducts, null);
             } else {
                 $data = [];
-                // return $this->apiResponse($apiResponse, $statusCode, 'There is no product list add', $data, null);
-                return response()->json([
-                    'status' => true,
-                    'message' => 'There is no product list add!',
-                    'data' => $wishlistProducts,
-                ], 200);
+                return $this->apiResponse($apiResponse, $statusCode, 'There is no product list add', $data, null);
             }
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-            ], 500);
+        } catch (\Throwable $e) {
+            $apiResponse = 'error';
+            $statusCode = '500';
+            $message = $e->getMessage();
+            return $this->apiResponse($apiResponse, $statusCode, $message, null, null);
         }
     }
 
@@ -461,7 +449,7 @@ class ProductController extends Controller
                 'longitude' => $locationData['longitude'],
                 'product_complete_location' => $locationData['formatted_address'],
                 'raw_address' => $request->pickup_location,
-                'manul_pickup_location' => $request->manul_pickup_location ?? 1,
+                'manul_pickup_location' => $request->manul_pickup_location,
             ]);
 
             if ($request->has('disable_dates')) {
@@ -707,13 +695,6 @@ class ProductController extends Controller
      */
     public function getFormData()
     {
-        $user = auth()->user();
-        $is_added = $user->bankAccount;
-        if (is_null($is_added)) {
-            $added = false;
-        } else {
-            $added = true;
-        }
         try {
             $categories = getParentCategory();
             $brands = getBrands();
@@ -765,12 +746,6 @@ class ProductController extends Controller
                 ['id' => '3', 'label' => 'Good condition', 'value' => 'Good condition'],
                 ['id' => '4', 'label' => 'Fair condition', 'value' => 'Fair condition'],
             ];
-            $rentalDays = [
-                ['id' => '1', 'label' => '7 Days', 'value' => '7'],
-                ['id' => '2', 'label' => '14 Days', 'value' => '14'],
-                ['id' => '3', 'label' => '30 Days', 'value' => '30'],
-                // ['id' => '4', 'label' => 'Fair condition', 'value' => 'Fair condition'],
-            ];
 
             $data = [
                 'Category' => $categoryData,
@@ -778,8 +753,6 @@ class ProductController extends Controller
                 'Size' => $sizeData,
                 'Color' => $colorData,
                 'Condition' => $conditionData,
-                'rentaldays' => $rentalDays,
-                'bank_account' => $added,
             ];
 
             return response()->json([
@@ -1142,13 +1115,6 @@ class ProductController extends Controller
                 ['id' => '4', 'label' => 'Fair condition', 'value' => 'Fair condition'],
             ];
 
-            $rentalDays = [
-                ['id' => '1', 'label' => '7 Days', 'value' => '7'],
-                ['id' => '2', 'label' => '14 Days', 'value' => '14'],
-                ['id' => '3', 'label' => '30 Days', 'value' => '30'],
-                // ['id' => '4', 'label' => 'Fair condition', 'value' => 'Fair condition'],
-            ];
-
             $productDetails = $this->getProduct($id);
             $productDetails->all_images = $productDetails->allImages->map(function ($image) {
                 return [
@@ -1171,7 +1137,6 @@ class ProductController extends Controller
                     'sizes' => $sizeData,
                     'colors' => $colorData,
                     'conditions' => $conditionData,
-                    'rentaldays' => $rentalDays,
                     'queries' => $queries->map(function ($query) {
                         return [
                             'id' => $query->id,
@@ -1354,55 +1319,12 @@ class ProductController extends Controller
             $order = Order::where('query_id', $query->id)->firstOrFail();
             $productUser = User::where('id', $product->user_id)->firstOrFail();
             $productDetails = $this->getProduct($order->product_id);
-
-            // Organize images
-            $customerPickedUpImages = $order->customerPickedUpImages->map(function ($image) {
+            $productDetails->all_images = $productDetails->allImages->map(function ($image) {
                 return [
                     'id' => $image->id,
-                    'order_id' => $image->order_id,
-                    'type' => $image->type,
-                    'uploaded_by' => $image->uploaded_by,
-                    'file_name' => $image->file,
-                    'file_path' => $image->url,
-                    'created_at' => $image->created_at,
-                    'updated_at' => $image->updated_at
-                ];
-            });
-
-            $customerReturnedImages = $order->customerReturnedImages->map(function ($image) {
-                return [
-                    'id' => $image->id,
-                    'order_id' => $image->order_id,
-                    'type' => $image->type,
-                    'uploaded_by' => $image->uploaded_by,
-                    'file_name' => $image->file,
-                    'file_path' => $image->url,
-                    'created_at' => $image->created_at,
-                    'updated_at' => $image->updated_at
-                ];
-            });
-
-            $retailerPickedUpImages = $order->retailerPickedUpImages->map(function ($image) {
-                return [
-                    'id' => $image->id,
-                    'order_id' => $image->order_id,
-                    'type' => $image->type,
-                    'uploaded_by' => $image->uploaded_by,
-                    'file_name' => $image->file,
-                    'file_path' => $image->url,
-                    'created_at' => $image->created_at,
-                    'updated_at' => $image->updated_at
-                ];
-            });
-
-            $retailerReturnedImages = $order->retailerReturnedImages->map(function ($image) {
-                return [
-                    'id' => $image->id,
-                    'order_id' => $image->order_id,
-                    'type' => $image->type,
-                    'uploaded_by' => $image->uploaded_by,
-                    'file_name' => $image->file,
-                    'file_path' => $image->url,
+                    'product_id' => $image->product_id,
+                    'file_name' => $image->file_name,
+                    'file_path' => storage_path($image->file_path),
                     'created_at' => $image->created_at,
                     'updated_at' => $image->updated_at
                 ];
@@ -1413,14 +1335,8 @@ class ProductController extends Controller
                 'message' => 'Order details fetched successfully',
                 'data' => [
                     'product' => $productDetails,
-                    'queries' => $query,
-                    'user' => $productUser,
-                    'images' => [
-                        'customerPickedUpImages' => $customerPickedUpImages,
-                        'customerReturnedImages' => $customerReturnedImages,
-                        'retailerPickedUpImages' => $retailerPickedUpImages,
-                        'retailerReturnedImages' => $retailerReturnedImages,
-                    ],
+                    'queries' => $query, // Include queries data
+                    'user ' => $productUser,
                 ],
             ], 200);
         } catch (\Throwable $e) {
@@ -1433,8 +1349,4 @@ class ProductController extends Controller
             ], 500);
         }
     }
-
-
-
-
 }

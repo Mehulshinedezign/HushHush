@@ -20,6 +20,7 @@ section.home-sec {
 
 .home-filter-box {
     max-width: 83px;
+    min-width: 83px;
     width: 100%;
     background-color: #EFEFEF;
     border-radius: 10px;
@@ -255,8 +256,14 @@ span.left-form-icon {
 
 .home-product-main {
     width: 100%;
+    position: relative;
 }
-
+.home-product-main .list-empty-box {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 50px;
+}
 .home-product-box {
     display: grid;
     grid-template-columns: repeat(5, 1fr);

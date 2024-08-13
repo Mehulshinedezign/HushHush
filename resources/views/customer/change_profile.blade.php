@@ -44,13 +44,13 @@
                                                         <input type="text" name="name" id="name"
                                                             class="form-control form-class @error('name') is-invalid @enderror"
                                                             placeholder="Name" value="{{ $user->name }}">
+                                                            @error('name')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    {{ $message }}
+                                                                </span>
+                                                            @enderror
                                                     </div>
                                                 </div>
-                                                @error('name')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        {{ $message }}
-                                                    </span>
-                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -93,13 +93,13 @@
                                                             <div class="formfield">
                                                                 <textarea name="complete_address" id="address" placeholder="Address"
                                                                     class="form-control @error('complete_address') is-invalid @enderror">{{ $user->userDetail->complete_address ?? '' }}</textarea>
+                                                                    @error('complete_address')
+                                                                        <span class="invalid-feedback" role="alert">
+                                                                            {{ $message }}
+                                                                        </span>
+                                                                    @enderror
                                                             </div>
                                                         </div>
-                                                        @error('complete_address')
-                                                            <span class="invalid-feedback" role="alert">
-                                                                {{ $message }}
-                                                            </span>
-                                                        @enderror
                                                     </div>
                                                 </div>
                                             </div>
@@ -111,14 +111,14 @@
                                                     <div class="form-group">
                                                         <div class="formfield">
                                                             <input type="text" placeholder="address1" id="addressline1" name="addressline1"
-                                                                class="form-control" value="{{ $user->userDetail->address1 ?? '' }}">
+                                                                class="form-control form-class @error('addressline1') is-invalid @enderror" value="{{ $user->userDetail->address1 ?? '' }}">
+                                                                @error('addressline1')
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
                                                         </div>
                                                     </div>
-                                                    @error('addressline1')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            {{ $message }}
-                                                        </span>
-                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -129,14 +129,14 @@
                                                     <div class="form-group">
                                                         <div class="formfield">
                                                             <input type="text" placeholder="address2" id="addressline2" name="addressline2"
-                                                                class="form-control" value="{{ $user->userDetail->address2 ?? '' }}">
+                                                                class="form-control form-class @error('addressline2') is-invalid @enderror" value="{{ $user->userDetail->address2 ?? '' }}">
+                                                                @error('addressline2')
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
                                                         </div>
                                                     </div>
-                                                    @error('addressline2')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            {{ $message }}
-                                                        </span>
-                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -147,14 +147,14 @@
                                                     <div class="form-group">
                                                         <div class="formfield">
                                                             <input type="text" placeholder="Country" id="country" name="country"
-                                                                class="form-control" value="{{ $user->userDetail->country ?? '' }}">
+                                                                class="form-control form-class @error('country') is-invalid @enderror" value="{{ $user->userDetail->country ?? '' }}">
+                                                                @error('country')
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
                                                         </div>
                                                     </div>
-                                                    @error('country')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            {{ $message }}
-                                                        </span>
-                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -165,14 +165,14 @@
                                                     <div class="form-group">
                                                         <div class="formfield">
                                                             <input type="text" name="state" placeholder="state" value="{{ $user->userDetail->state ?? ''}}"
-                                                                id="state" class="form-control">
+                                                                id="state" class="form-control form-class @error('state') is-invalid @enderror">
+                                                                @error('state')
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
                                                         </div>
                                                     </div>
-                                                    @error('state')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            {{ $message }}
-                                                        </span>
-                                                    @enderror
                                                 </div>
                                             </div>       
                                         </div>
@@ -183,14 +183,14 @@
                                                     <div class="form-group">
                                                         <div class="formfield">
                                                             <input type="text" name="city" id="city" value="{{ $user->userDetail->city ?? '' }}"
-                                                                placeholder="City" class="form-control">
+                                                                placeholder="City" class="form-control form-class @error('city') is-invalid @enderror">
+                                                                @error('city')
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
                                                         </div>
                                                     </div>
-                                                    @error('city')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            {{ $message }}
-                                                        </span>
-                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -334,9 +334,9 @@
             const lastNameRegex = /^[a-zA-Z]+$/;
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             // const addressRegex = /^[a-zA-Z0-9\s,.'-]{3,}$/;
-            const dateOfBirthRegex = /^\d{4}-\d{2}-\d{2}$/;
-            const accountNumberRegex = /^\d+$/;
-            const routingNumberRegex = /^\d+$/;
+            // const dateOfBirthRegex = /^\d{4}-\d{2}-\d{2}$/;
+            // const accountNumberRegex = /^\d+$/;
+            // const routingNumberRegex = /^\d+$/;
 
             $.validator.addMethod("userCompleteAddress", function(value, element) {
                 return $('#addressline1').val() !== '' && $('#addressline2').val() !== '' && $('#country').val() !== '' && $('#state').val() !== '' && $('#city').val() !== '';

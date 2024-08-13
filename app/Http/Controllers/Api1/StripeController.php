@@ -132,7 +132,7 @@ class StripeController extends Controller
             if ($paymentIntent->status == 'succeeded') {
                 $fromDateTime = Carbon::parse($query->from_date);
                 $toDateTime = Carbon::parse($query->to_date);
-                $orderStatus = 'Waiting';
+                $orderStatus = 'COMPLETED';
 
                 $order = Order::create([
                     'user_id' => $query->user_id,

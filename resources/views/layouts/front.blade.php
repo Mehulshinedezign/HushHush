@@ -86,8 +86,8 @@
     </main>
 
     {{-- Add produc modal here --}}
-    <div class="modal fade addproduct-Modal" id="addproduct-Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade addproduct-Modal product-modal" id="addproduct-Modal" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -117,16 +117,19 @@
                                                             fill="#DEE0E3" />
                                                     </svg>
                                                 </span>
+
                                                 <p>Upload Images</p>
                                                 <input type="file" name="images[]" id="upload-image-five" multiple
-                                                    accept="image/*" class="d-none">
+                                                    accept="image/*"
+                                                    class="produt_input d-none form-control form-class @error('images') is-invalid @enderror">
                                             </label>
+                                            @error('images')
+                                                {{-- <span class="invalid-feedback" role="alert"> --}}
+                                                <span class="text-danger"
+                                                    style="font-size: 14px;">{{ $message }}</span>
+                                                {{-- </span> --}}
+                                            @enderror
                                         </div>
-                                        @error('images')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
                                         <div class="upload-img-preview-box">
                                             <div class="upload-img-preview">
                                                 {{-- <img src="{{asset('front/images/pro10.png')}}" alt="img"> --}}
@@ -141,11 +144,13 @@
                                             <label for="">Product Name*</label>
                                             <div class="formfield">
                                                 <input type="text" name="product_name" id=""
-                                                    placeholder="Enter Name" class="form-control">
+                                                    placeholder="Enter Name"
+                                                    class="produt_input form-control form-class @error('product_name') is-invalid @enderror">
+                                                @error('product_name')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
-                                            @error('product_name')
-                                                <span class="invalid-feedback" role="alert">
-                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -153,7 +158,8 @@
                                             <label for="">Category/Subcategory</label>
                                             <div class="duel-select-field">
                                                 <div class="formfield">
-                                                    <select name="category" class="parent_category">
+                                                    <select name="category"
+                                                        class="parent_category produt_input form-class @error('category') is-invalid @enderror">
                                                         <option value="">Category</option>
                                                         @foreach (getParentCategory() as $category)
                                                             <option value="{{ jsencode_userdata($category->id) }}"
@@ -166,22 +172,23 @@
                                                         <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                             alt="img">
                                                     </span>
+                                                    @error('category')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            {{ $message }}
+                                                        @enderror
                                                 </div>
-                                                @error('category')
+                                                <div class="formfield">
+                                                    <select name="subcategory" id="subcategory">
+                                                        <option value="">Subcategory</option>
+                                                    </select>
+                                                    <span class="form-icon">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                            alt="img">
+                                                    </span>
+                                                </div>
+                                                @error('subcategory')
                                                     <span class="invalid-feedback" role="alert">
                                                     @enderror
-                                                    <div class="formfield">
-                                                        <select name="subcategory" id="subcategory">
-                                                            <option value="">Subcategory</option>
-                                                        </select>
-                                                        <span class="form-icon">
-                                                            <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                                alt="img">
-                                                        </span>
-                                                    </div>
-                                                    @error('subcategory')
-                                                        <span class="invalid-feedback" role="alert">
-                                                        @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -259,9 +266,14 @@
                                                 </div>
                                             </div>
                                             <div class="form-field">
-                                                <input type="text" class="form-control"
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('product_complete_location') is-invalid @enderror"
                                                     name="product_complete_location" placeholder="Address"
                                                     id="product_address">
+                                                @error('product_complete_location')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -269,62 +281,75 @@
                                         <div class="form-group">
                                             <label for="">Address line 1*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control"
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('address1') is-invalid @enderror"
                                                     placeholder="address line 1" name="address1"
                                                     id="product_address1">
+                                                @error('address1')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
-                                            @error('address1')
-                                                <span class="invalid-feedback" role="alert">
-                                                @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-lg-6 col-md-3 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">Address line 2*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control"
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('address2') is-invalid @enderror"
                                                     placeholder="address line 2" name="address2"
                                                     id="product_address2">
+                                                @error('address2')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
-                                            @error('address2')
-                                                <span class="invalid-feedback" role="alert">
-                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">Country*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" placeholder="country"
-                                                    name="country" id="product_country">
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('country') is-invalid @enderror"
+                                                    placeholder="country" name="country" id="product_country">
+                                                @error('country')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
-                                            @error('country')
-                                                <span class="invalid-feedback" role="alert">
-                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">State*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" placeholder="state"
-                                                    name="state" id="product_state">
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('state') is-invalid @enderror"
+                                                    placeholder="country" placeholder="state" name="state"
+                                                    id="product_state">
+                                                @error('state')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
-                                            @error('state')
-                                                <span class="invalid-feedback" role="alert">
-                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">City*</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" placeholder="city"
-                                                    name="city" id="product_city">
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('city') is-invalid @enderror"
+                                                    placeholder="country" placeholder="city" name="city"
+                                                    id="product_city">
+                                                @error('city')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
-                                            @error('city')
-                                                <span class="invalid-feedback" role="alert">
-                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -351,7 +376,9 @@
 
                                                 {{-- <input type="text" name="product_condition" id=""
                                                     placeholder="Product Condition" class="form-control"> --}}
-                                                <select class="form-control" name="product_condition">
+                                                <select
+                                                    class="produt_input form-control form-class @error('product_condition') is-invalid @enderror"
+                                                    name="product_condition">
                                                     <option value="">Select Condition</option>
                                                     <option value="Hardly">Hardly used</option>
                                                     <option value="Great">Great condition</option>
@@ -362,10 +389,11 @@
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                         alt="img">
                                                 </span>
+                                                @error('product_condition')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
-                                            @error('product_condtion')
-                                                <span class="invalid-feedback" role="alert">
-                                                @enderror
                                         </div>
                                     </div>
                                     {{-- <div class="col-lg-4 col-md-4 col-sm-12">
@@ -382,13 +410,15 @@
                                         <div class="form-group">
                                             <label for="">Product market value*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="number" class="form-control"
+                                                <input type="number"
+                                                    class="produt_input form-control form-class @error('product_market_value') is-invalid @enderror"
                                                     name="product_market_value" value="" min="1">
                                                 <span class="form-icon">$</span>
+                                                @error('product_market_value')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
-                                            @error('product_market_value')
-                                                <span class="invalid-feedback" role="alert">
-                                                @enderror
                                         </div>
                                     </div>
 
@@ -396,8 +426,13 @@
                                         <div class="form-group">
                                             <label for="">Product link</label>
                                             <div class="formfield">
-                                                <input type="text" class="form-control" name="product_link"
-                                                    placeholder="Product link" value="">
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('product_link') is-invalid @enderror"
+                                                    name="product_link" placeholder="Product link" value="">
+                                                @error('product_link')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -409,20 +444,24 @@
                                                 <!-- <input type="number" class="form-control" name="min_rent_days"
                                                     placeholder="Rental days" value="" min="1"> -->
                                                 <select class="form-control" name="min_rent_days">
-                                                    <option value="">Select Rental days</option>
-                                                    <option value="7">7 Days</option>
-                                                    <option value="14">14 Days</option>
-                                                    <option value="30">30 Days</option>
-                                                    <!-- <option value="Fair">Fair condition</option> -->
-                                                </select>
-                                                <span class="form-icon">
-                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                        alt="img">
-                                                </span>
+                                                    <select
+                                                        class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
+                                                        name="min_rent_days">
+                                                        <option value="">Select Rental days</option>
+                                                        <option value="7">7 Days</option>
+                                                        <option value="14">14 Days</option>
+                                                        <option value="30">30 Days</option>
+                                                        <!-- <option value="Fair">Fair condition</option> -->
+                                                    </select>
+                                                    <span class="form-icon">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                            alt="img">
+                                                    </span>
+                                                    @error('min_rent_days')
+                                                        <span class="invalid-feedback" role="alert">
+                                                            {{ $message }}
+                                                        @enderror
                                             </div>
-                                            @error('min_rent_days')
-                                                <span class="invalid-feedback" role="alert">
-                                                @enderror
                                         </div>
                                     </div>
 
@@ -431,50 +470,61 @@
                                             <label for="">Rent Price/Day*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_day" id=""
-                                                    placeholder="" class="form-control">
+                                                    placeholder=""
+                                                    class="produt_input form-control form-class @error('rent_price_day') is-invalid @enderror"
+                                                    min="1">
                                                 <span class="form-icon">$</span>
+                                                @error('rent_price_day')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
-                                            <div class="rentPerDay-error"></div>
-                                            @error('rent_price_day')
-                                                <span class="invalid-feedback" role="alert">
-                                                @enderror
                                         </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
-                                        <div class="form-group ">
-                                            <label for="">Rent Price/Week*</label>
-                                            <div class="formfield right-icon-field">
-                                                <input type="number" name="rent_price_week" id=""
-                                                    placeholder="" class="form-control">
-                                                <span class="form-icon">$</span>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="form-group ">
+                                                <label for="">Rent Price/Week*</label>
+                                                <div class="formfield right-icon-field">
+                                                    <input type="number" name="rent_price_week" id=""
+                                                        placeholder=""
+                                                        class="produt_input form-control form-class @error('rent_price_week') is-invalid @enderror"
+                                                        min="1">
+                                                    <span class="form-icon">$</span>
+                                                </div>
+                                                @error('rent_price_week')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
-                                            @error('rent_price_week')
-                                                <span class="invalid-feedback" role="alert">
-                                                @enderror
                                         </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
-                                        <div class="form-group ">
-                                            <label for="">Rent Price/Month*</label>
-                                            <div class="formfield right-icon-field">
-                                                <input type="number" name="rent_price_month" id=""
-                                                    placeholder="" class="form-control">
-                                                <span class="form-icon">$</span>
+                                        <div class="col-lg-4 col-md-4 col-sm-12">
+                                            <div class="form-group ">
+                                                <label for="">Rent Price/Month*</label>
+                                                <div class="formfield right-icon-field">
+                                                    <input type="number" name="rent_price_month" id=""
+                                                        placeholder=""
+                                                        class="produt_input form-control form-class @error('rent_price_month') is-invalid @enderror"
+                                                        min="1">
+                                                    <span class="form-icon">$</span>
+                                                </div>
+                                                @error('rent_price_month')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
-                                            @error('rent_price_month')
-                                                <span class="invalid-feedback" role="alert">
-                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Description*</label>
                                             <div class="formfield">
-                                                <textarea name="description" id="" rows="4" class="form-control" placeholder="Enter Description"></textarea>
+                                                <textarea name="description" id="" rows="4"
+                                                    class="produt_input form-control form-class @error('description') is-invalid @enderror"
+                                                    placeholder="Enter Description"></textarea>
+                                                @error('description')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
-                                            @error('description')
-                                                <span class="invalid-feedback" role="alert">
-                                                @enderror
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -769,20 +819,53 @@
 
             });
 
+            function initDaterangepicker($element) {
+                $element.daterangepicker({
+                    autoUpdateInput: false,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                    drops: 'down',
+                    opens: 'right',
+                    minDate: moment().startOf('day')
+                }).on('apply.daterangepicker', function(ev, picker) {
+                    $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format(
+                        'YYYY-MM-DD'));
+                });
+            }
 
-            $('.daterange-cus').daterangepicker({
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                },
-                drops: 'down',
-                opens: 'right',
-                minDate: moment().startOf('day') // Disable previous dates
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format(
-                    'YYYY-MM-DD'));
+            $('#non_available_date').on('click', function(e) {
+                e.preventDefault();
+                var $modal;
+                var currentScrollTop;
+                var targetOffset;
+                if ($('.update_product-modal').length) {
+                    $modal = $('.update_product-modal');
+                    targetOffset = $(this).offset().top + 210;
+                    currentScrollTop = $(".update_product-modal").scrollTop();
+                } else {
+                    targetOffset = $(this).offset().top - 100;
+                    $modal = $('.product-modal');
+                    currentScrollTop = $modal.scrollTop();
+                }
+
+                if (currentScrollTop >= targetOffset) {
+                    initDaterangepicker($('#non_available_date'));
+                    $('#non_available_date').data('daterangepicker').show();
+                } else {
+                    $modal.animate({
+                        scrollTop: targetOffset
+                    }, 500, function() {
+                        setTimeout(function() {
+                            initDaterangepicker($('#non_available_date'));
+                            $('#non_available_date').data('daterangepicker').show();
+                        }, 100);
+                    });
+                }
             });
 
+
+            // Initialize daterangepicker for other elements if needed
             $('.daterange-btn').daterangepicker({
                 ranges: {
                     'Today': [moment(), moment()],
@@ -794,7 +877,7 @@
                         'month').endOf('month')]
                 },
                 autoUpdateInput: false,
-                minDate: moment().startOf('day') // Disable previous dates
+                minDate: moment().startOf('day')
             }).on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format(
                     'MMMM D, YYYY'));
@@ -876,6 +959,9 @@
                 $('#addproduct-Modal').modal('show');
             @endif
 
+            @if ($errors->has('add_product_error'))
+                $('#addproduct-Modal').modal('show');
+            @endif
         });
     </script>
 

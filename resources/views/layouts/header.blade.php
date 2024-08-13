@@ -391,352 +391,56 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <!-- <a class="nav-link" aria-current="page" href="#">What's New</a> -->
-                        <div class="dropdown">
-                            <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                What's New
-                            </div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <div class="sub-categeory-menu">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-links">
-                                                <a href="#">Dresses</a>
-                                                <a href="#">Rompers</a>
-                                                <a href="#">Little Black Dress</a>
-                                                <a href="#">Tops</a>
-                                                <a href="#">Outerwear</a>
-                                                <a href="#">Jumpsuit</a>
-                                                <a href="#">Bottoms</a>
-                                                <a href="#">Skirts</a>
-                                                <a href="#">Boho</a>
-                                                <a href="#">Knitwear</a>
-                                                <a href="#">Denim</a>
-                                                <a href="#">Off-Shoulder</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-img">
-                                                <img src="{{ asset('front/images/sub-menu-img.png') }}"
-                                                    alt="img">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                    @foreach (getParentCategory() as $index => $parentCategory)
+                        @if ($index >= 10)
+                        @break
+                    @endif
                     <li class="nav-item">
                         <div class="dropdown">
-                            <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Top Profiles
-                            </div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <div class="sub-categeory-menu">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-links">
-                                                <a href="#">Dresses</a>
-                                                <a href="#">Rompers</a>
-                                                <a href="#">Little Black Dress</a>
-                                                <a href="#">Tops</a>
-                                                <a href="#">Outerwear</a>
-                                                <a href="#">Jumpsuit</a>
-                                                <a href="#">Bottoms</a>
-                                                <a href="#">Skirts</a>
-                                                <a href="#">Boho</a>
-                                                <a href="#">Knitwear</a>
-                                                <a href="#">Denim</a>
-                                                <a href="#">Off-Shoulder</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-img">
-                                                <img src="{{ asset('front/images/sub-menu-img.png') }}"
-                                                    alt="img">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <a class="dropdown-toggle"
+                                href="{{ route('index', ['category' => $parentCategory->id]) }}" type="button">
+                                {{ $parentCategory->name }}
+                            </a>
                         </div>
                     </li>
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Trending
-                            </div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <div class="sub-categeory-menu">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-links">
-                                                <a href="#">Dresses</a>
-                                                <a href="#">Rompers</a>
-                                                <a href="#">Little Black Dress</a>
-                                                <a href="#">Tops</a>
-                                                <a href="#">Outerwear</a>
-                                                <a href="#">Jumpsuit</a>
-                                                <a href="#">Bottoms</a>
-                                                <a href="#">Skirts</a>
-                                                <a href="#">Boho</a>
-                                                <a href="#">Knitwear</a>
-                                                <a href="#">Denim</a>
-                                                <a href="#">Off-Shoulder</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-img">
-                                                <img src="{{ asset('front/images/sub-menu-img.png') }}"
-                                                    alt="img">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Occasion
-                            </div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <div class="sub-categeory-menu">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-links">
-                                                <a href="#">Dresses</a>
-                                                <a href="#">Rompers</a>
-                                                <a href="#">Little Black Dress</a>
-                                                <a href="#">Tops</a>
-                                                <a href="#">Outerwear</a>
-                                                <a href="#">Jumpsuit</a>
-                                                <a href="#">Bottoms</a>
-                                                <a href="#">Skirts</a>
-                                                <a href="#">Boho</a>
-                                                <a href="#">Knitwear</a>
-                                                <a href="#">Denim</a>
-                                                <a href="#">Off-Shoulder</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-img">
-                                                <img src="{{ asset('front/images/sub-menu-img.png') }}"
-                                                    alt="img">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Brand
-                            </div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <div class="sub-categeory-menu">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-links">
-                                                <a href="#">Dresses</a>
-                                                <a href="#">Rompers</a>
-                                                <a href="#">Little Black Dress</a>
-                                                <a href="#">Tops</a>
-                                                <a href="#">Outerwear</a>
-                                                <a href="#">Jumpsuit</a>
-                                                <a href="#">Bottoms</a>
-                                                <a href="#">Skirts</a>
-                                                <a href="#">Boho</a>
-                                                <a href="#">Knitwear</a>
-                                                <a href="#">Denim</a>
-                                                <a href="#">Off-Shoulder</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-img">
-                                                <img src="{{ asset('front/images/sub-menu-img.png') }}"
-                                                    alt="img">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Clothing
-                            </div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <div class="sub-categeory-menu">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-links">
-                                                <a href="#">Dresses</a>
-                                                <a href="#">Rompers</a>
-                                                <a href="#">Little Black Dress</a>
-                                                <a href="#">Tops</a>
-                                                <a href="#">Outerwear</a>
-                                                <a href="#">Jumpsuit</a>
-                                                <a href="#">Bottoms</a>
-                                                <a href="#">Skirts</a>
-                                                <a href="#">Boho</a>
-                                                <a href="#">Knitwear</a>
-                                                <a href="#">Denim</a>
-                                                <a href="#">Off-Shoulder</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-img">
-                                                <img src="{{ asset('front/images/sub-menu-img.png') }}"
-                                                    alt="img">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Shoes
-                            </div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <div class="sub-categeory-menu">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-links">
-                                                <a href="#">Dresses</a>
-                                                <a href="#">Rompers</a>
-                                                <a href="#">Little Black Dress</a>
-                                                <a href="#">Tops</a>
-                                                <a href="#">Outerwear</a>
-                                                <a href="#">Jumpsuit</a>
-                                                <a href="#">Bottoms</a>
-                                                <a href="#">Skirts</a>
-                                                <a href="#">Boho</a>
-                                                <a href="#">Knitwear</a>
-                                                <a href="#">Denim</a>
-                                                <a href="#">Off-Shoulder</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-img">
-                                                <img src="{{ asset('front/images/sub-menu-img.png') }}"
-                                                    alt="img">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Bags
-                            </div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <div class="sub-categeory-menu">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-links">
-                                                <a href="#">Dresses</a>
-                                                <a href="#">Rompers</a>
-                                                <a href="#">Little Black Dress</a>
-                                                <a href="#">Tops</a>
-                                                <a href="#">Outerwear</a>
-                                                <a href="#">Jumpsuit</a>
-                                                <a href="#">Bottoms</a>
-                                                <a href="#">Skirts</a>
-                                                <a href="#">Boho</a>
-                                                <a href="#">Knitwear</a>
-                                                <a href="#">Denim</a>
-                                                <a href="#">Off-Shoulder</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-img">
-                                                <img src="{{ asset('front/images/sub-menu-img.png') }}"
-                                                    alt="img">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <div class="dropdown">
-                            <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Accessories
-                            </div>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <div class="sub-categeory-menu">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-links">
-                                                <a href="#">Dresses</a>
-                                                <a href="#">Rompers</a>
-                                                <a href="#">Little Black Dress</a>
-                                                <a href="#">Tops</a>
-                                                <a href="#">Outerwear</a>
-                                                <a href="#">Jumpsuit</a>
-                                                <a href="#">Bottoms</a>
-                                                <a href="#">Skirts</a>
-                                                <a href="#">Boho</a>
-                                                <a href="#">Knitwear</a>
-                                                <a href="#">Denim</a>
-                                                <a href="#">Off-Shoulder</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="sub-categeory-img">
-                                                <img src="{{ asset('front/images/sub-menu-img.png') }}"
-                                                    alt="img">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                @endforeach
+            </ul>
 
+
+            <form action="{{ route('index') }}" method="GET">
                 @if (request()->route()->getName() == 'index')
                     <div class="search-pro-header">
                         <ul>
                             <li>
-                                <input type="text" placeholder="Anywhere">
+                                <input type="text" name="search" placeholder="Search by product name"
+                                    value="{{ request('search') }}">
                             </li>
                             <li>
-                                <input type="text" placeholder="Any day">
+                                <div class="formfield icon-new-bx">
+                                    <input type="text" name="filter_date" id="daterange"
+                                        placeholder="Enter date range" class="form-control daterange-cus">
+                                    <label for="daterange" class="form-icon">
+                                        <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
+                                    </label>
+                                </div>
                             </li>
                             <li>
-                                <button type="button" class="primary-btn"><i
-                                        class="fa-solid fa-magnifying-glass"></i>Search</button>
+                                <button type="submit" class="primary-btn"><i
+                                        class="fa-solid fa-magnifying-glass"></i></button>
+                            </li>
+                            <li>
+                                <a href="{{ route('index') }}" class="close-icon-link"><i
+                                        class="fa-solid fa-xmark"></i></a>
                             </li>
                         </ul>
                     </div>
                 @endif
-            </div>
+            </form>
+
+
         </div>
-    </nav>
+    </div>
+</nav>
 </header>
 @push('scripts')
 @endpush

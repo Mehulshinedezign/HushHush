@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\{Category, Product, ProductImage, ProductLocation, ProductUnavailability, Brand, City, RetailerBankInformation, Size, User, NeighborhoodCity, ProductDisableDate, State};
 use Carbon\Carbon;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -210,11 +212,12 @@ class ProductController extends Controller
     //     }
     // }
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
 
         // dd($request->all());
         try {
+            DB::beginTransaction();
 
             $product_complete_location = $request->input('product_complete_location');
             $address = urlencode($product_complete_location);
@@ -302,11 +305,12 @@ class ProductController extends Controller
                 }
             }
 
-
+            DB::commit();
             return redirect()->route('product')->with('success', "Your product has been uploaded successfully.");
 
             // return redirect()->back()->with('success', "Your product has been uploaded successfully.");
         } catch (\Exception $e) {
+            DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
         }
     }

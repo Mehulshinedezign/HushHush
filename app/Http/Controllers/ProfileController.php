@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\{Country, State, City, Notification, NotificationSetting, Product, RetailerBankInformation, UserDocuments, User, UserCard, UserNotification};
 use Hash, Stripe, Exception, DateTime;
-use App\Http\Requests\{ProfileRequest, UserDetailRequest};
+use App\Http\Requests\{ProfileRequest, UpdateUserProfile, UserDetailRequest};
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\{Auth, Session};
 
@@ -516,7 +516,7 @@ class ProfileController extends Controller
         return view('customer.change_profile', compact('user','bank'));
     }
 
-    public function saveUserprofile(Request $request)
+    public function saveUserprofile(UpdateUserProfile $request)
     {
        
         try {

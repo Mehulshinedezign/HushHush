@@ -25,7 +25,7 @@ class ProfileController extends Controller
                 ], 401);
             }
 
-            $userData = User::find($user->id, ['id', 'name', 'email', 'phone_number', 'profile_file', 'profile_url', 'zipcode', 'email_notifications', 'push_notifications', 'country_code' ,'otp_is_verified','email_verified_at']);
+            $userData = User::find($user->id, ['id', 'name', 'email', 'phone_number', 'profile_file', 'profile_url', 'zipcode', 'email_notifications', 'push_notifications', 'country_code']);
             $userDetails = UserDetail::where('user_id', $user->id)->first();
 
             $response = [

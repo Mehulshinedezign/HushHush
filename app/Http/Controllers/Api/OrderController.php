@@ -1,0 +1,257 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\OrderImage;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+class OrderController extends Controller
+{
+    public function uploadRetailerImages(Request $request, $id, $type)
+    {
+        try {
+            // dd($request->file);
+            $request->validate([
+                'images[].*' => 'required|file|mimes:jpeg,png,jpg,gif,svg',
+            ]);
+
+            $user = auth()->user();
+
+            if (!in_array($type, ['pickedup', 'returned'])) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid type provided',
+                    'data' => [],
+                ], 400);
+            }
+
+            $orderImages = [];
+
+            if ($request->hasFile('images')) {
+                foreach ($request->images as $image) {
+                    // dd($image);
+                    $path = $image->store('order_images', 'public');
+                    $url = $path;
+
+
+                    $orderImages[] = OrderImage::create([
+                        'order_id' => $id,
+                        'user_id' => $user->id,
+                        'file' => $path,
+                        'url' => $url,
+                        'type' => $type,
+                        'uploaded_by' => 'retailer',
+                    ]);
+                }
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Images uploaded successfully',
+                    'data' => $orderImages,
+                ], 201);
+            }
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Files not found',
+                'data' => [],
+            ], 400);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [
+                    'errors' => [],
+                ],
+            ], 500);
+        }
+    }
+
+
+    public function uploadCustomerImages(Request $request, $id, $type)
+    {
+        try {
+            // dd($type);
+
+            $request->validate([
+                'images[].*' => 'required|file|mimes:jpeg,png,jpg,gif,svg',
+            ]);
+
+            $user = auth()->user();
+
+
+            if (!in_array($type, ['pickedup', 'returned'])) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid type provided',
+                    'data' => [],
+                ], 400);
+            }
+
+
+            if ($request->hasFile('images')) {
+                foreach ($request->images as $image) {
+                    // dd($image);
+                    $path = $image->store('order_images', 'public');
+                    $url = $path;
+
+
+                    $orderImages[] = OrderImage::create([
+                        'order_id' => $id,
+                        'user_id' => $user->id,
+                        'file' => $path,
+                        'url' => $url,
+                        'type' => $type,
+                        'uploaded_by' => 'customer',
+                    ]);
+                }
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Images uploaded successfully',
+                    'data' => $orderImages,
+                ], 201);
+            }
+
+
+            return response()->json([
+                'status' => false,
+                'message' => 'File not found',
+                'data' => [],
+            ], 400);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [
+                    'errors' => [],
+                ],
+            ], 500);
+        }
+    }
+
+
+
+    public function retailerVerifyImage(Request $request, $id, $type)
+    {
+        try {
+            $user = auth()->user();
+
+            if (!in_array($type, ['pickedup', 'returned'])) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid type provided',
+                    'data' => [],
+                ], 400);
+            }
+
+            $order = Order::find($id);
+
+            if (!$order) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Order not found',
+                    'data' => [],
+                ], 404);
+            }
+
+            Log::info("Before Update: ", $order->toArray());
+
+            if ($type == 'pickedup') {
+                $order->update(['retailer_confirmed_pickedup' => 1]);
+
+                if ($order->customer_confirmed_pickedup == 1) {
+                    $order->update(['status' => 'Picked Up']);
+                }
+            }
+
+            if ($type == 'returned') {
+                $order->update(['retailer_confirmed_returned' => 1]);
+
+                if ($order->customer_confirmed_returned == 1) {
+                    $order->update(['status' => 'Completed']);
+                }
+            }
+
+            Log::info("After Update: ", $order->toArray());
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Image verified successfully',
+                'data' => $order,
+            ], 200);
+        } catch (\Throwable $e) {
+            Log::error("Error: ", ['message' => $e->getMessage()]);
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [
+                    'errors' => [],
+                ],
+            ], 500);
+        }
+    }
+
+    public function customerVerifyImage(Request $request, $id, $type)
+    {
+        try {
+            $user = auth()->user();
+
+            if (!in_array($type, ['pickedup', 'returned'])) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid type provided',
+                    'data' => [],
+                ], 400);
+            }
+
+            $order = Order::find($id);
+
+            if (!$order) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Order not found',
+                    'data' => [],
+                ], 404);
+            }
+
+            Log::info("Before Update: ", $order->toArray());
+
+            if ($type == 'pickedup') {
+                $order->update(['customer_confirmed_pickedup' => 1]);
+
+                if ($order->retailer_confirmed_pickedup == 1) {
+                    $order->update(['status' => 'Picked Up']);
+                }
+            }
+
+            if ($type == 'returned') {
+                $order->update(['customer_confirmed_returned' => 1]);
+
+                if ($order->retailer_confirmed_returned == 1) {
+                    $order->update(['status' => 'Completed']);
+                }
+            }
+
+            Log::info("After Update: ", $order->toArray());
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Image verified successfully',
+                'data' => $order,
+            ], 200);
+        } catch (\Throwable $e) {
+            Log::error("Error: ", ['message' => $e->getMessage()]);
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [
+                    'errors' => [],
+                ],
+            ], 500);
+        }
+    }
+}

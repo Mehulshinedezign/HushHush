@@ -19,14 +19,13 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::post('/register', [App\Http\Controllers\Api\RegisterController::class, 'register']);
-Route::post('/login/{type}', [App\Http\Controllers\Api\LoginController::class, 'login'])->middleware('prevent.admin');
+Route::post('/login/{type}', [App\Http\Controllers\Api\LoginController::class, 'login']);
 Route::post('/reset-password/{type}', [App\Http\Controllers\Api\ForgotPasswordController::class, 'resetPassword']);
 Route::post('verify-otp/{type}', [App\Http\Controllers\Api\RegisterController::class, 'verifyOtp']);
 Route::post('/update-password', [App\Http\Controllers\Api\ResetPasswordController::class, 'resetPassword']);
 
 
-
-Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [App\Http\Controllers\Api\LoginController::class, 'logout']);
 
     // Product API
@@ -65,11 +64,6 @@ Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {
     Route::get('/your-product-booked', [App\Http\Controllers\Api\QueryController::class, 'booked']);
     Route::post('products/{id}/ratings', [App\Http\Controllers\Api\ProductController::class, 'ratings']);
     Route::get('/order/details/{id}', [App\Http\Controllers\Api\ProductController::class, 'orderDetails']);
-    Route::post('order/{id}/upload-retailer-images/{type}', [App\Http\Controllers\Api\OrderController::class, 'uploadRetailerImages']);
-    Route::post('order/{id}/upload-customer-images/{type}', [App\Http\Controllers\Api\OrderController::class, 'uploadCustomerImages']);
-    Route::post('/verify/{id}/images/{type}', [App\Http\Controllers\Api\OrderController::class, 'retailerVerifyImage']);
-    Route::post('/customerverify/{id}/images/{type}', [App\Http\Controllers\Api\OrderController::class, 'customerVerifyImage']);
-
 
     // Route::post('/borrow/{bookingId}/confirm', [App\Http\Controllers\Api\LenderController::class, 'confirmPayment']);
     // Route::post('/stripe/charge', [App\Http\Controllers\Api\StripeController::class, 'createCharge']);
@@ -87,8 +81,6 @@ Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {
     //Bank Deatils APIs
     Route::post('/bank-account', [App\Http\Controllers\Api\BankAccountController::class, 'addOrUpdateBankAccount']);
     Route::get('/bank-account/details', [App\Http\Controllers\Api\BankAccountController::class, 'getDetails']);
-
-
 
 
     Route::post('/stripe/onboarding/redirect', [App\Http\Controllers\Api\StripeController::class, 'redirectToStripe'])->name('api.stripe.onboarding.redirect');

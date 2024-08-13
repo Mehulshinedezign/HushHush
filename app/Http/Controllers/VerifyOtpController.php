@@ -157,6 +157,6 @@ class VerifyOtpController extends Controller
         }
 
         return redirect()->route('auth.verify_otp_form',  ['user' => $user->id])
-            ->with('status', ucfirst($type) . ' OTP resent successfully on your email/phone number.');
+            ->with('status', ' OTP resent successfully on your email/phone number.');
     }
 }

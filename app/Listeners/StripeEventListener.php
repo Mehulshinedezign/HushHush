@@ -21,6 +21,7 @@ class StripeEventListener implements ShouldQueue
      */
     public function handle(WebhookReceived $event)
     {
+        Log::info('listner start',["event" => $event]);
         $eventObject = $event->payload['data']['object'];
 
         if (empty($eventObject['id'])) {
@@ -28,7 +29,9 @@ class StripeEventListener implements ShouldQueue
         }
 
         switch ($event->payload['type']) {
+            
             case 'account.updated':
+                Log::info('listner start in switch',['type' => $event->payload['type']]);
                 $account = $eventObject;
 
                 // Check if the account is fully set up
@@ -55,5 +58,7 @@ class StripeEventListener implements ShouldQueue
                 //     // Handle invoice.payment_succeeded event
                 //     break;
         }
+        Log::info('end');
+
     }
 }

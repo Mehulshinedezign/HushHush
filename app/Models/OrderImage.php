@@ -22,4 +22,9 @@ class OrderImage extends Model
         'type',
         'uploaded_by',
     ];
+
+    public function getUrlAttribute($value)
+    {
+        return url('/storage/'.$value);
+    }
 }

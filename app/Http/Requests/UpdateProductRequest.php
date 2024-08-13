@@ -23,28 +23,28 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'product_name' => 'required',
+
+        $rules = [
+            'product_name' => 'required|string',
+            'category' => 'required|string',
+            'product_complete_location' => 'required|string',
+            'address1' => 'required|string',
+            'address2' => 'required|string',
+            'country' => 'required|string',
+            'state' => 'required|string',
+            'city' => 'required|string',
+            'product_link' => ['nullable','regex:/^((ftp|http|https):\/\/)?(www\.)?(?!.*(ftp|http|https|www\.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/'],
+            'product_condition' => 'required|string',
             'description' => 'required|string',
-            'category' => 'required',
-             'product_condition' => 'required|string',
-            'rent_price' => 'nullable',
-            'rent_price_day' => 'required',
-            'rent_price_week' => 'required',
-            'rent_price_month' => 'required',
-            'min_rent_days' => 'required',
-            'product_market_value' => 'required',
-            'product_link' => 'nullable',
-            'size' => 'nullable',
-            'brand' => 'nullable',
-            'color' => 'nullable',
-            'price' => 'nullable',
-            'city' => 'required',
-            'state' => 'required',
-            'non_available_dates' => 'nullable',
-            // 'pick_up_location' => 'required|',
-            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'product_market_value' => 'required|numeric',
+            'min_rent_days' => 'required|integer|min:1',
+            'rent_price_day' => 'required|numeric|min:0',
+            'rent_price_week' => 'required|numeric|min:0',
+            'rent_price_month' => 'required|numeric|min:0',
         ];
+
+
+        return $rules;
     }
 
     /**
@@ -55,21 +55,34 @@ class UpdateProductRequest extends FormRequest
     public function messages()
     {
         return [
-            'product_name.required' => 'The product name is required.',
-            'description.required' => 'The product description is required.',
-            'category.required' => 'Please select a category.',
-            'product_condition.required' => 'Please specify the product condition.',
-            'rent_price_day.required' => 'The daily rent price is required.',
-            'rent_price_week.required' => 'The weekly rent price is required.',
-            'rent_price_month.required' => 'The monthly rent price is required.',
-            'min_rent_days.required' => 'Please specify the minimum rental period.',
-            'product_market_value.required' => 'The product market value is required.',
-            'city.required' => 'The city is required.',
-            'state.required' => 'The state is required.',
-            // 'pick_up_location.required' => 'The pick-up location is required.',
-            'images.*.image' => 'The uploaded file must be an image.',
-            'images.*.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
-            'images.*.max' => 'The image may not be greater than 2MB.',
+            'new_images.required' => 'Please upload at least one image.',
+            'new_images.min' => 'You must upload at least one image.',
+            'new_images.max' => 'You can upload a maximum of 5 images.',
+            'new_images.*.image' => 'Each file must be an image.',
+            'new_images.*.mimes' => 'Only jpeg, png, jpg images are allowed.',
+            'existing_images.array' => 'Existing images must be an array.',
+            'existing_images.*.integer' => 'Each existing image ID must be a valid integer.',
+            'existing_images.*.exists' => 'The provided existing image ID is invalid.',
+            'product_name.required' => 'This field is required.',
+            'category.required' => 'This field is required.',
+            'product_complete_location.required' => 'This field is required.',
+            'address1.required' => 'This field is required.',
+            'address2.required' => 'This field is required.',
+            'country.required' => 'This field is required.',
+            'state.required' => 'This field is required.',
+            'city.required' => 'This field is required.',
+            'product_link.regex' => 'Please enter a valid product link.',
+            'product_condition.required' => 'This field is required.',
+            'description.required' => 'This field is required.',
+            'product_market_value.required' => 'This field is required..',
+            'min_rent_days.required' => 'This field is required.',
+            'rent_price_day.required' => 'This field is required.',
+            'rent_price_week.required' => 'This field is required.',
+            'rent_price_month.required' => 'This field is required.',
+            'min_rent_days.integer' => 'Minimum rental days must be a valid number.',
+            'rent_price_day.numeric' => 'Daily rental price must be a valid number.',
+            'rent_price_week.numeric' => 'Weekly rental price must be a valid number.',
+            'rent_price_month.numeric' => 'Monthly rental price must be a valid number.',
         ];
     }
 }
