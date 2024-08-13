@@ -243,11 +243,36 @@ class ProfileController extends Controller
             return response()->json([
                 'status' => true,
                 'data' => [
-                    'product_count' => $productCount,
-                    'query_count' => $queryCount,
-                    'completed_orders_count' => $completedOrdersCount,
-                    'other_orders_count' => $otherOrdersCount,
-                    'earning' => $earning,
+                    [
+                        'name' => 'Total items added for rent',
+                        'count' => $productCount,
+                        'groupname' => 'Ionicons',
+                        'iconname' => 'newspaper-outline',
+                    ],
+                    [
+                        'name' => 'Total booking requests received',
+                        'count' => $queryCount,
+                        'groupname' => 'Ionicons',
+                        'iconname' => 'newspaper-outline',
+                    ],
+                    [
+                        'name' => 'Total completed bookings',
+                        'count' => $completedOrdersCount,
+                        'groupname' => 'Ionicons',
+                        'iconname' => 'newspaper-outline',
+                    ],
+                    [
+                        'name' => 'Total active bookings',
+                        'count' => $otherOrdersCount,
+                        'groupname' => 'Ionicons',
+                        'iconname' => 'newspaper-outline',
+                    ],
+                    [
+                        'name' => 'Total revenue generated',
+                        'count' => $earning,
+                        'groupname' => 'Ionicons',
+                        'iconname' => 'newspaper-outline',
+                    ],
                 ],
             ], 200);
         } catch (\Exception $e) {
@@ -260,36 +285,37 @@ class ProfileController extends Controller
     }
 
 
-    public function destory(Request $request )
+
+    public function destory(Request $request)
     {
         DB::beginTransaction();
         $user = auth()->user();
         $products = Product::where('user_id', $user->id)->get();
-            foreach ($products as $product) {
-                $product->locations()->delete();
+        foreach ($products as $product) {
+            $product->locations()->delete();
 
-                foreach ($product->allImages as $image) {
-                    Storage::disk('public')->delete($image->file_path);
-                    $image->delete();
-                }
-
-                $product->delete();
+            foreach ($product->allImages as $image) {
+                Storage::disk('public')->delete($image->file_path);
+                $image->delete();
             }
 
-            UserDetail::where('user_id', $user->id)->delete();
+            $product->delete();
+        }
 
-            $user->delete();
+        UserDetail::where('user_id', $user->id)->delete();
 
-            // $user->logout();
-            $user->tokens()->delete();
+        $user->delete();
 
-            DB::commit();
-            return response()->json([
-                'status' => true,
-                'data' => ['message'=>'Account deleted',
+        // $user->logout();
+        $user->tokens()->delete();
 
-                ],
-            ], 200);
+        DB::commit();
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'message' => 'Account deleted',
 
+            ],
+        ], 200);
     }
 }
