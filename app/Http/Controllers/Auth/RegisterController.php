@@ -92,7 +92,7 @@ class RegisterController extends Controller
             'email.max' => __('user.validations.emailMax'),
             'email.unique' => __('user.validations.emailUnique'),
             'phone_number.main.required' => __('customvalidation.user.phone_number.required'),
-            'phone_number.main.digits' => 'hdgfhdgfgdhfsgdf',
+            'phone_number.main.digits' => 'Please enter valid number',
             'phone_number.main.min' => __('customvalidation.user.phone_number.min', ['min' => config('validation.phone_minlength'), 'max' => config('validation.phone_maxlength')]),
             'phone_number.main.max' => __('customvalidation.user.phone_number.max', ['min' => config('validation.phone_minlength'), 'max' => config('validation.phone_maxlength')]),
             'password.required' => __('user.validations.passwordRequired'),
