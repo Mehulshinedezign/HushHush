@@ -269,6 +269,17 @@
                                             </a>
                                         </div>
                                         <h4>{{ $product->retailer->name }}</h4>
+
+                                        <div><a href="javascript:void(0)"
+                                                class="button outline-btn small-btn chat-list-profile"
+                                                data-senderId="{{ auth()->user()->id }}"
+                                                data-receverId="{{ @$product->user_id }}"
+                                                data-receverName = "{{ @$product->retailer->name }}"
+                                                data-receverImage="{{ isset($product->retailer->profile_file) ? Storage::url($product->retailer->profile_file) : asset('img/avatar.png') }}"
+                                                data-profile="{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}"
+                                                data-name="{{ auth()->user()->name }}"><i
+                                                    class="fa-solid fa-comments"></i>
+                                                Chat</a></div>
                                     </div>
                                 </div>
                                 <div class="pro-dec-rating-main">
