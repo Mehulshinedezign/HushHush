@@ -26,8 +26,8 @@ Route::post('/update-password', [App\Http\Controllers\Api\ResetPasswordControlle
 
 
 
+Route::post('/logout', [App\Http\Controllers\Api\LoginController::class, 'logout']);
 Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {
-    Route::post('/logout', [App\Http\Controllers\Api\LoginController::class, 'logout']);
 
     // Product API
     Route::get('/product', [App\Http\Controllers\Api\ProductController::class, 'index']);

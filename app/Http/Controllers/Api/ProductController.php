@@ -1086,7 +1086,7 @@ class ProductController extends Controller
                     ]
                 ], 404);
             }
-
+            $user = auth()->user();
             $authUserId = auth()->user()->id;
 
             $queries = Query::where('product_id', $id)->where('user_id', $authUserId)->get();
@@ -1186,6 +1186,7 @@ class ProductController extends Controller
                             'negotiate_price' => $query->negotiate_price,
                         ];
                     }),
+                    'loggedInUser'=>$user,
                 ],
             ], 200);
         } catch (\Throwable $e) {

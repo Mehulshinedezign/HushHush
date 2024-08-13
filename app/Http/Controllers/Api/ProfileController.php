@@ -281,6 +281,7 @@ class ProfileController extends Controller
             $user->delete();
 
             // $user->logout();
+            $user->tokens()->delete();
 
             DB::commit();
             return response()->json([
