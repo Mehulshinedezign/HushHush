@@ -145,23 +145,35 @@
                 });
                 return false;
             }
+            if(!cleaning_charges && !shipping_charges)
+            {
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Please enter a cleaning and shipping charge',
+                    'position': 'topRight',
+                });
+                return false;
+            }
+            else{
 
-            if (cleaning_charges <= 0 || !cleaning_charges) {
-                iziToast.error({
-                    title: 'Error',
-                    message: 'Please enter a valid cleaning charge',
-                    'position': 'topRight',
-                });
-                return false;
+                if (cleaning_charges <= 0 || !cleaning_charges) {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Please enter a valid cleaning charge',
+                        'position': 'topRight',
+                    });
+                    return false;
+                }
+                if (shipping_charges <= 0 || !shipping_charges) {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Please enter a valid shipping charge',
+                        'position': 'topRight',
+                    });
+                    return false;
+                }
             }
-            if (shipping_charges <= 0 || !shipping_charges) {
-                iziToast.error({
-                    title: 'Error',
-                    message: 'Please enter a valid shipping charge',
-                    'position': 'topRight',
-                });
-                return false;
-            }
+
 
             Swal.fire({
                 title: 'Are you sure?',
