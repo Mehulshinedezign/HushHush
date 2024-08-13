@@ -148,8 +148,8 @@
                                                     class="produt_input form-control form-class @error('product_name') is-invalid @enderror">
                                                 @error('product_name')
                                                     <span class="invalid-feedback" role="alert">
-                                                        {{ $message }}
-                                                    @enderror
+                                                        {{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -175,7 +175,8 @@
                                                     @error('category')
                                                         <span class="invalid-feedback" role="alert">
                                                             {{ $message }}
-                                                        @enderror
+                                                        </span>
+                                                    @enderror
                                                 </div>
                                                 <div class="formfield">
                                                     <select name="subcategory" id="subcategory">
@@ -188,7 +189,8 @@
                                                 </div>
                                                 @error('subcategory')
                                                     <span class="invalid-feedback" role="alert">
-                                                    @enderror
+                                                    </span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -208,7 +210,8 @@
                                             </div>
                                             @error('subcategory')
                                                 <span class="invalid-feedback" role="alert">
-                                                @enderror
+                                                </span>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -229,7 +232,8 @@
                                             </div>
                                             @error('brand')
                                                 <span class="invalid-feedback" role="alert">
-                                                @enderror
+                                                </span>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -250,7 +254,8 @@
                                             </div>
                                             @error('color')
                                                 <span class="invalid-feedback" role="alert">
-                                                @enderror
+                                                </span>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
@@ -273,7 +278,8 @@
                                                 @error('product_complete_location')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
-                                                    @enderror
+                                                    </span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -288,7 +294,8 @@
                                                 @error('address1')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
-                                                    @enderror
+                                                    </span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -304,7 +311,8 @@
                                                 @error('address2')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
-                                                    @enderror
+                                                    </span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -318,7 +326,8 @@
                                                 @error('country')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
-                                                    @enderror
+                                                    </span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -333,7 +342,8 @@
                                                 @error('state')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
-                                                    @enderror
+                                                    </span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -348,13 +358,14 @@
                                                 @error('city')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
-                                                    @enderror
+                                                    </span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Non-Available Dates*</label>
+                                            <label for="">Non-Available Dates</label>
                                             <div class="formfield">
                                                 <input type="text" name="non_available_dates"
                                                     id="non_available_date" placeholder="Select Dates"
@@ -366,7 +377,8 @@
                                             </div>
                                             @error('non_available_dates')
                                                 <span class="invalid-feedback" role="alert">
-                                                @enderror
+                                                </span>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -392,7 +404,8 @@
                                                 @error('product_condition')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
-                                                    @enderror
+                                                    </span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -417,7 +430,8 @@
                                                 @error('product_market_value')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
-                                                    @enderror
+                                                    </span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -432,7 +446,8 @@
                                                 @error('product_link')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
-                                                    @enderror
+                                                    </span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -443,24 +458,25 @@
                                             <div class="formfield ">
                                                 <!-- <input type="number" class="form-control" name="min_rent_days"
                                                     placeholder="Rental days" value="" min="1"> -->
-                                                <select class="form-control" name="min_rent_days">
-                                                    <select
-                                                        class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
-                                                        name="min_rent_days">
-                                                        <option value="">Select Rental days</option>
-                                                        <option value="7">7 Days</option>
-                                                        <option value="14">14 Days</option>
-                                                        <option value="30">30 Days</option>
-                                                        <!-- <option value="Fair">Fair condition</option> -->
-                                                    </select>
-                                                    <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
+                                                {{-- <select class="form-control" name="min_rent_days"> --}}
+                                                <select
+                                                    class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
+                                                    name="min_rent_days">
+                                                    <option value="">Select Rental days</option>
+                                                    <option value="7">7 Days</option>
+                                                    <option value="14">14 Days</option>
+                                                    <option value="30">30 Days</option>
+                                                    <!-- <option value="Fair">Fair condition</option> -->
+                                                </select>
+                                                <span class="form-icon">
+                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                        alt="img">
+                                                </span>
+                                                @error('min_rent_days')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
                                                     </span>
-                                                    @error('min_rent_days')
-                                                        <span class="invalid-feedback" role="alert">
-                                                            {{ $message }}
-                                                        @enderror
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -477,40 +493,43 @@
                                                 @error('rent_price_day')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
-                                                    @enderror
+                                                    </span>
+                                                @enderror
                                             </div>
                                         </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-12">
-                                            <div class="form-group ">
-                                                <label for="">Rent Price/Week*</label>
-                                                <div class="formfield right-icon-field">
-                                                    <input type="number" name="rent_price_week" id=""
-                                                        placeholder=""
-                                                        class="produt_input form-control form-class @error('rent_price_week') is-invalid @enderror"
-                                                        min="1">
-                                                    <span class="form-icon">$</span>
-                                                </div>
-                                                @error('rent_price_week')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        {{ $message }}
-                                                    @enderror
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
+                                        <div class="form-group ">
+                                            <label for="">Rent Price/Week*</label>
+                                            <div class="formfield right-icon-field">
+                                                <input type="number" name="rent_price_week" id=""
+                                                    placeholder=""
+                                                    class="produt_input form-control form-class @error('rent_price_week') is-invalid @enderror"
+                                                    min="1">
+                                                <span class="form-icon">$</span>
                                             </div>
+                                            @error('rent_price_week')
+                                                <span class="invalid-feedback" role="alert">
+                                                    {{ $message }}
+                                                </span>
+                                            @enderror
                                         </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-12">
-                                            <div class="form-group ">
-                                                <label for="">Rent Price/Month*</label>
-                                                <div class="formfield right-icon-field">
-                                                    <input type="number" name="rent_price_month" id=""
-                                                        placeholder=""
-                                                        class="produt_input form-control form-class @error('rent_price_month') is-invalid @enderror"
-                                                        min="1">
-                                                    <span class="form-icon">$</span>
-                                                </div>
-                                                @error('rent_price_month')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        {{ $message }}
-                                                    @enderror
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
+                                        <div class="form-group ">
+                                            <label for="">Rent Price/Month*</label>
+                                            <div class="formfield right-icon-field">
+                                                <input type="number" name="rent_price_month" id=""
+                                                    placeholder=""
+                                                    class="produt_input form-control form-class @error('rent_price_month') is-invalid @enderror"
+                                                    min="1">
+                                                <span class="form-icon">$</span>
                                             </div>
+                                            @error('rent_price_month')
+                                                <span class="invalid-feedback" role="alert">
+                                                    {{ $message }}
+                                                </span>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
@@ -523,7 +542,8 @@
                                                 @error('description')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
-                                                    @enderror
+                                                    </span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>

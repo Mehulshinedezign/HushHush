@@ -53,7 +53,7 @@ function urlify(text) {
 }
 
 $(document).ready(function () {
-    $(document).on('click','.chat-list-profile', function () {
+    $(document).on('click', '.chat-list-profile', function () {
 
         var element = $(this);
         var data = userData(element);
