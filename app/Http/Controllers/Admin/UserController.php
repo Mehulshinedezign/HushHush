@@ -22,6 +22,34 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
+    // public function customers(Request $request)
+    // {
+    //     // Ensure global_pagination is set in the request, default to 15 if not present
+    //     $pagination = $request->input('global_pagination', 15);
+
+    //     // Get the role ID for customers
+    //     $roleId = Role::where('name', 'customer')->pluck('id')->first();
+
+    //     // Fetch customers with their order items and paginate the results
+    //     $customers = User::with('orderitem')
+    //         ->where('role_id', $roleId)
+    //         ->orderBy('id', 'DESC')
+    //         ->paginate($pagination);
+
+    //     // Prepare serial number
+    //     $sno = (($customers->currentPage() * $customers->perPage()) - $pagination) + 1;
+
+    //     // Fetch orders for each customer
+    //     foreach ($customers as $customer) {
+    //         $customer->orders = Order::where('retailer_id', $customer->id)->get();
+    //         // dd($customer->orders);
+    //     }
+
+    //     $active = "customers";
+
+    //     return view('admin.customer.customer_list', compact('customers', 'active', 'sno'));
+    // }
+
     public function customers(Request $request)
     {
         // Ensure global_pagination is set in the request, default to 15 if not present
@@ -30,11 +58,34 @@ class UserController extends Controller
         // Get the role ID for customers
         $roleId = Role::where('name', 'customer')->pluck('id')->first();
 
-        // Fetch customers with their order items and paginate the results
-        $customers = User::with('orderitem')
+        // Start the query for fetching customers
+        $query = User::with('orderitem')
             ->where('role_id', $roleId)
-            ->orderBy('id', 'DESC')
-            ->paginate($pagination);
+            ->orderBy('id', 'DESC');
+
+        // Apply search filter if search input is present
+        if ($request->filled('search')) {
+            $searchTerm = $request->input('search');
+            $query->where(function ($q) use ($searchTerm, $request) {
+                if ($request->input('SearchVia')) {
+                    // Search by email
+                    $q->where('email', 'like', '%' . $searchTerm . '%');
+                } else {
+                    // General search (you can customize this further)
+                    $q->where('name', 'like', '%' . $searchTerm . '%')
+                        ->orWhere('email', 'like', '%' . $searchTerm . '%');
+                }
+            });
+        }
+
+        // Apply status filter if filter_by_status input is present
+        if ($request->filled('filter_by_status')) {
+            $status = $request->input('filter_by_status');
+            $query->where('status', $status);
+        }
+
+        // Paginate the results
+        $customers = $query->paginate($pagination);
 
         // Prepare serial number
         $sno = (($customers->currentPage() * $customers->perPage()) - $pagination) + 1;
@@ -42,13 +93,13 @@ class UserController extends Controller
         // Fetch orders for each customer
         foreach ($customers as $customer) {
             $customer->orders = Order::where('retailer_id', $customer->id)->get();
-            // dd($customer->orders);
         }
 
         $active = "customers";
 
         return view('admin.customer.customer_list', compact('customers', 'active', 'sno'));
     }
+
 
 
     public function viewCustomer(User $user)
@@ -83,7 +134,7 @@ class UserController extends Controller
         $notAvailable = 'N/A';
         // if ($user->role->name == 'customer') {
         $file = 'admin.customer.edit';
-        // } 
+        // }
         // else {
         // $file = 'admin.retailer.edit';
         // }

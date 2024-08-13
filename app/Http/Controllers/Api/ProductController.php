@@ -109,7 +109,7 @@ class ProductController extends Controller
     public function wishlist(Request $request)
     {
         try {
-            
+
             $productFavorites = ProductFavorite::with(['product.thumbnailImage', 'product.category'])
             ->where('user_id', auth()->user()->id)
             ->whereHas('product', function ($query) {
@@ -117,10 +117,10 @@ class ProductController extends Controller
             })
             ->orderByDesc('id')
             ->paginate($request->global_product_pagination);
-            
+
             $wishlistProducts = $productFavorites->map(function ($productFavorite) {
                 $product = $productFavorite->product;
-                
+
                 if ($product) {
                     // dd('here');
                     return [
@@ -1415,6 +1415,7 @@ class ProductController extends Controller
                     'product' => $productDetails,
                     'queries' => $query,
                     'user' => $productUser,
+                    'order' => $order,
                     'images' => [
                         'customerPickedUpImages' => $customerPickedUpImages,
                         'customerReturnedImages' => $customerReturnedImages,

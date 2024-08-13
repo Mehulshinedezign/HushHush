@@ -12,7 +12,16 @@ class Query extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'product_id', 'for_user', 'query_message', 'status', 'date_range', 'negotiate_price', 'chat_enabled', 'shipping_charges', 'cleaning_charges'
+        'user_id',
+        'product_id',
+        'for_user',
+        'query_message',
+        'status',
+        'date_range',
+        'negotiate_price',
+        'chat_enabled',
+        'shipping_charges',
+        'cleaning_charges'
     ];
 
     public function product()
@@ -89,4 +98,8 @@ class Query extends Model
         return ($this->negotiate_price + $this->shipping_charges + $this->cleaning_charges);
     }
 
+    public static function countUserQueries($userId)
+    {
+        return self::where('for_user', $userId)->count();
+    }
 }

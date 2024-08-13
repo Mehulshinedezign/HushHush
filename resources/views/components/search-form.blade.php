@@ -60,9 +60,9 @@
                 <div class="col-md-2">
                     <select name="filter_by_status" class="form-control selectric" tabindex="-1">
                         <option value="">Filter by</option>
-                        <option {{ request()->filter_by_status == 'Active' ? 'selected' : '' }} value="Active">Active
+                        <option {{ request()->filter_by_status == '1' ? 'selected' : '' }} value="1">Active
                         </option>
-                        <option value="Inactive" {{ request()->filter_by_status == 'Inactive' ? 'selected' : '' }}>
+                        <option value="0" {{ request()->filter_by_status == '0' ? 'selected' : '' }}>
                             Inactive</option>
                         @if ($categoryTypeField)
                             <option {{ request()->filter_by_status == 'main' ? 'selected' : '' }} value="main">Main
@@ -75,15 +75,15 @@
             @endif
 
             @if ($brandField)
-            <div class="col-md-2">
-                <select name="filter_by_status" class="form-control selectric" tabindex="-1">
-                    <option value="">Filter by</option>
-                    <option {{ request()->filter_by_status == 'Active' ? 'selected' : '' }} value="Active">Active
-                    </option>
-                    <option value="Inactive" {{ request()->filter_by_status == 'Inactive' ? 'selected' : '' }}>
-                        Inactive</option>
-                </select>
-            </div>
+                <div class="col-md-2">
+                    <select name="filter_by_status" class="form-control selectric" tabindex="-1">
+                        <option value="">Filter by</option>
+                        <option {{ request()->filter_by_status == 'Active' ? 'selected' : '' }} value="Active">Active
+                        </option>
+                        <option value="Inactive" {{ request()->filter_by_status == 'Inactive' ? 'selected' : '' }}>
+                            Inactive</option>
+                    </select>
+                </div>
             @endif
 
             @if ($dateField)

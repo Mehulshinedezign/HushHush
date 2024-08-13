@@ -577,4 +577,9 @@ class Product extends Model
 
         return $price;
     }
+
+    public static function countUserProducts($userId)
+    {
+        return self::where('user_id', $userId)->count();
+    }
 }

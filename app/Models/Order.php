@@ -16,7 +16,35 @@ class Order extends Model
      * @var string[]
      */
     protected $fillable = [
-        'user_id', 'retailer_id', 'query_id', 'product_id', 'transaction_id', 'from_date', 'to_date', 'from_hour', 'from_minute', 'order_date', 'cancelled_date', 'pickedup_date', 'returned_date', 'promocode', 'discount_type', 'discount_percentage', 'discounted_amount', 'subtotal', 'tax', 'taxrate', 'total', 'status', 'customer_confirmed_pickedup', 'retailer_confirmed_pickedup', 'customer_confirmed_returned', 'retailer_confirmed_returned', 'cancellation_note', 'dispute_status', 'dispute_date'
+        'user_id',
+        'retailer_id',
+        'query_id',
+        'product_id',
+        'transaction_id',
+        'from_date',
+        'to_date',
+        'from_hour',
+        'from_minute',
+        'order_date',
+        'cancelled_date',
+        'pickedup_date',
+        'returned_date',
+        'promocode',
+        'discount_type',
+        'discount_percentage',
+        'discounted_amount',
+        'subtotal',
+        'tax',
+        'taxrate',
+        'total',
+        'status',
+        'customer_confirmed_pickedup',
+        'retailer_confirmed_pickedup',
+        'customer_confirmed_returned',
+        'retailer_confirmed_returned',
+        'cancellation_note',
+        'dispute_status',
+        'dispute_date'
     ];
 
     protected $appends = ['cancellation_time_left'];
@@ -247,5 +275,19 @@ class Order extends Model
     public function queryOf()
     {
         return $this->hasOne(Query::class, "id", "query_id");
+    }
+
+    public static function countCompletedOrders($retailerId)
+    {
+        return self::where('retailer_id', $retailerId)
+            ->where('status', 'Completed')
+            ->count();
+    }
+
+    public static function countOtherOrders($retailerId)
+    {
+        return self::where('retailer_id', $retailerId)
+            ->where('status', '!=', 'Completed')
+            ->count();
     }
 }

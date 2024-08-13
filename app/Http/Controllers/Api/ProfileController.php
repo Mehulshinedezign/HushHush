@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\Query;
+use App\Models\RetailerPayout;
 use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -25,7 +30,7 @@ class ProfileController extends Controller
                 ], 401);
             }
 
-            $userData = User::find($user->id, ['id', 'name', 'email', 'phone_number', 'profile_file', 'profile_url', 'zipcode', 'email_notifications', 'push_notifications', 'country_code' ,'otp_is_verified','email_verified_at']);
+            $userData = User::find($user->id, ['id', 'name', 'email', 'phone_number', 'profile_file', 'profile_url', 'zipcode', 'email_notifications', 'push_notifications', 'country_code', 'otp_is_verified', 'email_verified_at']);
             $userDetails = UserDetail::where('user_id', $user->id)->first();
 
             $response = [
@@ -222,5 +227,68 @@ class ProfileController extends Controller
                 'errors' => []
             ], 500);
         }
+    }
+
+    public function Stats(Request $request)
+    {
+        try {
+            $user = auth()->user();
+
+            $productCount = Product::countUserProducts($user->id);
+            $queryCount = Query::countUserQueries($user->id);
+            $completedOrdersCount = Order::countCompletedOrders($user->id);
+            $otherOrdersCount = Order::countOtherOrders($user->id);
+            $earning = RetailerPayout::calculateTotalEarnings($user->id);
+
+            return response()->json([
+                'status' => true,
+                'data' => [
+                    'product_count' => $productCount,
+                    'query_count' => $queryCount,
+                    'completed_orders_count' => $completedOrdersCount,
+                    'other_orders_count' => $otherOrdersCount,
+                    'earning' => $earning,
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'errors' => []
+            ], 500);
+        }
+    }
+
+
+    public function destory(Request $request )
+    {
+        DB::beginTransaction();
+        $user = auth()->user();
+        $products = Product::where('user_id', $user->id)->get();
+            foreach ($products as $product) {
+                $product->locations()->delete();
+
+                foreach ($product->allImages as $image) {
+                    Storage::disk('public')->delete($image->file_path);
+                    $image->delete();
+                }
+
+                $product->delete();
+            }
+
+            UserDetail::where('user_id', $user->id)->delete();
+
+            $user->delete();
+
+            // $user->logout();
+
+            DB::commit();
+            return response()->json([
+                'status' => true,
+                'data' => ['message'=>'Account deleted',
+
+                ],
+            ], 200);
+
     }
 }

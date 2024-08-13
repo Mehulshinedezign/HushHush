@@ -158,25 +158,26 @@ class OrderController extends Controller
                 ], 404);
             }
 
-            Log::info("Before Update: ", $order->toArray());
+            // Log::info("Before Update: ", $order->toArray());
+            $dateTime = date('Y-m-d H:i:s');
 
             if ($type == 'pickedup') {
-                $order->update(['retailer_confirmed_pickedup' => 1]);
+                $order->update(['retailer_confirmed_pickedup' => '1']);
 
-                if ($order->customer_confirmed_pickedup == 1) {
-                    $order->update(['status' => 'Picked Up']);
+                if ($order->customer_confirmed_pickedup == '1' && $order->status !== 'Picked Up') {
+                    $order->update(['status' => 'Picked Up' ,'pickedup_date' => $dateTime]);
                 }
             }
 
             if ($type == 'returned') {
-                $order->update(['retailer_confirmed_returned' => 1]);
+                $order->update(['retailer_confirmed_returned' => '1']);
 
-                if ($order->customer_confirmed_returned == 1) {
-                    $order->update(['status' => 'Completed']);
+                if ($order->customer_confirmed_returned == '1' && $order->status !== 'Completed') {
+                    $order->update(['status' => 'Completed','returned_date' => $dateTime]);
                 }
             }
 
-            Log::info("After Update: ", $order->toArray());
+            // Log::info("After Update: ", $order->toArray());
 
             return response()->json([
                 'status' => true,
@@ -218,25 +219,26 @@ class OrderController extends Controller
                 ], 404);
             }
 
-            Log::info("Before Update: ", $order->toArray());
+            // Log::info("Before Update: ", $order->toArray());
+            $dateTime = date('Y-m-d H:i:s');
 
             if ($type == 'pickedup') {
-                $order->update(['customer_confirmed_pickedup' => 1]);
+                $order->update(['customer_confirmed_pickedup' => '1']);
 
-                if ($order->retailer_confirmed_pickedup == 1) {
-                    $order->update(['status' => 'Picked Up']);
+                if ($order->retailer_confirmed_pickedup == '1' && $order->status !== 'Picked Up') {
+                    $order->update(['status' => 'Picked Up' ,'pickedup_date' => $dateTime]);
                 }
             }
 
             if ($type == 'returned') {
-                $order->update(['customer_confirmed_returned' => 1]);
+                $order->update(['customer_confirmed_returned' => '1']);
 
-                if ($order->retailer_confirmed_returned == 1) {
-                    $order->update(['status' => 'Completed']);
+                if ($order->retailer_confirmed_returned == '1' && $order->status !== 'Completed') {
+                    $order->update(['status' => 'Completed',  'returned_date' => $dateTime]);
                 }
             }
 
-            Log::info("After Update: ", $order->toArray());
+            // Log::info("After Update: ", $order->toArray());
 
             return response()->json([
                 'status' => true,
