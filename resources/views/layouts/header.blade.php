@@ -307,11 +307,11 @@
                         <li>
                             @if (is_null($userBankInfo))
                                 <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
-                                    Add New Product
+                                    Rent your Closet
                                 </div>
                             @else
                                 <div data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
-                                    Add New Product
+                                    Rent your Closet
                                 </div>
                             @endif
 
@@ -417,12 +417,14 @@
                             </li>
                             <li>
                                 <div class="formfield icon-new-bx">
-                                    <input type="text" name="filter_date" id="daterange"
+                                    <input type="text" name="filter_date" id="daterange-header"
                                         placeholder="Enter date range" class="form-control daterange-cus">
-                                    <label for="daterange" class="form-icon">
+                                    <label for="daterange-header" class="form-icon">
                                         <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
                                     </label>
                                 </div>
+
+
                             </li>
                             <li>
                                 <button type="submit" class="primary-btn"><i

@@ -47,7 +47,7 @@ class ProductController extends Controller
         $authUserId = auth()->user()->id;
 
         // Base product query
-        $query = Product::with('disableDates', 'ratings')->where('user_id', '!=', $authUserId);
+        $query = Product::with('disableDates', 'ratings')->where('user_id', '!=', $authUserId)->where('status','1');
 
         // Filter products by selected categories
         if (!empty($selectedCategories)) {

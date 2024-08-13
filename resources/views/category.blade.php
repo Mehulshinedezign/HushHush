@@ -191,12 +191,14 @@
                             <h4>Date range</h4>
                             <div class="form-group date-range-field">
                                 <div class="formfield">
-                                    <input type="text" name="filter_date" id="daterange"
+                                    <input type="text" name="filter_date" id="daterange-category"
                                         placeholder="Enter date range" class="form-control daterange-cus">
-                                    <label for="daterange" class="form-icon">
+                                    <label for="daterange-category" class="form-icon">
                                         <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
                                     </label>
                                 </div>
+
+
                             </div>
 
                         </div>
@@ -307,7 +309,7 @@
                         @else
                             <div class="list-empty-box">
                                 <img src="{{ asset('front/images/no-products.svg') }}">
-                                <h3 class="text-center">Your Query is empty</h3>
+                                <h3 class="text-center">No Products Available</h3>
                             </div>
                         @endif
                     </div>
@@ -352,8 +354,7 @@
         const customDateFormat = 'MM/DD/YYYY';
 
         jQuery(function() {
-            const date = '{{ request()->get('
-                    filter_date ') }}';
+            const date = '{{ request()->get('filter_date') }}';
             let start, end;
 
             if (date) {
@@ -365,28 +366,32 @@
                 end = moment();
             }
 
-            jQuery('#daterange').daterangepicker({
-                startDate: start,
-                endDate: end,
-                autoUpdateInput: false,
-                locale: {
-                    format: customDateFormat,
-                    separator: ' - ',
-                },
-            });
+            jQuery('.daterange-cus').each(function() {
+                jQuery(this).daterangepicker({
+                    startDate: start,
+                    endDate: end,
+                    autoUpdateInput: false,
+                    locale: {
+                        format: customDateFormat,
+                        separator: ' - ',
+                    },
+                });
 
-            if (date) {
-                jQuery('#daterange').val(date);
-            }
-            jQuery('#daterange').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format(customDateFormat) + ' - ' + picker.endDate.format(
-                    customDateFormat));
-            });
+                if (date) {
+                    jQuery(this).val(date);
+                }
 
-            jQuery('#daterange').on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
+                jQuery(this).on('apply.daterangepicker', function(ev, picker) {
+                    jQuery(this).val(picker.startDate.format(customDateFormat) + ' - ' + picker
+                        .endDate.format(customDateFormat));
+                });
+
+                jQuery(this).on('cancel.daterangepicker', function(ev, picker) {
+                    jQuery(this).val('');
+                });
             });
         });
+
 
         $('.navbar-toggler').on('click', function() {
             $(".navbar-toggler").toggleClass('open');
