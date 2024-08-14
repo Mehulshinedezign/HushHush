@@ -27,7 +27,7 @@ Route::post('/verify/email/otp', [App\Http\Controllers\VerifyOtpController::clas
 Route::post('/verify/phone/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyPhoneOtp'])->name('verify.phone.otp');
 Route::get('/resend-otp/{type}', [App\Http\Controllers\VerifyOtpController::class, 'resendOtp'])->name('resend.otp');
 
-Route::middleware('localization', 'prevent-back-history',)->group(function () {
+Route::middleware('localization', 'prevent-back-history')->group(function () {
 
     Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
     Route::post('/ajaxlogin', [App\Http\Controllers\Auth\LoginController::class, 'ajaxLogin'])->name('ajaxlogin');
@@ -52,7 +52,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
 
 
 
-    Route::middleware('auth', 'VerifyOtp', 'CheckStatus')->group(function () {
+    Route::middleware(['auth', 'VerifyOtp', 'CheckStatus', 'web.admin'])->group(function () {
 
 
         Route::any('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index');
@@ -93,7 +93,7 @@ Route::middleware('localization', 'prevent-back-history',)->group(function () {
     Route::get('card/details/{query?}/{price?}', [App\Http\Controllers\BookingController::class, 'cardDetail'])->name('card.details');
     Route::post('charge', [App\Http\Controllers\BookingController::class, 'charge'])->name('charge');
 
-    Route::middleware('auth', 'CheckStatus')->group(function () {
+    Route::middleware(['auth', 'CheckStatus'])->group(function () {
         //Retailer order
         Route::match(['get', 'post'], 'retailer/order', [App\Http\Controllers\Retailer\OrderController::class, 'index'])->name('retailercustomer');
         Route::get('order/{order}', [App\Http\Controllers\Retailer\OrderController::class, 'viewOrder'])->name('retailervieworder');

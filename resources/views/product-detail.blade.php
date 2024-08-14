@@ -62,10 +62,10 @@
                                     <p>{{ $product->ratings_count }} Ratings & Reviews</p>
                                     <div class="form-group">
                                         <div class="formfield">
-                                            <select name="" id="">
+                                            <select name="" id="" readonly>
                                                 <option value="">Most Recent</option>
-                                                <option value="">older</option>
-                                                <option value="">unseen</option>
+                                                {{-- <option value="">older</option>
+                                                <option value="">unseen</option> --}}
                                             </select>
                                             <span class="form-icon">
                                                 <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
@@ -152,7 +152,7 @@
                                 </div>
 
                             </div>
-                            
+
                             <div class="pro-desc-info">
                                 <div class="pro-desc-info-box">
                                     <h4>Brand :</h4>
@@ -302,9 +302,9 @@
                                 <div class="pro-dec-rating-main">
                                     <div class="pro-rating-head">
                                         <h4>Ratings & Reviews</h4>
-                                        <a href="javascript:void(0)" data-toggle="modal"
+                                        {{-- <a href="javascript:void(0)" data-toggle="modal"
                                             data-rating_product_id="{{ $product->id }}"
-                                            data-target="#rating_review">Leave Review</a>
+                                            data-target="#rating_review">Leave Review</a> --}}
                                     </div>
                                     <div class="pro-rating-body">
                                         <div class="pro-rating-left">
@@ -439,12 +439,15 @@
                                     <div class="form-group">
                                         <label for="">Select your Rental date</label>
                                         <div class="formfield">
-                                            <input type="text" name="rental_dates"
+                                            <input type="text" name="rental_dates" id="rental_dates"
                                                 class="form-control rent_dates form-class @error('rental_dates') is-invalid @enderror"
                                                 placeholder="Select rental date">
-                                            <span class="form-icon">
-                                                <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
-                                            </span>
+                                                <label for="rental_dates" class="form-icon">
+                                                    <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
+                                                </label>
+
+
+
                                         </div>
                                         @error('rental_dates')
                                             <span class="invalid-feedback" role="alert">
@@ -454,10 +457,10 @@
                                     </div>
 
                                     <div class="form-group my-3">
-                                        <label for="">Description</label>
+                                        <label for="">Message to lender</label>
                                         <div class="formfield">
                                             <textarea name="description" cols="30" rows="5"
-                                                class="form-control form-class @error('description') is-invalid @enderror" placeholder="Description"></textarea>
+                                                class="form-control form-class @error('description') is-invalid @enderror" placeholder="message to lender"></textarea>
                                         </div>
                                         @error('description')
                                             <span class="invalid-feedback" role="alert">
@@ -467,9 +470,19 @@
                                     </div>
                                     <div class="item-pickup-loc-main">
                                         <h4>Pick up Location</h4>
-                                        @if (@$product->productCompleteLocation->manul_pickup_location == '1')
+                                        {{-- @if (@$product->productCompleteLocation->manul_pickup_location == '1')
                                             <p>{{ $product->productCompleteLocation->pick_up_location ?? '' }}</p>
-                                        @endif
+                                        @endif --}}
+                                        <input type="radio" id="pick_up" name="delivery_option" value="{{ $product->productCompleteLocation->pick_up_location }}">
+                                        <label for="pick_up">Pick up from lender location</label><br>
+
+                                        <input type="radio" id="ship_to_me" name="delivery_option" value="{{ auth()->user()->userDetail->complete_address }}">
+                                        <label for="ship_to_me">Ship it to me</label><br>
+
+                                        <div id="selected_value"></div>
+                                        <div id="profile_message" class="message" style="display: none;">Please complete your profile to enable this option.</div>
+
+
                                     </div>
                                 </div>
 
@@ -489,6 +502,7 @@
 @endsection
 
 @push('scripts')
+
     <script>
         $('.slider-content').slick({
             slidesToShow: 1,
@@ -535,159 +549,219 @@
         });
 
         $(document).ready(function() {
-            $('#Askquery').on('click', function(e) {
-                let form = $('form#Sendquery')[0];
-                let formData = new FormData(form);
-                if ($('#Sendquery').valid()) {
-                    $('#Askquery').prop('disabled', true);
-                    var url = `{{ route('query') }}`;
-                    $.ajax({
-                        type: "post",
-                        url: url,
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        beforeSend: function() {
-                            $('body').addClass('loading');
-                        },
-                        complete: function() {
-                            $('body').removeClass('loading');
-                        },
+    $('#Askquery').on('click', function(e) {
+        let form = $('form#Sendquery')[0];
+        let formData = new FormData(form);
+        let hasErrors = false;
 
-                        success: function(response) {
-                            var modalContent = '';
-                            if (response.success) {
-                                modalContent =
-                                    `<div class="success-text" role="alert"><img src="` +
-                                    "{{ asset('assets/img/query.png') }}" +
-                                    `" style="max-width: 180px;">` + response.message +
-                                    `</div>`;
-                            } else {
-                                modalContent = '<div class="alert alert-danger" role="alert">' +
-                                    response.message + '</div>';
-                            }
+        // Validate Rental Date
+        if (!$('#rental_dates').val()) {
+            iziToast.error({
+                title: 'Error',
+                message: 'Please select a rental date.',
+                position: 'topRight',
+            });
+            hasErrors = true;
+        }
 
-                            $('#query_msg .modal-body').html(
-                                '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
-                                modalContent
-                            );
+        // // Validate Delivery Option
+        // if (!$('input[name="delivery_option"]:checked').val()) {
+        //     iziToast.error({
+        //         title: 'Error',
+        //         message: 'Please select a delivery option.',
+        //         position: 'topRight',
+        //     });
+        //     hasErrors = true;
+        // }
 
-                            $('#query_msg').modal('show');
-                            $('#Askquery').prop('disabled', false);
-                            $("#Sendquery")[0].reset();
-                            $('#closeModalBtn').on('click', function() {
-                                $('#query_msg').modal('hide');
-                                location.reload();
-                            });
-                        },
-                        error: function(response) {
-                            $('#Askquery').prop('disabled', false);
-                            $('#query_msg .modal-body').html(
-                                '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
-                                '<div class="alert alert-danger" role="alert">' + response
-                                .message + '</div>'
-                            );
-                            $('#query_msg').modal('show');
-                            $('#closeModalBtn').on('click', function() {
-                                $('#query_msg').modal('hide');
-                                location.reload();
-                            });
-                        }
+        // Check for incomplete profile if "Ship it to me" is selected
+        if ($('#ship_to_me').is(':checked') && {{ is_null(auth()->user()->userDetail->complete_address) ? 'true' : 'false' }}) {
+            iziToast.error({
+                title: 'Error',
+                message: 'Please complete your profile to enable this option.',
+                position: 'topRight',
+            });
+            hasErrors = true;
+        }
+
+        if (hasErrors) {
+            e.preventDefault(); // Prevent form submission if there are errors
+            return;
+        }
+
+        if ($('#Sendquery').valid()) {
+            $('#Askquery').prop('disabled', true);
+            var url = `{{ route('query') }}`;
+            $.ajax({
+                type: "post",
+                url: url,
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                beforeSend: function() {
+                    $('body').addClass('loading');
+                },
+                complete: function() {
+                    $('body').removeClass('loading');
+                },
+                success: function(response) {
+                    var modalContent = '';
+                    if (response.success) {
+                        modalContent =
+                            `<div class="success-text" role="alert"><img src="` +
+                            "{{ asset('assets/img/query.png') }}" +
+                            `" style="max-width: 180px;">` + response.message +
+                            `</div>`;
+                    } else {
+                        modalContent = '<div class="alert alert-danger" role="alert">' +
+                            response.message + '</div>';
+                    }
+
+                    $('#query_msg .modal-body').html(
+                        '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
+                        modalContent
+                    );
+
+                    $('#query_msg').modal('show');
+                    $('#Askquery').prop('disabled', false);
+                    $("#Sendquery")[0].reset();
+                    $('#closeModalBtn').on('click', function() {
+                        $('#query_msg').modal('hide');
+                        location.reload();
+                    });
+                },
+                error: function(response) {
+                    $('#Askquery').prop('disabled', false);
+                    $('#query_msg .modal-body').html(
+                        '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
+                        '<div class="alert alert-danger" role="alert">' + response
+                        .message + '</div>'
+                    );
+                    $('#query_msg').modal('show');
+                    $('#closeModalBtn').on('click', function() {
+                        $('#query_msg').modal('hide');
+                        location.reload();
+                    });
+                }
+            });
+        } else {
+            e.preventDefault(); // Prevent the default action of the button click
+        }
+    });
+
+    // Date range picker setup
+    var queryDates = @json($querydates);
+    var disableDates = @json($disable_dates);
+    var disabledDateRanges = queryDates.map(function(query) {
+        var dateRange = query.date_range.split(' - ');
+        return {
+            start: moment(dateRange[0]),
+            end: moment(dateRange[1])
+        };
+    });
+
+    var noneAvailableDates = disableDates.map(function(dateRange) {
+        return {
+            start: moment(dateRange),
+            end: moment(dateRange)
+        };
+    }).filter(function(range) {
+        return range !== null;
+    });
+
+    function isDateDisabled(date) {
+        var inQueryDates = disabledDateRanges.some(function(range) {
+            return date.isBetween(range.start, range.end, 'day', '[]');
+        });
+
+        var inDisableDates = noneAvailableDates.some(function(range) {
+            return date.isSame(range.start, 'day') || date.isSame(range.end, 'day');
+        });
+
+        return inQueryDates || inDisableDates;
+    }
+
+    $('.rent_dates').daterangepicker({
+        autoUpdateInput: false,
+        locale: {
+            format: 'YYYY-MM-DD'
+        },
+        drops: 'down',
+        opens: 'right',
+        minDate: moment().startOf('day'),
+        isInvalidDate: isDateDisabled
+    }).on('apply.daterangepicker', function(ev, picker) {
+        var startDate = picker.startDate;
+        var endDate = picker.endDate;
+        var duration = endDate.diff(startDate, 'days');
+
+        if (duration < 6) {
+            iziToast.error({
+                title: 'Error',
+                message: 'Please select a date range of at least 7 days.',
+                position: 'topRight',
+            });
+            $(this).val('');
+        } else {
+            $(this).val(startDate.format('YYYY-MM-DD') + ' - ' + endDate.format('YYYY-MM-DD'));
+        }
+    });
+
+    $('.daterange-btn').daterangepicker({
+        autoUpdateInput: false,
+        locale: {
+            format: 'YYYY-MM-DD'
+        },
+        drops: 'down',
+        opens: 'right',
+        minDate: moment().startOf('day'),
+        isInvalidDate: isDateDisabled,
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
+                'month').endOf('month')]
+        }
+    }).on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format(
+            'MMMM D, YYYY'));
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the radio buttons and message element
+    const radioButtons = document.querySelectorAll('input[name="delivery_option"]');
+    const profileMessage = document.getElementById('profile_message');
+
+    // Add an event listener to each radio button
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.checked) {
+                const selectedValue = this.value;
+                document.getElementById('selected_value').textContent = ` ${selectedValue}`;
+
+                // Check if the 'Ship it to me' option is selected and the profile is not complete
+                if (this.id === 'ship_to_me' && {{ is_null(auth()->user()->userDetail->complete_address) ? 'true' : 'false' }}) {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Please complete your profile to enable this option.',
+                        position: 'topRight',
                     });
                 } else {
-                    e.preventDefault(); // Prevent the default action of the button click
+                    profileMessage.style.display = 'none'; // Hide message
                 }
-            });
-
-            // Date range picker setup
-            var queryDates = @json($querydates);
-            var disableDates = @json($disable_dates);
-            var disabledDateRanges = queryDates.map(function(query) {
-                var dateRange = query.date_range.split(' - ');
-                return {
-                    start: moment(dateRange[0]),
-                    end: moment(dateRange[1])
-                };
-            });
-
-            var noneAvailableDates = disableDates.map(function(dateRange) {
-                return {
-                    start: moment(dateRange),
-                    end: moment(dateRange)
-                };
-            }).filter(function(range) {
-                return range !== null;
-            });
-
-
-            function isDateDisabled(date) {
-                var inQueryDates = disabledDateRanges.some(function(range) {
-                    return date.isBetween(range.start, range.end, 'day', '[]');
-                });
-
-                var inDisableDates = noneAvailableDates.some(function(range) {
-                    return date.isSame(range.start, 'day') || date.isSame(range.end, 'day');
-                });
-
-                return inQueryDates || inDisableDates;
             }
-
-            $('.rent_dates').daterangepicker({
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                },
-                drops: 'down',
-                opens: 'right',
-                minDate: moment().startOf('day'),
-                isInvalidDate: isDateDisabled
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format(
-                    'YYYY-MM-DD'));
-                var dateRange = $(this).val().split(' - ');
-                var startDate = dateRange[0];
-                var endDate = dateRange[1];
-
-                // check range exit inbetween disabled date or not
-                // disableDates.map(function(dateRange) {
-                //     if (startDate < dateRange && endDate > dateRange) {
-                //         return iziToast.error({
-                //             title: 'Error',
-                //             message: 'this date range is not selectable',
-                //             position: 'topRight'
-                //         });
-                //     }
-                // }).filter(function(range) {
-                //     return range !== null;
-                // });
-            });
-
-            $('.daterange-btn').daterangepicker({
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                },
-                drops: 'down',
-                opens: 'right',
-                minDate: moment().startOf('day'),
-                isInvalidDate: isDateDisabled,
-                ranges: {
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
-                        'month').endOf('month')]
-                }
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format(
-                    'MMMM D, YYYY'));
-            });
         });
+    });
+});
+
+
     </script>
 
     @include('validation')

@@ -158,19 +158,16 @@
                                             <label for="">Category/Subcategory</label>
                                             <div class="duel-select-field">
                                                 <div class="formfield">
-                                                    <select name="category"
-                                                        class="parent_category produt_input form-class @error('category') is-invalid @enderror">
+                                                    <select name="category" class="parent_category produt_input form-class @error('category') is-invalid @enderror" id="parent-category">
                                                         <option value="">Category</option>
                                                         @foreach (getParentCategory() as $category)
-                                                            <option value="{{ jsencode_userdata($category->id) }}"
-                                                                data-fetchsize="{{ $category->name }}">
+                                                            <option value="{{ jsencode_userdata($category->id) }}" data-subcategories="{{ getChild($category->id) }}" data-fetchsize="{{ $category->name }}">
                                                                 {{ $category->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
                                                     <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
                                                     </span>
                                                     @error('category')
                                                         <span class="invalid-feedback" role="alert">
@@ -178,22 +175,24 @@
                                                         </span>
                                                     @enderror
                                                 </div>
+
                                                 <div class="formfield">
-                                                    <select name="subcategory" id="subcategory">
+                                                    <select name="subcategory" id="subcategory" class="produt_input form-class @error('subcategory') is-invalid @enderror">
                                                         <option value="">Subcategory</option>
                                                     </select>
                                                     <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
                                                     </span>
                                                 </div>
                                                 @error('subcategory')
                                                     <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
                                                     </span>
                                                 @enderror
                                             </div>
                                         </div>
                                     </div>
+
 
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
@@ -700,6 +699,28 @@
     <script src="{{ asset('js/custom/add-wishlist.js') }}"></script>
     <script src="{{ asset('js/custom/common.js') }}?ver={{ now() }}"></script>
     <script>
+        jQuery(document).ready(function() {
+    $('#parent-category').on('change', function() {
+        var selectedOption = $(this).find('option:selected');
+        var subcategories = selectedOption.data('subcategories');
+        var subcategoryDropdown = $('#subcategory');
+
+        // Clear the subcategory dropdown
+        subcategoryDropdown.empty();
+        subcategoryDropdown.append('<option value="">Subcategory</option>');
+
+        // If no category is selected, stop here
+        if (!subcategories || subcategories.length === 0) {
+            return;
+        }
+
+        // Populate the subcategory dropdown with the received data
+        subcategories.forEach(function(subcategory) {
+            subcategoryDropdown.append('<option value="' + subcategory.id + '">' + subcategory.name + '</option>');
+        });
+    });
+});
+
         $('.custom-slider').slick({
             centerPadding: '60px',
             slidesToShow: 10,

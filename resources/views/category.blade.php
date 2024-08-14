@@ -40,14 +40,34 @@
                             <div class="filter-categories category-hight-fix">
 
                                 @foreach (getParentCategory() as $key => $category)
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="{{ $category->id }}"
-                                            id="category-check-{{ $key }}" name="Category[]"
-                                            @if (in_array($category->id, request()->input('Category', []))) checked @endif>
-                                        <label class="form-check-label"
-                                            for="category-check1">{{ $category->name }}</label>
+                                <div class="form-check">
+                                    <input class="form-check-input parent-category" type="checkbox" value="{{ $category->id }}"
+                                        id="category-check-{{ $key }}" name="Category[]"
+                                        @if (in_array($category->id, request()->input('Category', []))) checked @endif>
+                                    <label class="form-check-label" for="category-check-{{ $key }}">{{ $category->name }}</label>
+                                </div>
+
+                                {{-- Check if there are any child categories --}}
+                                @php
+                                    $childCategories = getChild($category->id);
+                                @endphp
+
+                                @if ($childCategories->isNotEmpty())
+                                    {{-- Child categories --}}
+                                    <div class="child-categories" id="child-categories-{{ $key }}" style="display:none; margin-left: 20px;">
+                                        @foreach ($childCategories as $child)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="{{ $child->id }}"
+                                                    id="category-check-child-{{ $child->id }}" name="Category[]"
+                                                    @if (in_array($child->id, request()->input('Category', []))) checked @endif>
+                                                <label class="form-check-label" for="category-check-child-{{ $child->id }}">{{ $child->name }}</label>
+                                            </div>
+                                        @endforeach
                                     </div>
-                                @endforeach
+                                @endif
+                            @endforeach
+
+
                             </div>
                         </div>
                         <div class="home-filter-inner">
@@ -99,12 +119,12 @@
                                         <div class="price-field left">
                                             <input type="number" name="min_value" id="selectedMinValue"
                                                 class="min-input" value="{{ request()->input('min_value', 0) }}"
-                                                readonly>
+                                                >
                                         </div>
                                         <div class="price-field right">
                                             <input type="number" name="max_value" id="selectedMaxValue"
                                                 class="max-input" value="{{ request()->input('max_value', 10000) }}"
-                                                readonly>
+                                                >
                                         </div>
                                     </div>
                                     <div class="slider-container">
@@ -116,9 +136,9 @@
 
                                 <div class="range-input">
                                     <input type="range" class="min-range" min="0" max="10000"
-                                        value="{{ request()->input('min_value', 0) }}" step="1" readonly>
+                                        value="{{ request()->input('min_value', 0) }}" step="1" >
                                     <input type="range" class="max-range" min="0" max="10000"
-                                        value="{{ request()->input('max_value', 10000) }}" step="1" readonly>
+                                        value="{{ request()->input('max_value', 10000) }}" step="1" >
                                 </div>
                             </div>
 
@@ -350,6 +370,30 @@
 
 
 @push('scripts')
+<script>
+    jQuery(document).ready(function() {
+    // Handle parent category click
+    $('.parent-category').on('change', function() {
+        var parentId = $(this).val();
+        var childDivId = '#child-categories-' + $(this).attr('id').split('-')[2];
+
+        if ($(this).is(':checked')) {
+            // Show the child categories div if the parent category is checked
+            $(childDivId).slideDown();
+        } else {
+            // Hide the child categories div if the parent category is unchecked
+            $(childDivId).slideUp();
+        }
+    });
+
+    // Initially show the child categories for any checked parent categories
+    $('.parent-category:checked').each(function() {
+        var childDivId = '#child-categories-' + $(this).attr('id').split('-')[2];
+        $(childDivId).show();
+    });
+});
+
+</script>
     <script>
         const customDateFormat = 'MM/DD/YYYY';
 
@@ -540,7 +584,7 @@
             const priceInputValue = document.querySelectorAll(".price-input input");
             const rangeInputValue = document.querySelectorAll(".range-input input");
             const rangeValue = document.querySelector(".price-slider");
-            const priceGap = 100; // Define a minimum gap between min and max values
+            const priceGap = 0; // Define a minimum gap between min and max values
 
             function updateRangePosition(minp, maxp) {
                 const value1 = rangeInputValue[0].max;

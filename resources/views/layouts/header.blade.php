@@ -317,7 +317,7 @@
 
                         </li>
                         <li><a href="{{ route('wishlist') }}"><i class="fa-regular fa-heart"></i>
-                                <p class="d-inline-block d-lg-none">Wishlist</p>
+                                <p class="d-inline-block d-lg-none"></p>
                             </a></li>
                         <li>
                             <div class="dropdown">
@@ -336,10 +336,10 @@
 
                                     <li><a class="dropdown-item" href="{{ route('my_query') }}">
                                             <i class="fa fa-question-circle" aria-hidden="true"></i>
-                                            My Query</a></li>
+                                            My Inquiry</a></li>
                                     <li><a class="dropdown-item" href="{{ route('receive_query') }}"><img width="15"
                                                 height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
-                                                alt="img">Receive Query</a></li>
+                                                alt="img">Received Inquiry</a></li>
                                     <li><a class="dropdown-item" href="{{ route('profile') }}">
                                             <i class="fa-solid fa-user"></i>
                                             Profile</a></li>
@@ -358,11 +358,15 @@
                                     <li><a class="dropdown-item" href="{{ route('common.chat') }}"><i
                                                 class="fa-solid fa-comment"></i>Chat
                                         </a></li>
-                                    <li><a class="dropdown-item" href="{{ route('order.spent.transaction') }}"><i
+                                    {{-- <li><a class="dropdown-item" href="{{ route('order.spent.transaction') }}"><i
                                                 class="fa-solid fa-comment"></i>Spent Transaction
-                                        </a></li>
-                                    <li><a class="dropdown-item" href="{{ route('order.earning.transaction') }}"><i
-                                                class="fa-solid fa-comment"></i>Earning Transaction
+                                        </a></li> --}}
+                                    <li><a class="dropdown-item" href="{{ route('order.earning.transaction') }}"><svg
+                                                xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1"
+                                                viewBox="0 0 24 24" width="20" height="20">
+                                                <path
+                                                    d="m18.293,7.363l.846-.846c-1.7-2.21-4.338-3.518-7.138-3.518C7.038,3,3,7.037,3,12s4.038,9,9,9c4.45,0,8.28-3.315,8.908-7.712.118-.819.881-1.387,1.697-1.273.82.118,1.391.878,1.273,1.697-.839,5.865-5.945,10.288-11.879,10.288C5.383,24,0,18.617,0,12S5.383,0,12,0c3.602,0,7.002,1.622,9.273,4.383l1.102-1.102c.6-.6,1.625-.175,1.625.673v3.83c0,.665-.539,1.204-1.205,1.204h-3.83c-.848,0-1.273-1.025-.673-1.625Zm-6.293,12.637c.829,0,1.5-.672,1.5-1.5v-.669c1.448-.462,2.5-1.82,2.5-3.418,0-1.476-.885-2.783-2.254-3.33l-2.378-.952c-.224-.089-.368-.303-.368-.544,0-.323.263-.587.587-.587h1.181c.181,0,.343.094.434.251.415.717,1.333.963,2.05.548s.962-1.333.548-2.05c-.499-.864-1.344-1.465-2.299-1.67v-.579c0-.828-.671-1.5-1.5-1.5s-1.5.672-1.5,1.5v.669c-1.448.461-2.5,1.82-2.5,3.418,0,1.477.885,2.783,2.254,3.33l2.377.951c.224.09.368.304.368.545,0,.323-.263.587-.587.587h-1.181c-.181,0-.343-.094-.434-.251-.415-.717-1.333-.962-2.049-.548-.717.415-.962,1.333-.547,2.05.499.864,1.343,1.465,2.298,1.671v.578c0,.828.671,1.5,1.5,1.5Z" />
+                                            </svg>Earnings
                                         </a></li>
                                     {{-- <li><a class="dropdown-item" href="{{ route('') }}"><i
                                                 style="color: #606060" class="fa-solid fa-lock"></i></i>my
@@ -392,7 +396,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     @foreach (getParentCategory() as $index => $parentCategory)
-                        @if ($index >= 10)
+                        @if ($index >= 5)
                         @break
                     @endif
                     <li class="nav-item">
@@ -412,32 +416,27 @@
                     <div class="search-pro-header">
                         <ul>
                             <li>
-                                <input type="text" name="search" placeholder="Search by product name"
-                                    value="{{ request('search') }}">
+                                <input type="text" name="search" placeholder="Search by product name" value="{{ request('search') }}">
                             </li>
                             <li>
                                 <div class="formfield icon-new-bx">
-                                    <input type="text" name="filter_date" id="daterange-header"
-                                        placeholder="Enter date range" class="form-control daterange-cus">
+                                    <input type="text" name="filter_date" id="daterange-header" placeholder="Enter date range" class="form-control daterange-cus">
                                     <label for="daterange-header" class="form-icon">
                                         <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
                                     </label>
                                 </div>
-
-
                             </li>
                             <li>
-                                <button type="submit" class="primary-btn"><i
-                                        class="fa-solid fa-magnifying-glass"></i></button>
+                                <button type="submit" class="primary-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
                             </li>
                             <li>
-                                <a href="{{ route('index') }}" class="close-icon-link"><i
-                                        class="fa-solid fa-xmark"></i></a>
+                                <a href="{{ route('index') }}" class="close-icon-link"><i class="fa-solid fa-xmark"></i></a>
                             </li>
                         </ul>
                     </div>
                 @endif
             </form>
+
 
 
         </div>

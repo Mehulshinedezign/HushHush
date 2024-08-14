@@ -5,7 +5,7 @@
         <div class="container">
             <div class="rental-request-wrapper">
                 <div class="rental-header">
-                    <h2>Receive Order History</h2>
+                    <h2>Received Order History</h2>
                 </div>
 
                 <div class="rental-request-tb mb-4">

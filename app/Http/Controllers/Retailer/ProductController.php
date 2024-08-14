@@ -310,6 +310,7 @@ class ProductController extends Controller
 
             // return redirect()->back()->with('success', "Your product has been uploaded successfully.");
         } catch (\Exception $e) {
+            // dd($e->getMessage());
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
         }
