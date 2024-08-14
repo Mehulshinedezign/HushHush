@@ -12,7 +12,7 @@
             <div class="rental-request-wrapper">
                 <div class="rental-header">
                     {{-- @dd($user); --}}
-                    <h2>Receive query List</h2>
+                    <h2>Received inquiry List</h2>
                     <div class="form-group">
                         {{-- <div class="formfield">
                             <input type="text" placeholder="Select Date" class="form-control">

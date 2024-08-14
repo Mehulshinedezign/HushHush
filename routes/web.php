@@ -227,9 +227,9 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
 
             // Query section code here
             Route::post('query', [App\Http\Controllers\Customer\QueryController::class, 'store'])->name('query');
-            Route::get('my_query', [App\Http\Controllers\Customer\QueryController::class, 'myQuery'])->name('my_query');
+            Route::get('my_inquiry', [App\Http\Controllers\Customer\QueryController::class, 'myQuery'])->name('my_query');
             Route::get('query_view', [App\Http\Controllers\Customer\QueryController::class, 'view'])->name('query_view');
-            Route::get('receive_query', [App\Http\Controllers\Customer\QueryController::class, 'receiveQuery'])->name('receive_query');
+            Route::get('received_query', [App\Http\Controllers\Customer\QueryController::class, 'receiveQuery'])->name('receive_query');
             Route::get('accept_query/{id}', [App\Http\Controllers\Customer\QueryController::class, 'acceptQuery'])->name('accept_query');
             Route::get('reject_query/{id}', [App\Http\Controllers\Customer\QueryController::class, 'rejectQuery'])->name('reject_query');
             Route::get('/fetch-queries', [App\Http\Controllers\Customer\QueryController::class, 'fetchQueries'])->name('fetch.queries');

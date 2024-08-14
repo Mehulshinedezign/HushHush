@@ -345,7 +345,7 @@
                                             Profile</a></li>
                                     <li><a class="dropdown-item" href="{{ route('retailercustomer') }}">
                                             <i class="fa fa-question-circle" aria-hidden="true"></i>
-                                            Receive order</a></li>
+                                            Received order</a></li>
                                     <li><a class="dropdown-item" href="{{ route('orders') }}"><i
                                                 class="fa-solid fa-file"></i>Order History</a></li>
                                     <!-- <li><a class="dropdown-item" href="{{ route('rental-request') }}"><img src="{{ asset('front/images/rent-req-icon.svg') }}" alt="img">Rental Request</a></li> -->
