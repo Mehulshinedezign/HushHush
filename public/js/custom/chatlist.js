@@ -1,14 +1,17 @@
 var dbRef = db.ref(`/users/` + senderId);
-var onlinePresence = db.ref(`/OnlinePresence/${senderId}`);
 
 let first = true;
 let response = new Promise((resolve, reject) => {
     dbRef.once("value").then(snap => {
-        snap.forEach(message => {
-            let activeClass = first ? 'activecht' : '';
 
+        snap.forEach(message => {
+
+            // var test = unSeenMessages(message);
+            // console.log(test, "fsdfsdfsdfsdfsf");
+            // alert(test);
+            let activeClass = first ? 'activecht' : '';
             $('.chatlist').append(`<li>
-                <div class="chat-list online ${activeClass}"
+                <div class="chat-list ${activeClass}"
                     data-receiverId=${message.key}
                     data-senderId="${message.val().id}">
                     <div class="chat-profile-img-box">
@@ -18,11 +21,13 @@ let response = new Promise((resolve, reject) => {
                         <p class="getname">
                        ${message.val().name}
                         </p>
-                    </div>
+                        <p id="${message.key + 'count'}"></p>
+                    </div> 
                 </div>
             </li>`);
             first = false;
         });
+
     }).then(() => getFirstChatData())
         .catch(error => {
             console.log("error".error)
@@ -30,11 +35,40 @@ let response = new Promise((resolve, reject) => {
 
 });
 
+// show first chat active and load all messages
 function getFirstChatData() {
     element = $('.activecht');
     getMessages(element);
+    userliststatus();
 }
 
+
+
+
+
+
+firebaselistner = null;
+function userliststatus() {
+
+    var elements = $('.chatlist').find('li');
+    elements.each(function (index, element) {
+        var list = $(element).find('div:first');
+
+        var receiver = parseInt(list.attr('data-receiverid'));
+        if (firebaselistner)
+            firebaselistner();
+
+        var firebaselistner = db.ref(`/OnlinePresence/${receiver}`).on('value', (snapshot) => {
+            console.log(snapshot.val());
+            let onlineClass = snapshot.val().status == 'online' ? 'online' : 'offline';
+            let onlineRClass = snapshot.val().status == 'online' ? 'offline' : 'online';
+            var pertcularPlace = '.chat-list[data-receiverid="' + snapshot.val().id + '"]';
+            console.log(pertcularPlace);
+            $(pertcularPlace).addClass(onlineClass);
+            $(pertcularPlace).removeClass(onlineRClass);
+        });
+    })
+}
 
 // chat search form submit
 $("#searchmember").on("submit", function (e) {

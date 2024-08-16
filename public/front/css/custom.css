@@ -2338,7 +2338,8 @@ p.pick_up_address {
     padding-left: 8px;
 }
 
-.chat-list.online .chat-profile-img {
+.chat-list.online .chat-profile-img,
+.chat-list.offline .chat-profile-img {
     position: relative;
 }
 
@@ -2351,4 +2352,16 @@ p.pick_up_address {
     height: 10px;
     background-color: green;
     border-radius: 50px;
+}
+
+.chat-list.offline .chat-profile-img::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50px;
+
 }

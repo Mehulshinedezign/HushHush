@@ -9,7 +9,6 @@ var dbRef = db.ref(`/users/` + senderId);
 dbRef.once("value").then(snap => {
     snap.forEach(message => {
         console.log(message.key, message.val());
-
     });
 }).catch(error => {
     console.log("error".error)
@@ -58,6 +57,7 @@ $(document).ready(function () {
         var element = $(this);
         var data = userData(element);
         onlinePresence(data['id'], data['created']);
+        unSeenMessages(data['id'], data['receiverId']);
         createUser(data['id'], data['receiverId'], data['created'], data['image'], data['name'], data);
         createUser(data['receiverId'], data['id'], data['created'], data['authprofile'], data['authName'], data);
 
@@ -100,7 +100,6 @@ $(document).ready(function () {
 
     function createUser(adminId, receiverId, timestamp, image, name, data) {
 
-        // jQuery('#sendMessage').prop('disabled', true);
         let response = new Promise((resolve, reject) => {
 
             db.ref(`users/${adminId}`).child(`${receiverId}`).set({
@@ -122,20 +121,84 @@ $(document).ready(function () {
     }
 });
 
-// online Presence
-function onlinePresence($user, $created) {
-    let response = new Promise((resolve, reject) => {
+// user online offline status update
+$(document).ready(function () {
+    userStatus();
+});
 
-        db.ref(`/OnlinePresence/${adminId}`).set({
+function userStatus() {
+    if (window.location.href == APP_URL + '/chat') {
+
+        const currentTime = new Date().getTime();
+        const timestamp = currentTime;
+
+        let response = new Promise((resolve, reject) => {
+            db.ref(`/OnlinePresence/${senderId}`).set({
+                status: 'online',
+                time: timestamp,
+                id: senderId,
+            }).then(() => console.log('Updated'))
+                .catch(function (error) {
+                    reject(error)
+                    console.log('error', error);
+                })
+        });
+    } else {
+        const currentTime = new Date().getTime();
+        const timestamp = currentTime;
+
+        let response = new Promise((resolve, reject) => {
+            db.ref(`/OnlinePresence/${senderId}`).set({
+                status: 'offline',
+                time: timestamp,
+                id: senderId,
+            }).then(() => console.log('Updated'))
+                .catch(function (error) {
+                    reject(error)
+                    console.log('error', error);
+                })
+        });
+    }
+}
+
+// online Presence
+function onlinePresence(user, created) {
+
+    let response = new Promise((resolve, reject) => {
+        db.ref(`/OnlinePresence/${user}`).set({
             status: 'online',
-            time: $created,
-            id: $user,
+            time: created,
+            id: user,
         }).then(() => console.log('Updated'))
             .catch(function (error) {
                 reject(error)
                 console.log('error', error);
             })
     });
+}
+
+// total number of unseen messages
+function unSeenMessages(sender, reciever) {
+    alert('dzfxsdf');
+    // if (fireBaseListener1234)
+    //     fireBaseListener1234()
+
+    // let response = new Promise((resolve, reject) => {
+    // alert(reciever);
+    var fireBaseListener1234 = db.ref('messeges/' + `${sender}_${reciever}`).on("child_added", (snap) => {
+        var count = 0;
+        var message = snap;
+
+        if (message.val().isSeen == 'false') {
+            count += 1;
+        }
+        console.log(count, "Dsfsdfsdfsdfsdfdsf");
+        alert(count);
+        return;
+    });
+
+    // })
+
 }
 document.getElementById("chatForm").addEventListener("submit", submitForm);
 
@@ -144,8 +207,8 @@ function submitForm(e) {
     var messagedata = messageData();
     if (messagedata.msg != '') {
 
-        sendMessage(messagedata['sender'], messagedata['reciever'], messagedata['created'], messagedata);
-        sendMessage(messagedata['reciever'], messagedata['sender'], messagedata['created'], messagedata);
+        sendMessage(messagedata['sender'], messagedata['reciever'], messagedata['created'], messagedata, 'true');
+        sendMessage(messagedata['reciever'], messagedata['sender'], messagedata['created'], messagedata, 'false');
     }
 }
 // }
@@ -168,7 +231,6 @@ function messageData() {
     const attachmentInput = document.getElementById("attachment");
     // const message = parseHtml(msgValue);
 
-    //console.log(message, 'message');
     // var img = '';
     const isSeen = '';
     var sender = '';
@@ -180,7 +242,7 @@ function messageData() {
         reciever: ReceiverId,
         msg: message,
         // img: img,
-        isSeen: 'isSeen',
+        isSeen: 'true',
         a_remove: '0',
         created: created,
     }
@@ -189,13 +251,21 @@ function messageData() {
 }
 
 
-function sendMessage(sender, reciever, created, data) {
+function sendMessage(sender, reciever, created, data, check) {
 
     jQuery('#message').val('');
 
     let response = new Promise((resolve, reject) => {
         var test = 'messeges/' + `${sender}_${reciever}`;
-        db.ref(test).push(data).then(() => {
+        db.ref(test).push({
+            sender: data['sender'],
+            reciever: data['reciever'],
+            msg: data['msg'],
+            // img: img,
+            isSeen: check,
+            a_remove: '0',
+            created: data['created'],
+        }).then(() => {
             console.log('Message updated.');
             // loadMessages(sender, reciever, img);
             resolve(); // Resolve the promise on success
@@ -206,6 +276,34 @@ function sendMessage(sender, reciever, created, data) {
     });
 
 }
+
+// messsage isseen update
+function messageUpdate(message, check) {
+    // console.log(message.key);
+    // alert(message.key);
+    var sender = parseInt(message.val().reciever);
+    var reciever = parseInt(message.val().sender);
+    messageId = message.key;
+    // console.log(sender, reciever, check);
+    // alert(sender);
+    let response = new Promise((resolve, reject) => {
+        // var messagePath = 'messages/' + `${sender}_${receiver}/` + messageId;
+        var test = 'messeges/' + `${sender}_${reciever}/` + messageId;
+        console.log(sender, reciever, check);
+        // alert(reciever);
+        db.ref(test).update({
+            isSeen: check,
+        }).then(() => {
+            console.log('Message updated.');
+            // loadMessages(sender, reciever, img);
+            resolve(); // Resolve the promise on success
+        }).catch((error) => {
+            reject(error);
+            console.log('error', error);
+        });
+    });
+}
+
 
 $(document).on('click', '.chat-list', function () {
 
@@ -256,7 +354,7 @@ function loadMessages(sender, reciever, userImage) {
     //     console.log('sadfasd', message.val(), "sdfsfsdfsd");
 
     var fireBaseListener = db.ref('messeges/' + `${sender}_${reciever}`).on("child_added", (snap) => {
-        console.log('sadfasfasd', snap.val());
+
         var message = snap;
         var messageList = '';
 
@@ -270,7 +368,6 @@ function loadMessages(sender, reciever, userImage) {
         } else {
             var time = msgDate;
         }
-
 
         if (parseInt(authUserId) == parseInt(message.val().sender)) {
 
@@ -295,17 +392,25 @@ function loadMessages(sender, reciever, userImage) {
             messageList += '<span>' + time + '</span></div>';
             // if (attachment)
             //     messageList += '<div class="msg_media"><img src="' + attachment + '"></div>';
+
+
+
             if (message.val().msg)
                 messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message.val().msg)) + '</div>';
             messageList += '</div></div>';
 
+            // issen update
+            if (parseInt(authUserId) == parseInt(message.val().reciever)) {
+                messageUpdate(message, 'true');
+            }
         }
 
 
         // });
 
-
         jQuery('#chatWindow').append(messageList);
     });
+
+
 
 }
