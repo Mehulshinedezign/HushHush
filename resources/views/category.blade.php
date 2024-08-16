@@ -42,9 +42,10 @@
                                     <div class="form-check">
                                         <input class="form-check-input parent-category" type="checkbox"
                                             value="{{ $category->id }}" id="category-check-{{ $key }}"
-                                            name="Category[]" @if (in_array($category->id, request()->input('Category', []))) checked @endif>
-                                        <label class="form-check-label"
-                                            for="category-check-{{ $key }}">{{ $category->name }}</label>
+                                            name="category[]" @if (in_array($category->id, (array) request()->input('category', []))) checked @endif>
+                                        <label class="form-check-label" for="category-check-{{ $key }}">
+                                            {{ $category->name }}
+                                        </label>
                                     </div>
 
                                     @php
@@ -60,14 +61,17 @@
                                                         value="{{ $child->id }}"
                                                         id="subcategory-check-child-{{ $child->id }}"
                                                         name="Subcategory[]"
-                                                        @if (in_array($child->id, request()->input('Subcategory', []))) checked @endif>
+                                                        @if (in_array($child->id, (array) request()->input('Subcategory', []))) checked @endif>
                                                     <label class="form-check-label"
-                                                        for="subcategory-check-child-{{ $child->id }}">{{ $child->name }}</label>
+                                                        for="subcategory-check-child-{{ $child->id }}">
+                                                        {{ $child->name }}
+                                                    </label>
                                                 </div>
                                             @endforeach
                                         </div>
                                     @endif
                                 @endforeach
+
                             </div>
 
                         </div>
@@ -451,12 +455,19 @@
             $(".invite-member-popup").toggleClass('open');
         });
 
+
         $('.sidebar-expand-btn').on('click', function() {
             $(".home-filter-box").addClass('expand');
         });
         $('.filter-fotter-btns').on('click', function() {
             $(".home-filter-box").removeClass('expand');
         });
+        $('.filter-head').on('click', function() {
+            $(".home-filter-box").addClass('expand');
+        });
+        // $('.filter-fotter-btns').on('click', function() {
+        //     $(".home-filter-box").removeClass('expand');
+        // });
 
 
 

@@ -701,7 +701,7 @@
         if (duration < 6) {
             iziToast.error({
                 title: 'Error',
-                message: 'Please select a date range of at least 7 days.',
+                message: 'Please select a date range of at least min rent days.',
                 position: 'topRight',
             });
             $(this).val('');

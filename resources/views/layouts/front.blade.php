@@ -22,8 +22,8 @@
     <link rel="stylesheet" href="{{ asset('css/iziToast.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/daterangepicker.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/custom-front.css') }}?ver={{ now() }}" />
-    <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}?ver={{ now() }}">
     <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}?ver={{ now() }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
     <!-- <script>
         document.addEventListener('contextmenu', function(e) {
