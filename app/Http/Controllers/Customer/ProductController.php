@@ -34,10 +34,13 @@ class ProductController extends Controller
      *
      * @return Collection
      */
+
+
     public function index(Request $request)
     {
         $categories = Category::where('status', 'Active')->get();
         $selectedCategories = $request->input('category', []);
+        $selectedSubcategories = $request->input('Subcategory', []);
         $selectedcolor = $request->input('filtercolor', []);
         $selectedcondition = $request->input('condition', []);
         $selectedbrands = $request->input('brand', []);
@@ -46,33 +49,29 @@ class ProductController extends Controller
 
         $authUserId = auth()->user()->id;
 
-        // Base product query
-        $query = Product::with('disableDates', 'ratings')->where('user_id', '!=', $authUserId)->where('status','1');
-
-        // Filter products by selected categories
-        if (!empty($selectedCategories)) {
-            $query->whereIn('category_id', (array) $selectedCategories);
-        }
+        $query = Product::with('disableDates', 'ratings')
+            ->where('user_id', '!=', $authUserId)
+            ->where('status', '1');
 
         if (!empty($searchKeyword)) {
             $query->where('name', 'LIKE', '%' . $searchKeyword . '%');
         }
 
-        // Apply additional filters if necessary (e.g., colors, condition, etc.)
         $query->applyFilters();
 
-        // Get filtered products
         $products = $query->orderBy('created_at', 'desc')->get();
 
         return view('index', compact('products', 'categories'))->with([
             'selectedLocation' => $this->selectedLocation,
             'selectedCategories' => $selectedCategories,
+            'selectedSubcategories' => $selectedSubcategories,
             'selectedcolor' => $selectedcolor,
             'selectedcondition' => $selectedcondition,
             'selectedbrands' => $selectedbrands,
             'selectedsize' => $selectedsize,
         ]);
     }
+
 
 
 
@@ -362,6 +361,4 @@ class ProductController extends Controller
 
         return view('customer.profile', compact('products', 'retailer'));
     }
-
-
 }

@@ -474,60 +474,69 @@ class Product extends Model
     // }
 
     public function scopeApplyFilters($query)
-    {
-        $request = request();
+{
+    $request = request();
 
-        // Category filter
-        $query->when($request->filled('Category'), function ($q) use ($request) {
-            $q->whereIn('category_id', $request->Category);
+    // Category filter
+    $query->when($request->filled('category'), function ($q) use ($request) {
+        $categories = is_array($request->category) ? $request->category : [$request->category];
+        $q->whereIn('category_id', $categories);
+    });
+
+    // Subcategory filter
+    $query->when($request->filled('Subcategory'), function ($q) use ($request) {
+        $subcategories = is_array($request->Subcategory) ? $request->Subcategory : [$request->Subcategory];
+        $q->whereIn('subcat_id', $subcategories);
+    });
+
+    // Brand filter
+    $query->when($request->filled('Brand'), function ($q) use ($request) {
+        $brands = is_array($request->Brand) ? $request->Brand : [$request->Brand];
+        $q->whereIn('brand', $brands);
+    });
+
+    // Size filter
+    $query->when($request->filled('Size'), function ($q) use ($request) {
+        $sizes = is_array($request->Size) ? $request->Size : [$request->Size];
+        $q->whereIn('size', $sizes);
+    });
+
+    // Price range filter
+    $query->when($request->filled(['min_value', 'max_value']), function ($q) use ($request) {
+        $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
+    });
+
+    // Location filters (Country, State, City)
+    $query->when($request->filled('city'), function ($q) use ($request) {
+        $q->where('city', $request->city);
+    });
+
+    $query->when($request->filled('state') && !$request->filled('city'), function ($q) use ($request) {
+        $q->where('state', $request->state);
+    });
+
+    $query->when($request->filled('country') && !$request->filled(['state', 'city']), function ($q) use ($request) {
+        $q->where('country', $request->country);
+    });
+
+    // Rating filter
+    $query->when($request->filled('rating'), function ($q) use ($request) {
+        $q->whereHas('ratings', function ($q) use ($request) {
+            $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
         });
+    });
 
-        // Brand filter
-        $query->when($request->filled('Brand'), function ($q) use ($request) {
-            $q->whereIn('brand', $request->Brand);
-        });
+    // Date range filter
+    $query->when($request->filled('filter_date'), function ($q) use ($request) {
+        $dateRange = $request->filter_date;
+        $dates = explode(' - ', $dateRange);
+        $startDate = date('Y-m-d', strtotime($dates[0]));
+        $endDate = date('Y-m-d', strtotime($dates[1]));
+        return $q->whereBetween('created_at', [$startDate, $endDate]);
+    });
 
-        // Size filter
-        $query->when($request->filled('Size'), function ($q) use ($request) {
-            $q->whereIn('size', $request->Size);
-        });
-
-        // Price range filter
-        $query->when($request->filled(['min_value', 'max_value']), function ($q) use ($request) {
-            $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
-        });
-
-        // Location filters (Country, State, City)
-        $query->when($request->filled('city'), function ($q) use ($request) {
-            $q->where('city', $request->city);
-        });
-
-        $query->when($request->filled('state') && !$request->filled('city'), function ($q) use ($request) {
-            $q->where('state', $request->state);
-        });
-
-        $query->when($request->filled('country') && !$request->filled(['state', 'city']), function ($q) use ($request) {
-            $q->where('country', $request->country);
-        });
-
-        // Rating filter
-        $query->when($request->filled('rating'), function ($q) use ($request) {
-            $q->whereHas('ratings', function ($q) use ($request) {
-                $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
-            });
-        });
-
-        // Date range filter
-        $query->when($request->filled('filter_date'), function ($q) use ($request) {
-            $dateRange = $request->filter_date;
-            $dates = explode(' - ', $dateRange);
-            $startDate = date('Y-m-d', strtotime($dates[0]));
-            $endDate = date('Y-m-d', strtotime($dates[1]));
-            return $q->whereBetween('created_at', [$startDate, $endDate]);
-        });
-
-        return $query;
-    }
+    return $query;
+}
 
 
     public function scopeFilterByDateRange($query, $startDate, $endDate)
@@ -581,5 +590,10 @@ class Product extends Model
     public static function countUserProducts($userId)
     {
         return self::where('user_id', $userId)->count();
+    }
+
+    public function subcategory()
+    {
+        return $this->belongsTo(Category::class, 'subcat_id');
     }
 }

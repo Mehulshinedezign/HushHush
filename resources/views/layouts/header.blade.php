@@ -411,7 +411,7 @@
             </ul>
 
 
-            <form action="{{ route('index') }}" method="GET">
+            <form id="searchForm" action="{{ route('index') }}" method="GET">
                 @if (request()->route()->getName() == 'index')
                     <div class="search-pro-header">
                         <ul>
@@ -436,6 +436,7 @@
                     </div>
                 @endif
             </form>
+
 
 
 

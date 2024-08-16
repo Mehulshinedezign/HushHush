@@ -111,12 +111,12 @@ class ProductController extends Controller
         try {
 
             $productFavorites = ProductFavorite::with(['product.thumbnailImage', 'product.category'])
-            ->where('user_id', auth()->user()->id)
-            ->whereHas('product', function ($query) {
-                $query->whereNull('deleted_at');
-            })
-            ->orderByDesc('id')
-            ->paginate($request->global_product_pagination);
+                ->where('user_id', auth()->user()->id)
+                ->whereHas('product', function ($query) {
+                    $query->whereNull('deleted_at');
+                })
+                ->orderByDesc('id')
+                ->paginate($request->global_product_pagination);
 
             $wishlistProducts = $productFavorites->map(function ($productFavorite) {
                 $product = $productFavorite->product;
@@ -140,9 +140,9 @@ class ProductController extends Controller
                         'status' => $product->status,
                         'other_size' => $product->other_size,
                         'condition' => $product->condition,
-                        'brand' => $product->get_brand->name??'N/A',
-                        'color' => $product->get_color->name??'N/A',
-                        'size' => $product->get_size->name??'N/A',
+                        'brand' => $product->get_brand->name ?? 'N/A',
+                        'color' => $product->get_color->name ?? 'N/A',
+                        'size' => $product->get_size->name ?? 'N/A',
                         'modified_by' => $product->modified_by,
                         'modified_user_type' => $product->modified_user_type,
                         'available' => $product->available,
@@ -560,7 +560,7 @@ class ProductController extends Controller
                 'product_condition' => 'required|string',
                 'product_market_value' => 'required|numeric',
                 'product_link' => 'nullable|url',
-                'min_rent_days' => 'required|integer',
+                // 'min_rent_days' => 'required|integer',
                 'disable_dates' => 'nullable|string',
                 'rent_day' => 'required|integer',
                 'rent_week' => 'required|integer',
@@ -804,7 +804,7 @@ class ProductController extends Controller
     private function getProduct($id)
     {
         if ($id) {
-            return Product::with(['locations', 'allImages', 'thumbnailImage', 'get_size', 'favorites', 'category', 'disableDates', 'retailer', 'get_color', 'get_brand',])
+            return Product::with(['locations', 'allImages', 'thumbnailImage', 'get_size', 'favorites', 'category', 'disableDates', 'retailer', 'get_color', 'get_brand', 'subcategory',])
                 ->whereId($id)
                 ->first()
                 ->makeVisible(['file_path']);
@@ -1072,6 +1072,134 @@ class ProductController extends Controller
      *details of product.
      */
 
+    // public function getAllProductsById($id)
+    // {
+    //     try {
+    //         $product = Product::with('allImages')->findOrFail($id);
+
+    //         if (is_null($product)) {
+    //             return response()->json([
+    //                 'status' => false,
+    //                 'message' => 'Product not found',
+    //                 'data' => [
+    //                     'errors' => ['product_id' => 'The product does not exist.'],
+    //                 ]
+    //             ], 404);
+    //         }
+    //         $user = auth()->user();
+    //         $authUserId = auth()->user()->id;
+
+    //         $queries = Query::where('product_id', $id)->where('user_id', $authUserId)->get();
+
+    //         $categories = getParentCategory();
+    //         $brands = getBrands();
+    //         $sizes = getAllsizes();
+    //         $colors = getColors();
+
+    //         $categoryData = $categories->map(function ($category) {
+    //             return [
+    //                 'id' => $category->id,
+    //                 'label' => $category->name,
+    //                 'value' => $category->name,
+    //                 'Subcategory' => getChild($category->id)->map(function ($subCategory) {
+    //                     return [
+    //                         'id' => $subCategory->id,
+    //                         'label' => $subCategory->name,
+    //                         'value' => $subCategory->name
+    //                     ];
+    //                 }),
+    //             ];
+    //         });
+
+    //         $brandData = $brands->map(function ($brand) {
+    //             return [
+    //                 'id' => $brand->id,
+    //                 'label' => $brand->name,
+    //                 'value' => $brand->name,
+    //             ];
+    //         });
+
+    //         $sizeData = $sizes->map(function ($size) {
+    //             return [
+    //                 'id' => $size->id,
+    //                 'label' => $size->name,
+    //                 'value' => $size->name,
+    //             ];
+    //         });
+
+    //         $colorData = $colors->map(function ($color) {
+    //             return [
+    //                 'id' => $color->id,
+    //                 'label' => $color->name,
+    //                 'value' => $color->name,
+    //             ];
+    //         });
+
+    //         $conditionData = [
+    //             ['id' => '1', 'label' => 'Hardly used', 'value' => 'Hardly used'],
+    //             ['id' => '2', 'label' => 'Great condition', 'value' => 'Great condition'],
+    //             ['id' => '3', 'label' => 'Good condition', 'value' => 'Good condition'],
+    //             ['id' => '4', 'label' => 'Fair condition', 'value' => 'Fair condition'],
+    //         ];
+
+    //         $rentalDays = [
+    //             ['id' => '1', 'label' => '7 Days', 'value' => '7'],
+    //             ['id' => '2', 'label' => '14 Days', 'value' => '14'],
+    //             ['id' => '3', 'label' => '30 Days', 'value' => '30'],
+    //             // ['id' => '4', 'label' => 'Fair condition', 'value' => 'Fair condition'],
+    //         ];
+
+    //         $productDetails = $this->getProduct($id);
+    //         $productDetails->all_images = $productDetails->allImages->map(function ($image) {
+    //             return [
+    //                 'id' => $image->id,
+    //                 'product_id' => $image->product_id,
+    //                 'file_name' => $image->file_name,
+    //                 'file_path' => storage_path($image->file_path),
+    //                 'created_at' => $image->created_at,
+    //                 'updated_at' => $image->updated_at
+    //             ];
+    //         });
+
+    //         return response()->json([
+    //             'status' => true,
+    //             'message' => 'Product details fetched successfully',
+    //             'data' => [
+    //                 'product' => $productDetails,
+    //                 'categories' => $categoryData,
+    //                 'brands' => $brandData,
+    //                 'sizes' => $sizeData,
+    //                 'colors' => $colorData,
+    //                 'conditions' => $conditionData,
+    //                 'rentaldays' => $rentalDays,
+    //                 'queries' => $queries->map(function ($query) {
+    //                     return [
+    //                         'id' => $query->id,
+    //                         'user_id' => $query->user_id,
+    //                         'product_id' => $query->product_id,
+    //                         'for_user' => $query->for_user,
+    //                         'query_message' => $query->query_message,
+    //                         'status' => $query->status,
+    //                         'date_range' => $query->date_range,
+    //                         'start_date' => $query->start_date,
+    //                         'end_date' => $query->end_date,
+    //                         'negotiate_price' => $query->negotiate_price,
+    //                     ];
+    //                 }),
+    //                 'loggedInUser'=>$user,
+    //             ],
+    //         ], 200);
+    //     } catch (\Throwable $e) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => $e->getMessage(),
+    //             'data' => [
+    //                 'errors' => []
+    //             ]
+    //         ], 500);
+    //     }
+    // }
+
     public function getAllProductsById($id)
     {
         try {
@@ -1086,6 +1214,7 @@ class ProductController extends Controller
                     ]
                 ], 404);
             }
+
             $user = auth()->user();
             $authUserId = auth()->user()->id;
 
@@ -1146,10 +1275,13 @@ class ProductController extends Controller
                 ['id' => '1', 'label' => '7 Days', 'value' => '7'],
                 ['id' => '2', 'label' => '14 Days', 'value' => '14'],
                 ['id' => '3', 'label' => '30 Days', 'value' => '30'],
-                // ['id' => '4', 'label' => 'Fair condition', 'value' => 'Fair condition'],
             ];
 
             $productDetails = $this->getProduct($id);
+
+            // Include subcategory name in product details
+            $productDetails->subcategory_name = $productDetails->subcategory ? $productDetails->subcategory->name : null;
+
             $productDetails->all_images = $productDetails->allImages->map(function ($image) {
                 return [
                     'id' => $image->id,
@@ -1186,7 +1318,7 @@ class ProductController extends Controller
                             'negotiate_price' => $query->negotiate_price,
                         ];
                     }),
-                    'loggedInUser'=>$user,
+                    'loggedInUser' => $user,
                 ],
             ], 200);
         } catch (\Throwable $e) {
@@ -1199,6 +1331,7 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
 
 
 
@@ -1435,8 +1568,4 @@ class ProductController extends Controller
             ], 500);
         }
     }
-
-
-
-
 }

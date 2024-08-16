@@ -1,66 +1,7 @@
 @extends('layouts.front')
 @section('title', 'My Profile')
-{{-- @section('content')
-    <section>
-        <div class="my-profile-section">
-            <div class="container">
-                <div class="my-profile-title">
-                    <h4>My Profile</h4>
-                </div>
-                <div class="my-profile-form">
-                    <div class="profile-edit-btn">
-                        <a class="primary-btn" href="{{ route('edit-account') }}">Edit</a>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="personal-info-row">
-                                <div>
-                                    <span>Name</span>
-                                    <p>{{ auth()->user()->name }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="personal-info-row">
-                                <div>
-                                    <span>Username</span>
-                                    <p>{{ auth()->user()->username }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="personal-info-row">
-                                <div>
-                                    <span>Email</span>
-                                    <p>{{ auth()->user()->email }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="personal-info-row">
-                                <div>
-                                    <span>Phone number</span>
-                                    <p>{{ auth()->user()->phone_number }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="zip-code-row">
-                        <div>
-                            <span>Zip code</span>
-                            <p>{{ auth()->user()->zipcode }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-@endsection --}}
-@php
-    $user = auth()->user();
-@endphp
+
+
 @section('content')
     <section class="profile-banner-sec">
         <div class="container">
@@ -89,23 +30,23 @@
                         </div>
                     </div>
                     <div class="col-md-5">
+                        @if(!is_null($retailer->userDetail->about))
                         <div class="profile-about-detail">
                             <h4>About me</h4>
 
                             @if ( ($retailer) && ($retailer->userDetail))
                                 <p>{{ $retailer->userDetail->about }}</p>
-                            @else
-                                <p>Safer For The Environment: Our denim factory partner recycles 98% of their water using
-                                    reverse osmosis filtration and keeps byproducts out of the environment by mixing them with
-                                    concrete.</p>
+
                             @endif
 
                             {{-- <p>Safer For The Environment: Our denim factory partner recycles 98% of their water using
                                 reverse osmosis filtration and keeps byproducts out of the environment by mixing them with
                                 concrete.</p> --}}
                         </div>
+                        @endif
                     </div>
                     <div class="col-md-5">
+                        @if(!is_null($retailer->userDetail->complete_address))
                         <div class="profile-address-detail">
                             <div class="profile-address-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="19" viewBox="0 0 15 19"
@@ -115,22 +56,25 @@
                                         fill="#1B1B1B" />
                                 </svg>
                             </div>
+
                             <div class="profile-address-data">
                                 <h3>Address</h3>
 
                                 @if($retailer && $retailer->userDetail)
-                                    <p>{{ $user->userDetail->address1 }}</p>
+                                    <p>{{ $retailer->userDetail->complete_address }}</p>
                                 @endif
 
                                 {{-- <p>Akshya Nagar 1st Block 1st Cross, Rammurthy nagar Los Angeles , USA</p> --}}
                             </div>
+
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
             <div class="product-slider-wrapper">
                 <div class="product-slider-heading">
-                    <h3>Products by Desirae</h3>
+                    <h3>Products by {{ $retailer->name }}</h3>
                 </div>
                 <div class="product-slider-main">
                     <div class="product-slider">
@@ -167,174 +111,7 @@
                                 </div>
                             </div>
                         @endforeach
-                        {{-- <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{ asset('front/images/pro2.png') }}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <div class="product-prize-rating">
-                                    <h4>$159/day</h4>
-                                    <div class="review-profile-rating-box">
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{ asset('front/images/pro3.png') }}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <div class="product-prize-rating">
-                                    <h4>$159/day</h4>
-                                    <div class="review-profile-rating-box">
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{ asset('front/images/pro4.png') }}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <div class="product-prize-rating">
-                                    <h4>$159/day</h4>
-                                    <div class="review-profile-rating-box">
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{ asset('front/images/pro5.png') }}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <div class="product-prize-rating">
-                                    <h4>$159/day</h4>
-                                    <div class="review-profile-rating-box">
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{ asset('front/images/pro6.png') }}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <div class="product-prize-rating">
-                                    <h4>$159/day</h4>
-                                    <div class="review-profile-rating-box">
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{ asset('front/images/pro8.png') }}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <div class="product-prize-rating">
-                                    <h4>$159/day</h4>
-                                    <div class="review-profile-rating-box">
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-card">
-                            <div class="product-img-box">
-                                <img src="{{ asset('front/images/pro-0.png') }}" alt="img">
-                                <div class="product-card-like">
-                                    <i class="fa-solid fa-heart"></i>
-                                </div>
-                                <div class="product-card-status">
-                                    <p>in Stock</p>
-                                </div>
-                            </div>
-                            <div class="product-card-detail">
-                                <p>Glamour Affair</p>
-                                <div class="product-prize-rating">
-                                    <h4>$159/day</h4>
-                                    <div class="review-profile-rating-box">
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                        <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
+
                     </div>
                     <div class="prev-product-btn">
 

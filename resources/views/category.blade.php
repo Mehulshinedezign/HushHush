@@ -38,37 +38,38 @@
                         <div class="home-filter-inner">
                             <h4>Product category</h4>
                             <div class="filter-categories category-hight-fix">
-
                                 @foreach (getParentCategory() as $key => $category)
-                                <div class="form-check">
-                                    <input class="form-check-input parent-category" type="checkbox" value="{{ $category->id }}"
-                                        id="category-check-{{ $key }}" name="Category[]"
-                                        @if (in_array($category->id, request()->input('Category', []))) checked @endif>
-                                    <label class="form-check-label" for="category-check-{{ $key }}">{{ $category->name }}</label>
-                                </div>
-
-                                {{-- Check if there are any child categories --}}
-                                @php
-                                    $childCategories = getChild($category->id);
-                                @endphp
-
-                                @if ($childCategories->isNotEmpty())
-                                    {{-- Child categories --}}
-                                    <div class="child-categories" id="child-categories-{{ $key }}" style="display:none; margin-left: 20px;">
-                                        @foreach ($childCategories as $child)
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="{{ $child->id }}"
-                                                    id="category-check-child-{{ $child->id }}" name="Category[]"
-                                                    @if (in_array($child->id, request()->input('Category', []))) checked @endif>
-                                                <label class="form-check-label" for="category-check-child-{{ $child->id }}">{{ $child->name }}</label>
-                                            </div>
-                                        @endforeach
+                                    <div class="form-check">
+                                        <input class="form-check-input parent-category" type="checkbox"
+                                            value="{{ $category->id }}" id="category-check-{{ $key }}"
+                                            name="Category[]" @if (in_array($category->id, request()->input('Category', []))) checked @endif>
+                                        <label class="form-check-label"
+                                            for="category-check-{{ $key }}">{{ $category->name }}</label>
                                     </div>
-                                @endif
-                            @endforeach
 
+                                    @php
+                                        $childCategories = getChild($category->id);
+                                    @endphp
 
+                                    @if ($childCategories->isNotEmpty())
+                                        <div class="child-categories" id="child-categories-{{ $key }}"
+                                            style="display:none; margin-left: 20px;">
+                                            @foreach ($childCategories as $child)
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        value="{{ $child->id }}"
+                                                        id="subcategory-check-child-{{ $child->id }}"
+                                                        name="Subcategory[]"
+                                                        @if (in_array($child->id, request()->input('Subcategory', []))) checked @endif>
+                                                    <label class="form-check-label"
+                                                        for="subcategory-check-child-{{ $child->id }}">{{ $child->name }}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                @endforeach
                             </div>
+
                         </div>
                         <div class="home-filter-inner">
                             <h4>Brand</h4>
@@ -118,13 +119,11 @@
                                     <div class="price-input">
                                         <div class="price-field left">
                                             <input type="number" name="min_value" id="selectedMinValue"
-                                                class="min-input" value="{{ request()->input('min_value', 0) }}"
-                                                >
+                                                class="min-input" value="{{ request()->input('min_value', 0) }}">
                                         </div>
                                         <div class="price-field right">
                                             <input type="number" name="max_value" id="selectedMaxValue"
-                                                class="max-input" value="{{ request()->input('max_value', 10000) }}"
-                                                >
+                                                class="max-input" value="{{ request()->input('max_value', 10000) }}">
                                         </div>
                                     </div>
                                     <div class="slider-container">
@@ -136,9 +135,9 @@
 
                                 <div class="range-input">
                                     <input type="range" class="min-range" min="0" max="10000"
-                                        value="{{ request()->input('min_value', 0) }}" step="1" >
+                                        value="{{ request()->input('min_value', 0) }}" step="1">
                                     <input type="range" class="max-range" min="0" max="10000"
-                                        value="{{ request()->input('max_value', 10000) }}" step="1" >
+                                        value="{{ request()->input('max_value', 10000) }}" step="1">
                                 </div>
                             </div>
 
@@ -370,32 +369,32 @@
 
 
 @push('scripts')
-<script>
-    jQuery(document).ready(function() {
-    // Handle parent category click
-    $('.parent-category').on('change', function() {
-        var parentId = $(this).val();
-        var childDivId = '#child-categories-' + $(this).attr('id').split('-')[2];
+    <script>
+        jQuery(document).ready(function() {
+            // Handle parent category click
+            $('.parent-category').on('change', function() {
+                var parentId = $(this).val();
+                var childDivId = '#child-categories-' + $(this).attr('id').split('-')[2];
 
-        if ($(this).is(':checked')) {
-            // Show the child categories div if the parent category is checked
-            $(childDivId).slideDown();
-        } else {
-            // Hide the child categories div if the parent category is unchecked
-            $(childDivId).slideUp();
-        }
-    });
+                if ($(this).is(':checked')) {
+                    // Show the child categories div if the parent category is checked
+                    $(childDivId).slideDown();
+                } else {
+                    // Hide the child categories div if the parent category is unchecked
+                    $(childDivId).slideUp();
+                }
+            });
 
-    // Initially show the child categories for any checked parent categories
-    $('.parent-category:checked').each(function() {
-        var childDivId = '#child-categories-' + $(this).attr('id').split('-')[2];
-        $(childDivId).show();
-    });
-});
-
-</script>
+            // Initially show the child categories for any checked parent categories
+            $('.parent-category:checked').each(function() {
+                var childDivId = '#child-categories-' + $(this).attr('id').split('-')[2];
+                $(childDivId).show();
+            });
+        });
+    </script>
     <script>
         const customDateFormat = 'MM/DD/YYYY';
+
 
         jQuery(function() {
             const date = '{{ request()->get('filter_date') }}';
@@ -428,6 +427,9 @@
                 jQuery(this).on('apply.daterangepicker', function(ev, picker) {
                     jQuery(this).val(picker.startDate.format(customDateFormat) + ' - ' + picker
                         .endDate.format(customDateFormat));
+                    if (jQuery(this).closest('form').attr('id') === 'searchForm') {
+                        jQuery(this).closest('form').submit();
+                    }
                 });
 
                 jQuery(this).on('cancel.daterangepicker', function(ev, picker) {
@@ -435,6 +437,11 @@
                 });
             });
         });
+
+
+
+
+
 
 
         $('.navbar-toggler').on('click', function() {
@@ -679,7 +686,8 @@
         // disable the enter keyword
         $(document).ready(function() {
             $(document).on('keypress', 'input', function(e) {
-                if (e.which === 13) {
+                var form = $(this).closest('form');
+                if (form.attr('id') !== 'searchForm' && e.which === 13) {
                     e.preventDefault();
                     return false;
                 }
