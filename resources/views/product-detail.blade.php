@@ -4,9 +4,7 @@
     $user = auth()->user();
 @endphp
 @section('content')
-@php
-    $user = auth()->user();
-@endphp
+
 
 
     <section class="product-desc-sec">
@@ -283,7 +281,7 @@
                                     <div class="lender-profile-box">
                                         <div class="lender-dp-box">
                                             <a href="{{ route('lenderProfile', jsencode_userdata($product->user_id)) }}">
-                                                @if ($user->profile_file)
+                                                @if ($product->retailer->profile_file)
                                                     <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
                                                         alt="Profile Picture">
                                                 @else

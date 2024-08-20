@@ -433,7 +433,11 @@
 
                 // Check if the file type is not jpeg, png, or jpg
                 if (fileType !== 'image/jpeg' && fileType !== 'image/png' && fileType !== 'image/jpg') {
-                    alert('Only JPEG, PNG, and JPG files are allowed.');
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Only JPEG, PNG, and JPG files are allowed.',
+                        position: 'topRight',
+                    });
                     $('#upload-my-pro').val(''); // Clear input
                     return;
                 }
