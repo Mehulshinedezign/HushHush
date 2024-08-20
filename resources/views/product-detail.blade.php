@@ -4,7 +4,13 @@
     $user = auth()->user();
 @endphp
 @section('content')
+@php
+    $user = auth()->user();
+@endphp
+
+
     <section class="product-desc-sec">
+        
         <div class="container">
             <div class="breadcrum-main">
                 <a href="{{ url('/') }}" class="breadcrum-list">Home</a>
@@ -476,7 +482,7 @@
                                         <input type="radio" id="pick_up" name="delivery_option" value="{{ $product->productCompleteLocation->pick_up_location }}">
                                         <label for="pick_up">Pick up from lender location</label><br>
 
-                                        <input type="radio" id="ship_to_me" name="delivery_option" value="{{ auth()->user()->userDetail->complete_address }}">
+                                        <input type="radio" id="ship_to_me" name="delivery_option" value="{{ $user->userDetail->complete_address }}">
                                         <label for="ship_to_me">Ship it to me</label><br>
 
                                         <div id="selected_value"></div>
@@ -575,7 +581,7 @@
         // }
 
         // Check for incomplete profile if "Ship it to me" is selected
-        if ($('#ship_to_me').is(':checked') && {{ is_null(auth()->user()->userDetail->complete_address) ? 'true' : 'false' }}) {
+        if ($('#ship_to_me').is(':checked') && {{ is_null($user->userDetail->complete_address) ? 'true' : 'false' }}) {
             iziToast.error({
                 title: 'Error',
                 message: 'Please complete your profile to enable this option.',
@@ -747,7 +753,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('selected_value').textContent = ` ${selectedValue}`;
 
                 // Check if the 'Ship it to me' option is selected and the profile is not complete
-                if (this.id === 'ship_to_me' && {{ is_null(auth()->user()->userDetail->complete_address) ? 'true' : 'false' }}) {
+                if (this.id === 'ship_to_me' && {{ is_null($user->userDetail->complete_address) ? 'true' : 'false' }}) {
                     iziToast.error({
                         title: 'Error',
                         message: 'Please complete your profile to enable this option.',

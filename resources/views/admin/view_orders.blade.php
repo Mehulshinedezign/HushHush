@@ -133,7 +133,7 @@
                                             <div class="disputed-img-outer">
                                                 @foreach ($order->customerPickedUpImages as $customerPickedUpImage)
                                                     <img class="dispute-admin-img"
-                                                        src="{{ Storage::url($customerPickedUpImage->url) }}"
+                                                        src="{{ ($customerPickedUpImage->url) }}"
                                                         height="25%" width="25%">
                                                 @endforeach
                                             </div>
@@ -155,7 +155,7 @@
                                             <div class="disputed-img-outer">
                                                 @foreach ($order->retailerPickedUpImages as $retailerPickedUpImage)
                                                     <img class="dispute-admin-img"
-                                                        src="{{ Storage::url($retailerPickedUpImage->url) }}"
+                                                        src="{{ ($retailerPickedUpImage->url) }}"
                                                         height="25%" width="25%">
                                                 @endforeach
                                             </div>
@@ -177,7 +177,7 @@
                                             <div class="disputed-img-outer">
                                                 @foreach ($order->customerReturnedImages as $customerReturnedImage)
                                                     <img class="dispute-admin-img"
-                                                        src="{{ Storage::url($customerReturnedImage->url) }}"
+                                                        src="{{ ($customerReturnedImage->url) }}"
                                                         height="25%" width="25%">
                                                 @endforeach
                                             </div>
@@ -199,7 +199,7 @@
                                             <div class="disputed-img-outer">
                                                 @foreach ($order->retailerReturnedImages as $retailerReturnedImage)
                                                     <img class="dispute-admin-img"
-                                                        src="{{ Storage::url($retailerReturnedImage->url) }}"
+                                                        src="{{($retailerReturnedImage->url) }}"
                                                         height="25%" width="25%">
                                                 @endforeach
                                             </div>
@@ -318,7 +318,7 @@
                                             <div class="disputed-img-outer">
                                                 @foreach ($order->disputedOrderImages as $disputedOrderImage)
                                                     <img class="dispute-admin-img"
-                                                        src="{{ Storage::url($disputedOrderImage->url) }}" height="100"
+                                                        src="{{ ($disputedOrderImage->url) }}" height="100"
                                                         width="100">
                                                 @endforeach
                                             </div>
