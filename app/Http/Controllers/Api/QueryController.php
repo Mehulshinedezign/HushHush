@@ -311,14 +311,16 @@ class QueryController extends Controller
             $queries = Query::where('for_user', $user->id)->where('status', 'completed')
                 ->whereNull('deleted_at')
                 ->get();
+                // dd($queries);
 
             if ($queries->count() > 0) {
                 $queries = $queries->map(function ($query) {
                     [$startDate, $endDate] = explode(' - ', $query->date_range);
 
-                    // Convert date format
-                    $startDate = Carbon::createFromFormat('d-m-Y', $startDate)->format('Y-m-d');
-                    $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->format('Y-m-d');
+                    // dd($startDate,$endDate);
+                    // // Convert date format
+                    // $startDate = Carbon::createFromFormat('d-m-Y', $startDate)->format('Y-m-d');
+                    // $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->format('Y-m-d');
 
                     $productId = $query->product_id;
                     $product = Product::where('id', $productId)
@@ -351,8 +353,8 @@ class QueryController extends Controller
                         'name' => $product->name ?? null,
                         'product_image_url' => $product->thumbnailImage->file_path ?? null,
                         'borrower' => $borrower->name ?? null,
-                        'borrower_profile_pic' => $borrower->frontend_profile_url,
-                        'borrower_id' => $borrower->id,
+                        'borrower_profile_pic' => $borrower->frontend_profile_url ?? null,
+                        'borrower_id' => $borrower->id ?? null,
                         'brand' => $product->get_brand->name ??'N/A',
                         'size' => $product->get_size->name ?? "N/A",
                         'price' => $price,

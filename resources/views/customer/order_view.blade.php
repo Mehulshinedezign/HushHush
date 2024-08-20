@@ -123,7 +123,7 @@
                                         <div class="gallery-box">
                                             @foreach ($order->customerPickedUpImages as $customerPickedUpImage)
                                                 <div>
-                                                    <img src="{{ Storage::url($customerPickedUpImage->url) }}"
+                                                    <img src="{{ ($customerPickedUpImage->url) }}"
                                                         alt="picked-up-img" />
                                                     {{-- <a class="download-uploaded-file"
                                                         href="{{ route('downloadattachment', [$customerPickedUpImage->order_id, $customerPickedUpImage->id]) }}"
@@ -144,7 +144,7 @@
                                         <div class="gallery-box">
                                             @foreach ($order->retailerPickedUpImages as $retailerPickedUpImage)
                                                 <div>
-                                                    <img src="{{ Storage::url($retailerPickedUpImage->url) }}"
+                                                    <img src="{{ ($retailerPickedUpImage->url) }}"
                                                         alt="retailer-pickedup-img" />
                                                     {{-- <a class="download-uploaded-file"
                                                         href="{{ route('downloadattachment', [$retailerPickedUpImage->order_id, $retailerPickedUpImage->id]) }}"
@@ -199,7 +199,7 @@
                                                             data-id="{{ $image->id }}"><i
                                                                 class="fas fa-times"></i></span> --}}
                                                         <div class="product-image-box"><img
-                                                                src="{{ Storage::url($image->url) }}" alt="img"
+                                                                src="{{ ($image->url) }}" alt="img"
                                                                 height="100px" width="100px" />
                                                         </div>
                                                     </li>
@@ -219,7 +219,7 @@
                                         <div class="gallery-box">
                                             @foreach ($order->customerReturnedImages as $customerReturnedImage)
                                                 <div>
-                                                    <img src="{{ Storage::url($customerReturnedImage->url) }}"
+                                                    <img src="{{ ($customerReturnedImage->url) }}"
                                                         alt="customer-returned-img" />
                                                     {{-- <a class="download-uploaded-file"
                                                         href="{{ route('downloadattachment', [$customerReturnedImage->order_id, $customerReturnedImage->id]) }}"
@@ -240,7 +240,7 @@
                                         <div class="gallery-box">
                                             @foreach ($order->retailerReturnedImages as $retailerReturnedImage)
                                                 <div>
-                                                    <img src="{{ Storage::url($retailerReturnedImage->url) }}"
+                                                    <img src="{{($retailerReturnedImage->url) }}"
                                                         alt="retailer-returned-img" />
                                                     {{-- <a class="download-uploaded-file"
                                                         href="{{ route('downloadattachment', [$retailerReturnedImage->order_id, $retailerReturnedImage->id]) }}"
