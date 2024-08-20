@@ -30,6 +30,7 @@
                         </div>
                     </div>
                     <div class="col-md-5">
+                        
                         @if(!is_null($retailer->userDetail->about))
                         <div class="profile-about-detail">
                             <h4>About me</h4>

@@ -86,7 +86,7 @@ class QueryController extends Controller
                         'id' => $query->id,
                         'user_id' => $query->user_id,
                         'product_id' => $query->product_id,
-                        'for_user' => $query->for_user,
+                        'for_user' => $query->for_user ,
                         'query_message' => $query->query_message,
                         'status' => $query->status,
                         'date_range' => [
@@ -97,8 +97,8 @@ class QueryController extends Controller
                         'name' => $product->name ?? null,
                         'product_image_url' => $product->thumbnailImage->file_path ?? null,
                         'lender' => $lender->name ?? null,
-                        'lender_profile_pic' => $lender->frontend_profile_url,
-                        'lender_id' => $lender->id,
+                        'lender_profile_pic' => $lender->frontend_profile_url ?? null,
+                        'lender_id' => $lender->id ?? null,
                     ];
                 });
 
@@ -125,6 +125,7 @@ class QueryController extends Controller
     public function queriesForUser(Request $request)
     {
         $user = auth()->user();
+        // dd($user);
         $status = $request->get('status');
         try {
             $queries = Query::where('for_user', $user->id)
@@ -137,15 +138,18 @@ class QueryController extends Controller
                     [$startDate, $endDate] = explode(' - ', $query->date_range);
                     // dd($startDate, $endDate,$query);
                     $productId = $query->product_id;
+                    // dd($productId,$query);
                     $product = Product::where('id', $productId)
                         ->whereNull('deleted_at')
                         ->first();
+                        // dd($product);
                     $borrower = User::where('id', $query->user_id)->first();
+                    // dd($borrower);
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
                     return [
-                        'id' => $query->id,
-                        'user_id' => $query->user_id,
-                        'product_id' => $query->product_id,
+                        'id' => $query->id ?? null,
+                        'user_id' => $query->user_id ?? null,
+                        'product_id' => $query->product_id ?? null,
                         'for_user' => $query->for_user,
                         'query_message' => $query->query_message,
                         'status' => $query->status,
@@ -157,8 +161,8 @@ class QueryController extends Controller
                         'name' => $product->name ?? null,
                         'product_image_url' => $product->thumbnailImage->file_path ?? null,
                         'borrower' => $borrower->name ?? null,
-                        'borrower_profile_pic' => $borrower->frontend_profile_url,
-                        'borrower_id' => $borrower->id,
+                        'borrower_profile_pic' => $borrower->frontend_profile_url ?? null,
+                        'borrower_id' => $borrower->id ?? null,
                     ];
                 });
                 // dd('here');
@@ -274,7 +278,7 @@ class QueryController extends Controller
                         'name' => $product->name ?? null,
                         'product_image_url' => $product->thumbnailImage->file_path ?? null,
                         'lender' => $lender->name ?? null,
-                        'lender_profile_pic' => $lender->frontend_profile_url,
+                        'lender_profile_pic' => $lender->frontend_profile_url ?? null,
                         'lender_id' => $lender->id,
                         'brand' => $product->get_brand->name ?? null,
                         'size' => $product->get_size->name ?? null,

@@ -281,7 +281,7 @@
                                     <div class="lender-profile-box">
                                         <div class="lender-dp-box">
                                             <a href="{{ route('lenderProfile', jsencode_userdata($product->user_id)) }}">
-                                                @if ($product->retailer->profile_file)
+                                                @if ($product->retailer->profile_file )
                                                     <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
                                                         alt="Profile Picture">
                                                 @else

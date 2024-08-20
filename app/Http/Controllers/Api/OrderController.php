@@ -8,67 +8,103 @@ use App\Models\OrderImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+
 class OrderController extends Controller
 {
-    public function uploadRetailerImages(Request $request, $id, $type)
-    {
-        try {
-            // dd($request->file);
-            $request->validate([
-                'images[].*' => 'required|file|mimes:jpeg,png,jpg,gif,svg',
-            ]);
 
-            $user = auth()->user();
+public function uploadRetailerImages(Request $request, $id, $type)
+{
+    try {
+        // Log the entire request to see what is being sent from the frontend
+        // Log::info('Received request for uploadRetailerImages', [
+        //     'request_data' => $request->all(),
+        //     'user_id' => auth()->id(),
+        //     'order_id' => $id,
+        //     'type' => $type,
+        // ]);
 
-            if (!in_array($type, ['pickedup', 'returned'])) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Invalid type provided',
-                    'data' => [],
-                ], 400);
-            }
+        // Validate the uploaded images
+        $request->validate([
+            'images.*' => 'required|file|mimes:jpeg,png,jpg,gif,svg',
+        ]);
 
-            $orderImages = [];
-
-            if ($request->hasFile('images')) {
-                foreach ($request->images as $image) {
-                    // dd($image);
-                    $path = $image->store('order_images', 'public');
-                    $url = $path;
-
-
-                    $orderImages[] = OrderImage::create([
-                        'order_id' => $id,
-                        'user_id' => $user->id,
-                        'file' => $path,
-                        'url' => $url,
-                        'type' => $type,
-                        'uploaded_by' => 'retailer',
-                    ]);
-                }
-
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Images uploaded successfully',
-                    'data' => $orderImages,
-                ], 201);
-            }
-
+        // Check for valid type
+        if (!in_array($type, ['pickedup', 'returned'])) {
+            // Log::warning('Invalid type provided', ['type' => $type]);
             return response()->json([
                 'status' => false,
-                'message' => 'Files not found',
+                'message' => 'Invalid type provided',
                 'data' => [],
             ], 400);
-        } catch (\Throwable $e) {
-            return response()->json([
-                'status' => false,
-                'message' => $e->getMessage(),
-                'data' => [
-                    'errors' => [],
-                ],
-            ], 500);
         }
+
+        $orderImages = [];
+
+        // Check if files are present and handle the upload
+        if ($request->hasFile('images')) {
+            foreach ($request->images as $image) {
+                // Log each image file before storing
+                // Log::info('Processing image', [
+                //     'image_name' => $image->getClientOriginalName(),
+                //     'image_mime' => $image->getMimeType(),
+                // ]);
+
+                // Store the image
+                $path = $image->store('order_images', 'public');
+                $url = $path;
+
+                // Create the order image record
+                $orderImages[] = OrderImage::create([
+                    'order_id' => $id,
+                    'user_id' => auth()->id(),
+                    'file' => $path,
+                    'url' => $url,
+                    'type' => $type,
+                    'uploaded_by' => 'retailer',
+                ]);
+            }
+
+            // Log the success of the upload process
+            // Log::info('Images uploaded successfully', [
+            //     'order_id' => $id,
+            //     'user_id' => auth()->id(),
+            //     'uploaded_images' => $orderImages,
+            // ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Images uploaded successfully',
+                'data' => $orderImages,
+            ], 201);
+        }
+
+        // Log if no files were found in the request
+        // Log::warning('No files found in the request', [
+        //     'request_data' => $request->all(),
+        // ]);
+
+        return response()->json([
+            'status' => false,
+            'message' => 'Files not found',
+            'data' => [],
+        ], 400);
+    } catch (\Throwable $e) {
+        // Log the exception with stack trace
+        // Log::error('Error occurred in uploadRetailerImages', [
+        //     'error_message' => $e->getMessage(),
+        //     'stack_trace' => $e->getTraceAsString(),
+        // ]);
+
+        return response()->json([
+            'status' => false,
+            'message' => $e->getMessage(),
+            'data' => [
+                'errors' => [],
+            ],
+        ], 500);
     }
+}
+
 
 
     public function uploadCustomerImages(Request $request, $id, $type)
