@@ -1402,6 +1402,8 @@ img.chat-pro-img {
     height: calc(100vh - 550px);
     overflow: auto;
     padding: 0 20px;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 #chatForm {
@@ -1531,6 +1533,25 @@ input[type=number] {
     display: flex;
     align-items: center;
     gap: 16px;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.chat-profile-left {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.chat-profile-img-box>p {
+    background-color: #3a3a3a;
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
 }
 
 .chat-list-profile,

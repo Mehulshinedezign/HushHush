@@ -57,7 +57,7 @@ $(document).ready(function () {
         var element = $(this);
         var data = userData(element);
         onlinePresence(data['id'], data['created']);
-        unSeenMessages(data['id'], data['receiverId']);
+        // unSeenMessages(data['id'], data['receiverId']);
         createUser(data['id'], data['receiverId'], data['created'], data['image'], data['name'], data);
         createUser(data['receiverId'], data['id'], data['created'], data['authprofile'], data['authName'], data);
 
@@ -177,29 +177,6 @@ function onlinePresence(user, created) {
     });
 }
 
-// total number of unseen messages
-function unSeenMessages(sender, reciever) {
-    alert('dzfxsdf');
-    // if (fireBaseListener1234)
-    //     fireBaseListener1234()
-
-    // let response = new Promise((resolve, reject) => {
-    // alert(reciever);
-    var fireBaseListener1234 = db.ref('messeges/' + `${sender}_${reciever}`).on("child_added", (snap) => {
-        var count = 0;
-        var message = snap;
-
-        if (message.val().isSeen == 'false') {
-            count += 1;
-        }
-        console.log(count, "Dsfsdfsdfsdfsdfdsf");
-        alert(count);
-        return;
-    });
-
-    // })
-
-}
 document.getElementById("chatForm").addEventListener("submit", submitForm);
 
 function submitForm(e) {
@@ -207,8 +184,8 @@ function submitForm(e) {
     var messagedata = messageData();
     if (messagedata.msg != '') {
 
-        sendMessage(messagedata['sender'], messagedata['reciever'], messagedata['created'], messagedata, 'true');
-        sendMessage(messagedata['reciever'], messagedata['sender'], messagedata['created'], messagedata, 'false');
+        sendMessage(messagedata['sender'], messagedata['reciever'], messagedata, 'true');
+        sendMessage(messagedata['reciever'], messagedata['sender'], messagedata, 'false');
     }
 }
 // }
@@ -251,7 +228,7 @@ function messageData() {
 }
 
 
-function sendMessage(sender, reciever, created, data, check) {
+function sendMessage(sender, reciever, data, check) {
 
     jQuery('#message').val('');
 
@@ -267,7 +244,6 @@ function sendMessage(sender, reciever, created, data, check) {
             created: data['created'],
         }).then(() => {
             console.log('Message updated.');
-            // loadMessages(sender, reciever, img);
             resolve(); // Resolve the promise on success
         }).catch((error) => {
             reject(error);
@@ -277,25 +253,23 @@ function sendMessage(sender, reciever, created, data, check) {
 
 }
 
+
+
 // messsage isseen update
 function messageUpdate(message, check) {
-    // console.log(message.key);
-    // alert(message.key);
     var sender = parseInt(message.val().reciever);
     var reciever = parseInt(message.val().sender);
-    messageId = message.key;
-    // console.log(sender, reciever, check);
-    // alert(sender);
+    var messageId = message.key;
+
     let response = new Promise((resolve, reject) => {
-        // var messagePath = 'messages/' + `${sender}_${receiver}/` + messageId;
+
         var test = 'messeges/' + `${sender}_${reciever}/` + messageId;
-        console.log(sender, reciever, check);
-        // alert(reciever);
+
         db.ref(test).update({
             isSeen: check,
         }).then(() => {
             console.log('Message updated.');
-            // loadMessages(sender, reciever, img);
+
             resolve(); // Resolve the promise on success
         }).catch((error) => {
             reject(error);
@@ -321,7 +295,7 @@ $(document).on('click', '.chat-list', function () {
 function getMessages(element) {
     var sender = element.attr('data-senderId');
     var reciever = element.attr('data-receiverId');
-    userImage = element.find('img').attr('src');
+    var userImage = element.find('img').attr('src');
     var name = element.find('p').html()
 
     var Chatimg = `<img src="${userImage}" class="chat-pro-img"><span>${name}</span>`;
@@ -331,20 +305,30 @@ function getMessages(element) {
     loadMessages(sender, reciever, userImage);
 }
 
+for (const chatId of chatsList) {
 
-fireBaseListener = null;
+    var newVar = "listener" + chatId;
+    variables[newVar] = null;
+    if (variables[newVar])
+        variables[newVar]();
+    variables[newVar]
+}
 
-// fireBaseListener = null;
+
 function loadMessages(sender, reciever, userImage) {
     if (!sender) {
-
         return;
     }
 
     jQuery('#chatWindow').html('');
-    if (fireBaseListener)
-        fireBaseListener();
 
+
+
+    var newVar = "listener" + sender + '_' + reciever;
+    fireBaseListeners[newVar] = null;
+
+    if (fireBaseListeners[newVar])
+        fireBaseListeners[newVar]();
     // var messageList = '',
     //     allSenders = [];
     // messageList += '<p class="text-center date_cht">Today, ' + moment(new Date()).format('MMMM MM') + '</p>'
@@ -353,7 +337,7 @@ function loadMessages(sender, reciever, userImage) {
     // snap.forEach(message => {
     //     console.log('sadfasd', message.val(), "sdfsfsdfsd");
 
-    var fireBaseListener = db.ref('messeges/' + `${sender}_${reciever}`).on("child_added", (snap) => {
+    fireBaseListeners[newVar] = db.ref('messeges/' + `${sender}_${reciever}`).on("child_added", (snap) => {
 
         var message = snap;
         var messageList = '';
@@ -368,7 +352,6 @@ function loadMessages(sender, reciever, userImage) {
         } else {
             var time = msgDate;
         }
-
         if (parseInt(authUserId) == parseInt(message.val().sender)) {
 
             messageList += '<div class="chat-screen-right-wrapper">';

@@ -1073,7 +1073,9 @@
         var last_msg_update_url = APP_URL + '/retailer/lastchat/update';
         var search_url = APP_URL + '/retailer/chat/search/';
         var chat_image_store_url = APP_URL + '/retailer/chat/image';
+        const fireBaseListeners = {};
     </script>
+
     <script defer src="{{ asset('js/custom/chat2.js') }}"></script>
     <script defer src="{{ asset('js/custom/chatlist.js') }}"></script>
     {{-- end chat --}}
