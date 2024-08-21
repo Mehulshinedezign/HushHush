@@ -8,7 +8,7 @@
 
 
     <section class="product-desc-sec">
-        
+
         <div class="container">
             <div class="breadcrum-main">
                 <a href="{{ url('/') }}" class="breadcrum-list">Home</a>
@@ -175,34 +175,24 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                    <h4>Size :</h4>
-                                    <p>{{ $product->size ?? 'N/A' }}</p>
-                                </div> -->
+                                            <h4>Size :</h4>
+                                            <p>{{ $product->size ?? 'N/A' }}</p>
+                                        </div> -->
 
 
                             </div>
-                            {{-- <div class="form-group">
-                                <label for="">Select your Rental date</label>
-                                <div class="formfield">
-                                    <input type="text" placeholder="7/31/2023  to  8/01/2023" class="form-control">
-                                    <span class="form-icon">
-                                        <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
-                        </span>
-                    </div>
-                </div> --}}
-                            {{-- <div class="pro-desc-loc">
-                                <h3>Pick up Location</h3>
-                                <div class="pro-desc-loc-copy">
-                                    <p>Akshya Nagar 1st Block 1st Cross, Rammurthy nagar....</p>
-                                    <a href="#" class="copy-add-btn"><img
-                                            src="{{ asset('front/images/copy-icon.svg') }}" alt="img">Copy</a>
-            </div>
-        </div> --}}
-                            {{-- <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                                data-bs-target="#bookitem-sidebar" aria-controls="offcanvasRight">Book Now</a> --}}
+
                             @if (@$product->user_id != auth()->user()->id)
-                                <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                                    data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Send Request</a>
+                                @if (is_null($user->userDetail->complete_address))
+                                    {{-- <div data-bs-toggle="modal" data-bs-target="#addaddress-Modal">
+                                        Send Request
+                                    </div> --}}
+                                    <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="modal"
+                                        data-bs-target="#addaddress-Modal" aria-controls="offcanvasRight">Send Request</a>
+                                @else
+                                    <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
+                                        data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Send Request</a>
+                                @endif
                             @endif
 
                             <div class="pro-info-accordian">
@@ -222,23 +212,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingTwo">
-                                            <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                                                aria-expanded="false" aria-controls="collapseTwo">
-                                                Additional information
-                                            </button>
-                                        </h2>
-                                        <div id="collapseTwo" class="accordion-collapse collapse"
-                                            aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                Safer For The Environment: Our denim factory partner recycles 98% of their
-                                                water using reverse osmosis filtration and keeps byproducts out of the
-                                                environment by mixing them with concrete.
-                                            </div>
-                                        </div>
-                                    </div> --}}
+
                                 </div>
                                 <div class="pro-info-accordian">
                                     <div class="accordion" id="accordionExample">
@@ -257,23 +231,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- <div class="accordion-item">
-                                            <h2 class="accordion-header" id="headingTwo">
-                                                <button class="accordion-button collapsed" type="button"
-                                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                                                    aria-expanded="false" aria-controls="collapseTwo">
-                                                    Additional information
-                                                </button>
-                                            </h2>
-                                            <div id="collapseTwo" class="accordion-collapse collapse"
-                                                aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                                <div class="accordion-body">
-                                                    Safer For The Environment: Our denim factory partner recycles 98% of their
-                                                    water using reverse osmosis filtration and keeps byproducts out of the
-                                                    environment by mixing them with concrete.
-                                                </div>
-                                            </div>
-                                        </div> --}}
+
                                     </div>
                                 </div>
                                 <div class="lender-profile">
@@ -306,9 +264,7 @@
                                 <div class="pro-dec-rating-main">
                                     <div class="pro-rating-head">
                                         <h4>Ratings & Reviews</h4>
-                                        {{-- <a href="javascript:void(0)" data-toggle="modal"
-                                            data-rating_product_id="{{ $product->id }}"
-                                            data-target="#rating_review">Leave Review</a> --}}
+
                                     </div>
                                     <div class="pro-rating-body">
                                         <div class="pro-rating-left">
@@ -446,9 +402,9 @@
                                             <input type="text" name="rental_dates" id="rental_dates"
                                                 class="form-control rent_dates form-class @error('rental_dates') is-invalid @enderror"
                                                 placeholder="Select rental date">
-                                                <label for="rental_dates" class="form-icon">
-                                                    <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
-                                                </label>
+                                            <label for="rental_dates" class="form-icon">
+                                                <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
+                                            </label>
 
 
 
@@ -474,30 +430,25 @@
                                     </div>
                                     <div class="item-pickup-loc-main">
                                         <h4>Pick up Location</h4>
-                                        {{-- @if (@$product->productCompleteLocation->manul_pickup_location == '1')
-                                            <p>{{ $product->productCompleteLocation->pick_up_location ?? '' }}</p>
-                                        @endif --}}
-                                        <input type="radio" id="pick_up" name="delivery_option" value="{{ $product->productCompleteLocation->pick_up_location }}">
+
+                                        <input type="radio" id="pick_up" name="delivery_option"
+                                            value="{{ $product->productCompleteLocation->pick_up_location }}">
                                         <label for="pick_up">Pick up from lender location</label><br>
 
-                                        <input type="radio" id="ship_to_me" name="delivery_option" value="{{ $user->userDetail->complete_address }}">
+                                        <input type="radio" id="ship_to_me" name="delivery_option"
+                                            value="{{ $user->userDetail->complete_address }}">
                                         <label for="ship_to_me">Ship it to me</label><br>
 
-                                        <div id="selected_value"></div>
-                                        <div id="profile_message" class="message" style="display: none;">Please complete your profile to enable this option.</div>
-
-
+                                        <input type="text" id="selected_value" readonly class="form-control" placeholder="Selected option will appear here">
+                                        <input type="text" id="profile_message" class="message" style="display: none;" value="Please complete your profile to enable this option." readonly>
                                     </div>
+
                                 </div>
 
                                 <button type="button" class="button primary-btn full-btn mt-3"
                                     id="Askquery">Next</button>
                             </form>
 
-                            {{-- <div class="book-item-footer">
-                            <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                                data-bs-target="#checkout-sidebar" aria-controls="offcanvasRight">Next</a>
-                        </div> --}}
                         </div>
                     </div>
                 </div>
@@ -506,7 +457,6 @@
 @endsection
 
 @push('scripts')
-
     <script>
         $('.slider-content').slick({
             slidesToShow: 1,
@@ -553,219 +503,225 @@
         });
 
         $(document).ready(function() {
-    $('#Askquery').on('click', function(e) {
-        let form = $('form#Sendquery')[0];
-        let formData = new FormData(form);
-        let hasErrors = false;
+            $('#Askquery').on('click', function(e) {
+                let form = $('form#Sendquery')[0];
+                let formData = new FormData(form);
+                let hasErrors = false;
 
-        // Validate Rental Date
-        if (!$('#rental_dates').val()) {
-            iziToast.error({
-                title: 'Error',
-                message: 'Please select a rental date.',
-                position: 'topRight',
-            });
-            hasErrors = true;
-        }
-
-        // // Validate Delivery Option
-        // if (!$('input[name="delivery_option"]:checked').val()) {
-        //     iziToast.error({
-        //         title: 'Error',
-        //         message: 'Please select a delivery option.',
-        //         position: 'topRight',
-        //     });
-        //     hasErrors = true;
-        // }
-
-        // Check for incomplete profile if "Ship it to me" is selected
-        if ($('#ship_to_me').is(':checked') && {{ is_null($user->userDetail->complete_address) ? 'true' : 'false' }}) {
-            iziToast.error({
-                title: 'Error',
-                message: 'Please complete your profile to enable this option.',
-                position: 'topRight',
-            });
-            hasErrors = true;
-        }
-
-        if (hasErrors) {
-            e.preventDefault(); // Prevent form submission if there are errors
-            return;
-        }
-
-        if ($('#Sendquery').valid()) {
-            $('#Askquery').prop('disabled', true);
-            var url = `{{ route('query') }}`;
-            $.ajax({
-                type: "post",
-                url: url,
-                data: formData,
-                processData: false,
-                contentType: false,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                beforeSend: function() {
-                    $('body').addClass('loading');
-                },
-                complete: function() {
-                    $('body').removeClass('loading');
-                },
-                success: function(response) {
-                    var modalContent = '';
-                    if (response.success) {
-                        modalContent =
-                            `<div class="success-text" role="alert"><img src="` +
-                            "{{ asset('assets/img/query.png') }}" +
-                            `" style="max-width: 180px;">` + response.message +
-                            `</div>`;
-                    } else {
-                        modalContent = '<div class="alert alert-danger" role="alert">' +
-                            response.message + '</div>';
-                    }
-
-                    $('#query_msg .modal-body').html(
-                        '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
-                        modalContent
-                    );
-
-                    $('#query_msg').modal('show');
-                    $('#Askquery').prop('disabled', false);
-                    $("#Sendquery")[0].reset();
-                    $('#closeModalBtn').on('click', function() {
-                        $('#query_msg').modal('hide');
-                        location.reload();
+                // Validate Rental Date
+                if (!$('#rental_dates').val()) {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Please select a rental date.',
+                        position: 'topRight',
                     });
-                },
-                error: function(response) {
-                    $('#Askquery').prop('disabled', false);
-                    $('#query_msg .modal-body').html(
-                        '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
-                        '<div class="alert alert-danger" role="alert">' + response
-                        .message + '</div>'
-                    );
-                    $('#query_msg').modal('show');
-                    $('#closeModalBtn').on('click', function() {
-                        $('#query_msg').modal('hide');
-                        location.reload();
-                    });
+                    hasErrors = true;
                 }
-            });
-        } else {
-            e.preventDefault(); // Prevent the default action of the button click
-        }
-    });
 
-    // Date range picker setup
-    var queryDates = @json($querydates);
-    var disableDates = @json($disable_dates);
-    var disabledDateRanges = queryDates.map(function(query) {
-        var dateRange = query.date_range.split(' - ');
-        return {
-            start: moment(dateRange[0]),
-            end: moment(dateRange[1])
-        };
-    });
+                // // Validate Delivery Option
+                // if (!$('input[name="delivery_option"]:checked').val()) {
+                //     iziToast.error({
+                //         title: 'Error',
+                //         message: 'Please select a delivery option.',
+                //         position: 'topRight',
+                //     });
+                //     hasErrors = true;
+                // }
 
-    var noneAvailableDates = disableDates.map(function(dateRange) {
-        return {
-            start: moment(dateRange),
-            end: moment(dateRange)
-        };
-    }).filter(function(range) {
-        return range !== null;
-    });
-
-    function isDateDisabled(date) {
-        var inQueryDates = disabledDateRanges.some(function(range) {
-            return date.isBetween(range.start, range.end, 'day', '[]');
-        });
-
-        var inDisableDates = noneAvailableDates.some(function(range) {
-            return date.isSame(range.start, 'day') || date.isSame(range.end, 'day');
-        });
-
-        return inQueryDates || inDisableDates;
-    }
-
-    $('.rent_dates').daterangepicker({
-        autoUpdateInput: false,
-        locale: {
-            format: 'YYYY-MM-DD'
-        },
-        drops: 'down',
-        opens: 'right',
-        minDate: moment().startOf('day'),
-        isInvalidDate: isDateDisabled
-    }).on('apply.daterangepicker', function(ev, picker) {
-        var startDate = picker.startDate;
-        var endDate = picker.endDate;
-        var duration = endDate.diff(startDate, 'days');
-
-        if (duration < 6) {
-            iziToast.error({
-                title: 'Error',
-                message: 'Please select a date range of at least min rent days.',
-                position: 'topRight',
-            });
-            $(this).val('');
-        } else {
-            $(this).val(startDate.format('YYYY-MM-DD') + ' - ' + endDate.format('YYYY-MM-DD'));
-        }
-    });
-
-    $('.daterange-btn').daterangepicker({
-        autoUpdateInput: false,
-        locale: {
-            format: 'YYYY-MM-DD'
-        },
-        drops: 'down',
-        opens: 'right',
-        minDate: moment().startOf('day'),
-        isInvalidDate: isDateDisabled,
-        ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
-                'month').endOf('month')]
-        }
-    }).on('apply.daterangepicker', function(ev, picker) {
-        $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format(
-            'MMMM D, YYYY'));
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Get the radio buttons and message element
-    const radioButtons = document.querySelectorAll('input[name="delivery_option"]');
-    const profileMessage = document.getElementById('profile_message');
-
-    // Add an event listener to each radio button
-    radioButtons.forEach(radio => {
-        radio.addEventListener('change', function() {
-            if (this.checked) {
-                const selectedValue = this.value;
-                document.getElementById('selected_value').textContent = ` ${selectedValue}`;
-
-                // Check if the 'Ship it to me' option is selected and the profile is not complete
-                if (this.id === 'ship_to_me' && {{ is_null($user->userDetail->complete_address) ? 'true' : 'false' }}) {
+                // Check for incomplete profile if "Ship it to me" is selected
+                if ($('#ship_to_me').is(':checked') &&
+                    {{ is_null($user->userDetail->complete_address) ? 'true' : 'false' }}) {
                     iziToast.error({
                         title: 'Error',
                         message: 'Please complete your profile to enable this option.',
                         position: 'topRight',
                     });
-                } else {
-                    profileMessage.style.display = 'none'; // Hide message
+                    hasErrors = true;
                 }
+
+                if (hasErrors) {
+                    e.preventDefault(); // Prevent form submission if there are errors
+                    return;
+                }
+
+                if ($('#Sendquery').valid()) {
+                    $('#Askquery').prop('disabled', true);
+                    var url = `{{ route('query') }}`;
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        beforeSend: function() {
+                            $('body').addClass('loading');
+                        },
+                        complete: function() {
+                            $('body').removeClass('loading');
+                        },
+                        success: function(response) {
+                            var modalContent = '';
+                            if (response.success) {
+                                modalContent =
+                                    `<div class="success-text" role="alert"><img src="` +
+                                    "{{ asset('assets/img/query.png') }}" +
+                                    `" style="max-width: 180px;">` + response.message +
+                                    `</div>`;
+                            } else {
+                                modalContent = '<div class="alert alert-danger" role="alert">' +
+                                    response.message + '</div>';
+                            }
+
+                            $('#query_msg .modal-body').html(
+                                '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
+                                modalContent
+                            );
+
+                            $('#query_msg').modal('show');
+                            $('#Askquery').prop('disabled', false);
+                            $("#Sendquery")[0].reset();
+                            $('#closeModalBtn').on('click', function() {
+                                $('#query_msg').modal('hide');
+                                location.reload();
+                            });
+                        },
+                        error: function(response) {
+                            $('#Askquery').prop('disabled', false);
+                            $('#query_msg .modal-body').html(
+                                '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
+                                '<div class="alert alert-danger" role="alert">' + response
+                                .message + '</div>'
+                            );
+                            $('#query_msg').modal('show');
+                            $('#closeModalBtn').on('click', function() {
+                                $('#query_msg').modal('hide');
+                                location.reload();
+                            });
+                        }
+                    });
+                } else {
+                    e.preventDefault(); // Prevent the default action of the button click
+                }
+            });
+
+            // Date range picker setup
+            var queryDates = @json($querydates);
+            var disableDates = @json($disable_dates);
+            var disabledDateRanges = queryDates.map(function(query) {
+                var dateRange = query.date_range.split(' - ');
+                return {
+                    start: moment(dateRange[0]),
+                    end: moment(dateRange[1])
+                };
+            });
+
+            var noneAvailableDates = disableDates.map(function(dateRange) {
+                return {
+                    start: moment(dateRange),
+                    end: moment(dateRange)
+                };
+            }).filter(function(range) {
+                return range !== null;
+            });
+
+            function isDateDisabled(date) {
+                var inQueryDates = disabledDateRanges.some(function(range) {
+                    return date.isBetween(range.start, range.end, 'day', '[]');
+                });
+
+                var inDisableDates = noneAvailableDates.some(function(range) {
+                    return date.isSame(range.start, 'day') || date.isSame(range.end, 'day');
+                });
+
+                return inQueryDates || inDisableDates;
             }
+
+            $('.rent_dates').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                drops: 'down',
+                opens: 'right',
+                minDate: moment().startOf('day'),
+                isInvalidDate: isDateDisabled
+            }).on('apply.daterangepicker', function(ev, picker) {
+                var startDate = picker.startDate;
+                var endDate = picker.endDate;
+                var duration = endDate.diff(startDate, 'days');
+
+                if (duration < 6) {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Please select a date range of at least min rent days.',
+                        position: 'topRight',
+                    });
+                    $(this).val('');
+                } else {
+                    $(this).val(startDate.format('YYYY-MM-DD') + ' - ' + endDate.format('YYYY-MM-DD'));
+                }
+            });
+
+            $('.daterange-btn').daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                drops: 'down',
+                opens: 'right',
+                minDate: moment().startOf('day'),
+                isInvalidDate: isDateDisabled,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
+                        'month').endOf('month')]
+                }
+            }).on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format(
+                    'MMMM D, YYYY'));
+            });
         });
-    });
-});
 
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the radio buttons and message element
+            const radioButtons = document.querySelectorAll('input[name="delivery_option"]');
+            const profileMessage = document.getElementById('profile_message');
+            const selectedValueInput = document.getElementById('selected_value');
 
+            // Server-side flag for address completeness
+            const isAddressComplete = {{ is_null($user->userDetail->complete_address) ? 'false' : 'true' }};
+
+            // Add an event listener to each radio button
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        const selectedValue = this.value;
+                        selectedValueInput.value =
+                        selectedValue; // Set the value of the readonly input field
+
+                        // Check if the 'Ship it to me' option is selected and the profile is not complete
+                        if (this.id === 'ship_to_me' && !isAddressComplete) {
+                            iziToast.error({
+                                title: 'Error',
+                                message: 'Please complete your profile to enable this option.',
+                                position: 'topRight',
+                            });
+                            profileMessage.style.display =
+                            'block'; // Show profile completion message
+                        } else {
+                            profileMessage.style.display = 'none'; // Hide message
+                        }
+                    }
+                });
+            });
+        });
     </script>
 
     @include('validation')

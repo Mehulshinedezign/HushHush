@@ -52,6 +52,7 @@ class ProfileController extends Controller
         $cards = UserCard::where('user_id', auth()->user()->id)->get();
 
         $bankDetail = RetailerBankInformation::where('retailer_id', $user->id)->first();
+        // session()->flash('showModal', true);
         return view('customer.edit_profile', compact('user', 'countries', 'states', 'cities', 'selectedCountryId', 'notAvailable', 'cards', 'bankDetail'));
     }
 

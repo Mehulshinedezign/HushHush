@@ -385,8 +385,6 @@
                                             <label for="">Condition*</label>
                                             <div class="formfield">
 
-                                                {{-- <input type="text" name="product_condition" id=""
-                                                    placeholder="Product Condition" class="form-control"> --}}
                                                 <select
                                                     class="produt_input form-control form-class @error('product_condition') is-invalid @enderror"
                                                     name="product_condition">
@@ -408,16 +406,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-lg-4 col-md-4 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="">Pickup Location*</label>
-                                            <div class="formfield">
-                                                <textarea name="pick_up_location" id="" rows="4" class="form-control" placeholder="Text"></textarea>
-                                            </div>
-                                        </div>
-                                    </div> --}}
-
-
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Product market value*</label>
@@ -455,9 +443,6 @@
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days*</label>
                                             <div class="formfield ">
-                                                <!-- <input type="number" class="form-control" name="min_rent_days"
-                                                    placeholder="Rental days" value="" min="1"> -->
-                                                {{-- <select class="form-control" name="min_rent_days"> --}}
                                                 <select
                                                     class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
                                                     name="min_rent_days">
@@ -569,6 +554,36 @@
                         <h3 class="modal-title" id="exampleModalLabel">Add your bank details</h3>
                         @csrf
                         <img src="{{ asset('front/images/bank-img.png') }}" alt="">
+                        <div class="profile-select-box border-disabled">
+                            <div class="profile-check-list">
+
+                                <a href="javascript:void(0)" data-bs-dismiss="modal" arial-label="Close"
+                                    class="button outline-btn full-btn">Cancel</a>
+
+                                <button type="submit" class="button primary-btn full-btn"
+                                    id="bank_info">Yes</button>
+
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @php
+        $user=auth()->user();
+    @endphp
+
+    <div class="modal fade addbank-Modal" id="addaddress-Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form action="{{ route('change-Profile', $user) }}" method="GET">
+                        <h3 class="modal-title" id="exampleModalLabel">Add your Address</h3>
+                        @csrf
+                        <img src="{{ asset('front/images/—Pngtree—address icon isolated on abstract_5218933.png') }}" alt="" width="200" height="200">
                         <div class="profile-select-box border-disabled">
                             <div class="profile-check-list">
 

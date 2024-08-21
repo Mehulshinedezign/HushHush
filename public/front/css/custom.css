@@ -2,6 +2,8 @@
 
 section.home-sec {
     padding: 40px 0px;
+    min-height: calc(100vh - 233px);
+    overflow: auto;
 }
 
 .section-heading {
@@ -2093,7 +2095,6 @@ p.pick_up_address {
 .home-filter-box::-webkit-scrollbar {
     width: 3px;
 }
-
 
 
 

@@ -17,7 +17,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        // dd($request->toArray()); 
+        // dd($request->toArray());
         $fromDate = $toDate = null;
         if (isset($request->global_date_separator) && isset($request->reservation_date)) {
             $fromAndToDate = array_map('trim', explode($request->global_date_separator, $request->reservation_date));
@@ -689,7 +689,7 @@ class OrderController extends Controller
 
         // $file = $request->file('dispute_image'.$i);
         // $path = $file->store('orders/dispute', 's3');
-        // $url = Storage::disk('s3')->url($path);                
+        // $url = Storage::disk('s3')->url($path);
         // $images[] = [
         //     'order_id' => $order->id,
         //     'user_id' => $userId,
@@ -713,6 +713,7 @@ class OrderController extends Controller
             $disputeData = [
                 'dispute_status' => 'Yes',
                 'dispute_date' => $dateTime
+
             ];
 
             // OrderItem::where('order_id', $order->id)->update($disputeData);
@@ -755,7 +756,7 @@ class OrderController extends Controller
         return readfile($path);
     }
 
-    // rental request 
+    // rental request
     public function rental_request(Request $request)
     {
 

@@ -92,7 +92,7 @@ class StripeOnboardingController extends Controller
             );
 
 
-            session()->flash('showModal', true);
+            // session()->flash('showModal', true);
 
             return redirect()->route('index')->with('success', 'Your account is created and your bank details have been stored.');
         } else {

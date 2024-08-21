@@ -90,32 +90,7 @@
                             </div>
                         </div>
 
-                        {{-- <div class="home-filter-inner">
-                             <h4>Price Range</h4>
-                            <div class="filter-categories">
-                                <div class="">
-                                    <div class="price-range-box">
-                                        <div class="form-group">
-                                            <div class="formfield">
-                                                <input type="text" name="min" id="" placeholder="min"
-                                                    class="form-control">
-                                                <span class="left-form-icon">
-                                                    <img src="{{ asset('front/images/dollar-icon.svg') }}" alt="img">
-                        </span>
-                    </div>
-            </div>
-            <div class="form-group">
-                <div class="formfield">
-                    <input type="text" name="max" id="" placeholder="max"
-                        class="form-control">
-                    <span class="left-form-icon">
-                        <img src="{{ asset('front/images/dollar-icon.svg') }}" alt="img">
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div> --}}
+
                         <div class="home-filter-inner">
                             <h4>Price</h4>
                             <div class="custom-wrapper filter-range-wrapper">
@@ -147,21 +122,7 @@
 
                         </div>
 
-                        {{-- <h4>Status</h4>
-                            <div class="filter-categories">
-                                <div class="stock-status">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value=""
-                                            id="category-status1">
-                                        <label class="form-check-label" for="category-status1">Stock</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value=""
-                                            id="category-status2">
-                                        <label class="form-check-label" for="category-status2">Out of Stock</label>
-                                    </div>
-                                </div>
-                            </div> --}}
+
                         <div class="home-filter-inner">
                             <h4>Size</h4>
                             <div class="filter-categories category-hight-fix">
@@ -244,14 +205,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <h4>Area Range</h4>
-                            <div class="filter-categories">
-                                <div class="filter-range-box">
-                                    <input type="text" class="js-range-slider" name="my_range" value=""
-                                        data-skin="round" data-type="double" data-min="0" data-max="1000"
-                                        data-grid="false" />
-                                </div>
-                            </div> --}}
+
                         </div>
                         <div class="home-filter-fotter">
                             <div class="filter-fotter-btns">
@@ -348,28 +302,6 @@
 </section>
 
 
-<!-- <section class="three-feature-sec">
-    <div class="container">
-        <div class="three-feature-wrapper">
-            <div class="three-feature-box">
-                <img src="{{ asset('front/images/easy-return-icon.svg') }}" alt="easy-return" width="52"
-                    height="52">
-                <h4>Easy Returns</h4>
-            </div>
-            <div class="three-feature-box">
-                <img src="{{ asset('front/images/quality-check-icon.svg') }}" alt="quality-check" width="52"
-                    height="52">
-                <h4>Quality Check & Hygiene</h4>
-            </div>
-            <div class="three-feature-box">
-                <img src="{{ asset('front/images/secure-payment-icon.svg') }}" alt="secure-payment" width="52"
-                    height="52">
-                <h4>Secure Payment</h4>
-            </div>
-        </div>
-    </div>
-</section> -->
-
 
 
 @push('scripts')
@@ -386,6 +318,9 @@
                 } else {
                     // Hide the child categories div if the parent category is unchecked
                     $(childDivId).slideUp();
+
+                    // Uncheck all child checkboxes
+                    $(childDivId).find('input[type="checkbox"]').prop('checked', false);
                 }
             });
 
@@ -431,7 +366,7 @@
                 jQuery(this).on('apply.daterangepicker', function(ev, picker) {
                     jQuery(this).val(picker.startDate.format(customDateFormat) + ' - ' + picker
                         .endDate.format(customDateFormat));
-                    if (jQuery(this).closest('form').attr('id') === 'searchForm') {
+                    if (jQuery(this).closest('form').attr('id') === 'searchForm' ) {
                         jQuery(this).closest('form').submit();
                     }
                 });
@@ -463,9 +398,10 @@
             $(".home-filter-box").removeClass('expand');
         });
         $('.filter-head').on('click', function() {
-            $(".home-filter-box").addClass('expand');
+            $(".home-filter-box").toggleClass('expand');
         });
-        // $('.filter-fotter-btns').on('click', function() {
+
+        // $('.filter-head').on('click', function() {
         //     $(".home-filter-box").removeClass('expand');
         // });
 

@@ -70,6 +70,8 @@ Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {
     Route::post('/verify/{id}/images/{type}', [App\Http\Controllers\Api\OrderController::class, 'retailerVerifyImage']);
     Route::post('/customerverify/{id}/images/{type}', [App\Http\Controllers\Api\OrderController::class, 'customerVerifyImage']);
 
+    Route::post('/order/{order}/dispute', [App\Http\Controllers\Api\OrderController::class, 'orderDisputeApi']);
+
 
     // Route::post('/borrow/{bookingId}/confirm', [App\Http\Controllers\Api\LenderController::class, 'confirmPayment']);
     // Route::post('/stripe/charge', [App\Http\Controllers\Api\StripeController::class, 'createCharge']);

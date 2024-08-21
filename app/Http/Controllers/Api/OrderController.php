@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DisputeRequest;
+use App\Models\DisputeOrder;
 use App\Models\Order;
 use App\Models\OrderImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 
 class OrderController extends Controller
@@ -201,7 +204,7 @@ public function uploadRetailerImages(Request $request, $id, $type)
                 $order->update(['retailer_confirmed_pickedup' => '1']);
 
                 if ($order->customer_confirmed_pickedup == '1' && $order->status !== 'Picked Up') {
-                    $order->update(['status' => 'Picked Up' ,'pickedup_date' => $dateTime]);
+                    $order->update(['status' => 'Picked Up', 'pickedup_date' => $dateTime]);
                 }
             }
 
@@ -209,7 +212,7 @@ public function uploadRetailerImages(Request $request, $id, $type)
                 $order->update(['retailer_confirmed_returned' => '1']);
 
                 if ($order->customer_confirmed_returned == '1' && $order->status !== 'Completed') {
-                    $order->update(['status' => 'Completed','returned_date' => $dateTime]);
+                    $order->update(['status' => 'Completed', 'returned_date' => $dateTime]);
                 }
             }
 
@@ -262,7 +265,7 @@ public function uploadRetailerImages(Request $request, $id, $type)
                 $order->update(['customer_confirmed_pickedup' => '1']);
 
                 if ($order->retailer_confirmed_pickedup == '1' && $order->status !== 'Picked Up') {
-                    $order->update(['status' => 'Picked Up' ,'pickedup_date' => $dateTime]);
+                    $order->update(['status' => 'Picked Up', 'pickedup_date' => $dateTime]);
                 }
             }
 
@@ -292,4 +295,79 @@ public function uploadRetailerImages(Request $request, $id, $type)
             ], 500);
         }
     }
+
+    public function orderDisputeApi(DisputeRequest $request, Order $order)
+    {
+        try {
+            $user = auth()->user();
+            $userId = $user->id;
+            // dd($order);
+
+            if (in_array($order->status, ['Completed', 'Cancelled'])) {
+                return response()->json([
+                    'status' => false,
+                    'message' => "You cannot raise a dispute for cancelled and completed orders",
+                    'data' => [],
+                ], 400);
+            }
+
+            if (in_array($order->dispute_status, ['Yes', 'Resolved'])) {
+                return response()->json([
+                    'status' => false,
+                    'message' => "You cannot raise a dispute for an already disputed order",
+                    'data' => [],
+                ], 400);
+            }
+
+            $dateTime = now();
+            $images = [];
+
+            if (isset($request->images)) {
+                foreach ($request->images as $file) {
+                    if ($file != null) {
+                        $images[] = [
+                            'order_id' => $order->id,
+                            'user_id' => $userId,
+                            'url' => Storage::disk('public')->put('orders/dispute', $file),
+                            'file' => $file->getClientOriginalName(),
+                            'type' => 'disputed',
+                            'uploaded_by' => 'customer',
+                        ];
+                    }
+                }
+            }
+
+            if (count($images)) {
+                DisputeOrder::create([
+                    'subject' => $request->subject,
+                    'description' => $request->description,
+                    'order_id' => $order->id,
+                    'reported_id' => $userId,
+                    'reported_by' => 'customer',
+                ]);
+                OrderImage::insert($images);
+                $order->update([
+                    'dispute_status' => 'Yes',
+                    'dispute_date' => $dateTime,
+                    'cancellation_note' => $request->description,
+                ]);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Your dispute was submitted successfully. We will contact you soon.',
+                'data' => $order,
+            ], 200);
+        } catch (\Throwable $e) {
+            Log::error("Error: ", ['message' => $e->getMessage()]);
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [
+                    'errors' => [],
+                ],
+            ], 500);
+        }
+    }
+
 }
