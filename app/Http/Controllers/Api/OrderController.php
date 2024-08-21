@@ -370,4 +370,29 @@ public function uploadRetailerImages(Request $request, $id, $type)
         }
     }
 
+
+    public function getDisputedOrders(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $orders = Order::where('user_id', $user->id)
+                ->whereIn('dispute_status', ['Yes', 'Resolved'])
+                ->get();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Disputed orders retrieved successfully',
+                'data' => $orders,
+            ], 200);
+        } catch (\Throwable $e) {
+            Log::error("Error: ", ['message' => $e->getMessage()]);
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [],
+            ], 500);
+        }
+    }
+
+
 }

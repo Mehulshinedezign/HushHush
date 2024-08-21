@@ -1487,6 +1487,7 @@ class ProductController extends Controller
             $product = Product::where('id', $query->product_id)->firstOrFail();
             $order = Order::where('query_id', $query->id)->firstOrFail();
             $productUser = User::where('id', $product->user_id)->firstOrFail();
+            $borrower =User::where('id',$order->user_id)->firstOrFail();
             $productDetails = $this->getProduct($order->product_id);
 
             // Organize images
@@ -1550,6 +1551,7 @@ class ProductController extends Controller
                     'queries' => $query,
                     'user' => $productUser,
                     'order' => $order,
+                    'borrower'=>$borrower,
                     'images' => [
                         'customerPickedUpImages' => $customerPickedUpImages,
                         'customerReturnedImages' => $customerReturnedImages,
