@@ -527,13 +527,13 @@ class Product extends Model
     });
 
     // Date range filter
-    $query->when($request->filled('filter_date'), function ($q) use ($request) {
-        $dateRange = $request->filter_date;
-        $dates = explode(' - ', $dateRange);
-        $startDate = date('Y-m-d', strtotime($dates[0]));
-        $endDate = date('Y-m-d', strtotime($dates[1]));
-        return $q->whereBetween('created_at', [$startDate, $endDate]);
-    });
+    // $query->when($request->filled('filter_date'), function ($q) use ($request) {
+    //     $dateRange = $request->filter_date;
+    //     $dates = explode(' - ', $dateRange);
+    //     $startDate = date('Y-m-d', strtotime($dates[0]));
+    //     $endDate = date('Y-m-d', strtotime($dates[1]));
+    //     return $q->whereBetween('created_at', [$startDate, $endDate]);
+    // });
 
     return $query;
 }

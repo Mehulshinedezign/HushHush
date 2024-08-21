@@ -176,7 +176,7 @@
                             <div class="form-group date-range-field">
                                 <div class="formfield">
                                     <input type="text" name="filter_date" id="daterange-category"
-                                        placeholder="Enter date range" class="form-control daterange-cus">
+                                        placeholder="Enter date range" class="form-control daterange-cus" readonly>
                                     <label for="daterange-category" class="form-icon">
                                         <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
                                     </label>

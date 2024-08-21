@@ -79,14 +79,14 @@ class QueryController extends Controller
                         ->first();
                     $lender = User::where('id', $query->for_user)->first();
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
-                    $price = $price+($query->cleaning_charges)+($query->shipping_charges);
+                    $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
                     // dd($price);
 
                     return [
                         'id' => $query->id,
                         'user_id' => $query->user_id,
                         'product_id' => $query->product_id,
-                        'for_user' => $query->for_user ,
+                        'for_user' => $query->for_user,
                         'query_message' => $query->query_message,
                         'status' => $query->status,
                         'date_range' => [
@@ -142,7 +142,7 @@ class QueryController extends Controller
                     $product = Product::where('id', $productId)
                         ->whereNull('deleted_at')
                         ->first();
-                        // dd($product);
+                    // dd($product);
                     $borrower = User::where('id', $query->user_id)->first();
                     // dd($borrower);
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
@@ -201,8 +201,8 @@ class QueryController extends Controller
             } elseif ($type == 'price') {
                 $validator = Validator::make($request->all(), [
                     // 'price' => 'required',
-                    'cleaning_charges' =>'required',
-                    'shipping_charges' =>'required',
+                    'cleaning_charges' => 'required',
+                    'shipping_charges' => 'required',
 
                 ]);
                 if ($validator->fails()) {
@@ -252,15 +252,22 @@ class QueryController extends Controller
 
                     $productId = $query->product_id;
                     $product = Product::withTrashed()->where('id', $productId)->first();
+                    $order = Order::where('query_id', $query->id)->first();
                     $lender = User::where('id', $query->for_user)->first();
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
                     $now = Carbon::now()->format('Y-m-d');
 
-                    if ($now > $endDate) {
+                    if ($order->status  === 'Waiting') {
+                        if ($now > $endDate) {
+                            $status = 'COMPLETED';
+                        } elseif ($now < $startDate) {
+                            $status = 'PAID';
+                        } else {
+                            $status = 'ACTIVE';
+                        }
+                    } elseif ($order->status == 'Completed') {
                         $status = 'COMPLETED';
-                    } elseif ($now < $startDate) {
-                        $status = 'PAID';
-                    } else {
+                    } elseif ($order->status == 'Picked Up') {
                         $status = 'ACTIVE';
                     }
 
@@ -315,7 +322,8 @@ class QueryController extends Controller
             $queries = Query::where('for_user', $user->id)->where('status', 'completed')
                 ->whereNull('deleted_at')
                 ->get();
-                // dd($queries);
+            // dd($queries);
+
 
             if ($queries->count() > 0) {
                 $queries = $queries->map(function ($query) {
@@ -330,16 +338,23 @@ class QueryController extends Controller
                     $product = Product::where('id', $productId)
                         ->whereNull('deleted_at')
                         ->first();
+                    $order = Order::where('query_id', $query->id)->first();
                     $borrower = User::where('id', $query->user_id)->first();
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
 
                     $now = Carbon::now()->format('Y-m-d');
 
-                    if ($now > $endDate) {
+                    if ($order->status  === 'Waiting') {
+                        if ($now > $endDate) {
+                            $status = 'COMPLETED';
+                        } elseif ($now < $startDate) {
+                            $status = 'PAID';
+                        } else {
+                            $status = 'ACTIVE';
+                        }
+                    } elseif ($order->status == 'Completed') {
                         $status = 'COMPLETED';
-                    } elseif ($now < $startDate) {
-                        $status = 'PAID';
-                    } else {
+                    } elseif ($order->status == 'Picked Up') {
                         $status = 'ACTIVE';
                     }
 
@@ -359,7 +374,7 @@ class QueryController extends Controller
                         'borrower' => $borrower->name ?? null,
                         'borrower_profile_pic' => $borrower->frontend_profile_url ?? null,
                         'borrower_id' => $borrower->id ?? null,
-                        'brand' => $product->get_brand->name ??'N/A',
+                        'brand' => $product->get_brand->name ?? 'N/A',
                         'size' => $product->get_size->name ?? "N/A",
                         'price' => $price,
                     ];

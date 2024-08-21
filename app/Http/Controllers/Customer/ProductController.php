@@ -36,41 +36,54 @@ class ProductController extends Controller
      */
 
 
-    public function index(Request $request)
-    {
-        $categories = Category::where('status', 'Active')->get();
-        $selectedCategories = $request->input('category', []);
-        $selectedSubcategories = $request->input('Subcategory', []);
-        $selectedcolor = $request->input('filtercolor', []);
-        $selectedcondition = $request->input('condition', []);
-        $selectedbrands = $request->input('brand', []);
-        $selectedsize = $request->input('size', []);
-        $searchKeyword = $request->input('search', '');
+     public function index(Request $request)
+     {
+         $categories = Category::where('status', 'Active')->get();
+         $selectedCategories = $request->input('category', []);
+         $selectedSubcategories = $request->input('Subcategory', []);
+         $selectedcolor = $request->input('filtercolor', []);
+         $selectedcondition = $request->input('condition', []);
+         $selectedbrands = $request->input('brand', []);
+         $selectedsize = $request->input('size', []);
+         $searchKeyword = $request->input('search', '');
+         $disabledate = $request->input('filter_date');
 
-        $authUserId = auth()->user()->id;
+         $startDate = null;
+         $endDate = null;
 
-        $query = Product::with('disableDates', 'ratings')
-            ->where('user_id', '!=', $authUserId)
-            ->where('status', '1');
+         if (!empty($disabledate) && strpos($disabledate, ' - ') !== false) {
+             [$startDate, $endDate] = explode(' - ', $disabledate);
+         }
 
-        if (!empty($searchKeyword)) {
-            $query->where('name', 'LIKE', '%' . $searchKeyword . '%');
-        }
+         $authUserId = auth()->user()->id;
 
-        $query->applyFilters();
+         $query = Product::with('disableDates', 'ratings')
+             ->where('user_id', '!=', $authUserId)
+             ->where('status', '1');
 
-        $products = $query->orderBy('created_at', 'desc')->get();
+         if (!empty($searchKeyword)) {
+             $query->where('name', 'LIKE', '%' . $searchKeyword . '%');
+         }
 
-        return view('index', compact('products', 'categories'))->with([
-            'selectedLocation' => $this->selectedLocation,
-            'selectedCategories' => $selectedCategories,
-            'selectedSubcategories' => $selectedSubcategories,
-            'selectedcolor' => $selectedcolor,
-            'selectedcondition' => $selectedcondition,
-            'selectedbrands' => $selectedbrands,
-            'selectedsize' => $selectedsize,
-        ]);
-    }
+         $query->applyFilters();
+
+         if ($startDate && $endDate) {
+             $query->filterByDateRange($startDate, $endDate);
+         }
+
+         $products = $query->orderBy('created_at', 'desc')->get();
+
+         return view('index', compact('products', 'categories'))->with([
+             'selectedLocation' => $this->selectedLocation,
+             'selectedCategories' => $selectedCategories,
+             'selectedSubcategories' => $selectedSubcategories,
+             'selectedcolor' => $selectedcolor,
+             'selectedcondition' => $selectedcondition,
+             'selectedbrands' => $selectedbrands,
+             'selectedsize' => $selectedsize,
+         ]);
+     }
+
 
 
 

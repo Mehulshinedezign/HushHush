@@ -237,7 +237,7 @@
                                         <div class="form-group">
                                             <label for="">City*</label>
                                             <div class="formfield">
-                                                <input type="text" class="produt_input form-control form-class @error('city') is-invalid @enderror" placeholder="city" name="city" id="product_city" value="{{ $product->city}}">
+                                                <input type="text" class="produt_input form-control form-class @error('city') is-invalid @enderror" placeholder="city" name="city" id="product_city" value="{{ $product->city ?? ''}}">
                                                 @error('city')
                                                 <span class="invalid-feedback" role="alert">
                                                     {{$message}}
@@ -252,7 +252,7 @@
                                             <div class="formfield">
                                                 <input type="text" name="non_available_dates"
                                                     id="non_available_date" placeholder="Select Dates"
-                                                    class="form-control daterange-cus" value="{{ $formattedDates }}">
+                                                    class="form-control daterange-cus" value="{{ $formattedDates }}" readonly>
                                                 <span class="form-icon cal-icon">
                                                     <img src="{{ asset('front/images/calender-icon.svg') }}"
                                                         alt="img">
@@ -298,7 +298,7 @@
                                             </div>
                                         </div>
                                     </div> --}}
-                                    
+
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -475,7 +475,7 @@
 
     <script>
 
-        // New update script code here 
+        // New update script code here
         $(document).ready(function() {
             let imageCount = $('.image-wrapper').length;
             const maxFiles = 5;
@@ -579,12 +579,12 @@
                 }
             });
 
-            // size script code here 
+            // size script code here
             var sizes = @json(config('size'));
             var category_size = $(this).find('option:selected').data('fetchsize');
             var size = "{{$product->size}}";
             var selectedOption = $('select[name="size"]');
-            selectedOption.empty(); 
+            selectedOption.empty();
 
             var sizeOptions = sizes[category_size] || [];
 

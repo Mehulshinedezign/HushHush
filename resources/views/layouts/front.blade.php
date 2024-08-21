@@ -368,7 +368,7 @@
                                             <div class="formfield">
                                                 <input type="text" name="non_available_dates"
                                                     id="non_available_date" placeholder="Select Dates"
-                                                    class="form-control daterange-cus">
+                                                    class="form-control daterange-cus" readonly>
                                                 <span class="form-icon cal-icon">
                                                     <img src="{{ asset('front/images/calender-icon.svg') }}"
                                                         alt="img">
