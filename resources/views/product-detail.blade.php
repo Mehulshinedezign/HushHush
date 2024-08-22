@@ -66,14 +66,14 @@
                                     <p>{{ $product->ratings_count }} Ratings & Reviews</p>
                                     <div class="form-group">
                                         <div class="formfield">
-                                            <select name="" id="" readonly>
+                                            <p>Most Recent</p>
+                                            {{-- <select name="" id="" readonly>
                                                 <option value="">Most Recent</option>
-                                                {{-- <option value="">older</option>
-                                                <option value="">unseen</option> --}}
-                                            </select>
-                                            <span class="form-icon">
+
+                                            </select> --}}
+                                            {{-- <span class="form-icon">
                                                 <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
-                                            </span>
+                                            </span> --}}
                                         </div>
                                     </div>
                                 </div>

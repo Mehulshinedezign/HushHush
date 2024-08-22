@@ -386,7 +386,7 @@ span.left-form-icon {
     /* transform: translateX(-50%); */
     justify-content: space-between;
     /* top: 100px; */
-    gap: 20px;
+    gap: 60px;
     align-content: center;
 }
 .home-filter-box.expand .home-filter-inner {

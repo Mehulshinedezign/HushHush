@@ -336,23 +336,29 @@
                                                 <input type="number" class="form-control" name="min_rent_days"
                                                     value="{{ $product->min_days_rent_item }}" min="1">
                                             </div> -->
-                                            <select class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror" name="min_rent_days">
-                                                    <option value="">Select rental days</option>
-                                                    <option value="7"
-                                                        @if ($product->min_days_rent_item == 7) selected @endif>7 Days
-                                                    </option>
-                                                    <option value="14"
-                                                        @if ($product->min_days_rent_item == 14) selected @endif>14 Days</option>
-                                                    <option value="30"
-                                                        @if ($product->min_days_rent_item == 30) selected @endif>30 Days</option>
-                                                        <!-- <option value="Fair"
-                                                        @if ($product->product_condition == 'Fair') selected @endif>Fair condition</option> -->
+                                            <div class="formfield">
+                                                <select class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror" name="min_rent_days">
+                                                        <option value="">Select rental days</option>
+                                                        <option value="7"
+                                                            @if ($product->min_days_rent_item == 7) selected @endif>7 Days
+                                                        </option>
+                                                        <option value="14"
+                                                            @if ($product->min_days_rent_item == 14) selected @endif>14 Days</option>
+                                                        <option value="30"
+                                                            @if ($product->min_days_rent_item == 30) selected @endif>30 Days</option>
+                                                            <!-- <option value="Fair"
+                                                            @if ($product->product_condition == 'Fair') selected @endif>Fair condition</option> -->
                                                 </select>
+                                                <span class="form-icon">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                            alt="img">
+                                                </span>
 
-                                                @error('min_rent_days')
-                                                <span class="invalid-feedback" role="alert">
-                                                    {{$message}}
-                                                @enderror
+                                                    @error('min_rent_days')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{$message}}
+                                                    @enderror
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">

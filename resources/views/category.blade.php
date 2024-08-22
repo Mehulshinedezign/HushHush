@@ -172,6 +172,11 @@
                                     </div>
                                 </div>
                             </div>
+
+
+
+                        </div>
+                        <div class="home-filter-inner">
                             <h4>Date range</h4>
                             <div class="form-group date-range-field">
                                 <div class="formfield">
@@ -184,7 +189,6 @@
 
 
                             </div>
-
                         </div>
                         <div class="home-filter-inner">
                             <h4>Locations</h4>
