@@ -74,7 +74,6 @@ function unSeenMessages(sender, receiver) {
             count += 1;
         }
 
-        console.log(count, "Unseen message count");
 
         // Update the count on the UI
         if(count > 0){

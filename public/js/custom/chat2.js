@@ -408,8 +408,7 @@ function loadMessages(sender, receiver, userImage) {
     }
 
     // Attach a new listener
-    fireBaseListeners[listenerKey] = db.ref('messeges/' + listenerKey).on("child_added", (snap) => {
-        var message = snap;
+    fireBaseListeners[listenerKey] = db.ref('messeges/' + listenerKey).on("child_added", (message) => {
         var messageList = '';
 
         let date = moment(new Date()).format('YYYY-MM-DD');
@@ -420,6 +419,7 @@ function loadMessages(sender, receiver, userImage) {
             : msgDate;
 
         if (parseInt(authUserId) === parseInt(message.val().sender)) {
+            console.log('if',message.val());
             messageList += '<div class="chat-screen-right-wrapper">';
             messageList += '<div class="chat-screenmsg-wrapper">';
             messageList += '<div class="chat-screen-name-time">';
@@ -430,6 +430,7 @@ function loadMessages(sender, receiver, userImage) {
             messageList += '<div class="chat-screen-img"><img src="' + authUserprofile + '?id=' + message.val() + '"></div>';
             messageList += '</div>';
         } else {
+            console.log('else',message.val());
             messageList += '<div class="chat-screen-left-wrapper">';
             messageList += '<div class="chat-screen-img"><img src="' + userImage + '?id=' + message.val() + '"></div>';
             messageList += '<div class="msg-data"><div class="pro_name d-flex">';
@@ -441,7 +442,9 @@ function loadMessages(sender, receiver, userImage) {
         }
         // console.log(authUserId,message.val().receiver,"test1234",message.val());
         if (parseInt(authUserId) === parseInt(message.val().reciever)) {
-            messageUpdate(message, 'true');
+            if(message.val().isSeen != 'true' ){
+                messageUpdate(message, 'true');
+            }
         }
         jQuery('#chatWindow').append(messageList);
     });
