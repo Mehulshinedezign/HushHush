@@ -32,7 +32,7 @@ class UpdateProductRequest extends FormRequest
             'address2' => 'required|string',
             'country' => 'required|string',
             'state' => 'required|string',
-            'city' => 'required|string',
+            // 'city' => 'required|string',
             'product_link' => ['nullable','regex:/^((ftp|http|https):\/\/)?(www\.)?(?!.*(ftp|http|https|www\.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/'],
             'product_condition' => 'required|string',
             'description' => 'required|string',

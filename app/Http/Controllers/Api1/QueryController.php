@@ -67,7 +67,7 @@ class QueryController extends Controller
                 ->whereNull('deleted_at')
                 ->filterByStatus($status)
                 ->get();
-                // dd($queries);
+            // dd($queries);
 
             if (count($queries) > 0) {
                 $queries = $queries->map(function ($query) {
@@ -299,8 +299,9 @@ class QueryController extends Controller
 
     public function booked()
     {
+        dd('here');
         $user = auth()->user();
-        // dd($user);
+        dd($user);
         try {
             $queries = Query::where('for_user', $user->id)->where('status', 'completed')
                 ->whereNull('deleted_at')

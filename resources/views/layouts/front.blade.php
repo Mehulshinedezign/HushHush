@@ -22,8 +22,8 @@
     <link rel="stylesheet" href="{{ asset('css/iziToast.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/daterangepicker.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/custom-front.css') }}?ver={{ now() }}" />
-    <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}?ver={{ now() }}">
     <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}?ver={{ now() }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
     <!-- <script>
         document.addEventListener('contextmenu', function(e) {
@@ -158,19 +158,16 @@
                                             <label for="">Category/Subcategory</label>
                                             <div class="duel-select-field">
                                                 <div class="formfield">
-                                                    <select name="category"
-                                                        class="parent_category produt_input form-class @error('category') is-invalid @enderror">
+                                                    <select name="category" class="parent_category produt_input form-class @error('category') is-invalid @enderror" id="parent-category">
                                                         <option value="">Category</option>
                                                         @foreach (getParentCategory() as $category)
-                                                            <option value="{{ jsencode_userdata($category->id) }}"
-                                                                data-fetchsize="{{ $category->name }}">
+                                                            <option value="{{ jsencode_userdata($category->id) }}" data-subcategories="{{ getChild($category->id) }}" data-fetchsize="{{ $category->name }}">
                                                                 {{ $category->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
                                                     <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
                                                     </span>
                                                     @error('category')
                                                         <span class="invalid-feedback" role="alert">
@@ -178,22 +175,24 @@
                                                         </span>
                                                     @enderror
                                                 </div>
+
                                                 <div class="formfield">
-                                                    <select name="subcategory" id="subcategory">
+                                                    <select name="subcategory" id="subcategory" class="produt_input form-class @error('subcategory') is-invalid @enderror">
                                                         <option value="">Subcategory</option>
                                                     </select>
                                                     <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
                                                     </span>
                                                 </div>
                                                 @error('subcategory')
                                                     <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
                                                     </span>
                                                 @enderror
                                             </div>
                                         </div>
                                     </div>
+
 
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
@@ -369,7 +368,7 @@
                                             <div class="formfield">
                                                 <input type="text" name="non_available_dates"
                                                     id="non_available_date" placeholder="Select Dates"
-                                                    class="form-control daterange-cus">
+                                                    class="form-control daterange-cus" readonly>
                                                 <span class="form-icon cal-icon">
                                                     <img src="{{ asset('front/images/calender-icon.svg') }}"
                                                         alt="img">
@@ -386,8 +385,6 @@
                                             <label for="">Condition*</label>
                                             <div class="formfield">
 
-                                                {{-- <input type="text" name="product_condition" id=""
-                                                    placeholder="Product Condition" class="form-control"> --}}
                                                 <select
                                                     class="produt_input form-control form-class @error('product_condition') is-invalid @enderror"
                                                     name="product_condition">
@@ -409,16 +406,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-lg-4 col-md-4 col-sm-12">
-                                        <div class="form-group">
-                                            <label for="">Pickup Location*</label>
-                                            <div class="formfield">
-                                                <textarea name="pick_up_location" id="" rows="4" class="form-control" placeholder="Text"></textarea>
-                                            </div>
-                                        </div>
-                                    </div> --}}
-
-
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Product market value*</label>
@@ -456,9 +443,6 @@
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days*</label>
                                             <div class="formfield ">
-                                                <!-- <input type="number" class="form-control" name="min_rent_days"
-                                                    placeholder="Rental days" value="" min="1"> -->
-                                                {{-- <select class="form-control" name="min_rent_days"> --}}
                                                 <select
                                                     class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
                                                     name="min_rent_days">
@@ -570,6 +554,36 @@
                         <h3 class="modal-title" id="exampleModalLabel">Add your bank details</h3>
                         @csrf
                         <img src="{{ asset('front/images/bank-img.png') }}" alt="">
+                        <div class="profile-select-box border-disabled">
+                            <div class="profile-check-list">
+
+                                <a href="javascript:void(0)" data-bs-dismiss="modal" arial-label="Close"
+                                    class="button outline-btn full-btn">Cancel</a>
+
+                                <button type="submit" class="button primary-btn full-btn"
+                                    id="bank_info">Yes</button>
+
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @php
+        $user=auth()->user();
+    @endphp
+
+    <div class="modal fade addbank-Modal" id="addaddress-Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form action="{{ route('change-Profile', $user) }}" method="GET">
+                        <h3 class="modal-title" id="exampleModalLabel">Add your Address</h3>
+                        @csrf
+                        <img src="{{ asset('front/images/—Pngtree—address icon isolated on abstract_5218933.png') }}" alt="" width="200" height="200">
                         <div class="profile-select-box border-disabled">
                             <div class="profile-check-list">
 
@@ -700,6 +714,28 @@
     <script src="{{ asset('js/custom/add-wishlist.js') }}"></script>
     <script src="{{ asset('js/custom/common.js') }}?ver={{ now() }}"></script>
     <script>
+        jQuery(document).ready(function() {
+    $('#parent-category').on('change', function() {
+        var selectedOption = $(this).find('option:selected');
+        var subcategories = selectedOption.data('subcategories');
+        var subcategoryDropdown = $('#subcategory');
+
+        // Clear the subcategory dropdown
+        subcategoryDropdown.empty();
+        subcategoryDropdown.append('<option value="">Subcategory</option>');
+
+        // If no category is selected, stop here
+        if (!subcategories || subcategories.length === 0) {
+            return;
+        }
+
+        // Populate the subcategory dropdown with the received data
+        subcategories.forEach(function(subcategory) {
+            subcategoryDropdown.append('<option value="' + subcategory.id + '">' + subcategory.name + '</option>');
+        });
+    });
+});
+
         $('.custom-slider').slick({
             centerPadding: '60px',
             slidesToShow: 10,

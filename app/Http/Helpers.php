@@ -74,7 +74,7 @@ if (!function_exists('jsdecode_userdata')) {
 if (!function_exists('getParentCategory')) {
     function getParentCategory()
     {
-        return Category::where('status', '1')->get();
+        return Category::where('status', '1')->where('parent_id', Null)->get();
     }
 }
 
@@ -82,6 +82,7 @@ if (!function_exists('getParentCategory')) {
 if (!function_exists('getChild')) {
     function getChild($id)
     {
+        // dd('here' ,$id);
         return Category::where('status', '1')->where('parent_id', $id)->get();
     }
 }

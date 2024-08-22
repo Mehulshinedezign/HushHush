@@ -92,7 +92,7 @@ class QueryController extends Controller
                 $lender->notify(new QueryReceived($product_date));
             }
             DB::commit();
-            return response()->json(['success' => true, 'message' => 'Query send successfully']);
+            return response()->json(['success' => true, 'message' => 'Inquiry send successfully']);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json(['success' => false, 'message' => $e->getMessage() ]);
@@ -135,12 +135,12 @@ class QueryController extends Controller
                 'cleaning_charges' => 'required|numeric|min:1',
                 'shipping_charges' => 'required|numeric|min:1',
             ])->validate();
-            
+
             $query_product = Query::where('id', $id)->first();
-    
-    
+
+
             // dd($query_product->toArray());
-    
+
                     // $query->FilterByDateRange($startDate,$endDate);
             $data = [
                 // 'user_id' => $query_product->user_id,
@@ -148,31 +148,31 @@ class QueryController extends Controller
                 'negotiate_price' => $request->negotiate_price ?? null,
                 'shipping_charges' => $request->shipping_charges ?? null,
                 'cleaning_charges' => $request->cleaning_charges ?? null,
-    
+
                 // 'for_user' => $query_product->for_user,
                 // 'query_message' => $query_product->query_message,
                 'status' => 'ACCEPTED',
                 // 'date_range' => $query_product->date_range,
             ];
-    
+
             $query_product->update($data);
-    
+
             $dates = explode(' - ', $query_product->date_range);
             $startDate = date('Y-m-d', strtotime($dates[0]));
             $endDate = date('Y-m-d', strtotime($dates[1]));
-    
+
             while ($startDate <= $endDate) {
                 $startDate = date_create($startDate);
                  $query_product->product->disableDates()->create([
                 'disable_date' => $startDate->format('Y-m-d'),
                 ]);
-    
-    
+
+
                 $startDate->modify('+1 day');
                 $startDate = $startDate->format('Y-m-d');
             }
-    
-    
+
+
             $userId =jsencode_userdata($query_product->user->id);
             if(@$query_product->user->usernotification->accept_item == '1'){
                 $query_product->user->notify(new AcceptItem($userId));

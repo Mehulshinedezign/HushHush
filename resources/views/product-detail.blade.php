@@ -4,7 +4,11 @@
     $user = auth()->user();
 @endphp
 @section('content')
+
+
+
     <section class="product-desc-sec">
+
         <div class="container">
             <div class="breadcrum-main">
                 <a href="{{ url('/') }}" class="breadcrum-list">Home</a>
@@ -62,14 +66,14 @@
                                     <p>{{ $product->ratings_count }} Ratings & Reviews</p>
                                     <div class="form-group">
                                         <div class="formfield">
-                                            <select name="" id="">
+                                            <p>Most Recent</p>
+                                            {{-- <select name="" id="" readonly>
                                                 <option value="">Most Recent</option>
-                                                <option value="">older</option>
-                                                <option value="">unseen</option>
-                                            </select>
-                                            <span class="form-icon">
+
+                                            </select> --}}
+                                            {{-- <span class="form-icon">
                                                 <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
-                                            </span>
+                                            </span> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -152,7 +156,7 @@
                                 </div>
 
                             </div>
-                            
+
                             <div class="pro-desc-info">
                                 <div class="pro-desc-info-box">
                                     <h4>Brand :</h4>
@@ -171,34 +175,24 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                    <h4>Size :</h4>
-                                    <p>{{ $product->size ?? 'N/A' }}</p>
-                                </div> -->
+                                            <h4>Size :</h4>
+                                            <p>{{ $product->size ?? 'N/A' }}</p>
+                                        </div> -->
 
 
                             </div>
-                            {{-- <div class="form-group">
-                                <label for="">Select your Rental date</label>
-                                <div class="formfield">
-                                    <input type="text" placeholder="7/31/2023  to  8/01/2023" class="form-control">
-                                    <span class="form-icon">
-                                        <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
-                        </span>
-                    </div>
-                </div> --}}
-                            {{-- <div class="pro-desc-loc">
-                                <h3>Pick up Location</h3>
-                                <div class="pro-desc-loc-copy">
-                                    <p>Akshya Nagar 1st Block 1st Cross, Rammurthy nagar....</p>
-                                    <a href="#" class="copy-add-btn"><img
-                                            src="{{ asset('front/images/copy-icon.svg') }}" alt="img">Copy</a>
-            </div>
-        </div> --}}
-                            {{-- <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                                data-bs-target="#bookitem-sidebar" aria-controls="offcanvasRight">Book Now</a> --}}
+
                             @if (@$product->user_id != auth()->user()->id)
-                                <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                                    data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Send Request</a>
+                                @if (is_null($user->userDetail->complete_address))
+                                    {{-- <div data-bs-toggle="modal" data-bs-target="#addaddress-Modal">
+                                        Send Request
+                                    </div> --}}
+                                    <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="modal"
+                                        data-bs-target="#addaddress-Modal" aria-controls="offcanvasRight">Send Request</a>
+                                @else
+                                    <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
+                                        data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Send Request</a>
+                                @endif
                             @endif
 
                             <div class="pro-info-accordian">
@@ -218,23 +212,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="accordion-item">
-                                        <h2 class="accordion-header" id="headingTwo">
-                                            <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                                                aria-expanded="false" aria-controls="collapseTwo">
-                                                Additional information
-                                            </button>
-                                        </h2>
-                                        <div id="collapseTwo" class="accordion-collapse collapse"
-                                            aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                            <div class="accordion-body">
-                                                Safer For The Environment: Our denim factory partner recycles 98% of their
-                                                water using reverse osmosis filtration and keeps byproducts out of the
-                                                environment by mixing them with concrete.
-                                            </div>
-                                        </div>
-                                    </div> --}}
+
                                 </div>
                                 <div class="pro-info-accordian">
                                     <div class="accordion" id="accordionExample">
@@ -253,23 +231,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- <div class="accordion-item">
-                                            <h2 class="accordion-header" id="headingTwo">
-                                                <button class="accordion-button collapsed" type="button"
-                                                    data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                                                    aria-expanded="false" aria-controls="collapseTwo">
-                                                    Additional information
-                                                </button>
-                                            </h2>
-                                            <div id="collapseTwo" class="accordion-collapse collapse"
-                                                aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                                                <div class="accordion-body">
-                                                    Safer For The Environment: Our denim factory partner recycles 98% of their
-                                                    water using reverse osmosis filtration and keeps byproducts out of the
-                                                    environment by mixing them with concrete.
-                                                </div>
-                                            </div>
-                                        </div> --}}
+
                                     </div>
                                 </div>
                                 <div class="lender-profile">
@@ -277,7 +239,7 @@
                                     <div class="lender-profile-box">
                                         <div class="lender-dp-box">
                                             <a href="{{ route('lenderProfile', jsencode_userdata($product->user_id)) }}">
-                                                @if ($user->profile_file)
+                                                @if ($product->retailer->profile_file )
                                                     <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
                                                         alt="Profile Picture">
                                                 @else
@@ -302,9 +264,7 @@
                                 <div class="pro-dec-rating-main">
                                     <div class="pro-rating-head">
                                         <h4>Ratings & Reviews</h4>
-                                        <a href="javascript:void(0)" data-toggle="modal"
-                                            data-rating_product_id="{{ $product->id }}"
-                                            data-target="#rating_review">Leave Review</a>
+
                                     </div>
                                     <div class="pro-rating-body">
                                         <div class="pro-rating-left">
@@ -439,12 +399,15 @@
                                     <div class="form-group">
                                         <label for="">Select your Rental date</label>
                                         <div class="formfield">
-                                            <input type="text" name="rental_dates"
+                                            <input type="text" name="rental_dates" id="rental_dates"
                                                 class="form-control rent_dates form-class @error('rental_dates') is-invalid @enderror"
                                                 placeholder="Select rental date">
-                                            <span class="form-icon">
+                                            <label for="rental_dates" class="form-icon">
                                                 <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
-                                            </span>
+                                            </label>
+
+
+
                                         </div>
                                         @error('rental_dates')
                                             <span class="invalid-feedback" role="alert">
@@ -454,10 +417,10 @@
                                     </div>
 
                                     <div class="form-group my-3">
-                                        <label for="">Description</label>
+                                        <label for="">Message to lender</label>
                                         <div class="formfield">
                                             <textarea name="description" cols="30" rows="5"
-                                                class="form-control form-class @error('description') is-invalid @enderror" placeholder="Description"></textarea>
+                                                class="form-control form-class @error('description') is-invalid @enderror" placeholder="message to lender"></textarea>
                                         </div>
                                         @error('description')
                                             <span class="invalid-feedback" role="alert">
@@ -467,20 +430,25 @@
                                     </div>
                                     <div class="item-pickup-loc-main">
                                         <h4>Pick up Location</h4>
-                                        @if (@$product->productCompleteLocation->manul_pickup_location == '1')
-                                            <p>{{ $product->productCompleteLocation->pick_up_location ?? '' }}</p>
-                                        @endif
+
+                                        <input type="radio" id="pick_up" name="delivery_option"
+                                            value="{{ $product->productCompleteLocation->pick_up_location }}">
+                                        <label for="pick_up">Pick up from lender location</label><br>
+
+                                        <input type="radio" id="ship_to_me" name="delivery_option"
+                                            value="{{ $user->userDetail->complete_address }}">
+                                        <label for="ship_to_me">Ship it to me</label><br>
+
+                                        <input type="text" id="selected_value" readonly class="form-control" placeholder="Selected option will appear here">
+                                        <input type="text" id="profile_message" class="message" style="display: none;" value="Please complete your profile to enable this option." readonly>
                                     </div>
+
                                 </div>
 
                                 <button type="button" class="button primary-btn full-btn mt-3"
                                     id="Askquery">Next</button>
                             </form>
 
-                            {{-- <div class="book-item-footer">
-                            <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                                data-bs-target="#checkout-sidebar" aria-controls="offcanvasRight">Next</a>
-                        </div> --}}
                         </div>
                     </div>
                 </div>
@@ -538,6 +506,44 @@
             $('#Askquery').on('click', function(e) {
                 let form = $('form#Sendquery')[0];
                 let formData = new FormData(form);
+                let hasErrors = false;
+
+                // Validate Rental Date
+                if (!$('#rental_dates').val()) {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Please select a rental date.',
+                        position: 'topRight',
+                    });
+                    hasErrors = true;
+                }
+
+                // // Validate Delivery Option
+                // if (!$('input[name="delivery_option"]:checked').val()) {
+                //     iziToast.error({
+                //         title: 'Error',
+                //         message: 'Please select a delivery option.',
+                //         position: 'topRight',
+                //     });
+                //     hasErrors = true;
+                // }
+
+                // Check for incomplete profile if "Ship it to me" is selected
+                if ($('#ship_to_me').is(':checked') &&
+                    {{ is_null($user->userDetail->complete_address) ? 'true' : 'false' }}) {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Please complete your profile to enable this option.',
+                        position: 'topRight',
+                    });
+                    hasErrors = true;
+                }
+
+                if (hasErrors) {
+                    e.preventDefault(); // Prevent form submission if there are errors
+                    return;
+                }
+
                 if ($('#Sendquery').valid()) {
                     $('#Askquery').prop('disabled', true);
                     var url = `{{ route('query') }}`;
@@ -556,7 +562,6 @@
                         complete: function() {
                             $('body').removeClass('loading');
                         },
-
                         success: function(response) {
                             var modalContent = '';
                             if (response.success) {
@@ -622,7 +627,6 @@
                 return range !== null;
             });
 
-
             function isDateDisabled(date) {
                 var inQueryDates = disabledDateRanges.some(function(range) {
                     return date.isBetween(range.start, range.end, 'day', '[]');
@@ -645,24 +649,20 @@
                 minDate: moment().startOf('day'),
                 isInvalidDate: isDateDisabled
             }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format(
-                    'YYYY-MM-DD'));
-                var dateRange = $(this).val().split(' - ');
-                var startDate = dateRange[0];
-                var endDate = dateRange[1];
+                var startDate = picker.startDate;
+                var endDate = picker.endDate;
+                var duration = endDate.diff(startDate, 'days');
 
-                // check range exit inbetween disabled date or not
-                // disableDates.map(function(dateRange) {
-                //     if (startDate < dateRange && endDate > dateRange) {
-                //         return iziToast.error({
-                //             title: 'Error',
-                //             message: 'this date range is not selectable',
-                //             position: 'topRight'
-                //         });
-                //     }
-                // }).filter(function(range) {
-                //     return range !== null;
-                // });
+                if (duration < 6) {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Please select a date range of at least min rent days.',
+                        position: 'topRight',
+                    });
+                    $(this).val('');
+                } else {
+                    $(this).val(startDate.format('YYYY-MM-DD') + ' - ' + endDate.format('YYYY-MM-DD'));
+                }
             });
 
             $('.daterange-btn').daterangepicker({
@@ -686,6 +686,40 @@
             }).on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format(
                     'MMMM D, YYYY'));
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the radio buttons and message element
+            const radioButtons = document.querySelectorAll('input[name="delivery_option"]');
+            const profileMessage = document.getElementById('profile_message');
+            const selectedValueInput = document.getElementById('selected_value');
+
+            // Server-side flag for address completeness
+            const isAddressComplete = {{ is_null($user->userDetail->complete_address) ? 'false' : 'true' }};
+
+            // Add an event listener to each radio button
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        const selectedValue = this.value;
+                        selectedValueInput.value =
+                        selectedValue; // Set the value of the readonly input field
+
+                        // Check if the 'Ship it to me' option is selected and the profile is not complete
+                        if (this.id === 'ship_to_me' && !isAddressComplete) {
+                            iziToast.error({
+                                title: 'Error',
+                                message: 'Please complete your profile to enable this option.',
+                                position: 'topRight',
+                            });
+                            profileMessage.style.display =
+                            'block'; // Show profile completion message
+                        } else {
+                            profileMessage.style.display = 'none'; // Hide message
+                        }
+                    }
+                });
             });
         });
     </script>

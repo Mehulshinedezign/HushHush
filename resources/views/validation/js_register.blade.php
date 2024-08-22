@@ -14,6 +14,20 @@
                 maxlength: nameMaxLength,
                 regex: nameRegex,
             },
+
+            first_name: {
+                required: true,
+                minlength:2,
+                maxlength: 50,
+                regex: nameRegex,
+            },
+
+            last_name: {
+                required: true,
+                minlength:2,
+                maxlength: 50,
+                regex: nameRegex,
+            },
             email: {
                 required: true,
                 email: true,
@@ -65,6 +79,19 @@
                 required: `{{ __('customvalidation.user.name.required') }}`,
                 minlength: `{{ __('customvalidation.user.name.min', ['min' => '${nameMinLength}', 'max' => '${nameMaxLength}']) }}`,
                 maxlength: `{{ __('customvalidation.user.name.max', ['min' => '${nameMinLength}', 'max' => '${nameMaxLength}']) }}`,
+                regex: `{{ __('customvalidation.user.name.regex', ['regex' => '${nameRegex}']) }}`,
+            },
+
+            first_name: {
+                required: `{{ __('customvalidation.user.name.required') }}`,
+                minlength: 'First name must be between 2-50 characters.',
+                maxlength: 'First name must be between 2-50 characters.',
+                regex: `{{ __('customvalidation.user.name.regex', ['regex' => '${nameRegex}']) }}`,
+            },
+            last_name: {
+                required: `{{ __('customvalidation.user.name.required') }}`,
+                minlength: 'Last name must be between 2-50 characters.',
+                maxlength: 'Last name must be between 2-50 characters.',
                 regex: `{{ __('customvalidation.user.name.regex', ['regex' => '${nameRegex}']) }}`,
             },
             email: {

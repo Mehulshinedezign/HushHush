@@ -24,7 +24,7 @@ class StoreProductRequest extends FormRequest
             'address2' => 'required',
             'country' => 'required',
             'state' => 'required',
-            'city' => 'required',
+            // 'city' => 'required',
             'product_link' => ['nullable','regex:/^((ftp|http|https):\/\/)?(www\.)?(?!.*(ftp|http|https|www\.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/'],
             'description' => 'required',
             'product_market_value' => 'required',

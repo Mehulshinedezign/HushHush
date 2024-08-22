@@ -11,7 +11,7 @@
         <div class="container">
             <div class="rental-request-wrapper">
                 <div class="rental-header">
-                    <h2>My query List</h2>
+                    <h2>My Inquiry List</h2>
                     <div class="form-group">
                         {{-- <div class="formfield">
                             <input type="text" placeholder="Select Date" class="form-control">

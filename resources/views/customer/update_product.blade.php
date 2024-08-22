@@ -237,7 +237,7 @@
                                         <div class="form-group">
                                             <label for="">City*</label>
                                             <div class="formfield">
-                                                <input type="text" class="produt_input form-control form-class @error('city') is-invalid @enderror" placeholder="city" name="city" id="product_city" value="{{ $product->city}}">
+                                                <input type="text" class="produt_input form-control form-class @error('city') is-invalid @enderror" placeholder="city" name="city" id="product_city" value="{{ $product->city ?? ''}}">
                                                 @error('city')
                                                 <span class="invalid-feedback" role="alert">
                                                     {{$message}}
@@ -252,7 +252,7 @@
                                             <div class="formfield">
                                                 <input type="text" name="non_available_dates"
                                                     id="non_available_date" placeholder="Select Dates"
-                                                    class="form-control daterange-cus" value="{{ $formattedDates }}">
+                                                    class="form-control daterange-cus" value="{{ $formattedDates }}" readonly>
                                                 <span class="form-icon cal-icon">
                                                     <img src="{{ asset('front/images/calender-icon.svg') }}"
                                                         alt="img">
@@ -298,7 +298,7 @@
                                             </div>
                                         </div>
                                     </div> --}}
-                                    
+
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -336,23 +336,29 @@
                                                 <input type="number" class="form-control" name="min_rent_days"
                                                     value="{{ $product->min_days_rent_item }}" min="1">
                                             </div> -->
-                                            <select class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror" name="min_rent_days">
-                                                    <option value="">Select rental days</option>
-                                                    <option value="7"
-                                                        @if ($product->min_days_rent_item == 7) selected @endif>7 Days
-                                                    </option>
-                                                    <option value="14"
-                                                        @if ($product->min_days_rent_item == 14) selected @endif>14 Days</option>
-                                                    <option value="30"
-                                                        @if ($product->min_days_rent_item == 30) selected @endif>30 Days</option>
-                                                        <!-- <option value="Fair"
-                                                        @if ($product->product_condition == 'Fair') selected @endif>Fair condition</option> -->
+                                            <div class="formfield">
+                                                <select class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror" name="min_rent_days">
+                                                        <option value="">Select rental days</option>
+                                                        <option value="7"
+                                                            @if ($product->min_days_rent_item == 7) selected @endif>7 Days
+                                                        </option>
+                                                        <option value="14"
+                                                            @if ($product->min_days_rent_item == 14) selected @endif>14 Days</option>
+                                                        <option value="30"
+                                                            @if ($product->min_days_rent_item == 30) selected @endif>30 Days</option>
+                                                            <!-- <option value="Fair"
+                                                            @if ($product->product_condition == 'Fair') selected @endif>Fair condition</option> -->
                                                 </select>
+                                                <span class="form-icon">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                            alt="img">
+                                                </span>
 
-                                                @error('min_rent_days')
-                                                <span class="invalid-feedback" role="alert">
-                                                    {{$message}}
-                                                @enderror
+                                                    @error('min_rent_days')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{$message}}
+                                                    @enderror
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -475,7 +481,7 @@
 
     <script>
 
-        // New update script code here 
+        // New update script code here
         $(document).ready(function() {
             let imageCount = $('.image-wrapper').length;
             const maxFiles = 5;
@@ -579,12 +585,12 @@
                 }
             });
 
-            // size script code here 
+            // size script code here
             var sizes = @json(config('size'));
             var category_size = $(this).find('option:selected').data('fetchsize');
             var size = "{{$product->size}}";
             var selectedOption = $('select[name="size"]');
-            selectedOption.empty(); 
+            selectedOption.empty();
 
             var sizeOptions = sizes[category_size] || [];
 

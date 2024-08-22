@@ -10,8 +10,7 @@
 
         $.validator.addMethod("completeAddress", function(value, element) {
             return $('#product_address1').val() !== '' && $('#product_address2').val() !== '' && $(
-                '#product_country').val() !== '' && $('#product_state').val() !== '' && $(
-                '#product_city').val() !== '';
+                '#product_country').val() !== '' && $('#product_state').val() !== '' ;
         }, "Please enter the complete address");
         const rules = {
             name: {

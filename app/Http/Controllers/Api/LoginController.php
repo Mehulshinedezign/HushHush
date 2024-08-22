@@ -12,6 +12,7 @@ use App\Notifications\VerificationEmail;
 use App\Services\OtpService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class LoginController extends Controller
 {
@@ -42,11 +43,19 @@ class LoginController extends Controller
                 if ($user->role->name == 'admin') {
                     Auth::logout();
                     $isVerified = false;
-                    return $this->apiResponse('error', '500', 'Invalid Credentials', ['errors' =>'Invalid Credentials'], $isVerified);
+                    return $this->apiResponse('error', '500', 'Invalid Credentials', ['errors' => 'Invalid Credentials'], $isVerified);
                 }
 
                 $isVerified = !is_null($user->email_verified_at) && $user->otp_is_verified == 1;
                 $isActive = $user->status == 1;
+                PushToken::updateOrCreate(
+                    ['user_id' => $user->id],
+                    [
+                        'fcm_token' => $request->fcm_token,
+                        'device_id' => $request->device_id,
+                        'device_type' => $request->device_type,
+                    ]
+                );
 
                 if (!$isVerified) {
                     if (is_null($user->email_verified_at) && $user->otp_is_verified != 1) {
@@ -110,9 +119,7 @@ class LoginController extends Controller
                         'phone' => $user->country_code . $user->phone_number,
                         'profile_pic' => $user->frontend_profile_url,
                         'name' => $user->name,
-                        'fcm_token' => $user->pushToken->fcm_token,
-                        'device_type' => $user->pushToken->device_type,
-                        'device_id' => $user->pushToken->device_id,
+
                     ];
 
                     return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
@@ -131,6 +138,7 @@ class LoginController extends Controller
                         'phone' => $user->country_code . $user->phone_number,
                         'name' => $user->frontend_profile_url,
                         'profile_pic' => $user->name,
+
                     ];
 
                     return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
@@ -148,6 +156,9 @@ class LoginController extends Controller
                     'phone' => $user->country_code . $user->phone_number,
                     'profile_pic' => $user->frontend_profile_url,
                     'name' => $user->name,
+                    'fcm_token' => $user->pushToken->fcm_token,
+                    'device_type' => $user->pushToken->device_type,
+                    'device_id' => $user->pushToken->device_id,
                 ];
                 return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
             } else {
@@ -170,26 +181,56 @@ class LoginController extends Controller
 
 
 
+
+
     public function logout(Request $request)
     {
         try {
-            $user = $request->user();
 
-            if ($user) {
-                $user->tokens()->delete();
-                $apiResponse = 'success';
-                $statusCode = '200';
-                $message = 'User logged out successfully!';
-            } else {
-                $apiResponse = 'error';
-                $statusCode = '401';
-                $message = 'Unauthorized';
-                $data = [];
+            $token = $request->bearerToken();
+
+            if (!$token) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Token not provided',
+                ], 401);
             }
 
-            return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
+            $personalAccessToken = PersonalAccessToken::findToken($token);
+
+            if (!$personalAccessToken) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid token',
+                ], 401);
+            }
+
+
+            $user = $personalAccessToken->tokenable;
+
+            if ($user) {
+
+                if ($user->pushToken) {
+                    $user->pushToken->delete();
+                }
+
+                $user->tokens()->delete();
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'User logged out successfully!',
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Unauthorized',
+                ], 401);
+            }
         } catch (\Throwable $e) {
-            return $this->apiResponse('error', '404', $e->getMessage(), ['errors' => $e->getMessage()], null);
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 500);
         }
     }
 }

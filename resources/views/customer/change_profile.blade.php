@@ -44,11 +44,11 @@
                                                         <input type="text" name="name" id="name"
                                                             class="form-control form-class @error('name') is-invalid @enderror"
                                                             placeholder="Name" value="{{ $user->name }}">
-                                                            @error('name')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    {{ $message }}
-                                                                </span>
-                                                            @enderror
+                                                        @error('name')
+                                                            <span class="invalid-feedback" role="alert">
+                                                                {{ $message }}
+                                                            </span>
+                                                        @enderror
                                                     </div>
                                                 </div>
                                             </div>
@@ -64,17 +64,9 @@
                                             <div class="my-pro-edit-form">
                                                 <div class="form-group ">
                                                     <div class="formfield form-control">
-                                                        {{-- <input type="email" name="email" id="email"
-                                                            class="form-control @error('email') is-invalid @enderror"
-                                                            placeholder="Email" value="{{ $user->email }}"> --}}
-                                                            <h4>{{ $user->email }}</h4>
+                                                        <h4>{{ $user->email }}</h4>
                                                     </div>
                                                 </div>
-                                                {{-- @error('email')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        {{ $message }}
-                                                    </span>
-                                                @enderror --}}
                                             </div>
                                         </div>
                                     </div>
@@ -82,7 +74,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="my-pro-detail">
-                                    
+
                                     <div class="row w-100">
                                         <div class="col-md-12">
                                             <div class="my-pro-detail-left">
@@ -93,11 +85,11 @@
                                                             <div class="formfield">
                                                                 <textarea name="complete_address" id="address" placeholder="Address"
                                                                     class="form-control @error('complete_address') is-invalid @enderror">{{ $user->userDetail->complete_address ?? '' }}</textarea>
-                                                                    @error('complete_address')
-                                                                        <span class="invalid-feedback" role="alert">
-                                                                            {{ $message }}
-                                                                        </span>
-                                                                    @enderror
+                                                                @error('complete_address')
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        {{ $message }}
+                                                                    </span>
+                                                                @enderror
                                                             </div>
                                                         </div>
                                                     </div>
@@ -110,13 +102,15 @@
                                                 <div class="my-pro-edit-form">
                                                     <div class="form-group">
                                                         <div class="formfield">
-                                                            <input type="text" placeholder="address1" id="addressline1" name="addressline1"
-                                                                class="form-control form-class @error('addressline1') is-invalid @enderror" value="{{ $user->userDetail->address1 ?? '' }}">
-                                                                @error('addressline1')
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        {{ $message }}
-                                                                    </span>
-                                                                @enderror
+                                                            <input type="text" placeholder="address1" id="addressline1"
+                                                                name="addressline1"
+                                                                class="form-control form-class @error('addressline1') is-invalid @enderror"
+                                                                value="{{ $user->userDetail->address1 ?? '' }}">
+                                                            @error('addressline1')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    {{ $message }}
+                                                                </span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
@@ -128,67 +122,95 @@
                                                 <div class="my-pro-edit-form">
                                                     <div class="form-group">
                                                         <div class="formfield">
-                                                            <input type="text" placeholder="address2" id="addressline2" name="addressline2"
-                                                                class="form-control form-class @error('addressline2') is-invalid @enderror" value="{{ $user->userDetail->address2 ?? '' }}">
-                                                                @error('addressline2')
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        {{ $message }}
-                                                                    </span>
-                                                                @enderror
+                                                            <input type="text" placeholder="address2" id="addressline2"
+                                                                name="addressline2"
+                                                                class="form-control form-class @error('addressline2') is-invalid @enderror"
+                                                                value="{{ $user->userDetail->address2 ?? '' }}">
+                                                            @error('addressline2')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    {{ $message }}
+                                                                </span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4 address_data">
+                                        <div class="col-md-3 address_data">
                                             <div class="my-pro-detail-para">
                                                 <p>Country</p>
                                                 <div class="my-pro-edit-form">
                                                     <div class="form-group">
                                                         <div class="formfield">
-                                                            <input type="text" placeholder="Country" id="country" name="country"
-                                                                class="form-control form-class @error('country') is-invalid @enderror" value="{{ $user->userDetail->country ?? '' }}">
-                                                                @error('country')
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        {{ $message }}
-                                                                    </span>
-                                                                @enderror
+                                                            <input type="text" placeholder="Country" id="country"
+                                                                name="country"
+                                                                class="form-control form-class @error('country') is-invalid @enderror"
+                                                                value="{{ $user->userDetail->country ?? '' }}">
+                                                            @error('country')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    {{ $message }}
+                                                                </span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4 address_data">
+                                        <div class="col-md-3 address_data">
                                             <div class="my-pro-detail-para">
                                                 <p>State</p>
                                                 <div class="my-pro-edit-form">
                                                     <div class="form-group">
                                                         <div class="formfield">
-                                                            <input type="text" name="state" placeholder="state" value="{{ $user->userDetail->state ?? ''}}"
-                                                                id="state" class="form-control form-class @error('state') is-invalid @enderror">
-                                                                @error('state')
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        {{ $message }}
-                                                                    </span>
-                                                                @enderror
+                                                            <input type="text" name="state" placeholder="state"
+                                                                value="{{ $user->userDetail->state ?? '' }}"
+                                                                id="state"
+                                                                class="form-control form-class @error('state') is-invalid @enderror">
+                                                            @error('state')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    {{ $message }}
+                                                                </span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>       
+                                            </div>
                                         </div>
-                                        <div class="col-md-4 address_data">
+                                        <div class="col-md-3 address_data">
                                             <div class="my-pro-detail-para">
                                                 <p>City</p>
                                                 <div class="my-pro-edit-form">
                                                     <div class="form-group">
                                                         <div class="formfield">
-                                                            <input type="text" name="city" id="city" value="{{ $user->userDetail->city ?? '' }}"
-                                                                placeholder="City" class="form-control form-class @error('city') is-invalid @enderror">
-                                                                @error('city')
-                                                                    <span class="invalid-feedback" role="alert">
-                                                                        {{ $message }}
-                                                                    </span>
-                                                                @enderror
+                                                            <input type="text" name="city" id="city"
+                                                                value="{{ $user->userDetail->city ?? '' }}"
+                                                                placeholder="City"
+                                                                class="form-control form-class @error('city') is-invalid @enderror">
+                                                            @error('city')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    {{ $message }}
+                                                                </span>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 address_data">
+                                            <div class="my-pro-detail-para">
+                                                <p>zipcode</p>
+                                                <div class="my-pro-edit-form">
+                                                    <div class="form-group">
+                                                        <div class="formfield">
+                                                            <input type="text" name="zipcode" id="zipcode"
+                                                                value="{{ $user->userDetail->zipcode ?? '' }}"
+                                                                placeholder="zipcode"
+                                                                class="form-control form-class @error('zipcode') is-invalid @enderror">
+                                                            @error('zipcode')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    {{ $message }}
+                                                                </span>
+                                                            @enderror
                                                         </div>
                                                     </div>
                                                 </div>
@@ -205,86 +227,6 @@
                                             {{-- <p>Bank</p> --}}
                                             <div class="my-pro-edit-form">
                                                 <div class="row g-3">
-                                                    {{-- <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="">First Name</label>
-                                                            <div class="formfield">
-                                                                <input type="text" name="account_holder_first_name"
-                                                                    class="form-control @error('account_holder_first_name') is-invalid @enderror"
-                                                                    placeholder="Account Holder First Name"
-                                                                    value="{{ $user->vendorBankDetails->account_holder_first_name ?? '' }}">
-                                                            </div>
-                                                            @error('account_holder_first_name')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    {{ $message }}
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div> --}}
-                                                    {{-- <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="">Last Name</label>
-                                                            <div class="formfield">
-                                                                <input type="text" name="account_holder_last_name"
-                                                                    class="form-control @error('account_holder_last_name') is-invalid @enderror"
-                                                                    placeholder="Account Holder Last Name"
-                                                                    value="{{ $user->vendorBankDetails->account_holder_last_name ?? '' }}">
-                                                            </div>
-                                                            @error('account_holder_last_name')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    {{ $message }}
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div> --}}
-                                                    {{-- <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="">DOB</label>
-                                                            <div class="formfield">
-                                                                <input type="date" name="date_of_birth"
-                                                                    class="form-control @error('date_of_birth') is-invalid @enderror"
-                                                                    placeholder="Date of Birth"
-                                                                    value="{{ $user->vendorBankDetails->account_holder_dob ?? '' }}">
-                                                            </div>
-                                                            @error('date_of_birth')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    {{ $message }}
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div> --}}
-                                                    {{-- <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="">Account Number</label>
-                                                            <div class="formfield">
-                                                                <input type="text" name="account_number"
-                                                                    class="form-control @error('account_number') is-invalid @enderror"
-                                                                    placeholder="Account Number"
-                                                                    value="{{ isset($user->vendorBankDetails->account_number) ? jsdecode_userdata($user->vendorBankDetails->account_number) : '' }}">
-                                                            </div>
-                                                            @error('account_number')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    {{ $message }}
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div> --}}
-                                                    {{-- <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label for="">Routing Number</label>
-                                                            <div class="formfield">
-                                                                <input type="text" name="routing_number"
-                                                                    class="form-control @error('routing_number') is-invalid @enderror"
-                                                                    placeholder="Routing Number"
-                                                                    value="{{ isset($user->vendorBankDetails->routing_number) ? jsdecode_userdata($user->vendorBankDetails->routing_number) : '' }}">
-                                                            </div>
-                                                            @error('routing_number')
-                                                                <span class="invalid-feedback" role="alert">
-                                                                    {{ $message }}
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-                                                    </div> --}}
 
                                                     <div class="col-md-12">
                                                         <div class="my-pro-detail-left">
@@ -333,13 +275,11 @@
             const nameRegex = /^[a-zA-Z\s]+$/;
             const lastNameRegex = /^[a-zA-Z]+$/;
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            // const addressRegex = /^[a-zA-Z0-9\s,.'-]{3,}$/;
-            // const dateOfBirthRegex = /^\d{4}-\d{2}-\d{2}$/;
-            // const accountNumberRegex = /^\d+$/;
-            // const routingNumberRegex = /^\d+$/;
+
 
             $.validator.addMethod("userCompleteAddress", function(value, element) {
-                return $('#addressline1').val() !== '' && $('#addressline2').val() !== '' && $('#country').val() !== '' && $('#state').val() !== '' && $('#city').val() !== '';
+                return $('#addressline1').val() !== '' && $('#addressline2').val() !== '' && $('#country')
+                    .val() !== '' && $('#state').val() !== '' && $('#city').val() !== '';
             }, "Please enter the complete address");
 
             const rules = {
@@ -356,26 +296,7 @@
                     required: true,
                     userCompleteAddress: true,
                 },
-                // account_holder_first_name: {
-                //     required: true,
-                //     regex: nameRegex,
-                // },
-                // account_holder_last_name: {
-                //     required: true,
-                //     regex: lastNameRegex,
-                // },
-                // date_of_birth: {
-                //     required: true,
-                //     regex: dateOfBirthRegex,
-                // },
-                // account_number: {
-                //     required: true,
-                //     regex: accountNumberRegex,
-                // },
-                // routing_number: {
-                //     required: true,
-                //     regex: routingNumberRegex,
-                // }
+
             };
 
             const messages = {
@@ -392,26 +313,7 @@
                     required: 'This field is required.',
                     userCompleteAddress: 'Please enter the complete address',
                 },
-                // account_holder_first_name: {
-                //     required: 'This field is required.',
-                //     regex: 'First name must contain only letters and spaces.',
-                // },
-                // account_holder_last_name: {
-                //     required: 'This field is required.',
-                //     regex: 'Last name must not contain space and digits.',
-                // },
-                // date_of_birth: {
-                //     required: 'This field is required.',
-                //     regex: 'Date of birth must be in the format YYYY-MM-DD.',
-                // },
-                // account_number: {
-                //     required: 'This field is required.',
-                //     regex: 'Account number must contain only digits.',
-                // },
-                // routing_number: {
-                //     required: 'This field is required.',
-                //     regex: 'Routing number must contain only digits.',
-                // }
+
             };
 
             handleValidation('save_user', rules, messages, function(form) {
@@ -419,7 +321,7 @@
                 form.submit();
             });
 
-        // Trigger validation when country, state, or city fields change
+            // Trigger validation when country, state, or city fields change
             $('#addressline1, #addressline2, #country, #state, #city').on('change', function() {
                 $('#address').valid();
             });
@@ -433,7 +335,11 @@
 
                 // Check if the file type is not jpeg, png, or jpg
                 if (fileType !== 'image/jpeg' && fileType !== 'image/png' && fileType !== 'image/jpg') {
-                    alert('Only JPEG, PNG, and JPG files are allowed.');
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Only JPEG, PNG, and JPG files are allowed.',
+                        position: 'topRight',
+                    });
                     $('#upload-my-pro').val(''); // Clear input
                     return;
                 }
@@ -450,81 +356,115 @@
 
             // SHow the preview of image
 
-            $('#upload-my-pro').change(function() {
-                var input = this;
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
+            $(document).ready(function() {
+                $('#upload-my-pro').change(function() {
+                    var file = this.files[0];
+                    var fileType = file.type;
 
-                    reader.onload = function(e) {
-                        $('#preview-img').attr('src', e.target.result);
+                    if (fileType !== 'image/jpeg' && fileType !== 'image/png' && fileType !==
+                        'image/jpg') {
+                        iziToast.error({
+                            title: 'Error',
+                            message: 'Only JPEG, PNG, and JPG files are allowed.',
+                            position: 'topRight',
+                        });
+                        $('#upload-my-pro').val('');
+                        return;
                     }
 
-                    reader.readAsDataURL(input.files[0]);
-                }
-            });
+                    var fileSize = file.size / 1024 / 1024;
 
-
-            // google place api 
-            $('.address_data').hide();
-
-            $('#address').on('focus', function() {
-                $(".address_data").slideDown("slow");
-                initAutocomplete();
-            });
-
-            $('#address').on('input', function() {
-                if ($(this).val() === '') {
-                    $(".address_data").slideUp("slow");
-                    $('#addressline1, #addressline2, #country, #state, #city').val('');
-                }
-            });
-
-            function initAutocomplete() {
-                var input = document.getElementById('address');
-                var autocomplete = new google.maps.places.Autocomplete(input);
-
-                $('#addressline1, #addressline2, #country, #state, #city').prop('readonly', true);
-
-                autocomplete.addListener('place_changed', function() {
-                    var place = autocomplete.getPlace();
-
-                    $('#addressline1, #addressline2, #country, #state, #city').val('');
-
-                    for (var i = 0; i < place.address_components.length; i++) {
-                        var addressType = place.address_components[i].types[0];
-                        if(addressType === 'street_number'){
-                            $('#addressline1').val(place.address_components[i].long_name);
-                        }
-                        if(addressType === 'route'){
-                            $('#addressline2').val(place.address_components[i].long_name);
-                        }
-                        if (addressType === 'country') {
-                            $('#country').val(place.address_components[i].long_name);
-                        }
-                        if (addressType === 'administrative_area_level_1') {
-                            $('#state').val(place.address_components[i].long_name);
-                        }
-                        if (addressType === 'locality') {
-                            $('#city').val(place.address_components[i].long_name);
-                        }
+                    if (fileSize > 2) {
+                        alert('File size exceeds the limit of 2 MB.');
+                        $('#upload-my-pro').val('');
+                        return;
                     }
-
-                    function setReadonly(selector) {
-                        if ($(selector).val()) {
-                            $(selector).prop('readonly', true);
-                        } else {
-                            $(selector).prop('readonly', false);
-                        }
-                    }
-                    setReadonly('#addressline1');
-                    setReadonly('#addressline2');
-
-                    $(".address_data").slideDown("slow");
                 });
-            }
+
+                $('#upload-my-pro').change(function() {
+                    var input = this;
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+
+                        reader.onload = function(e) {
+                            $('#preview-img').attr('src', e.target.result);
+                        }
+
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                });
+
+                $('.address_data').hide();
+
+                $('#address').on('focus', function() {
+                    $(".address_data").slideDown("slow");
+                    initAutocomplete();
+                });
+
+                $('#address').on('input', function() {
+                    if ($(this).val() === '') {
+                        $(".address_data").slideUp("slow");
+                        $('#addressline1, #addressline2, #country, #state, #city, #zipcode').val(
+                        '');
+                    }
+                });
+
+                function initAutocomplete() {
+                    var input = document.getElementById('address');
+                    var autocomplete = new google.maps.places.Autocomplete(input);
+
+                    $('#addressline1, #addressline2, #country, #state, #city, #zipcode').prop('readonly',
+                        true);
+
+                    autocomplete.addListener('place_changed', function() {
+                        var place = autocomplete.getPlace();
+
+                        $('#addressline1, #addressline2, #country, #state, #city, #zipcode').val(
+                        '');
+
+                        var zipcode = null; // Initialize zipcode to null
+
+                        for (var i = 0; i < place.address_components.length; i++) {
+                            var addressType = place.address_components[i].types[0];
+                            if (addressType === 'street_number') {
+                                $('#addressline1').val(place.address_components[i].long_name);
+                            }
+                            if (addressType === 'route') {
+                                $('#addressline2').val(place.address_components[i].long_name);
+                            }
+                            if (addressType === 'country') {
+                                $('#country').val(place.address_components[i].long_name);
+                            }
+                            if (addressType === 'administrative_area_level_1') {
+                                $('#state').val(place.address_components[i].long_name);
+                            }
+                            if (addressType === 'locality') {
+                                $('#city').val(place.address_components[i].long_name);
+                            }
+                            if (addressType === 'postal_code') {
+                                zipcode = place.address_components[i]
+                                .long_name; // Assign zipcode if available
+                            }
+                        }
+
+                        $('#zipcode').val(zipcode); // Set zipcode field
+
+                        function setReadonly(selector) {
+                            if ($(selector).val()) {
+                                $(selector).prop('readonly', true);
+                            } else {
+                                $(selector).prop('readonly', false);
+                            }
+                        }
+                        setReadonly('#addressline1');
+                        setReadonly('#addressline2');
+
+                        $(".address_data").slideDown("slow");
+                    });
+                }
+            });
+
 
         });
-
-
     </script>
 @endpush

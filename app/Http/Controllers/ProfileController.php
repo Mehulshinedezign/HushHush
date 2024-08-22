@@ -17,16 +17,8 @@ class ProfileController extends Controller
     public function profile()
     {
         // dd("HERE PPPPPPPPPPPPPPPP");
-        $user = auth()->user();
-        // $selectedCountryId = $user->country_id;
-        // if (is_null($user->country_id)) {
-        //     $selectedCountryId = Country::where('iso_code', 'US')->pluck('id')->first();
-        // }
+        $retailer = auth()->user();
 
-        // $countries = Country::all();
-        // $states = State::where('country_id', $selectedCountryId)->get();
-        // $cities = City::where('state_id', $user->state_id)->get();
-        // $notAvailable = 'N/A';
         if (auth()->user()->role->name == 'customer') {
             $file = 'customer.profile';
         } elseif (auth()->user()->role->name == 'admin') {
@@ -35,8 +27,8 @@ class ProfileController extends Controller
             $file = 'retailer.profile';
         }
 
-        $products = Product::where('user_id',$user->id)->get();
-        return view($file,compact('products'));
+        $products = Product::where('user_id',$retailer->id)->get();
+        return view($file,compact('products','retailer'));
     }
 
     public function edit_profile()
@@ -58,13 +50,9 @@ class ProfileController extends Controller
 
         // card index
         $cards = UserCard::where('user_id', auth()->user()->id)->get();
-        // dd($user->getCashier());
-        // $stripePublicKey = config('cashier.key');/
-        // $stripeCustomer = $user->createOrGetStripeCustomer();
-        // $intent = $user->createSetupIntent();
 
-        // bankdetails
         $bankDetail = RetailerBankInformation::where('retailer_id', $user->id)->first();
+        // session()->flash('showModal', true);
         return view('customer.edit_profile', compact('user', 'countries', 'states', 'cities', 'selectedCountryId', 'notAvailable', 'cards', 'bankDetail'));
     }
 
@@ -518,7 +506,7 @@ class ProfileController extends Controller
 
     public function saveUserprofile(UpdateUserProfile $request)
     {
-       
+
         try {
             $user = auth()->user();
             $data = [
@@ -531,7 +519,7 @@ class ProfileController extends Controller
                 if (!is_null($user->profile_file)) {
                     Storage::disk('public')->delete($user->profile_file);
                 }
-            
+
                 $file = $request->file('profile_pic');
                 $path = $file->store('profiles', 'public');
                 $data['profile_file'] = $path;
@@ -545,6 +533,7 @@ class ProfileController extends Controller
                 'state' => $request->state,
                 'city' => $request->city,
                 'about' => $request->about ?? null,
+                'zipcode'=>$request->zipcode ??null,
             ];
 
             //  RetailerBankInformation::where('retailer_id', auth()->user()->id)->first();
@@ -569,7 +558,7 @@ class ProfileController extends Controller
             $user->update($data);
 
             $user->userDetail()->updateOrCreate(
-                ['user_id' => $user->id], 
+                ['user_id' => $user->id],
                 $userdetail
             );
 
@@ -578,7 +567,7 @@ class ProfileController extends Controller
             return redirect()->back();
         }
     }
-    
+
     public function notificationPrefrence(Request $request){
 
         $user = auth()->user();
@@ -595,9 +584,9 @@ class ProfileController extends Controller
                 'customer_order_return' => 'customer_order_return',
                 'lender_order_return' => 'lender_order_return',
             ];
-    
+
             $fieldToUpdate = $fieldData[$request->name] ?? null;
-    
+
             if ($fieldToUpdate) {
                 $updateData = [$fieldToUpdate => $request->value];
                 UserNotification::updateOrCreate(

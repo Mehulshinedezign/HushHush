@@ -38,17 +38,42 @@
                         <div class="home-filter-inner">
                             <h4>Product category</h4>
                             <div class="filter-categories category-hight-fix">
-
                                 @foreach (getParentCategory() as $key => $category)
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="{{ $category->id }}"
-                                            id="category-check-{{ $key }}" name="Category[]"
-                                            @if (in_array($category->id, request()->input('Category', []))) checked @endif>
-                                        <label class="form-check-label"
-                                            for="category-check1">{{ $category->name }}</label>
+                                        <input class="form-check-input parent-category" type="checkbox"
+                                            value="{{ $category->id }}" id="category-check-{{ $key }}"
+                                            name="category[]" @if (in_array($category->id, (array) request()->input('category', []))) checked @endif>
+                                        <label class="form-check-label" for="category-check-{{ $key }}">
+                                            {{ $category->name }}
+                                        </label>
                                     </div>
+
+                                    @php
+                                        $childCategories = getChild($category->id);
+                                    @endphp
+
+                                    @if ($childCategories->isNotEmpty())
+                                        <div class="child-categories" id="child-categories-{{ $key }}"
+                                            style="display:none; margin-left: 20px;">
+                                            @foreach ($childCategories as $child)
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        value="{{ $child->id }}"
+                                                        id="subcategory-check-child-{{ $child->id }}"
+                                                        name="Subcategory[]"
+                                                        @if (in_array($child->id, (array) request()->input('Subcategory', []))) checked @endif>
+                                                    <label class="form-check-label"
+                                                        for="subcategory-check-child-{{ $child->id }}">
+                                                        {{ $child->name }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 @endforeach
+
                             </div>
+
                         </div>
                         <div class="home-filter-inner">
                             <h4>Brand</h4>
@@ -65,32 +90,7 @@
                             </div>
                         </div>
 
-                        {{-- <div class="home-filter-inner">
-                             <h4>Price Range</h4>
-                            <div class="filter-categories">
-                                <div class="">
-                                    <div class="price-range-box">
-                                        <div class="form-group">
-                                            <div class="formfield">
-                                                <input type="text" name="min" id="" placeholder="min"
-                                                    class="form-control">
-                                                <span class="left-form-icon">
-                                                    <img src="{{ asset('front/images/dollar-icon.svg') }}" alt="img">
-                        </span>
-                    </div>
-            </div>
-            <div class="form-group">
-                <div class="formfield">
-                    <input type="text" name="max" id="" placeholder="max"
-                        class="form-control">
-                    <span class="left-form-icon">
-                        <img src="{{ asset('front/images/dollar-icon.svg') }}" alt="img">
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div> --}}
+
                         <div class="home-filter-inner">
                             <h4>Price</h4>
                             <div class="custom-wrapper filter-range-wrapper">
@@ -98,13 +98,11 @@
                                     <div class="price-input">
                                         <div class="price-field left">
                                             <input type="number" name="min_value" id="selectedMinValue"
-                                                class="min-input" value="{{ request()->input('min_value', 0) }}"
-                                                readonly>
+                                                class="min-input" value="{{ request()->input('min_value', 0) }}">
                                         </div>
                                         <div class="price-field right">
                                             <input type="number" name="max_value" id="selectedMaxValue"
-                                                class="max-input" value="{{ request()->input('max_value', 10000) }}"
-                                                readonly>
+                                                class="max-input" value="{{ request()->input('max_value', 10000) }}">
                                         </div>
                                     </div>
                                     <div class="slider-container">
@@ -116,29 +114,15 @@
 
                                 <div class="range-input">
                                     <input type="range" class="min-range" min="0" max="10000"
-                                        value="{{ request()->input('min_value', 0) }}" step="1" readonly>
+                                        value="{{ request()->input('min_value', 0) }}" step="1">
                                     <input type="range" class="max-range" min="0" max="10000"
-                                        value="{{ request()->input('max_value', 10000) }}" step="1" readonly>
+                                        value="{{ request()->input('max_value', 10000) }}" step="1">
                                 </div>
                             </div>
 
                         </div>
 
-                        {{-- <h4>Status</h4>
-                            <div class="filter-categories">
-                                <div class="stock-status">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value=""
-                                            id="category-status1">
-                                        <label class="form-check-label" for="category-status1">Stock</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value=""
-                                            id="category-status2">
-                                        <label class="form-check-label" for="category-status2">Out of Stock</label>
-                                    </div>
-                                </div>
-                            </div> --}}
+
                         <div class="home-filter-inner">
                             <h4>Size</h4>
                             <div class="filter-categories category-hight-fix">
@@ -188,17 +172,23 @@
                                     </div>
                                 </div>
                             </div>
+
+
+
+                        </div>
+                        <div class="home-filter-inner">
                             <h4>Date range</h4>
                             <div class="form-group date-range-field">
                                 <div class="formfield">
-                                    <input type="text" name="filter_date" id="daterange"
-                                        placeholder="Enter date range" class="form-control daterange-cus">
-                                    <label for="daterange" class="form-icon">
+                                    <input type="text" name="filter_date" id="daterange-category"
+                                        placeholder="Enter date range" class="form-control daterange-cus" readonly>
+                                    <label for="daterange-category" class="form-icon">
                                         <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
                                     </label>
                                 </div>
-                            </div>
 
+
+                            </div>
                         </div>
                         <div class="home-filter-inner">
                             <h4>Locations</h4>
@@ -219,14 +209,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <h4>Area Range</h4>
-                            <div class="filter-categories">
-                                <div class="filter-range-box">
-                                    <input type="text" class="js-range-slider" name="my_range" value=""
-                                        data-skin="round" data-type="double" data-min="0" data-max="1000"
-                                        data-grid="false" />
-                                </div>
-                            </div> --}}
+
                         </div>
                         <div class="home-filter-fotter">
                             <div class="filter-fotter-btns">
@@ -307,7 +290,7 @@
                         @else
                             <div class="list-empty-box">
                                 <img src="{{ asset('front/images/no-products.svg') }}">
-                                <h3 class="text-center">Your Query is empty</h3>
+                                <h3 class="text-center">No Products Available</h3>
                             </div>
                         @endif
                     </div>
@@ -323,37 +306,41 @@
 </section>
 
 
-<!-- <section class="three-feature-sec">
-    <div class="container">
-        <div class="three-feature-wrapper">
-            <div class="three-feature-box">
-                <img src="{{ asset('front/images/easy-return-icon.svg') }}" alt="easy-return" width="52"
-                    height="52">
-                <h4>Easy Returns</h4>
-            </div>
-            <div class="three-feature-box">
-                <img src="{{ asset('front/images/quality-check-icon.svg') }}" alt="quality-check" width="52"
-                    height="52">
-                <h4>Quality Check & Hygiene</h4>
-            </div>
-            <div class="three-feature-box">
-                <img src="{{ asset('front/images/secure-payment-icon.svg') }}" alt="secure-payment" width="52"
-                    height="52">
-                <h4>Secure Payment</h4>
-            </div>
-        </div>
-    </div>
-</section> -->
-
 
 
 @push('scripts')
     <script>
+        jQuery(document).ready(function() {
+            // Handle parent category click
+            $('.parent-category').on('change', function() {
+                var parentId = $(this).val();
+                var childDivId = '#child-categories-' + $(this).attr('id').split('-')[2];
+
+                if ($(this).is(':checked')) {
+                    // Show the child categories div if the parent category is checked
+                    $(childDivId).slideDown();
+                } else {
+                    // Hide the child categories div if the parent category is unchecked
+                    $(childDivId).slideUp();
+
+                    // Uncheck all child checkboxes
+                    $(childDivId).find('input[type="checkbox"]').prop('checked', false);
+                }
+            });
+
+            // Initially show the child categories for any checked parent categories
+            $('.parent-category:checked').each(function() {
+                var childDivId = '#child-categories-' + $(this).attr('id').split('-')[2];
+                $(childDivId).show();
+            });
+        });
+    </script>
+    <script>
         const customDateFormat = 'MM/DD/YYYY';
 
+
         jQuery(function() {
-            const date = '{{ request()->get('
-                    filter_date ') }}';
+            const date = '{{ request()->get('filter_date') }}';
             let start, end;
 
             if (date) {
@@ -365,28 +352,40 @@
                 end = moment();
             }
 
-            jQuery('#daterange').daterangepicker({
-                startDate: start,
-                endDate: end,
-                autoUpdateInput: false,
-                locale: {
-                    format: customDateFormat,
-                    separator: ' - ',
-                },
-            });
+            jQuery('.daterange-cus').each(function() {
+                jQuery(this).daterangepicker({
+                    startDate: start,
+                    endDate: end,
+                    autoUpdateInput: false,
+                    locale: {
+                        format: customDateFormat,
+                        separator: ' - ',
+                    },
+                });
 
-            if (date) {
-                jQuery('#daterange').val(date);
-            }
-            jQuery('#daterange').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format(customDateFormat) + ' - ' + picker.endDate.format(
-                    customDateFormat));
-            });
+                if (date) {
+                    jQuery(this).val(date);
+                }
 
-            jQuery('#daterange').on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
+                jQuery(this).on('apply.daterangepicker', function(ev, picker) {
+                    jQuery(this).val(picker.startDate.format(customDateFormat) + ' - ' + picker
+                        .endDate.format(customDateFormat));
+                    if (jQuery(this).closest('form').attr('id') === 'searchForm' ) {
+                        jQuery(this).closest('form').submit();
+                    }
+                });
+
+                jQuery(this).on('cancel.daterangepicker', function(ev, picker) {
+                    jQuery(this).val('');
+                });
             });
         });
+
+
+
+
+
+
 
         $('.navbar-toggler').on('click', function() {
             $(".navbar-toggler").toggleClass('open');
@@ -395,12 +394,20 @@
             $(".invite-member-popup").toggleClass('open');
         });
 
+
         $('.sidebar-expand-btn').on('click', function() {
             $(".home-filter-box").addClass('expand');
         });
         $('.filter-fotter-btns').on('click', function() {
             $(".home-filter-box").removeClass('expand');
         });
+        $('.filter-head').on('click', function() {
+            $(".home-filter-box").toggleClass('expand');
+        });
+
+        // $('.filter-head').on('click', function() {
+        //     $(".home-filter-box").removeClass('expand');
+        // });
 
 
 
@@ -535,7 +542,7 @@
             const priceInputValue = document.querySelectorAll(".price-input input");
             const rangeInputValue = document.querySelectorAll(".range-input input");
             const rangeValue = document.querySelector(".price-slider");
-            const priceGap = 100; // Define a minimum gap between min and max values
+            const priceGap = 0; // Define a minimum gap between min and max values
 
             function updateRangePosition(minp, maxp) {
                 const value1 = rangeInputValue[0].max;
@@ -630,7 +637,8 @@
         // disable the enter keyword
         $(document).ready(function() {
             $(document).on('keypress', 'input', function(e) {
-                if (e.which === 13) {
+                var form = $(this).closest('form');
+                if (form.attr('id') !== 'searchForm' && e.which === 13) {
                     e.preventDefault();
                     return false;
                 }

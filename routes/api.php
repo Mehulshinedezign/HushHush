@@ -26,8 +26,8 @@ Route::post('/update-password', [App\Http\Controllers\Api\ResetPasswordControlle
 
 
 
+Route::post('/logout', [App\Http\Controllers\Api\LoginController::class, 'logout']);
 Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {
-    Route::post('/logout', [App\Http\Controllers\Api\LoginController::class, 'logout']);
 
     // Product API
     Route::get('/product', [App\Http\Controllers\Api\ProductController::class, 'index']);
@@ -69,6 +69,12 @@ Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {
     Route::post('order/{id}/upload-customer-images/{type}', [App\Http\Controllers\Api\OrderController::class, 'uploadCustomerImages']);
     Route::post('/verify/{id}/images/{type}', [App\Http\Controllers\Api\OrderController::class, 'retailerVerifyImage']);
     Route::post('/customerverify/{id}/images/{type}', [App\Http\Controllers\Api\OrderController::class, 'customerVerifyImage']);
+
+    Route::post('/order/{order}/dispute', [App\Http\Controllers\Api\OrderController::class, 'orderDisputeApi']);
+    Route::get('/orders/disputed/{type}', [App\Http\Controllers\Api\OrderController::class, 'getDisputedOrders']);
+    Route::get('/cancel/orders{id}', [App\Http\Controllers\Api\OrderController::class, 'cancelOrderApi']);
+
+
 
 
     // Route::post('/borrow/{bookingId}/confirm', [App\Http\Controllers\Api\LenderController::class, 'confirmPayment']);

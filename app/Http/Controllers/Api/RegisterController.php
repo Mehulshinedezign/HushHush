@@ -7,6 +7,8 @@ use App\Models\EmailOtp;
 use App\Models\PhoneOtp;
 use App\Models\PushToken;
 use App\Models\User;
+use App\Models\UserDetail;
+use App\Models\UserDocuments;
 use App\Notifications\EmailOtpVerification;
 use App\Services\OtpService;
 use Illuminate\Http\Request;
@@ -48,6 +50,23 @@ class RegisterController extends Controller
                 'email_verification_token' => Str::random(50),
                 'country_code' => $request->country_code,
             ]);
+
+            UserDetail::create([
+                'user_id' => $user->id,
+                // 'address1' =>$data['complete_address'],
+                // 'about' =>$data['about'],
+            ]);
+
+            // $path = $data['gov_id']->store('user_documents');
+            // $filePath = str_replace("public/", "", $path);
+            // $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+
+            // UserDocuments::create([
+            //     'user_id' => $request->id,
+            //     'file' => $fileExtension,
+            //     'url' => $filePath,
+            // ]);
+    
 
             $country_code = $request->country_code;
             $number = $request->phone_number;

@@ -79,6 +79,8 @@ class Kernel extends HttpKernel
         'VerifyOtp' => \App\Http\Middleware\VerifyOtpMiddleware::class,
         'CheckStatus' => \App\Http\Middleware\CheckStatus::class,
         'prevent.admin' => \App\Http\Middleware\PreventAdminAccess::class,
+        'web.admin' => \App\Http\Middleware\webadmin::class,
+        // 'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
 
     ];
     protected $commands = [

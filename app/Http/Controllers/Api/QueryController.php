@@ -79,7 +79,7 @@ class QueryController extends Controller
                         ->first();
                     $lender = User::where('id', $query->for_user)->first();
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
-                    $price = $price+($query->cleaning_charges)+($query->shipping_charges);
+                    $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
                     // dd($price);
 
                     return [
@@ -97,8 +97,8 @@ class QueryController extends Controller
                         'name' => $product->name ?? null,
                         'product_image_url' => $product->thumbnailImage->file_path ?? null,
                         'lender' => $lender->name ?? null,
-                        'lender_profile_pic' => $lender->frontend_profile_url,
-                        'lender_id' => $lender->id,
+                        'lender_profile_pic' => $lender->frontend_profile_url ?? null,
+                        'lender_id' => $lender->id ?? null,
                     ];
                 });
 
@@ -125,6 +125,7 @@ class QueryController extends Controller
     public function queriesForUser(Request $request)
     {
         $user = auth()->user();
+        // dd($user);
         $status = $request->get('status');
         try {
             $queries = Query::where('for_user', $user->id)
@@ -137,15 +138,18 @@ class QueryController extends Controller
                     [$startDate, $endDate] = explode(' - ', $query->date_range);
                     // dd($startDate, $endDate,$query);
                     $productId = $query->product_id;
+                    // dd($productId,$query);
                     $product = Product::where('id', $productId)
                         ->whereNull('deleted_at')
                         ->first();
+                    // dd($product);
                     $borrower = User::where('id', $query->user_id)->first();
+                    // dd($borrower);
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
                     return [
-                        'id' => $query->id,
-                        'user_id' => $query->user_id,
-                        'product_id' => $query->product_id,
+                        'id' => $query->id ?? null,
+                        'user_id' => $query->user_id ?? null,
+                        'product_id' => $query->product_id ?? null,
                         'for_user' => $query->for_user,
                         'query_message' => $query->query_message,
                         'status' => $query->status,
@@ -157,8 +161,8 @@ class QueryController extends Controller
                         'name' => $product->name ?? null,
                         'product_image_url' => $product->thumbnailImage->file_path ?? null,
                         'borrower' => $borrower->name ?? null,
-                        'borrower_profile_pic' => $borrower->frontend_profile_url,
-                        'borrower_id' => $borrower->id,
+                        'borrower_profile_pic' => $borrower->frontend_profile_url ?? null,
+                        'borrower_id' => $borrower->id ?? null,
                     ];
                 });
                 // dd('here');
@@ -197,8 +201,8 @@ class QueryController extends Controller
             } elseif ($type == 'price') {
                 $validator = Validator::make($request->all(), [
                     // 'price' => 'required',
-                    'cleaning_charges' =>'required',
-                    'shipping_charges' =>'required',
+                    'cleaning_charges' => 'required',
+                    'shipping_charges' => 'required',
 
                 ]);
                 if ($validator->fails()) {
@@ -248,16 +252,25 @@ class QueryController extends Controller
 
                     $productId = $query->product_id;
                     $product = Product::withTrashed()->where('id', $productId)->first();
+                    $order = Order::where('query_id', $query->id)->first(); // Use first() instead of get()
                     $lender = User::where('id', $query->for_user)->first();
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
                     $now = Carbon::now()->format('Y-m-d');
 
-                    if ($now > $endDate) {
+                    if ($order && $order->status === 'Waiting') {
+                        if ($now > $endDate) {
+                            $status = 'COMPLETED';
+                        } elseif ($now < $startDate) {
+                            $status = 'PAID';
+                        } else {
+                            $status = 'ACTIVE';
+                        }
+                    } elseif ($order && $order->status == 'Completed') {
                         $status = 'COMPLETED';
-                    } elseif ($now < $startDate) {
-                        $status = 'PAID';
-                    } else {
+                    } elseif ($order && $order->status == 'Picked Up') {
                         $status = 'ACTIVE';
+                    } else {
+                        $status = 'UNKNOWN';
                     }
 
                     return [
@@ -274,7 +287,7 @@ class QueryController extends Controller
                         'name' => $product->name ?? null,
                         'product_image_url' => $product->thumbnailImage->file_path ?? null,
                         'lender' => $lender->name ?? null,
-                        'lender_profile_pic' => $lender->frontend_profile_url,
+                        'lender_profile_pic' => $lender->frontend_profile_url ?? null,
                         'lender_id' => $lender->id,
                         'brand' => $product->get_brand->name ?? null,
                         'size' => $product->get_size->name ?? null,
@@ -303,6 +316,7 @@ class QueryController extends Controller
     }
 
 
+
     public function booked()
     {
         $user = auth()->user();
@@ -311,30 +325,42 @@ class QueryController extends Controller
             $queries = Query::where('for_user', $user->id)->where('status', 'completed')
                 ->whereNull('deleted_at')
                 ->get();
+            // dd($queries);
+
 
             if ($queries->count() > 0) {
                 $queries = $queries->map(function ($query) {
                     [$startDate, $endDate] = explode(' - ', $query->date_range);
 
-                    // Convert date format
-                    $startDate = Carbon::createFromFormat('d-m-Y', $startDate)->format('Y-m-d');
-                    $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->format('Y-m-d');
+                    // dd($startDate,$endDate);
+                    // // Convert date format
+                    // $startDate = Carbon::createFromFormat('d-m-Y', $startDate)->format('Y-m-d');
+                    // $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->format('Y-m-d');
 
                     $productId = $query->product_id;
                     $product = Product::where('id', $productId)
                         ->whereNull('deleted_at')
                         ->first();
+                    $order = Order::where('query_id', $query->id)->first();
                     $borrower = User::where('id', $query->user_id)->first();
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
 
                     $now = Carbon::now()->format('Y-m-d');
 
-                    if ($now > $endDate) {
+                    if ($order && $order->status === 'Waiting') {
+                        if ($now > $endDate) {
+                            $status = 'COMPLETED';
+                        } elseif ($now < $startDate) {
+                            $status = 'PAID';
+                        } else {
+                            $status = 'ACTIVE';
+                        }
+                    } elseif ($order && $order->status == 'Completed') {
                         $status = 'COMPLETED';
-                    } elseif ($now < $startDate) {
-                        $status = 'PAID';
-                    } else {
+                    } elseif ($order && $order->status == 'Picked Up') {
                         $status = 'ACTIVE';
+                    } else {
+                        $status = 'UNKNOWN';
                     }
 
                     return [
@@ -351,9 +377,9 @@ class QueryController extends Controller
                         'name' => $product->name ?? null,
                         'product_image_url' => $product->thumbnailImage->file_path ?? null,
                         'borrower' => $borrower->name ?? null,
-                        'borrower_profile_pic' => $borrower->frontend_profile_url,
-                        'borrower_id' => $borrower->id,
-                        'brand' => $product->get_brand->name ??'N/A',
+                        'borrower_profile_pic' => $borrower->frontend_profile_url ?? null,
+                        'borrower_id' => $borrower->id ?? null,
+                        'brand' => $product->get_brand->name ?? 'N/A',
                         'size' => $product->get_size->name ?? "N/A",
                         'price' => $price,
                     ];
