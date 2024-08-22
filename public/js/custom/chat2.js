@@ -8,7 +8,6 @@ const db = firebase.database();
 var dbRef = db.ref(`/users/` + senderId);
 dbRef.once("value").then(snap => {
     snap.forEach(message => {
-        console.log(message.key, message.val());
     });
 }).catch(error => {
     console.log("error".error)
@@ -282,12 +281,15 @@ function messageUpdate(message, check) {
 $(document).on('click', '.chat-list', function () {
 
     var classElement = jQuery('.chat-list');
+    $(this).find('p.count-msg').addClass('d-none');
     classElement.removeClass('activecht');
-    // classElement.find('p.chat-txt').removeClass('chatmsg');
-    // classElement.find('.time-count-deta span').removeClass('chatdate');
-
+    // $("#" + sender + 'count').addClass('d-none');
     var element = jQuery(this);
     element.addClass('activecht');
+    var sender = parseInt(element.attr('data-senderId'));
+    var reciever = parseInt(element.attr('data-receiverId'));
+    var except = `${sender}_${reciever}`;
+    disableOtherListeners(except)
     getMessages(element);
 });
 
@@ -305,95 +307,226 @@ function getMessages(element) {
     loadMessages(sender, reciever, userImage);
 }
 
-for (const chatId of chatsList) {
 
-    var newVar = "listener" + chatId;
-    variables[newVar] = null;
-    if (variables[newVar])
-        variables[newVar]();
-    variables[newVar]
-}
+// function loadMessages(sender, reciever, userImage) {
+//     if (!sender) {
+//         return;
+//     }
+
+    
+    
+    
+//     jQuery('#chatWindow').html('');
+//     var newVar = "listener" + sender + '_' + reciever;
+//     fireBaseListeners[newVar] = null;
+
+//     if (fireBaseListeners[newVar])
+//         fireBaseListeners[newVar]();
+//     // var messageList = '',
+//     //     allSenders = [];
+//     // messageList += '<p class="text-center date_cht">Today, ' + moment(new Date()).format('MMMM MM') + '</p>'
+//     // messageList += '<p class="text-center date_cht"></p>';
+    
+//     // snap.forEach(message => {
+//         //     console.log('sadfasd', message.val(), "sdfsfsdfsd");
+        
+//         fireBaseListeners[newVar] = db.ref('messeges/' + `${sender}_${reciever}`).on("child_added", (snap) => {
+//         console.log('listner call',newVar,snap.val());
+//         var message = snap;
+//         var messageList = '';
+
+//         let date = moment(new Date()).format('YYYY-MM-DD');
+
+//         var msgDate = moment(new Date(parseInt(message.val().created))).format('YYYY-MM-DD');
+
+//         if (date == msgDate) {
+//             var time = moment(new Date(parseInt(message.val().created))).format('h:mm a');
+
+//         } else {
+//             var time = msgDate;
+//         }
+//         if (parseInt(authUserId) == parseInt(message.val().sender)) {
+
+//             messageList += '<div class="chat-screen-right-wrapper">';
+//             messageList += '<div class="chat-screenmsg-wrapper">';
+//             messageList += '<div class="chat-screen-name-time">';
+//             messageList += '<span>' + time + '</span><p>You</p></div>';
+
+//             // if (attachment)
+//             //     messageList += '<div class="msg_media"><img src="' + attachment + '"></div>';
+//             if (message.val().msg)
+//                 messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message.val().msg)) + '</div></div>';
+//             messageList += '<div class="chat-screen-img"><img src="' + authUserprofile + '?id=' + message.val() + '"></div>';
+//             messageList += '</div>';
+
+//         }
+//         else {
+//             messageList += '<div class="chat-screen-left-wrapper">';
+//             messageList += '<div class="chat-screen-img"><img src="' + userImage + '?id=' + message.val() + '"></div>';
+//             messageList += '<div class="msg-data"><div class="pro_name d-flex">';
+//             // messageList += `<p>USERNAME-${message.val().name}</p>`;
+//             messageList += '<span>' + time + '</span></div>';
+//             // if (attachment)
+//             //     messageList += '<div class="msg_media"><img src="' + attachment + '"></div>';
 
 
-function loadMessages(sender, reciever, userImage) {
+
+//             if (message.val().msg)
+//                 messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message.val().msg)) + '</div>';
+//             messageList += '</div></div>';
+
+//             // issen update
+//             if (parseInt(authUserId) == parseInt(message.val().reciever)) {
+//                 messageUpdate(message, 'true');
+//             }
+//         }
+
+
+//         // });
+
+//         jQuery('#chatWindow').append(messageList);
+//     });
+
+
+
+// }
+
+// Global object to store Firebase listeners
+const fireBaseListeners = {};
+
+function loadMessages(sender, receiver, userImage) {
     if (!sender) {
         return;
     }
 
     jQuery('#chatWindow').html('');
+    const listenerKey = `${sender}_${receiver}`;
 
+    // Detach existing listener if it exists
+    if (fireBaseListeners[listenerKey]) {
+        db.ref('messeges/' + listenerKey).off("child_added", fireBaseListeners[listenerKey]); // Detach the existing listener
+    }
 
-
-    var newVar = "listener" + sender + '_' + reciever;
-    fireBaseListeners[newVar] = null;
-
-    if (fireBaseListeners[newVar])
-        fireBaseListeners[newVar]();
-    // var messageList = '',
-    //     allSenders = [];
-    // messageList += '<p class="text-center date_cht">Today, ' + moment(new Date()).format('MMMM MM') + '</p>'
-    // messageList += '<p class="text-center date_cht"></p>';
-
-    // snap.forEach(message => {
-    //     console.log('sadfasd', message.val(), "sdfsfsdfsd");
-
-    fireBaseListeners[newVar] = db.ref('messeges/' + `${sender}_${reciever}`).on("child_added", (snap) => {
-
+    // Attach a new listener
+    fireBaseListeners[listenerKey] = db.ref('messeges/' + listenerKey).on("child_added", (snap) => {
         var message = snap;
         var messageList = '';
 
         let date = moment(new Date()).format('YYYY-MM-DD');
-
         var msgDate = moment(new Date(parseInt(message.val().created))).format('YYYY-MM-DD');
 
-        if (date == msgDate) {
-            var time = moment(new Date(parseInt(message.val().created))).format('h:mm a');
+        var time = date == msgDate
+            ? moment(new Date(parseInt(message.val().created))).format('h:mm a')
+            : msgDate;
 
-        } else {
-            var time = msgDate;
-        }
-        if (parseInt(authUserId) == parseInt(message.val().sender)) {
-
+        if (parseInt(authUserId) === parseInt(message.val().sender)) {
             messageList += '<div class="chat-screen-right-wrapper">';
             messageList += '<div class="chat-screenmsg-wrapper">';
             messageList += '<div class="chat-screen-name-time">';
             messageList += '<span>' + time + '</span><p>You</p></div>';
-
-            // if (attachment)
-            //     messageList += '<div class="msg_media"><img src="' + attachment + '"></div>';
-            if (message.val().msg)
+            if (message.val().msg) {
                 messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message.val().msg)) + '</div></div>';
+            }
             messageList += '<div class="chat-screen-img"><img src="' + authUserprofile + '?id=' + message.val() + '"></div>';
             messageList += '</div>';
-
-        }
-        else {
+        } else {
             messageList += '<div class="chat-screen-left-wrapper">';
             messageList += '<div class="chat-screen-img"><img src="' + userImage + '?id=' + message.val() + '"></div>';
             messageList += '<div class="msg-data"><div class="pro_name d-flex">';
-            // messageList += `<p>USERNAME-${message.val().name}</p>`;
             messageList += '<span>' + time + '</span></div>';
-            // if (attachment)
-            //     messageList += '<div class="msg_media"><img src="' + attachment + '"></div>';
-
-
-
-            if (message.val().msg)
+            if (message.val().msg) {
                 messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message.val().msg)) + '</div>';
-            messageList += '</div></div>';
-
-            // issen update
-            if (parseInt(authUserId) == parseInt(message.val().reciever)) {
-                messageUpdate(message, 'true');
             }
+            messageList += '</div></div>';
         }
-
-
-        // });
-
+        // console.log(authUserId,message.val().receiver,"test1234",message.val());
+        if (parseInt(authUserId) === parseInt(message.val().reciever)) {
+            messageUpdate(message, 'true');
+        }
         jQuery('#chatWindow').append(messageList);
     });
+}
+
+// function loadMessages(sender, receiver, userImage) {
+//     if (!sender) {
+//         return;
+//     }
+
+//     jQuery('#chatWindow').html('');
+//     var listenerKey = sender+"_"+receiver;
+
+//     // Detach existing listener if it exists
+//     if (fireBaseListeners[listenerKey]) {
+//         fireBaseListeners[listenerKey](); // Detach the existing listener
+//     }else{
 
 
+//     // Attach a new listener
+//     fireBaseListeners[listenerKey] = db.ref('messeges/' + listenerKey).on("child_added", (snap) => {
+//         if (!snap || !snap.exists()) {
+//             console.warn('No message data found for this chat.');
+//             return;
+//         }
 
+//         console.log('Listener call', listenerKey, snap.val());
+//         var message = snap;
+
+//         // Ensure `message` is not undefined
+//         if (!message || !message.val()) {
+//             console.warn('Message data is undefined or null.');
+//             return;
+//         }
+
+//         var messageList = '';
+//         let date = moment(new Date()).format('YYYY-MM-DD');
+//         var msgDate = moment(new Date(parseInt(message.val().created))).format('YYYY-MM-DD');
+
+//         var time = date == msgDate
+//             ? moment(new Date(parseInt(message.val().created))).format('h:mm a')
+//             : msgDate;
+
+//         if (parseInt(authUserId) === parseInt(message.val().sender)) {
+//             messageList += '<div class="chat-screen-right-wrapper">';
+//             messageList += '<div class="chat-screenmsg-wrapper">';
+//             messageList += '<div class="chat-screen-name-time">';
+//             messageList += '<span>' + time + '</span><p>You</p></div>';
+//             if (message.val().msg) {
+//                 messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message.val().msg)) + '</div></div>';
+//             }
+//             messageList += '<div class="chat-screen-img"><img src="' + authUserprofile + '?id=' + message.val() + '"></div>';
+//             messageList += '</div>';
+//         } else {
+//             messageList += '<div class="chat-screen-left-wrapper">';
+//             messageList += '<div class="chat-screen-img"><img src="' + userImage + '?id=' + message.val() + '"></div>';
+//             messageList += '<div class="msg-data"><div class="pro_name d-flex">';
+//             messageList += '<span>' + time + '</span></div>';
+//             if (message.val().msg) {
+//                 messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message.val().msg)) + '</div>';
+//             }
+//             messageList += '</div></div>';
+//             if (parseInt(authUserId) === parseInt(message.val().receiver)) {
+//                 messageUpdate(message, 'true');
+//             }
+//         }
+
+//         jQuery('#chatWindow').append(messageList);
+//     });
+// }
+
+// }
+
+function disableOtherListeners(except) {
+    var elements = $('.chatlist').find('li');
+    elements.each(function (index, element) {
+        var list = $(element).find('div.chat-list');
+       var reciever = parseInt(list.attr('data-senderId'));
+        var sender = parseInt(list.attr('data-receiverId'));
+        var listenerKey = `${reciever}_${sender}`;
+        if(except != listenerKey){
+            if (fireBaseListeners[listenerKey]) {
+                // delete fireBaseListeners[listenerKey]
+                db.ref('messeges/' + listenerKey).off("child_added", fireBaseListeners[listenerKey]); // Detach the existing listener
+            }
+        }
+    })
 }
