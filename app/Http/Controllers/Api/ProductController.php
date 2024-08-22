@@ -1203,7 +1203,8 @@ class ProductController extends Controller
     public function getAllProductsById($id)
     {
         try {
-            $product = Product::with('allImages')->findOrFail($id);
+
+            $product = Product::with('allImages','ratings')->findOrFail($id);
 
             if (is_null($product)) {
                 return response()->json([
@@ -1290,6 +1291,19 @@ class ProductController extends Controller
                     'file_path' => storage_path($image->file_path),
                     'created_at' => $image->created_at,
                     'updated_at' => $image->updated_at
+                ];
+            });
+            $productDetails->reviews = $productDetails->ratings->map(function ($review) {
+
+                return [
+                    'id' => $review->id,
+                    'product_id' => $review->product_id,
+                    'order_id' => $review->order_id,
+                    'user_id' => $review->user_id,
+                    'rating' => $review->rating,
+                    'review' => $review->review,
+                    'created_at' => $review->created_at,
+                    'updated_at' => $review->updated_at
                 ];
             });
 
