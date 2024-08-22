@@ -4,9 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DisputeRequest;
+use App\Models\AdminSetting;
 use App\Models\DisputeOrder;
 use App\Models\Order;
 use App\Models\OrderImage;
+use App\Models\Product;
+use App\Models\ProductDisableDate;
+use App\Models\Query;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -15,98 +20,98 @@ use Illuminate\Support\Facades\Storage;
 class OrderController extends Controller
 {
 
-public function uploadRetailerImages(Request $request, $id, $type)
-{
-    try {
-        // Log the entire request to see what is being sent from the frontend
-        // Log::info('Received request for uploadRetailerImages', [
-        //     'request_data' => $request->all(),
-        //     'user_id' => auth()->id(),
-        //     'order_id' => $id,
-        //     'type' => $type,
-        // ]);
+    public function uploadRetailerImages(Request $request, $id, $type)
+    {
+        try {
+            // Log the entire request to see what is being sent from the frontend
+            // Log::info('Received request for uploadRetailerImages', [
+            //     'request_data' => $request->all(),
+            //     'user_id' => auth()->id(),
+            //     'order_id' => $id,
+            //     'type' => $type,
+            // ]);
 
-        // Validate the uploaded images
-        $request->validate([
-            'images.*' => 'required|file|mimes:jpeg,png,jpg,gif,svg',
-        ]);
+            // Validate the uploaded images
+            $request->validate([
+                'images.*' => 'required|file|mimes:jpeg,png,jpg,gif,svg',
+            ]);
 
-        // Check for valid type
-        if (!in_array($type, ['pickedup', 'returned'])) {
-            // Log::warning('Invalid type provided', ['type' => $type]);
-            return response()->json([
-                'status' => false,
-                'message' => 'Invalid type provided',
-                'data' => [],
-            ], 400);
-        }
-
-        $orderImages = [];
-
-        // Check if files are present and handle the upload
-        if ($request->hasFile('images')) {
-            foreach ($request->images as $image) {
-                // Log each image file before storing
-                // Log::info('Processing image', [
-                //     'image_name' => $image->getClientOriginalName(),
-                //     'image_mime' => $image->getMimeType(),
-                // ]);
-
-                // Store the image
-                $path = $image->store('order_images', 'public');
-                $url = $path;
-
-                // Create the order image record
-                $orderImages[] = OrderImage::create([
-                    'order_id' => $id,
-                    'user_id' => auth()->id(),
-                    'file' => $path,
-                    'url' => $url,
-                    'type' => $type,
-                    'uploaded_by' => 'retailer',
-                ]);
+            // Check for valid type
+            if (!in_array($type, ['pickedup', 'returned'])) {
+                // Log::warning('Invalid type provided', ['type' => $type]);
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid type provided',
+                    'data' => [],
+                ], 400);
             }
 
-            // Log the success of the upload process
-            // Log::info('Images uploaded successfully', [
-            //     'order_id' => $id,
-            //     'user_id' => auth()->id(),
-            //     'uploaded_images' => $orderImages,
+            $orderImages = [];
+
+            // Check if files are present and handle the upload
+            if ($request->hasFile('images')) {
+                foreach ($request->images as $image) {
+                    // Log each image file before storing
+                    // Log::info('Processing image', [
+                    //     'image_name' => $image->getClientOriginalName(),
+                    //     'image_mime' => $image->getMimeType(),
+                    // ]);
+
+                    // Store the image
+                    $path = $image->store('order_images', 'public');
+                    $url = $path;
+
+                    // Create the order image record
+                    $orderImages[] = OrderImage::create([
+                        'order_id' => $id,
+                        'user_id' => auth()->id(),
+                        'file' => $path,
+                        'url' => $url,
+                        'type' => $type,
+                        'uploaded_by' => 'retailer',
+                    ]);
+                }
+
+                // Log the success of the upload process
+                // Log::info('Images uploaded successfully', [
+                //     'order_id' => $id,
+                //     'user_id' => auth()->id(),
+                //     'uploaded_images' => $orderImages,
+                // ]);
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Images uploaded successfully',
+                    'data' => $orderImages,
+                ], 201);
+            }
+
+            // Log if no files were found in the request
+            // Log::warning('No files found in the request', [
+            //     'request_data' => $request->all(),
             // ]);
 
             return response()->json([
-                'status' => true,
-                'message' => 'Images uploaded successfully',
-                'data' => $orderImages,
-            ], 201);
+                'status' => false,
+                'message' => 'Files not found',
+                'data' => [],
+            ], 400);
+        } catch (\Throwable $e) {
+            // Log the exception with stack trace
+            // Log::error('Error occurred in uploadRetailerImages', [
+            //     'error_message' => $e->getMessage(),
+            //     'stack_trace' => $e->getTraceAsString(),
+            // ]);
+
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [
+                    'errors' => [],
+                ],
+            ], 500);
         }
-
-        // Log if no files were found in the request
-        // Log::warning('No files found in the request', [
-        //     'request_data' => $request->all(),
-        // ]);
-
-        return response()->json([
-            'status' => false,
-            'message' => 'Files not found',
-            'data' => [],
-        ], 400);
-    } catch (\Throwable $e) {
-        // Log the exception with stack trace
-        // Log::error('Error occurred in uploadRetailerImages', [
-        //     'error_message' => $e->getMessage(),
-        //     'stack_trace' => $e->getTraceAsString(),
-        // ]);
-
-        return response()->json([
-            'status' => false,
-            'message' => $e->getMessage(),
-            'data' => [
-                'errors' => [],
-            ],
-        ], 500);
     }
-}
 
 
 
@@ -371,13 +376,55 @@ public function uploadRetailerImages(Request $request, $id, $type)
     }
 
 
-    public function getDisputedOrders(Request $request)
+    public function getDisputedOrders(Request $request, $type)
     {
         try {
             $user = auth()->user();
-            $orders = Order::where('user_id', $user->id)
-                ->whereIn('dispute_status', ['Yes', 'Resolved'])
-                ->get();
+            // $type = $request->input('type');
+
+            if ($type == 'borrower') {
+                // If type is borrower, retrieve orders where user_id is the authenticated user's ID
+                $orders = Order::where('user_id', $user->id)
+                    ->whereIn('dispute_status', ['Yes', 'Resolved'])
+                    ->get();
+            } elseif ($type == 'lender') {
+                // If type is lender, retrieve orders where retailer_id is the authenticated user's ID
+                $orders = Order::where('retailer_id', $user->id)
+                    ->whereIn('dispute_status', ['Yes', 'Resolved'])
+                    ->get();
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid type provided',
+                    'data' => [],
+                ], 400);
+            }
+
+            // Loop through each order to retrieve the related product
+            $orders = $orders->map(function ($order) {
+                $product = Product::withTrashed()->where('id', $order->product_id)->first();
+                $borrower = User::withTrashed()->where('id', $order->user_id)->first();
+                $lender = User::withTrashed()->where('id', $order->retailer_id)->first();
+                $dispute = DisputeOrder::where('order_id', $order->id)->first();
+                $query = Query::where('id', $order->query_id)->first();
+
+                return [
+                    'order_id' => $order->id,
+                    'product_id' => $product->id ?? null,
+                    'product_name' => $product->name ?? null,
+                    'product_image_url' => $product->thumbnailImage->file_path ?? null,
+                    'dispute_status' => $order->dispute_status,
+                    'order_status' => $order->status,
+                    'price' => $order->price,
+                    'borrower' => $borrower->name,
+                    'lender' => $lender->name,
+                    'dispute' => $dispute,
+                    'redirect_id' => $query->id,
+                    'status' => $order->dispute_status,
+                    // 'cancellation note'=>$order->cancellation_note,
+                    // 'created_at' => $order->created_at,
+                ];
+            });
 
             return response()->json([
                 'status' => true,
@@ -395,4 +442,110 @@ public function uploadRetailerImages(Request $request, $id, $type)
     }
 
 
+    public function cancelOrderApi(Request $request, $id)
+    {
+        try {
+            $order = Order::where('id',$id)->first();
+            $order->load(["transaction", "retailer", "queryOf"]);
+
+            $order_commission = AdminSetting::where('key', 'order_commission')->first();
+
+            if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
+                return response()->json([
+                    'status'  => false,
+                    'message' => "You cannot cancel the disputed order",
+                    'data'    => []
+                ], 403);
+            }
+
+            if ($order->status != "Waiting") {
+                return response()->json([
+                    'status'  => false,
+                    'message' => __("order.messages.cancel.notAllowed"),
+                    'data'    => []
+                ], 403);
+            }
+
+            if (is_null($order->transaction->payment_id ?? '') || empty($order->transaction->payment_id ?? '')) {
+                return response()->json([
+                    'status'  => false,
+                    'message' => __("order.messages.cancel.paymentIncomplete"),
+                    'data'    => []
+                ], 403);
+            }
+
+            $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+
+            /* Retrieve Payment Intent Details */
+            $paymentIntentData = $stripe->paymentIntents->retrieve(
+                $order->transaction->payment_id
+            );
+
+            if (!isset($paymentIntentData->latest_charge)) {
+                return response()->json([
+                    'status'  => false,
+                    'message' => __("order.messages.cancel.paymentIncomplete"),
+                    'data'    => []
+                ], 403);
+            }
+
+            /* Calculate Refund Amount */
+            if (isset($order->queryOf->negotiate_price)) {
+                $amount = $order->queryOf->negotiate_price * ($order_commission->value / 100);
+                $customerAmount = $order->total - $amount;
+            } else {
+                $amount = $order->queryOf->getCalculatedPrice($order->queryOf->date_range) * ($order_commission->value / 100);
+                $customerAmount = $order->total - $amount;
+            }
+
+            /* Refund Payment */
+            $refundStatus = $stripe->refunds->create([
+                'charge' => $paymentIntentData->latest_charge,
+                'amount' => ($order->cancellation_time_left >= 2) ? floatval($customerAmount) * 100 : floatval($customerAmount / 2) * 100,
+            ]);
+
+            if ($refundStatus->status == "succeeded") {
+                $dateTime = now();
+
+                /* Update Order Status */
+                $order->update([
+                    "status"           => "Cancelled",
+                    "cancelled_date"   => $dateTime,
+                    'cancellation_note' => $request->cancellation_note
+                ]);
+
+                /* Update Transaction */
+                $order->transaction->update([
+                    "status" => "Cancelled"
+                ]);
+
+                /* Remove Product Unavailable Dates */
+                ProductDisableDate::where('product_id', $order->product_id)
+                    ->whereBetween('disable_date', [$order->from_date, $order->to_date])
+                    ->delete();
+
+                return response()->json([
+                    'status'  => true,
+                    'message' => __("order.messages.cancel.success"),
+                    'data'    => [
+                        'order_id' => $order->id,
+                        'cancelled_date' => $dateTime
+                    ]
+                ], 200);
+            }
+
+            return response()->json([
+                'status'  => false,
+                'message' => __("order.messages.cancel.error"),
+                'data'    => []
+            ], 500);
+        } catch (\Exception $e) {
+            Log::error("Order Cancellation Error: ", ['message' => $e->getMessage()]);
+            return response()->json([
+                'status'  => false,
+                'message' => $e->getMessage(),
+                'data'    => []
+            ], 500);
+        }
+    }
 }

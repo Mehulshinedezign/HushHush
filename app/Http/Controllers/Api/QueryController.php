@@ -252,12 +252,12 @@ class QueryController extends Controller
 
                     $productId = $query->product_id;
                     $product = Product::withTrashed()->where('id', $productId)->first();
-                    $order = Order::where('query_id', $query->id)->first();
+                    $order = Order::where('query_id', $query->id)->first(); // Use first() instead of get()
                     $lender = User::where('id', $query->for_user)->first();
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
                     $now = Carbon::now()->format('Y-m-d');
 
-                    if ($order->status  === 'Waiting') {
+                    if ($order && $order->status === 'Waiting') {
                         if ($now > $endDate) {
                             $status = 'COMPLETED';
                         } elseif ($now < $startDate) {
@@ -265,10 +265,12 @@ class QueryController extends Controller
                         } else {
                             $status = 'ACTIVE';
                         }
-                    } elseif ($order->status == 'Completed') {
+                    } elseif ($order && $order->status == 'Completed') {
                         $status = 'COMPLETED';
-                    } elseif ($order->status == 'Picked Up') {
+                    } elseif ($order && $order->status == 'Picked Up') {
                         $status = 'ACTIVE';
+                    } else {
+                        $status = 'UNKNOWN';
                     }
 
                     return [
@@ -314,6 +316,7 @@ class QueryController extends Controller
     }
 
 
+
     public function booked()
     {
         $user = auth()->user();
@@ -344,7 +347,7 @@ class QueryController extends Controller
 
                     $now = Carbon::now()->format('Y-m-d');
 
-                    if ($order->status  === 'Waiting') {
+                    if ($order && $order->status === 'Waiting') {
                         if ($now > $endDate) {
                             $status = 'COMPLETED';
                         } elseif ($now < $startDate) {
@@ -352,10 +355,12 @@ class QueryController extends Controller
                         } else {
                             $status = 'ACTIVE';
                         }
-                    } elseif ($order->status == 'Completed') {
+                    } elseif ($order && $order->status == 'Completed') {
                         $status = 'COMPLETED';
-                    } elseif ($order->status == 'Picked Up') {
+                    } elseif ($order && $order->status == 'Picked Up') {
                         $status = 'ACTIVE';
+                    } else {
+                        $status = 'UNKNOWN';
                     }
 
                     return [
