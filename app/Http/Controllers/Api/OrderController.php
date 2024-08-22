@@ -445,12 +445,20 @@ class OrderController extends Controller
     public function cancelOrderApi(Request $request, $id)
     {
         try {
-            $order = Order::where('id',$id)->first();
+            $order = Order::where('id', $id)->first();
+            if (!$order) {
+                return response()->json([
+                    'status'  => false,
+                    'message' => "Order not found",
+                    'data'    => []
+                ], 404);
+            }
+
             $order->load(["transaction", "retailer", "queryOf"]);
 
             $order_commission = AdminSetting::where('key', 'order_commission')->first();
 
-            if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
+            if (in_array($order->dispute_status, ['Yes', 'Resolved'])) {
                 return response()->json([
                     'status'  => false,
                     'message' => "You cannot cancel the disputed order",
@@ -466,7 +474,7 @@ class OrderController extends Controller
                 ], 403);
             }
 
-            if (is_null($order->transaction->payment_id ?? '') || empty($order->transaction->payment_id ?? '')) {
+            if (empty($order->transaction->payment_id)) {
                 return response()->json([
                     'status'  => false,
                     'message' => __("order.messages.cancel.paymentIncomplete"),
@@ -476,7 +484,7 @@ class OrderController extends Controller
 
             $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
 
-            /* Retrieve Payment Intent Details */
+            // Retrieve Payment Intent Details
             $paymentIntentData = $stripe->paymentIntents->retrieve(
                 $order->transaction->payment_id
             );
@@ -489,7 +497,7 @@ class OrderController extends Controller
                 ], 403);
             }
 
-            /* Calculate Refund Amount */
+            // Calculate Refund Amount
             if (isset($order->queryOf->negotiate_price)) {
                 $amount = $order->queryOf->negotiate_price * ($order_commission->value / 100);
                 $customerAmount = $order->total - $amount;
@@ -498,28 +506,33 @@ class OrderController extends Controller
                 $customerAmount = $order->total - $amount;
             }
 
-            /* Refund Payment */
+            // Convert to cents
+            $customerAmountInCents = intval($customerAmount * 100);
+
+            // Refund Payment
+            $refundAmount = ($order->cancellation_time_left >= 2) ? $customerAmountInCents : intval($customerAmountInCents / 2);
+
             $refundStatus = $stripe->refunds->create([
                 'charge' => $paymentIntentData->latest_charge,
-                'amount' => ($order->cancellation_time_left >= 2) ? floatval($customerAmount) * 100 : floatval($customerAmount / 2) * 100,
+                'amount' => $refundAmount,
             ]);
 
             if ($refundStatus->status == "succeeded") {
                 $dateTime = now();
 
-                /* Update Order Status */
+                // Update Order Status
                 $order->update([
                     "status"           => "Cancelled",
                     "cancelled_date"   => $dateTime,
                     'cancellation_note' => $request->cancellation_note
                 ]);
 
-                /* Update Transaction */
+                // Update Transaction
                 $order->transaction->update([
                     "status" => "Cancelled"
                 ]);
 
-                /* Remove Product Unavailable Dates */
+                // Remove Product Unavailable Dates
                 ProductDisableDate::where('product_id', $order->product_id)
                     ->whereBetween('disable_date', [$order->from_date, $order->to_date])
                     ->delete();
@@ -548,4 +561,5 @@ class OrderController extends Controller
             ], 500);
         }
     }
+
 }

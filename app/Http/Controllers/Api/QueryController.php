@@ -269,7 +269,10 @@ class QueryController extends Controller
                         $status = 'COMPLETED';
                     } elseif ($order && $order->status == 'Picked Up') {
                         $status = 'ACTIVE';
-                    } else {
+                    }
+                    elseif ($order && $order->status == 'Cancelled') {
+                        $status = 'CANCELLED';
+                     } else {
                         $status = 'UNKNOWN';
                     }
 
@@ -292,6 +295,7 @@ class QueryController extends Controller
                         'brand' => $product->get_brand->name ?? null,
                         'size' => $product->get_size->name ?? null,
                         'price' => $price,
+
                     ];
                 });
 
@@ -359,7 +363,10 @@ class QueryController extends Controller
                         $status = 'COMPLETED';
                     } elseif ($order && $order->status == 'Picked Up') {
                         $status = 'ACTIVE';
-                    } else {
+                    }
+                    elseif ($order && $order->status == 'Cancelled') {
+                        $status = 'CANCELLED';
+                     } else {
                         $status = 'UNKNOWN';
                     }
 

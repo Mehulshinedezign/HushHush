@@ -290,4 +290,6 @@ class Order extends Model
             ->where('status', '!=', 'Completed')
             ->count();
     }
+
+
 }

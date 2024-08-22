@@ -198,7 +198,7 @@
                                         </div>
                                         <div class="col-md-3 address_data">
                                             <div class="my-pro-detail-para">
-                                                <p>zipcode</p>
+                                                <p>Zip-Code/Postal Code</p>
                                                 <div class="my-pro-edit-form">
                                                     <div class="form-group">
                                                         <div class="formfield">

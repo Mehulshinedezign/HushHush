@@ -287,6 +287,7 @@ class ProductController extends Controller
                 'pick_up_location' => $request->product_complete_location,
                 // 'product_complete_location' => $request->product_complete_location,
                 'raw_address' => $formatted_address ?? null,
+                'postcode'=>$request->zipcode,
             ]);
 
 

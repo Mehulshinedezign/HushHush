@@ -370,7 +370,7 @@
                 jQuery(this).on('apply.daterangepicker', function(ev, picker) {
                     jQuery(this).val(picker.startDate.format(customDateFormat) + ' - ' + picker
                         .endDate.format(customDateFormat));
-                    if (jQuery(this).closest('form').attr('id') === 'searchForm' ) {
+                    if (jQuery(this).closest('form').attr('id') === 'searchForm') {
                         jQuery(this).closest('form').submit();
                     }
                 });
@@ -539,72 +539,109 @@
         const rangevalue = document.querySelector(".slider-container .price-slider");
 
         document.addEventListener('DOMContentLoaded', function() {
-            const priceInputValue = document.querySelectorAll(".price-input input");
-            const rangeInputValue = document.querySelectorAll(".range-input input");
-            const rangeValue = document.querySelector(".price-slider");
-            const priceGap = 0; // Define a minimum gap between min and max values
+    const priceInputValue = document.querySelectorAll(".price-input input");
+    const rangeInputValue = document.querySelectorAll(".range-input input");
+    const rangeValue = document.querySelector(".price-slider");
+    const priceGap = 0; // Define a minimum gap between min and max values
 
-            function updateRangePosition(minp, maxp) {
-                const value1 = rangeInputValue[0].max;
-                rangeValue.style.left = `${(minp / value1) * 100}%`;
-                rangeValue.style.right = `${100 - (maxp / value1) * 100}%`;
+    function updateRangePosition(minp, maxp) {
+        const value1 = rangeInputValue[0].max;
+        rangeValue.style.left = `${(minp / value1) * 100}%`;
+        rangeValue.style.right = `${100 - (maxp / value1) * 100}%`;
+    }
+
+    function sanitizeValue(value, min, max) {
+        // Ensure value is a number and within the allowed range
+        if (value === '' || isNaN(value)) {
+            return min;
+        }
+        value = parseInt(value);
+        if (value < min) {
+            return min;
+        }
+        if (value > max) {
+            return max;
+        }
+        return value;
+    }
+
+    function setInitialValues() {
+        priceInputValue.forEach((input) => {
+            if (input.value === '') {
+                input.value = '0';
+            }
+        });
+        rangeInputValue.forEach((range) => {
+            if (range.value === '') {
+                range.value = '0';
+            }
+        });
+    }
+
+    setInitialValues();
+
+    // Event listener for price input fields
+    priceInputValue.forEach((input, index) => {
+        input.addEventListener("input", (e) => {
+            let minp = sanitizeValue(priceInputValue[0].value, 0, 10000);
+            let maxp = sanitizeValue(priceInputValue[1].value, 0, 10000);
+
+            if (minp < 0) {
+                minp = 0;
+            }
+            if (maxp > 10000) {
+                maxp = 10000;
+            }
+            if (minp > maxp - priceGap) {
+                minp = maxp - priceGap;
             }
 
-            priceInputValue.forEach((input, index) => {
-                input.addEventListener("input", (e) => {
-                    let minp = parseInt(priceInputValue[0].value);
-                    let maxp = parseInt(priceInputValue[1].value);
+            if (e.target.classList.contains("min-input")) {
+                rangeInputValue[0].value = minp;
+            } else {
+                rangeInputValue[1].value = maxp;
+            }
 
-                    if (minp < 0) {
-                        alert("Minimum price cannot be less than 0");
-                        priceInputValue[0].value = 0;
-                        minp = 0;
-                    }
-                    if (maxp > 10000) {
-                        alert("Maximum price cannot be greater than 10000");
-                        priceInputValue[1].value = 10000;
-                        maxp = 10000;
-                    }
-                    if (minp > maxp - priceGap) {
-                        priceInputValue[0].value = maxp - priceGap;
-                        minp = maxp - priceGap;
-                    }
-
-                    if (e.target.classList.contains("min-input")) {
-                        rangeInputValue[0].value = minp;
-                    } else {
-                        rangeInputValue[1].value = maxp;
-                    }
-
-                    updateRangePosition(minp, maxp);
-                });
-            });
-
-            rangeInputValue.forEach((range, index) => {
-                range.addEventListener("input", (e) => {
-                    let minVal = parseInt(rangeInputValue[0].value);
-                    let maxVal = parseInt(rangeInputValue[1].value);
-
-                    if (maxVal - minVal < priceGap) {
-                        if (e.target.classList.contains("min-range")) {
-                            rangeInputValue[0].value = maxVal - priceGap;
-                        } else {
-                            rangeInputValue[1].value = minVal + priceGap;
-                        }
-                    } else {
-                        priceInputValue[0].value = minVal;
-                        priceInputValue[1].value = maxVal;
-
-                        document.getElementById('selectedMinValue').value = minVal;
-                        document.getElementById('selectedMaxValue').value = maxVal;
-                        document.getElementById('styleForSlider').value =
-                            `left:${(minVal / rangeInputValue[0].max) * 100}%; right:${100 - (maxVal / rangeInputValue[1].max) * 100}%;`;
-
-                        updateRangePosition(minVal, maxVal);
-                    }
-                });
-            });
+            updateRangePosition(minp, maxp);
         });
+
+        // Add blur event listener to handle empty input case
+        input.addEventListener("blur", (e) => {
+            if (e.target.value === '') {
+                e.target.value = '0';
+                let minp = sanitizeValue(priceInputValue[0].value, 0, 10000);
+                let maxp = sanitizeValue(priceInputValue[1].value, 0, 10000);
+                updateRangePosition(minp, maxp);
+            }
+        });
+    });
+
+    rangeInputValue.forEach((range, index) => {
+        range.addEventListener("input", (e) => {
+            let minVal = sanitizeValue(rangeInputValue[0].value, 0, 10000);
+            let maxVal = sanitizeValue(rangeInputValue[1].value, 0, 10000);
+
+            if (maxVal - minVal < priceGap) {
+                if (e.target.classList.contains("min-range")) {
+                    rangeInputValue[0].value = maxVal - priceGap;
+                } else {
+                    rangeInputValue[1].value = minVal + priceGap;
+                }
+            } else {
+                priceInputValue[0].value = minVal;
+                priceInputValue[1].value = maxVal;
+
+                document.getElementById('selectedMinValue').value = minVal;
+                document.getElementById('selectedMaxValue').value = maxVal;
+                document.getElementById('styleForSlider').value =
+                    `left:${(minVal / rangeInputValue[0].max) * 100}%; right:${100 - (maxVal / rangeInputValue[1].max) * 100}%;`;
+
+                updateRangePosition(minVal, maxVal);
+            }
+        });
+    });
+});
+
     </script>
     <script>
         function initAutocomplete() {

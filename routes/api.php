@@ -72,7 +72,7 @@ Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {
 
     Route::post('/order/{order}/dispute', [App\Http\Controllers\Api\OrderController::class, 'orderDisputeApi']);
     Route::get('/orders/disputed/{type}', [App\Http\Controllers\Api\OrderController::class, 'getDisputedOrders']);
-    Route::get('/cancel/orders{id}', [App\Http\Controllers\Api\OrderController::class, 'cancelOrderApi']);
+    Route::get('/cancel/orders/{id}', [App\Http\Controllers\Api\OrderController::class, 'cancelOrderApi']);
 
 
 

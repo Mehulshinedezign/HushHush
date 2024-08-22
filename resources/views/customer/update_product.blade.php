@@ -209,7 +209,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
+                                    <div class="col-lg-3 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">Country*</label>
                                             <div class="formfield">
@@ -221,7 +221,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
+                                    <div class="col-lg-3 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">State*</label>
                                             <div class="formfield">
@@ -233,12 +233,25 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
+                                    <div class="col-lg-3 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">City*</label>
                                             <div class="formfield">
                                                 <input type="text" class="produt_input form-control form-class @error('city') is-invalid @enderror" placeholder="city" name="city" id="product_city" value="{{ $product->city ?? ''}}">
                                                 @error('city')
+                                                <span class="invalid-feedback" role="alert">
+                                                    {{$message}}
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-md-2 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">Zip-Code/Postal Code</label>
+                                            <div class="formfield">
+                                                <input type="text" class="produt_input form-control form-class @error('zipcode') is-invalid @enderror" placeholder="zipcode" name="zipcode" id="zipcode" value="{{ $product->productCompleteLocation->postcode ?? ''}}" readonly>
+                                                @error('zipcode')
                                                 <span class="invalid-feedback" role="alert">
                                                     {{$message}}
                                                 @enderror

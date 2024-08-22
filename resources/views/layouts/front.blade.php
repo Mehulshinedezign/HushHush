@@ -315,7 +315,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
+                                    <div class="col-lg-3 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">Country*</label>
                                             <div class="formfield">
@@ -330,7 +330,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
+                                    <div class="col-lg-3 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">State*</label>
                                             <div class="formfield">
@@ -346,7 +346,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-2 col-sm-12 product_sub_data">
+                                    <div class="col-lg-3 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
                                             <label for="">City*</label>
                                             <div class="formfield">
@@ -354,6 +354,22 @@
                                                     class="produt_input form-control form-class @error('city') is-invalid @enderror"
                                                     placeholder="country" placeholder="city" name="city"
                                                     id="product_city">
+                                                @error('city')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-2 col-sm-12 product_sub_data">
+                                        <div class="form-group">
+                                            <label for="">Zip-Code/Postal Code</label>
+                                            <div class="formfield">
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('zipcode') is-invalid @enderror"
+                                                    placeholder="zipcode" placeholder="zipcode" name="zipcode"
+                                                    id="zipcode" readonly>
                                                 @error('city')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
@@ -972,8 +988,9 @@
                 autocomplete.addListener('place_changed', function() {
                     var place = autocomplete.getPlace();
 
-                    $(' #product_address1,#product_address2,#product_country, #product_state, #product_city')
+                    $(' #product_address1,#product_address2,#product_country, #product_state, #product_city','#zipcode')
                         .val('');
+                        var zipcode = null;
 
                     for (var i = 0; i < place.address_components.length; i++) {
                         var addressType = place.address_components[i].types[0];
@@ -992,6 +1009,9 @@
                         if (addressType === 'locality') {
                             $('#product_city').val(place.address_components[i].long_name);
                         }
+                        if (addressType === 'postal_code') {
+                            $('#zipcode').val(place.address_components[i].long_name);// Assign zipcode if available
+                            }
                     }
 
                     function setReadonly(selector) {
