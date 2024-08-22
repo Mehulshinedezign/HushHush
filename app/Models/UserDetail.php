@@ -9,36 +9,36 @@ class UserDetail extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id','address1','address2','country','state','city','about','complete_address'];
+    protected $fillable = ['user_id','address1','address2','country','state','city','about','complete_address','zipcode'];
 
      /**
       * User country
       *
       * @var object
       */
- 
+
       public function country()
       {
           return $this->belongsTo(Country::class);
       }
-   
+
        /**
         * User state
         *
         * @var object
         */
-   
+
       public function state()
       {
           return $this->belongsTo(State::class);
       }
-   
+
        /**
         * User city
         *
         * @var object
         */
-   
+
       public function city()
       {
           return $this->belongsTo(City::class);

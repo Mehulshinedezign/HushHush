@@ -533,6 +533,7 @@ class ProfileController extends Controller
                 'state' => $request->state,
                 'city' => $request->city,
                 'about' => $request->about ?? null,
+                'zipcode'=>$request->zipcode ??null,
             ];
 
             //  RetailerBankInformation::where('retailer_id', auth()->user()->id)->first();
