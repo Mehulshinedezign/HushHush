@@ -4,7 +4,7 @@
     <section class="chat-sec">
         <div class="container">
             <div class="chat-wrapper">
-                <h2>Chat Customer Service</h2>
+                <h2>Chat </h2>
                 @include('components.chat_outer')
             </div>
         </div>
