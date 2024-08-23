@@ -1204,7 +1204,7 @@ class ProductController extends Controller
     {
         try {
 
-            $product = Product::with('allImages','ratings')->findOrFail($id);
+            $product = Product::with('allImages', 'ratings')->findOrFail($id);
 
             if (is_null($product)) {
                 return response()->json([
@@ -1501,8 +1501,11 @@ class ProductController extends Controller
             $product = Product::where('id', $query->product_id)->firstOrFail();
             $order = Order::where('query_id', $query->id)->firstOrFail();
             $productUser = User::where('id', $product->user_id)->firstOrFail();
-            $borrower =User::where('id',$order->user_id)->firstOrFail();
+            $borrower = User::where('id', $order->user_id)->firstOrFail();
             $productDetails = $this->getProduct($order->product_id);
+
+            // Check if the logged-in user has a review on the product
+            $userHasReview = $productDetails->ratings->where('user_id', $user->id)->isNotEmpty();
 
             // Organize images
             $customerPickedUpImages = $order->customerPickedUpImages->map(function ($image) {
@@ -1565,7 +1568,8 @@ class ProductController extends Controller
                     'queries' => $query,
                     'user' => $productUser,
                     'order' => $order,
-                    'borrower'=>$borrower,
+                    'borrower' => $borrower,
+                    'userHasReview' => $userHasReview, // Add the key here
                     'images' => [
                         'customerPickedUpImages' => $customerPickedUpImages,
                         'customerReturnedImages' => $customerReturnedImages,
