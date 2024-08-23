@@ -30,6 +30,7 @@ section.home-sec {
     /* min-height: 1354px; */
     position: relative;
     transition: all 0.3s ease;
+    padding-bottom: 25px;
 }
 
 .filter-categories {
@@ -81,7 +82,7 @@ section.home-sec {
 
 .home-filter-box.expand .home-filter-inner {
     border-bottom: 1px solid var(--border-color);
-    padding: 25px 35px;
+    padding: 25px 30px;
 }
 
 .price-range-box {
@@ -388,7 +389,7 @@ span.left-form-icon {
     /* transform: translateX(-50%); */
     justify-content: space-between;
     /* top: 100px; */
-    gap: 60px;
+    gap: 50px;
     align-content: center;
 }
 .home-filter-box.expand .home-filter-inner {
@@ -419,6 +420,7 @@ span.left-form-icon {
 
 .home-filter-box.expand {
     max-width: 386px;
+    padding-bottom: 0;
 }
 
 .home-filter-box.expand .filter-head {
@@ -902,11 +904,16 @@ span.left-form-icon {
     max-width: 584px;
     margin: 0 auto;
 }
+.slider.slider-thumb .slick-slide.slick-current.slick-active {
+border-color: #000;
+}
 
 .slider.slider-thumb .slick-slide {
     max-width: 180px;
     height: 174px;
     margin: 0px 15px;
+    border: 2px solid transparent;
+    overflow: hidden;
 }
 
 .slider.slider-thumb .slick-slide img {
@@ -1708,22 +1715,24 @@ span.left-form-icon {
 .profile-about-detail::after {
     content: "";
     width: 1px;
-    height: 150%;
+    height: 100%;
     position: absolute;
     left: 0;
-    top: -25px;
+    top: 50%;
     background-color: var(--border-color);
+    transform: translateY(-50%);
 }
 
 .profile-about-detail::before {
     content: "";
     width: 1px;
-    height: 150%;
+    height: 100%;
     position: absolute;
     right: 0;
     left: auto;
-    top: -25px;
+    top: 50%;
     background-color: var(--border-color);
+    transform: translateY(-50%);
 }
 
 /* ======================= profile css -================================ */
@@ -2371,4 +2380,72 @@ p.pick_up_address {
     background-color: red;
     border-radius: 50px;
 
+}
+
+/* 23-08-202 */
+
+
+/* .opensleft-custom.show-calendar{
+    top: 135.5px !important;
+    right: 80px !important;
+} */
+
+
+.inquiry-list-main .db-table {
+    padding: 0 15px;
+}
+
+.transaction-table tr th {
+    padding: 15px 20px 15px !important;
+}
+.price-field input {
+    padding-left: 9px;
+    padding-right: 4px;
+}
+.price-field  .dollar-icon {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: #000;
+    position: absolute;
+    left: 3px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.price-field .dollar-icon i {
+    font-size: 13px;
+    line-height: normal;
+    font-weight: 400;
+    color: #000;
+}
+
+header.cust-header nav.sticky-nav {
+    width: 100%;
+    transition: all .3s ease;
+}
+header.cust-header.fixed nav.sticky-nav {
+    position: fixed;
+    width: 100%;
+    background: #fff;
+    top: 0;
+    z-index: 9999;
+    box-shadow: 0px 0px 10px #0606061f;
+}
+
+.product-desc-sec .slider.slider-thumb.slick-initialized.slick-slider {
+    top: -200px;
+}
+
+.product-slider .slick-track {
+    margin: 0;
+}
+.profile-address-icon {
+    display: flex;
+    align-items: flex-start;
+}
+
+.breadcrum-main .breadcrum-list:last-child::after {
+    display: none;
 }

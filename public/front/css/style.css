@@ -497,7 +497,8 @@ a.navbar-brand {
     align-items: center;
     border: 1px solid var(--mid-gray, #DEE0E3);
     background: var(--wh, #FFF);
-    padding: 7px;
+    padding: 7px 8px;
+    gap: 2px;
 }
 
 .search-pro-header ul li:first-child {
@@ -506,11 +507,11 @@ a.navbar-brand {
 
 .search-pro-header ul li input {
     border: none;
-    padding: 6px 10px;
+    padding: 2px 5px 2px 5px;
     width: 100%;
-    font-size: 11px;
+    font-size: 14px;
+    font-family: 'outfit-regular';
 }
-
 .search-pro-header button.primary-btn {
     min-height: 29px;
     gap: 10px;

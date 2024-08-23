@@ -214,30 +214,26 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-
-        // dd($request->all());
         try {
             DB::beginTransaction();
 
+            // Geocoding the complete location
             $product_complete_location = $request->input('product_complete_location');
             $address = urlencode($product_complete_location);
-
             $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=" . config('services.google_maps.api_key');
             $response = file_get_contents($url);
             $raw_address = json_decode($response, true);
-
             if (!empty($raw_address['results'])) {
                 $formatted_address = json_encode($raw_address['results'][0]);
             }
 
-
+            // Create the product
             $userId = auth()->user()->id;
-
             $data = [
                 'name' => $request->product_name,
                 'description' => $request->description,
                 'user_id' => $userId,
-                'category_id' => jsdecode_userdata($request->category),
+                'category_id' => $request->category,
                 'subcat_id' => $request->subcategory,
                 'product_condition' => $request->product_condition,
                 'rent_price' => $request->rent_price ?? 0,
@@ -259,15 +255,14 @@ class ProductController extends Controller
                 'modified_user_type' => 'Self',
                 'non_available_dates' => $request->non_available_dates ?? 0,
             ];
-
             $product = Product::create($data);
 
+            // Handling images
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $index => $image) {
                     $fileName = $product->id . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
                     $filePath = $image->storeAs('products/images', $fileName, 'public');
 
-                    // dd($fileName,$filePath);
                     ProductImage::create([
                         'product_id' => $product->id,
                         'file_name' => $fileName,
@@ -276,6 +271,7 @@ class ProductController extends Controller
                 }
             }
 
+            // Store product location
             ProductLocation::create([
                 'product_id' => $product->id,
                 'address1' => $request->address1,
@@ -285,19 +281,18 @@ class ProductController extends Controller
                 'state' => $request->state,
                 'city' => $request->city ?? null,
                 'pick_up_location' => $request->product_complete_location,
-                // 'product_complete_location' => $request->product_complete_location,
                 'raw_address' => $formatted_address ?? null,
-                'postcode'=>$request->zipcode,
+                'postcode' => $request->zipcode ?? null,
             ]);
 
-
-
+            // Handle disable dates
             if ($request->has('non_available_dates') && $request->filled('non_available_dates')) {
                 $dateRange = $request->non_available_dates;
                 list($startDateStr, $endDateStr) = explode(' - ', $dateRange);
                 $startDate = Carbon::createFromFormat('Y-m-d', $startDateStr);
                 $endDate = Carbon::createFromFormat('Y-m-d', $endDateStr);
 
+                // Insert selected date range
                 for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
                     ProductDisableDate::create([
                         'product_id' => $product->id,
@@ -306,16 +301,24 @@ class ProductController extends Controller
                 }
             }
 
+            // Automatically add 4 days from the creation date
+            $createdDate = Carbon::now()->startOfDay();
+            for ($i = 1; $i <= 4; $i++) {
+                $futureDate = $createdDate->copy()->addDays($i);
+                ProductDisableDate::create([
+                    'product_id' => $product->id,
+                    'disable_date' => $futureDate->format('Y-m-d'),
+                ]);
+            }
+
             DB::commit();
             return redirect()->route('product')->with('success', "Your product has been uploaded successfully.");
-
-            // return redirect()->back()->with('success', "Your product has been uploaded successfully.");
         } catch (\Exception $e) {
-            // dd($e->getMessage());
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
 
     /**
      * Show the form for editing the specified resource.

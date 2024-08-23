@@ -181,8 +181,11 @@
         font-size: 18px;
     }
 
+    .bottom-nav #navbarSupportedContent {
+        gap: 30px;
+    }
     .search-pro-header .primary-btn {
-        min-width: 100px;
+        min-width: 32px;
     }
 
     .header-cart ul li p {

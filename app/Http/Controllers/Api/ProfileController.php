@@ -137,8 +137,8 @@ class ProfileController extends Controller
             $user->update($request->all());
 
             // User details entry
-            $address1 = $request->address1;
-            $address2 = $request->address2;
+            $address1 = $request->address1 ?? $user->userDetail->address1 ?? Null;
+            $address2 = $request->address2 ?? $user->userDetail->address2 ?? Null;
             $about = ($request->about == '') ? NUll : $request->about;
             $country = $request->country_id;
             $state = $request->state_id;
@@ -162,6 +162,7 @@ class ProfileController extends Controller
                 'address' => $userDetails,
             ];
             DB::commit();
+            // dd($user,$userDetails);
             return response()->json([
                 'status' => true,
                 'message' => 'User updated successfully',

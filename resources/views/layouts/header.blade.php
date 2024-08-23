@@ -3,7 +3,7 @@
 
 {{-- NEW HTML CODE --}}
 <header class="cust-header">
-    <nav class="navbar">
+    <nav class="navbar sticky-nav">
         <div class="container">
             <div class="cust-nav-header-sec">
                 <div class="logo mobile-logo">
@@ -145,7 +145,7 @@
                         <li>
                             <div class="formfield icon-new-bx">
                                 <input type="text" name="filter_date" id="daterange-header"
-                                    placeholder="Enter date range" class="form-control daterange-cus" readonly>
+                                    placeholder="Enter date range" class="form-control daterange-cus custom-left-open" readonly>
                                 <label for="daterange-header" class="form-icon">
                                     <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
                                 </label>

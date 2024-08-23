@@ -36,53 +36,53 @@ class ProductController extends Controller
      */
 
 
-     public function index(Request $request)
-     {
-         $categories = Category::where('status', 'Active')->get();
-         $selectedCategories = $request->input('category', []);
-         $selectedSubcategories = $request->input('Subcategory', []);
-         $selectedcolor = $request->input('filtercolor', []);
-         $selectedcondition = $request->input('condition', []);
-         $selectedbrands = $request->input('brand', []);
-         $selectedsize = $request->input('size', []);
-         $searchKeyword = $request->input('search', '');
-         $disabledate = $request->input('filter_date');
+    public function index(Request $request)
+    {
+        $categories = Category::where('status', 'Active')->get();
+        $selectedCategories = $request->input('category', []);
+        $selectedSubcategories = $request->input('Subcategory', []);
+        $selectedcolor = $request->input('filtercolor', []);
+        $selectedcondition = $request->input('condition', []);
+        $selectedbrands = $request->input('brand', []);
+        $selectedsize = $request->input('size', []);
+        $searchKeyword = $request->input('search', '');
+        $disabledate = $request->input('filter_date');
 
-         $startDate = null;
-         $endDate = null;
+        $startDate = null;
+        $endDate = null;
 
-         if (!empty($disabledate) && strpos($disabledate, ' - ') !== false) {
-             [$startDate, $endDate] = explode(' - ', $disabledate);
-         }
+        if (!empty($disabledate) && strpos($disabledate, ' - ') !== false) {
+            [$startDate, $endDate] = explode(' - ', $disabledate);
+        }
 
-         $authUserId = auth()->user()->id;
+        $authUserId = auth()->user()->id;
 
-         $query = Product::with('disableDates', 'ratings')
-             ->where('user_id', '!=', $authUserId)
-             ->where('status', '1');
+        $query = Product::with('disableDates', 'ratings')
+            ->where('user_id', '!=', $authUserId)
+            ->where('status', '1');
 
-         if (!empty($searchKeyword)) {
-             $query->where('name', 'LIKE', '%' . $searchKeyword . '%');
-         }
+        if (!empty($searchKeyword)) {
+            $query->where('name', 'LIKE', '%' . $searchKeyword . '%');
+        }
 
-         $query->applyFilters();
+        $query->applyFilters();
 
-         if ($startDate && $endDate) {
-             $query->filterByDateRange($startDate, $endDate);
-         }
+        if ($startDate && $endDate) {
+            $query->filterByDateRange($startDate, $endDate);
+        }
 
-         $products = $query->orderBy('created_at', 'desc')->get();
+        $products = $query->orderBy('created_at', 'desc')->get();
 
-         return view('index', compact('products', 'categories'))->with([
-             'selectedLocation' => $this->selectedLocation,
-             'selectedCategories' => $selectedCategories,
-             'selectedSubcategories' => $selectedSubcategories,
-             'selectedcolor' => $selectedcolor,
-             'selectedcondition' => $selectedcondition,
-             'selectedbrands' => $selectedbrands,
-             'selectedsize' => $selectedsize,
-         ]);
-     }
+        return view('index', compact('products', 'categories'))->with([
+            'selectedLocation' => $this->selectedLocation,
+            'selectedCategories' => $selectedCategories,
+            'selectedSubcategories' => $selectedSubcategories,
+            'selectedcolor' => $selectedcolor,
+            'selectedcondition' => $selectedcondition,
+            'selectedbrands' => $selectedbrands,
+            'selectedsize' => $selectedsize,
+        ]);
+    }
 
 
 
@@ -93,40 +93,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // public function view(Request $request, $id)
-    // {
 
-
-    //     $id = jsdecode_userdata($id);
-    //     // dd("TODAY prodcut id is : ",$id);
-    //     $product = $this->getProduct($request, $id);
-    //     if (is_null($product)) {
-    //         return redirect()->back()->with('message', __('product.messages.notAvailable'));
-    //     }
-    //     $security = $this->getSecurityAmount($product);
-    //     $insurance = $this->getInsuranceAmount($product);
-    //     $rating_progress = $this->getratingprogress($product);
-    //     $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
-    //         ->where('id', '<>', $product->id)
-    //         ->where('category_id', $product->category_id)->whereHas('category', function ($q) {
-    //             $q->where('status', '1');
-    //         })
-    //         ->where('user_id', '!=', auth()->user()->id)
-    //         ->inRandomOrder()
-    //         ->limit(5)
-    //         ->get();
-
-    //     $layout_class = 'single_product';
-
-
-    //     $neighborhoodcity =   NeighborhoodCity::where('id', $product->neighborhood_city)->first();
-    //     $city =   NeighborhoodCity::where('id', $neighborhoodcity->parent_id)->first();
-
-    //     // $nonDates = json_encode($nonDates);
-
-
-    //     return view('product-detail', compact('product', 'relatedProducts', 'security', 'insurance', 'layout_class', 'rating_progress', 'neighborhoodcity', 'city'))->with(['selectedLocation' => $this->selectedLocation]);
-    // }
 
     public function view(Request $request, $id)
     {
@@ -139,8 +106,7 @@ class ProductController extends Controller
         if (is_null($product)) {
             return redirect()->back()->with('message', __('product.messages.notAvailable'));
         }
-        // $security = $this->getSecurityAmount($product);
-        // $insurance = $this->getInsuranceAmount($product);
+
         $rating_progress = $this->getratingprogress($product);
         $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
             ->where('id', $product->id)
@@ -171,22 +137,6 @@ class ProductController extends Controller
         sort($disable_dates);
 
 
-        // dd($disable_dates);
-
-        // dd("here",$disabledDates);
-        // $disable_dates = [];
-        // if ($disabledDates->isNotEmpty()) {
-        //     $sortedDates = $disabledDates->sortBy('disable_date');
-        //     $firstDate = \Carbon\Carbon::parse($sortedDates->first()->disable_date)->format('Y-m-d');
-        //     $lastDate = \Carbon\Carbon::parse($sortedDates->last()->disable_date)->format('Y-m-d');
-
-        //     $disable_dates[] = $firstDate . ' - ' . $lastDate;
-        // } else {
-        //     $disable_dates[] = '';
-        // }
-
-
-        // dd($querydates,$disable_dates);
         return view('product-detail', compact('product', 'productImages', 'querydates', 'relatedProducts', 'rating_progress', 'disable_dates'));
     }
 

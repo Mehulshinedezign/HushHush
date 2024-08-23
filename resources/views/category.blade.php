@@ -80,10 +80,12 @@
                                 <div class="price-input-container">
                                     <div class="price-input">
                                         <div class="price-field left">
+                                            <span class="dollar-icon"><i class="fa-solid fa-dollar-sign"></i></span>
                                             <input type="number" name="min_value" id="selectedMinValue"
                                                 class="min-input" value="{{ request()->input('min_value', 0) }}">
                                         </div>
                                         <div class="price-field right">
+                                            <span class="dollar-icon"><i class="fa-solid fa-dollar-sign"></i></span>
                                             <input type="number" name="max_value" id="selectedMaxValue"
                                                 class="max-input" value="{{ request()->input('max_value', 10000) }}">
                                         </div>
@@ -336,10 +338,17 @@
             }
 
             jQuery('.daterange-cus').each(function() {
+                var option = 'right';
+                if(jQuery(this).hasClass('custom-left-open')){
+                    option = 'left';
+                    }
+
                 jQuery(this).daterangepicker({
                     startDate: start,
                     endDate: end,
                     autoUpdateInput: false,
+                    opens: option,
+                    drops:'auto',
                     locale: {
                         format: customDateFormat,
                         separator: ' - ',

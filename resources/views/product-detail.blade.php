@@ -175,9 +175,9 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                            <h4>Size :</h4>
-                                            <p>{{ $product->size ?? 'N/A' }}</p>
-                                        </div> -->
+                                                <h4>Size :</h4>
+                                                <p>{{ $product->size ?? 'N/A' }}</p>
+                                            </div> -->
 
 
                             </div>
@@ -239,7 +239,7 @@
                                     <div class="lender-profile-box">
                                         <div class="lender-dp-box">
                                             <a href="{{ route('lenderProfile', jsencode_userdata($product->user_id)) }}">
-                                                @if ($product->retailer->profile_file )
+                                                @if ($product->retailer->profile_file)
                                                     <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
                                                         alt="Profile Picture">
                                                 @else
@@ -439,9 +439,18 @@
                                             value="{{ $user->userDetail->complete_address }}">
                                         <label for="ship_to_me">Ship it to me</label><br>
 
-                                        <input type="text" id="selected_value" readonly class="form-control" placeholder="Selected option will appear here">
-                                        <input type="text" id="profile_message" class="message" style="display: none;" value="Please complete your profile to enable this option." readonly>
+                                        <input type="text" id="selected_value" readonly class="form-control"
+                                            placeholder="Selected option will appear here">
+                                        <input type="text" id="profile_message" class="message"
+                                            style="display: none;"
+                                            value="Please complete your profile to enable this option." readonly>
+                                            @error('delivery_option')
+                                            <span class="invalid-feedback" role="alert">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
                                     </div>
+
 
                                 </div>
 
@@ -653,10 +662,15 @@
                 var endDate = picker.endDate;
                 var duration = endDate.diff(startDate, 'days');
 
-                if (duration < 6) {
+                // Correctly assigning the value from the Blade template
+                var count = {{ $product->min_days_rent_item }};
+
+                // console.log(count);
+
+                if (duration < count-1) {
                     iziToast.error({
                         title: 'Error',
-                        message: 'Please select a date range of at least min rent days.',
+                        message: 'Please select a date range of at least ' + count + ' days.',
                         position: 'topRight',
                     });
                     $(this).val('');
@@ -704,7 +718,7 @@
                     if (this.checked) {
                         const selectedValue = this.value;
                         selectedValueInput.value =
-                        selectedValue; // Set the value of the readonly input field
+                            selectedValue; // Set the value of the readonly input field
 
                         // Check if the 'Ship it to me' option is selected and the profile is not complete
                         if (this.id === 'ship_to_me' && !isAddressComplete) {
@@ -714,7 +728,7 @@
                                 position: 'topRight',
                             });
                             profileMessage.style.display =
-                            'block'; // Show profile completion message
+                                'block'; // Show profile completion message
                         } else {
                             profileMessage.style.display = 'none'; // Hide message
                         }

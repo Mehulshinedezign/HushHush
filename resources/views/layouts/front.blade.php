@@ -321,7 +321,7 @@
                                             <div class="formfield">
                                                 <input type="text"
                                                     class="produt_input form-control form-class @error('country') is-invalid @enderror"
-                                                    placeholder="country" name="country" id="product_country">
+                                                    placeholder="Country" name="country" id="product_country">
                                                 @error('country')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
@@ -336,7 +336,7 @@
                                             <div class="formfield">
                                                 <input type="text"
                                                     class="produt_input form-control form-class @error('state') is-invalid @enderror"
-                                                    placeholder="country" placeholder="state" name="state"
+                                                    placeholder="State" placeholder="state" name="state"
                                                     id="product_state">
                                                 @error('state')
                                                     <span class="invalid-feedback" role="alert">
@@ -348,11 +348,11 @@
                                     </div>
                                     <div class="col-lg-3 col-md-2 col-sm-12 product_sub_data">
                                         <div class="form-group">
-                                            <label for="">City*</label>
+                                            <label for="">City</label>
                                             <div class="formfield">
                                                 <input type="text"
                                                     class="produt_input form-control form-class @error('city') is-invalid @enderror"
-                                                    placeholder="country" placeholder="city" name="city"
+                                                    placeholder="City" placeholder="city" name="city"
                                                     id="product_city">
                                                 @error('city')
                                                     <span class="invalid-feedback" role="alert">

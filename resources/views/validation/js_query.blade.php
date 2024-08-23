@@ -6,18 +6,24 @@ jQuery(document).ready(function(){
         },
         description:{
             required: true,
-          
+
         },
+        // delivery_option:{
+        //     required: true,
+        // }
     }
     const messages = {
         rental_dates: {
-            required:'Please Select proper date range',
+            required:'Please select proper date range',
         },
         description: {
             required: 'Please enter description',
-            
-        },        
-    };    
+
+        },
+        // delivery_option:{
+        //     required: 'Please select location ',
+        // }
+    };
     handleValidation('Sendquery', rules, messages);
 });
 </script>
