@@ -2455,6 +2455,9 @@ header.cust-header.fixed nav.sticky-nav {
 .rental-request-wrapper .tb-table table{
     min-width: 1300px;
 }
+table.inquiry-table {
+    min-width: 1360px !important;
+}
 
 .bottom-nav .container{
     gap: 30px;

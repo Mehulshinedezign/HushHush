@@ -458,6 +458,8 @@
 
     .copyright-links ul {
         gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     .pro-quality-info {
@@ -743,6 +745,9 @@
         grid-template-columns: repeat(1, 1fr);
         gap: 60px 25px;
     }
+    .chat-list-box {
+        max-width: 300px;
+    }
 
 }
 
@@ -771,7 +776,7 @@
     .copyright-links ul {
         flex-wrap: wrap;
         justify-content: center;
-        gap: 0 10px;
+        gap: 0 20px;
     }
 
     .pro-slider-section {
@@ -1317,7 +1322,39 @@
     .section-heading h2 {
         font-size: 22px;
     }
-
+    .product-slider-heading h3 {
+        font-size: 20px;
+        line-height: 30px;
+    }
+    .product-prize-rating {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-direction: column;
+    }
+    .product-card-detail h4 {
+        font-size: 14px;
+    }
+    .profile-banner-name h2 {
+        position: relative;
+        z-index: 9;
+    }
+    .profile-banner-sec {
+        padding: 30px 0px 120px;
+    }
+    .profile-about-detail::before, .profile-about-detail::after {
+        display: none;
+    }
+    .profile-about-detail {
+        padding: 10px 0px;
+        position: relative;
+    }
+    .product-slider-sec-min-height {
+        padding: 30px 0px;
+    }
+    .list-empty-box {
+        max-width: 240px;
+    }
 }
 
 @media screen and (max-width:575px) {
@@ -1361,5 +1398,37 @@
     .filter-fotter-btns a,.filter-fotter-btns button{
         width: 100%;
     }
+    .product-slider-heading {
+        margin: 0px 0 60px;
+    }
+    .profile-detail-box {
+        box-shadow: 0px 23px 40px 0px #00000014;
+        padding: 49px 20px;
+    }
+    .profile-address-detail {
+        padding: 15px 15px 15px 15px;
+    }
+    .profile-banner-name h2 {
+        font-size: 22px;
+    }
+    .custom-tab .custom-tab-list li a {
+        font-size: 14px;
+    }
+    .custom-tab .custom-tab-list {
+        grid-gap: 0px;
+    }
+    .list-empty-box {
+        max-width: 170px;
+    }
+    .list-empty-box h3 {
+        font-size: 16px;
+    }
+    .rental-header h2 {
+        font-size: 22px;
+        font-weight: 600;
+        line-height: 24px;
+    }
 
 }
+
+

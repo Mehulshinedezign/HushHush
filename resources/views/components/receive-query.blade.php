@@ -2,7 +2,7 @@
     <div class="inquiry-list-main mt-4">
         <div class="db-table">
             <div class="tb-table">
-                <table class="gfbejh">
+                <table class="inquiry-table">
                     <thead>
                         <tr>
                             <th>Product</th>

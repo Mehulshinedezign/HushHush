@@ -138,21 +138,28 @@ class ProfileController extends Controller
             $user->update($request->all());
 
             // User details entry
+            $completeadrres =$request->complete_address ?? $user->userDetail->complete_address ?? Null;
             $address1 = $request->address1 ?? $user->userDetail->address1 ?? Null;
             $address2 = $request->address2 ?? $user->userDetail->address2 ?? Null;
             $about = ($request->about == '') ? NUll : $request->about;
-            $country = $request->country_id;
-            $state = $request->state_id;
-            $city = $request->city_id;
+            $country = $request->country ??$user->userDetail->country ?? Null;
+            $state = $request->state ?? $user->userDetail->state ?? Null;
+            $city = $request->city ?? $user->userDetail->city ?? Null;
+            $zipcode =$request->zipcode ??$user->userDetail->zipcode ?? Null;
+            // $about = $request->about_me ?? $user->userDetail->about?? null;
             $userDetails = UserDetail::updateOrCreate(
                 ['user_id' => $user->id],
                 [
+                    'complete_address'=> $completeadrres,
                     'address1' => $address1,
                     'address2' => $address2,
-                    'country_id' => $country,
-                    'state_id' => $state,
-                    'city_id' => $city,
-                    'about' => $about
+                    'country' => $country,
+                    'state' => $state,
+                    'city' => $city,
+                    'about' => $about,
+                    'zipcode'=>$zipcode,
+
+
                 ]
             );
 

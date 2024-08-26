@@ -118,12 +118,15 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $fullName = $data['first_name'] . ' ' . $data['last_name'];
-
+        $number =$data['phone_number']['full'];
+        $main =$data['phone_number']['main'];
+        $number1=$this->splitDynamicCountryCode($number,$main);
         $signUpData = User::create([
             'name' => $fullName,
             'status' => '0',
             'email' => $data['email'],
-            'phone_number' => $data['phone_number']['main'],
+            'country_code' => $number1['country_code'],
+            'phone_number' => $number1['number'],
             'password' => Hash::make($data['password']),
             'email_verification_token' => Str::random(50)
         ]);
@@ -158,6 +161,31 @@ class RegisterController extends Controller
 
         return $signUpData;
     }
+
+    function splitDynamicCountryCode($number1, $number2)
+    {
+        $clean1 = preg_replace('/[^0-9]/', '', $number1);
+        $clean2 = preg_replace('/[^0-9]/', '', $number2);
+
+        $diff = strlen($clean1) - strlen($clean2);
+
+        if ($diff > 0) {
+            $countryCode = '+' . substr($clean1, 0, $diff);
+            $number = substr($clean1, $diff);
+        } else {
+            $countryCode = '';
+            $number = $clean2;
+        }
+
+        return [
+            'country_code' => $countryCode,
+            'number' => $number
+        ];
+    }
+
+
+
+
 
 
     protected function register(Request $request)

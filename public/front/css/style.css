@@ -103,7 +103,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 3px;
+    width: 2px;
 }
 
 /* Track */
@@ -378,6 +378,7 @@ footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .copyright-links ul {
@@ -982,16 +983,16 @@ span.remove-image {
 
 .list-empty-box {
     max-width: 500px;
-    margin: 0 auto;
+    margin: 15px auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
 }
-
 .list-empty-box img {
     max-width: 300px;
     text-align: center;
+    width: 100%;
 }
 
 .duel-select-field .form-icon {
@@ -2693,7 +2694,9 @@ form#searchForm {
     padding: 10px 20px 10px !important;
 }
 
-
+.tb-table::-webkit-scrollbar:horizontal{
+    height: 1px;
+}
 
 
 
