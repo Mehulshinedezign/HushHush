@@ -2030,10 +2030,10 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 @media screen and (max-width: 768px) {
-    .main {
+    /* .main {
         width: 80%;
         margin-right: 5px;
-    }
+    } */
 
     .custom-wrapper {
         width: 100%;
@@ -2190,10 +2190,10 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 @media screen and (max-width: 768px) {
-    .main {
+    /* .main {
         width: 80%;
         margin-right: 5px;
-    }
+    } */
 
     .custom-wrapper {
         width: 100%;
@@ -2550,10 +2550,10 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 @media screen and (max-width: 768px) {
-    .main {
+    /* .main {
         width: 80%;
         margin-right: 5px;
-    }
+    } */
 
     .custom-wrapper {
         width: 100%;

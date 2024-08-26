@@ -241,6 +241,8 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
 
 
             Route::post('order/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
+
+            Route::get('user/notification', [App\Http\Controllers\Api\ProfileController::class, 'test']);
         });
     });
 });

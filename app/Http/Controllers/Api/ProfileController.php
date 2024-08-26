@@ -133,6 +133,7 @@ class ProfileController extends Controller
             if ($request->hasFile('profile_pic')) {
                 $profilePicPath = $request->file('profile_pic')->store('profile_pictures', 'public');
                 $user['profile_url'] = $profilePicPath;
+                $user['profile_file'] = $profilePicPath;
             }
             $user->update($request->all());
 
@@ -318,5 +319,36 @@ class ProfileController extends Controller
 
             ],
         ], 200);
+    }
+
+
+    public function test()
+    {
+        // Check if the user is authenticated
+        if (!auth()->check()) {
+            return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
+        }
+
+        $user = auth()->user();
+
+        // Ensure the user has a pushToken and that the FCM token is available
+        if (!$user->pushToken || !$user->pushToken->fcm_token) {
+            return response()->json(['status' => 'error', 'message' => 'FCM token not found'], 404);
+        }
+        // dd($user->pushToken->fcm_token);
+
+        $payload = [
+            'id' => 'dhfgdh',
+            'content' => 'You have received an inquiry about a product'
+        ];
+
+        // Call the function to send push notifications
+        $response = sendPushNotifications($user->pushToken->fcm_token, $payload);
+
+        if ($response === false) {
+            return response()->json(['status' => 'error', 'message' => 'Failed to send notification'], 500);
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'Notification sent successfully', 'response' => $response]);
     }
 }

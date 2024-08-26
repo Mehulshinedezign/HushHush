@@ -523,6 +523,7 @@ class ProfileController extends Controller
                 $file = $request->file('profile_pic');
                 $path = $file->store('profiles', 'public');
                 $data['profile_file'] = $path;
+                $data['profile_url'] = $path;
             }
 
             $userdetail = [

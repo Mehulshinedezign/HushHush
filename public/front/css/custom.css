@@ -1293,7 +1293,7 @@ border-color: #000;
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0 1px;
-    /* min-width: 1150px; */
+    min-width: 1150px;
     background: #F1F2F3;
 }
 
@@ -2430,7 +2430,7 @@ header.cust-header.fixed nav.sticky-nav {
     width: 100%;
     background: #fff;
     top: 0;
-    z-index: 9999;
+    z-index: 999;
     box-shadow: 0px 0px 10px #0606061f;
 }
 
@@ -2448,4 +2448,14 @@ header.cust-header.fixed nav.sticky-nav {
 
 .breadcrum-main .breadcrum-list:last-child::after {
     display: none;
+}
+
+
+
+.rental-request-wrapper .tb-table table{
+    min-width: 1300px;
+}
+
+.bottom-nav .container{
+    gap: 30px;
 }
