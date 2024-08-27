@@ -158,16 +158,21 @@
                                             <label for="">Category/Subcategory</label>
                                             <div class="duel-select-field">
                                                 <div class="formfield">
-                                                    <select name="category" class="parent_category produt_input form-class @error('category') is-invalid @enderror" id="parent-category">
+                                                    <select name="category"
+                                                        class="parent_category produt_input form-class @error('category') is-invalid @enderror"
+                                                        id="parent-category">
                                                         <option value="">Category</option>
                                                         @foreach (getParentCategory() as $category)
-                                                            <option value="{{ jsencode_userdata($category->id) }}" data-subcategories="{{ getChild($category->id) }}" data-fetchsize="{{ $category->name }}">
+                                                            <option value="{{ jsencode_userdata($category->id) }}"
+                                                                data-subcategories="{{ getChild($category->id) }}"
+                                                                data-fetchsize="{{ $category->name }}">
                                                                 {{ $category->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
                                                     <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                            alt="img">
                                                     </span>
                                                     @error('category')
                                                         <span class="invalid-feedback" role="alert">
@@ -177,11 +182,13 @@
                                                 </div>
 
                                                 <div class="formfield">
-                                                    <select name="subcategory" id="subcategory" class="produt_input form-class @error('subcategory') is-invalid @enderror">
+                                                    <select name="subcategory" id="subcategory"
+                                                        class="produt_input form-class @error('subcategory') is-invalid @enderror">
                                                         <option value="">Subcategory</option>
                                                     </select>
                                                     <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                            alt="img">
                                                     </span>
                                                 </div>
                                                 @error('subcategory')
@@ -588,7 +595,7 @@
         </div>
     </div>
     @php
-        $user=auth()->user();
+        $user = auth()->user();
     @endphp
 
     <div class="modal fade addbank-Modal" id="addaddress-Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -599,7 +606,8 @@
                     <form action="{{ route('change-Profile', $user) }}" method="GET">
                         <h3 class="modal-title" id="exampleModalLabel">Add your Address</h3>
                         @csrf
-                        <img src="{{ asset('front/images/—Pngtree—address icon isolated on abstract_5218933.png') }}" alt="" width="200" height="200">
+                        <img src="{{ asset('front/images/—Pngtree—address icon isolated on abstract_5218933.png') }}"
+                            alt="" width="200" height="200">
                         <div class="profile-select-box border-disabled">
                             <div class="profile-check-list">
 
@@ -731,26 +739,27 @@
     <script src="{{ asset('js/custom/common.js') }}?ver={{ now() }}"></script>
     <script>
         jQuery(document).ready(function() {
-    $('#parent-category').on('change', function() {
-        var selectedOption = $(this).find('option:selected');
-        var subcategories = selectedOption.data('subcategories');
-        var subcategoryDropdown = $('#subcategory');
+            $('#parent-category').on('change', function() {
+                var selectedOption = $(this).find('option:selected');
+                var subcategories = selectedOption.data('subcategories');
+                var subcategoryDropdown = $('#subcategory');
 
-        // Clear the subcategory dropdown
-        subcategoryDropdown.empty();
-        subcategoryDropdown.append('<option value="">Subcategory</option>');
+                // Clear the subcategory dropdown
+                subcategoryDropdown.empty();
+                subcategoryDropdown.append('<option value="">Subcategory</option>');
 
-        // If no category is selected, stop here
-        if (!subcategories || subcategories.length === 0) {
-            return;
-        }
+                // If no category is selected, stop here
+                if (!subcategories || subcategories.length === 0) {
+                    return;
+                }
 
-        // Populate the subcategory dropdown with the received data
-        subcategories.forEach(function(subcategory) {
-            subcategoryDropdown.append('<option value="' + subcategory.id + '">' + subcategory.name + '</option>');
+                // Populate the subcategory dropdown with the received data
+                subcategories.forEach(function(subcategory) {
+                    subcategoryDropdown.append('<option value="' + subcategory.id + '">' +
+                        subcategory.name + '</option>');
+                });
+            });
         });
-    });
-});
 
         $('.custom-slider').slick({
             centerPadding: '60px',
@@ -988,9 +997,10 @@
                 autocomplete.addListener('place_changed', function() {
                     var place = autocomplete.getPlace();
 
-                    $(' #product_address1,#product_address2,#product_country, #product_state, #product_city','#zipcode')
+                    $(' #product_address1,#product_address2,#product_country, #product_state, #product_city',
+                            '#zipcode')
                         .val('');
-                        var zipcode = null;
+                    var zipcode = null;
 
                     for (var i = 0; i < place.address_components.length; i++) {
                         var addressType = place.address_components[i].types[0];
@@ -1010,8 +1020,9 @@
                             $('#product_city').val(place.address_components[i].long_name);
                         }
                         if (addressType === 'postal_code') {
-                            $('#zipcode').val(place.address_components[i].long_name);// Assign zipcode if available
-                            }
+                            $('#zipcode').val(place.address_components[i]
+                                .long_name); // Assign zipcode if available
+                        }
                     }
 
                     function setReadonly(selector) {
@@ -1104,8 +1115,8 @@
     {{-- end header --}}
 
     {{-- chat --}}
-    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script>
         const firebaseConfig = {
             apiKey: "{{ env('APIKEY') }}",
@@ -1129,12 +1140,112 @@
         var last_msg_update_url = APP_URL + '/retailer/lastchat/update';
         var search_url = APP_URL + '/retailer/chat/search/';
         var chat_image_store_url = APP_URL + '/retailer/chat/image';
-        // const fireBaseListeners = {};
+        var chat_page_url = APP_URL + '/chat';
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        var senderid = parseInt(senderId);
+        var dbRef = db.ref('/users/' + senderid);
+    </script>
+
+    <script>
+        // Initialize unseenMessageListenersOverall as an object
+        const unseenMessageListenersOverall = {};
+
+        array_list = checkmessagecount();
+        array_list.then(chat_list => {
+            var messageCount = countSingleChatCount(chat_list);
+            messageCount.then(m => {
+                // show total number of unseen message in the header
+                $('.userIconbtn').text(m);
+            });
+
+            // Set up a listener for new messages in each chat
+            chat_list.forEach(chatId => {
+
+                // If a listener already exists for this chat, remove it first
+                if (unseenMessageListenersOverall[chatId]) {
+                    db.ref('messeges/' + chatId).off('child_added', unseenMessageListenersOverall[chatId]);
+                    console.log('Existing listener removed for:', chatId);
+                }
+
+                // Add a new listener for child_added
+                unseenMessageListenersOverall[chatId] = db.ref('messeges/' + chatId).on('child_added', (
+                    snap) => {
+                    const message = snap.val();
+
+                    // Check if the message is unseen and update the count
+                    if (message && message.isSeen === 'false') {
+                        // Update the unseen message count
+                        messageCount.then(currentCount => {
+                            let updatedCount = currentCount + 1;
+                            $('.userIconbtn').text(updatedCount);
+                        });
+                    }
+
+                    // Alternatively, you can update the count by re-checking all messages
+                    countSingleChatCount(chat_list).then(updatedCount => {
+                        if(updatedCount > 0){
+                            $('.userIconbtn').text(updatedCount);
+                        }else{
+                            $('.userIconbtn').text('');
+                        }
+                    });
+                });
+            });
+        });
+
+        // count total number of unseen message 
+        async function countSingleChatCount(chat_list) {
+            return new Promise(async (res, rej) => {
+                try {
+                    let totalMessage = 0;
+
+                    for (let index = 0; index < chat_list.length; index++) {
+                        const unseenMessageSnapshot = await db.ref('messeges/' + chat_list[index]).once(
+                            'value');
+
+                        if (unseenMessageSnapshot.exists()) {
+                            unseenMessageSnapshot.forEach(message => {
+                                const msg = message.val();
+
+                                // Ensure the message object is not null and has the isSeen property
+                                if (msg && msg.isSeen === 'false') {
+                                    totalMessage++;
+                                }
+                            });
+                        }
+
+                        if (index === chat_list.length - 1) {
+                            res(totalMessage);
+                        }
+                    }
+                } catch (error) {
+                    rej(error);
+                }
+            });
+        }
+
+        async function checkmessagecount() {
+            return new Promise((res, rej) => {
+                var array_list = [];
+                dbRef.once("value").then(snap => {
+                    snap.forEach((message) => {
+                        receiver = parseInt(`${message.key}`);
+                        sender = parseInt(`${message.val().id}`);
+                        var chatKey = `${sender}_${receiver}`;
+                        array_list.push(chatKey);
+                    });
+                    res(array_list);
+                }).catch(error => {
+                    rej(error);
+                });
+            });
+        }
     </script>
 
     <script defer src="{{ asset('js/custom/chat2.js') }}"></script>
     <script defer src="{{ asset('js/custom/chatlist.js') }}"></script>
-    {{-- end chat --}}
 
     @include('validation')
     @include('validation.js_product')

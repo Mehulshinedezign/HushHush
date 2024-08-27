@@ -80,6 +80,7 @@
                                             password</a></li>
                                     <li><a class="dropdown-item" href="{{ route('common.chat') }}"><i
                                                 class="fa-solid fa-comment"></i>Chat
+                                                <span class="userIconbtn"></span>
                                         </a></li>
                                     {{-- <li><a class="dropdown-item" href="{{ route('order.spent.transaction') }}"><i
                                                 class="fa-solid fa-comment"></i>Spent Transaction

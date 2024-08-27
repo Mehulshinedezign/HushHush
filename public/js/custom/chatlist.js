@@ -1,4 +1,4 @@
-var dbRef = db.ref(`/users/` + senderId);
+var dbRef = db.ref(`/users/` + senderid);
 
 let first = true;
 let response = new Promise((resolve, reject) => {
@@ -41,6 +41,7 @@ function getFirstChatData() {
     checkmessagecount();
 }
 
+var unseenMessageListeners = {}; // Object to store listener references by chat key
 
 function checkmessagecount() {
     var elements = $('.chatlist').find('li');
@@ -54,42 +55,82 @@ function checkmessagecount() {
     })
 }
 
-// total number of unseen messages
-const unseenMessageListeners = {}; // Object to store listener references by chat key
-
 function unSeenMessages(sender, receiver) {
     const chatKey = `${receiver}_${sender}`;
 
     // Remove existing listener if it exists
     if (unseenMessageListeners[chatKey]) {
-        db.ref('messeges/' + chatKey).off('child_added', unseenMessageListeners[chatKey]);
+        db.ref('messeges/' + chatKey).off('child_added', unseenMessageListeners[chatKey].childAdded);
+        db.ref('messeges/' + chatKey).off('child_changed', unseenMessageListeners[chatKey].childChanged);
     }
 
-    // Define new listener function
+    // Initialize count variable
     let count = 0;
-    const listener = db.ref('messeges/' + chatKey).on('child_added', (snap) => {
+    let totalMessage = 0;
+    // Define the child_added listener
+    const childAdded = db.ref('messeges/' + chatKey).on('child_added', (snap) => {
         const message = snap.val();
+        if(message.isSeen==='true')
+        {
+            totalMessage +=1;
+        }
 
         if (message.isSeen === 'false') {   
             count += 1;
         }
-
-
-        // Update the count on the UI
-        if(count > 0){
-
-            $("#" + sender + 'count').text(count);
-            $("#" + sender + 'count').removeClass('d-none');
-        }else{
-            $("#" + sender + 'count').addClass('d-none');
-        }
+       
+        updateCountUI(sender, count);
+        updateTotalUnseenMessages();    
     });
 
-    // Store the new listener function
-    unseenMessageListeners[chatKey] = listener;
+    // Define the child_changed listener
+    const childChanged = db.ref('messeges/' + chatKey).on('child_changed', (snap) => {
+        const message = snap.val();
+        if (message.isSeen === 'true') {
+            count -= 1;
+           
+
+        } else if (message.isSeen === 'false' && !message.isSeenBefore) {
+            count += 1;
+           
+        }
+        
+        updateCountUI(sender, count);
+        updateTotalUnseenMessages();
+    });
+
+    // Store the new listeners
+    unseenMessageListeners[chatKey] = {
+        childAdded,
+        childChanged
+    };
+}
+// Update the total unseen message count for the user
+function updateTotalUnseenMessages() {
+    let totalUnseenCount = 0;
+    for (const chatKey in unseenMessageListeners) {
+        const countElement = $("#" + chatKey.split('_')[1] + 'count');
+        const count = parseInt(countElement.text()) || 0;
+        totalUnseenCount += count;
+    }
+
+    const userElement = $('.userIconbtn');
+    if (totalUnseenCount > 0) {
+        userElement.text(totalUnseenCount);
+    } else {
+        userElement.text('');
+    }
 }
 
-
+function updateCountUI(sender, count) {
+    const countElement = $("#" + sender + 'count');
+    if (count > 0) {
+        countElement.text(count);
+        countElement.removeClass('d-none');
+    } else {
+        countElement.addClass('d-none');
+    }
+}
 
 
 const onlineStatusListeners = {}; // Object to store listener references by receiver ID
