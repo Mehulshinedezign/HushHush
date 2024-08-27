@@ -1,6 +1,6 @@
 @extends('layouts.front')
 @section('content')
-    <section class="od-table-section">
+    <section class="od-table-section min-height-100">
         <div class="container">
             <div class="od-table-wrapper">
                 <div class="back-block mb-2">

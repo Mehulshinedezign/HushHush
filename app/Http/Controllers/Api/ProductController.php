@@ -489,6 +489,15 @@ class ProductController extends Controller
                 }
             }
 
+            $createdDate = Carbon::now()->startOfDay();
+            for ($i = 1; $i <= 4; $i++) {
+                $futureDate = $createdDate->copy()->addDays($i);
+                ProductDisableDate::create([
+                    'product_id' => $product->id,
+                    'disable_date' => $futureDate->format('Y-m-d'),
+                ]);
+            }
+
             if ($request->hasFile('images') && count($request->images)) {
                 foreach ($request->images as $index => $image) {
                     $fileName = $product->id . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();

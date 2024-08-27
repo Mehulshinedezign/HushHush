@@ -187,6 +187,7 @@
     </div>
 </nav>
 </header>
+@include('common.alert')
 @push('scripts')
 <script>
     function clearForm() {

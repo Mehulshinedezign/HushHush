@@ -1,5 +1,3 @@
-
-
 <section class="home-sec">
     <div class="container">
         <div class="home-wrapper">
@@ -281,7 +279,7 @@
                             @endforeach
                         @else
                             <div class="list-empty-box">
-                                <img src="{{ asset('front/images/no-products.svg') }}">
+                                <img src="{{ asset('front/images/Empty 1.svg') }}">
                                 <h3 class="text-center">No Products Available</h3>
                             </div>
                         @endif
@@ -346,16 +344,16 @@
 
             jQuery('.daterange-cus').each(function() {
                 var option = 'right';
-                if(jQuery(this).hasClass('custom-left-open')){
+                if (jQuery(this).hasClass('custom-left-open')) {
                     option = 'left';
-                    }
+                }
 
                 jQuery(this).daterangepicker({
                     startDate: start,
                     endDate: end,
                     autoUpdateInput: false,
                     opens: option,
-                    drops:'auto',
+                    drops: 'auto',
                     locale: {
                         format: customDateFormat,
                         separator: ' - ',
@@ -685,11 +683,18 @@
 
             $('.filter-rating-inner').click(function() {
                 var value = $(this).data('value');
-                $('.filter-rating-inner').removeClass('active');
-                $(this).addClass('active').addClass('active');
 
-                $('#rating').val(value);
+                // Check if the clicked rating is already active
+                if ($(this).hasClass('active')) {
+                    $(this).removeClass('active'); // Remove active class
+                    $('#rating').val(''); // Clear the value in the hidden input
+                } else {
+                    $('.filter-rating-inner').removeClass('active'); // Remove active class from all
+                    $(this).addClass('active'); // Add active class to clicked element
+                    $('#rating').val(value); // Set the value in the hidden input
+                }
             });
+
 
             function getQueryParam(param) {
                 var urlParams = new URLSearchParams(window.location.search);

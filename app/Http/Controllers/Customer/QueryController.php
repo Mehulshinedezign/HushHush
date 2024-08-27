@@ -179,7 +179,7 @@ class QueryController extends Controller
             }
 
             DB::commit();
-            return redirect()->back()->with('success', 'Query accepted successfully.');
+            return redirect()->back()->with('success', 'Offer sent successfully.');
 
         } catch(\Exception $e){
             DB::rollback();

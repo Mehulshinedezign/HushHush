@@ -391,7 +391,7 @@
                                             <div class="formfield">
                                                 <input type="text" name="non_available_dates"
                                                     id="non_available_date" placeholder="Select Dates"
-                                                    class="form-control daterange-cus" readonly>
+                                                    class="form-control daterange-cus">
                                                 <span class="form-icon cal-icon">
                                                     <img src="{{ asset('front/images/calender-icon.svg') }}"
                                                         alt="img">
@@ -760,6 +760,16 @@
                 });
             });
         });
+
+        $('#non_available_date').on('keypress', function(e) {
+            e.preventDefault(); // Prevent any keypress event
+        });
+
+        // Alternatively, if you want to prevent only specific keys like letters or numbers, you can do:
+        $('#non_available_date').on('keypress', function(e) {
+            return false; // Blocks all keyboard inputs
+        });
+
 
         $('.custom-slider').slick({
             centerPadding: '60px',
@@ -1185,9 +1195,9 @@
 
                     // Alternatively, you can update the count by re-checking all messages
                     countSingleChatCount(chat_list).then(updatedCount => {
-                        if(updatedCount > 0){
+                        if (updatedCount > 0) {
                             $('.userIconbtn').text(updatedCount);
-                        }else{
+                        } else {
                             $('.userIconbtn').text('');
                         }
                     });

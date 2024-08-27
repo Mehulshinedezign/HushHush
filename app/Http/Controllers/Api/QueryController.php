@@ -105,6 +105,7 @@ class QueryController extends Controller
                         'lender' => $lender->name ?? null,
                         'lender_profile_pic' => $lender->frontend_profile_url ?? null,
                         'lender_id' => $lender->id ?? null,
+                        'created_at'=>$query->created_at,
                     ];
                 });
 
@@ -169,6 +170,7 @@ class QueryController extends Controller
                         'borrower' => $borrower->name ?? null,
                         'borrower_profile_pic' => $borrower->frontend_profile_url ?? null,
                         'borrower_id' => $borrower->id ?? null,
+                        'created_at'=>$query->created_at,
                     ];
                 });
                 // dd('here');

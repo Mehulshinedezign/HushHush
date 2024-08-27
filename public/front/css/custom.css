@@ -2466,3 +2466,24 @@ table.inquiry-table {
 .bottom-nav .container{
     gap: 30px;
 }
+
+
+.add-adress-alert strong p {
+    color: red;
+
+    animation: blinkit 0.6s infinite ;
+}
+.add-adress-alert strong p a{
+    color: red;
+    text-decoration: underline;
+}
+.add-adress-alert{
+    padding: 0.2rem 1rem;
+    background-color: #f8d7da61;
+    margin: 0;
+}
+.pro-desc-info-box:first-child {
+    border-left: 0;
+    padding-left: 0px;
+}
+
