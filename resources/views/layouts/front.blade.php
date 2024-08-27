@@ -597,7 +597,7 @@
     @php
         $user = auth()->user();
     @endphp
-
+@auth
     <div class="modal fade addbank-Modal" id="addaddress-Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -625,7 +625,7 @@
             </div>
         </div>
     </div>
-
+@endauth
     {{-- Query modal section success and error  --}}
     <div class="modal fade query_msg" id="query_msg" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -1113,7 +1113,7 @@
         });
     </script>
     {{-- end header --}}
-
+@auth
     {{-- chat --}}
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -1246,7 +1246,7 @@
 
     <script defer src="{{ asset('js/custom/chat2.js') }}"></script>
     <script defer src="{{ asset('js/custom/chatlist.js') }}"></script>
-
+@endauth
     @include('validation')
     @include('validation.js_product')
     @stack('scripts')
