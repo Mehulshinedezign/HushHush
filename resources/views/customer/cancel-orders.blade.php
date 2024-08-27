@@ -17,8 +17,12 @@
     </div>
 @endif --}}
 <div class="row g-3">
+    @php $empty = true; @endphp
+
     @foreach ($orders as $order)
         @if ($order->status == 'Cancelled')
+        @php $empty = false; @endphp
+
             <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="order-card-top">
                     <div class="order-card-img">
@@ -60,6 +64,12 @@
             </div>
         @endif
     @endforeach
+    @if($empty)
+    <div class="list-empty-box">
+        <img src="{{ asset('front/images/Empty 1.svg') }}" alt="No orders available">
+        <h3 class="text-center">No orders Available</h3>
+    </div>
+    @endif
 
 </div>
 {{-- <div class="pagination-main">

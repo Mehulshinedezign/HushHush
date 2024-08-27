@@ -745,7 +745,7 @@
     }
     .home-filter-product:has(.home-filter-box.expand) .home-product-box {
         display: grid;
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 60px 25px;
     }
     .chat-list-box {
@@ -757,7 +757,7 @@
 @media screen and (max-width:767px) {
     .home-product-box {
         display: grid;
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 60px 25px;
     }
     .pro-quality-info ul {
@@ -1358,6 +1358,16 @@
     .list-empty-box {
         max-width: 240px;
     }
+    .filter-fotter-btns {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 0px 4px;
+        width: 100%;
+    }
+    .filter-fotter-btns button{
+        width: 100%;
+    }
 }
 
 @media screen and (max-width:575px) {
@@ -1392,12 +1402,7 @@
     .home-filter-fotter {
         padding: 10px 0px;
     }
-    .filter-fotter-btns {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        padding: 0px 4px;
-    }
+
     .filter-fotter-btns a,.filter-fotter-btns button{
         width: 100%;
     }
@@ -1430,6 +1435,11 @@
         font-size: 22px;
         font-weight: 600;
         line-height: 24px;
+    }
+    .home-filter-product:has(.home-filter-box.expand) .home-product-box {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 60px 25px;
     }
 
 }
