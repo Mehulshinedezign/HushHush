@@ -507,7 +507,6 @@
             slidesToScroll: 1,
             asNavFor: '.slider-content',
             dots: false,
-            centerMode: false,
             focusOnSelect: true
         });
 
@@ -738,6 +737,6 @@
         });
     </script>
 
-    @include('validation')
+    {{-- @include('validation') --}}
     @include('validation.js_query')
 @endpush

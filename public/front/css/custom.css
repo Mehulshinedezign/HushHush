@@ -909,7 +909,7 @@ border-color: #000;
 }
 
 .slider.slider-thumb .slick-slide {
-    max-width: 180px;
+    /* max-width: 180px; */
     height: 174px;
     margin: 0px 15px;
     border: 2px solid transparent;
@@ -2352,6 +2352,7 @@ p.pick_up_address {
     padding-right: 40px;
     font-size: 12px;
     padding-left: 8px;
+    background-color: #fff;
 }
 
 .chat-list.online .chat-profile-img,
@@ -2453,7 +2454,7 @@ header.cust-header.fixed nav.sticky-nav {
 
 
 .rental-request-wrapper .tb-table table{
-    min-width: 1300px;
+    min-width: 1360px;
 }
 table.inquiry-table {
     min-width: 1360px !important;

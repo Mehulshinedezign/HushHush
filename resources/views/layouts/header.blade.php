@@ -80,6 +80,7 @@
                                             password</a></li>
                                     <li><a class="dropdown-item" href="{{ route('common.chat') }}"><i
                                                 class="fa-solid fa-comment"></i>Chat
+                                                <span class="userIconbtn"></span>
                                         </a></li>
                                     {{-- <li><a class="dropdown-item" href="{{ route('order.spent.transaction') }}"><i
                                                 class="fa-solid fa-comment"></i>Spent Transaction
@@ -114,7 +115,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"><i style="color: #fff" class="fa-sharp fa-solid fa-bars"></i></span>
+                <span class=""><i style="color: #fff" class="fa-sharp fa-solid fa-bars"></i></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">

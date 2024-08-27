@@ -1954,7 +1954,7 @@ input[type=number] {
     border-radius: 9px;
     text-align: center;
     border: 0px;
-    background: #f5f5f5;
+    background: #fff;
     max-width: 60px;
 }
 
@@ -2114,7 +2114,7 @@ input[type="range"]::-webkit-slider-thumb {
     border-radius: 9px;
     text-align: center;
     border: 0px;
-    background: #f5f5f5;
+    background: #fff;
     max-width: 60px;
 }
 
@@ -2278,8 +2278,11 @@ section.od-table-section {
     display: flex;
     align-items: center;
     justify-content: center;
+    max-width: 200px;
+    height: 155px;
+    overflow: hidden;
+    background-color: #fff;
 }
-
 .gallery-box .download-uploaded-file {
     position: absolute;
     width: 25px;
@@ -2292,6 +2295,8 @@ section.od-table-section {
 
 .gallery-box img {
     object-fit: contain !important;
+    width: 100%;
+    height: 100%;
 }
 
 .product-pic-gallery {
@@ -2466,7 +2471,7 @@ section.od-table-section {
     border-radius: 9px;
     text-align: center;
     border: 0px;
-    background: #f5f5f5;
+    background: #fff;
     max-width: 60px;
 }
 
@@ -2624,7 +2629,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .order-trans-wrap {
-    max-width: 1200px;
+    /* max-width: 1200px; */
     margin: 0 auto;
     position: relative;
 }
@@ -2672,7 +2677,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 .home-filter-box.expand .filter-categories {
     display: block;
-    padding-right: 15px;
+    /* padding-right: 15px; */
 }
 .search-pro-header .formfield.icon-new-bx input{
     min-height: unset;
@@ -2695,7 +2700,7 @@ form#searchForm {
 }
 
 .tb-table::-webkit-scrollbar:horizontal{
-    height: 1px;
+    height: 5px;
 }
 
 
