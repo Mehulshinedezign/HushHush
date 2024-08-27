@@ -2353,7 +2353,7 @@ p.pick_up_address {
 
 .home-filter-inner .form-group.date-range-field .formfield input {
     padding-right: 40px;
-    font-size: 12px;
+    font-size: 14px;
     padding-left: 8px;
     background-color: #fff;
 }
@@ -2486,4 +2486,6 @@ table.inquiry-table {
     border-left: 0;
     padding-left: 0px;
 }
-
+.filter-location-box .form-group .formfield input{
+    padding: 12px 8px;
+}

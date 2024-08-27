@@ -1,3 +1,4 @@
+@auth
 @php
     $user = auth()->user();
     $userBankInfo = $user->userBankInfo;
@@ -20,3 +21,4 @@
         </strong>
     </div>
 @endif
+@endauth

@@ -50,15 +50,10 @@ class OrderController extends Controller
             ->orderByDesc('id')
             ->paginate($request->global_pagination);
 
-        // if ('retailer' == $request->type) {
-        //     return view('retailer.order_list', compact('orders'));
-        // }
-        // dd($orders->toArray());
+
 
 
         return view('customer.order_history', compact('orders'));
-        // previous code
-        // return view('customer.order_list', compact('orders'));
     }
 
     public function payment_history(Request $request)

@@ -199,14 +199,14 @@
                                 <a href="{{ route('index') }}" id="actionButton"
                                     class="button outline-btn">Cancel</a>
                                 {{-- <a href="javascript:void(0)" class="button primary-btn">Apply Filter</a> --}}
-                                @auth
-                                    <button type="submit" class="button primary-btn">Apply Filter</button>
+                                <button type="submit" class="button primary-btn">Apply Filter</button>
+                                {{-- @auth
                                 @endauth
                                 @guest
                                 <a href="{{route('login')}}">
                                 <span class="button primary-btn">Apply Filter</button>
                                 </a>
-                                @endguest
+                                @endguest --}}
                             </div>
                         </div>
                         <div class="small-slidebar-icon">
@@ -539,7 +539,7 @@
             const priceInputValue = document.querySelectorAll(".price-input input");
             const rangeInputValue = document.querySelectorAll(".range-input input");
             const rangeValue = document.querySelector(".price-slider");
-            const priceGap = 0; // Define a minimum gap between min and max values
+            const priceGap = 10; // Define a minimum gap between min and max values
 
             function updateRangePosition(minp, maxp) {
                 const value1 = rangeInputValue[0].max;

@@ -834,34 +834,42 @@ class ProductController extends Controller
 
             $query = Product::where('user_id', '!=', $authUserId);
 
+            $filterApplied = false;
+
             if ($request->has('Category')) {
                 $categories = explode(',', $request->input('Category'));
                 $query->filterByCategories($categories);
+                $filterApplied = true;
             }
 
             if ($request->has('Brand')) {
                 $brands = explode(',', $request->input('Brand'));
                 $query->filterByBrands($brands);
+                $filterApplied = true;
             }
 
             if ($request->has('Size')) {
                 $sizes = explode(',', $request->input('Size'));
                 $query->filterBySizes($sizes);
+                $filterApplied = true;
             }
 
             if ($request->has('Color')) {
                 $colors = explode(',', $request->input('Color'));
                 $query->filterByColors($colors);
+                $filterApplied = true;
             }
 
             if ($request->has('Price')) {
                 $priceRange = explode(',', $request->input('Price'));
                 $query->filterByPriceRange($priceRange);
+                $filterApplied = true;
             }
 
             if ($request->has('Condition')) {
                 $conditions = explode(',', $request->input('Condition'));
                 $query->filterByCondition($conditions);
+                $filterApplied = true;
             }
 
             $products = $query->get();
@@ -993,6 +1001,7 @@ class ProductController extends Controller
                 'data' => [
                     'products' => $transformedProducts,
                     'filters' => $filters,
+                    'filter_applied' => $filterApplied,
                 ],
             ], 200);
         } catch (\Throwable $e) {
@@ -1003,6 +1012,7 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
 
 
     /**
