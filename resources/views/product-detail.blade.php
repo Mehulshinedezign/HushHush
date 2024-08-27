@@ -738,6 +738,6 @@
         });
     </script>
 
-    @include('validation')
+    {{-- @include('validation') --}}
     @include('validation.js_query')
 @endpush
