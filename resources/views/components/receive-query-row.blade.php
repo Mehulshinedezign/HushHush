@@ -51,7 +51,7 @@
 
     @if ($query->status == 'PENDING')
         <td class = "negotiation-price-td">
-            <input type="text" id="negotiate_price_{{ $query->id }}" placeholder="Enter negotiate price"
+            <input type="text" id="negotiate_price_{{ $query->id }}" placeholder="Enter agreed price"
                 min='0' class="negotiation_price_{{ $query->id }}" name="negotiate_price">
             <input type="text" id="cleaning_charges_{{ $query->id }}" placeholder="Enter cleaning charges"
                 min='0' class="cleaning_charges_{{ $query->id }}" name="cleaning_price">

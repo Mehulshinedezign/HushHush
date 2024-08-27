@@ -507,7 +507,6 @@
             slidesToScroll: 1,
             asNavFor: '.slider-content',
             dots: false,
-            centerMode: false,
             focusOnSelect: true
         });
 
@@ -576,7 +575,7 @@
                             if (response.success) {
                                 modalContent =
                                     `<div class="success-text" role="alert"><img src="` +
-                                    "{{ asset('assets/img/query.png') }}" +
+                                    "{{ asset('front/images/query1.png') }}" +
                                     `" style="max-width: 180px;">` + response.message +
                                     `</div>`;
                             } else {

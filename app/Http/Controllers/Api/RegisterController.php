@@ -40,9 +40,11 @@ class RegisterController extends Controller
         DB::beginTransaction();
 
         try {
+
+            $fullName = $request->first_name . ' ' . $request->last_name;
             $user = User::create([
-                'username' => $request->username,
-                'name' => $request->name,
+                // 'username' => $request->username,
+                'name' => $fullName,
                 'status' => '0',
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
@@ -66,7 +68,7 @@ class RegisterController extends Controller
             //     'file' => $fileExtension,
             //     'url' => $filePath,
             // ]);
-    
+
 
             $country_code = $request->country_code;
             $number = $request->phone_number;
@@ -126,7 +128,8 @@ class RegisterController extends Controller
     {
         $emailRegex = "/^[a-zA-Z]+[a-zA-Z0-9_\.\-]*@[a-zA-Z]+(\.[a-zA-Z]+)*[\.]{1}[a-zA-Z]{2,10}$/";
         $validation = [
-            'name' => 'required|string|min:2|max:50',
+            'first_name' => 'required|string|min:2|max:50',
+            'last_name' => 'required|string|min:2|max:50',
             'email' => 'required|string|email|max:255|unique:users|regex:' . $emailRegex,
             'phone_number' => 'required|digits:' . config('validation.phone_minlength') . '|min:' . config('validation.phone_minlength') . '|max:' . config('validation.phone_maxlength'),
             'password' => 'required|string|min:8|max:32|confirmed',
@@ -137,10 +140,14 @@ class RegisterController extends Controller
         ];
 
         $message = [
-            'name.required' => __('user.validations.nameRequired'),
-            'name.string' => __('user.validations.nameString'),
-            'name.min' => __('user.validations.nameMin'),
-            'name.max' => __('user.validations.nameMax'),
+            'first_name.required' => __('user.validations.nameRequired'),
+            'first_name.string' => __('user.validations.nameString'),
+            'first_name.min' => __('user.validations.nameMin'),
+            'first_name.max' => __('user.validations.nameMax'),
+            'last_name.required' => __('user.validations.nameRequired'),
+            'last_name.string' => __('user.validations.nameString'),
+            'last_name.min' => __('user.validations.nameMin'),
+            'last_name.max' => __('user.validations.nameMax'),
             'email.required' => __('user.validations.emailRequired'),
             'email.string' => __('user.validations.emailString'),
             'email.email' => __('user.validations.emailType'),

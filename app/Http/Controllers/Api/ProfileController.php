@@ -133,25 +133,33 @@ class ProfileController extends Controller
             if ($request->hasFile('profile_pic')) {
                 $profilePicPath = $request->file('profile_pic')->store('profile_pictures', 'public');
                 $user['profile_url'] = $profilePicPath;
+                $user['profile_file'] = $profilePicPath;
             }
             $user->update($request->all());
 
             // User details entry
+            $completeadrres =$request->complete_address ?? $user->userDetail->complete_address ?? Null;
             $address1 = $request->address1 ?? $user->userDetail->address1 ?? Null;
             $address2 = $request->address2 ?? $user->userDetail->address2 ?? Null;
             $about = ($request->about == '') ? NUll : $request->about;
-            $country = $request->country_id;
-            $state = $request->state_id;
-            $city = $request->city_id;
+            $country = $request->country ??$user->userDetail->country ?? Null;
+            $state = $request->state ?? $user->userDetail->state ?? Null;
+            $city = $request->city ?? $user->userDetail->city ?? Null;
+            $zipcode =$request->zipcode ??$user->userDetail->zipcode ?? Null;
+            // $about = $request->about_me ?? $user->userDetail->about?? null;
             $userDetails = UserDetail::updateOrCreate(
                 ['user_id' => $user->id],
                 [
+                    'complete_address'=> $completeadrres,
                     'address1' => $address1,
                     'address2' => $address2,
-                    'country_id' => $country,
-                    'state_id' => $state,
-                    'city_id' => $city,
-                    'about' => $about
+                    'country' => $country,
+                    'state' => $state,
+                    'city' => $city,
+                    'about' => $about,
+                    'zipcode'=>$zipcode,
+
+
                 ]
             );
 
@@ -318,5 +326,36 @@ class ProfileController extends Controller
 
             ],
         ], 200);
+    }
+
+
+    public function test()
+    {
+        // Check if the user is authenticated
+        if (!auth()->check()) {
+            return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
+        }
+
+        $user = auth()->user();
+
+        // Ensure the user has a pushToken and that the FCM token is available
+        if (!$user->pushToken || !$user->pushToken->fcm_token) {
+            return response()->json(['status' => 'error', 'message' => 'FCM token not found'], 404);
+        }
+        // dd($user->pushToken->fcm_token);
+
+        $payload = [
+            'id' => 'dhfgdh',
+            'content' => 'You have received an inquiry about a product'
+        ];
+
+        // Call the function to send push notifications
+        $response = sendPushNotifications($user->pushToken->fcm_token, $payload);
+
+        if ($response === false) {
+            return response()->json(['status' => 'error', 'message' => 'Failed to send notification'], 500);
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'Notification sent successfully', 'response' => $response]);
     }
 }

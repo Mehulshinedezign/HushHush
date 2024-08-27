@@ -3140,14 +3140,14 @@ input.error-messages {
 .chatWindow::-webkit-scrollbar,
 .notification-feed-boxes .list-unstyled::-webkit-scrollbar {
     background-color: #cccc;
-    width: 3px;
+    width: 2px;
 }
 
 .chat-window-box .msg-type-box textarea.form-control::-webkit-scrollbar-thumb,
 .chatWindow::-webkit-scrollbar-thumb,
 .notification-feed-boxes .list-unstyled::-webkit-scrollbar-thumb {
     background-color: var(--green);
-    border-radius: 3px;
+    border-radius: 2px;
 }
 
 .chart-main-ourter .card {

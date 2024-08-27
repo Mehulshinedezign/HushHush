@@ -214,8 +214,11 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
+        // dd($request->all());
         try {
             DB::beginTransaction();
+            $category =jsdecode_userdata($request->category);
+            // dd($category);
 
             // Geocoding the complete location
             $product_complete_location = $request->input('product_complete_location');
@@ -233,7 +236,7 @@ class ProductController extends Controller
                 'name' => $request->product_name,
                 'description' => $request->description,
                 'user_id' => $userId,
-                'category_id' => $request->category,
+                'category_id' => $category,
                 'subcat_id' => $request->subcategory,
                 'product_condition' => $request->product_condition,
                 'rent_price' => $request->rent_price ?? 0,
@@ -314,6 +317,7 @@ class ProductController extends Controller
             DB::commit();
             return redirect()->route('product')->with('success', "Your product has been uploaded successfully.");
         } catch (\Exception $e) {
+            dd($e->getMessage());
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
         }

@@ -365,4 +365,51 @@ if (!function_exists('check_order_list_paginate_retailer')) {
             return $brandName->name;
         }
     }
+
+
+
+
+
+    if (!function_exists('sendPushNotifications')) {
+        function sendPushNotifications($token, $payload)
+        {
+            if (!is_null($token)) {
+                $url = 'https://fcm.googleapis.com/fcm/send';
+                $api_key = 'AIzaSyDovLKo3djdRbs963vqKdbj-geRWyzMTrg'; // Replace with your FCM Server Key
+
+                $notification = [
+                    'title' => 'Notification Title', // You can customize this
+                    'body' => $payload['content'],
+                    'order_id' => $payload['id'],
+                ];
+
+                $fcmNotification = [
+                    'to' => $token,
+                    'notification' => $notification,
+                    'priority' => 'high',
+                    'data' => $payload
+                ];
+
+                $headers = [
+                    'Authorization: key=' . $api_key,
+                    'Content-Type: application/json'
+                ];
+
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fcmNotification));
+                $result = curl_exec($ch);
+                curl_close($ch);
+
+                return $result;
+            }
+
+            return false;
+        }
+    }
+
 }

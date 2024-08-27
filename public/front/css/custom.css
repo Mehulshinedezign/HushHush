@@ -909,7 +909,7 @@ border-color: #000;
 }
 
 .slider.slider-thumb .slick-slide {
-    max-width: 180px;
+    /* max-width: 180px; */
     height: 174px;
     margin: 0px 15px;
     border: 2px solid transparent;
@@ -1293,7 +1293,7 @@ border-color: #000;
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0 1px;
-    /* min-width: 1150px; */
+    min-width: 1150px;
     background: #F1F2F3;
 }
 
@@ -2352,6 +2352,7 @@ p.pick_up_address {
     padding-right: 40px;
     font-size: 12px;
     padding-left: 8px;
+    background-color: #fff;
 }
 
 .chat-list.online .chat-profile-img,
@@ -2430,7 +2431,7 @@ header.cust-header.fixed nav.sticky-nav {
     width: 100%;
     background: #fff;
     top: 0;
-    z-index: 9999;
+    z-index: 999;
     box-shadow: 0px 0px 10px #0606061f;
 }
 
@@ -2448,4 +2449,17 @@ header.cust-header.fixed nav.sticky-nav {
 
 .breadcrum-main .breadcrum-list:last-child::after {
     display: none;
+}
+
+
+
+.rental-request-wrapper .tb-table table{
+    min-width: 1360px;
+}
+table.inquiry-table {
+    min-width: 1360px !important;
+}
+
+.bottom-nav .container{
+    gap: 30px;
 }

@@ -44,6 +44,12 @@ class QueryController extends Controller
                 'date_range' => $startDate . ' - ' . $endDate,
             ]);
 
+            $payload['id'] = $query->id;
+            $payload['content']= "You have received an inquriy product #".str_pad($product->name, 5, '0', STR_PAD_LEFT);
+
+            // if(@$started_order->driverDetail->userNotifications->updated_order)
+            sendPushNotifications(@$product->user_id->driverDetail->fcm_token,$payload);
+
             return response()->json([
                 'status' => true,
                 'message' => 'Query created successfully',

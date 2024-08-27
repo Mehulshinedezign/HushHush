@@ -2,10 +2,10 @@
     <div class="inquiry-list-main mt-4">
         <div class="db-table">
             <div class="tb-table">
-                <table>
+                <table >
                     <thead>
                         <tr>
-                            <th>Product</th>
+                            <th>Productttt</th>
                             <th>Name</th>
                             <th>Actual Price</th>
                             @if($querydatas->first()->status != 'PENDING')
