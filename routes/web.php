@@ -34,6 +34,8 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
     Route::get('verify-email/{user}/{token}', [App\Http\Controllers\Auth\RegisterController::class, 'verifyEmail'])->name('verify-email');
     Route::any('/verify', [App\Http\Controllers\Auth\ResetPasswordController::class, 'verifyOtp'])->name('verify');
     Route::any('/update-password', [App\Http\Controllers\Auth\ResetPasswordController::class, 'update'])->name('user.updatepassword');
+    Route::any('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index');
+    Route::get('product/{id}', [App\Http\Controllers\Customer\ProductController::class, 'view'])->name('viewproduct');
 
     Auth::routes();
 
@@ -55,9 +57,7 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
     Route::middleware(['auth', 'VerifyOtp', 'CheckStatus', 'web.admin'])->group(function () {
 
 
-        Route::any('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index');
-        Route::get('products', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('products');
-        Route::get('product/{id}', [App\Http\Controllers\Customer\ProductController::class, 'view'])->name('viewproduct');
+        // Route::get('products', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('products');
         Route::get('lender_info/{id}', [App\Http\Controllers\Customer\ProductController::class, 'lenderInfo'])->name('lenderProfile');
         Route::get('product/{product}/book', [App\Http\Controllers\Customer\ProductController::class, 'book'])->name('book');
         Route::get('lender/{id}', [App\Http\Controllers\Customer\ProductController::class, 'retailer'])->name('lender');
@@ -76,8 +76,6 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         Route::post('store/image', [App\Http\Controllers\Retailer\ProductController::class, 'store_img'])->name('image.store');
 
         Route::get('delete/image/{token}', [App\Http\Controllers\Retailer\ProductController::class, 'deleteimages'])->name('image.delete');
-
-
 
         Route::middleware('vendorproduct')->group(function () {
             Route::get('products/edit/{id}', [App\Http\Controllers\Retailer\ProductController::class, 'edit'])->name('editproduct');

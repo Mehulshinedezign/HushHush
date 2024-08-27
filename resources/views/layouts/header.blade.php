@@ -17,97 +17,112 @@
                         </li>
                     </ul>
                 </div>
-                <div class="header-cart">
-                    @php
-                        $user = auth()->user();
-                        $userBankInfo = auth()->user()->userBankInfo;
-                    @endphp
-                    <ul>
-                        <li>
-                            @if (is_null($userBankInfo))
-                                <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
-                                    Rent your Closet
-                                </div>
-                            @elseif (is_null($user->userDetail->complete_address))
-                                <div data-bs-toggle="modal" data-bs-target="#addaddress-Modal">
-                                    Rent your Closet
-                                </div>
-                            @else
-                                <div data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
-                                    Rent your Closet
-                                </div>
-                            @endif
+                @auth
+                    <div class="header-cart">
+                        @php
+                            $user = auth()->user();
+                            $userBankInfo = auth()->user()->userBankInfo;
+                        @endphp
+                        <ul>
+                            <li>
+                                @if (is_null($userBankInfo))
+                                    <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
+                                        Rent your Closet
+                                    </div>
+                                @elseif (is_null($user->userDetail->complete_address))
+                                    <div data-bs-toggle="modal" data-bs-target="#addaddress-Modal">
+                                        Rent your Closet
+                                    </div>
+                                @else
+                                    <div data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
+                                        Rent your Closet
+                                    </div>
+                                @endif
 
-                        </li>
-                        <li><a href="{{ route('wishlist') }}"><i class="fa-regular fa-heart"></i>
-                                <p class="d-inline-block d-lg-none"></p>
-                            </a></li>
-                        <li>
-                            <div class="dropdown">
-                                <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-regular fa-user"></i>
-                                </div>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                            </li>
+                            <li><a href="{{ route('wishlist') }}"><i class="fa-regular fa-heart"></i>
+                                    <p class="d-inline-block d-lg-none"></p>
+                                </a></li>
+                            <li>
+                                <div class="dropdown">
+                                    <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa-regular fa-user"></i>
+                                    </div>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
 
-                                    <li><a class="dropdown-item" href="{{ route('edit-account') }}"><i
-                                                style="color: #606060" class="fa-solid fa-gear"></i>Account Settings</a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="{{ route('product') }}">
-                                            <i class="fa-solid fa-cart-shopping"></i>
-                                            My Products</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('edit-account') }}"><i
+                                                    style="color: #606060" class="fa-solid fa-gear"></i>Account Settings</a>
+                                        </li>
+                                        <li><a class="dropdown-item" href="{{ route('product') }}">
+                                                <i class="fa-solid fa-cart-shopping"></i>
+                                                My Products</a></li>
 
-                                    <li><a class="dropdown-item" href="{{ route('my_query') }}">
-                                            <i class="fa fa-question-circle" aria-hidden="true"></i>
-                                            My Inquiry</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('receive_query') }}"><img width="15"
-                                                height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
-                                                alt="img">Received Inquiry</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('profile') }}">
-                                            <i class="fa-solid fa-user"></i>
-                                            Profile</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('retailercustomer') }}">
-                                            <i class="fa fa-question-circle" aria-hidden="true"></i>
-                                            Received order</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('orders') }}"><i
-                                                class="fa-solid fa-file"></i>Order History</a></li>
-                                    <!-- <li><a class="dropdown-item" href="{{ route('rental-request') }}"><img src="{{ asset('front/images/rent-req-icon.svg') }}" alt="img">Rental Request</a></li> -->
-                                    <!-- <li><a class="dropdown-item" href="#"><img src="{{ asset('front/images/notification-icon.svg') }}" alt="img">Notifications</a></li> -->
-                                    <!-- <li><a class="dropdown-item" href="#"><img src="{{ asset('front/images/saved-icon.svg') }}" alt="img">Saved Items</a></li> -->
-                                    <!-- <li><a class="dropdown-item" href="{{ route('payment-history') }}"><img src="{{ asset('front/images/payment-history-icon.svg') }}" alt="img">Payment History</a></li> -->
-                                    <li><a class="dropdown-item" href="{{ route('user.changePassword') }}"><i
-                                                style="color: #606060" class="fa-solid fa-lock"></i>Change
-                                            password</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('common.chat') }}"><i
-                                                class="fa-solid fa-comment"></i>Chat
+                                        <li><a class="dropdown-item" href="{{ route('my_query') }}">
+                                                <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                                My Inquiry</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('receive_query') }}"><img width="15"
+                                                    height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
+                                                    alt="img">Received Inquiry</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('profile') }}">
+                                                <i class="fa-solid fa-user"></i>
+                                                Profile</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('retailercustomer') }}">
+                                                <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                                Received order</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('orders') }}"><i
+                                                    class="fa-solid fa-file"></i>Order History</a></li>
+                                        <!-- <li><a class="dropdown-item" href="{{ route('rental-request') }}"><img src="{{ asset('front/images/rent-req-icon.svg') }}" alt="img">Rental Request</a></li> -->
+                                        <!-- <li><a class="dropdown-item" href="#"><img src="{{ asset('front/images/notification-icon.svg') }}" alt="img">Notifications</a></li> -->
+                                        <!-- <li><a class="dropdown-item" href="#"><img src="{{ asset('front/images/saved-icon.svg') }}" alt="img">Saved Items</a></li> -->
+                                        <!-- <li><a class="dropdown-item" href="{{ route('payment-history') }}"><img src="{{ asset('front/images/payment-history-icon.svg') }}" alt="img">Payment History</a></li> -->
+                                        <li><a class="dropdown-item" href="{{ route('user.changePassword') }}"><i
+                                                    style="color: #606060" class="fa-solid fa-lock"></i>Change
+                                                password</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('common.chat') }}"><i
+                                                    class="fa-solid fa-comment"></i>Chat
                                                 <span class="userIconbtn"></span>
-                                        </a></li>
-                                    {{-- <li><a class="dropdown-item" href="{{ route('order.spent.transaction') }}"><i
+                                            </a></li>
+                                        {{-- <li><a class="dropdown-item" href="{{ route('order.spent.transaction') }}"><i
                                                 class="fa-solid fa-comment"></i>Spent Transaction
                                         </a></li> --}}
-                                    <li><a class="dropdown-item" href="{{ route('order.earning.transaction') }}"><svg
-                                                xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1"
-                                                viewBox="0 0 24 24" width="20" height="20">
-                                                <path
-                                                    d="m18.293,7.363l.846-.846c-1.7-2.21-4.338-3.518-7.138-3.518C7.038,3,3,7.037,3,12s4.038,9,9,9c4.45,0,8.28-3.315,8.908-7.712.118-.819.881-1.387,1.697-1.273.82.118,1.391.878,1.273,1.697-.839,5.865-5.945,10.288-11.879,10.288C5.383,24,0,18.617,0,12S5.383,0,12,0c3.602,0,7.002,1.622,9.273,4.383l1.102-1.102c.6-.6,1.625-.175,1.625.673v3.83c0,.665-.539,1.204-1.205,1.204h-3.83c-.848,0-1.273-1.025-.673-1.625Zm-6.293,12.637c.829,0,1.5-.672,1.5-1.5v-.669c1.448-.462,2.5-1.82,2.5-3.418,0-1.476-.885-2.783-2.254-3.33l-2.378-.952c-.224-.089-.368-.303-.368-.544,0-.323.263-.587.587-.587h1.181c.181,0,.343.094.434.251.415.717,1.333.963,2.05.548s.962-1.333.548-2.05c-.499-.864-1.344-1.465-2.299-1.67v-.579c0-.828-.671-1.5-1.5-1.5s-1.5.672-1.5,1.5v.669c-1.448.461-2.5,1.82-2.5,3.418,0,1.477.885,2.783,2.254,3.33l2.377.951c.224.09.368.304.368.545,0,.323-.263.587-.587.587h-1.181c-.181,0-.343-.094-.434-.251-.415-.717-1.333-.962-2.049-.548-.717.415-.962,1.333-.547,2.05.499.864,1.343,1.465,2.298,1.671v.578c0,.828.671,1.5,1.5,1.5Z" />
-                                            </svg>Earnings
-                                        </a></li>
-                                    {{-- <li><a class="dropdown-item" href="{{ route('') }}"><i
+                                        <li><a class="dropdown-item" href="{{ route('order.earning.transaction') }}"><svg
+                                                    xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1"
+                                                    viewBox="0 0 24 24" width="20" height="20">
+                                                    <path
+                                                        d="m18.293,7.363l.846-.846c-1.7-2.21-4.338-3.518-7.138-3.518C7.038,3,3,7.037,3,12s4.038,9,9,9c4.45,0,8.28-3.315,8.908-7.712.118-.819.881-1.387,1.697-1.273.82.118,1.391.878,1.273,1.697-.839,5.865-5.945,10.288-11.879,10.288C5.383,24,0,18.617,0,12S5.383,0,12,0c3.602,0,7.002,1.622,9.273,4.383l1.102-1.102c.6-.6,1.625-.175,1.625.673v3.83c0,.665-.539,1.204-1.205,1.204h-3.83c-.848,0-1.273-1.025-.673-1.625Zm-6.293,12.637c.829,0,1.5-.672,1.5-1.5v-.669c1.448-.462,2.5-1.82,2.5-3.418,0-1.476-.885-2.783-2.254-3.33l-2.378-.952c-.224-.089-.368-.303-.368-.544,0-.323.263-.587.587-.587h1.181c.181,0,.343.094.434.251.415.717,1.333.963,2.05.548s.962-1.333.548-2.05c-.499-.864-1.344-1.465-2.299-1.67v-.579c0-.828-.671-1.5-1.5-1.5s-1.5.672-1.5,1.5v.669c-1.448.461-2.5,1.82-2.5,3.418,0,1.477.885,2.783,2.254,3.33l2.377.951c.224.09.368.304.368.545,0,.323-.263.587-.587.587h-1.181c-.181,0-.343-.094-.434-.251-.415-.717-1.333-.962-2.049-.548-.717.415-.962,1.333-.547,2.05.499.864,1.343,1.465,2.298,1.671v.578c0,.828.671,1.5,1.5,1.5Z" />
+                                                </svg>Earnings
+                                            </a></li>
+                                        {{-- <li><a class="dropdown-item" href="{{ route('') }}"><i
                                                 style="color: #606060" class="fa-solid fa-lock"></i></i>my
                                             order</a></li> --}}
-                                    <li><a class="dropdown-item" href="{{ route('logout') }}">
-                                            <i class="fa-solid fa-sign-out" aria-hidden="true"></i>
-                                            Logout</a></li>
-                                </ul>
-                            </div>
+                                        <li><a class="dropdown-item" href="{{ route('logout') }}">
+                                                <i class="fa-solid fa-sign-out" aria-hidden="true"></i>
+                                                Logout</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button> -->
+                </div>
+            @endauth
+            @guest
+                <div class="header-cart">
+                    <ul>
+                        <li>
+                            <div><a href="{{ route('login') }}">Rent your Closet</a></div>
+                        </li>
+                        <li>
+                            <div><a href="{{ route('login') }}">login</a></div>
                         </li>
                     </ul>
+
                 </div>
-                <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button> -->
-            </div>
+            @endguest
         </div>
     </nav>
     <nav class="navbar navbar-expand-lg bottom-nav">

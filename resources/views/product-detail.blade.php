@@ -175,26 +175,29 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                            <h4>Size :</h4>
+                                        <h4>Size :</h4>
                                             <p>{{ $product->size ?? 'N/A' }}</p>
-                                        </div> -->
+                                    </div> -->
 
 
                             </div>
-
-                            @if (@$product->user_id != auth()->user()->id)
-                                @if (is_null($user->userDetail->complete_address))
-                                    {{-- <div data-bs-toggle="modal" data-bs-target="#addaddress-Modal">
+                            @auth
+                                @if (@$product->user_id != auth()->user()->id)
+                                    @if (is_null($user->userDetail->complete_address))
+                                        {{-- <div data-bs-toggle="modal" data-bs-target="#addaddress-Modal">
                                         Send Request
                                     </div> --}}
-                                    <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="modal"
-                                        data-bs-target="#addaddress-Modal" aria-controls="offcanvasRight">Send Request</a>
-                                @else
-                                    <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                                        data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Send Request</a>
+                                        <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="modal"
+                                            data-bs-target="#addaddress-Modal" aria-controls="offcanvasRight">Send Request</a>
+                                    @else
+                                        <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
+                                            data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Send Request</a>
+                                    @endif
                                 @endif
-                            @endif
-
+                            @endauth
+                            @guest
+                                <a href="{{ route('login') }}" class="button primary-btn full-btn mt-3">Send Request</a>
+                            @endguest
                             <div class="pro-info-accordian">
                                 <div class="accordion" id="accordionExample">
                                     <div class="accordion-item">
@@ -234,31 +237,50 @@
 
                                     </div>
                                 </div>
+        
                                 <div class="lender-profile">
                                     <p>Lender</p>
                                     <div class="lender-profile-box">
                                         <div class="lender-dp-box">
+                                            @auth
                                             <a href="{{ route('lenderProfile', jsencode_userdata($product->user_id)) }}">
-                                                @if ($product->retailer->profile_file )
+                                                @if ($product->retailer->profile_file)
                                                     <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
                                                         alt="Profile Picture">
                                                 @else
                                                     <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
                                                 @endif
                                             </a>
+                                            @endauth
+                                            @guest
+                                            <a href="{{ route('login') }}">
+                                                @if ($product->retailer->profile_file)
+                                                    <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
+                                                        alt="Profile Picture">
+                                                @else
+                                                    <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
+                                                @endif
+                                            </a>
+                                            @endguest
                                         </div>
                                         <h4>{{ $product->retailer->name }}</h4>
-
-                                        <div><a href="javascript:void(0)"
-                                                class="button outline-btn small-btn chat-list-profile"
-                                                data-senderId="{{ auth()->user()->id }}"
-                                                data-receverId="{{ @$product->user_id }}"
-                                                data-receverName = "{{ @$product->retailer->name }}"
-                                                data-receverImage="{{ isset($product->retailer->profile_file) ? Storage::url($product->retailer->profile_file) : asset('img/avatar.png') }}"
-                                                data-profile="{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}"
-                                                data-name="{{ auth()->user()->name }}"><i
-                                                    class="fa-solid fa-comments"></i>
-                                                Chat</a></div>
+                                        @auth
+                                            <div><a href="javascript:void(0)"
+                                                    class="button outline-btn small-btn chat-list-profile"
+                                                    data-senderId="{{ auth()->user()->id }}"
+                                                    data-receverId="{{ @$product->user_id }}"
+                                                    data-receverName = "{{ @$product->retailer->name }}"
+                                                    data-receverImage="{{ isset($product->retailer->profile_file) ? Storage::url($product->retailer->profile_file) : asset('img/avatar.png') }}"
+                                                    data-profile="{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}"
+                                                    data-name="{{ auth()->user()->name }}"><i
+                                                        class="fa-solid fa-comments"></i>
+                                                    Chat</a></div>
+                                        @endauth
+                                        @guest
+                                            <div><a href="{{ route('login') }}" class="button outline-btn small-btn"><i
+                                                        class="fa-solid fa-comments"></i>
+                                                    Chat</a></div>
+                                        @endguest
                                     </div>
                                 </div>
                                 <div class="pro-dec-rating-main">
@@ -436,11 +458,14 @@
                                         <label for="pick_up">Pick up from lender location</label><br>
 
                                         <input type="radio" id="ship_to_me" name="delivery_option"
-                                            value="{{ $user->userDetail->complete_address }}">
+                                            value="{{ @$user->userDetail->complete_address }}">
                                         <label for="ship_to_me">Ship it to me</label><br>
 
-                                        <input type="text" id="selected_value" readonly class="form-control" placeholder="Selected option will appear here">
-                                        <input type="text" id="profile_message" class="message" style="display: none;" value="Please complete your profile to enable this option." readonly>
+                                        <input type="text" id="selected_value" readonly class="form-control"
+                                            placeholder="Selected option will appear here">
+                                        <input type="text" id="profile_message" class="message"
+                                            style="display: none;"
+                                            value="Please complete your profile to enable this option." readonly>
                                     </div>
 
                                 </div>
@@ -530,7 +555,7 @@
 
                 // Check for incomplete profile if "Ship it to me" is selected
                 if ($('#ship_to_me').is(':checked') &&
-                    {{ is_null($user->userDetail->complete_address) ? 'true' : 'false' }}) {
+                    {{ is_null(@$user->userDetail->complete_address) ? 'true' : 'false' }}) {
                     iziToast.error({
                         title: 'Error',
                         message: 'Please complete your profile to enable this option.',
@@ -696,7 +721,7 @@
             const selectedValueInput = document.getElementById('selected_value');
 
             // Server-side flag for address completeness
-            const isAddressComplete = {{ is_null($user->userDetail->complete_address) ? 'false' : 'true' }};
+            const isAddressComplete = {{ is_null(@$user->userDetail->complete_address) ? 'false' : 'true' }};
 
             // Add an event listener to each radio button
             radioButtons.forEach(radio => {
@@ -704,7 +729,7 @@
                     if (this.checked) {
                         const selectedValue = this.value;
                         selectedValueInput.value =
-                        selectedValue; // Set the value of the readonly input field
+                            selectedValue; // Set the value of the readonly input field
 
                         // Check if the 'Ship it to me' option is selected and the profile is not complete
                         if (this.id === 'ship_to_me' && !isAddressComplete) {
@@ -714,7 +739,7 @@
                                 position: 'topRight',
                             });
                             profileMessage.style.display =
-                            'block'; // Show profile completion message
+                                'block'; // Show profile completion message
                         } else {
                             profileMessage.style.display = 'none'; // Hide message
                         }

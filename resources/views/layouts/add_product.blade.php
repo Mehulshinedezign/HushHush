@@ -6,8 +6,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
     integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css">
 <link rel="stylesheet" href="{{ asset('front/css/style.css') }}?ver={{ now() }}">
 <link rel="stylesheet" href="{{ asset('css/iziToast.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('css/daterangepicker.css') }}" />
@@ -23,24 +22,28 @@
         </div>
     </div>
 </div>
-@include('customer.identification_model')
-@include('customer.bank_details_model')
-
+@auth
+    @include('customer.identification_model')
+    @include('customer.bank_details_model')
+@endauth
 @push('scripts')
     @includeFirst(['validation'])
     @includefirst(['validation.js_product'])
     @includefirst(['layouts.notification-alert'])
-    <script>
-        const commision_type = "{{ adminsetting()->type }}"
-        const commision = "{{ adminsetting()->value }}"
-        const maxProductImageCount = parseInt("{{ $global_max_product_image_count }}");
-        const is_bankdetail = "{{ auth()->user()->vendorBankDetails }}";
-        const checkdocuments = "{{ count(auth()->user()->documents) }}";
-        const checkdocumentstatus = "{{ auth()->user()->is_approved }}";
-        const product_check = "{{ count(auth()->user()->products) }}";
-        const image_store_url = "{{ route('image.store') }}";
-        var htmlForm = `@include('retailer.include.product-from', ['product' => new App\Models\Product()])`;
-    </script>
+    @auth
+
+        <script>
+            const commision_type = "{{ adminsetting()->type }}"
+            const commision = "{{ adminsetting()->value }}"
+            const maxProductImageCount = parseInt("{{ $global_max_product_image_count }}");
+            const is_bankdetail = "{{ auth()->user()->vendorBankDetails }}";
+            const checkdocuments = "{{ count(auth()->user()->documents) }}";
+            const checkdocumentstatus = "{{ auth()->user()->is_approved }}";
+            const product_check = "{{ count(auth()->user()->products) }}";
+            const image_store_url = "{{ route('image.store') }}";
+            var htmlForm = `@include('retailer.include.product-from', ['product' => new App\Models\Product()])`;
+        </script>
+    @endauth
     <script src="{{ asset('js/custom/product-add-edit.js') }}?ver={{ now() }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 

@@ -55,11 +55,18 @@ class ProductController extends Controller
              [$startDate, $endDate] = explode(' - ', $disabledate);
          }
 
+         if(isset(auth()->user()->id)){
+
          $authUserId = auth()->user()->id;
 
          $query = Product::with('disableDates', 'ratings')
              ->where('user_id', '!=', $authUserId)
              ->where('status', '1');
+            }else{
+                $query = Product::with('disableDates', 'ratings')
+             ->where('status', '1');
+            }
+            
 
          if (!empty($searchKeyword)) {
              $query->where('name', 'LIKE', '%' . $searchKeyword . '%');
@@ -142,7 +149,8 @@ class ProductController extends Controller
         // $security = $this->getSecurityAmount($product);
         // $insurance = $this->getInsuranceAmount($product);
         $rating_progress = $this->getratingprogress($product);
-        $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
+        if(isset(auth()->user()->id)){
+            $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
             ->where('id', $product->id)
             ->where('category_id', $product->category_id)->whereHas('category', function ($q) {
                 $q->where('status', '1');
@@ -151,11 +159,27 @@ class ProductController extends Controller
             ->inRandomOrder()
             ->limit(5)
             ->get();
+        }else{
+            $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
+            ->where('id', $product->id)
+            ->where('category_id', $product->category_id)->whereHas('category', function ($q) {
+                $q->where('status', '1');
+            })
+            ->inRandomOrder()
+            ->limit(5)
+            ->get();
+        }
+       
 
         $layout_class = 'single_product';
 
         $productImages = $product->allImages;
-        $querydates = Query::where(['product_id' => $id, 'status' => 'PENDING', 'user_id' => auth()->user()->id])->get();
+        if(auth()->id()){
+            $querydates = Query::where(['product_id' => $id, 'status' => 'PENDING', 'user_id' => auth()->user()->id])->get();
+        }else{
+            $querydates = Query::where(['product_id' => $id, 'status' => 'PENDING'])->get();
+
+        }
         $product_buffer = $product->created_at->format('Y-m-d');
         $carbonDate = Carbon::createFromFormat('Y-m-d', $product_buffer);
         $array1 = [];
