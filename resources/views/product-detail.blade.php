@@ -227,7 +227,7 @@
                                             <div id="collapseTwo" class="accordion-collapse collapse show"
                                                 aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
-                                                    {{ $product->productCompleteLocation->pick_up_location }}
+                                                    {{ $product->productCompleteLocation->city ." ,". $product->productCompleteLocation->country }}
                                                 </div>
                                             </div>
                                         </div>
@@ -439,11 +439,11 @@
                                             value="{{ $user->userDetail->complete_address }}">
                                         <label for="ship_to_me">Ship it to me</label><br>
 
-                                        <input type="text" id="selected_value" readonly class="form-control"
+                                        {{-- <input type="text" id="selected_value" readonly class="form-control"
                                             placeholder="Selected option will appear here">
                                         <input type="text" id="profile_message" class="message"
                                             style="display: none;"
-                                            value="Please complete your profile to enable this option." readonly>
+                                            value="Please complete your profile to enable this option." readonly> --}}
                                             @error('delivery_option')
                                             <span class="invalid-feedback" role="alert">
                                                 {{ $message }}

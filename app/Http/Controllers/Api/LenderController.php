@@ -69,6 +69,7 @@ class LenderController extends Controller
                     'product_image_url' => $product->thumbnailImage ? $product->thumbnailImage->file_path : null,
                     'all_images' => $allImages,
                     'favourites' => !is_null($product->favorites) ? true : false,
+                    'created_at' => $product->created_at,
                 ];
             })->toArray();
 

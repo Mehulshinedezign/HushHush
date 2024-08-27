@@ -815,7 +815,7 @@
         $(window).scroll(function() {
             var scroll = $(window).scrollTop();
 
-            if (scroll >= 250) {
+            if (scroll >= 180) {
                 $("header").addClass("fixed");
             } else {
                 $("header").removeClass("fixed");
@@ -1195,7 +1195,7 @@
             });
         });
 
-        // count total number of unseen message 
+        // count total number of unseen message
         async function countSingleChatCount(chat_list) {
             return new Promise(async (res, rej) => {
                 try {

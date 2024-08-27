@@ -322,7 +322,7 @@
             });
 
             // Trigger validation when country, state, or city fields change
-            $('#addressline1, #addressline2, #country, #state, #city').on('change', function() {
+            $('#addressline1, #addressline2, #country, #state, ').on('change', function() {
                 $('#address').valid();
             });
         });

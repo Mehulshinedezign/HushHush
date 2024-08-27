@@ -2679,10 +2679,13 @@ input[type="range"]::-webkit-slider-thumb {
     display: block;
     /* padding-right: 15px; */
 }
-.search-pro-header .formfield.icon-new-bx input{
+.search-pro-header .formfield.icon-new-bx input {
     min-height: unset;
+    background-color: transparent;
 }
-
+.search-pro-header .formfield.icon-new-bx input::placeholder{
+    color: #757575;
+}
 .formfield.icon-new-bx .form-icon {
     top: 7px;
 }
@@ -2703,7 +2706,17 @@ form#searchForm {
     height: 5px;
 }
 
+.formfield:has(select){
+    z-index: 9;
+}
+.formfield:has(select) .form-icon{
+    z-index: -1;
+}
 
+.formfield select, .formfield select:focus{
+    background-color: transparent;
+    cursor: pointer;
+}
 
 
 
