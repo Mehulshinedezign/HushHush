@@ -507,7 +507,6 @@
             slidesToScroll: 1,
             asNavFor: '.slider-content',
             dots: false,
-            centerMode: false,
             focusOnSelect: true
         });
 

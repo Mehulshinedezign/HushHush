@@ -414,9 +414,12 @@
     }
 
     ul.navbar-nav>li {
-        padding: 5px 25px;
+        padding: 5px 0px;
         width: 100%;
         position: relative;
+    }
+    .bottom-nav .container {
+        gap: 0px;
     }
 
     .logo img {

@@ -1,0 +1,24 @@
+<svg width="292" height="273" viewBox="0 0 292 273" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M137.273 184.194C139.201 181.6 144.612 177.969 150.837 184.194" stroke="black" stroke-width="2.7423"/>
+<path d="M233.958 110.771H54.1689C52.4398 110.771 51.1422 112.351 51.4792 114.047L77.3424 244.21C77.5974 245.494 78.7236 246.418 80.0321 246.418H208.52C209.831 246.418 210.959 245.489 211.211 244.202L236.65 114.039C236.981 112.345 235.684 110.771 233.958 110.771Z" stroke="black" stroke-width="5.02755"/>
+<circle cx="5.99342" cy="5.99342" r="5.99342" transform="matrix(1 0 0 -1 114.055 171.688)" fill="black"/>
+<circle cx="5.99342" cy="5.99342" r="5.99342" transform="matrix(1 0 0 -1 162.078 171.688)" fill="black"/>
+<circle opacity="0.5" cx="6.79772" cy="6.79772" r="5.88362" transform="matrix(1 0 0 -1 261.477 84.7666)" stroke="black" stroke-width="1.8282"/>
+<circle opacity="0.5" cx="6.79772" cy="6.79772" r="5.88362" transform="matrix(1 0 0 -1 163.234 28.1689)" stroke="black" stroke-width="1.8282"/>
+<circle opacity="0.5" cx="6.79772" cy="6.79772" r="5.88362" transform="matrix(1 0 0 -1 53.8125 14.5732)" stroke="black" stroke-width="1.8282"/>
+<g opacity="0.5">
+<path d="M283.867 151.694V159.326H291.637" stroke="black" stroke-width="1.8282"/>
+<path d="M283.867 171.688V164.057H291.637" stroke="black" stroke-width="1.8282"/>
+<path d="M278.949 151.694V159.326H271.179" stroke="black" stroke-width="1.8282"/>
+<path d="M278.949 171.688V164.057H271.179" stroke="black" stroke-width="1.8282"/>
+</g>
+<g opacity="0.5">
+<path d="M13.0508 41.7764V49.4083H20.8209" stroke="black" stroke-width="1.8282"/>
+<path d="M13.0508 61.7705V54.1386H20.8209" stroke="black" stroke-width="1.8282"/>
+<path d="M8.13281 41.7764V49.4083H0.362659" stroke="black" stroke-width="1.8282"/>
+<path d="M8.13281 61.7705V54.1386H0.362659" stroke="black" stroke-width="1.8282"/>
+</g>
+<rect x="120.446" y="35.1481" width="17.1287" height="94.4236" rx="8.56433" transform="rotate(30.3753 120.446 35.1481)" fill="#FFC400" stroke="black" stroke-width="5.02755"/>
+<rect x="218.79" y="110.143" width="17.1287" height="94.4236" rx="8.56433" transform="rotate(112.886 218.79 110.143)" fill="#DF7056" stroke="black" stroke-width="5.02755"/>
+<ellipse opacity="0.5" cx="144.058" cy="266.64" rx="91.7376" ry="5.38306" fill="#D9D9D9"/>
+</svg>

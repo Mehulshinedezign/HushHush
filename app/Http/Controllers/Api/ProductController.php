@@ -1049,6 +1049,7 @@ class ProductController extends Controller
                     'product_image_url' => $product->thumbnailImage->file_path ?? null,
                     'all_images' => $allImages,
                     'favourites' => !is_null($product->favorites) ? true : false,
+                    'created_at' => $product->created_at,
 
                 ];
             })->toArray();
@@ -1068,7 +1069,7 @@ class ProductController extends Controller
     }
 
 
-   
+
 
     public function getAllProductsById($id)
     {
