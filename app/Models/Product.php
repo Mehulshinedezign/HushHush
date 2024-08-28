@@ -312,6 +312,19 @@ class Product extends Model
         return $query;
     }
 
+    public function scopeFilterByRatings($query, $ratings)
+    {
+        if (!empty($ratings)) {
+            // dd($ratings);
+            return $query->whereHas('ratings', function ($q) use ($ratings) {
+                $q->whereIn('rating', $ratings);
+            });
+        }
+        dd($query);
+        return $query;
+    }
+
+
 
     // public function scopeApplyFilters($query)
     // {
@@ -475,77 +488,77 @@ class Product extends Model
 
 
     public function scopeApplyFilters($query)
-{
-    $request = request();
+    {
+        $request = request();
 
-    // Category filter with subcategories
-    $query->when($request->filled('category'), function ($q) use ($request) {
-        $categories = is_array($request->category) ? $request->category : [$request->category];
-        $q->where(function ($q) use ($categories) {
-            $q->whereIn('category_id', $categories)
-              ->orWhereHas('subcategory', function ($q) use ($categories) {
-                  $q->whereIn('parent_id', $categories);
-              });
+        // Category filter with subcategories
+        $query->when($request->filled('category'), function ($q) use ($request) {
+            $categories = is_array($request->category) ? $request->category : [$request->category];
+            $q->where(function ($q) use ($categories) {
+                $q->whereIn('category_id', $categories)
+                    ->orWhereHas('subcategory', function ($q) use ($categories) {
+                        $q->whereIn('parent_id', $categories);
+                    });
+            });
         });
-    });
 
-    // Subcategory filter
-    // $query->when($request->filled('Subcategory'), function ($q) use ($request) {
-    //     $subcategories = is_array($request->Subcategory) ? $request->Subcategory : [$request->Subcategory];
-    //     $q->whereIn('subcat_id', $subcategories);
-    // });
+        // Subcategory filter
+        // $query->when($request->filled('Subcategory'), function ($q) use ($request) {
+        //     $subcategories = is_array($request->Subcategory) ? $request->Subcategory : [$request->Subcategory];
+        //     $q->whereIn('subcat_id', $subcategories);
+        // });
 
-    // Brand filter
-    $query->when($request->filled('Brand'), function ($q) use ($request) {
-        $brands = is_array($request->Brand) ? $request->Brand : [$request->Brand];
-        $q->whereIn('brand', $brands);
-    });
-
-    // Size filter
-    $query->when($request->filled('Size'), function ($q) use ($request) {
-        $sizes = is_array($request->Size) ? $request->Size : [$request->Size];
-        $q->whereIn('size', $sizes);
-    });
-
-    // Price range filter
-    $query->when($request->filled(['min_value', 'max_value']), function ($q) use ($request) {
-        $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
-    });
-
-    // Location filter
-    $query->when($request->filled(['country', 'state', 'city']), function ($q) use ($request) {
-        $q->where([
-            'country' => $request->country,
-            'state' => $request->state,
-            'city' => $request->city,
-        ]);
-    })->when($request->filled(['country', 'state']) && !$request->filled('city'), function ($q) use ($request) {
-        $q->where([
-            'country' => $request->country,
-            'state' => $request->state,
-        ]);
-    })->when($request->filled('country') && !$request->filled(['state', 'city']), function ($q) use ($request) {
-        $q->where('country', $request->country);
-    });
-
-    // Rating filter
-    $query->when($request->rating, function ($q) use ($request) {
-        $q->whereHas('ratings', function ($q) use ($request) {
-            $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+        // Brand filter
+        $query->when($request->filled('Brand'), function ($q) use ($request) {
+            $brands = is_array($request->Brand) ? $request->Brand : [$request->Brand];
+            $q->whereIn('brand', $brands);
         });
-    });
 
-    // Filter by date range
-    // $query->when($request->filled('filter_date'), function ($q) use ($request) {
-    //     $dateRange = $request->filter_date;
-    //     $dates = explode(' - ', $dateRange);
-    //     $startDate = date('Y-m-d', strtotime($dates[0]));
-    //     $endDate = date('Y-m-d', strtotime($dates[1]));
-    //     return $q->filterByDateRange($startDate, $endDate);
-    // });
+        // Size filter
+        $query->when($request->filled('Size'), function ($q) use ($request) {
+            $sizes = is_array($request->Size) ? $request->Size : [$request->Size];
+            $q->whereIn('size', $sizes);
+        });
 
-    return $query;
-}
+        // Price range filter
+        $query->when($request->filled(['min_value', 'max_value']), function ($q) use ($request) {
+            $q->whereBetween('rent_day', [$request->input('min_value'), $request->input('max_value')]);
+        });
+
+        // Location filter
+        $query->when($request->filled(['country', 'state', 'city']), function ($q) use ($request) {
+            $q->where([
+                'country' => $request->country,
+                'state' => $request->state,
+                'city' => $request->city,
+            ]);
+        })->when($request->filled(['country', 'state']) && !$request->filled('city'), function ($q) use ($request) {
+            $q->where([
+                'country' => $request->country,
+                'state' => $request->state,
+            ]);
+        })->when($request->filled('country') && !$request->filled(['state', 'city']), function ($q) use ($request) {
+            $q->where('country', $request->country);
+        });
+
+        // Rating filter
+        $query->when($request->rating, function ($q) use ($request) {
+            $q->whereHas('ratings', function ($q) use ($request) {
+                $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+            });
+        });
+
+        // Filter by date range
+        // $query->when($request->filled('filter_date'), function ($q) use ($request) {
+        //     $dateRange = $request->filter_date;
+        //     $dates = explode(' - ', $dateRange);
+        //     $startDate = date('Y-m-d', strtotime($dates[0]));
+        //     $endDate = date('Y-m-d', strtotime($dates[1]));
+        //     return $q->filterByDateRange($startDate, $endDate);
+        // });
+
+        return $query;
+    }
 
 
     // public function scopeApplyFilters($query)

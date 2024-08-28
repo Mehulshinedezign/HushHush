@@ -471,11 +471,11 @@ class ProductController extends Controller
                         if (count($dateRange) == 1) {
                             ProductDisableDate::create([
                                 'product_id' => $product->id,
-                                'disable_date' => \DateTime::createFromFormat('d/m/Y', $dateRange[0])->format('Y-m-d'),
+                                'disable_date' => \DateTime::createFromFormat('Y-m-d', $dateRange[0])->format('Y-m-d'),
                             ]);
                         } else if (count($dateRange) == 2) {
-                            $start = \DateTime::createFromFormat('d/m/Y', $dateRange[0]);
-                            $end = \DateTime::createFromFormat('d/m/Y', $dateRange[1]);
+                            $start = \DateTime::createFromFormat('Y-m-d', $dateRange[0]);
+                            $end = \DateTime::createFromFormat('Y-m-d', $dateRange[1]);
 
                             while ($start <= $end) {
                                 ProductDisableDate::create([
@@ -872,6 +872,13 @@ class ProductController extends Controller
                 $filterApplied = true;
             }
 
+            // Add Ratings filter
+            if ($request->has('Ratings')) {
+                $ratings = explode(',', $request->input('Ratings'));
+                $query->filterByRatings($ratings);
+                $filterApplied = true;
+            }
+
             $products = $query->get();
 
             $categories = getParentCategory();
@@ -943,6 +950,17 @@ class ProductController extends Controller
                         ['id' => '3', 'name' => 'Fair', 'isSelect' => false],
                     ],
                 ],
+                [
+                    'id' => '7',
+                    'name' => 'Ratings',
+                    'subItems' => [
+                        ['id' => '1', 'name' => '1 Star', 'isSelect' => false],
+                        ['id' => '2', 'name' => '2 Stars', 'isSelect' => false],
+                        ['id' => '3', 'name' => '3 Stars', 'isSelect' => false],
+                        ['id' => '4', 'name' => '4 Stars', 'isSelect' => false],
+                        ['id' => '5', 'name' => '5 Stars', 'isSelect' => false],
+                    ],
+                ],
             ];
 
             // Transform the products
@@ -1012,6 +1030,7 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
 
 
 
