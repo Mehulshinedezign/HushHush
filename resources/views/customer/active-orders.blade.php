@@ -105,31 +105,30 @@
         </a>
     </div> --}}
 </div>
-<div class="modal fade cencel-order-modal" id="cancellation-note" tabindex="-1"
-    aria-labelledby="cancellation-noteLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="ajax-response"></div>
-                <form method="post">
-                    @csrf
-                    <div class="cancellation-popup-sec">
-                        <div class="popup-head">
-                            <h6>Cancellation Note</h6>
-                            <button type="" class="close" data-bs-dismiss="modal"><i
-                                    class="fa-solid fa-xmark"></i></button>
-                        </div>
-                        <textarea class="form-control mt-3" name="cancellation_note" rows="5"
-                            placeholder="Please write cancellation note here"></textarea>
-                        <button type="submit" class="button primary-btn full-btn mt-3  submit"
-                            id="cancel-order">Submit&nbsp;<i class="fa-solid fa-circle-notch fa-spin show-loader"
-                                style="display:none;"></i>
-                        </button>
+<div class="modal fade cencel-order-modal" id="cancellation-note" data-bs-backdrop="static" tabindex="-1"
+aria-labelledby="cancellation-noteLabel" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-body">
+            <div class="ajax-response"></div>
+            <form method="post" id="cancel-order">
+                @csrf
+                <div class="cancellation-popup-sec">
+                    <div class="popup-head">
+                        <h6>Cancellation Note</h6>
+                        <button type="" class="close" data-bs-dismiss="modal"><i
+                                class="fa-solid fa-xmark"></i></button>
                     </div>
-                </form>
-            </div>
+                    <textarea class="form-control mt-3" name="cancellation_note" rows="5"
+                        placeholder="Please write cancellation note here"></textarea>
+                    <button type="submit" class="button primary-btn full-btn mt-3  submit">Submit&nbsp;<i
+                            class="fa-solid fa-circle-notch fa-spin show-loader" style="display:none;"></i>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 </div>
 @push('scripts')
     {{-- dispute order --}}

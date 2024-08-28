@@ -20,6 +20,8 @@ class UserNotification extends Model
         'lender_order_pickup',
         'customer_order_return',
         'lender_order_return',
+        'order_canceled_by_lender',
+        'order_canceled_by_customer',
     ];
 
 

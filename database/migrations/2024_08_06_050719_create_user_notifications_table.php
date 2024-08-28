@@ -23,6 +23,8 @@ return new class extends Migration
             $table->enum('lender_order_pickup',['0','1'])->default('0');
             $table->enum('customer_order_return',['0','1'])->default('0');
             $table->enum('lender_order_return',['0','1'])->default('0');
+            $table->enum('order_canceled_by_lender',['0','1'])->default('0');
+            $table->enum('order_canceled_by_customer',['0','1'])->default('0');
 
             $table->timestamps();
         });

@@ -13,7 +13,7 @@ use Stripe, Exception, DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\{AdminSetting, BillingToken, Order, Chat, CustomerBillingDetails, CustomerRating, DisputeOrder, OrderImage, OrderItem, Product, User, RetailerPayout, ProductDisableDate};
-use App\Notifications\{CustomerImageUpload, CustomerImageUploadForReturn, CustomerOrderPickup, CutomerOrderReturn, LenderOrderPickup, LenderOrderReturn, OrderPickUp, OrderReturn, VendorOrderPickedUp, VendorOrderReturn, RateYourExperience};
+use App\Notifications\{CustomerImageUpload, CustomerImageUploadForReturn, CustomerOrderPickup, CutomerOrderReturn, LenderOrderPickup, LenderOrderReturn, OrderPickUp, OrderReturn, VendorOrderPickedUp, VendorOrderReturn, RateYourExperience,VendorOrderCancelled};
 
 
 class OrderController extends Controller
@@ -705,12 +705,11 @@ class OrderController extends Controller
             //     // send mail to customer of order cancelled successfully
             // }
             // $user->notify(new OrderCancelled($order));
-
+            $ordernotificaton = Order::with('user.usernotification')->where('user_id',$order->user_id)->first();
             // // check the retailer order cancelled status before sending the notification
-            // if (isset($order->item->retailer->notification) && $order->item->retailer->notification->order_cancelled == 'on') {
-            //     // send mail to retailer of order picked up successfully
-            //     // $order->item->retailer->notify(new VendorOrderCancelled($order));
-            // }
+            if (isset($order->user->usernotification) && $order->user->usernotification->order_canceled_by_lender == 1) {
+                $order->user->notify(new VendorOrderCancelled());
+            }
 
             session()->flash('success', __("order.messages.cancel.success"));
             // dd($url);

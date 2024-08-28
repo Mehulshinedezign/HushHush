@@ -14,10 +14,9 @@ class RentalCancelorder extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    public function __construct($emaildata, $customer)
+    public function __construct()
     {
-        $this->data = $emaildata;
-        $this->customer = $customer;
+        
     }
 
     /**
@@ -35,11 +34,9 @@ class RentalCancelorder extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $data = $this->data;
-        $customer = $this->customer;
-        $retailer =  $data['product']['retailer'];
-        $user = auth()->user();
-        return (new MailMessage)->subject("Queue Taylor Swift's Don't Blame Me")->markdown('mail.customer.rental_cancel_order', compact('data', 'retailer', 'user', 'customer'));
+      
+        return (new MailMessage)->subject("Order canceled By Customer")->line('order canceled by customer.')
+        ->line('Thank you for using our application!');
     }
 
     /**

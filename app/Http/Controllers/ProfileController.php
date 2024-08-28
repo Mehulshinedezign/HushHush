@@ -584,6 +584,8 @@ class ProfileController extends Controller
                 'lender_order_pickup' => 'lender_order_pickup',
                 'customer_order_return' => 'customer_order_return',
                 'lender_order_return' => 'lender_order_return',
+                'order_canceled_by_lender' => 'order_canceled_by_lender',
+                'order_canceled_by_customer' => 'order_canceled_by_customer',
             ];
 
             $fieldToUpdate = $fieldData[$request->name] ?? null;

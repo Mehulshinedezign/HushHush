@@ -200,7 +200,8 @@
                                                 for="switch7">Toggle</label>
                                         </div>
                                     </div>
-                                </div><div class="my-pro-notify-box">
+                                </div>
+                                <div class="my-pro-notify-box">
                                     <div class="my-pro-detail-left">
                                         <div class="my-pro-detail-para">
                                             <h4 class="m-0">Lender order return</h4>
@@ -210,6 +211,32 @@
                                         <div class="toggle-btn">
                                             <input type="checkbox" id="switch8" name="lender_order_return" @if (@$user->usernotification->lender_order_return == '1') checked="checked" @endif><label
                                                 for="switch8">Toggle</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="my-pro-notify-box">
+                                    <div class="my-pro-detail-left">
+                                        <div class="my-pro-detail-para">
+                                            <h4 class="m-0"> order canceled by Lender</h4>
+                                        </div>
+                                    </div>
+                                    <div class="my-pro-detail-right">
+                                        <div class="toggle-btn">
+                                            <input type="checkbox" id="switch9" name="order_canceled_by_lender" @if (@$user->usernotification->order_canceled_by_lender == '1') checked="checked" @endif><label
+                                                for="switch9">Toggle</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="my-pro-notify-box">
+                                    <div class="my-pro-detail-left">
+                                        <div class="my-pro-detail-para">
+                                            <h4 class="m-0"> order canceled by customer</h4>
+                                        </div>
+                                    </div>
+                                    <div class="my-pro-detail-right">
+                                        <div class="toggle-btn">
+                                            <input type="checkbox" id="switch10" name="order_canceled_by_customer" @if (@$user->usernotification->order_canceled_by_customer == '1') checked="checked" @endif><label
+                                                for="switch10">Toggle</label>
                                         </div>
                                     </div>
                                 </div>

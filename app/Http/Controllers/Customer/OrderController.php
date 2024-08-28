@@ -512,9 +512,8 @@ class OrderController extends Controller
 
     public function cancelOrder(Request $request, Order $order)
     {
-
+     
         $order->load(["transaction", "retailer", "queryOf"]);
-
         $order_commission = AdminSetting::where('key', 'order_commission')->first();
         $url = route('orders');
         if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
@@ -554,7 +553,6 @@ class OrderController extends Controller
         $paymentIntentData = $stripe->paymentIntents->retrieve(
             $order->transaction->payment_id
         );
-
         if (!isset($paymentIntentData->latest_charge)) {
             session()->flash('error', __("order.messages.cancel.paymentIncomplete"));
             return response()->json([
@@ -609,7 +607,6 @@ class OrderController extends Controller
             /*UPDATE ORDER ITEMS*/
             // OrderItem::where("order_id", $order->id)->update($updateData);
 
-            // dd($order->transaction);
             $order->transaction->update($updateData);
             /*UPDATE TRANSACTION*/
             // Transaction::where("order_id", $order->id)->update($updateData);
@@ -619,7 +616,11 @@ class OrderController extends Controller
             ProductDisableDate::where('product_id', $order->product_id)->where("disable_date", '>=', $order->from_date)->where("disable_date", '<=', $order->to_date)->delete();
 
             $user = auth()->user();
-
+            $ordernotificaton = Order::with('retailer.usernotification')->where('retailer_id',$order->retailer_id)->first();
+            // // check the retailer order cancelled status before sending the notification
+            if (isset($order->retailer->usernotification) && $order->retailer->usernotification->order_canceled_by_customer == 1) {
+                $order->retailer->notify(new RentalCancelorder());
+            }
 
             session()->flash('success', __("order.messages.cancel.success"));
             return response()->json([

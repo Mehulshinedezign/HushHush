@@ -35,8 +35,11 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
     Route::get('verify-email/{user}/{token}', [App\Http\Controllers\Auth\RegisterController::class, 'verifyEmail'])->name('verify-email');
     Route::any('/verify', [App\Http\Controllers\Auth\ResetPasswordController::class, 'verifyOtp'])->name('verify');
     Route::any('/update-password', [App\Http\Controllers\Auth\ResetPasswordController::class, 'update'])->name('user.updatepassword');
-    Route::get('product/{id}', [App\Http\Controllers\Customer\ProductController::class, 'view'])->name('viewproduct');
 
+    Route::middleware(['web.admin'])->group(function () {
+    Route::any('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index');
+    Route::get('product/{id}', [App\Http\Controllers\Customer\ProductController::class, 'view'])->name('viewproduct');
+    });
     Auth::routes();
 
     Route::get('retailer/register', function () {

@@ -17,9 +17,8 @@ class VendorOrderCancelled extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($message)
+    public function __construct()
     {
-        $this->message = $message;
     }
 
     /**
@@ -41,9 +40,10 @@ class VendorOrderCancelled extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $data = $this->message;
 
-        return (new MailMessage)->markdown('mail.vendor.order_cancelled', compact('data'));
+        return (new MailMessage)->subject('Oder Canceled BY Lender')
+        ->line('Your order canceled by lender .')
+        ->line('Thank you for using our application!');
     }
 
     /**
