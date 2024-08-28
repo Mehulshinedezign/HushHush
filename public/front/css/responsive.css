@@ -380,6 +380,10 @@
     .add-product-sec {
         padding-bottom: 40px;
     }
+    .rental-request-wrapper .tb-table table {
+        min-width: 1660px;
+    }
+
 }
 
 
@@ -561,9 +565,9 @@
         padding: 15px;
     }
 
-    .btn-dispute-holder {
+    /* .btn-dispute-holder {
         padding: 0 15px 20px;
-    }
+    } */
 
     ul.billing-info {
         gap: 20px;
@@ -1368,6 +1372,22 @@
     .filter-fotter-btns button{
         width: 100%;
     }
+    .order-pro-details {
+        flex-direction: column;
+    }
+    .order-details-list {
+        padding-left: 0px;
+        border-left: 0;
+    }
+    .rental-request-tb ul {
+        border-bottom: 1px solid #C0C0C0;
+        gap: 10px;
+    }
+    .order-his-card {
+        background-color: #F4F4F4;
+        padding: 18px 10px 14px 10px;
+    }
+
 }
 
 @media screen and (max-width:575px) {
@@ -1440,6 +1460,18 @@
         display: grid;
         grid-template-columns: repeat(1, 1fr);
         gap: 60px 25px;
+    }
+    .rental-request-tb ul {
+        border-bottom: 1px solid #C0C0C0;
+        gap: 0px;
+    }
+    .order-his-tab-head ul .nav-link {
+        display: block;
+        padding: .5rem 0rem;
+    }
+    .order-card-img {
+        width: 100%;
+        max-height: 251px;
     }
 
 }

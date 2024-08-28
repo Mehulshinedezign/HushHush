@@ -37,7 +37,7 @@
                                 <div class="my-pro-detail">
                                     <div class="my-pro-detail-left">
                                         <div class="my-pro-detail-para">
-                                            <p>Personal Info</p>
+                                            <p>User Name</p>
                                             <div class="my-pro-edit-form">
                                                 <div class="form-group">
                                                     <div class="formfield">

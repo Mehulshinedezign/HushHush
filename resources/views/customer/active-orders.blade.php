@@ -24,7 +24,7 @@
             @if ($order->status == 'Waiting' || $order->status == 'Picked Up')
             @php $empty = false; @endphp
 
-                <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6">
                     <div class="order-his-card">
                         <div class="order-card-top">
                             <div class="order-card-img">
@@ -70,7 +70,7 @@
                             <div class="order-card-footer">
                                 <div class="btn-dispute-holder">
                                     <a href="javascript:void(0);" data-url="{{ route('orderdispute', [$order->id]) }}"
-                                        class="btn btn-dark justify-content-center dispute-order full-btn"
+                                        class="button btn-dark justify-content-center dispute-order full-btn"
                                         data-bs-toggle="modal" data-bs-target="#orderDisputeModal">Raise a dispute</a>
                                 </div>
                             </div>

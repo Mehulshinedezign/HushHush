@@ -27,7 +27,7 @@ Route::post('/verify/email/otp', [App\Http\Controllers\VerifyOtpController::clas
 Route::post('/verify/phone/otp', [App\Http\Controllers\VerifyOtpController::class, 'verifyPhoneOtp'])->name('verify.phone.otp');
 Route::get('/resend-otp/{type}', [App\Http\Controllers\VerifyOtpController::class, 'resendOtp'])->name('resend.otp');
 
-Route::any('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index');
+Route::any('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index')->middleware('auth_verified');
 Route::middleware('localization', 'prevent-back-history')->group(function () {
 
     Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);

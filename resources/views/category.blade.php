@@ -6,7 +6,7 @@
                 <h2>Dress for Every Occasion</h2>
             </div>
             <div class="home-filter-product">
-                <form action="{{ route('index') }}" method="GET">
+                <form action="{{ route('index') }}" method="GET" id="filters">
                     <input type="hidden" name="country" id="country">
                     <input type="hidden" name="state" id="state">
                     <input type="hidden" name="city" id="city">
@@ -88,19 +88,22 @@
                                                 class="max-input" value="{{ request()->input('max_value', 10000) }}">
                                         </div>
                                     </div>
-                                    <div class="slider-container">
+
+                                    <!-- Error message div -->
+                                    <div id="error-message" style="color: red; margin-top: 5px; display: none;"></div>
+                                    {{-- <div class="slider-container">
                                         <div class="price-slider"
                                             style="@if (request()->has('style')) {{ request()->style }} @endif">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
-                                <div class="range-input">
+                                {{-- <div class="range-input">
                                     <input type="range" class="min-range" min="0" max="10000"
                                         value="{{ request()->input('min_value', 0) }}" step="1">
                                     <input type="range" class="max-range" min="0" max="10000"
                                         value="{{ request()->input('max_value', 10000) }}" step="1">
-                                </div>
+                                </div> --}}
                             </div>
 
                         </div>
@@ -299,6 +302,36 @@
 
 
 @push('scripts')
+    <script>
+        const minInput = document.getElementById('selectedMinValue');
+        const maxInput = document.getElementById('selectedMaxValue');
+        const errorMessage = document.getElementById('error-message');
+
+        function validateValues() {
+            const minValue = parseFloat(minInput.value);
+            const maxValue = parseFloat(maxInput.value);
+
+            if (minValue >= maxValue) {
+                errorMessage.textContent = 'The minimum value must be less than the maximum value.';
+                errorMessage.style.display = 'block';
+                return false;
+            } else {
+                errorMessage.style.display = 'none';
+                return true;
+            }
+        }
+
+        // Attach real-time validation to input events
+        minInput.addEventListener('input', validateValues);
+        maxInput.addEventListener('input', validateValues);
+
+        // Attach validation check before form submission
+        document.getElementById('filters').addEventListener('submit', function(event) {
+            if (!validateValues()) {
+                event.preventDefault(); // Prevent form submission if validation fails
+            }
+        });
+    </script>
     <script>
         jQuery(document).ready(function() {
             // Handle parent category click

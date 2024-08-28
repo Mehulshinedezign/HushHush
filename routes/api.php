@@ -23,6 +23,8 @@ Route::post('/login/{type}', [App\Http\Controllers\Api\LoginController::class, '
 Route::post('/reset-password/{type}', [App\Http\Controllers\Api\ForgotPasswordController::class, 'resetPassword']);
 Route::post('verify-otp/{type}', [App\Http\Controllers\Api\RegisterController::class, 'verifyOtp']);
 Route::post('/update-password', [App\Http\Controllers\Api\ResetPasswordController::class, 'resetPassword']);
+Route::post('/resend-otp/{type}', [App\Http\Controllers\Api\ResetPasswordController::class, 'resentOtp']);
+
 
 
 

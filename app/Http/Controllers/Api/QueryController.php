@@ -85,6 +85,7 @@ class QueryController extends Controller
                         ->first();
                     $lender = User::where('id', $query->for_user)->first();
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
+                    $actual_price =$query->getCalculatedPrice($query->date_range);
                     $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
                     // dd($price);
 
@@ -106,6 +107,10 @@ class QueryController extends Controller
                         'lender_profile_pic' => $lender->frontend_profile_url ?? null,
                         'lender_id' => $lender->id ?? null,
                         'created_at'=>$query->created_at,
+                        'negotiated_price'=>$query->negotiate_price ?? Null,
+                        'cleaning_charge' => $query->cleaning_charges ?? Null,
+                        'shipping_charge' => $query->shipping_charges ?? null,
+                        'actual_price' => $actual_price ?? null,
                     ];
                 });
 
@@ -153,6 +158,7 @@ class QueryController extends Controller
                     $borrower = User::where('id', $query->user_id)->first();
                     // dd($borrower);
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
+                    $actual_price =$query->getCalculatedPrice($query->date_range);
                     return [
                         'id' => $query->id ?? null,
                         'user_id' => $query->user_id ?? null,
@@ -171,6 +177,10 @@ class QueryController extends Controller
                         'borrower_profile_pic' => $borrower->frontend_profile_url ?? null,
                         'borrower_id' => $borrower->id ?? null,
                         'created_at'=>$query->created_at,
+                        'negotiated_price'=>$query->negotiate_price ?? Null,
+                        'cleaning_charge' => $query->cleaning_charges ?? Null,
+                        'shipping_charge' => $query->shipping_charges ?? null,
+                        'actual_price' => $actual_price ?? null,
                     ];
                 });
                 // dd('here');

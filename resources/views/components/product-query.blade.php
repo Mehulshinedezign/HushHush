@@ -5,7 +5,7 @@
                 <table >
                     <thead>
                         <tr>
-                            <th>Productttt</th>
+                            <th>Product</th>
                             <th>Name</th>
                             <th>Actual Price</th>
                             @if($querydatas->first()->status != 'PENDING')

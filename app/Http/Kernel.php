@@ -80,6 +80,7 @@ class Kernel extends HttpKernel
         'CheckStatus' => \App\Http\Middleware\CheckStatus::class,
         'prevent.admin' => \App\Http\Middleware\PreventAdminAccess::class,
         'web.admin' => \App\Http\Middleware\webadmin::class,
+        'auth_verified' => \App\Http\Middleware\RedirectToOtpPage::class,
         // 'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
 
     ];

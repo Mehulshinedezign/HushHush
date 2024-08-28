@@ -415,6 +415,7 @@ class ProductController extends Controller
             $user = $request->user();
             // dd($user->vendorBankDetails);
             $is_bankdetail = $user->bankAccount;
+            // dd()
 
             if (is_null($is_bankdetail)) {
                 $apiResponse = 'error';
@@ -437,7 +438,7 @@ class ProductController extends Controller
                 'brand' => $request->brand,
                 'product_condition' => $request->product_condition,
                 'user_id' => $user->id,
-                'status' => $is_bankdetail && isset($request->status) ? '1' : '0',
+                'status' => '1',
                 'product_market_value' => $request->product_market_value,
                 'product_link' => $request->product_link,
                 'min_days_rent_item' => $request->min_rent_days,
@@ -445,7 +446,7 @@ class ProductController extends Controller
                 'rent_week' => $request->rent_week,
                 'rent_month' => $request->rent_month,
             ];
-
+            // dd($data,$is_bankdetail);
             $product = Product::create($data);
 
             $locationData = json_decode($request->pickup_location, true);
@@ -830,9 +831,19 @@ class ProductController extends Controller
     public function getAllProducts(Request $request)
     {
         try {
-            $authUserId = auth()->user()->id;
+            $authUser = auth()->user();
 
-            $query = Product::where('user_id', '!=', $authUserId);
+            $is_bankdetail = $authUser->bankAccount;
+            if(is_null($is_bankdetail))
+            {
+                $bankdetails=false;
+            }
+            else
+            {
+                $bankdetails=true;
+            }
+
+            $query = Product::where('user_id', '!=', $authUser->id);
 
             $filterApplied = false;
 
@@ -1020,6 +1031,7 @@ class ProductController extends Controller
                     'products' => $transformedProducts,
                     'filters' => $filters,
                     'filter_applied' => $filterApplied,
+                    'account_added' => $bankdetails,
                 ],
             ], 200);
         } catch (\Throwable $e) {

@@ -3,8 +3,8 @@
 @section('title', $page->title)
 
 @section('content')
-   
-    <section class="cms-comman-sec">
+
+    <section class="cms-comman-sec min-height-100">
         <div class="profile-section">
             <div class="container">
                 <div class="banner-content">

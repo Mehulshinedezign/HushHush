@@ -22,7 +22,7 @@
         @foreach ($orders as $order)
             @if ($order->status == 'Completed')
                 @php $empty = false; @endphp
-                <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6">
                     <div class="order-his-card">
                         <div class="order-card-top">
                             <div class="order-card-img">

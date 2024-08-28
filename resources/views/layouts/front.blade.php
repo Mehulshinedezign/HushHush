@@ -1258,7 +1258,7 @@
     <script defer src="{{ asset('js/custom/chatlist.js') }}"></script>
 @endauth
     @include('validation')
-    @include('validation.js_product')
+    {{-- @include('validation.js_product') --}}
     @stack('scripts')
 </body>
 

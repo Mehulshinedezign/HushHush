@@ -191,6 +191,13 @@ class RegisterController extends Controller
             }
 
             $user = User::find($request->input('user_id'));
+            if(is_null($user))
+            {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'User ID doesnot exist ',
+                ], 400);
+            }
             $otp = $request->input('otp');
 
             if ($this->otpService->verifyOtpByType($user, $otp, $type)) {

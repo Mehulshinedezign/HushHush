@@ -1,4 +1,4 @@
-1/* container Queries */
+/* container Queries */
 @media screen and (min-width:576px) {
     .footer-navigation-list .accordion-arrow {
         opacity: 0;
@@ -1285,6 +1285,8 @@
     .chat-window-box {
         padding: 15px 15px 30px;
     }
+
+
 
 
 }

@@ -45,6 +45,15 @@
             product_condition: {
                 required: true,
             },
+            size: {
+                required: true,
+            },
+            brand: {
+                required: true,
+            },
+            color: {
+                required: true,
+            },
             // state: {
             //     required: true,
             // },
@@ -84,7 +93,7 @@
             },
             product_link: {
                 // required: true,
-                url: '/^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/',
+                pattern: /^((ftp|http|https):\/\/)?(www\.)?(?!.*(ftp|http|https|www\.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/,
             },
             min_rent_days: {
                 required: true,
@@ -146,6 +155,15 @@
             product_condition: {
                 required: `{{ __('customvalidation.product.condition.required') }}`,
             },
+            size: {
+                required: 'Please select the size',
+            },
+            brand: {
+                required: 'Please select the brand',
+            },
+            color: {
+                required: 'Please select the color',
+            },
             // state: {
             //     required: `{{ __('customvalidation.product.state.required') }}`,
             // },
@@ -183,7 +201,7 @@
             },
             product_link: {
                 // required: `{{ __('customvalidation.product.product_link.required') }}`,
-                url: 'Please enter valid url link.',
+                pattern: 'Please enter valid url link.',
             },
             min_rent_days: {
                 required: `{{ __('customvalidation.product.min_rent_days.required') }}`,

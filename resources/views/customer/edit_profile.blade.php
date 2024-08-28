@@ -41,7 +41,7 @@
                             <div class="my-pro-detail">
                                 <div class="my-pro-detail-left">
                                     <div class="my-pro-detail-para">
-                                        <p>Personal Info</p>
+                                        <p>User Name</p>
                                         <h4>{{ $user->name }}</h4>
                                     </div>
                                 </div>
@@ -77,7 +77,7 @@
                                     <div class="my-pro-detail-left">
                                         <div class="my-pro-detail-para">
                                             <h4>Your bank account details is not stored please submit your bank details. <a href="{{ route('stripe.onboarding.redirect') }}">Submit</a> </h4>
-                                            
+
                                         </div>
                                     </div>
 
@@ -300,7 +300,7 @@
                 });
             });
         });
-        
+
 
 
 
