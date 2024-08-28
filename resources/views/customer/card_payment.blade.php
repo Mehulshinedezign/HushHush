@@ -43,7 +43,7 @@
                                         <label for="">Card Holder Name</label>
                                         <div class="form-field ">
                                             <input type="text" name="cardname" id="cardName" class="form-control"
-                                                placeholder="John Doe">
+                                                >
                                             <label class="cardName-error" for="card-name" id="cardname"></label>
                                             <!-- <div class="is-invalid stripe-error" id="cardname"></div> -->
                                         </div>
@@ -93,7 +93,7 @@
 
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <input type="hidden" value="{{ $price }}" id="total_payment">
