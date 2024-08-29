@@ -113,9 +113,9 @@
                         </ul>
                     </div>
                     <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button> -->
+                                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button> -->
                 </div>
             @endauth
             @guest
@@ -155,48 +155,63 @@
                         </div>
                     </li>
                 @endforeach
+            </ul>
+        </div>
+        <form id="searchForm" action="{{ route('index') }}" method="GET">
+            {{-- @if (request()->route()->getName() == 'index') --}}
+            <div class="search-pro-header">
+                <ul>
+                    <li>
+                        <input type="text" name="search" placeholder="Search by product name"
+                            value="{{ request('search') }}">
+                    </li>
+                    <li>
+                        <div class="formfield icon-new-bx">
+                            <input type="text" name="filter_date" id="daterange-header"
+                                placeholder="Enter date range" class="form-control daterange-cus custom-left-open"
+                                readonly>
+                            <label for="daterange-header" class="form-icon">
+                                <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
+                            </label>
+
+                        </div>
+                    </li>
+                    <li>
+                        <button type="submit" class="primary-btn"><i
+                                class="fa-solid fa-magnifying-glass"></i></button>
+                    </li>
+                    <li>
+                        @if (request()->route()->getName() == 'index')
+                            <a href="{{ route('index') }}" class="close-icon-link"><i
+                                    class="fa-solid fa-xmark"></i></a>
+                        @else
+                            <a href="javascript:void(0);" class="close-icon-link" onclick="clearForm();"><i
+                                    class="fa-solid fa-xmark"></i></a>
+                        @endif
+                    </li>
                 </ul>
             </div>
-            <form id="searchForm" action="{{ route('index') }}" method="GET">
-                {{-- @if (request()->route()->getName() == 'index') --}}
-                <div class="search-pro-header">
-                    <ul>
-                        <li>
-                            <input type="text" name="search" placeholder="Search by product name"
-                                value="{{ request('search') }}">
-                        </li>
-                        <li>
-                            <div class="formfield icon-new-bx">
-                                <input type="text" name="filter_date" id="daterange-header"
-                                    placeholder="Enter date range" class="form-control daterange-cus custom-left-open" readonly>
-                                <label for="daterange-header" class="form-icon">
-                                    <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
-                                </label>
-
-                            </div>
-                        </li>
-                        <li>
-                            <button type="submit" class="primary-btn"><i
-                                    class="fa-solid fa-magnifying-glass"></i></button>
-                        </li>
-                        <li>
-                            @if (request()->route()->getName() == 'index')
-                                <a href="{{ route('index') }}" class="close-icon-link"><i
-                                        class="fa-solid fa-xmark"></i></a>
-                            @else
-                                <a href="javascript:void(0);" class="close-icon-link" onclick="clearForm();"><i
-                                        class="fa-solid fa-xmark"></i></a>
-                            @endif
-                        </li>
-                    </ul>
-                </div>
-                {{-- @endif --}}
-            </form>
+            {{-- @endif --}}
+        </form>
     </div>
 </nav>
 </header>
 {{-- @include('common.alert') --}}
 @push('scripts')
+<script>
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const filterForm = document.getElementById('filters');
+        const searchForm = document.getElementById('searchForm');
+        const filterInputs = filterForm.querySelectorAll('input[name]');
+        filterInputs.forEach(function(input) {
+            const clone = input.cloneNode(true);
+            clone.style.display = 'none'; // Hide cloned elements
+            searchForm.appendChild(clone);
+        });
+        searchForm.submit();
+    });
+</script>
 <script>
     function clearForm() {
         document.getElementById('searchForm').reset();

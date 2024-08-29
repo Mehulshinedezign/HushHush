@@ -137,84 +137,11 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // public function store(Request $request)
-    // {
-    //     // dd("save product : ",$request->images);
 
-    //     // dd("Here",$request->all());
-    //     try {
-
-    //         $userId = auth()->user()->id;
-
-    //         $data = [
-    //             'name' => $request->product_name,
-    //             'user_id' => $userId,
-    //             'category_id' => $request->category,
-    //             'subcat_id' => $request->subcategory,
-    //             'size' => $request->size ?? '',
-    //             'color' => $request->color ?? '',
-    //             'brand' => $request->brand ?? '',
-    //             'condition' => $request->product_condition,
-    //             'state' => $request->state,
-    //             'city' => $request->city,
-    //             'product_market_value' => $request->product_market_value,
-    //             'product_link' => $request->product_link,
-    //             'min_days_rent_item' => $request->min_rent_days,
-    //             'description' => $request->description,
-    //             'rent_day' => $request->rent_price_day,
-    //             'rent_week' => $request->rent_price_week,
-    //             'rent_mont' => $request->rent_price_month,
-
-    //         ];
-
-    //         $product = Product::create($data);
-    //         // if ($request->other_brand) {
-    //         //     $brand = Brand::where('name', strtolower($request->other_brand))->first();
-    //         //     if (!$brand) {
-    //         //         $brand = Brand::create(['name' => $request->other_brand]);
-    //         //     }
-    //         //     $data['brand'] = $brand->id;
-    //         // }
-
-
-    //         if ($request->hasFile('images')) {
-    //             foreach ($request->file('images') as $index => $image) {
-    //                 // Generate a unique file name
-    //                 $fileName = $product->id . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
-    //                 $filePath = $image->storeAs('products/images', $fileName, 'public');
-
-    //                 ProductImage::create([
-    //                     'product_id' => $product->id,
-    //                     'file_name' => $fileName,
-    //                     'file_path' => $filePath,
-    //                 ]);
-    //             }
-    //         }
-
-
-
-    //         if ($request->other_size) {
-    //             $data['size'] = null;
-    //         }
-
-
-    //         ProductLocation::create([
-    //             'product_id' => $product->id,
-    //             'map_address' => $request->pick_up_location,
-    //         ]);
-
-
-    //         dd("YES DONE");
-    //         // session()->flash('success', "Your product has been uploaded successfully.");
-    //         return redirect()->back()-> session()->flash('success', "Your product has been uploaded successfully.");
-    //     } catch (\Exception $e) {
-    //         return redirect()->back()-> session()->flash('error', $e->getMessage());
-    //     }
-    // }
 
     public function store(StoreProductRequest $request)
     {
-        // dd($request->all());
+        // dd('shipment',$request->shipment,'mannual',$request->manual_location);
         try {
             DB::beginTransaction();
             $category =jsdecode_userdata($request->category);
@@ -280,6 +207,7 @@ class ProductController extends Controller
                 'address1' => $request->address1,
                 'address2' => $request->address2,
                 'manul_pickup_location' => $request->manual_location ? '1' : '0',
+                'shipment' => $request->shipment ? '1' : '0',
                 'country' => $request->country,
                 'state' => $request->state,
                 'city' => $request->city ?? null,

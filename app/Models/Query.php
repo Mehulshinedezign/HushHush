@@ -21,7 +21,8 @@ class Query extends Model
         'negotiate_price',
         'chat_enabled',
         'shipping_charges',
-        'cleaning_charges'
+        'cleaning_charges',
+        'delivery_option',
     ];
 
     public function product()
@@ -101,5 +102,10 @@ class Query extends Model
     public static function countUserQueries($userId)
     {
         return self::where('for_user', $userId)->count();
+    }
+
+    public function getDeliveryMethodAttribute()
+    {
+        return $this->delivery_option === 'ship_to_me' ? 'Shipment' : 'Pickup';
     }
 }

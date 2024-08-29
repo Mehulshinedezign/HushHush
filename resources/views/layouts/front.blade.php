@@ -267,13 +267,20 @@
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
                                             <div class="product_manual_location">
-                                                <label for="">Pickup Location*</label>
+                                                <label for="">Delivery Option</label>
 
                                                 <div class="form-check form-switch">
                                                     <label class="form-check-label"
-                                                        for="flexSwitchCheckChecked">Manual Pickup location</label>
+                                                        for="flexSwitchCheckChecked">Manual Pickup</label>
                                                     <input class="form-check-input" type="checkbox" role="switch"
                                                         name="manual_location" id="flexSwitchCheckChecked" checked>
+                                                </div>
+
+                                                <div class="form-check form-switch">
+                                                    <label class="form-check-label"
+                                                        for="flexSwitchCheckChecked">Shipment</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                        name="shipment" id="" checked>
                                                 </div>
                                             </div>
                                             <div class="form-field">
@@ -836,20 +843,7 @@
     {{-- Search the country and state  and GOogle place Api --}}
     <script>
         $(document).ready(function() {
-            // price manage
-            // const commission = "{{ adminsetting()->value }}"
-            // $('input[name="rent_price_day"]').on('change', function() {
-            //     var rentPerDay = $(this).val();
-            //     if (commission > rentPerDay) {
-            //         checkPerDayRent = 'Please enter the price grater than' + commission
-            //         $('.rentPerDay-error').text(checkPerDayRent);
-            //         $(document).find('button').prop('disabled', true);
-            //     } else {
-            //         $('.rentPerDay-error').text('');
-            //         $(document).find('button').prop('disabled', true);
-            //     }
-            // })
-            // fetch the subcategory data
+
             $('.parent_category').change(function() {
                 var categoryId = $(this).val();
                 var route = '{{ url('sub_category') }}/' + categoryId;

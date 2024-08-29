@@ -66,7 +66,7 @@ class ProductController extends Controller
                 $query = Product::with('disableDates', 'ratings')
              ->where('status', '1');
             }
-            
+
 
         if (!empty($searchKeyword)) {
             $query->where('name', 'LIKE', '%' . $searchKeyword . '%');
@@ -135,7 +135,7 @@ class ProductController extends Controller
             ->limit(5)
             ->get();
         }
-       
+
 
         $layout_class = 'single_product';
 
@@ -161,6 +161,7 @@ class ProductController extends Controller
         sort($disable_dates);
 
 
+        // dd( $product->productCompleteLocation);
         return view('product-detail', compact('product', 'productImages', 'querydates', 'relatedProducts', 'rating_progress', 'disable_dates'));
     }
 

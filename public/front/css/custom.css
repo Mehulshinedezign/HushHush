@@ -934,7 +934,7 @@ border-color: #000;
 }
 
 .slider-content .slick-slide {
-    height: 995px;
+    height: 600px;
     position: relative;
 }
 
@@ -1296,7 +1296,7 @@ border-color: #000;
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0 1px;
-    min-width: 1150px;
+    /* min-width: 1150px; */
     background: #F1F2F3;
 }
 
@@ -2237,7 +2237,7 @@ border-color: #000;
 
 .Inquiry-desc {
     display: inline-block;
-    max-width: 20em;
+    max-width: 8em;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -2456,12 +2456,12 @@ header.cust-header.fixed nav.sticky-nav {
 
 
 
-.rental-request-wrapper .tb-table table{
+/* .rental-request-wrapper .tb-table table{
     min-width: 1430px;
 }
 table.inquiry-table {
     min-width: 1660px !important;
-}
+} */
 
 .bottom-nav .container{
     gap: 30px;
@@ -2515,4 +2515,14 @@ table.inquiry-table {
     border-radius: 50px;
     left: 17px;
     white-space: nowrap;
+}.tb-table table tr th, .tb-table table tr td{
+    white-space: nowrap;
 }
+.inquiry-actions a, .user-table-head h5{
+    white-space: nowrap;
+}
+
+
+
+
+

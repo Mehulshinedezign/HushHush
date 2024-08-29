@@ -834,13 +834,10 @@ class ProductController extends Controller
             $authUser = auth()->user();
 
             $is_bankdetail = $authUser->bankAccount;
-            if(is_null($is_bankdetail))
-            {
-                $bankdetails=false;
-            }
-            else
-            {
-                $bankdetails=true;
+            if (is_null($is_bankdetail)) {
+                $bankdetails = false;
+            } else {
+                $bankdetails = true;
             }
 
             $query = Product::where('user_id', '!=', $authUser->id);
@@ -906,6 +903,14 @@ class ProductController extends Controller
                             'id' => $category->id,
                             'name' => $category->name,
                             'isSelect' => false,
+                            'Subcategory' => getChild($category->id)->map(function ($subCategory) {
+                                return [
+                                    'id' => $subCategory->id,
+                                    'name' => $subCategory->name,
+                                    'isSelect' => false,
+                                ];
+                            }),
+
                         ];
                     })->toArray(),
                 ],
@@ -1374,7 +1379,8 @@ class ProductController extends Controller
 
             ];
 
-            $price = $query->negotiate_price ?? $productDetails->getCalculatedPrice($query->date_range);
+            $price = $query->negotiate_price  ?? $productDetails->getCalculatedPrice($query->date_range);
+            $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
 
             return response()->json([
                 'status' => true,

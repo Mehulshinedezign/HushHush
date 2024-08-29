@@ -139,7 +139,7 @@ class BookingController extends Controller
         }
         if ($status->status == "succeeded") {
             $order->update(['transaction_id' => $transaction->id]);
-            return redirect()->route('orders');
+            return redirect()->route('orders')->with('success', 'Order placed successfully');
         }
     }
 }

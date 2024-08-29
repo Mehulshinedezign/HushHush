@@ -8,6 +8,7 @@
                             <th>Product</th>
                             <th>Name</th>
                             <th>Actual Price</th>
+                            <th>Shipment Type</th>
                             @if ($querydatas->first()->status != 'PENDING')
                                 <th>Negotiation Price</th>
                                 <th>Cleaning Price</th>

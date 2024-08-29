@@ -14,8 +14,9 @@
                 <a href="{{ url('/') }}" class="breadcrum-list">Home</a>
                 <a href="#" class="breadcrum-list">{{ $product->categories->name ?? '' }}</a>
                 {{-- @dd($product->categories->singlesubcategory); --}}
-                @if(!is_null($product->categories->singlesubcategory))
-                <a href="#" class="breadcrum-list active">{{ $product->categories->singlesubcategory->name ?? '' }}</a>
+                @if (!is_null($product->categories->singlesubcategory))
+                    <a href="#"
+                        class="breadcrum-list active">{{ $product->categories->singlesubcategory->name ?? '' }}</a>
                 @endif
             </div>
             <div class="product-desc-main">
@@ -178,9 +179,9 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                                <h4>Size :</h4>
-                                                <p>{{ $product->size ?? 'N/A' }}</p>
-                                            </div> -->
+                                                            <h4>Size :</h4>
+                                                            <p>{{ $product->size ?? 'N/A' }}</p>
+                                                        </div> -->
 
 
                             </div>
@@ -233,37 +234,37 @@
                                             <div id="collapseTwo" class="accordion-collapse collapse show"
                                                 aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
-                                                    {{ $product->productCompleteLocation->city ." ,". $product->productCompleteLocation->country }}
+                                                    {{ $product->productCompleteLocation->city . ' ,' . $product->productCompleteLocation->country }}
                                                 </div>
                                             </div>
                                         </div>
 
                                     </div>
                                 </div>
-        
+
                                 <div class="lender-profile">
                                     <p>Lender</p>
                                     <div class="lender-profile-box">
                                         <div class="lender-dp-box">
                                             @auth
-                                            <a href="{{ route('lenderProfile', jsencode_userdata($product->user_id)) }}">
-                                                @if ($product->retailer->profile_file)
-                                                    <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
-                                                        alt="Profile Picture">
-                                                @else
-                                                    <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
-                                                @endif
-                                            </a>
+                                                <a href="{{ route('lenderProfile', jsencode_userdata($product->user_id)) }}">
+                                                    @if ($product->retailer->profile_file)
+                                                        <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
+                                                            alt="Profile Picture">
+                                                    @else
+                                                        <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
+                                                    @endif
+                                                </a>
                                             @endauth
                                             @guest
-                                            <a href="{{ route('login') }}">
-                                                @if ($product->retailer->profile_file)
-                                                    <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
-                                                        alt="Profile Picture">
-                                                @else
-                                                    <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
-                                                @endif
-                                            </a>
+                                                <a href="{{ route('login') }}">
+                                                    @if ($product->retailer->profile_file)
+                                                        <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
+                                                            alt="Profile Picture">
+                                                    @else
+                                                        <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
+                                                    @endif
+                                                </a>
                                             @endguest
                                         </div>
                                         <h4>{{ $product->retailer->name }}</h4>
@@ -358,6 +359,9 @@
                     </div>
                 </div>
             </div>
+            @php
+                $authUser = auth()->user();
+            @endphp
             <div class="offcanvas offcanvas-end inquiry-sidebar" tabindex="-1" id="inquiry-sidebar"
                 aria-labelledby="offcanvasExampleLabel">
                 <div class="offcanvas-header">
@@ -453,30 +457,60 @@
                                             </span>
                                         @enderror
                                     </div>
+
                                     <div class="item-pickup-loc-main">
-                                        <h4>Pick up Location</h4>
+                                        @if (
+                                            $product->productCompleteLocation &&
+                                                $product->productCompleteLocation->manul_pickup_location == '1' &&
+                                                $product->productCompleteLocation->shipment == '1')
+                                            <h4>Choose Location</h4>
 
-                                        <input type="radio" id="pick_up" name="delivery_option"
-                                            value="{{ $product->productCompleteLocation->pick_up_location }}">
-                                        <label for="pick_up">Pick up from lender location</label><br>
+                                            <input type="radio" id="pick_up" name="delivery_option" value="pick_up"
+                                                @if ($product->productCompleteLocation->shipment == '0') checked @endif>
+                                            <label for="pick_up">Pick up from lender location</label><br>
 
-                                        <input type="radio" id="ship_to_me" name="delivery_option"
-                                            value="{{ @$user->userDetail->complete_address }}">
-                                        <label for="ship_to_me">Ship it to me</label><br>
+                                            <input type="radio" id="ship_to_me" name="delivery_option"
+                                                value="ship_to_me" @if ($product->productCompleteLocation->manul_pickup_location == '0') checked @endif>
+                                            <label for="ship_to_me">Ship it to me</label><br>
 
-                                        {{-- <input type="text" id="selected_value" readonly class="form-control"
-                                            placeholder="Selected option will appear here">
-                                        <input type="text" id="profile_message" class="message"
-                                            style="display: none;"
-                                            value="Please complete your profile to enable this option." readonly> --}}
+                                            <input type="text" id="selected_value" readonly class="form-control"
+                                                placeholder="Selected option will appear here"
+                                                value="{{ $product->productCompleteLocation->shipment == '0' ? @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state : $authUser->userDetail->complete_address }}">
+
                                             @error('delivery_option')
-                                            <span class="invalid-feedback" role="alert">
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
+                                                <span class="invalid-feedback" role="alert">
+                                                    {{ $message }}
+                                                </span>
+                                            @enderror
+                                        @elseif(
+                                            $product->productCompleteLocation &&
+                                                $product->productCompleteLocation->manul_pickup_location == '1' &&
+                                                $product->productCompleteLocation->shipment == '0')
+                                            <h4>Pick up Location</h4>
+                                            <input type="radio" id="pick_up" name="delivery_option" value="pick_up"
+                                                checked>
+                                            <label for="pick_up">Pick up from lender location</label><br>
+
+                                            <input type="text" id="selected_value" readonly class="form-control"
+                                                value="{{ @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state }}">
+                                        @elseif(
+                                            $product->productCompleteLocation &&
+                                                $product->productCompleteLocation->manul_pickup_location == '0' &&
+                                                $product->productCompleteLocation->shipment == '1')
+                                            <h4>Delivery Location</h4>
+                                            <input type="radio" id="ship_to_me" name="delivery_option"
+                                                value="ship_to_me" checked>
+                                            <label for="ship_to_me">Ship it to me</label><br>
+
+                                            <input type="text" id="selected_value" readonly class="form-control"
+                                                value="{{ $authUser->userDetail->complete_address }}">
+                                        @else
+                                            <input type="text" id="ship" readonly class="form-control"
+                                                placeholder="No available pickup or shipment location">
+                                        @endif
+
+
                                     </div>
-
-
                                 </div>
 
                                 <button type="button" class="button primary-btn full-btn mt-3"
@@ -691,7 +725,7 @@
 
                 // console.log(count);
 
-                if (duration < count-1) {
+                if (duration < count - 1) {
                     iziToast.error({
                         title: 'Error',
                         message: 'Please select a date range of at least ' + count + ' days.',
@@ -728,34 +762,15 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Get the radio buttons and message element
             const radioButtons = document.querySelectorAll('input[name="delivery_option"]');
-            const profileMessage = document.getElementById('profile_message');
             const selectedValueInput = document.getElementById('selected_value');
-
-            // Server-side flag for address completeness
-            const isAddressComplete = {{ is_null(@$user->userDetail->complete_address) ? 'false' : 'true' }};
-
-            // Add an event listener to each radio button
             radioButtons.forEach(radio => {
                 radio.addEventListener('change', function() {
-                    if (this.checked) {
-                        const selectedValue = this.value;
+                    if (this.id === 'pick_up') {
                         selectedValueInput.value =
-                            selectedValue; // Set the value of the readonly input field
-
-                        // Check if the 'Ship it to me' option is selected and the profile is not complete
-                        if (this.id === 'ship_to_me' && !isAddressComplete) {
-                            iziToast.error({
-                                title: 'Error',
-                                message: 'Please complete your profile to enable this option.',
-                                position: 'topRight',
-                            });
-                            profileMessage.style.display =
-                                'block'; // Show profile completion message
-                        } else {
-                            profileMessage.style.display = 'none'; // Hide message
-                        }
+                            "{{ @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state }}";
+                    } else if (this.id === 'ship_to_me') {
+                        selectedValueInput.value = "{{ $authUser->userDetail->complete_address }}";
                     }
                 });
             });

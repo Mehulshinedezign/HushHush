@@ -328,7 +328,7 @@
         // Attach validation check before form submission
         document.getElementById('filters').addEventListener('submit', function(event) {
             if (!validateValues()) {
-                event.preventDefault(); // Prevent form submission if validation fails
+                event.preventDefault(); 
             }
         });
     </script>

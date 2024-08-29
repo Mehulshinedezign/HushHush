@@ -25,6 +25,12 @@
             <h5>${{ $query->getCalculatedPrice($query->date_range) }}</h5>
         </div>
     </td>
+    <td>
+        <div class="user-table-head">
+            <h5>{{ $query->delivery_method  }}</h5>
+        </div>
+    </td>
+
     @if ($query->status != 'PENDING')
         <td>
             <div class="user-table-head">
@@ -55,8 +61,10 @@
                 min='0' class="negotiation_price_{{ $query->id }}" name="negotiate_price">
             <input type="text" id="cleaning_charges_{{ $query->id }}" placeholder="Enter cleaning charges"
                 min='0' class="cleaning_charges_{{ $query->id }}" name="cleaning_price">
+                @if($query->delivery_option =='ship_to_me')
             <input type="text" id="shipping_charges_{{ $query->id }}" placeholder="Enter shipping charges"
                 min='0' class="shipping_charges_{{ $query->id }}" name="shipping_price">
+            @endif
         </td>
     @endif
     <td class="user-active">
@@ -82,7 +90,7 @@
                     Chat</a>
             @endif
             <a href="{{ route('query_view') }}" class="button primary-btn small-btn single_query"
-                data-bs-toggle="modal" data-query-id="{{ $query->id }}">
+                data-bs-toggle="modal" data-query-id="{{ $query->id }}" data-query-ship ="{{ $query->delivery_option }}">
                 <i class="fa-solid fa-eye"></i> View
             </a>
         </div>

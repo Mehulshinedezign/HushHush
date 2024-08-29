@@ -29,6 +29,7 @@ class QueryController extends Controller
                 'product_id' => 'required',
                 'rental_dates' => 'required',
                 'description' => 'required|string',
+                'delivery_option' => 'required|string',
             ]);
             $user = auth()->user();
             $foruser = jsdecode_userdata($request->for_user);
@@ -42,6 +43,7 @@ class QueryController extends Controller
                 'query_message' => $request->description,
                 'status' => 'PENDING',
                 'date_range' => $request->rental_dates,
+                'delivery_option' => $request->delivery_option,
             ];
 
             $dates = explode(' - ', $request->rental_dates);

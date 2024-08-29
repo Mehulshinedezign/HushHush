@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('for_user')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
 
             $table->text('query_message')->nullable();
+            $table->text('delivery_option')->nullable();
             $table->enum('status', ['ACCEPTED', 'REJECTED', 'PENDING', 'COMPLETED'])->default('PENDING');
             $table->string('date_range');
             $table->timestamps();

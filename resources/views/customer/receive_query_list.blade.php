@@ -62,7 +62,7 @@
 @endsection
 
 @push('scripts')
-    {{-- @includeFirst(['validation']) --}}
+
     <script>
         $(document).ready(function() {
             var myModal = new bootstrap.Modal(document.getElementById('single_query_Modal'));
@@ -72,6 +72,7 @@
                 console.log("Query view clicked");
                 var url = $(this).attr('href');
                 var queryId = $(this).data('query-id');
+                // var queryShip =$(this).data('query-id')
 
                 $.ajax({
                     url: url,
@@ -90,15 +91,7 @@
             });
         });
 
-        // accept query
-        // function acceptQuery(queryId) {
-        //     var price = document.getElementById('negotiate_price_' + queryId).value;
-        //     var encodedPrice = (price);
-        //     var url = `{{ url('/accept_query') }}/${queryId}?negotiate_price=${encodedPrice}`;
-        //     window.location.href = url;
-        // }
 
-        // reject query
         function confirmReject(event, queryId) {
             event.preventDefault();
 
