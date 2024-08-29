@@ -559,7 +559,6 @@ $('#cancel-order').submit(function (e) {
         ajaxCall($("#cancel-order").attr("action"), 'post', formData)
             .then(function (response) {
                 if (response) {
-                    //console.log(response.url)
                     window.location.replace(response.url);
                 }
                 else {

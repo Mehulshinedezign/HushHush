@@ -36,7 +36,10 @@
                                 <img src="{{ $order->product->thumbnailImage->file_path }}" alt="profile">
                             </a>
                         </div>
-                        <p>{{ $order->product->name }}</p>
+                        <div class="name-with-status">
+                            <p>{{ $order->product->name }}</p>
+                            <p class="cancelled-txt">Cancelled</p>
+                       </div>
                         <div class="pro-desc-prize">
                             <h3>${{ $order->total }}</h3>
                             {{-- <div class="badge day-badge">
@@ -46,6 +49,10 @@
                         </div>
                         <div class="order-pro-details">
                             <div class="order-details-list">
+                                <p>Cancelation Note:</p>
+                                <h4>{{ $order->cancellation_note }}</h4>
+                            </div>
+                            {{-- <div class="order-details-list">
                                 <p>Category :</p>
                                 <h4>{{ $order->product->category->name }}</h4>
                             </div>
@@ -64,7 +71,7 @@
                             <div class="order-details-list">
                                 <p>Payment:</p>
                                 <h4>Paid</h4>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

@@ -3,16 +3,20 @@
     <section class="od-table-section min-height-100">
         <div class="container">
             <div class="od-table-wrapper">
-                <div class="back-block mb-2">
+                <div class="back-block mb-2 back-order-status">
                     <a href="{{ route('retailercustomer') }}"><i class="fa-solid fa-angle-left"></i> Back</a>
+                    @if ($order->status == 'Cancelled')
+                        <p class="cancelled-txt">Cancelled</p>
+                    @endif
                 </div>
+
                 <div class="order-detail-box">
                     {{-- @dd($order->toArray()) --}}
 
                     <div class="order-detail-summary d-flex justify-content-between">
                         <div class="detail-summary left-detail">
                             <h6 class="order-detail-heading">Customer Details</h6>
-                            <div class="od-profile-bx">
+                            <div class="od-profile-bx mb-3">
                                 <div class="product-picture">
                                     <img src="{{ $order->product->thumbnailImage->file_path }}" alt="tent">
                                 </div>
@@ -20,8 +24,11 @@
                                     <span class=""><b>Name:</b> {{ @$order->user->name }}</span>
                                 </div>
                             </div>
-
-
+                            @if (@$order->status == 'Cancelled')
+                                <div>
+                                    <span><b>Cancellation Note: </b>{{ $order->cancellation_note }}</span>
+                                </div>
+                            @endif
 
                         </div>
                         <div class="detail-summary right-detail">
@@ -108,9 +115,8 @@
                                                         {{-- <span class="remove-preview-img" data-index="{{ $index + 1 }}"
                                                             data-id="{{ $image->id }}"><i
                                                                 class="fas fa-times"></i></span> --}}
-                                                        <div class="product-image-box "><img
-                                                                src="{{ ($image->url) }}" alt="img"
-                                                                height="100px" width="100px" />
+                                                        <div class="product-image-box "><img src="{{ $image->url }}"
+                                                                alt="img" height="100px" width="100px" />
                                                         </div>
                                                     </li>
                                                 @endforeach
@@ -128,7 +134,7 @@
                                         <div class="gallery-box">
                                             @foreach ($order->retailerPickedUpImages as $retailerPickedUpImage)
                                                 <div>
-                                                    <img src="{{ ($retailerPickedUpImage->url) }}"
+                                                    <img src="{{ $retailerPickedUpImage->url }}"
                                                         alt="retailer-pickedup-img" />
                                                     {{-- <a class="download-uploaded-file"
                                                         href="{{ route('retailer.downloadattachment', [$retailerPickedUpImage->order_id, $retailerPickedUpImage->id]) }}"
@@ -149,8 +155,7 @@
                                         <div class="gallery-box">
                                             @foreach ($order->customerPickedUpImages as $customerPickedUpImage)
                                                 <div>
-                                                    <img src="{{ ($customerPickedUpImage->url) }}"
-                                                        alt="picked-up-img" />
+                                                    <img src="{{ $customerPickedUpImage->url }}" alt="picked-up-img" />
                                                     {{-- <a class="download-uploaded-file"
                                                         href="{{ route('retailer.downloadattachment', [$customerPickedUpImage->order_id, $customerPickedUpImage->id]) }}"
                                                         target="_blank"> <i class="fas fa-download"></i></a> --}}
@@ -210,9 +215,8 @@
                                                         {{-- <span class="remove-preview-img" data-index="{{ $index + 1 }}"
                                                             data-id="{{ $image->id }}"><i
                                                                 class="fas fa-times"></i></span> --}}
-                                                        <div class="product-image-box"><img
-                                                                src="{{ ($image->url) }}" alt="img"
-                                                                height="100px" width="100px" />
+                                                        <div class="product-image-box"><img src="{{ $image->url }}"
+                                                                alt="img" height="100px" width="100px" />
                                                         </div>
                                                     </li>
                                                 @endforeach
@@ -232,7 +236,7 @@
                                         <div class="gallery-box">
                                             @foreach ($order->retailerReturnedImages as $retailerReturnedImage)
                                                 <div>
-                                                    <img src="{{ ($retailerReturnedImage->url) }}"
+                                                    <img src="{{ $retailerReturnedImage->url }}"
                                                         alt="retailer-returned-img" />
                                                     {{-- <a class="download-uploaded-file"
                                                         href="{{ route('retailer.downloadattachment', [$retailerReturnedImage->order_id, $retailerReturnedImage->id]) }}"
@@ -255,7 +259,7 @@
                                         <div class="gallery-box">
                                             @foreach ($order->customerReturnedImages as $customerReturnedImage)
                                                 <div>
-                                                    <img src="{{ ($customerReturnedImage->url) }}"
+                                                    <img src="{{ $customerReturnedImage->url }}"
                                                         alt="customer-returned-img" />
                                                     {{-- <a class="download-uploaded-file"
                                                         href="{{ route('retailer.downloadattachment', [$customerReturnedImage->order_id, $customerReturnedImage->id]) }}"

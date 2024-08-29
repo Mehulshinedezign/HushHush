@@ -540,7 +540,7 @@ a.navbar-brand {
 
 .header-cart>ul {
     display: flex;
-    gap: 10px;
+    gap: 20px;
     align-items: center;
 }
 
@@ -2717,7 +2717,24 @@ form#searchForm {
     background-color: transparent;
     cursor: pointer;
 }
+.back-order-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
+.back-order-status .cancelled-txt{
+    color: red;
+    font-weight: 600;
+}
+.name-with-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.name-with-status .cancelled-txt{
+    color: red;
+}
 
 
 

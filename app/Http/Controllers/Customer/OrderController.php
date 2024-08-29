@@ -515,7 +515,8 @@ class OrderController extends Controller
      
         $order->load(["transaction", "retailer", "queryOf"]);
         $order_commission = AdminSetting::where('key', 'order_commission')->first();
-        $url = route('orders');
+        $url = route('orders',['tab'=>'cancelled']);
+        
         if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
             session()->flash('warning', "You can not cancel the disputed order");
             return response()->json([

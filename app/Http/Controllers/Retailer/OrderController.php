@@ -596,7 +596,7 @@ class OrderController extends Controller
     public function cancelOrder(Request $request, Order $order)
     {
         $order->load(["transaction"]);
-        $url = route('retailercustomer');
+        $url = route('retailercustomer',['tab'=>'cancelled']);
 
         if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
             session()->flash('warning', "You can not cancel the disputed order");

@@ -12,7 +12,7 @@
                     <div class="order-his-tab-head">
                         <ul class="nav nav-pills " id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
+                                <button class="nav-link @if(request()->tab !='cancelled') active @endif" id="pills-home-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
                                     aria-selected="true">
                                     <div class="rental-history-badge ">
@@ -33,7 +33,7 @@
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link " id="pills-canceled-tab" data-bs-toggle="pill"
+                                <button class="nav-link @if(request()->tab=='cancelled')active @endif" id="pills-canceled-tab" data-bs-toggle="pill"
                                     data-bs-target="#pills-canceled" type="button" role="tab"
                                     aria-controls="pills-canceled" aria-selected="false">
                                     <div class="rental-history-badge danger">
@@ -59,7 +59,7 @@
 
 
                     <div class="tab-content" id="pills-tabContent">
-                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                        <div class="tab-pane fade @if(request()->tab !='cancelled') show active @endif" id="pills-home" role="tabpanel"
                             aria-labelledby="pills-home-tab" tabindex="0">
                             @include('retailer.active-orders')
                         </div>
@@ -68,7 +68,7 @@
                             @include('retailer.complete-orders')
 
                         </div>
-                        <div class="tab-pane fade  " id="pills-canceled" role="tabpanel"
+                        <div class="tab-pane fade @if(request()->tab=='cancelled') show active @endif " id="pills-canceled" role="tabpanel"
                             aria-labelledby="pills-canceled-tab" tabindex="0">
                             @include('retailer.cancel-orders')
                         </div>
