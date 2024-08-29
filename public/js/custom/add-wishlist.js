@@ -17,14 +17,15 @@ function addToWishlist(element, productId) {
                     iconElement.removeClass('fa-regular').addClass('fa-solid');
                 } else {
                     iconElement.removeClass('fa-solid').addClass('fa-regular');
+                    location.reload();
                 }
 
-                // iziToast.success({
-                //     title: "",
-                //     message: response.message,
-                //     class: 'alert-msg',
-                //     position: 'topRight'
-                // });
+                iziToast.success({
+                    title: "",
+                    message: response.message,
+                    class: 'alert-msg',
+                    position: 'topRight'
+                });
             },
             error: function(errors) {
                 let result = errors.responseJSON;
@@ -39,31 +40,6 @@ function addToWishlist(element, productId) {
     }
 }
 
-function removeFromWishlist(element, productId) {
-    if(userId == '' || userId == null || userId == false) {
-        window.location.replace(login_url);
-    }
-    if (jQuery.isNumeric(productId) && productId > 0) {
-        jQuery.ajax({
-            url: url,
-            method: 'post',
-            data: {
-                productid: productId,
-            },
-            success: function(response) {
-                currentUrl.searchParams.delete("page");
-                window.location.replace(currentUrl.href)
-            },
-            error: function(errors) {
-                let result = errors.responseJSON;
-                let message = result.message
-                iziToast.error({
-                    title: errorTitle,
-                    message: message,
-                    position: 'topRight'
-                });
-            }
-        })
-    }
-}
+
+
 
