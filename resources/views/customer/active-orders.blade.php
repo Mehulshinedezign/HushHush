@@ -1,28 +1,10 @@
-{{-- @if (count($orders) > 0)
-    @foreach ($orders as $order)
-        @if ($order->status == 'Pending' || $order->status == 'Picked Up')
-            @include('customer.order-row')
-        @endif
-    @endforeach
-@else
-    <div class="pro-tab-contant">
-        <div class="pro-tab-contant-row">
-            <h3></h3>
-        </div>
-    </div>
-@endif
-@if (check_order_list_paginate('Pending') > 10)
-    <div class="custom-pagination">
-        {{ $orders->links('pagination::product-list') }}
-    </div>
-@endif --}}
 <div class="order-his-card-box">
     <div class="row g-3">
         @php $empty = true; @endphp
 
         @foreach ($orders as $order)
             @if ($order->status == 'Waiting' || $order->status == 'Picked Up')
-            @php $empty = false; @endphp
+                @php $empty = false; @endphp
 
                 <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6">
                     <div class="order-his-card">
@@ -60,11 +42,18 @@
                             </div>
                         </div>
                         @if ($order->status == 'Waiting')
-                            <div class="order-card-footer">
+                            {{-- <div class="order-card-footer">
                                 <a href="#" data-url="{{ route('cancel-order', $order->id) }}"
                                     class="button outline-btn full-btn cancel-order" data-toggle="modal"
                                     data-bs-target="#cancellation-note">Cancel
                                     order</a>
+                            </div> --}}
+
+                            <div class="order-card-footer">
+                                <a href="#" data-url="{{ route('cancel-order', $order->id) }}"
+                                    class="button outline-btn full-btn cancel-order">
+                                    Cancel order
+                                </a>
                             </div>
                         @else
                             <div class="order-card-footer">
@@ -79,31 +68,14 @@
                 </div>
             @endif
         @endforeach
-        @if($empty)
-        <div class="list-empty-box">
-            <img src="{{ asset('front/images/Empty 1.svg') }}" alt="No orders available">
-            <h3 class="text-center">No orders Available</h3>
-        </div>
+        @if ($empty)
+            <div class="list-empty-box">
+                <img src="{{ asset('front/images/Empty 1.svg') }}" alt="No orders available">
+                <h3 class="text-center">No orders Available</h3>
+            </div>
         @endif
 
     </div>
-    {{-- <div class="pagination-main">
-        <a href="javascript:void(0)" class="pagination-box">
-            01
-        </a>
-        <a href="javascript:void(0)" class="pagination-box">
-            02
-        </a>
-        <a href="javascript:void(0)" class="pagination-box active">
-            03
-        </a>
-        <a href="javascript:void(0)" class="pagination-box">
-            04
-        </a>
-        <a href="javascript:void(0)" class="pagination-box">
-            05
-        </a>
-    </div> --}}
 </div>
 <div class="modal fade cencel-order-modal" id="cancellation-note" data-bs-backdrop="static" tabindex="-1"
 aria-labelledby="cancellation-noteLabel" aria-hidden="true">
@@ -131,7 +103,6 @@ aria-labelledby="cancellation-noteLabel" aria-hidden="true">
 </div>
 </div>
 @push('scripts')
-    {{-- dispute order --}}
     <div class="modal fade book-product-modal" id="orderDisputeModal" tabindex="-1" role="dialog"
         aria-labelledby="orderDisputeModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -205,13 +176,10 @@ aria-labelledby="cancellation-noteLabel" aria-hidden="true">
             </div>
         </div>
     </div>
-    {{-- end dispute order --}}
-    <script>
+    {{-- <script>
         $(document).ready(function() {
 
             $('.cancel-order').on('click', function() {
-                // $('.modal fade').addClass('d-none');
-
                 swal({
                         title: 'Cancel Order',
                         text: 'The platform charges will be deducted by stripe',
@@ -222,13 +190,66 @@ aria-labelledby="cancellation-noteLabel" aria-hidden="true">
                     })
                     .then((willOpen) => {
                         if (willOpen) {
-                            // $('.modal fade').removeClass('d-none');
                             $('#cancellation-note').modal('show');
                         } else {
                             jQuery('body').removeClass('modal-open');
                         }
                     });
             })
+        });
+    </script> --}}
+
+    <script>
+        $(document).ready(function() {
+            $('.cancel-order').on('click', function(event) {
+                event.preventDefault(); // Prevent default anchor behavior (which might cause a page reload)
+
+                let cancelUrl = $(this).data('url'); // Get the URL from the data-url attribute
+
+                swal({
+                        title: 'Cancel Order',
+                        text: 'The platform charges will be deducted by stripe',
+                        icon: 'warning',
+                        buttons: true,
+                        dangerMode: true,
+                        buttons: ["No", "Yes"],
+                    })
+                    .then((willCancel) => {
+                        if (willCancel) {
+                            // Show the modal if the user confirms
+                            $('#cancellation-note').modal('show');
+
+                            // You can send an AJAX request to cancel the order here
+                            // Or handle it in the modal's form submission
+                            $.ajax({
+                                url: cancelUrl,
+                                method: 'POST',
+                                data: {
+                                    _token: '{{ csrf_token() }}', // Ensure CSRF token is included
+                                    reason: 'Your cancellation reason here' // Replace with actual reason if needed
+                                },
+                                success: function(response) {
+                                    if (response.success) {
+                                        swal("Order Cancelled", response.message, "success")
+                                            .then(() => {
+                                                location
+                                            .reload(); // Reload the page or redirect
+                                            });
+                                    } else {
+                                        swal("Error", response.message, "error");
+                                    }
+                                },
+                                error: function() {
+                                    swal("Error",
+                                        "An error occurred while cancelling the order.",
+                                        "error");
+                                }
+                            });
+                        } else {
+                            jQuery('body').removeClass('modal-open');
+                        }
+                    });
+            });
         });
     </script>
 
@@ -245,12 +266,6 @@ aria-labelledby="cancellation-noteLabel" aria-hidden="true">
             function previewImages(input, imgPreviewPlaceholder) {
                 const files = Array.from(input.files);
                 const currentCount = selectedFiles.length;
-
-                // if (currentCount + files.length > MAX_IMAGES) {
-                //     alert(`You can upload up to ${MAX_IMAGES} images.`);
-                //     return;
-                // }
-
                 files.forEach((file) => {
                     selectedFiles.push(file);
                     const reader = new FileReader();
