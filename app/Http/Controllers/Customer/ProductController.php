@@ -36,6 +36,62 @@ class ProductController extends Controller
      */
 
 
+    // public function index(Request $request)
+    // {
+    //     $categories = Category::where('status', 'Active')->get();
+    //     $selectedCategories = $request->input('category', []);
+    //     $selectedSubcategories = $request->input('Subcategory', []);
+    //     $selectedcolor = $request->input('filtercolor', []);
+    //     $selectedcondition = $request->input('condition', []);
+    //     $selectedbrands = $request->input('brand', []);
+    //     $selectedsize = $request->input('size', []);
+    //     $searchKeyword = $request->input('search', '');
+    //     $disabledate = $request->input('filter_date');
+
+    //     $startDate = null;
+    //     $endDate = null;
+
+    //      if (!empty($disabledate) && strpos($disabledate, ' - ') !== false) {
+    //          [$startDate, $endDate] = explode(' - ', $disabledate);
+    //      }
+
+    //      if(isset(auth()->user()->id)){
+
+    //     $authUserId = auth()->user()->id;
+
+    //      $query = Product::with('disableDates', 'ratings')
+    //          ->where('user_id', '!=', $authUserId)
+    //          ->where('status', '1');
+    //         }else{
+    //             $query = Product::with('disableDates', 'ratings')
+    //          ->where('status', '1');
+    //         }
+
+
+    //     if (!empty($searchKeyword)) {
+    //         $query->where('name', 'LIKE', '%' . $searchKeyword . '%');
+    //     }
+
+    //     $query->applyFilters();
+
+    //     if ($startDate && $endDate) {
+    //         $query->filterByDateRange($startDate, $endDate);
+    //     }
+
+    //     $products = $query->orderBy('created_at', 'desc')->paginate(1);
+
+    //     return view('index', compact('products', 'categories'))->with([
+    //         'selectedLocation' => $this->selectedLocation,
+    //         'selectedCategories' => $selectedCategories,
+    //         'selectedSubcategories' => $selectedSubcategories,
+    //         'selectedcolor' => $selectedcolor,
+    //         'selectedcondition' => $selectedcondition,
+    //         'selectedbrands' => $selectedbrands,
+    //         'selectedsize' => $selectedsize,
+    //     ]);
+    // }
+
+
     public function index(Request $request)
     {
         $categories = Category::where('status', 'Active')->get();
@@ -51,22 +107,19 @@ class ProductController extends Controller
         $startDate = null;
         $endDate = null;
 
-         if (!empty($disabledate) && strpos($disabledate, ' - ') !== false) {
-             [$startDate, $endDate] = explode(' - ', $disabledate);
-         }
+        if (!empty($disabledate) && strpos($disabledate, ' - ') !== false) {
+            [$startDate, $endDate] = explode(' - ', $disabledate);
+        }
 
-         if(isset(auth()->user()->id)){
-
-        $authUserId = auth()->user()->id;
-
-         $query = Product::with('disableDates', 'ratings')
-             ->where('user_id', '!=', $authUserId)
-             ->where('status', '1');
-            }else{
-                $query = Product::with('disableDates', 'ratings')
-             ->where('status', '1');
-            }
-
+        if (auth()->check()) {
+            $authUserId = auth()->user()->id;
+            $query = Product::with('disableDates', 'ratings')
+                ->where('user_id', '!=', $authUserId)
+                ->where('status', '1');
+        } else {
+            $query = Product::with('disableDates', 'ratings')
+                ->where('status', '1');
+        }
 
         if (!empty($searchKeyword)) {
             $query->where('name', 'LIKE', '%' . $searchKeyword . '%');
@@ -78,7 +131,20 @@ class ProductController extends Controller
             $query->filterByDateRange($startDate, $endDate);
         }
 
-        $products = $query->orderBy('created_at', 'desc')->get();
+        $products = $query->orderBy('created_at', 'desc')->paginate(5);
+
+        if ($request->ajax()) {
+            $products_count = $products->count();
+            $view = view('partials.product-cards', compact('products'))->render();
+            return response()->json([
+                'status' => true,
+                'message' => 'Products fetched successfully!',
+                'data' => [
+                    'html' => $view,
+                    'products_count' => $products_count,
+                ],
+            ], 200);
+        }
 
         return view('index', compact('products', 'categories'))->with([
             'selectedLocation' => $this->selectedLocation,
@@ -90,6 +156,8 @@ class ProductController extends Controller
             'selectedsize' => $selectedsize,
         ]);
     }
+
+
 
 
 
@@ -115,36 +183,35 @@ class ProductController extends Controller
         }
 
         $rating_progress = $this->getratingprogress($product);
-        if(isset(auth()->user()->id)){
+        if (isset(auth()->user()->id)) {
             $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
-            ->where('id', $product->id)
-            ->where('category_id', $product->category_id)->whereHas('category', function ($q) {
-                $q->where('status', '1');
-            })
-            ->where('user_id', '!=', auth()->user()->id)
-            ->inRandomOrder()
-            ->limit(5)
-            ->get();
-        }else{
+                ->where('id', $product->id)
+                ->where('category_id', $product->category_id)->whereHas('category', function ($q) {
+                    $q->where('status', '1');
+                })
+                ->where('user_id', '!=', auth()->user()->id)
+                ->inRandomOrder()
+                ->limit(5)
+                ->get();
+        } else {
             $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
-            ->where('id', $product->id)
-            ->where('category_id', $product->category_id)->whereHas('category', function ($q) {
-                $q->where('status', '1');
-            })
-            ->inRandomOrder()
-            ->limit(5)
-            ->get();
+                ->where('id', $product->id)
+                ->where('category_id', $product->category_id)->whereHas('category', function ($q) {
+                    $q->where('status', '1');
+                })
+                ->inRandomOrder()
+                ->limit(5)
+                ->get();
         }
 
 
         $layout_class = 'single_product';
 
         $productImages = $product->allImages;
-        if(auth()->id()){
+        if (auth()->id()) {
             $querydates = Query::where(['product_id' => $id, 'status' => 'PENDING', 'user_id' => auth()->user()->id])->get();
-        }else{
+        } else {
             $querydates = Query::where(['product_id' => $id, 'status' => 'PENDING'])->get();
-
         }
         $product_buffer = $product->created_at->format('Y-m-d');
         $carbonDate = Carbon::createFromFormat('Y-m-d', $product_buffer);
@@ -340,8 +407,10 @@ class ProductController extends Controller
 
 
         $retailer = User::whereId(jsdecode_userdata($id))->first();
+        // dd($retailer);
         $products = Product::with('ratings', 'thumbnailImage')->where('user_id', $retailer->id)->paginate($request->global_pagination);
         $ratedProducts = $products->where('average_rating', '>', '0');
+        // dd($ratedProducts);
         $averageRating = 0.0;
         if (count($ratedProducts)) {
             $averageRating = $ratedProducts->sum('average_rating') / count($ratedProducts);

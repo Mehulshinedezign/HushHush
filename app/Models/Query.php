@@ -108,4 +108,9 @@ class Query extends Model
     {
         return $this->delivery_option === 'ship_to_me' ? 'Shipment' : 'Pickup';
     }
+
+    // public function getlenderName()
+    // {
+
+    // }
 }

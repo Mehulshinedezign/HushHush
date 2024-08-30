@@ -250,7 +250,7 @@
 
                 {{-- @dd($products); --}}
                 <div class="home-product-main">
-                    <div class="home-product-box">
+                    <div class="home-product-box" id="home-product-box">
                         @if ($products && $products->count() > 0)
                             @foreach ($products as $product)
                                 <div class="product-card">
@@ -280,6 +280,8 @@
                                     </div>
                                 </div>
                             @endforeach
+
+                            <!-- Pagination Links -->
                         @else
                             <div class="list-empty-box">
                                 <img src="{{ asset('front/images/Empty 1.svg') }}">
@@ -287,6 +289,28 @@
                             </div>
                         @endif
                     </div>
+
+
+
+                    {{-- <div id="home-product-box" class="home-product-box">
+                        @include('partials.product-cards', ['products' => $products])
+                    </div> --}}
+
+                    {{-- <div class="auto-load text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100px" height="100px" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3"
+                                fill="none"></circle>
+                            <circle cx="50" cy="50" r="40" stroke="gray" stroke-width="3"
+                                fill="none" stroke-dasharray="100" stroke-dashoffset="100"
+                                transform="rotate(-90 50 50)">
+                                <animate attributeName="stroke-dashoffset" values="100;0" dur="1s"
+                                    repeatCount="indefinite"></animate>
+                            </circle>
+                        </svg>
+                    </div> --}}
+
+
+
 
                 </div>
 
@@ -302,6 +326,41 @@
 
 
 @push('scripts')
+    <script>
+        $(document).ready(function() {
+            var page = 1;
+            var appendElements = true;
+
+            $(window).scroll(function() {
+                if ($(window).scrollTop() + $(window).height() >= $(document).height() - 10) {
+                    if (appendElements) {
+                        page++;
+                        loadMoreData(page);
+                    }
+                }
+            });
+
+            function loadMoreData(page) {
+                $.ajax({
+                        url: '?page=' + page,
+                        type: 'get',
+                        beforeSend: function() {
+                        }
+                    })
+                    .done(function(response) {
+                        $('.auto-load svg').hide();
+                        if (response.data.html === '' || response.data.products_count === 0) {
+                            appendElements = false;
+                            return;
+                        }
+                        $('#home-product-box').append(response.data.html);
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        console.log('Server error occurred');
+                    });
+            }
+        });
+    </script>
     <script>
         const minInput = document.getElementById('selectedMinValue');
         const maxInput = document.getElementById('selectedMaxValue');
@@ -328,7 +387,7 @@
         // Attach validation check before form submission
         document.getElementById('filters').addEventListener('submit', function(event) {
             if (!validateValues()) {
-                event.preventDefault(); 
+                event.preventDefault();
             }
         });
     </script>

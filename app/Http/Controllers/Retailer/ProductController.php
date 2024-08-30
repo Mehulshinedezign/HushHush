@@ -662,11 +662,11 @@ class ProductController extends Controller
         try {
             $product = Product::findOrFail(jsdecode_userdata($id));
 
-            foreach ($product->allImages as $image) {
-                Storage::disk('public')->delete($image->file_path);
-                $image->delete();
-            }
-            $product->locations()->delete();
+            // foreach ($product->allImages as $image) {
+            //     Storage::disk('public')->delete($image->file_path);
+            //     $image->delete();
+            // }
+            // $product->locations()->delete();
 
 
 

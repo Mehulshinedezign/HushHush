@@ -26,13 +26,14 @@ Route::post('/update-password', [App\Http\Controllers\Api\ResetPasswordControlle
 Route::post('/resend-otp/{type}', [App\Http\Controllers\Api\ResetPasswordController::class, 'resentOtp']);
 
 
-
+Route::get('/guest', [App\Http\Controllers\Api\ProductController::class, 'guestIndex']);
+Route::get('/guest/product-details/{id}', [App\Http\Controllers\Api\ProductController::class, 'getGuestAllProductsById']);
+Route::get('/guest/lender-profile/{id}', [App\Http\Controllers\Api\LenderController::class, 'guestLenderInfo']);
 
 Route::post('/logout', [App\Http\Controllers\Api\LoginController::class, 'logout']);
 Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {
-
-    // Product API
     Route::get('/product', [App\Http\Controllers\Api\ProductController::class, 'index']);
+    // Product API
     Route::get('/my-wishlist', [App\Http\Controllers\Api\ProductController::class, 'wishlist']);
     Route::post('/add-favorite/{id}', [App\Http\Controllers\Api\ProductController::class, 'addFavorite']);
     Route::post('/remove-favorite', [App\Http\Controllers\Api\ProductController::class, 'removeFavorite']);
@@ -74,14 +75,7 @@ Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {
 
     Route::post('/order/{order}/dispute', [App\Http\Controllers\Api\OrderController::class, 'orderDisputeApi']);
     Route::get('/orders/disputed/{type}', [App\Http\Controllers\Api\OrderController::class, 'getDisputedOrders']);
-    Route::get('/cancel/orders/{id}', [App\Http\Controllers\Api\OrderController::class, 'cancelOrderApi']);
-
-
-
-
-    // Route::post('/borrow/{bookingId}/confirm', [App\Http\Controllers\Api\LenderController::class, 'confirmPayment']);
-    // Route::post('/stripe/charge', [App\Http\Controllers\Api\StripeController::class, 'createCharge']);
-
+    Route::post('/cancel/orders/{id}', [App\Http\Controllers\Api\OrderController::class, 'cancelOrderApi']);
 
     Route::post('/payment-intent/{id}', [App\Http\Controllers\Api\StripeController::class, 'createPaymentIntent']);
     Route::get('/user-intent', [App\Http\Controllers\Api\StripeController::class, 'createIntent']);

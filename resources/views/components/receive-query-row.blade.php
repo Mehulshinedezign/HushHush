@@ -1,6 +1,7 @@
 <tr class="user_query-{{ $query->id }}">
     <td>
         <a href="#" class="user-table-profile">
+            {{-- @dd($query); --}}
             <div class="table-profile">
                 @if ($query->product)
                     <a href="{{ route('viewproduct', jsencode_userdata($query->product->id)) }}">
@@ -18,6 +19,12 @@
     <td>
         <div class="user-table-head">
             <h5>{{ $query->product->name ?? '' }}</h5>
+        </div>
+    </td>
+    <td>
+        <div class="user-table-head">
+
+            <a href="{{ route('lenderProfile',[jsencode_userdata($query->user_id)]) }}"><h5>{{ $query->user->name }}</h5></a>
         </div>
     </td>
     <td>
@@ -71,7 +78,7 @@
         <div class="inquiry-actions">
             @if ($query->status == 'PENDING')
                 <a href="javascript:void(0)" class="button accept-btn small-btn"
-                    onclick="confirmAccept(event, '{{ $query->id }}','{{ $query->date_range }}','{{ $query->product->rent_day }}','{{ $query->product->rent_week }}','{{ $query->product->rent_month }}')">
+                    onclick="confirmAccept(event, '{{ $query->id }}','{{ $query->date_range }}','{{ $query->product->rent_day }}','{{ $query->product->rent_week }}','{{ $query->product->rent_month }}','{{ $query->delivery_option }}')">
                     <i class="fa-solid fa-circle-check"></i> Send Offer
                 </a>
                 <a href="javascript:void(0)" class="button reject-btn small-btn"

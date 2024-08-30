@@ -48,6 +48,24 @@
                 @endif
             </div>
         </div>
+        @else
+        <div class="col-md-12">
+            <div class="query-detail-info">
+                <h3>Customer</h3>
+                @if ($query)
+                    <p>{{ $query->forUser->name ?? '' }}</p>
+                @endif
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <div class="query-detail-info">
+                <h3>Customer Address</h3>
+                @if ($query)
+                    <p>{{ @$query->forUser->userDetail->complete_address ?? 'NA' }}</p>
+                @endif
+            </div>
+        </div>
         @endif
 
         {{-- @if (@$query->status == 'PENDING')

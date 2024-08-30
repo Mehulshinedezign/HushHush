@@ -5,8 +5,9 @@
                 <table >
                     <thead>
                         <tr>
-                            <th>Product</th>
-                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>User Name</th>
                             <th>Actual Price</th>
                             @if($querydatas->first()->status != 'PENDING')
                             <th>Negotiation Price</th>

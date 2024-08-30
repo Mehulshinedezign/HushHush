@@ -132,7 +132,6 @@
                                         </div>
                                         <div class="upload-img-preview-box">
                                             <div class="upload-img-preview">
-                                                {{-- <img src="{{asset('front/images/pro10.png')}}" alt="img"> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -604,35 +603,35 @@
     @php
         $user = auth()->user();
     @endphp
-@auth
-    <div class="modal fade addbank-Modal" id="addaddress-Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <form action="{{ route('change-Profile', $user) }}" method="GET">
-                        <h3 class="modal-title" id="exampleModalLabel">Add your Address</h3>
-                        @csrf
-                        <img src="{{ asset('front/images/—Pngtree—address icon isolated on abstract_5218933.png') }}"
-                            alt="" width="200" height="200">
-                        <div class="profile-select-box border-disabled">
-                            <div class="profile-check-list">
+    @auth
+        <div class="modal fade addbank-Modal" id="addaddress-Modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form action="{{ route('change-Profile', $user) }}" method="GET">
+                            <h3 class="modal-title" id="exampleModalLabel">Add your Address</h3>
+                            @csrf
+                            <img src="{{ asset('front/images/—Pngtree—address icon isolated on abstract_5218933.png') }}"
+                                alt="" width="200" height="200">
+                            <div class="profile-select-box border-disabled">
+                                <div class="profile-check-list">
 
-                                <a href="javascript:void(0)" data-bs-dismiss="modal" arial-label="Close"
-                                    class="button outline-btn full-btn">Cancel</a>
+                                    <a href="javascript:void(0)" data-bs-dismiss="modal" arial-label="Close"
+                                        class="button outline-btn full-btn">Cancel</a>
 
-                                <button type="submit" class="button primary-btn full-btn"
-                                    id="bank_info">Yes</button>
+                                    <button type="submit" class="button primary-btn full-btn"
+                                        id="bank_info">Yes</button>
 
+                                </div>
                             </div>
-                        </div>
-                    </form>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </form>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-@endauth
+    @endauth
     {{-- Query modal section success and error  --}}
     <div class="modal fade query_msg" id="query_msg" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -1075,13 +1074,13 @@
                     selectedFiles.push(file);
                     const reader = new FileReader();
                     reader.onload = function(event) {
-                        const element = `
-                    <div class="upload-img-box">
+                        const element = `<div class="upload-img-box">
                         <img src="${event.target.result}" alt="img">
                         <div class="upload-img-cross">
                             <i class="fa-regular fa-circle-xmark remove_uploaded"></i>
                         </div>
                     </div>`;
+
                         $(imgPreviewPlaceholder).append(element);
                     };
                     reader.readAsDataURL(file);
@@ -1117,140 +1116,140 @@
         });
     </script>
     {{-- end header --}}
-@auth
-    {{-- chat --}}
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script>
-        const firebaseConfig = {
-            apiKey: "{{ env('APIKEY') }}",
-            authDomain: "{{ env('AUTHDOMAIN') }}",
-            databaseURL: "{{ env('DATABASEURL') }}",
-            projectId: "{{ env('PROJECTID') }}",
-            storageBucket: "{{ env('STORAGEBUCKET') }}",
-            messagingSenderId: "{{ env('MESSAGINGSENDERID') }}",
-            appId: "{{ env('APPID') }}",
-            measurementId: "{{ env('MEASUREMENTID') }}"
-        };
-        var senderId = "{{ auth()->user()->id }}";
-        const authUserId = "{{ auth()->user()->id }}";
-        const authUserprofile =
-            "{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}";
-        var userImage = "{{ route('retaileruserimage') }}";
-        var imagePath = "{{ asset('storage/') }}";
-        var chat_store_url = "{{ route('retailerstore.chat') }}";
-        var get_chat_url = APP_URL + '/retailer/chat/messages';
-        var get_user_names = APP_URL + '/retailer/getuser/names';
-        var last_msg_update_url = APP_URL + '/retailer/lastchat/update';
-        var search_url = APP_URL + '/retailer/chat/search/';
-        var chat_image_store_url = APP_URL + '/retailer/chat/image';
-        var chat_page_url = APP_URL + '/chat';
+    @auth
+        {{-- chat --}}
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+        <script>
+            const firebaseConfig = {
+                apiKey: "{{ env('APIKEY') }}",
+                authDomain: "{{ env('AUTHDOMAIN') }}",
+                databaseURL: "{{ env('DATABASEURL') }}",
+                projectId: "{{ env('PROJECTID') }}",
+                storageBucket: "{{ env('STORAGEBUCKET') }}",
+                messagingSenderId: "{{ env('MESSAGINGSENDERID') }}",
+                appId: "{{ env('APPID') }}",
+                measurementId: "{{ env('MEASUREMENTID') }}"
+            };
+            var senderId = "{{ auth()->user()->id }}";
+            const authUserId = "{{ auth()->user()->id }}";
+            const authUserprofile =
+                "{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}";
+            var userImage = "{{ route('retaileruserimage') }}";
+            var imagePath = "{{ asset('storage/') }}";
+            var chat_store_url = "{{ route('retailerstore.chat') }}";
+            var get_chat_url = APP_URL + '/retailer/chat/messages';
+            var get_user_names = APP_URL + '/retailer/getuser/names';
+            var last_msg_update_url = APP_URL + '/retailer/lastchat/update';
+            var search_url = APP_URL + '/retailer/chat/search/';
+            var chat_image_store_url = APP_URL + '/retailer/chat/image';
+            var chat_page_url = APP_URL + '/chat';
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        var senderid = parseInt(senderId);
-        var dbRef = db.ref('/users/' + senderid);
-    </script>
+            firebase.initializeApp(firebaseConfig);
+            const db = firebase.database();
+            var senderid = parseInt(senderId);
+            var dbRef = db.ref('/users/' + senderid);
+        </script>
 
-    <script>
-        // Initialize unseenMessageListenersOverall as an object
-        const unseenMessageListenersOverall = {};
+        <script>
+            // Initialize unseenMessageListenersOverall as an object
+            const unseenMessageListenersOverall = {};
 
-        array_list = checkmessagecount();
-        array_list.then(chat_list => {
-            var messageCount = countSingleChatCount(chat_list);
-            messageCount.then(m => {
-                // show total number of unseen message in the header
-                $('.userIconbtn').text(m);
-            });
+            array_list = checkmessagecount();
+            array_list.then(chat_list => {
+                var messageCount = countSingleChatCount(chat_list);
+                messageCount.then(m => {
+                    // show total number of unseen message in the header
+                    $('.userIconbtn').text(m);
+                });
 
-            // Set up a listener for new messages in each chat
-            chat_list.forEach(chatId => {
+                // Set up a listener for new messages in each chat
+                chat_list.forEach(chatId => {
 
-                // If a listener already exists for this chat, remove it first
-                if (unseenMessageListenersOverall[chatId]) {
-                    db.ref('messeges/' + chatId).off('child_added', unseenMessageListenersOverall[chatId]);
-                    console.log('Existing listener removed for:', chatId);
-                }
-
-                // Add a new listener for child_added
-                unseenMessageListenersOverall[chatId] = db.ref('messeges/' + chatId).on('child_added', (
-                    snap) => {
-                    const message = snap.val();
-
-                    // Check if the message is unseen and update the count
-                    if (message && message.isSeen === 'false') {
-                        // Update the unseen message count
-                        messageCount.then(currentCount => {
-                            let updatedCount = currentCount + 1;
-                            $('.userIconbtn').text(updatedCount);
-                        });
+                    // If a listener already exists for this chat, remove it first
+                    if (unseenMessageListenersOverall[chatId]) {
+                        db.ref('messeges/' + chatId).off('child_added', unseenMessageListenersOverall[chatId]);
+                        console.log('Existing listener removed for:', chatId);
                     }
 
-                    // Alternatively, you can update the count by re-checking all messages
-                    countSingleChatCount(chat_list).then(updatedCount => {
-                        if (updatedCount > 0) {
-                            $('.userIconbtn').text(updatedCount);
-                        } else {
-                            $('.userIconbtn').text('');
-                        }
-                    });
-                });
-            });
-        });
+                    // Add a new listener for child_added
+                    unseenMessageListenersOverall[chatId] = db.ref('messeges/' + chatId).on('child_added', (
+                        snap) => {
+                        const message = snap.val();
 
-        // count total number of unseen message
-        async function countSingleChatCount(chat_list) {
-            return new Promise(async (res, rej) => {
-                try {
-                    let totalMessage = 0;
-
-                    for (let index = 0; index < chat_list.length; index++) {
-                        const unseenMessageSnapshot = await db.ref('messeges/' + chat_list[index]).once(
-                            'value');
-
-                        if (unseenMessageSnapshot.exists()) {
-                            unseenMessageSnapshot.forEach(message => {
-                                const msg = message.val();
-
-                                // Ensure the message object is not null and has the isSeen property
-                                if (msg && msg.isSeen === 'false') {
-                                    totalMessage++;
-                                }
+                        // Check if the message is unseen and update the count
+                        if (message && message.isSeen === 'false') {
+                            // Update the unseen message count
+                            messageCount.then(currentCount => {
+                                let updatedCount = currentCount + 1;
+                                $('.userIconbtn').text(updatedCount);
                             });
                         }
 
-                        if (index === chat_list.length - 1) {
-                            res(totalMessage);
-                        }
-                    }
-                } catch (error) {
-                    rej(error);
-                }
-            });
-        }
-
-        async function checkmessagecount() {
-            return new Promise((res, rej) => {
-                var array_list = [];
-                dbRef.once("value").then(snap => {
-                    snap.forEach((message) => {
-                        receiver = parseInt(`${message.key}`);
-                        sender = parseInt(`${message.val().id}`);
-                        var chatKey = `${sender}_${receiver}`;
-                        array_list.push(chatKey);
+                        // Alternatively, you can update the count by re-checking all messages
+                        countSingleChatCount(chat_list).then(updatedCount => {
+                            if (updatedCount > 0) {
+                                $('.userIconbtn').text(updatedCount);
+                            } else {
+                                $('.userIconbtn').text('');
+                            }
+                        });
                     });
-                    res(array_list);
-                }).catch(error => {
-                    rej(error);
                 });
             });
-        }
-    </script>
 
-    <script defer src="{{ asset('js/custom/chat2.js') }}"></script>
-    <script defer src="{{ asset('js/custom/chatlist.js') }}"></script>
-@endauth
+            // count total number of unseen message
+            async function countSingleChatCount(chat_list) {
+                return new Promise(async (res, rej) => {
+                    try {
+                        let totalMessage = 0;
+
+                        for (let index = 0; index < chat_list.length; index++) {
+                            const unseenMessageSnapshot = await db.ref('messeges/' + chat_list[index]).once(
+                                'value');
+
+                            if (unseenMessageSnapshot.exists()) {
+                                unseenMessageSnapshot.forEach(message => {
+                                    const msg = message.val();
+
+                                    // Ensure the message object is not null and has the isSeen property
+                                    if (msg && msg.isSeen === 'false') {
+                                        totalMessage++;
+                                    }
+                                });
+                            }
+
+                            if (index === chat_list.length - 1) {
+                                res(totalMessage);
+                            }
+                        }
+                    } catch (error) {
+                        rej(error);
+                    }
+                });
+            }
+
+            async function checkmessagecount() {
+                return new Promise((res, rej) => {
+                    var array_list = [];
+                    dbRef.once("value").then(snap => {
+                        snap.forEach((message) => {
+                            receiver = parseInt(`${message.key}`);
+                            sender = parseInt(`${message.val().id}`);
+                            var chatKey = `${sender}_${receiver}`;
+                            array_list.push(chatKey);
+                        });
+                        res(array_list);
+                    }).catch(error => {
+                        rej(error);
+                    });
+                });
+            }
+        </script>
+
+        <script defer src="{{ asset('js/custom/chat2.js') }}"></script>
+        <script defer src="{{ asset('js/custom/chatlist.js') }}"></script>
+    @endauth
     @include('validation')
     {{-- @include('validation.js_product') --}}
     @stack('scripts')

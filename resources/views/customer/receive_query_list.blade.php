@@ -62,7 +62,6 @@
 @endsection
 
 @push('scripts')
-
     <script>
         $(document).ready(function() {
             var myModal = new bootstrap.Modal(document.getElementById('single_query_Modal'));
@@ -120,57 +119,61 @@
         }
 
 
-        function confirmAccept(event, queryId, date_range, rentDay, rentWeek, rentMonth) {
+        function confirmAccept(event, queryId, date_range, rentDay, rentWeek, rentMonth, deliveryOption) {
             event.preventDefault();
+
+            // console.log('Function confirmAccept triggered'); // Ensure the function is being called
+
             let price = $(`.negotiation_price_${queryId}`).val();
             let shipping_charges = $(`.shipping_charges_${queryId}`).val();
             let cleaning_charges = $(`.cleaning_charges_${queryId}`).val();
 
+            // Set shipping charges to 0 if delivery option is pickup
+            if (deliveryOption === 'pick_up') {
+                // console.log('Delivery option is pick_up:', deliveryOption); // Check delivery option
+                shipping_charges = 0;
+                // console.log('Shipping charges set to 0:', shipping_charges); // Confirm shipping charges set to 0
+            }
 
             if (!price) {
                 price = calculatePrice(date_range, rentDay, rentWeek, rentMonth);
             }
+
+
             if (price <= 0 || isNaN(price)) {
                 iziToast.error({
                     title: 'Error',
                     message: 'Please enter a valid price',
-                    'position': 'topRight',
+                    position: 'topRight',
                 });
                 return false;
             }
-            if(!cleaning_charges && !shipping_charges)
-            {
+
+
+            if (!cleaning_charges || cleaning_charges <= 0 || isNaN(cleaning_charges)) {
                 iziToast.error({
                     title: 'Error',
-                    message: 'Please enter a cleaning and shipping charge',
-                    'position': 'topRight',
+                    message: 'Please enter a valid cleaning charge',
+                    position: 'topRight',
                 });
                 return false;
             }
-            else{
 
-                if (cleaning_charges <= 0 || !cleaning_charges) {
-                    iziToast.error({
-                        title: 'Error',
-                        message: 'Please enter a valid cleaning charge',
-                        'position': 'topRight',
-                    });
-                    return false;
-                }
-                if (shipping_charges <= 0 || !shipping_charges) {
-                    iziToast.error({
-                        title: 'Error',
-                        message: 'Please enter a valid shipping charge',
-                        'position': 'topRight',
-                    });
-                    return false;
-                }
+            // console.log('Delivery option after validation:', deliveryOption);
+
+
+            if (deliveryOption != 'pick_up' && (shipping_charges <= 0 || isNaN(shipping_charges))) {
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Please enter a valid shipping charge',
+                    position: 'topRight',
+                });
+                return false;
             }
-
 
             Swal.fire({
                 title: 'Are you sure?',
-                text: `Are you sure you want to send offer for this product at $${parseInt(price) + parseInt(shipping_charges) + parseInt(cleaning_charges)} `,
+                text: `Are you sure you want to send an offer for this product at $${parseInt(price) + parseInt(shipping_charges) + parseInt(cleaning_charges)}?`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#1B1B1B',
@@ -185,6 +188,8 @@
                 }
             });
         }
+
+
 
         function acceptQuery(queryId, price, shipping_charges, cleaning_charges) {
             const encodedPrice = encodeURIComponent(price);

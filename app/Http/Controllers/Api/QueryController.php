@@ -183,8 +183,6 @@ class QueryController extends Controller
                         'actual_price' => $actual_price ?? null,
                     ];
                 });
-                // dd('here');
-                // dd('here',$price);
 
                 return response()->json([
                     'status' => true,
@@ -211,9 +209,12 @@ class QueryController extends Controller
     {
         try {
             $query_details = Query::findOrFail($id);
+            dd($query_details);
 
             if ($type == 'ACCEPTED') {
                 $query_details->update(['status' => 'ACCEPTED']);
+
+                
             } elseif ($type == 'REJECTED') {
                 $query_details->update(['status' => 'REJECTED']);
             } elseif ($type == 'price') {
@@ -270,7 +271,7 @@ class QueryController extends Controller
 
                     $productId = $query->product_id;
                     $product = Product::withTrashed()->where('id', $productId)->first();
-                    $order = Order::where('query_id', $query->id)->first(); // Use first() instead of get()
+                    $order = Order::where('query_id', $query->id)->first();
                     $lender = User::where('id', $query->for_user)->first();
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
                     $now = Carbon::now()->format('Y-m-d');
@@ -353,12 +354,6 @@ class QueryController extends Controller
             if ($queries->count() > 0) {
                 $queries = $queries->map(function ($query) {
                     [$startDate, $endDate] = explode(' - ', $query->date_range);
-
-                    // dd($startDate,$endDate);
-                    // // Convert date format
-                    // $startDate = Carbon::createFromFormat('d-m-Y', $startDate)->format('Y-m-d');
-                    // $endDate = Carbon::createFromFormat('d-m-Y', $endDate)->format('Y-m-d');
-
                     $productId = $query->product_id;
                     $product = Product::where('id', $productId)
                         ->whereNull('deleted_at')

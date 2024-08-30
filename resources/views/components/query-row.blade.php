@@ -21,6 +21,12 @@
     </td>
     <td>
         <div class="user-table-head">
+            {{-- <h5>{{ $query->forUser->name }}</h5> --}}
+            <a href="{{ route('lenderProfile',[jsencode_userdata($query->for_user)]) }}"><h5>{{ $query->forUser->name }}</h5></a>
+        </div>
+    </td>
+    <td>
+        <div class="user-table-head">
             <h5>${{ $query->getCalculatedPrice($query->date_range) }}</h5>
         </div>
     </td>
