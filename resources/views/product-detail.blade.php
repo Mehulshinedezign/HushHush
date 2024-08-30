@@ -179,9 +179,9 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                                            <h4>Size :</h4>
-                                                            <p>{{ $product->size ?? 'N/A' }}</p>
-                                                        </div> -->
+                                                                <h4>Size :</h4>
+                                                                <p>{{ $product->size ?? 'N/A' }}</p>
+                                                            </div> -->
 
 
                             </div>
@@ -234,7 +234,7 @@
                                             <div id="collapseTwo" class="accordion-collapse collapse show"
                                                 aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
-                                                    {{ $product->productCompleteLocation->city . ' ,' . $product->productCompleteLocation->country }}
+                                                    {{ @$product->productCompleteLocation->city . ' ,' . @$product->productCompleteLocation->country }}
                                                 </div>
                                             </div>
                                         </div>
