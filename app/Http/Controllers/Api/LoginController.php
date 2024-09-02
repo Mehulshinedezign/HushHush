@@ -56,6 +56,14 @@ class LoginController extends Controller
                         'device_type' => $request->device_type,
                     ]
                 );
+                $is_bankdetail = $user->bankAccount;
+                if(is_null($is_bankdetail))
+                {
+                    $is_added= false;
+                }
+                else{
+                    $is_added= true;
+                }
 
                 if (!$isVerified) {
                     if (is_null($user->email_verified_at) && $user->otp_is_verified != 1) {
@@ -159,6 +167,7 @@ class LoginController extends Controller
                     'fcm_token' => $user->pushToken->fcm_token,
                     'device_type' => $user->pushToken->device_type,
                     'device_id' => $user->pushToken->device_id,
+                    'is_added' =>$is_added,
                 ];
                 return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
             } else {

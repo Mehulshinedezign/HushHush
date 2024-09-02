@@ -38,7 +38,7 @@
                                                 {{-- </span> --}}
                                             @enderror
                                             <div class="upload-img-preview-box">
-                                                <div class="update-upload-img-preview"
+                                                <div class="update-upload-img-preview sortable-images1234"
                                                     data-images="{{ json_encode($product->allImages->pluck('file_path')->toArray()) }}">
                                                     @foreach ($product->allImages as $image)
                                                         <div class="image-wrapper" data-id="{{ $image->id }}">
@@ -500,6 +500,7 @@
             const maxFiles = 5;
             let uploadedFiles = new Set();
             let newFiles = new Set();
+            let sortedArray = [];
 
             $('.image-wrapper').each(function() {
                 uploadedFiles.add($(this).find('input[name="existing_images[]"]').val());
@@ -521,7 +522,7 @@
 
             function processFiles(files) {
                 if (files.length === 0) {
-                    updateFileInput();
+                    updateFileInput1();
                     return;
                 }
 
@@ -570,14 +571,19 @@
                 }
                 wrapper.remove();
                 imageCount--;
-                updateFileInput();
+                updateFileInput1();
                 updateRemoveButtons();
             });
 
-            function updateFileInput() {
+            function updateFileInput1() {
+                console.log('here');
                 let fileInput = document.getElementById('update-upload-image-five');
                 let dt = new DataTransfer();
-                newFiles.forEach(file => dt.items.add(file));
+                sortedArray = Array.from(newFiles);
+                console.log(sortedArray,'before');
+                sortedArray.forEach(file => dt.items.add(file));
+                console.log(sortedArray,'aftter');
+
                 fileInput.files = dt.files;
             }
 
@@ -586,6 +592,27 @@
             }
 
             updateRemoveButtons();
+            // Initialize Sortable.js
+            var testarray = Array.from(newFiles);
+            console.log(newFiles);
+            var sortable1 = new Sortable(document.querySelector('.sortable-images1234'), {
+                animation: 150,
+                onEnd: function(evt) {
+                    console.log(evt,"dsfsdf");
+
+                    const itemEl = evt.item;
+                    const newIndex = evt.newIndex;
+                    const oldIndex = evt.oldIndex;
+
+                    // Rearrange selectedFiles array based on the new order
+
+                    const movedItem = sortedArray.splice(oldIndex, 1)[0];console.log(movedItem)
+                    sortedArray.splice(newIndex, 0, movedItem);
+
+                    updateFileInput1();
+                }
+            });
+            //
 
             $('form').on('submit', function(e) {
                 if (imageCount === 0) {

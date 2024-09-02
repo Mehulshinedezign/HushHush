@@ -496,7 +496,7 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, $id)
     {
-        // dd("here",$request->all());
+        // dd($request->all());
         // dd("ID Is: ",jsdecode_userdata($id));
         // if ($request->hasFile('new_images')) {
         //     dd($request->new_images);
@@ -548,6 +548,7 @@ class ProductController extends Controller
             $product->update($data);
 
             $currentImageIds = $product->allImages()->pluck('id')->toArray();
+            // dd("here",$currentImageIds);
 
             if ($request->has('existing_images')) {
                 $existingImageIds = $request->input('existing_images');
@@ -569,6 +570,7 @@ class ProductController extends Controller
             }
 
             if ($request->hasFile('new_images')) {
+                dd($request->new_images);
                 foreach ($request->file('new_images') as $index => $image) {
                     $fileName = $product->id . '_' . time() . '_' . $index . '.' . $image->getClientOriginalExtension();
                     $filePath = $image->storeAs('products/images', $fileName, 'public');

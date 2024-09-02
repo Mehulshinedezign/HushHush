@@ -2434,7 +2434,7 @@ section.od-table-section {
 .custom-wrapper {
     margin: 0;
     width: 100%;
-    padding: 0px 0px 40px;
+    padding: 0px 0px 100px;
     position: relative;
     left: 0px;
 }
@@ -2738,6 +2738,14 @@ form#searchForm {
 
 
 
+.filter-range-wrapper div#error-message {
+    position: absolute;
+    font-size: 12px;
+    bottom: 0;
+}
+.filter-head h3{
+    cursor: pointer;
+}
 
 
 

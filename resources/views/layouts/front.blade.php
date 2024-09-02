@@ -130,10 +130,15 @@
                                                 {{-- </span> --}}
                                             @enderror
                                         </div>
-                                        <div class="upload-img-preview-box">
+                                        {{-- <div class="upload-img-preview-box">
                                             <div class="upload-img-preview">
                                             </div>
+                                        </div> --}}
+                                        <div class="upload-img-preview-box">
+                                            <div class="upload-img-preview sortable-images">
+                                            </div>
                                         </div>
+
                                     </div>
                                 </div>
 
@@ -722,6 +727,7 @@
 
 
     <!--JS-->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ asset('front/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('front/js/jquery.min.js') }}"></script>
@@ -743,6 +749,7 @@
     <script src="{{ asset('js/custom/product-list.js') }}"></script>
     <script src="{{ asset('js/custom/add-wishlist.js') }}"></script>
     <script src="{{ asset('js/custom/common.js') }}?ver={{ now() }}"></script>
+
     <script>
         jQuery(document).ready(function() {
             $('#parent-category').on('change', function() {
@@ -1062,6 +1069,7 @@
             let selectedFiles = [];
 
             function previewImages(input, imgPreviewPlaceholder) {
+                console.log('here');
                 const files = Array.from(input.files);
                 const currentCount = selectedFiles.length;
 
@@ -1074,12 +1082,13 @@
                     selectedFiles.push(file);
                     const reader = new FileReader();
                     reader.onload = function(event) {
-                        const element = `<div class="upload-img-box">
-                        <img src="${event.target.result}" alt="img">
-                        <div class="upload-img-cross">
-                            <i class="fa-regular fa-circle-xmark remove_uploaded"></i>
-                        </div>
-                    </div>`;
+                        const element = `
+                <div class="upload-img-box">
+                    <img src="${event.target.result}" alt="img">
+                    <div class="upload-img-cross">
+                        <i class="fa-regular fa-circle-xmark remove_uploaded"></i>
+                    </div>
+                </div>`;
 
                         $(imgPreviewPlaceholder).append(element);
                     };
@@ -1095,13 +1104,6 @@
                 $('#upload-image-five')[0].files = dataTransfer.files;
             }
 
-            function updateImageCount(change) {
-                const $uploadImage = $('#upload-image-five');
-                let currentCount = parseInt($uploadImage.attr('upload-image-count') || 0);
-                currentCount += change;
-                $uploadImage.attr('upload-image-count', currentCount);
-            }
-
             $('#upload-image-five').on('change', function() {
                 previewImages(this, 'div.upload-img-preview');
             });
@@ -1111,7 +1113,45 @@
                 selectedFiles.splice(index, 1);
                 $(this).closest('.upload-img-box').remove();
                 updateFileInput();
-                updateImageCount(-1);
+            });
+
+            // Initialize Sortable.js
+            const sortable = new Sortable(document.querySelector('.sortable-images'), {
+                animation: 150,
+                onEnd: function(evt) {
+                    const itemEl = evt.item;
+                    const newIndex = evt.newIndex;
+                    const oldIndex = evt.oldIndex;
+
+                    // Rearrange selectedFiles array based on the new order
+                    const movedItem = selectedFiles.splice(oldIndex, 1)[0];
+                    selectedFiles.splice(newIndex, 0, movedItem);
+
+                    updateFileInput();
+                }
+            });
+
+            // Drag and drop file upload
+            $('.img-upload-box').on('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).addClass('drag-over');
+            });
+
+            $('.img-upload-box').on('dragleave', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).removeClass('drag-over');
+            });
+
+            $('.img-upload-box').on('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).removeClass('drag-over');
+
+                const files = e.originalEvent.dataTransfer.files;
+                $('#upload-image-five').prop('files', files);
+                $('#upload-image-five').trigger('change');
             });
         });
     </script>
@@ -1120,6 +1160,8 @@
         {{-- chat --}}
         <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+
         <script>
             const firebaseConfig = {
                 apiKey: "{{ env('APIKEY') }}",
