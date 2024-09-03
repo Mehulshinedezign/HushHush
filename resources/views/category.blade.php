@@ -327,6 +327,36 @@
 
 @push('scripts')
     <script>
+        function getQueryParameters() {
+            let params = new URLSearchParams(window.location.search);
+            let queryStr = '';
+
+            // Loop through all parameters and append them if they are not empty
+            params.forEach((value, key) => {
+                if (value) {
+                    queryStr += `&${key}=${encodeURIComponent(value)}`;
+                }
+            });
+
+            // Remove the leading '&' and return the parameters
+            return queryStr ? queryStr.slice(1) : '';
+        }
+
+        function createPaginationUrl(page) {
+            let baseUrl = window.location.origin + window.location.pathname;
+            let queryParameters = getQueryParameters();
+
+            // Append the page parameter
+            let paginationUrl = baseUrl + '?page=' + page;
+
+            // If there are other query parameters, append them
+            if (queryParameters) {
+                paginationUrl += '&' + queryParameters;
+            }
+
+            return paginationUrl;
+        }
+
         $(document).ready(function() {
             var page = 1;
             var appendElements = true;
@@ -341,11 +371,13 @@
             });
 
             function loadMoreData(page) {
+                let url = createPaginationUrl(page);
+                console.log(url,'gdhg');
+
                 $.ajax({
-                        url: '?page=' + page,
+                        url: url,
                         type: 'get',
-                        beforeSend: function() {
-                        }
+                        beforeSend: function() {}
                     })
                     .done(function(response) {
                         $('.auto-load svg').hide();

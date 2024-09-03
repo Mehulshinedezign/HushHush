@@ -759,6 +759,10 @@
 }
 
 @media screen and (max-width:767px) {
+    .slider-content .slick-slide {
+        height: 500px;
+        position: relative;
+    }
     .home-product-box {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -1391,6 +1395,10 @@
 }
 
 @media screen and (max-width:575px) {
+    .slider-content .slick-slide {
+        height: 300px;
+        position: relative;
+    }
     .product-img-bx:after {
         content: "";
         display: block;

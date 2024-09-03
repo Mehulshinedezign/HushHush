@@ -31,24 +31,26 @@
                                                 <p>Upload Images</p>
                                             </label>
                                             <input type="file" name="new_images[]" id="update-upload-image-five"
-                                                accept="image/*" class="d-none form-control form-class @error('new_images') is-invalid @enderror" multiple>
-                                                @error('new_images')
+                                                accept="image/*"
+                                                class="d-none form-control form-class @error('new_images') is-invalid @enderror"
+                                                multiple>
+                                            @error('new_images')
                                                 {{-- <span class="invalid-feedback" role="alert"> --}}
-                                                    <span class="text-danger" style="font-size: 14px;">{{ $message }}</span>
+                                                <span class="text-danger" style="font-size: 14px;">{{ $message }}</span>
                                                 {{-- </span> --}}
                                             @enderror
                                             <div class="upload-img-preview-box">
                                                 <div class="update-upload-img-preview sortable-images1234"
                                                     data-images="{{ json_encode($product->allImages->pluck('file_path')->toArray()) }}">
-                                                    @foreach ($product->allImages as $image)
+                                                    {{-- @foreach ($product->allImages as $image)
                                                         <div class="image-wrapper" data-id="{{ $image->id }}">
-                                                            <img src="{{ $image->file_path }}"
-                                                                alt="" loading="lazy">
+                                                            <img src="{{ $image->file_path }}" alt=""
+                                                                loading="lazy">
                                                             <input type="hidden" name="existing_images[]"
                                                                 value="{{ $image->id }}">
                                                             <span class="remove-image">&times;</span>
                                                         </div>
-                                                    @endforeach
+                                                    @endforeach --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -60,9 +62,10 @@
                                             <label for="">Product Name*</label>
                                             <div class="formfield">
                                                 <input type="text" name="product_name" id=""
-                                                    placeholder="Enter Name" class="produt_input form-control form-class @error('product_name') is-invalid @enderror"
+                                                    placeholder="Enter Name"
+                                                    class="produt_input form-control form-class @error('product_name') is-invalid @enderror"
                                                     value="{{ $product->name }}">
-                                                    @error('product_name')
+                                                @error('product_name')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
                                                     @enderror
@@ -74,10 +77,12 @@
                                             <label for="">Category/Subcategory*</label>
                                             <div class="duel-select-field">
                                                 <div class="formfield">
-                                                    <select name="category" class="parent_category produt_input form-class @error('category') is-invalid @enderror">
+                                                    <select name="category"
+                                                        class="parent_category produt_input form-class @error('category') is-invalid @enderror">
                                                         <option value="">Category</option>
                                                         @foreach (getParentCategory() as $category)
-                                                            <option value="{{ jsencode_userdata($category->id) }}" data-fetchsize="{{ $category->name }}"
+                                                            <option value="{{ jsencode_userdata($category->id) }}"
+                                                                data-fetchsize="{{ $category->name }}"
                                                                 @if ($product->category_id == $category->id) selected @endif>
                                                                 {{ $category->name }}
                                                             </option>
@@ -90,7 +95,7 @@
                                                     @error('category')
                                                         <span class="invalid-feedback" role="alert">
                                                             {{ $message }}
-                                                     @enderror
+                                                        @enderror
                                                 </div>
                                                 <div class="formfield">
                                                     <select name="subcategory" id="subcategory">
@@ -172,16 +177,23 @@
                                                 <label for="">Pickup Location*</label>
 
                                                 <div class="form-check form-switch">
-                                                    <label class="form-check-label" for="flexSwitchCheckChecked">Manual pickup location</label>
-                                                    <input class="form-check-input" type="checkbox" role="switch" name="manual_location" id="flexSwitchCheckChecked" {{ $product->productCompleteLocation->manul_pickup_location ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="flexSwitchCheckChecked">Manual
+                                                        pickup location</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                        name="manual_location" id="flexSwitchCheckChecked"
+                                                        {{ $product->productCompleteLocation->manul_pickup_location ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                             <div class="form-field">
-                                                <input type="text" class="form-control produt_input form-class @error('product_complete_location') is-invalid @enderror" placeholder="Address" name="product_complete_location" id="product_address" value="{{ $product->productCompleteLocation->pick_up_location ?? '' }}">
+                                                <input type="text"
+                                                    class="form-control produt_input form-class @error('product_complete_location') is-invalid @enderror"
+                                                    placeholder="Address" name="product_complete_location"
+                                                    id="product_address"
+                                                    value="{{ $product->productCompleteLocation->pick_up_location ?? '' }}">
                                                 @error('product_complete_location')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
-                                                @enderror
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -189,11 +201,14 @@
                                         <div class="form-group">
                                             <label for="">Address line 1*</label>
                                             <div class="formfield">
-                                                <input type="text" class="produt_input form-control form-class @error('address1') is-invalid @enderror" placeholder="address line 1" name="address1" id="product_address1" value="{{ $product->productCompleteLocation->address1 ?? ''}}">
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('address1') is-invalid @enderror"
+                                                    placeholder="address line 1" name="address1" id="product_address1"
+                                                    value="{{ $product->productCompleteLocation->address1 ?? '' }}">
                                                 @error('address1')
                                                     <span class="invalid-feedback" role="alert">
-                                                    {{ $message }}
-                                                 @enderror
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -201,11 +216,14 @@
                                         <div class="form-group">
                                             <label for="">Address line 2*</label>
                                             <div class="formfield">
-                                                <input type="text" class="produt_input form-control form-class @error('address2') is-invalid @enderror" placeholder="address line 2" name="address2" id="product_address2" value="{{ $product->productCompleteLocation->address2 ?? ''}}">
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('address2') is-invalid @enderror"
+                                                    placeholder="address line 2" name="address2" id="product_address2"
+                                                    value="{{ $product->productCompleteLocation->address2 ?? '' }}">
                                                 @error('address2')
-                                                <span class="invalid-feedback" role="alert">
-                                                {{ $message }}
-                                             @enderror
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -213,11 +231,14 @@
                                         <div class="form-group">
                                             <label for="">Country*</label>
                                             <div class="formfield">
-                                                <input type="text" class="produt_input form-control form-class @error('country') is-invalid @enderror" placeholder="country" name="country" id="product_country" value="{{ $product->productCompleteLocation->country ?? ''}}">
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('country') is-invalid @enderror"
+                                                    placeholder="country" name="country" id="product_country"
+                                                    value="{{ $product->productCompleteLocation->country ?? '' }}">
                                                 @error('country')
                                                     <span class="invalid-feedback" role="alert">
-                                                    {{ $message }}
-                                                @enderror
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -225,11 +246,14 @@
                                         <div class="form-group">
                                             <label for="">State*</label>
                                             <div class="formfield">
-                                                <input type="text" class="produt_input form-control form-class @error('state') is-invalid @enderror" placeholder="state" name="state" id="product_state" value="{{ $product->productCompleteLocation->state ?? ''}}">
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('state') is-invalid @enderror"
+                                                    placeholder="state" name="state" id="product_state"
+                                                    value="{{ $product->productCompleteLocation->state ?? '' }}">
                                                 @error('state')
                                                     <span class="invalid-feedback" role="alert">
-                                                    {{ $message }}
-                                                @enderror
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -237,11 +261,14 @@
                                         <div class="form-group">
                                             <label for="">City*</label>
                                             <div class="formfield">
-                                                <input type="text" class="produt_input form-control form-class @error('city') is-invalid @enderror" placeholder="city" name="city" id="product_city" value="{{ $product->city ?? ''}}">
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('city') is-invalid @enderror"
+                                                    placeholder="city" name="city" id="product_city"
+                                                    value="{{ $product->city ?? '' }}">
                                                 @error('city')
-                                                <span class="invalid-feedback" role="alert">
-                                                    {{$message}}
-                                                @enderror
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -250,11 +277,15 @@
                                         <div class="form-group">
                                             <label for="">Zip-Code/Postal Code</label>
                                             <div class="formfield">
-                                                <input type="text" class="produt_input form-control form-class @error('zipcode') is-invalid @enderror" placeholder="zipcode" name="zipcode" id="zipcode" value="{{ $product->productCompleteLocation->postcode ?? ''}}" readonly>
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('zipcode') is-invalid @enderror"
+                                                    placeholder="zipcode" name="zipcode" id="zipcode"
+                                                    value="{{ $product->productCompleteLocation->postcode ?? '' }}"
+                                                    readonly>
                                                 @error('zipcode')
-                                                <span class="invalid-feedback" role="alert">
-                                                    {{$message}}
-                                                @enderror
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -263,9 +294,9 @@
                                         <div class="form-group">
                                             <label for="">Non-Available Dates*</label>
                                             <div class="formfield">
-                                                <input type="text" name="non_available_dates"
-                                                    id="non_available_date" placeholder="Select Dates"
-                                                    class="form-control daterange-cus" value="{{ $formattedDates }}" readonly>
+                                                <input type="text" name="non_available_dates" id="non_available_date"
+                                                    placeholder="Select Dates" class="form-control daterange-cus"
+                                                    value="{{ $formattedDates }}" readonly>
                                                 <span class="form-icon cal-icon">
                                                     <img src="{{ asset('front/images/calender-icon.svg') }}"
                                                         alt="img">
@@ -277,17 +308,22 @@
                                         <div class="form-group">
                                             <label for="">Condition*</label>
                                             <div class="formfield">
-                                                <select class="produt_input form-control form-class @error('product_condition') is-invalid @enderror" name="product_condition">
+                                                <select
+                                                    class="produt_input form-control form-class @error('product_condition') is-invalid @enderror"
+                                                    name="product_condition">
                                                     <option value="">Condition</option>
                                                     <option value="Hardly"
                                                         @if ($product->product_condition == 'Hardly') selected @endif>Hardly used
                                                     </option>
                                                     <option value="Great"
-                                                        @if ($product->product_condition == 'Great') selected @endif>Hardly used</option>
+                                                        @if ($product->product_condition == 'Great') selected @endif>Hardly used
+                                                    </option>
                                                     <option value="Good"
-                                                        @if ($product->product_condition == 'Good') selected @endif>Good condition</option>
-                                                        <option value="Fair"
-                                                        @if ($product->product_condition == 'Fair') selected @endif>Fair condition</option>
+                                                        @if ($product->product_condition == 'Good') selected @endif>Good condition
+                                                    </option>
+                                                    <option value="Fair"
+                                                        @if ($product->product_condition == 'Fair') selected @endif>Fair condition
+                                                    </option>
                                                 </select>
                                                 <span class="form-icon">
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
@@ -295,8 +331,8 @@
                                                 </span>
                                                 @error('product_condition')
                                                     <span class="invalid-feedback" role="alert">
-                                                        {{$message}}
-                                                @enderror
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -317,13 +353,16 @@
                                         <div class="form-group">
                                             <label for="">Product market value*</label>
                                             <div class="formfield right-icon-field">
-                                                <input type="number" class="produt_input form-control form-class @error('product_market_value') is-invalid @enderror" name="product_market_value"
-                                                    value="{{ number_format($product->product_market_value, 0, '', '') }}" min="1">
+                                                <input type="number"
+                                                    class="produt_input form-control form-class @error('product_market_value') is-invalid @enderror"
+                                                    name="product_market_value"
+                                                    value="{{ number_format($product->product_market_value, 0, '', '') }}"
+                                                    min="1">
                                                 <span class="form-icon">$</span>
                                                 @error('product_market_value')
                                                     <span class="invalid-feedback" role="alert">
-                                                        {{$message}}
-                                                @enderror
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -332,11 +371,12 @@
                                         <div class="form-group">
                                             <label for="">Product link</label>
                                             <div class="formfield">
-                                                <input type="text" class="produt_input form-control form-class @error('product_link') is-invalid @enderror" name="product_link"
-                                                    value="{{ $product->product_link }}">
-                                                    @error('product_link')
-                                                        <span class="invalid-feedback" role="alert">
-                                                        {{$message}}
+                                                <input type="text"
+                                                    class="produt_input form-control form-class @error('product_link') is-invalid @enderror"
+                                                    name="product_link" value="{{ $product->product_link }}">
+                                                @error('product_link')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
                                                     @enderror
                                             </div>
                                         </div>
@@ -346,30 +386,32 @@
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days*</label>
                                             <!-- <div class="formfield ">
-                                                <input type="number" class="form-control" name="min_rent_days"
-                                                    value="{{ $product->min_days_rent_item }}" min="1">
-                                            </div> -->
+                                                                <input type="number" class="form-control" name="min_rent_days"
+                                                                    value="{{ $product->min_days_rent_item }}" min="1">
+                                                            </div> -->
                                             <div class="formfield">
-                                                <select class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror" name="min_rent_days">
-                                                        <option value="">Select rental days</option>
-                                                        <option value="7"
-                                                            @if ($product->min_days_rent_item == 7) selected @endif>7 Days
-                                                        </option>
-                                                        <option value="14"
-                                                            @if ($product->min_days_rent_item == 14) selected @endif>14 Days</option>
-                                                        <option value="30"
-                                                            @if ($product->min_days_rent_item == 30) selected @endif>30 Days</option>
-                                                            <!-- <option value="Fair"
-                                                            @if ($product->product_condition == 'Fair') selected @endif>Fair condition</option> -->
+                                                <select
+                                                    class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
+                                                    name="min_rent_days">
+                                                    <option value="">Select rental days</option>
+                                                    <option value="7"
+                                                        @if ($product->min_days_rent_item == 7) selected @endif>7 Days
+                                                    </option>
+                                                    <option value="14"
+                                                        @if ($product->min_days_rent_item == 14) selected @endif>14 Days</option>
+                                                    <option value="30"
+                                                        @if ($product->min_days_rent_item == 30) selected @endif>30 Days</option>
+                                                    <!-- <option value="Fair"
+                                                                            @if ($product->product_condition == 'Fair') selected @endif>Fair condition</option> -->
                                                 </select>
                                                 <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
+                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                        alt="img">
                                                 </span>
 
-                                                    @error('min_rent_days')
+                                                @error('min_rent_days')
                                                     <span class="invalid-feedback" role="alert">
-                                                        {{$message}}
+                                                        {{ $message }}
                                                     @enderror
                                             </div>
                                         </div>
@@ -379,13 +421,14 @@
                                             <label for="">Rent Price/Day*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_day" id=""
-                                                    placeholder="" class="produt_input form-control form-class @error('rent_price_day') is-invalid @enderror"
+                                                    placeholder=""
+                                                    class="produt_input form-control form-class @error('rent_price_day') is-invalid @enderror"
                                                     value="{{ $product->rent_day }}" min="1">
                                                 <span class="form-icon">$</span>
                                                 @error('rent_price_day')
-                                                <span class="invalid-feedback" role="alert">
-                                                    {{$message}}
-                                                @enderror
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -394,13 +437,14 @@
                                             <label for="">Rent Price/Week*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_week" id=""
-                                                    placeholder="" class="produt_input form-control form-class @error('rent_price_week') is-invalid @enderror"
+                                                    placeholder=""
+                                                    class="produt_input form-control form-class @error('rent_price_week') is-invalid @enderror"
                                                     value="{{ $product->rent_week }}" min="1">
                                                 <span class="form-icon">$</span>
                                                 @error('rent_price_week')
                                                     <span class="invalid-feedback" role="alert">
-                                                        {{$message}}
-                                                @enderror
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -409,12 +453,13 @@
                                             <label for="">Rent Price/Month*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_month" id=""
-                                                    placeholder="" class="produt_input form-control form-class @error('rent_price_month') is-invalid @enderror"
+                                                    placeholder=""
+                                                    class="produt_input form-control form-class @error('rent_price_month') is-invalid @enderror"
                                                     value="{{ $product->rent_month }}" min="1">
                                                 <span class="form-icon">$</span>
                                                 @error('rent_price_month')
                                                     <span class="invalid-feedback" role="alert">
-                                                        {{$message}}
+                                                        {{ $message }}
                                                     @enderror
                                             </div>
                                         </div>
@@ -423,11 +468,13 @@
                                         <div class="form-group">
                                             <label for="">Description*</label>
                                             <div class="formfield">
-                                                <textarea name="description" id="" rows="4" class="produt_input form-control form-class @error('description') is-invalid @enderror" placeholder="Enter Description">{{ $product->description }}</textarea>
+                                                <textarea name="description" id="" rows="4"
+                                                    class="produt_input form-control form-class @error('description') is-invalid @enderror"
+                                                    placeholder="Enter Description">{{ $product->description }}</textarea>
                                                 @error('description')
                                                     <span class="invalid-feedback" role="alert">
-                                                        {{$message}}
-                                                @enderror
+                                                        {{ $message }}
+                                                    @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -436,6 +483,7 @@
                                             <button class="button primary-btn " id="addProduct">Update</button>
                                         </div>
                                     </div>
+                                    <img id="image123" src="" alt="asfdsfd">
                                 </div>
                             </form>
                         </div>
@@ -448,63 +496,53 @@
 
 @push('scripts')
     {{-- <script>
-        $(document).ready(function() {
-            function loadCities(stateId) {
-                var url = '{{ route('cities') }}';
-                var currentCityId = {{ $product->city }};
+        var newFiles = new Set();
 
-                if (stateId) {
-                    $.ajax({
-                        type: 'GET',
-                        url: url,
-                        data: {
-                            state_id: stateId
-                        },
-                        dataType: 'json',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(data) {
-                            var citySelect = $('#city-select');
-                            citySelect.empty();
-                            citySelect.append('<option value="">Select City</option>');
-                            $.each(data, function(key, value) {
-                                var selected = (value.id == currentCityId) ? 'selected' : '';
-                                citySelect.append('<option value="' + value.id + '" ' +
-                                    selected + '>' + value.name + '</option>');
-                            });
-                        }
-                    });
-                } else {
-                    $('#city-select').empty().append('<option value="">Select City</option>');
+        function updateFileInput1() {
+            let fileInput = document.getElementById('update-upload-image-five');
+            let dt = new DataTransfer();
+            newFiles.forEach(item => {
+                if (!item.existing) {
+                    dt.items.add(item.file);
                 }
-            }
-
-            // Load cities when page loads
-            var initialStateId = $('#state-select').val();
-            loadCities(initialStateId);
-
-            // Load cities when state selection changes
-            $('#state-select').change(function() {
-                var stateId = $(this).val();
-                loadCities(stateId);
             });
-        });
-    </script> --}}
 
-    <script>
-
+            fileInput.files = dt.files;
+        }
+        async function fetchAndDisplayImage(url) {
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const file = new File([blob], "image.jpg", {
+                    type: blob.type
+                });
+                let dt = new DataTransfer();
+                dt.items.add(file);
+                newFiles.files = dt.files;
+                updateFileInput1()
+            } catch (error) {
+                console.error('Error fetching the image:', error);
+            }
+        }
         // New update script code here
         $(document).ready(function() {
+
+
             let imageCount = $('.image-wrapper').length;
             const maxFiles = 5;
             let uploadedFiles = new Set();
-            let newFiles = new Set();
-            let sortedArray = [];
-
-            $('.image-wrapper').each(function() {
-                uploadedFiles.add($(this).find('input[name="existing_images[]"]').val());
+            let prev_images = @json($product->allImages->pluck('file_path')->toArray());
+            $.each(prev_images, function(index, confSize) {
+                fetchAndDisplayImage(confSize);
             });
+            // $('.image-wrapper').each(function() {
+            //     const imageId = $(this).find('input[name="existing_images[]"]').val();
+            //     uploadedFiles.add(imageId);
+            //     newFiles.add({
+            //         id: imageId,
+            //         existing: true
+            //     });
+            // });
 
             $('#update-upload-image-five').on('change', function(e) {
                 let files = e.target.files;
@@ -545,7 +583,10 @@
 
                         imageCount++;
                         uploadedFiles.add(file.name);
-                        newFiles.add(file);
+                        newFiles.add({
+                            file: file,
+                            existing: false
+                        });
                         updateRemoveButtons();
 
                         processFiles(files);
@@ -560,59 +601,313 @@
             $(document).on('click', '.remove-image', function() {
                 let wrapper = $(this).closest('.image-wrapper');
                 let imageId = wrapper.data('id');
+
                 if (imageId) {
                     uploadedFiles.delete(imageId.toString());
+                    newFiles = new Set([...newFiles].filter(file => file.id !== imageId));
                 } else {
                     let filename = wrapper.find('input[name="new_images[]"]').val();
                     if (filename) {
                         uploadedFiles.delete(filename);
-                        newFiles.delete([...newFiles].find(file => file.name === filename));
+                        newFiles = new Set([...newFiles].filter(file => file.file.name !== filename));
                     }
                 }
+
                 wrapper.remove();
                 imageCount--;
                 updateFileInput1();
                 updateRemoveButtons();
             });
 
-            function updateFileInput1() {
-                console.log('here');
-                let fileInput = document.getElementById('update-upload-image-five');
-                let dt = new DataTransfer();
-                sortedArray = Array.from(newFiles);
-                console.log(sortedArray,'before');
-                sortedArray.forEach(file => dt.items.add(file));
-                console.log(sortedArray,'aftter');
 
-                fileInput.files = dt.files;
-            }
 
             function updateRemoveButtons() {
                 $('.remove-image').toggle(imageCount > 1);
             }
 
             updateRemoveButtons();
-            // Initialize Sortable.js
-            var testarray = Array.from(newFiles);
-            console.log(newFiles);
-            var sortable1 = new Sortable(document.querySelector('.sortable-images1234'), {
+
+            var sortable = new Sortable(document.querySelector('.sortable-images1234'), {
                 animation: 150,
                 onEnd: function(evt) {
-                    console.log(evt,"dsfsdf");
-
-                    const itemEl = evt.item;
                     const newIndex = evt.newIndex;
                     const oldIndex = evt.oldIndex;
 
-                    // Rearrange selectedFiles array based on the new order
+                    let sortedArray = Array.from(newFiles);
 
-                    const movedItem = sortedArray.splice(oldIndex, 1)[0];console.log(movedItem)
+                    const movedItem = sortedArray.splice(oldIndex, 1)[0];
                     sortedArray.splice(newIndex, 0, movedItem);
 
+                    newFiles = new Set(sortedArray);
                     updateFileInput1();
                 }
             });
-            //
+
+            $('form').on('submit', function(e) {
+                if (imageCount === 0) {
+                    e.preventDefault();
+                    alert("Please upload at least one image before submitting.");
+                } else if (imageCount > maxFiles) {
+                    e.preventDefault();
+                    alert(
+                        `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`
+                        );
+                }
+            });
+
+
+            var sizes = @json(config('size'));
+            var category_size = $(this).find('option:selected').data('fetchsize');
+            var size = "{{ $product->size }}";
+            var selectedOption = $('select[name="size"]');
+            selectedOption.empty();
+
+            var sizeOptions = sizes[category_size] || [];
+
+            if (sizeOptions.length === 0) {
+                var bydefaultSizes = sizes['bydefault'];
+
+                $.each(bydefaultSizes, function(index, confSize) {
+                    var isSelected = (confSize === size) ? ' selected' : '';
+                    selectedOption.append('<option value="' + confSize + '"' + isSelected + '>' + confSize +
+                        '</option>');
+                });
+            } else {
+                $.each(sizeOptions, function(key, options) {
+                    $.each(options, function(index, confSize) {
+                        var isSelected = (confSize === size) ? ' selected' : '';
+                        selectedOption.append('<option value="' + confSize + '"' + isSelected +
+                            '>' + confSize + '</option>');
+                    });
+                });
+            }
+
+        });
+    </script> --}}
+    {{-- <script>
+        var newFiles = new Set();
+
+        let fileInput = document.getElementById('update-upload-image-five');
+
+        function updateFileInput1() {
+            let dt = new DataTransfer();
+            newFiles.forEach(item => {
+                if (!item.existing) {
+                    dt.items.add(item.file);
+                }
+            });
+
+            fileInput.files = dt.files;
+            console.log(newFiles, "sdfsafdasfdasdasd");
+
+            console.log(fileInput.files, "sdfsd");
+        }
+
+        // async function fetchAndDisplayImage(url) {
+        //     try {
+
+        //         //
+        //         const response = await fetch(url);
+        //         const blob = await response.blob();
+
+        //         // Define a mapping of MIME types to file extensions
+        //         const mimeTypeToExtension = {
+        //             'image/jpeg': 'jpeg',
+        //             'image/png': 'png',
+        //             'image/gif': 'gif',
+        //             'image/webp': 'webp',
+        //             'image/bmp': 'bmp',
+        //             'image/svg+xml': 'svg'
+        //             // Add more MIME types and extensions as needed
+        //         };
+
+        //         // Get the file extension from the MIME type
+        //         const extension = mimeTypeToExtension[blob.type] || 'bin'; // Default to 'bin' if unknown type
+
+        //         // Create the file with the correct extension
+        //         const fileName = `new_${Date.now()}.${extension}`;
+        //         const file = new File([blob], fileName, { type: blob.type });
+        //         let dt = new DataTransfer();
+        //         dt.items.add(file);
+        //         newFiles.add({ file, existing: false });
+        //         fileInput.files = dt.files;
+        //         updateFileInput1();
+        //     } catch (error) {
+        //         console.error('Error fetching the image:', error);
+        //     }
+        // }
+
+        let uploadedFiles = new Set();
+        async function fetchAndDisplayImage(url,isExisting = false) {
+            try {
+                // Fetch the image as a Blob
+                const response = await fetch(url);
+                const blob = await response.blob();
+
+                // Define a mapping of MIME types to file extensions
+                const mimeTypeToExtension = {
+                    'image/jpeg': 'jpeg',
+                    'image/png': 'png',
+                    'image/gif': 'gif',
+                    'image/webp': 'webp',
+                    'image/bmp': 'bmp',
+                    'image/svg+xml': 'svg'
+                    // Add more MIME types and extensions as needed
+                };
+
+                // Get the file extension from the MIME type
+                const extension = mimeTypeToExtension[blob.type] || 'bin'; // Default to 'bin' if unknown type
+
+                // Create the file with the correct extension
+                const fileName = `new_${Date.now()}.${extension}`;
+                const file = new File([blob], fileName, {
+                    type: blob.type
+                });
+
+                // Initialize DataTransfer and add the file
+                let dt = new DataTransfer();
+                dt.items.add(file);
+
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let imgWrapper = $('<div>').addClass('image-wrapper');
+                    let img = $('<img>').attr('src', e.target.result).attr('alt', '').attr('loading', 'lazy');
+                    let removeBtn = $('<span>').addClass('remove-image').html('&times;');
+                    let hiddenInput = $('<input>').attr({
+                        type: 'hidden',
+                        name: 'new_images[]'
+                    }).val(file.name);
+
+                    imgWrapper.append(img, removeBtn, hiddenInput);
+                    $('.update-upload-img-preview').append(imgWrapper);
+
+                    if (!isExisting) {
+                        uploadedFiles.add(file.name);
+                        updateRemoveButtons();
+                    }
+                };
+
+                reader.readAsDataURL(file);
+
+                // Ensure fileInput is initialized and update files
+                let fileInput = document.getElementById('update-upload-image-five');
+                if (fileInput) {
+                    fileInput.files = dt.files;
+                    newFiles.add({
+                        file,
+                        existing: false
+                    });
+                    updateFileInput1();
+                } else {
+                    console.error('File input element not found.');
+                }
+            } catch (error) {
+                console.error('Error fetching the image:', error);
+            }
+        }
+
+
+        $(document).ready(function() {
+            let imageCount = $('.image-wrapper').length;
+            const maxFiles = 5;
+
+            let prev_images = @json($product->allImages->pluck('file_path')->toArray());
+            $.each(prev_images, function(index, imageUrl) {
+                fetchAndDisplayImage(imageUrl);
+            });
+
+            $('#update-upload-image-five').on('change', function(e) {
+                let files = e.target.files;
+                let remainingSlots = maxFiles - imageCount;
+
+                if (files.length > remainingSlots) {
+                    alert(`You can upload only ${maxFiles} images in total.`);
+                    return;
+                }
+
+                processFiles(Array.from(files));
+            });
+
+            function processFiles(files) {
+                if (files.length === 0) {
+                    updateFileInput1();
+                    return;
+                }
+
+                let file = files.shift();
+                if (!uploadedFiles.has(file.name)) {
+                    let reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        // console.log('djfdhgfdhgcnxbc');
+
+                        let imgWrapper = $('<div>').addClass('image-wrapper');
+                        let img = $('<img>').attr('src', e.target.result).attr('alt', '').attr('loading',
+                            'lazy');
+                        let removeBtn = $('<span>').addClass('remove-image').html('&times;');
+                        let hiddenInput = $('<input>').attr({
+                            type: 'hidden',
+                            name: 'new_images[]'
+                        }).val(file.name);
+
+                        imgWrapper.append(img, removeBtn, hiddenInput);
+                        $('.update-upload-img-preview').append(imgWrapper);
+
+                        imageCount++;
+                        uploadedFiles.add(file.name);
+                        newFiles.add({
+                            file,
+                            existing: false
+                        });
+                        updateRemoveButtons();
+
+                        processFiles(files);
+                    }
+
+                    reader.readAsDataURL(file);
+                } else {
+                    processFiles(files);
+                }
+            }
+
+            $(document).on('click', '.remove-image', function() {
+                let wrapper = $(this).closest('.image-wrapper');
+                let filename = wrapper.find('input[name="new_images[]"]').val();
+
+                if (filename) {
+                    uploadedFiles.delete(filename);
+                    newFiles = new Set([...newFiles].filter(file => file.file.name !== filename));
+                }
+
+                wrapper.remove();
+                imageCount--;
+                updateFileInput1();
+                updateRemoveButtons();
+            });
+
+            function updateRemoveButtons() {
+                console.log((newFiles),'465364536453645');
+
+                $('.remove-image').toggle((newFiles) > 0);
+            }
+
+            updateRemoveButtons();
+
+            new Sortable(document.querySelector('.sortable-images1234'), {
+                animation: 150,
+                onEnd: function(evt) {
+                    const newIndex = evt.newIndex;
+                    const oldIndex = evt.oldIndex;
+
+                    let sortedArray = Array.from(newFiles);
+
+                    const movedItem = sortedArray.splice(oldIndex, 1)[0];
+                    sortedArray.splice(newIndex, 0, movedItem);
+
+                    newFiles = new Set(sortedArray);
+                    updateFileInput1();
+                }
+            });
 
             $('form').on('submit', function(e) {
                 if (imageCount === 0) {
@@ -625,31 +920,193 @@
                 }
             });
 
-            // size script code here
             var sizes = @json(config('size'));
-            var category_size = $(this).find('option:selected').data('fetchsize');
-            var size = "{{$product->size}}";
+            var category_size = $('select[name="size"]').find('option:selected').data('fetchsize');
+            var size = "{{ $product->size }}";
             var selectedOption = $('select[name="size"]');
             selectedOption.empty();
 
             var sizeOptions = sizes[category_size] || [];
-
             if (sizeOptions.length === 0) {
                 var bydefaultSizes = sizes['bydefault'];
-
                 $.each(bydefaultSizes, function(index, confSize) {
                     var isSelected = (confSize === size) ? ' selected' : '';
-                    selectedOption.append('<option value="' + confSize + '"' + isSelected + '>' + confSize + '</option>');
+                    selectedOption.append('<option value="' + confSize + '"' + isSelected + '>' + confSize +
+                        '</option>');
                 });
             } else {
                 $.each(sizeOptions, function(key, options) {
                     $.each(options, function(index, confSize) {
                         var isSelected = (confSize === size) ? ' selected' : '';
-                        selectedOption.append('<option value="' + confSize + '"' + isSelected + '>' + confSize + '</option>');
+                        selectedOption.append('<option value="' + confSize + '"' + isSelected +
+                            '>' + confSize + '</option>');
                     });
                 });
             }
+        });
+    </script> --}}
 
+    <script>
+        var newFiles = new Set();
+        let fileInput = document.getElementById('update-upload-image-five');
+        let uploadedFiles = new Set();
+
+        function updateFileInput() {
+            let dt = new DataTransfer();
+            newFiles.forEach(item => {
+                if (!item.existing) {
+                    dt.items.add(item.file);
+                }
+            });
+            fileInput.files = dt.files;
+        }
+
+        function updateRemoveButtons() {
+            $('.remove-image').toggle(newFiles.size > 0);
+        }
+
+        async function fetchAndDisplayImage(url, isExisting = false) {
+            try {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                const mimeTypeToExtension = {
+                    'image/jpeg': 'jpeg',
+                    'image/png': 'png',
+                    'image/gif': 'gif',
+                    'image/webp': 'webp',
+                    'image/bmp': 'bmp',
+                    'image/svg+xml': 'svg'
+                };
+                const extension = mimeTypeToExtension[blob.type] || 'bin';
+                const fileName = `new_${Date.now()}.${extension}`;
+                const file = new File([blob], fileName, { type: blob.type });
+                let dt = new DataTransfer();
+                dt.items.add(file);
+                let reader = new FileReader();
+
+                reader.onload = function(e) {
+                    let imgWrapper = $('<div>').addClass('image-wrapper');
+                    let img = $('<img>').attr({ src: e.target.result, alt: '', loading: 'lazy' });
+                    let removeBtn = $('<span>').addClass('remove-image').html('&times;');
+                    let hiddenInput = $('<input>').attr({ type: 'hidden', name: 'new_images[]' }).val(file.name);
+                    imgWrapper.append(img, removeBtn, hiddenInput);
+                    $('.update-upload-img-preview').append(imgWrapper);
+
+                    if (!isExisting) {
+                        uploadedFiles.add(file.name);
+                        updateRemoveButtons();
+                    }
+                };
+
+                reader.readAsDataURL(file);
+                fileInput.files = dt.files;
+                newFiles.add({ file, existing: false });
+                updateFileInput();
+            } catch (error) {
+                console.error('Error fetching the image:', error);
+            }
+        }
+
+        $(document).ready(function() {
+            const maxFiles = 5;
+
+            let prev_images = @json($product->allImages->pluck('file_path')->toArray());
+            prev_images.forEach(imageUrl => fetchAndDisplayImage(imageUrl, true));
+
+            $('#update-upload-image-five').on('change', function(e) {
+                let files = e.target.files;
+                let remainingSlots = maxFiles - newFiles.size;
+
+                if (files.length > remainingSlots) {
+                    alert(`You can upload only ${maxFiles} images in total.`);
+                    return;
+                }
+
+                processFiles(Array.from(files));
+            });
+
+            function processFiles(files) {
+                if (files.length === 0) {
+                    updateFileInput();
+                    return;
+                }
+
+                let file = files.shift();
+                if (!uploadedFiles.has(file.name)) {
+                    let reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        let imgWrapper = $('<div>').addClass('image-wrapper');
+                        let img = $('<img>').attr({ src: e.target.result, alt: '', loading: 'lazy' });
+                        let removeBtn = $('<span>').addClass('remove-image').html('&times;');
+                        let hiddenInput = $('<input>').attr({ type: 'hidden', name: 'new_images[]' }).val(file.name);
+                        imgWrapper.append(img, removeBtn, hiddenInput);
+                        $('.update-upload-img-preview').append(imgWrapper);
+
+                        newFiles.add({ file, existing: false });
+                        uploadedFiles.add(file.name);
+                        updateRemoveButtons();
+                        processFiles(files);
+                    };
+
+                    reader.readAsDataURL(file);
+                } else {
+                    processFiles(files);
+                }
+            }
+
+            $(document).on('click', '.remove-image', function() {
+                let wrapper = $(this).closest('.image-wrapper');
+                let filename = wrapper.find('input[name="new_images[]"]').val();
+
+                if (filename) {
+                    uploadedFiles.delete(filename);
+                    newFiles = new Set([...newFiles].filter(item => item.file.name !== filename));
+                }
+
+                wrapper.remove();
+                updateFileInput();
+                updateRemoveButtons();
+            });
+
+            new Sortable(document.querySelector('.sortable-images1234'), {
+                animation: 150,
+                onEnd: function(evt) {
+                    const newIndex = evt.newIndex;
+                    const oldIndex = evt.oldIndex;
+                    let sortedArray = Array.from(newFiles);
+                    const movedItem = sortedArray.splice(oldIndex, 1)[0];
+                    sortedArray.splice(newIndex, 0, movedItem);
+                    newFiles = new Set(sortedArray);
+                    updateFileInput();
+                }
+            });
+
+            $('form').on('submit', function(e) {
+                if (newFiles.size === 0) {
+                    e.preventDefault();
+                    alert("Please upload at least one image before submitting.");
+                } else if (newFiles.size > maxFiles) {
+                    e.preventDefault();
+                    alert(`You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`);
+                }
+            });
+
+            var sizes = @json(config('size'));
+            var category_size = $('select[name="size"]').find('option:selected').data('fetchsize');
+            var size = "{{ $product->size }}";
+            var selectedOption = $('select[name="size"]');
+            selectedOption.empty();
+
+            var sizeOptions = sizes[category_size] || [];
+            var defaultSizes = sizeOptions.length === 0 ? sizes['bydefault'] : sizeOptions;
+
+            defaultSizes.forEach(confSize => {
+                var isSelected = confSize === size ? ' selected' : '';
+                selectedOption.append(`<option value="${confSize}"${isSelected}>${confSize}</option>`);
+            });
         });
     </script>
+
+
 @endpush

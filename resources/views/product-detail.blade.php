@@ -287,7 +287,7 @@
                                         @endguest
                                     </div>
                                 </div>
-                                <div class="pro-dec-rating-main">
+                                <div class="pro-dec-rating-main mb-0">
                                     <div class="pro-rating-head">
                                         <h4>Ratings & Reviews</h4>
 

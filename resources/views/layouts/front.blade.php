@@ -1152,6 +1152,8 @@
                 const files = e.originalEvent.dataTransfer.files;
                 $('#upload-image-five').prop('files', files);
                 $('#upload-image-five').trigger('change');
+                $('#update-upload-image-five').prop('files', files);
+                $('#update-upload-image-five').trigger('change');
             });
         });
     </script>

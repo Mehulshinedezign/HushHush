@@ -549,6 +549,8 @@ class ProductController extends Controller
         try {
             $product = Product::findOrFail($id);
 
+
+
             $user = $request->user();
             if ($product->user_id != $user->id) {
                 $response = [
@@ -585,6 +587,11 @@ class ProductController extends Controller
                 $response = ['errors' => $validator->errors()];
                 // Log::info('Update Product Response:', $response);
                 return response()->json($response, 422);
+            }
+            $existingImages = $product->images; // Assuming `images` is a relationship on the `Product` model
+            foreach ($existingImages as $image) {
+                Storage::disk('public')->delete($image->file_path); // Delete the image file
+                $image->delete(); // Delete the record from the database
             }
 
             $data = [

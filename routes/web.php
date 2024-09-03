@@ -18,6 +18,7 @@ use App\Http\Controllers\StripeOnboardingController;
 // Route::get('/', function () {
 //     return redirect()->route('login');
 // });
+Route::get("testing", [App\Http\Controllers\HomeController::class, 'testing'])->name('test');
 Route::get('order/earning/transaction', [StripeOnboardingController::class, 'earningtransaction'])->name('order.earning.transaction');
 Route::get('order/spent/transaction', [StripeOnboardingController::class, 'transaction'])->name('order.spent.transaction');
 

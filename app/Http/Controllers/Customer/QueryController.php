@@ -94,7 +94,7 @@ class QueryController extends Controller
                 $lender->notify(new QueryReceived($product_date));
             }
             DB::commit();
-            return response()->json(['success' => true, 'message' => 'Inquiry send successfully']);
+            return response()->json(['success' => true, 'message' => 'Inquiry sent successfully']);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json(['success' => false, 'message' => $e->getMessage() ]);

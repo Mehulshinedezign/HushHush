@@ -22,6 +22,7 @@ class QueryController extends Controller
                 'query_message' => 'nullable|string',
                 'start' => 'required|date',
                 'end' => 'required|date',
+                'delivery_option' =>'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
@@ -42,6 +43,7 @@ class QueryController extends Controller
                 'query_message' => $request->query_message,
                 'status' => 'PENDING',
                 'date_range' => $startDate . ' - ' . $endDate,
+                'delivery_option' => $request->delivery_option
             ]);
 
             $payload['id'] = $query->id;
@@ -87,6 +89,15 @@ class QueryController extends Controller
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
                     $actual_price =$query->getCalculatedPrice($query->date_range);
                     $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
+
+                    if($query->delivery_option == 'pick_up')
+                    {
+                        $address = $product->productCompleteLocation ?? Null;
+                    }
+                    else
+                    {
+                        $address = auth()->user()->userDetail ?? NUll;
+                    }
                     // dd($price);
 
                     return [
@@ -111,6 +122,8 @@ class QueryController extends Controller
                         'cleaning_charge' => $query->cleaning_charges ?? Null,
                         'shipping_charge' => $query->shipping_charges ?? null,
                         'actual_price' => $actual_price ?? null,
+                        'shipment_type' =>$query->delivery_option,
+                        'address'=> $address,
                     ];
                 });
 
@@ -159,6 +172,14 @@ class QueryController extends Controller
                     // dd($borrower);
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
                     $actual_price =$query->getCalculatedPrice($query->date_range);
+                    if($query->delivery_option == 'pick_up')
+                    {
+                        $address = $product->productCompleteLocation ?? null;
+                    }
+                    else
+                    {
+                        $address = auth()->user()->userDetail ?? null;
+                    }
                     return [
                         'id' => $query->id ?? null,
                         'user_id' => $query->user_id ?? null,
@@ -181,6 +202,8 @@ class QueryController extends Controller
                         'cleaning_charge' => $query->cleaning_charges ?? Null,
                         'shipping_charge' => $query->shipping_charges ?? null,
                         'actual_price' => $actual_price ?? null,
+                        'shipment_type' =>$query->delivery_option,
+                        'address'=> $address,
                     ];
                 });
 
@@ -214,7 +237,7 @@ class QueryController extends Controller
             if ($type == 'ACCEPTED') {
                 $query_details->update(['status' => 'ACCEPTED']);
 
-                
+
             } elseif ($type == 'REJECTED') {
                 $query_details->update(['status' => 'REJECTED']);
             } elseif ($type == 'price') {

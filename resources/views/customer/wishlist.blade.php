@@ -1,12 +1,15 @@
 @extends('layouts.front')
 @section('title', 'My Wishlist')
 @section('content')
-    <section class="my-wishlist-sec   fill-hight">
+    <section class="my-wishlist-sec fill-hight">
         <div class="slider-section profile-slider-section mt-0">
             <div class="container">
                 {{-- <h4>Favorites</h4> --}}
                 @if ($products->isNotEmpty())
                     <div class="home-product-main">
+                        <div class="section-heading">
+                            <h2>Wish List</h2>
+                        </div>
                         <div class="home-product-box">
                             @foreach ($products as $favrait)
                                 <div class="product-card">
