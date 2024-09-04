@@ -237,6 +237,11 @@
                                                                         <div class="formfield">
                                                                             <textarea name="about" id="about" placeholder="About me"
                                                                                 class="form-control @error('about') is-invalid @enderror">{{ $user->userDetail->about ?? '' }}</textarea>
+                                                                            @error('about')
+                                                                                <span class="invalid-feedback" role="alert">
+                                                                                    {{ $message }}
+                                                                                </span>
+                                                                            @enderror
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -277,9 +282,13 @@
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 
+            // $.validator.addMethod("userCompleteAddress", function(value, element) {
+            //     return $('#addressline1').val() !== '' && $('#addressline2').val() !== '' && $('#country')
+            //         .val() !== '' && $('#state').val() !== '' && $('#city').val() !== '';
+            // }, "Please enter the complete address");
+
             $.validator.addMethod("userCompleteAddress", function(value, element) {
-                return $('#addressline1').val() !== '' && $('#addressline2').val() !== '' && $('#country')
-                    .val() !== '' && $('#state').val() !== '' && $('#city').val() !== '';
+                return $('#country').val() !== '' && $('#state').val() !== '' && $('#city').val() !== '';
             }, "Please enter the complete address");
 
             const rules = {
@@ -296,6 +305,9 @@
                     required: true,
                     userCompleteAddress: true,
                 },
+                about: {
+                    required:true,
+                },
 
             };
 
@@ -311,7 +323,10 @@
                 },
                 complete_address: {
                     required: 'This field is required.',
-                    userCompleteAddress: 'Please enter the complete address',
+                    userCompleteAddress: 'Please enter the complete address.',
+                },
+                about: {
+                    required:'This field is required.',
                 },
 
             };
@@ -405,7 +420,7 @@
                     if ($(this).val() === '') {
                         $(".address_data").slideUp("slow");
                         $('#addressline1, #addressline2, #country, #state, #city, #zipcode').val(
-                        '');
+                            '');
                     }
                 });
 
@@ -420,7 +435,7 @@
                         var place = autocomplete.getPlace();
 
                         $('#addressline1, #addressline2, #country, #state, #city, #zipcode').val(
-                        '');
+                            '');
 
                         var zipcode = null; // Initialize zipcode to null
 
@@ -443,7 +458,7 @@
                             }
                             if (addressType === 'postal_code') {
                                 zipcode = place.address_components[i]
-                                .long_name; // Assign zipcode if available
+                                    .long_name; // Assign zipcode if available
                             }
                         }
 

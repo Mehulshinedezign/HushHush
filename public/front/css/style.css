@@ -2736,8 +2736,8 @@ form#searchForm {
     color: red;
 }
 
-
-
-
-
+form#filters {
+    position: sticky;
+    top: 90px;
+}
 

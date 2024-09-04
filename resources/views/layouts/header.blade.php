@@ -142,6 +142,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li>
+                       <a href="{{ url('/') }}">Home</a> 
+                    </li>
                     @foreach (getParentCategory() as $index => $parentCategory)
                         @if ($index >= 5)
                         @break

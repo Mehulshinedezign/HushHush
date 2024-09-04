@@ -11,8 +11,6 @@
         $user = auth()->user();
     @endphp
 
-
-
     <section class="my-profile-sec cust-form-bg fill-hight">
         <div class="container">
             <div class="my-profile-wrapper">
@@ -34,8 +32,11 @@
                                 @else
                                     <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
                                 @endif
+
                                 {{-- <img src="{{asset('front/images/pro3.png')}}" alt="img"> --}}
                             </div>
+                            <p style="text-align: center">Allowed only JPEG, JPG, PNG.</p>
+
                         </div>
                         <div class="col-md-6">
                             <div class="my-pro-detail">

@@ -26,9 +26,15 @@
                         </div>
                         <div class="order-pro-details">
                             <div class="order-details-list">
+                                <p>Order Id :</p>
+                                <h4>{{ $order->id }}</h4>
+                            </div>
+                            
+                            <div class="order-details-list">
                                 <p>Cancelation Note:</p>
                                 <h4>{{ $order->cancellation_note ??''}}</h4>
                             </div>
+                            
                             {{-- <div class="order-details-list">
                                 <p>Category :</p>
                                 <h4>{{ $order->product->category->name }}</h4>

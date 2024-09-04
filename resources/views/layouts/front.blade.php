@@ -87,7 +87,7 @@
 
     {{-- Add produc modal here --}}
     <div class="modal fade addproduct-Modal product-modal" id="addproduct-Modal" tabindex="-1"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -223,11 +223,15 @@
                                         <div class="form-group">
                                             <label for="">Brand</label>
                                             <div class="formfield">
-                                                <select class="form-control" name="brand">
+                                                <select class="form-control" id="mySelect" name="brand">
                                                     <option value="">Brand</option>
                                                     @foreach (getBrands() as $brand)
-                                                        <option value="{{ $brand->id }}">
+                                                        <option value="{{ $brand->id }}"
+                                                            class="@if ($brand->name == 'Other') moveMe @endif">
                                                             {{ $brand->name }}</option>
+                                                        {{-- @if ($brand->name == 'Other')
+                                                                <option value="{{$brand->id}}" id="moveMe">{{$brand->name}}</option>
+                                                            @endif --}}
                                                     @endforeach
                                                 </select>
                                                 <span class="form-icon">
@@ -241,14 +245,16 @@
                                             @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Color</label>
                                             <div class="formfield">
-                                                <select class="form-control" name="color">
+                                                <select class="form-control" id="selectColor" name="color">
                                                     <option value="">Color</option>
                                                     @foreach (getColors() as $color)
-                                                        <option value="{{ $color->id }}">
+                                                        <option value="{{ $color->id }}"
+                                                            class="@if ($color->name == 'Other') otherColor @endif">
                                                             {{ $color->name }}</option>
                                                     @endforeach
                                                 </select>
@@ -263,6 +269,7 @@
                                             @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
                                             <div class="product_manual_location">
@@ -277,9 +284,9 @@
 
                                                 <div class="form-check form-switch">
                                                     <label class="form-check-label"
-                                                        for="flexSwitchCheckChecked">Shipment</label>
+                                                        for="shipmentToggle">Shipment</label>
                                                     <input class="form-check-input" type="checkbox" role="switch"
-                                                        name="shipment" id="" checked>
+                                                        name="shipment" id="shipmentToggle" checked>
                                                 </div>
                                             </div>
                                             <div class="form-field">
@@ -744,6 +751,39 @@
     <script src="{{ asset('js/custom/add-wishlist.js') }}"></script>
     <script src="{{ asset('js/custom/common.js') }}?ver={{ now() }}"></script>
     <script>
+        $(document).ready(function() {
+            $('#mySelect').click(function() {
+                let $optionToMove = $('.moveMe');
+
+                // Remove the specific option and append it to the end of the select
+                $optionToMove.detach().appendTo('#mySelect');
+            });
+            $('#selectColor').click(function() {
+                let $optionToMove = $('.otherColor');
+
+                // Remove the specific option and append it to the end of the select
+                $optionToMove.detach().appendTo('#selectColor');
+            });
+        });
+
+        $(document).ready(function() {
+        $('#flexSwitchCheckChecked, #shipmentToggle').on('change', function() {
+            // Get the current state of both checkboxes
+            const isManualPickupChecked = $('#flexSwitchCheckChecked').is(':checked');
+            const isShipmentChecked = $('#shipmentToggle').is(':checked');
+
+            // If both are unchecked, prevent the change
+            if (!isManualPickupChecked && !isShipmentChecked) {
+                $(this).prop('checked', true); // Re-check the checkbox that was just unchecked
+                iziToast.error({
+                        title: 'Error',
+                        message: 'At least one option must be selected.',
+                        position: 'topRight',
+                    });
+            }
+        });
+    });
+
         jQuery(document).ready(function() {
             $('#parent-category').on('change', function() {
                 var selectedOption = $(this).find('option:selected');

@@ -130,8 +130,13 @@ class ProductController extends Controller
         if ($startDate && $endDate) {
             $query->filterByDateRange($startDate, $endDate);
         }
+        if($request->rating){
 
-        $products = $query->orderBy('created_at', 'desc')->paginate(5);
+            $products = $query->paginate(5);
+        }
+        else{
+            $products = $query->orderBy('created_at', 'desc')->paginate(5);
+        }
 
         if ($request->ajax()) {
             $products_count = $products->count();

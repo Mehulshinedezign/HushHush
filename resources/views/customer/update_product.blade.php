@@ -172,8 +172,12 @@
                                                 <label for="">Pickup Location*</label>
 
                                                 <div class="form-check form-switch">
-                                                    <label class="form-check-label" for="flexSwitchCheckChecked">Manual pickup location</label>
+                                                    <label class="form-check-label" for="flexSwitchCheckChecked">Pickup</label>
                                                     <input class="form-check-input" type="checkbox" role="switch" name="manual_location" id="flexSwitchCheckChecked" {{ $product->productCompleteLocation->manul_pickup_location ? 'checked' : '' }}>
+                                                </div>
+                                                <div class="form-check form-switch">
+                                                    <label class="form-check-label" for="shipmentToggle">Shipment</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch" name="shipment" id="shipmentToggle" {{ $product->productCompleteLocation->shipment ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                             <div class="form-field">
