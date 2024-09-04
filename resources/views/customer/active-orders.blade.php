@@ -180,35 +180,14 @@ aria-labelledby="cancellation-noteLabel" aria-hidden="true">
             </div>
         </div>
     </div>
-    {{-- <script>
-        $(document).ready(function() {
 
-            $('.cancel-order').on('click', function() {
-                swal({
-                        title: 'Cancel Order',
-                        text: 'The platform charges will be deducted by stripe',
-                        icon: 'warning',
-                        buttons: true,
-                        dangerMode: true,
-                        buttons: ["No", "Yes"],
-                    })
-                    .then((willOpen) => {
-                        if (willOpen) {
-                            $('#cancellation-note').modal('show');
-                        } else {
-                            jQuery('body').removeClass('modal-open');
-                        }
-                    });
-            })
-        });
-    </script> --}}
 
     <script>
         $(document).ready(function() {
             $('.cancel-order').on('click', function(event) {
-                event.preventDefault(); // Prevent default anchor behavior (which might cause a page reload)
+                event.preventDefault();
 
-                let cancelUrl = $(this).data('url'); // Get the URL from the data-url attribute
+                let cancelUrl = $(this).data('url');
 
                 swal({
                         title: 'Cancel Order',
@@ -220,24 +199,21 @@ aria-labelledby="cancellation-noteLabel" aria-hidden="true">
                     })
                     .then((willCancel) => {
                         if (willCancel) {
-                            // Show the modal if the user confirms
                             $('#cancellation-note').modal('show');
 
-                            // You can send an AJAX request to cancel the order here
-                            // Or handle it in the modal's form submission
                             $.ajax({
                                 url: cancelUrl,
                                 method: 'POST',
                                 data: {
-                                    _token: '{{ csrf_token() }}', // Ensure CSRF token is included
-                                    reason: 'Your cancellation reason here' // Replace with actual reason if needed
+                                    _token: '{{ csrf_token() }}',
+                                    reason: 'Your cancellation reason here'
                                 },
                                 success: function(response) {
                                     if (response.success) {
                                         swal("Order Cancelled", response.message, "success")
                                             .then(() => {
                                                 location
-                                            .reload(); // Reload the page or redirect
+                                            .reload();
                                             });
                                     } else {
                                         swal("Error", response.message, "error");

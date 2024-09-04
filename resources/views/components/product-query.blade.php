@@ -10,11 +10,11 @@
                             <th>User Name</th>
                             <th>Actual Price</th>
                             @if($querydatas->first()->status != 'PENDING')
-                            <th>Negotiation Price</th>
+                            <th>Agreed Price</th>
                             <th>Cleaning Price</th>
                             <th>Shipping Price</th>
                             @endif
-                            <th>Query</th>
+                            <th>Message</th>
                             <th>Date</th>
                             <!-- <th>Status</th> -->
                             <th>Action</th>

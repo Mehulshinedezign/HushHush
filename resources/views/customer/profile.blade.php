@@ -14,7 +14,7 @@
     <section class="product-slider-sec product-slider-sec-min-height">
         <div class="container">
             <div class="profile-detail-box">
-                <div class="row align-items-center">
+                <div class="row align-items-start">
                     <div class="col-md-2">
                         <div class="profile-personal-detail">
                             <div class="profile-personal-img">

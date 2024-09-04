@@ -287,7 +287,7 @@
                                         @endguest
                                     </div>
                                 </div>
-                                <div class="pro-dec-rating-main">
+                                <div class="pro-dec-rating-main mb-0">
                                     <div class="pro-rating-head">
                                         <h4>Ratings & Reviews</h4>
 
@@ -448,7 +448,7 @@
                                     <div class="form-group my-3">
                                         <label for="">Message to lender</label>
                                         <div class="formfield">
-                                            <textarea name="description" cols="30" rows="5"
+                                            <textarea name="description" cols="30" rows="3"
                                                 class="form-control form-class @error('description') is-invalid @enderror" placeholder="message to lender"></textarea>
                                         </div>
                                         @error('description')
@@ -475,7 +475,7 @@
 
                                             <input type="text" id="selected_value" readonly class="form-control"
                                                 placeholder="Selected option will appear here"
-                                                value="{{ $product->productCompleteLocation->shipment == '0' ? @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state : $authUser->userDetail->complete_address }}">
+                                                value="{{ $product->productCompleteLocation->shipment == '0' ? @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state : @$authUser->userDetail->complete_address }}">
 
                                             @error('delivery_option')
                                                 <span class="invalid-feedback" role="alert">
@@ -503,7 +503,7 @@
                                             <label for="ship_to_me">Ship it to me</label><br>
 
                                             <input type="text" id="selected_value" readonly class="form-control"
-                                                value="{{ $authUser->userDetail->complete_address }}">
+                                                value="{{ @$authUser->userDetail->complete_address }}">
                                         @else
                                             <input type="text" id="ship" readonly class="form-control"
                                                 placeholder="No available pickup or shipment location">
@@ -513,7 +513,7 @@
                                     </div>
                                 </div>
 
-                                <button type="button" class="button primary-btn full-btn mt-3"
+                                <button type="button" class="button primary-btn full-btn mt-3 mb-3"
                                     id="Askquery">Next</button>
                             </form>
 
@@ -775,7 +775,7 @@
                         selectedValueInput.value =
                             "{{ @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state }}";
                     } else if (this.id === 'ship_to_me') {
-                        selectedValueInput.value = "{{ $authUser->userDetail->complete_address }}";
+                        selectedValueInput.value = "{{ @$authUser->userDetail->complete_address }}";
                     }
                 });
             });

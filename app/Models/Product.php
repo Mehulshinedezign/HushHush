@@ -197,6 +197,11 @@ class Product extends Model
         return $this->hasMany(ProductRating::class);
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
     /**
      * Product favorites
      *

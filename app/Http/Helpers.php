@@ -373,26 +373,48 @@ if (!function_exists('check_order_list_paginate_retailer')) {
     if (!function_exists('sendPushNotifications')) {
         function sendPushNotifications($token, $payload)
         {
+            // dd($token);
             if (!is_null($token)) {
-                $url = 'https://fcm.googleapis.com/fcm/send';
-                $api_key = 'AIzaSyDovLKo3djdRbs963vqKdbj-geRWyzMTrg'; // Replace with your FCM Server Key
+                // Initialize Google Client
+                $client = new Google_Client();
+                $client->setAuthConfig('../pushCredentials.json'); // Path to your service account key file
+                $client->addScope('https://www.googleapis.com/auth/cloud-platform');
+                $client->fetchAccessTokenWithAssertion(); // Fetch the OAuth 2.0 access token
+
+                $accessToken = $client->getAccessToken()['access_token'];
+
+                $url = 'https://fcm.googleapis.com/v1/projects/test-hush-app/messages:send';
 
                 $notification = [
-                    'title' => 'Notification Title', // You can customize this
+                    'title' => 'HushHush',
                     'body' => $payload['content'],
-                    'order_id' => $payload['id'],
                 ];
 
+                $data = [
+                    'id' => strval($payload['id']),
+                    "content" => $payload['content']
+                ];
                 $fcmNotification = [
-                    'to' => $token,
-                    'notification' => $notification,
-                    'priority' => 'high',
-                    'data' => $payload
+                    'message' => [
+                        'token' => $token,
+                        'notification' => $notification,
+                        'data' => $data,
+                        'android' => [
+                            'priority' => 'high',
+                        ],
+                        'apns' => [
+                            'payload' => [
+                                'aps' => [
+                                    'priority' => 'high',
+                                ],
+                            ],
+                        ],
+                    ],
                 ];
 
                 $headers = [
-                    'Authorization: key=' . $api_key,
-                    'Content-Type: application/json'
+                    'Authorization: Bearer ' . $accessToken,
+                    'Content-Type: application/json',
                 ];
 
                 $ch = curl_init();
@@ -404,10 +426,9 @@ if (!function_exists('check_order_list_paginate_retailer')) {
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fcmNotification));
                 $result = curl_exec($ch);
                 curl_close($ch);
-
+                // dd($result);
                 return $result;
             }
-
             return false;
         }
     }

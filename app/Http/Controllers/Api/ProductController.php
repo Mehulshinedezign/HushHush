@@ -462,7 +462,9 @@ class ProductController extends Controller
                 'longitude' => $locationData['longitude'],
                 'product_complete_location' => $locationData['formatted_address'],
                 'raw_address' => $request->pickup_location,
-                'manul_pickup_location' => $request->manul_pickup_location ?? 1,
+                'manul_pickup_location' => $request->manul_pickup_location ?? '1',
+                'shipment' => $request->shipment ?? '1',
+
             ]);
 
             if ($request->has('disable_dates')) {
@@ -549,6 +551,8 @@ class ProductController extends Controller
         try {
             $product = Product::findOrFail($id);
 
+
+
             $user = $request->user();
             if ($product->user_id != $user->id) {
                 $response = [
@@ -585,6 +589,11 @@ class ProductController extends Controller
                 $response = ['errors' => $validator->errors()];
                 // Log::info('Update Product Response:', $response);
                 return response()->json($response, 422);
+            }
+            $existingImages = $product->images; // Assuming `images` is a relationship on the `Product` model
+            foreach ($existingImages as $image) {
+                Storage::disk('public')->delete($image->file_path); // Delete the image file
+                $image->delete(); // Delete the record from the database
             }
 
             $data = [
@@ -623,7 +632,8 @@ class ProductController extends Controller
                     'longitude' => $locationData['longitude'],
                     'complete_pickup_location' => $locationData['formatted_address'],
                     'raw_address' => $request->pickup_location,
-                    'manul_pickup_location' => $request->manul_pickup_location,
+                    'manul_pickup_location' => $request->manul_pickup_location ?? '1',
+                    'shipment' => $request->shipment ?? '0',
                 ]
             );
 

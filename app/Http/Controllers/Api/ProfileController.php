@@ -138,26 +138,26 @@ class ProfileController extends Controller
             $user->update($request->all());
 
             // User details entry
-            $completeadrres =$request->complete_address ?? $user->userDetail->complete_address ?? Null;
+            $completeadrres = $request->complete_address ?? $user->userDetail->complete_address ?? Null;
             $address1 = $request->address1 ?? $user->userDetail->address1 ?? Null;
             $address2 = $request->address2 ?? $user->userDetail->address2 ?? Null;
             $about = ($request->about == '') ? NUll : $request->about;
-            $country = $request->country ??$user->userDetail->country ?? Null;
+            $country = $request->country ?? $user->userDetail->country ?? Null;
             $state = $request->state ?? $user->userDetail->state ?? Null;
             $city = $request->city ?? $user->userDetail->city ?? Null;
-            $zipcode =$request->zipcode ??$user->userDetail->zipcode ?? Null;
+            $zipcode = $request->zipcode ?? $user->userDetail->zipcode ?? Null;
             // $about = $request->about_me ?? $user->userDetail->about?? null;
             $userDetails = UserDetail::updateOrCreate(
                 ['user_id' => $user->id],
                 [
-                    'complete_address'=> $completeadrres,
+                    'complete_address' => $completeadrres,
                     'address1' => $address1,
                     'address2' => $address2,
                     'country' => $country,
                     'state' => $state,
                     'city' => $city,
                     'about' => $about,
-                    'zipcode'=>$zipcode,
+                    'zipcode' => $zipcode,
 
 
                 ]
@@ -337,19 +337,16 @@ class ProfileController extends Controller
         }
 
         $user = auth()->user();
+        // dd($user->pushToken->fcm_token);
 
-        // Ensure the user has a pushToken and that the FCM token is available
         if (!$user->pushToken || !$user->pushToken->fcm_token) {
             return response()->json(['status' => 'error', 'message' => 'FCM token not found'], 404);
         }
-        // dd($user->pushToken->fcm_token);
 
         $payload = [
             'id' => 'dhfgdh',
             'content' => 'You have received an inquiry about a product'
         ];
-
-        // Call the function to send push notifications
         $response = sendPushNotifications($user->pushToken->fcm_token, $payload);
 
         if ($response === false) {
@@ -357,5 +354,137 @@ class ProfileController extends Controller
         }
 
         return response()->json(['status' => 'success', 'message' => 'Notification sent successfully', 'response' => $response]);
+    }
+
+
+    public function userNotification(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $user_notification = $user->usernotification;
+
+            return response()->json([
+                'status' => true,
+                'data' => [
+                    'user_id' => $user_notification->user_id,
+                    'query_receive' => $user_notification->query_receive,
+                    'accept_item' => $user_notification->accept_item,
+                    'reject_item' => $user_notification->reject_item,
+                    'order_req' => $user_notification->order_req,
+                    'customer_order_pickup' => $user_notification->customer_order_pickup,
+                    'lender_order_pickup' => $user_notification->lender_order_pickup,
+                    'customer_order_return' => $user_notification->customer_order_return,
+                    'lender_order_return' => $user_notification->lender_order_return,
+                    'order_canceled_by_lender' => $user_notification->order_canceled_by_lender,
+                    'order_canceled_by_customer' => $user_notification->order_canceled_by_customer,
+
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'errors' => []
+            ], 500);
+        }
+    }
+
+
+    public function updateNotification(Request $request)
+    {
+        try {
+            // Validate the incoming request
+            // $validatedData = $request->validate([
+            //     'query_receive' => 'required|in:0,1',
+            //     'accept_item' => 'required|in:0,1',
+            //     'reject_item' => 'required|in:0,1',
+            //     'order_req' => 'required|in:0,1',
+            //     'customer_order_pickup' => 'required|in:0,1',
+            //     'lender_order_pickup' => 'required|in:0,1',
+            //     'customer_order_return' => 'required|in:0,1',
+            //     'lender_order_return' => 'required|in:0,1',
+            //     'order_canceled_by_lender' => 'required|in:0,1',
+            //     'order_canceled_by_customer' => 'required|in:0,1',
+            // ]);
+
+            $user = auth()->user();
+
+            // Make sure user is authenticated
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'User not authenticated',
+                    'errors' => []
+                ], 401);
+            }
+            if (!$user->usernotification) {
+                $userNotification = $user->usernotification->create([
+                    'query_receive' => $request->query_receive,
+                    'accept_item' => $request->accept_item,
+                    'reject_item' => $request->reject_item,
+                    'order_req' => $request->order_req,
+                    'customer_order_pickup' => $request->customer_order_pickup,
+                    'lender_order_pickup' => $request->lender_order_pickup,
+                    'customer_order_return' => $request->customer_order_return,
+                    'lender_order_return' => $request->lender_order_return,
+                    'order_canceled_by_lender' => $request->order_canceled_by_lender,
+                    'order_canceled_by_customer' => $request->order_canceled_by_customer,
+                ]);
+            } else {
+                $userNotification = $user->usernotification->update([
+                    'query_receive' => $request->query_receive,
+                    'accept_item' => $request->accept_item,
+                    'reject_item' => $request->reject_item,
+                    'order_req' => $request->order_req,
+                    'customer_order_pickup' => $request->customer_order_pickup,
+                    'lender_order_pickup' => $request->lender_order_pickup,
+                    'customer_order_return' => $request->customer_order_return,
+                    'lender_order_return' => $request->lender_order_return,
+                    'order_canceled_by_lender' => $request->order_canceled_by_lender,
+                    'order_canceled_by_customer' => $request->order_canceled_by_customer,
+                ]);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Notification settings updated successfully',
+                'data' => $user->usernotification
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'errors' => []
+            ], 500);
+        }
+    }
+
+    public function earnings(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $orders = Order::with('product.thumbnailImage', 'retailer.vendorPayout', 'transaction')
+                ->where('retailer_id', $user->id)
+                ->get();
+            $data = $orders->map(function ($order) {
+                return [
+                    'date' => $order->transaction->date ?? '',
+                    'product_image_url' => $order->product->thumbnailImage->file_path ?? null,
+                    'name' => $order->product->name ?? '',
+                    'amount' => $order->retailer->vendorPayout[0]->amount ?? 'N/a',
+                ];
+            });
+
+            return response()->json([
+                'status' => true,
+                'data' => $data,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'errors' => []
+            ], 500);
+        }
     }
 }

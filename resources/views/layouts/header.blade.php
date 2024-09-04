@@ -43,7 +43,7 @@
                             <li>
                                 <a class="header-chat-icon" href="{{ route('common.chat') }}">
                                     {{-- <i class="fa-solid fa-comment"></i> --}}
-                                    <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="20" height="20"><path d="m13-.004H5C2.243-.004,0,2.239,0,4.996v12.854c0,.793.435,1.519,1.134,1.894.318.171.667.255,1.015.255.416,0,.831-.121,1.191-.36l3.963-2.643h5.697c2.757,0,5-2.243,5-5v-7C18,2.239,15.757-.004,13-.004Zm11,9v12.854c0,.793-.435,1.519-1.134,1.894-.318.171-.667.255-1.015.256-.416,0-.831-.121-1.19-.36l-3.964-2.644h-5.697c-1.45,0-2.747-.631-3.661-1.62l.569-.38h5.092c3.859,0,7-3.141,7-7v-7c0-.308-.027-.608-.065-.906,2.311.44,4.065,2.469,4.065,4.906Z"/></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="15" height="15"><path d="m13-.004H5C2.243-.004,0,2.239,0,4.996v12.854c0,.793.435,1.519,1.134,1.894.318.171.667.255,1.015.255.416,0,.831-.121,1.191-.36l3.963-2.643h5.697c2.757,0,5-2.243,5-5v-7C18,2.239,15.757-.004,13-.004Zm11,9v12.854c0,.793-.435,1.519-1.134,1.894-.318.171-.667.255-1.015.256-.416,0-.831-.121-1.19-.36l-3.964-2.644h-5.697c-1.45,0-2.747-.631-3.661-1.62l.569-.38h5.092c3.859,0,7-3.141,7-7v-7c0-.308-.027-.608-.065-.906,2.311.44,4.065,2.469,4.065,4.906Z"/></svg>
                                 <span class="userIconbtn"></span>
                             </a>
                             </li>
@@ -60,7 +60,7 @@
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
 
                                         <li><a class="dropdown-item" href="{{ route('edit-account') }}"><i
-                                                    style="color: #606060" class="fa-solid fa-gear"></i>Account Settings</a>
+                                                    style="color: #212529" class="fa-solid fa-gear"></i>Account Settings</a>
                                         </li>
                                         <li><a class="dropdown-item" href="{{ route('product') }}">
                                                 <i class="fa-solid fa-cart-shopping"></i>
@@ -85,7 +85,7 @@
                                         <!-- <li><a class="dropdown-item" href="#"><img src="{{ asset('front/images/saved-icon.svg') }}" alt="img">Saved Items</a></li> -->
                                         <!-- <li><a class="dropdown-item" href="{{ route('payment-history') }}"><img src="{{ asset('front/images/payment-history-icon.svg') }}" alt="img">Payment History</a></li> -->
                                         <li><a class="dropdown-item" href="{{ route('user.changePassword') }}"><i
-                                                    style="color: #606060" class="fa-solid fa-lock"></i>Change
+                                                    style="color: #212529" class="fa-solid fa-lock"></i>Change
                                                 password</a></li>
                                         {{-- <li><a class="dropdown-item" href="{{ route('common.chat') }}"><i
                                                     class="fa-solid fa-comment"></i>Chat
@@ -165,13 +165,13 @@
             <div class="search-pro-header">
                 <ul>
                     <li>
-                        <input type="text" name="search" placeholder="Search by product name"
+                        <input type="text" name="search" placeholder="Search by Product Name"
                             value="{{ request('search') }}">
                     </li>
                     <li>
                         <div class="formfield icon-new-bx">
                             <input type="text" name="filter_date" id="daterange-header"
-                                placeholder="Enter date range" class="form-control daterange-cus custom-left-open"
+                                placeholder="Enter Date Range" class="form-control daterange-cus custom-left-open"
                                 readonly>
                             <label for="daterange-header" class="form-icon">
                                 <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
@@ -209,7 +209,7 @@
         const filterInputs = filterForm.querySelectorAll('input[name]');
         filterInputs.forEach(function(input) {
             const clone = input.cloneNode(true);
-            clone.style.display = 'none'; // Hide cloned elements
+            clone.style.display = 'none';
             searchForm.appendChild(clone);
         });
         searchForm.submit();
