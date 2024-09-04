@@ -337,7 +337,7 @@ class ProfileController extends Controller
         }
 
         $user = auth()->user();
-
+        dd($user->pushToken->fcm_token);
 
         if (!$user->pushToken || !$user->pushToken->fcm_token) {
             return response()->json(['status' => 'error', 'message' => 'FCM token not found'], 404);

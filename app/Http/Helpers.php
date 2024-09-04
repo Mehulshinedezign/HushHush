@@ -376,7 +376,7 @@ if (!function_exists('check_order_list_paginate_retailer')) {
             if (!is_null($token)) {
                 // Initialize Google Client
                 $client = new Google_Client();
-                $client->setAuthConfig('../deliver-f2089-firebase-adminsdk-gvhgm-e95f9af02a.json'); // Path to your service account key file
+                $client->setAuthConfig('../pushCredentials.json'); // Path to your service account key file
                 $client->addScope('https://www.googleapis.com/auth/cloud-platform');
                 $client->fetchAccessTokenWithAssertion(); // Fetch the OAuth 2.0 access token
 
@@ -425,7 +425,7 @@ if (!function_exists('check_order_list_paginate_retailer')) {
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fcmNotification));
                 $result = curl_exec($ch);
                 curl_close($ch);
-
+                dd($result);
                 return $result;
             }
             return false;

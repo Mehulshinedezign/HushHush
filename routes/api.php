@@ -91,6 +91,9 @@ Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {
     Route::post('user/update/notification', [App\Http\Controllers\Api\ProfileController::class, 'updateNotification']);
     Route::get('user/earnings', [App\Http\Controllers\Api\ProfileController::class, 'earnings']);
 
+
+    Route::get('testing', [App\Http\Controllers\Api\ProfileController::class, 'test']);
+
     //Bank Deatils APIs
     Route::post('/bank-account', [App\Http\Controllers\Api\BankAccountController::class, 'addOrUpdateBankAccount']);
     Route::get('/bank-account/details', [App\Http\Controllers\Api\BankAccountController::class, 'getDetails']);
