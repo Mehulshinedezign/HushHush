@@ -86,9 +86,12 @@ class QueryController extends Controller
                         ->whereNull('deleted_at')
                         ->first();
                     $lender = User::where('id', $query->for_user)->first();
-                    $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
-                    $actual_price =$query->getCalculatedPrice($query->date_range);
+                    $price = $query->negotiate_price  ?? $product->getCalculatedPrice($query->date_range);
                     $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
+                    $actual_price =$query->getCalculatedPrice($query->date_range);
+                    // $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
+                    // $actual_price =$query->getCalculatedPrice($query->date_range);
+                    // $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
 
                     if($query->delivery_option == 'pick_up')
                     {
@@ -232,7 +235,7 @@ class QueryController extends Controller
     {
         try {
             $query_details = Query::findOrFail($id);
-            dd($query_details);
+            // dd($query_details);
 
             if ($type == 'ACCEPTED') {
                 $query_details->update(['status' => 'ACCEPTED']);
