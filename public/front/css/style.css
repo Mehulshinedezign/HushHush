@@ -2736,7 +2736,10 @@ form#searchForm {
     color: red;
 }
 
-
+form#filters {
+    position: sticky;
+    top: 90px;
+}
 
 .filter-range-wrapper div#error-message {
     position: absolute;
