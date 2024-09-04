@@ -87,6 +87,8 @@ Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {
     Route::post('/profile/change-password', [App\Http\Controllers\Api\ProfileController::class, 'changePassword']);
     Route::get('user/stats', [App\Http\Controllers\Api\ProfileController::class, 'stats']);
     Route::post('user/delete', [App\Http\Controllers\Api\ProfileController::class, 'destory']);
+    Route::get('user/notification', [App\Http\Controllers\Api\ProfileController::class, 'userNotification']);
+    Route::post('user/update/notification', [App\Http\Controllers\Api\ProfileController::class, 'updateNotification']);
 
     //Bank Deatils APIs
     Route::post('/bank-account', [App\Http\Controllers\Api\BankAccountController::class, 'addOrUpdateBankAccount']);
