@@ -394,18 +394,18 @@ class ProfileController extends Controller
     {
         try {
             // Validate the incoming request
-            $validatedData = $request->validate([
-                'query_receive' => 'required|in:0,1',
-                'accept_item' => 'required|in:0,1',
-                'reject_item' => 'required|in:0,1',
-                'order_req' => 'required|in:0,1',
-                'customer_order_pickup' => 'required|in:0,1',
-                'lender_order_pickup' => 'required|in:0,1',
-                'customer_order_return' => 'required|in:0,1',
-                'lender_order_return' => 'required|in:0,1',
-                'order_canceled_by_lender' => 'required|in:0,1',
-                'order_canceled_by_customer' => 'required|in:0,1',
-            ]);
+            // $validatedData = $request->validate([
+            //     'query_receive' => 'required|in:0,1',
+            //     'accept_item' => 'required|in:0,1',
+            //     'reject_item' => 'required|in:0,1',
+            //     'order_req' => 'required|in:0,1',
+            //     'customer_order_pickup' => 'required|in:0,1',
+            //     'lender_order_pickup' => 'required|in:0,1',
+            //     'customer_order_return' => 'required|in:0,1',
+            //     'lender_order_return' => 'required|in:0,1',
+            //     'order_canceled_by_lender' => 'required|in:0,1',
+            //     'order_canceled_by_customer' => 'required|in:0,1',
+            // ]);
 
             $user = auth()->user();
 
