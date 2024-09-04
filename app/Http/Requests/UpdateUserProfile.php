@@ -24,11 +24,12 @@ class UpdateUserProfile extends FormRequest
         return [
             'name' => ['required', 'regex:/^[a-zA-Z\s]+$/'],
             'complete_address' => 'required',
-            'addressline1' => 'required',
-            'addressline2' => 'required',
+            // 'addressline1' => 'required',
+            // 'addressline2' => 'required',
             'country' => 'required',
             'state' => 'required',
             'city' => 'required',
+            'about' => 'required',
         ];
     }
 
@@ -38,11 +39,13 @@ class UpdateUserProfile extends FormRequest
             'name.required' => 'This field is required.',
             'name.regex' => 'The name may only contain letters and spaces.',
             'complete_address.required' => 'This field is required.',
-            'addressline1.required' => 'This field is required.',
-            'addressline2.required' => 'This field is required.',
+            // 'addressline1.required' => 'This field is required.',
+            // 'addressline2.required' => 'This field is required.',
             'country.required' => 'This field is required.',
             'state.required' => 'This field is required.',
             'city.required' => 'This field is required.',
+            'about.required' => 'This field is required.',
+
         ];
     }
 }

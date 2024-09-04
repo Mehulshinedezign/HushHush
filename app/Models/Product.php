@@ -549,7 +549,7 @@ class Product extends Model
         // Rating filter
         $query->when($request->rating, function ($q) use ($request) {
             $q->whereHas('ratings', function ($q) use ($request) {
-                $q->havingRaw('AVG(rating) >= ?', [$request->rating]);
+                $q->havingRaw('AVG(rating) >= ?', [$request->rating])->orderBy('rating','asc');
             });
         });
 

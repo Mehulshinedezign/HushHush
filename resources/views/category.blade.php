@@ -91,19 +91,19 @@
 
                                     <!-- Error message div -->
                                     <div id="error-message" style="color: red; margin-top: 5px; display: none;"></div>
-                                    {{-- <div class="slider-container">
+                                    <div class="slider-container">
                                         <div class="price-slider"
                                             style="@if (request()->has('style')) {{ request()->style }} @endif">
                                         </div>
-                                    </div> --}}
+                                    </div>
                                 </div>
 
-                                {{-- <div class="range-input">
+                                <div class="range-input">
                                     <input type="range" class="min-range" min="0" max="10000"
                                         value="{{ request()->input('min_value', 0) }}" step="1">
                                     <input type="range" class="max-range" min="0" max="10000"
                                         value="{{ request()->input('max_value', 10000) }}" step="1">
-                                </div> --}}
+                                </div>
                             </div>
 
                         </div>

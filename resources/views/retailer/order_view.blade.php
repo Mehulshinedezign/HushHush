@@ -11,7 +11,6 @@
                 </div>
 
                 <div class="order-detail-box">
-                    {{-- @dd($order->toArray()) --}}
 
                     <div class="order-detail-summary d-flex justify-content-between">
                         <div class="detail-summary left-detail">

@@ -422,6 +422,7 @@ class ProductController extends Controller
                 'pick_up_location' => $request->product_complete_location,
                 // 'product_complete_location' => $request->product_complete_location,
                 'raw_address' => $formatted_address ?? null,
+                'shipment'=> $request->shipment  ? '1' : '0',
             ]);
             return redirect()->route('product')->with('success', 'Product updated successfully.');
             // return redirect()->back()->with('success', 'Product updated successfully.');

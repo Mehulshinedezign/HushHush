@@ -49,9 +49,14 @@
                         </div>
                         <div class="order-pro-details">
                             <div class="order-details-list">
+                                <p>Order Id :</p>
+                                <h4>{{ $order->id }}</h4>
+                            </div>
+                            <div class="order-details-list">
                                 <p>Cancelation Note:</p>
                                 <h4>{{ $order->cancellation_note }}</h4>
                             </div>
+                            
                             {{-- <div class="order-details-list">
                                 <p>Category :</p>
                                 <h4>{{ $order->product->category->name }}</h4>
@@ -78,7 +83,10 @@
             </div>
         @endif
     @empty
-        <div>No data found</div>
+    <div class="list-empty-box">
+        <img src="{{ asset('front/images/Empty 1.svg') }}">
+        <h3 class="text-center">No orders Available</h3>
+    </div>
     @endforelse
 
 </div>

@@ -29,7 +29,7 @@
                                     <div class="slider slider-content">
                                         @if ($productImages->isNotEmpty())
                                             @foreach ($productImages as $image)
-                                                <div><img src="{{ $image->file_path }}" alt="" loading="lazy"></div>
+                                                <div><img src="{{ $image->file_path }}" class="zoomout" alt="" loading="lazy"></div>
                                             @endforeach
                                         @else
                                             <div><img src="{{ asset('front/images/pro-description-img.png') }}"
@@ -526,6 +526,11 @@
 
 @push('scripts')
     <script>
+
+        $('.zoomout').on('click',function(){
+            $(this).toggleClass('img-scalable');
+        })
+
         $('.slider-content').slick({
             slidesToShow: 1,
             slidesToScroll: 1,
