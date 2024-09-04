@@ -462,7 +462,9 @@ class ProductController extends Controller
                 'longitude' => $locationData['longitude'],
                 'product_complete_location' => $locationData['formatted_address'],
                 'raw_address' => $request->pickup_location,
-                'manul_pickup_location' => $request->manul_pickup_location ?? 1,
+                'manul_pickup_location' => $request->manul_pickup_location ?? '1',
+                'shipment' => $request->shipment ?? '1',
+
             ]);
 
             if ($request->has('disable_dates')) {
@@ -630,7 +632,8 @@ class ProductController extends Controller
                     'longitude' => $locationData['longitude'],
                     'complete_pickup_location' => $locationData['formatted_address'],
                     'raw_address' => $request->pickup_location,
-                    'manul_pickup_location' => $request->manul_pickup_location,
+                    'manul_pickup_location' => $request->manul_pickup_location ?? '1',
+                    'shipment' => $request->shipment ?? '0',
                 ]
             );
 

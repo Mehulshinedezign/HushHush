@@ -373,6 +373,7 @@ if (!function_exists('check_order_list_paginate_retailer')) {
     if (!function_exists('sendPushNotifications')) {
         function sendPushNotifications($token, $payload)
         {
+            // dd($token);
             if (!is_null($token)) {
                 // Initialize Google Client
                 $client = new Google_Client();
@@ -382,7 +383,7 @@ if (!function_exists('check_order_list_paginate_retailer')) {
 
                 $accessToken = $client->getAccessToken()['access_token'];
 
-                $url = 'https://fcm.googleapis.com/v1/projects/deliver-f2089/messages:send';
+                $url = 'https://fcm.googleapis.com/v1/projects/test-hush-app/messages:send';
 
                 $notification = [
                     'title' => 'HushHush',
@@ -390,7 +391,7 @@ if (!function_exists('check_order_list_paginate_retailer')) {
                 ];
 
                 $data = [
-                    'order_id' => strval($payload['order_id']),
+                    'id' => strval($payload['id']),
                     "content" => $payload['content']
                 ];
                 $fcmNotification = [
@@ -425,10 +426,11 @@ if (!function_exists('check_order_list_paginate_retailer')) {
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fcmNotification));
                 $result = curl_exec($ch);
                 curl_close($ch);
-                dd($result);
+                // dd($result);
                 return $result;
             }
             return false;
         }
     }
+
 }
