@@ -503,7 +503,7 @@
                                             <label for="ship_to_me">Ship it to me</label><br>
 
                                             <input type="text" id="selected_value" readonly class="form-control"
-                                                value="{{ $authUser->userDetail->complete_address }}">
+                                                value="{{ @$authUser->userDetail->complete_address }}">
                                         @else
                                             <input type="text" id="ship" readonly class="form-control"
                                                 placeholder="No available pickup or shipment location">
