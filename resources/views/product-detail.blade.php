@@ -29,7 +29,8 @@
                                     <div class="slider slider-content">
                                         @if ($productImages->isNotEmpty())
                                             @foreach ($productImages as $image)
-                                                <div><img src="{{ $image->file_path }}" class="zoomout" alt="" loading="lazy"></div>
+                                                <div><img src="{{ $image->file_path }}" class="zoomout" alt=""
+                                                        loading="lazy"></div>
                                             @endforeach
                                         @else
                                             <div><img src="{{ asset('front/images/pro-description-img.png') }}"
@@ -179,9 +180,9 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                                                <h4>Size :</h4>
-                                                                <p>{{ $product->size ?? 'N/A' }}</p>
-                                                            </div> -->
+                                                                        <h4>Size :</h4>
+                                                                        <p>{{ $product->size ?? 'N/A' }}</p>
+                                                                    </div> -->
 
 
                             </div>
@@ -470,12 +471,13 @@
                                             <label for="pick_up">Pick up from lender location</label><br>
 
                                             <input type="radio" id="ship_to_me" name="delivery_option"
-                                                value="ship_to_me" @if ($product->productCompleteLocation->manul_pickup_location == '0') checked @endif>
+                                                value="ship_to_me" @if ($product->productCompleteLocation->manual_pickup_location == '0') checked @endif>
                                             <label for="ship_to_me">Ship it to me</label><br>
 
                                             <input type="text" id="selected_value" readonly class="form-control"
                                                 placeholder="Selected option will appear here"
-                                                value="{{ $product->productCompleteLocation->shipment == '0' ? @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state : @$authUser->userDetail->complete_address }}">
+                                                value="Please select the value">
+
 
                                             @error('delivery_option')
                                                 <span class="invalid-feedback" role="alert">
@@ -526,8 +528,7 @@
 
 @push('scripts')
     <script>
-
-        $('.zoomout').on('click',function(){
+        $('.zoomout').on('click', function() {
             $(this).toggleClass('img-scalable');
         })
 
@@ -769,15 +770,28 @@
         document.addEventListener('DOMContentLoaded', function() {
             const radioButtons = document.querySelectorAll('input[name="delivery_option"]');
             const selectedValueInput = document.getElementById('selected_value');
-            radioButtons.forEach(radio => {
-                radio.addEventListener('change', function() {
-                    if (this.id === 'pick_up') {
+
+            // Function to update the value based on selected radio button
+            const updateSelectedValue = () => {
+                const checkedRadio = document.querySelector('input[name="delivery_option"]:checked');
+                if (checkedRadio) {
+                    if (checkedRadio.id === 'pick_up') {
                         selectedValueInput.value =
                             "{{ @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state }}";
-                    } else if (this.id === 'ship_to_me') {
+                    } else if (checkedRadio.id === 'ship_to_me') {
                         selectedValueInput.value = "{{ @$authUser->userDetail->complete_address }}";
                     }
-                });
+                } else {
+                    selectedValueInput.value = "Please select the value";
+                }
+            };
+
+            // Initially call the function to set the default value
+            updateSelectedValue();
+
+            // Add event listeners to radio buttons
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', updateSelectedValue);
             });
         });
     </script>

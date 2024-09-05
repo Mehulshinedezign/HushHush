@@ -633,7 +633,7 @@ class ProductController extends Controller
                     'complete_pickup_location' => $locationData['formatted_address'],
                     'raw_address' => $request->pickup_location,
                     'manul_pickup_location' => $request->manul_pickup_location ?? '1',
-                    'shipment' => $request->shipment ?? '0',
+                    'shipment' => $request->shipment ?? '1',
                 ]
             );
 
