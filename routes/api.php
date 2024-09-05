@@ -28,7 +28,7 @@ Route::post('/resend-otp/{type}', [App\Http\Controllers\Api\ResetPasswordControl
 
 Route::get('/guest', [App\Http\Controllers\Api\ProductController::class, 'guestIndex']);
 Route::get('/guest/product-details/{id}', [App\Http\Controllers\Api\ProductController::class, 'getGuestAllProductsById']);
-Route::get('/guest/lender-profile/{id}', [App\Http\Controllers\Api\LenderController::class, 'guestLenderInfo']);
+Route::get('/guest/lender-profile/{id}', [App\Http\Controllers\Api\ProductController::class, 'guestLenderInfo']);
 
 Route::post('/logout', [App\Http\Controllers\Api\LoginController::class, 'logout']);
 Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {

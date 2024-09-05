@@ -93,8 +93,10 @@
             },
             product_link: {
                 // required: true,
-                pattern: /^((ftp|http|https):\/\/)?(www\.)?(?!.*(ftp|http|https|www\.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/,
+                pattern: /^(https?:\/\/)?([a-zA-Z0-9.-]+)(:[0-9]{1,5})?(\/[a-zA-Z0-9#?&%=_\-.]*)?$/
             },
+
+
             min_rent_days: {
                 required: true,
                 regex: minDaysItemRegex,
