@@ -60,6 +60,20 @@ class LoginController extends Controller
 
                 $product_ids = Product::where('user_id', $user->id)->pluck('id');
                 $product = (explode(",", implode(",", $product_ids->toArray())));
+
+
+                $hasCompleteAddress = !empty($user->userDetail->complete_address) &&
+                    !empty($user->userDetail->country);
+                $addresAdded = false;
+
+                if ($hasCompleteAddress) {
+                    $addresAdded = true;
+                } else {
+                    $addresAdded = false;
+                }
+
+
+
                 $is_bankdetail = $user->bankAccount;
                 if (is_null($is_bankdetail)) {
                     $is_added = false;
@@ -172,7 +186,8 @@ class LoginController extends Controller
                         // 'product' => $product,
                     ],
                     'product' => $product,
-                    'verify'=> $isVerified,
+                    'verify' => $isVerified,
+                    'addres_added'=>$addresAdded,
                 ], 200);
 
                 // $apiResponse = 'success';

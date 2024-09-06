@@ -118,64 +118,66 @@ class ProductController extends Controller
      */
 
 
-     public function view(Request $request, $id)
-     {
-         $id = jsdecode_userdata($id);
-         $product = Product::findOrFail($id);
+    public function view(Request $request, $id)
+    {
+        $id = jsdecode_userdata($id);
+        $product = Product::findOrFail($id);
 
-         if (is_null($product)) {
-             return redirect()->back()->with('message', __('product.messages.notAvailable'));
-         }
+        if (is_null($product)) {
+            return redirect()->back()->with('message', __('product.messages.notAvailable'));
+        }
 
-         $rating_progress = $this->getratingprogress($product);
+        $rating_progress = $this->getratingprogress($product);
 
-         $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
-             ->where('category_id', $product->category_id)
-             ->where('id', '!=', $product->id)
-             ->whereHas('category', function ($q) {
-                 $q->where('status', '1');
-             })
-             ->inRandomOrder()
-             ->limit(5)
-             ->get();
+        $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->whereHas('category', function ($q) {
+                $q->where('status', '1');
+            })
+            ->inRandomOrder()
+            ->limit(5)
+            ->get();
 
-         $disable_dates = $product->disableDates->pluck('disable_date')->toArray();
+        $disable_dates = $product->disableDates->pluck('disable_date')->toArray();
 
-         $product_buffer = $product->created_at->format('Y-m-d');
-         $carbonDate = Carbon::createFromFormat('Y-m-d', $product_buffer);
-         $array1 = [];
-         array_push($array1, $product_buffer);
-         for ($i = 0; $i < 3; $i++) {
-             $newDate = $carbonDate->addDay();
-             array_push($array1, $newDate->format('Y-m-d'));
-         }
+        $product_buffer = $product->created_at->format('Y-m-d');
+        $carbonDate = Carbon::createFromFormat('Y-m-d', $product_buffer);
+        $array1 = [];
+        array_push($array1, $product_buffer);
+        for ($i = 0; $i < 3; $i++) {
+            $newDate = $carbonDate->addDay();
+            array_push($array1, $newDate->format('Y-m-d'));
+        }
 
-         $disable_dates = array_merge($array1, $disable_dates);
+        $disable_dates = array_merge($array1, $disable_dates);
 
-         if (auth()->id()) {
-             $querydates = Query::where(['product_id' => $id, 'status' => 'PENDING', 'user_id' => auth()->user()->id])
-                 ->select('date_range')
-                 ->get();
+        $querydates = [];
+        if (auth()->check()) {  // Only execute if the user is authenticated
+            $querydates = Query::where(['product_id' => $id, 'status' => 'PENDING', 'user_id' => auth()->user()->id])
+                ->select('date_range')
+                ->get();
 
-             $userDisableDates = [];
-             foreach ($querydates as $query) {
-                 [$startDate, $endDate] = explode(' - ', $query->date_range);
-                 $period = \Carbon\CarbonPeriod::create($startDate, $endDate);
-                 foreach ($period as $date) {
-                     $userDisableDates[] = $date->format('Y-m-d');
-                 }
-             }
+            $userDisableDates = [];
+            foreach ($querydates as $query) {
+                [$startDate, $endDate] = explode(' - ', $query->date_range);
+                $period = \Carbon\CarbonPeriod::create($startDate, $endDate);
+                foreach ($period as $date) {
+                    $userDisableDates[] = $date->format('Y-m-d');
+                }
+            }
 
-             $disable_dates = array_merge($disable_dates, $userDisableDates);
-         }
+            $disable_dates = array_merge($disable_dates, $userDisableDates);
+        }
 
-         $disable_dates = array_unique($disable_dates);
-         sort($disable_dates);
+        $disable_dates = array_unique($disable_dates);
+        sort($disable_dates);
 
-         $productImages = $product->allImages;
+        $productImages = $product->allImages;
 
-         return view('product-detail', compact('product', 'productImages', 'querydates', 'relatedProducts', 'rating_progress', 'disable_dates'));
-     }
+        return view('product-detail', compact('product', 'productImages', 'querydates', 'relatedProducts', 'rating_progress', 'disable_dates'));
+    }
+
 
 
 

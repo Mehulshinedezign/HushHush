@@ -67,6 +67,7 @@
 
                             </div>
                             <div class="product-review-main">
+                                @if (count($product->ratings) > 0)
                                 <div class="product-review-heading">
                                     <p>{{ $product->ratings_count }} Ratings & Reviews</p>
                                     <div class="form-group">
@@ -82,6 +83,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
 
                                 @if (count($product->ratings) > 0)
                                     @foreach ($product->ratings as $rating)

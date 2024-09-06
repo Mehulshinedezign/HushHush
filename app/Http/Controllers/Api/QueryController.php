@@ -86,7 +86,7 @@ class QueryController extends Controller
                         ->whereNull('deleted_at')
                         ->first();
                     $lender = User::where('id', $query->for_user)->first();
-                    $price = $query->negotiate_price  ?? $product->getCalculatedPrice($query->date_range);
+                    $price = $query->negotiate_price  ?? $query->getCalculatedPrice($query->date_range);
                     $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
                     $actual_price =$query->getCalculatedPrice($query->date_range);
                     // $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);

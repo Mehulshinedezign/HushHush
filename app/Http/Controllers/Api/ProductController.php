@@ -850,6 +850,15 @@ class ProductController extends Controller
             } else {
                 $bankdetails = true;
             }
+            $hasCompleteAddress = !empty($authUser->userDetail->complete_address) &&
+                !empty($authUser->userDetail->country);
+            $addresAdded = false;
+
+            if ($hasCompleteAddress) {
+                $addresAdded = true;
+            } else {
+                $addresAdded = false;
+            }
 
             $query = Product::where('user_id', '!=', $authUser->id);
 
@@ -1048,6 +1057,7 @@ class ProductController extends Controller
                     'filters' => $filters,
                     'filter_applied' => $filterApplied,
                     'account_added' => $bankdetails,
+                    'address_added' =>$addresAdded,
 
                 ],
             ], 200);

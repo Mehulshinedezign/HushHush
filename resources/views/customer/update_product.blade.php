@@ -78,43 +78,40 @@
                                             <div class="duel-select-field">
                                                 <div class="formfield">
                                                     <select name="category"
-                                                        class="parent_category produt_input form-class @error('category') is-invalid @enderror">
+                                                        class="parent_category produt_input form-class @error('category') is-invalid @enderror"
+                                                        id="parent-category">
                                                         <option value="">Category</option>
                                                         @foreach (getParentCategory() as $category)
                                                             <option value="{{ jsencode_userdata($category->id) }}"
-                                                                data-fetchsize="{{ $category->name }}"
+                                                                data-subcategories="{{ getChild($category->id) }}"
                                                                 @if ($product->category_id == $category->id) selected @endif>
                                                                 {{ $category->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
                                                     <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
                                                     </span>
                                                     @error('category')
                                                         <span class="invalid-feedback" role="alert">
                                                             {{ $message }}
-                                                        @enderror
+                                                        </span>
+                                                    @enderror
                                                 </div>
-                                                <div class="formfield">
-                                                    <select name="subcategory" id="subcategory">
-                                                        <option value="">Subcategory</option>
-                                                        @foreach (getParentCategory() as $category)
-                                                            @foreach (getChild($category->id) as $subcategory)
-                                                                <option value="{{ $subcategory->id }}"
-                                                                    @if ($product->subcat_id == $subcategory->id) selected @endif>
-                                                                    {{ $subcategory->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        @endforeach
 
+                                                <div class="formfield">
+                                                    <select name="subcategory" id="subcategory" class="produt_input form-class @error('subcategory') is-invalid @enderror">
+                                                        <option value="">Subcategory</option>
                                                     </select>
                                                     <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
-                                                            alt="img">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
                                                     </span>
                                                 </div>
+                                                @error('subcategory')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </div>
@@ -946,7 +943,36 @@
             }
         });
     </script> --}}
+    <script>
+        // The same script as in Blade 1
+        $(document).ready(function() {
+            var subcategorySelect = $('#subcategory');
 
+            $('#parent-category').change(function() {
+                var selectedCategory = $(this).find(':selected');
+                var subcategories = selectedCategory.data('subcategories');
+                subcategorySelect.empty().append('<option value="">Subcategory</option>');
+                if (subcategories) {
+                    $.each(subcategories, function(index, subcategory) {
+                        subcategorySelect.append('<option value="' + subcategory.id + '">' + subcategory.name + '</option>');
+                    });
+                }
+            });
+
+            // If the product has a selected category and subcategory
+            var selectedCategory = $('#parent-category').find(':selected');
+            if (selectedCategory.length) {
+                var subcategories = selectedCategory.data('subcategories');
+                var selectedSubcategoryId = "{{ $product->subcat_id }}";
+                subcategorySelect.empty().append('<option value="">Subcategory</option>');
+                if (subcategories) {
+                    $.each(subcategories, function(index, subcategory) {
+                        subcategorySelect.append('<option value="' + subcategory.id + '" ' + (subcategory.id == selectedSubcategoryId ? 'selected' : '') + '>' + subcategory.name + '</option>');
+                    });
+                }
+            }
+        });
+    </script>
     <script>
         var newFiles = new Set();
         let fileInput = document.getElementById('update-upload-image-five');

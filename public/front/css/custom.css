@@ -1121,6 +1121,7 @@ border-color: #000;
     position: absolute;
     top: 15px;
     right: 15px;
+    min-height: unset !important;
 }
 
 .addproduct-Modal .modal-header h3 {
@@ -2406,8 +2407,9 @@ p.pick_up_address {
     padding: 15px 20px 15px !important;
 }
 .price-field input {
-    padding-left: 9px;
+    padding-left: 14px;
     padding-right: 4px;
+    max-width: 80px;
 }
 .price-field  .dollar-icon {
     margin: 0;
@@ -2546,4 +2548,7 @@ table.inquiry-table {
     border-radius: 50px;
     left: 12px;
     white-space: nowrap;
+}
+.dropdown-menu .dropdown-item i, .dropdown-menu .dropdown-item svg, .dropdown-menu .dropdown-item img {
+    flex: 0 0 17px;
 }

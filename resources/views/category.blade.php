@@ -214,15 +214,18 @@
                         </div>
                         <div class="small-slidebar-icon">
                             <span>
+
                                 <img src="{{ asset('front/images/sidebar-icon1.svg') }}" alt="img">
                             </span>
                             <span>
+
                                 <img src="{{ asset('front/images/sidebar-icon2.svg') }}" alt="img">
                             </span>
                             <span>
                                 <img src="{{ asset('front/images/sidebar-icon3.svg') }}" alt="img">
                             </span>
                             <span>
+
                                 <img src="{{ asset('front/images/sidebar-icon4.svg') }}" alt="img">
                             </span>
                             <span>
@@ -372,7 +375,7 @@
 
             function loadMoreData(page) {
                 let url = createPaginationUrl(page);
-                console.log(url,'gdhg');
+                console.log(url, 'gdhg');
 
                 $.ajax({
                         url: url,
