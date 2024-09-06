@@ -150,7 +150,47 @@
                     <li>
                        <a href="{{ url('/') }}">Home</a>
                     </li>
-                    @foreach (getParentCategory() as $index => $parentCategory)
+                    <li>
+                        <a href="{{ route( 'index',['sort'=>'new']) }}">Latest</a>
+                     </li>
+                     <li>
+                        <a href="{{ route( 'index',['sort'=>'old']) }}">Oldest</a>
+                     </li>
+                     <li>
+                        <a href="{{ route( 'index',['sort'=>'costier']) }}">Costier</a>
+                     </li>
+                     {{-- <li>
+                        <a href="{{ url('/') }}">Categories</a>
+                     </li> --}}
+                     <li class="nav-item">
+                        <!-- <a class="nav-link" aria-current="page" href="#">What's New</a> -->
+                        <div class="dropdown cstm-dropdown">
+                            <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Categories
+                            </div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <div class="sub-categeory-menu">
+                                            <div class="sub-categeory-links">
+                                                @foreach (getParentCategory() as $index => $parentCategory)
+                                                    <a class="dropdown-toggle"
+                                                        href="{{ route('index', ['category' => $parentCategory->id]) }}" type="button">
+                                                        {{ $parentCategory->name }}
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        {{-- <div class="col-md-6">
+                                            <div class="sub-categeory-img">
+                                                <img src="{{ asset('front/images/sub-menu-img.png') }}"
+                                                    alt="img">
+                                            </div>
+                                        </div> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    {{-- @foreach (getParentCategory() as $index => $parentCategory)
                         @if ($index >= 5)
                         @break
                     @endif
@@ -162,7 +202,7 @@
                             </a>
                         </div>
                     </li>
-                @endforeach
+                @endforeach --}}
             </ul>
         </div>
         <form id="searchForm" action="{{ route('index') }}" method="GET">
