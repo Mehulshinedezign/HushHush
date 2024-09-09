@@ -7,7 +7,7 @@
                     <div class="order-card-top">
                         <div class="order-card-img">
                             <a href="{{ route('retailervieworder', ['order' => $order->id]) }}">
-                                <img src="{{ $order->product->thumbnailImage->file_path }}" alt="profile">
+                                <img src="{{ @$order->product->thumbnailImage->file_path }}" alt="profile">
                             </a>
                         </div>
                         <div class="name-with-status">
