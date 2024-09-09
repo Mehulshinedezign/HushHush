@@ -611,15 +611,15 @@
                 // }
 
                 // Check for incomplete profile if "Ship it to me" is selected
-                if ($('#ship_to_me').is(':checked') &&
-                    {{ is_null(@$user->userDetail->complete_address) ? 'true' : 'false' }}) {
-                    iziToast.error({
-                        title: 'Error',
-                        message: 'Please complete your profile to enable this option.',
-                        position: 'topRight',
-                    });
-                    hasErrors = true;
-                }
+                // if ($('#ship_to_me').is(':checked') &&
+                //     {{ is_null(@$user->userDetail->complete_address) ? 'true' : 'false' }}) {
+                //     iziToast.error({
+                //         title: 'Error',
+                //         message: 'Please complete your profile to enable this option.',
+                //         position: 'topRight',
+                //     });
+                //     hasErrors = true;
+                // }
 
                 if (hasErrors) {
                     e.preventDefault(); // Prevent form submission if there are errors
