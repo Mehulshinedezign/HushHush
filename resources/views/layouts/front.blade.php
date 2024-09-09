@@ -805,6 +805,7 @@
                 // If both are unchecked, prevent the change
                 if (!isManualPickupChecked && !isShipmentChecked) {
                     $(this).prop('checked', true); // Re-check the checkbox that was just unchecked
+                    
                     iziToast.error({
                         title: 'Error',
                         message: 'At least one option must be selected.',
