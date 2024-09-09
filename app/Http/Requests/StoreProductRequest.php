@@ -21,7 +21,7 @@ class StoreProductRequest extends FormRequest
             'category' => 'required',
             'product_complete_location' => 'required',
             'address1' => 'required',
-            'address2' => 'required',
+            // 'address2' => 'required',
             'country' => 'required',
             'state' => 'required',
             // 'city' => 'required',

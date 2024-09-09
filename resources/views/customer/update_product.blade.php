@@ -549,6 +549,7 @@
                 const blob = await response.blob();
                 const mimeTypeToExtension = {
                     'image/jpeg': 'jpeg',
+                    'image/jfif': 'jpg',
                     'image/png': 'png',
                     'image/gif': 'gif',
                     'image/webp': 'webp',

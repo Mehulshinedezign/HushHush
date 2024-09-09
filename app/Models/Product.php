@@ -174,7 +174,12 @@ class Product extends Model
      */
     public function allImages()
     {
-        return $this->hasMany(ProductImage::class);
+        return $this->hasMany(ProductImage::class)->orderBy('created_at','desc');
+    }
+
+    public function allImages1()
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('created_at','asc');
     }
 
     /**

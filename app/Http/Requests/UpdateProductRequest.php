@@ -29,7 +29,7 @@ class UpdateProductRequest extends FormRequest
             'category' => 'required|string',
             'product_complete_location' => 'required|string',
             'address1' => 'required|string',
-            'address2' => 'required|string',
+            // 'address2' => 'required|string',
             'country' => 'required|string',
             'state' => 'required|string',
             // 'city' => 'required|string',
