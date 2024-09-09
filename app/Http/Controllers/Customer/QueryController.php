@@ -22,7 +22,7 @@ class QueryController extends Controller
 
         try {
             $request->validate([
-                'rental_start_date' => 'required',
+                'rental_dates' => 'required',
                 'product_id' => 'required',
                 'description' => 'required|string',
                 'delivery_option' => 'required|string',
@@ -35,7 +35,7 @@ class QueryController extends Controller
 
             $lender = User::where('id', $foruser)->first();
 
-            $dates = explode(' - ', $request->rental_start_date);
+            $dates = explode(' - ', $request->rental_dates);
             if (count($dates) !== 2) {
                 throw new \Exception("Invalid date range format.");
             }
@@ -131,6 +131,7 @@ class QueryController extends Controller
 
     public function acceptQuery(Request $request, $id)
     {
+        // dd($request->all());
 
         // dd($request->all());
         DB::beginTransaction();

@@ -55,7 +55,7 @@ class BookingController extends Controller
             'to_date' => $fromendDate,
             'order_date' => date('Y-m-d H:i:s'),
             'pickedup_date' => null,
-            'total' => $request->total_payment,
+            'total' =>jsdecode_userdata($request->total_payment),
             'status' => 'Waiting',
             // 'security_option' => null,
             // 'security_option_type' => $request->securityOptionType,
@@ -83,7 +83,6 @@ class BookingController extends Controller
         ]);
 
         $date = date('Y-m-d H:i:s');
-
         $status = PaymentIntent::create([
             'amount' => floatval(jsdecode_userdata($request->total_payment)) * 100, // amount in cents
             'currency' => 'usd',
@@ -97,7 +96,7 @@ class BookingController extends Controller
             // ],
             'return_url' => route('orders')
         ]);
-
+// dd($status);
         // testing
         // if (isset($query->negotiate_price)) {
         //     $amount = $query->negotiate_price * ($order_commission->value / 100);
@@ -124,7 +123,7 @@ class BookingController extends Controller
         $transaction = Transaction::create([
             'payment_id' => $status->id,
             'user_id' => $user->id,
-            'total' => $request->total_payment,
+            'total' => jsdecode_userdata($request->total_payment),
             'date' => $date,
             'status' => 'Completed',
             'gateway_response' => $status
