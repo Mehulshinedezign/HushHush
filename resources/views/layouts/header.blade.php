@@ -30,7 +30,7 @@
                                         Rent your Closet
                                     </div>
                                 @elseif (is_null($user->userDetail->complete_address))
-                                    <div data-bs-toggle="modal" data-bs-target="#addaddress-Modal">
+                                    <div data-bs-toggle="modal" data-bs-target="#accountSetting">
                                         Rent your Closet
                                     </div>
                                 @else

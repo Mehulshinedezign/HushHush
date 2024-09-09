@@ -74,6 +74,7 @@
             @endif
         </td>
     @endif
+    {{-- @dd($query->id ); --}}
     <td class="user-active">
         <div class="inquiry-actions">
             @if ($query->status == 'PENDING')

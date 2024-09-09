@@ -426,6 +426,7 @@
 
                 function initAutocomplete() {
                     var input = document.getElementById('address');
+                    console.log(input,'herere');
                     var autocomplete = new google.maps.places.Autocomplete(input);
 
                     $('#addressline1, #addressline2, #country, #state, #city, #zipcode').prop('readonly',
@@ -441,6 +442,7 @@
 
                         for (var i = 0; i < place.address_components.length; i++) {
                             var addressType = place.address_components[i].types[0];
+                            console.log(addressType);
                             if (addressType === 'street_number') {
                                 $('#addressline1').val(place.address_components[i].long_name);
                             }
@@ -457,9 +459,8 @@
                                 $('#city').val(place.address_components[i].long_name);
                             }
                             if (addressType === 'postal_code') {
-                                zipcode = place.address_components[i]
-                                    .long_name; // Assign zipcode if available
-                            }
+                            $('#zipcode').val(place.address_components[i].long_name); // Assign zipcode if available
+                        }
                         }
 
                         $('#zipcode').val(zipcode); // Set zipcode field

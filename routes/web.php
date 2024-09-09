@@ -172,6 +172,7 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         Route::get('/change_pass', [App\Http\Controllers\ProfileController::class, 'ChangePassword'])->name('user.changePassword');
         Route::get('change-profile/{user}', [App\Http\Controllers\ProfileController::class, 'changeProfile'])->name('change-Profile');
         Route::post('update_profile', [App\Http\Controllers\ProfileController::class, 'saveUserprofile'])->name('saveUserprofile');
+        Route::post('update-profile/{type?}', [App\Http\Controllers\ProfileController::class, 'accountSetting'])->name('Userprofile');
         Route::post('notification_preference', [App\Http\Controllers\ProfileController::class, 'notificationPrefrence'])->name('notification_preference');
 
         // card

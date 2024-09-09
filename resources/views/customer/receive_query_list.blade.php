@@ -132,6 +132,7 @@
             let price = $(`.negotiation_price_${queryId}`).val();
             let shipping_charges = $(`.shipping_charges_${queryId}`).val();
             let cleaning_charges = $(`.cleaning_charges_${queryId}`).val();
+            // alert(price);
 
             // Set shipping charges to 0 if delivery option is pickup
             if (deliveryOption === 'pick_up') {
@@ -142,6 +143,7 @@
 
             if (!price) {
                 price = calculatePrice(date_range, rentDay, rentWeek, rentMonth);
+                // alert(price); 
             }
 
 
@@ -223,17 +225,17 @@
 
             let price = 0;
 
-            if (days > 30) {
+            if (days >= 30) {
                 const months = Math.floor(days / 30);
                 let remainingDays = days % 30;
-                if (remainingDays > 7) {
+                if (remainingDays >= 7) {
                     const weeks = Math.floor(remainingDays / 7);
                     remainingDays = remainingDays % 7;
                     price = (months * rentMonth) + (weeks * rentWeek) + (remainingDays * rentDay);
                 } else {
                     price = (months * rentMonth) + (remainingDays * rentDay);
                 }
-            } else if (days > 7) {
+            } else if (days >= 7) {
                 const weeks = Math.floor(days / 7);
                 const remainingDays = days % 7;
                 price = (weeks * rentWeek) + (remainingDays * rentDay);

@@ -614,6 +614,7 @@
             </div>
         </div>
     </div>
+    @include('account-setting')
     @php
         $user = auth()->user();
     @endphp

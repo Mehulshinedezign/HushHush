@@ -68,21 +68,21 @@
                             </div>
                             <div class="product-review-main">
                                 @if (count($product->ratings) > 0)
-                                <div class="product-review-heading">
-                                    <p>{{ $product->ratings_count }} Ratings & Reviews</p>
-                                    <div class="form-group">
-                                        <div class="formfield">
-                                            <p>Most Recent</p>
-                                            {{-- <select name="" id="" readonly>
+                                    <div class="product-review-heading">
+                                        <p>{{ $product->ratings_count }} Ratings & Reviews</p>
+                                        <div class="form-group">
+                                            <div class="formfield">
+                                                <p>Most Recent</p>
+                                                {{-- <select name="" id="" readonly>
                                                 <option value="">Most Recent</option>
 
                                             </select> --}}
-                                            {{-- <span class="form-icon">
+                                                {{-- <span class="form-icon">
                                                 <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
                                             </span> --}}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                 @endif
 
                                 @if (count($product->ratings) > 0)
@@ -182,9 +182,9 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                                                        <h4>Size :</h4>
-                                                                        <p>{{ $product->size ?? 'N/A' }}</p>
-                                                                    </div> -->
+                                                                            <h4>Size :</h4>
+                                                                            <p>{{ $product->size ?? 'N/A' }}</p>
+                                                                        </div> -->
 
 
                             </div>
@@ -194,8 +194,9 @@
                                         {{-- <div data-bs-toggle="modal" data-bs-target="#addaddress-Modal">
                                         Send Request
                                     </div> --}}
-                                        <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="modal"
-                                            data-bs-target="#addaddress-Modal" aria-controls="offcanvasRight">Send Request</a>
+                                        <a href="#" class="button primary-btn full-btn mt-3 sendQuery"
+                                            data-bs-toggle="modal" data-bs-target="#accountSetting"
+                                            aria-controls="offcanvasRight">Send Request</a>
                                     @else
                                         <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
                                             data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Send Request</a>
@@ -237,7 +238,7 @@
                                             <div id="collapseTwo" class="accordion-collapse collapse show"
                                                 aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
-                                                    {{ @$product->productCompleteLocation->city . ' , ' . @$product->productCompleteLocation->state. ' , ' . @$product->productCompleteLocation->country }}
+                                                    {{ @$product->productCompleteLocation->city . ' , ' . @$product->productCompleteLocation->state . ' , ' . @$product->productCompleteLocation->country }}
                                                 </div>
                                             </div>
                                         </div>
@@ -272,18 +273,18 @@
                                         </div>
                                         <h4>{{ $product->retailer->name }}</h4>
                                         @auth
-                                        @if($product->user_id != auth()->id())
-                                            <div><a href="javascript:void(0)"
-                                                    class="button outline-btn small-btn chat-list-profile"
-                                                    data-senderId="{{ auth()->user()->id }}"
-                                                    data-receverId="{{ @$product->user_id }}"
-                                                    data-receverName = "{{ @$product->retailer->name }}"
-                                                    data-receverImage="{{ isset($product->retailer->profile_file) ? Storage::url($product->retailer->profile_file) : asset('img/avatar.png') }}"
-                                                    data-profile="{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}"
-                                                    data-name="{{ auth()->user()->name }}"><i
-                                                        class="fa-solid fa-comments"></i>
-                                                    Chat</a></div>
-                                                    @endif
+                                            @if ($product->user_id != auth()->id())
+                                                <div><a href="javascript:void(0)"
+                                                        class="button outline-btn small-btn chat-list-profile"
+                                                        data-senderId="{{ auth()->user()->id }}"
+                                                        data-receverId="{{ @$product->user_id }}"
+                                                        data-receverName = "{{ @$product->retailer->name }}"
+                                                        data-receverImage="{{ isset($product->retailer->profile_file) ? Storage::url($product->retailer->profile_file) : asset('img/avatar.png') }}"
+                                                        data-profile="{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}"
+                                                        data-name="{{ auth()->user()->name }}"><i
+                                                            class="fa-solid fa-comments"></i>
+                                                        Chat</a></div>
+                                            @endif
                                         @endauth
                                         @guest
                                             <div><a href="{{ route('login') }}" class="button outline-btn small-btn"><i
@@ -530,6 +531,12 @@
 
 @push('scripts')
     <script>
+        $('.sendQuery').on('click', function() {
+            console.log('herer', $('#saveProfile'))
+            //    var url={{ route('Userprofile', ['type' => 'query']) }}
+            var url = APP_URL + '/update-profile/query';
+            $('#saveProfile').attr('action', url);
+        })
         $('.zoomout').on('click', function() {
             $(this).toggleClass('img-scalable');
         })

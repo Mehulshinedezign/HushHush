@@ -569,6 +569,30 @@ class ProfileController extends Controller
         }
     }
 
+    public function accountSetting(Request $request, $type=null)
+    {
+        $user =auth()->user();
+        $userdetail = [
+            'complete_address' => $request->complete_address,
+            'address1' => $request->addressline1,
+            'address2' => $request->addressline2,
+            'country' => $request->country,
+            'state' => $request->state,
+            'city' => $request->city,
+            'about' => $request->about ?? null,
+            'zipcode'=>$request->zipcode ??null,
+        ];
+        $user->userDetail()->updateOrCreate(
+            ['user_id' => $user->id],
+            $userdetail
+        );
+        if($type=='product'){
+            return response()->json(['type'=>'product']);
+        }else{
+            return response()->json(['type'=>'query']);
+        }
+    }
+
     public function notificationPrefrence(Request $request){
 
         $user = auth()->user();
