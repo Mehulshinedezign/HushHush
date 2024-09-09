@@ -180,9 +180,62 @@ aria-labelledby="cancellation-noteLabel" aria-hidden="true">
             </div>
         </div>
     </div>
-
-
     <script>
+        $(document).ready(function() {
+
+            $('.cancel-order').on('click', function() {
+                // $('.modal fade').addClass('d-none');
+
+                swal({
+                        title: 'Cancel Order',
+                        text: 'The platform charges will be deducted by stripe',
+                        icon: 'warning',
+                        buttons: true,
+                        dangerMode: true,
+                        buttons: ["No", "Yes"],
+                    })
+                    .then((willOpen) => {
+                        if (willOpen) {
+                            // $('.modal fade').removeClass('d-none');
+                            $('#cancellation-note').modal('show');
+                        } else {
+                            jQuery('body').removeClass('modal-open');
+                        }
+                    });
+            })
+
+            $('#cancel-order').submit(function(e) {
+
+                e.preventDefault();
+                if ($('#cancel-order').valid()) {
+                    var formData = new FormData($('form#cancel-order').get(0));
+                    ajaxCall($("#cancel-order").attr("action"), 'post', formData)
+                        .then(function(response) {
+                            if (response) {
+                                //console.log(response.url)
+                                window.location.replace(response.url);
+                            } else {
+                                iziToast.error({
+                                    title: 'Error',
+                                    message: 'Something went wrong!',
+                                    position: 'topRight'
+                                });
+                            }
+                        }, function() {
+                            iziToast.error({
+                                title: 'Error',
+                                message: 'Something went wrong!',
+                                position: 'topRight'
+                            });
+                        }).finally(function() {
+                            console.log("error");
+                        });
+                }
+            });
+        });
+    </script>
+
+    {{-- <script>
         $(document).ready(function() {
             $('.cancel-order').on('click', function(event) {
                 event.preventDefault();
@@ -231,7 +284,7 @@ aria-labelledby="cancellation-noteLabel" aria-hidden="true">
                     });
             });
         });
-    </script>
+    </script> --}}
 
     <script>
         $('.dispute-order').on('click', function() {
