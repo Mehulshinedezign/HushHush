@@ -210,7 +210,7 @@ class StripeController extends Controller
     {
         try {
             $user = auth()->user();
-            $stripeCustomer = $user->createOrGetStripeCustomer();
+            $user->createOrGetStripeCustomer();
             $intent = $user->createSetupIntent();
             return response()->json(['status' => true, 'message' => 'Intent Created Succesfully', 'intent' => $intent], 200);
         } catch (\Exception $e) {

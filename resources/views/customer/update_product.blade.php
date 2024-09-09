@@ -481,7 +481,7 @@
                                             <button class="button primary-btn " id="addProduct">Update</button>
                                         </div>
                                     </div>
-                                    <img id="image123" src="" alt="asfdsfd">
+                                    <!-- <img id="image123" src="" alt="asfdsfd"> -->
                                 </div>
                             </form>
                         </div>
