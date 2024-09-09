@@ -38,7 +38,7 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
     Route::any('/update-password', [App\Http\Controllers\Auth\ResetPasswordController::class, 'update'])->name('user.updatepassword');
 
     Route::middleware(['web.admin'])->group(function () {
-    Route::any('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index');
+    Route::any('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index')->middleware('auth_verified');
     Route::get('product/{id}', [App\Http\Controllers\Customer\ProductController::class, 'view'])->name('viewproduct');
     });
     Auth::routes();

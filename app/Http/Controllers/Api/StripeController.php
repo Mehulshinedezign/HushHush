@@ -208,11 +208,21 @@ class StripeController extends Controller
 
     public function createIntent(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|numeric',
+            'currency' => 'required|string',
+            'payment_method' => 'required|string',
+        ]);
         try {
-            $user = auth()->user();
-            $user->createOrGetStripeCustomer();
-            $intent = $user->createSetupIntent();
-            return response()->json(['status' => true, 'message' => 'Intent Created Succesfully', 'intent' => $intent], 200);
+            $paymentIntent = PaymentIntent::create([
+                'amount' => $request->amount * 100, // Stripe expects amount in cents
+                'currency' => $request->currency,
+                'payment_method' => $request->payment_method,
+            ]);
+            // $user = auth()->user();
+            // $stripeCustomer = $user->createOrGetStripeCustomer();
+            // $intent = $user->createSetupIntent();
+            return response()->json(['status' => true, 'message' => 'Intent Created Succesfully', 'intent' => $paymentIntent], 200);
         } catch (\Exception $e) {
             return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
