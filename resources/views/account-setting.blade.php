@@ -1,4 +1,4 @@
-<div class="modal addproduct-Modal fade" id="accountSetting" tabindex="-1" aria-labelledby="accountSettingLabel"
+<div class="modal addproduct-Modal fade" id="accountSetting" tabindex="-1" data-bs-backdrop="static" aria-labelledby="accountSettingLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -180,9 +180,9 @@
             //         .val() !== '' && $('#state').val() !== '' && $('#city').val() !== '';
             // }, "Please enter the complete address");
 
-            // $.validator.addMethod("userCompleteAddress", function(value, element) {
-            //     return $('#country').val() !== '' && $('#state').val() !== '' && $('#city').val() !== '';
-            // }, "Please enter the complete address");
+            $.validator.addMethod("userCompleteAddress", function(value, element) {
+                return $('#selectCountry').val() !== '' && $('#selectState').val() !== '' && $('#selectCity').val() !== '';
+            }, "Please enter the complete address");
 
             const rules = {
                 name: {
@@ -196,7 +196,7 @@
                 },
                 complete_address: {
                     required: true,
-                    // userCompleteAddress: true,
+                    userCompleteAddress: true,
                 },
                 about: {
                     required: true,
@@ -216,7 +216,7 @@
                 },
                 complete_address: {
                     required: 'This field is required.',
-                    // userCompleteAddress: 'Please enter the complete address.',
+                    userCompleteAddress: 'Please enter the complete address.',
                 },
                 about: {
                     required: 'This field is required.',
@@ -225,9 +225,9 @@
             };
             $('#saveProfile').submit(function(e) {
                 e.preventDefault();
-                $('.spinner-border').removeClass('d-none');
                 handleValidation('saveProfile', rules, messages);
                 if ($('#saveProfile').valid()) {
+                $('.spinner-border').removeClass('d-none');
                     productformData = new FormData($('form#saveProfile').get(0));
                     var url = jQuery('#saveProfile').attr('action');
                     response = ajaxCall(url, 'post', productformData)
@@ -276,7 +276,7 @@
             var input = document.getElementById('address');
             var autocomplete = new google.maps.places.Autocomplete(input);
 
-            $('#addressline12, #addressline21, #selectCountry, #selectState, #selectCity, #zipcode').prop('readonly',
+            $('#selectCountry, #selectState, #selectCity, #zipcode').prop('readonly',
                 true);
 
             autocomplete.addListener('place_changed', function() {

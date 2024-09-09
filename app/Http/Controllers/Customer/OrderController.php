@@ -512,7 +512,6 @@ class OrderController extends Controller
 
     public function cancelOrder(Request $request, Order $order)
     {
-     
         $order->load(["transaction", "retailer", "queryOf"]);
         $order_commission = AdminSetting::where('key', 'order_commission')->first();
         $url = route('orders',['tab'=>'cancelled']);
@@ -549,7 +548,6 @@ class OrderController extends Controller
         // }
 
         $stripe = new Stripe\StripeClient(env('STRIPE_SECRET'));
-
         /*RETRIEVE PAYMENT INTENT DETAILS*/
         $paymentIntentData = $stripe->paymentIntents->retrieve(
             $order->transaction->payment_id
