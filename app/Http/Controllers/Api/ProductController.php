@@ -369,7 +369,7 @@ class ProductController extends Controller
                     'errors' => [],
                 ], 401);
             }
-            $product->createOrUpdate(['deleted_at' => carbon::now()]);
+            $product->Update(['deleted_at' => carbon::now()]);
 
             $apiResponse = 'success';
             $statusCode = 200;
@@ -378,6 +378,7 @@ class ProductController extends Controller
             return $this->apiResponse($apiResponse, $statusCode, $message, $data, null);
         } catch (\Throwable $e) {
             $data = [];
+            dd($e->getMessage());
             return $this->apiResponse('error', 500, 'An error occurred while deleting the product.', $data, null);
         }
     }
@@ -633,7 +634,7 @@ class ProductController extends Controller
                     'complete_pickup_location' => $locationData['formatted_address'],
                     'raw_address' => $request->pickup_location,
                     'manul_pickup_location' => $request->manul_pickup_location ?? '1',
-                    'shipment' => $request->shipment ?? '0',
+                    'shipment' => $request->shipment ?? '1',
                 ]
             );
 
@@ -849,6 +850,15 @@ class ProductController extends Controller
             } else {
                 $bankdetails = true;
             }
+            $hasCompleteAddress = !empty($authUser->userDetail->complete_address) &&
+                !empty($authUser->userDetail->country);
+            $addresAdded = false;
+
+            if ($hasCompleteAddress) {
+                $addresAdded = true;
+            } else {
+                $addresAdded = false;
+            }
 
             $query = Product::where('user_id', '!=', $authUser->id);
 
@@ -1047,6 +1057,7 @@ class ProductController extends Controller
                     'filters' => $filters,
                     'filter_applied' => $filterApplied,
                     'account_added' => $bankdetails,
+                    'address_added' =>$addresAdded,
 
                 ],
             ], 200);
@@ -1903,6 +1914,82 @@ class ProductController extends Controller
                 'data' => [
                     'errors' => []
                 ]
+            ], 500);
+        }
+    }
+
+    public function guestLenderInfo(Request $request, $id)
+    {
+        // dd('here');
+        try {
+
+            $userDetails = User::with(['userDetail'])->whereId($id)->firstOrFail();
+
+            $products = Product::with(['locations', 'allImages', 'thumbnailImage', 'get_size', 'favorites', 'category', 'disableDates', 'get_brand', 'get_color'])
+                ->get();
+
+            $transformedProducts = $products->map(function ($product) {
+                $allImages = $product->allImages->map(function ($image) {
+                    return [
+                        'id' => $image->id,
+                        'product_id' => $image->product_id,
+                        'file_name' => $image->file_name,
+                        'file_path' =>  $image->file_path,
+                        'created_at' => $image->created_at,
+                        'updated_at' => $image->updated_at
+                    ];
+                });
+
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'description' => $product->description,
+                    'specification' => $product->specification,
+                    'rentaltype' => $product->rentaltype,
+                    'user_id' => $product->user_id,
+                    'category_id' => $product->category_id,
+                    'subcat_id' => $product->subcat_id,
+                    'quantity' => $product->quantity,
+                    'rent' => $product->rent,
+                    'min_days_rent_item' => $product->min_days_rent_item,
+                    'price' => $product->price,
+                    'security' => $product->security,
+                    'status' => $product->status,
+                    'other_size' => $product->other_size,
+                    'condition' => $product->condition,
+                    'brand' => $product->get_brand->name ?? null,
+                    'color' => $product->get_color->name ?? null,
+                    'size' => $product->get_size->name ?? null,
+                    'rent_day' => $product->rent_day,
+                    'rent_week' => $product->rent_week,
+                    'rent_month' => $product->rent_month,
+                    'modified_by' => $product->modified_by,
+                    'modified_user_type' => $product->modified_user_type,
+                    'available' => $product->available,
+                    'city' => $product->city,
+                    'product_market_value' => $product->product_market_value,
+                    'product_link' => $product->product_link,
+                    'average_rating' => $product->average_rating,
+                    'product_image_url' => $product->thumbnailImage ? $product->thumbnailImage->file_path : null,
+                    'all_images' => $allImages,
+                    'favourites' => !is_null($product->favorites) ? true : false,
+                    'created_at' => $product->created_at,
+                ];
+            })->toArray();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Products fetched successfully!',
+                'data' => [
+                    'user' => $userDetails,
+                    'products' => $transformedProducts
+                ],
+            ], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to fetch user details. Error: ' . $e->getMessage(),
+                'errors' => [],
             ], 500);
         }
     }

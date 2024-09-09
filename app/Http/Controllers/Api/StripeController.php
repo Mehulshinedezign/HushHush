@@ -95,8 +95,9 @@ class StripeController extends Controller
 
     public function createPaymentIntent(Request $request, $id)
     {
-        // dd('here');
         $user = auth()->user();
+
+        // Validate the request input
         $validator = Validator::make($request->all(), [
             'amount' => 'required|numeric',
             'currency' => 'required|string',
@@ -104,59 +105,76 @@ class StripeController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json(['status' => false, 'errors' => $validator->errors()], 422);
+        }
+
+        // Retrieve the query associated with the ID
+        $query = Query::find($id);
+
+        if (!$query) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Query not found',
+            ], 404);
         }
 
         try {
-            $query = Query::find($id);
+            // Calculate total amount
+            $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
+            $complete_amount = $price + $query->cleaning_charges + $query->shipping_charges;
+            // dd($complete_amount);
 
-            if (!$query) {
+            if ($complete_amount != $request->amount) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Query not found',
-                ], 404);
+                    'message' => 'Payment amount mismatch',
+                ], 400);
             }
+
+            // Create or retrieve Stripe customer for the user
             $stripeCustomer = $user->createOrGetStripeCustomer();
+
+            // Create the PaymentIntent with Stripe
             $paymentIntent = PaymentIntent::create([
-                'amount' => $request->amount * 100,
+                'amount' => $request->amount * 100, // Stripe expects amount in cents
                 'currency' => $request->currency,
                 'payment_method' => $request->payment_method,
                 'confirm' => true,
+                'customer' => $stripeCustomer->id, // Attach the Stripe customer ID
                 'automatic_payment_methods' => [
                     'enabled' => true,
                     'allow_redirects' => 'never',
                 ],
             ]);
-            // dd($paymentIntent);
 
+            // Check if the payment succeeded
             if ($paymentIntent->status == 'succeeded') {
+                // Parse date and time from the query
                 $fromDateTime = Carbon::parse($query->from_date);
                 $toDateTime = Carbon::parse($query->to_date);
-                $orderStatus = 'Waiting';
 
+                // Create an order for the query
                 $order = Order::create([
                     'user_id' => $query->user_id,
                     'retailer_id' => $query->for_user,
-                    'transaction_id' => null,
+                    'transaction_id' => null, // Temporary, will be updated after transaction creation
                     'product_id' => $query->product_id,
                     'query_id' => $query->id,
                     'from_date' => $fromDateTime->toDateString(),
                     'to_date' => $toDateTime->toDateString(),
-                    // 'from_hour' => $fromDateTime->format('H'),
-                    // 'from_minute' => $fromDateTime->format('i'),
-                    // 'to_hour' => $toDateTime->format('H'),
-                    // 'to_minute' => $toDateTime->format('i'),
-                    'order_date' => date('Y-m-d H:i:s'),
-                    'status' => $orderStatus,
-                    'total'=>$request->amount,
+                    'order_date' => now(),
+                    'status' => 'Waiting',
+                    'total' => $request->amount,
                 ]);
 
+                // Mark the query as completed
                 $query->update(['status' => 'COMPLETED']);
 
+                // Record the transaction
                 $transaction = Transaction::create([
                     'payment_id' => $paymentIntent->id,
                     'order_id' => $order->id,
-                    'user_id' => auth()->user()->id,
+                    'user_id' => $user->id,
                     'payment_method' => $paymentIntent->payment_method_types[0],
                     'total' => $paymentIntent->amount,
                     'date' => now(),
@@ -167,14 +185,26 @@ class StripeController extends Controller
                 // Update the order with the correct transaction ID
                 $order->update(['transaction_id' => $transaction->id]);
 
-                return response()->json(['status' => true, 'message' => 'Payment successful', 'order' => $order], 200);
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Payment successful',
+                    'order' => $order
+                ], 200);
             } else {
-                return response()->json(['status' => false, 'message' => 'Payment failed', 'paymentIntent' => $paymentIntent], 400);
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Payment failed',
+                    'paymentIntent' => $paymentIntent,
+                ], 400);
             }
         } catch (\Exception $e) {
-            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 500);
         }
     }
+
 
     public function createIntent(Request $request)
     {

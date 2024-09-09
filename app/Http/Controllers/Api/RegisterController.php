@@ -9,6 +9,7 @@ use App\Models\PushToken;
 use App\Models\User;
 use App\Models\UserDetail;
 use App\Models\UserDocuments;
+use App\Models\UserNotification;
 use App\Notifications\EmailOtpVerification;
 use App\Services\OtpService;
 use Illuminate\Http\Request;
@@ -58,6 +59,8 @@ class RegisterController extends Controller
                 // 'address1' =>$data['complete_address'],
                 // 'about' =>$data['about'],
             ]);
+            
+            UserNotification::Create(['user_id' => $user->id]);
 
             // $path = $data['gov_id']->store('user_documents');
             // $filePath = str_replace("public/", "", $path);

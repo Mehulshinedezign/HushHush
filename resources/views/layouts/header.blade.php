@@ -7,7 +7,7 @@
         <div class="container">
             <div class="cust-nav-header-sec">
                 <div class="logo mobile-logo">
-                    <a class="navbar-brand" href=" {{ url('/') }} "><img src="{{ asset('front/images/logo.svg') }}"
+                    <a class="navbar-brand" href=" {{ url('/') }} "><img src="{{ asset('front/images/HUSH HUSH CLOSET.svg') }}"
                             alt="logo" width="91" height="63"></a>
                 </div>
                 <div class="collapse navbar-collapse cust-navbar-header" id="navbarNav">
@@ -94,12 +94,17 @@
                                         {{-- <li><a class="dropdown-item" href="{{ route('order.spent.transaction') }}"><i
                                                 class="fa-solid fa-comment"></i>Spent Transaction
                                         </a></li> --}}
-                                        <li><a class="dropdown-item" href="{{ route('order.earning.transaction') }}"><svg
-                                                    xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1"
-                                                    viewBox="0 0 24 24" width="20" height="20">
-                                                    <path
-                                                        d="m18.293,7.363l.846-.846c-1.7-2.21-4.338-3.518-7.138-3.518C7.038,3,3,7.037,3,12s4.038,9,9,9c4.45,0,8.28-3.315,8.908-7.712.118-.819.881-1.387,1.697-1.273.82.118,1.391.878,1.273,1.697-.839,5.865-5.945,10.288-11.879,10.288C5.383,24,0,18.617,0,12S5.383,0,12,0c3.602,0,7.002,1.622,9.273,4.383l1.102-1.102c.6-.6,1.625-.175,1.625.673v3.83c0,.665-.539,1.204-1.205,1.204h-3.83c-.848,0-1.273-1.025-.673-1.625Zm-6.293,12.637c.829,0,1.5-.672,1.5-1.5v-.669c1.448-.462,2.5-1.82,2.5-3.418,0-1.476-.885-2.783-2.254-3.33l-2.378-.952c-.224-.089-.368-.303-.368-.544,0-.323.263-.587.587-.587h1.181c.181,0,.343.094.434.251.415.717,1.333.963,2.05.548s.962-1.333.548-2.05c-.499-.864-1.344-1.465-2.299-1.67v-.579c0-.828-.671-1.5-1.5-1.5s-1.5.672-1.5,1.5v.669c-1.448.461-2.5,1.82-2.5,3.418,0,1.477.885,2.783,2.254,3.33l2.377.951c.224.09.368.304.368.545,0,.323-.263.587-.587.587h-1.181c-.181,0-.343-.094-.434-.251-.415-.717-1.333-.962-2.049-.548-.717.415-.962,1.333-.547,2.05.499.864,1.343,1.465,2.298,1.671v.578c0,.828.671,1.5,1.5,1.5Z" />
-                                                </svg>Earnings
+                                        <li><a class="dropdown-item" href="{{ route('order.earning.transaction') }}"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <g clip-path="url(#clip0_1034_13511)">
+                                                    <path d="M15.2442 6.13583L15.9492 5.43083C14.5325 3.58917 12.3342 2.49917 10.0008 2.49917C5.865 2.5 2.5 5.86417 2.5 10C2.5 14.1358 5.865 17.5 10 17.5C13.7083 17.5 16.9 14.7375 17.4233 11.0733C17.5217 10.3908 18.1575 9.9175 18.8375 10.0125C19.5208 10.1108 19.9967 10.7442 19.8983 11.4267C19.1992 16.3142 14.9442 20 9.99917 20C4.48583 20 0 15.5142 0 10C0 4.48583 4.48583 0 10 0C13.0017 0 15.835 1.35167 17.7275 3.6525L18.6458 2.73417C19.1458 2.23417 20 2.58833 20 3.295V6.48667C20 7.04083 19.5508 7.49 18.9958 7.49H15.8042C15.0975 7.49 14.7442 6.63583 15.2442 6.13583ZM10 16.6667C10.6908 16.6667 11.25 16.1067 11.25 15.4167V14.8592C12.4567 14.4742 13.3333 13.3425 13.3333 12.0108C13.3333 10.7808 12.5958 9.69167 11.455 9.23583L9.47333 8.4425C9.28667 8.36833 9.16667 8.19 9.16667 7.98917C9.16667 7.72 9.38583 7.5 9.65583 7.5H10.64C10.7908 7.5 10.9258 7.57833 11.0017 7.70917C11.3475 8.30667 12.1125 8.51167 12.71 8.16583C13.3075 7.82 13.5117 7.055 13.1667 6.4575C12.7508 5.7375 12.0467 5.23667 11.2508 5.06583V4.58333C11.2508 3.89333 10.6917 3.33333 10.0008 3.33333C9.31 3.33333 8.75083 3.89333 8.75083 4.58333V5.14083C7.54417 5.525 6.6675 6.6575 6.6675 7.98917C6.6675 9.22 7.405 10.3083 8.54583 10.7642L10.5267 11.5567C10.7133 11.6317 10.8333 11.81 10.8333 12.0108C10.8333 12.28 10.6142 12.5 10.3442 12.5H9.36C9.20917 12.5 9.07417 12.4217 8.99833 12.2908C8.6525 11.6933 7.8875 11.4892 7.29083 11.8342C6.69333 12.18 6.48917 12.945 6.835 13.5425C7.25083 14.2625 7.95417 14.7633 8.75 14.935V15.4167C8.75 16.1067 9.30917 16.6667 10 16.6667Z" fill="#212529e6"/>
+                                                    </g>
+                                                    <defs>
+                                                    <clipPath id="clip0_1034_13511">
+                                                    <rect width="20" height="20" fill="white"/>
+                                                    </clipPath>
+                                                    </defs>
+                                                    </svg>
+                                                    Earnings
                                             </a></li>
                                         {{-- <li><a class="dropdown-item" href="{{ route('') }}"><i
                                                 style="color: #606060" class="fa-solid fa-lock"></i></i>my
@@ -143,9 +148,49 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li>
-                       <a href="{{ url('/') }}">Home</a> 
+                       <a href="{{ url('/') }}">Home</a>
                     </li>
-                    @foreach (getParentCategory() as $index => $parentCategory)
+                    <li>
+                        <a href="{{ route( 'index',['sort'=>'new']) }}">Latest</a>
+                     </li>
+                     <li>
+                        <a href="{{ route( 'index',['sort'=>'old']) }}">Oldest</a>
+                     </li>
+                     <li>
+                        <a href="{{ route( 'index',['sort'=>'costier']) }}">Costier</a>
+                     </li>
+                     {{-- <li>
+                        <a href="{{ url('/') }}">Categories</a>
+                     </li> --}}
+                     <li class="nav-item">
+                        <!-- <a class="nav-link" aria-current="page" href="#">What's New</a> -->
+                        <div class="dropdown cstm-dropdown">
+                            <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Categories
+                            </div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <div class="sub-categeory-menu">
+                                            <div class="sub-categeory-links">
+                                                @foreach (getParentCategory() as $index => $parentCategory)
+                                                    <a class="dropdown-toggle"
+                                                        href="{{ route('index', ['category' => $parentCategory->id]) }}" type="button">
+                                                        {{ $parentCategory->name }}
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        {{-- <div class="col-md-6">
+                                            <div class="sub-categeory-img">
+                                                <img src="{{ asset('front/images/sub-menu-img.png') }}"
+                                                    alt="img">
+                                            </div>
+                                        </div> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    {{-- @foreach (getParentCategory() as $index => $parentCategory)
                         @if ($index >= 5)
                         @break
                     @endif
@@ -157,7 +202,7 @@
                             </a>
                         </div>
                     </li>
-                @endforeach
+                @endforeach --}}
             </ul>
         </div>
         <form id="searchForm" action="{{ route('index') }}" method="GET">

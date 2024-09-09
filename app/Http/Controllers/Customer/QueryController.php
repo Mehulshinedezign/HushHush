@@ -18,88 +18,90 @@ class QueryController extends Controller
 {
     public function store(Request $request)
     {
-        // Validate incoming request
-
-
         DB::beginTransaction();
 
         try {
             $request->validate([
-                'rental_dates' => 'required',
+                'rental_start_date' => 'required',
                 'product_id' => 'required',
-                'rental_dates' => 'required',
                 'description' => 'required|string',
                 'delivery_option' => 'required|string',
             ]);
+
+
             $user = auth()->user();
             $foruser = jsdecode_userdata($request->for_user);
             $product_id = jsdecode_userdata($request->product_id);
-            // dd($request);
-            $lender = User::where('id',$foruser)->first();
-            $data = [
-                'user_id' => $user->id,
-                'product_id' => $product_id,
-                'for_user' => $foruser,
-                'query_message' => $request->description,
-                'status' => 'PENDING',
-                'date_range' => $request->rental_dates,
-                'delivery_option' => $request->delivery_option,
-            ];
 
-            $dates = explode(' - ', $request->rental_dates);
+            $lender = User::where('id', $foruser)->first();
+
+            $dates = explode(' - ', $request->rental_start_date);
+            if (count($dates) !== 2) {
+                throw new \Exception("Invalid date range format.");
+            }
+
             $startDate = date('Y-m-d', strtotime($dates[0]));
             $endDate = date('Y-m-d', strtotime($dates[1]));
 
             $totalDays = (strtotime($endDate) - strtotime($startDate)) / 86400 + 1;
 
             $product = Product::findOrFail($product_id);
-            // dd($product);
-            // Check if the total days are less than the minimum rental days
             if ($totalDays < $product->min_days_rent_item) {
                 throw new \Exception("The rental period must be at least {$product->min_days_rent_item} days.");
             }
 
-            // dd($dates, $startDate, $endDate);
-
-
-            $product = Product::findorfail($product_id);
-            foreach($product->disableDates as $disabled_date)
-            {
-                if($startDate <= $disabled_date->disable_date && $endDate>= $disabled_date->disable_date )
-                throw new \Exception("Product is not available in this date range");
+            foreach ($product->disableDates as $disabled_date) {
+                if ($startDate <= $disabled_date->disable_date && $endDate >= $disabled_date->disable_date) {
+                    throw new \Exception("Product is not available in this date range.");
+                }
             }
 
-            $querydates = Query::where(['product_id'=>$product_id, 'status'=> 'PENDING','user_id' =>auth()->user()->id])->get()->pluck('date_range');
-             foreach($querydates as $query_date)
-             {
-                $dates = explode(' - ', $query_date);
-                $querystartDate = date('Y-m-d', strtotime($dates[0]));
-                $queryendDate = date('Y-m-d', strtotime($dates[1]));
+            $queryDates = Query::where([
+                'product_id' => $product_id,
+                'status' => 'PENDING',
+                'user_id' => auth()->user()->id
+            ])->get()->pluck('date_range');
 
-                if($startDate <= $querystartDate && $endDate>= $queryendDate )
-                throw new \Exception("Product is not available in this date range");
-             }
+            foreach ($queryDates as $queryDate) {
+                $queryDatesArray = explode(' - ', $queryDate);
 
+                if (count($queryDatesArray) !== 2) {
+                    throw new \Exception("Stored query date range format is invalid: {$queryDate}");
+                }
 
-            // dd($data);
-            $qur = Query::create($data);
+                $queryStartDate = date('Y-m-d', strtotime($queryDatesArray[0]));
+                $queryEndDate = date('Y-m-d', strtotime($queryDatesArray[1]));
 
-            $product_date=[
-                'customer_name'=>$user->name,
-                'date' =>$request->rental_dates,
+                if (($startDate >= $queryStartDate && $startDate <= $queryEndDate) ||
+                    ($endDate >= $queryStartDate && $endDate <= $queryEndDate) ||
+                    ($startDate <= $queryStartDate && $endDate >= $queryEndDate)
+                ) {
+                    throw new \Exception("Product is already reserved for this date range.");
+                }
+            }
+
+            $data = [
+                'user_id' => $user->id,
+                'product_id' => $product_id,
+                'for_user' => $foruser,
                 'query_message' => $request->description,
-                'lender_id' =>$foruser,
+                'status' => 'PENDING',
+                'date_range' => $startDate . ' - ' . $endDate,
+                'delivery_option' => $request->delivery_option,
             ];
-            if(@$lender->usernotification->query_receive == '1'){
-                $lender->notify(new QueryReceived($product_date));
-            }
+
+            Query::create($data);
+
             DB::commit();
             return response()->json(['success' => true, 'message' => 'Inquiry sent successfully']);
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['success' => false, 'message' => $e->getMessage() ]);
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
+
+
+
 
 
     public function myQuery(Request $request)
@@ -143,16 +145,13 @@ class QueryController extends Controller
 
             // dd($query_product->toArray());
 
-                    // $query->FilterByDateRange($startDate,$endDate);
+            // $query->FilterByDateRange($startDate,$endDate);
             $data = [
-                // 'user_id' => $query_product->user_id,
-                // 'product_id' => $query_product->product_id,
+
                 'negotiate_price' => $request->negotiate_price ?? null,
                 'shipping_charges' => $request->shipping_charges ?? null,
                 'cleaning_charges' => $request->cleaning_charges ?? null,
 
-                // 'for_user' => $query_product->for_user,
-                // 'query_message' => $query_product->query_message,
                 'status' => 'ACCEPTED',
                 // 'date_range' => $query_product->date_range,
             ];
@@ -165,8 +164,8 @@ class QueryController extends Controller
 
             while ($startDate <= $endDate) {
                 $startDate = date_create($startDate);
-                 $query_product->product->disableDates()->create([
-                'disable_date' => $startDate->format('Y-m-d'),
+                $query_product->product->disableDates()->create([
+                    'disable_date' => $startDate->format('Y-m-d'),
                 ]);
 
 
@@ -175,15 +174,14 @@ class QueryController extends Controller
             }
 
 
-            $userId =jsencode_userdata($query_product->user->id);
-            if(@$query_product->user->usernotification->accept_item == '1'){
+            $userId = jsencode_userdata($query_product->user->id);
+            if (@$query_product->user->usernotification->accept_item == '1') {
                 $query_product->user->notify(new AcceptItem($userId));
             }
 
             DB::commit();
             return redirect()->back()->with('success', 'Offer sent successfully.');
-
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()->with('error', $e->getMessage());
             // return response()->json(['success' => false, 'message' => $e->getMessage() ]);
@@ -206,8 +204,8 @@ class QueryController extends Controller
 
         $query_product->update($data);
 
-        $userId =jsencode_userdata($query_product->user->id);
-        if(@$query_product->user->usernotification->reject_item == '1'){
+        $userId = jsencode_userdata($query_product->user->id);
+        if (@$query_product->user->usernotification->reject_item == '1') {
             $query_product->user->notify(new RejectItem($userId));
         }
         return redirect()->back()->with('success', 'Query rejected successfully.');

@@ -36,62 +36,6 @@ class ProductController extends Controller
      */
 
 
-    // public function index(Request $request)
-    // {
-    //     $categories = Category::where('status', 'Active')->get();
-    //     $selectedCategories = $request->input('category', []);
-    //     $selectedSubcategories = $request->input('Subcategory', []);
-    //     $selectedcolor = $request->input('filtercolor', []);
-    //     $selectedcondition = $request->input('condition', []);
-    //     $selectedbrands = $request->input('brand', []);
-    //     $selectedsize = $request->input('size', []);
-    //     $searchKeyword = $request->input('search', '');
-    //     $disabledate = $request->input('filter_date');
-
-    //     $startDate = null;
-    //     $endDate = null;
-
-    //      if (!empty($disabledate) && strpos($disabledate, ' - ') !== false) {
-    //          [$startDate, $endDate] = explode(' - ', $disabledate);
-    //      }
-
-    //      if(isset(auth()->user()->id)){
-
-    //     $authUserId = auth()->user()->id;
-
-    //      $query = Product::with('disableDates', 'ratings')
-    //          ->where('user_id', '!=', $authUserId)
-    //          ->where('status', '1');
-    //         }else{
-    //             $query = Product::with('disableDates', 'ratings')
-    //          ->where('status', '1');
-    //         }
-
-
-    //     if (!empty($searchKeyword)) {
-    //         $query->where('name', 'LIKE', '%' . $searchKeyword . '%');
-    //     }
-
-    //     $query->applyFilters();
-
-    //     if ($startDate && $endDate) {
-    //         $query->filterByDateRange($startDate, $endDate);
-    //     }
-
-    //     $products = $query->orderBy('created_at', 'desc')->paginate(1);
-
-    //     return view('index', compact('products', 'categories'))->with([
-    //         'selectedLocation' => $this->selectedLocation,
-    //         'selectedCategories' => $selectedCategories,
-    //         'selectedSubcategories' => $selectedSubcategories,
-    //         'selectedcolor' => $selectedcolor,
-    //         'selectedcondition' => $selectedcondition,
-    //         'selectedbrands' => $selectedbrands,
-    //         'selectedsize' => $selectedsize,
-    //     ]);
-    // }
-
-
     public function index(Request $request)
     {
         $categories = Category::where('status', 'Active')->get();
@@ -130,12 +74,11 @@ class ProductController extends Controller
         if ($startDate && $endDate) {
             $query->filterByDateRange($startDate, $endDate);
         }
-        if($request->rating){
+        if ($request->rating) {
 
             $products = $query->paginate(5);
-        }
-        else{
-            $products = $query->orderBy('created_at', 'desc')->paginate(5);
+        } else {
+            $products = $query->sort()->paginate(20);
         }
 
         if ($request->ajax()) {
@@ -177,65 +120,66 @@ class ProductController extends Controller
 
     public function view(Request $request, $id)
     {
-
         $id = jsdecode_userdata($id);
-
-        // $product = $this->getProduct($request, $id);
         $product = Product::findOrFail($id);
-        // dd('here',$id,$product);
+
         if (is_null($product)) {
             return redirect()->back()->with('message', __('product.messages.notAvailable'));
         }
 
         $rating_progress = $this->getratingprogress($product);
-        if (isset(auth()->user()->id)) {
-            $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
-                ->where('id', $product->id)
-                ->where('category_id', $product->category_id)->whereHas('category', function ($q) {
-                    $q->where('status', '1');
-                })
-                ->where('user_id', '!=', auth()->user()->id)
-                ->inRandomOrder()
-                ->limit(5)
-                ->get();
-        } else {
-            $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
-                ->where('id', $product->id)
-                ->where('category_id', $product->category_id)->whereHas('category', function ($q) {
-                    $q->where('status', '1');
-                })
-                ->inRandomOrder()
-                ->limit(5)
-                ->get();
-        }
 
+        $relatedProducts = Product::with('thumbnailImage', 'ratings', 'favorites')
+            ->where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->whereHas('category', function ($q) {
+                $q->where('status', '1');
+            })
+            ->inRandomOrder()
+            ->limit(5)
+            ->get();
 
-        $layout_class = 'single_product';
+        $disable_dates = $product->disableDates->pluck('disable_date')->toArray();
 
-        $productImages = $product->allImages;
-        if (auth()->id()) {
-            $querydates = Query::where(['product_id' => $id, 'status' => 'PENDING', 'user_id' => auth()->user()->id])->get();
-        } else {
-            $querydates = Query::where(['product_id' => $id, 'status' => 'PENDING'])->get();
-        }
         $product_buffer = $product->created_at->format('Y-m-d');
         $carbonDate = Carbon::createFromFormat('Y-m-d', $product_buffer);
         $array1 = [];
         array_push($array1, $product_buffer);
         for ($i = 0; $i < 3; $i++) {
             $newDate = $carbonDate->addDay();
-            $formattedDate = $newDate->format('Y-m-d');
-            array_push($array1, $formattedDate);
+            array_push($array1, $newDate->format('Y-m-d'));
         }
-        $disable_dates = $product->disableDates->pluck('disable_date')->toArray();
+
         $disable_dates = array_merge($array1, $disable_dates);
+
+        $querydates = [];
+        if (auth()->check()) {  // Only execute if the user is authenticated
+            $querydates = Query::where(['product_id' => $id, 'status' => 'PENDING', 'user_id' => auth()->user()->id])
+                ->select('date_range')
+                ->get();
+
+            $userDisableDates = [];
+            foreach ($querydates as $query) {
+                [$startDate, $endDate] = explode(' - ', $query->date_range);
+                $period = \Carbon\CarbonPeriod::create($startDate, $endDate);
+                foreach ($period as $date) {
+                    $userDisableDates[] = $date->format('Y-m-d');
+                }
+            }
+
+            $disable_dates = array_merge($disable_dates, $userDisableDates);
+        }
+
         $disable_dates = array_unique($disable_dates);
         sort($disable_dates);
 
+        $productImages = $product->allImages;
 
-        // dd( $product->productCompleteLocation);
         return view('product-detail', compact('product', 'productImages', 'querydates', 'relatedProducts', 'rating_progress', 'disable_dates'));
     }
+
+
+
 
 
     /**
@@ -284,16 +228,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // public function wishlist(Request $request)
-    // {
-    //     $products = ProductFavorite::with('product.thumbnailImage', 'product.category')->where('user_id', auth()->user()->id)->orderByDesc('id')->paginate($request->global_product_pagination);
-    //     $user = User::with('notification')->where('id', auth()->user()->id)->first();
-    //     if (!$products->isEmpty() && @$user->notification->item_we_think_you_might_like == "on") {
-    //         $user->notify(new ItemYouLike($user, $products));
-    //     }
 
-    //     return view('customer.wishlist', compact('products'));
-    // }
 
     public function wishlist(Request $request)
     {
@@ -329,8 +264,6 @@ class ProductController extends Controller
         } else {
             $message = __('product.messages.notAvailable');
         }
-        // $product1 = $this->checkTimeAvailablity($request, $id);
-        // dd($request->toArray(),$id, $product1);
         $location = $this->productNearestLocation($request->latitude, $request->longitude, $id);
         if (is_null($location)) {
             $message = __('product.messages.notAvailableArea');

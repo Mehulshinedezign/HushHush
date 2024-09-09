@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\EmailOtp;
 use App\Models\PhoneOtp;
+use App\Models\Product;
 use App\Models\PushToken;
 use App\Notifications\EmailOtpVerification;
 use Illuminate\Http\Request;
@@ -56,13 +57,28 @@ class LoginController extends Controller
                         'device_type' => $request->device_type,
                     ]
                 );
-                $is_bankdetail = $user->bankAccount;
-                if(is_null($is_bankdetail))
-                {
-                    $is_added= false;
+
+                $product_ids = Product::where('user_id', $user->id)->pluck('id');
+                $product = (explode(",", implode(",", $product_ids->toArray())));
+
+
+                $hasCompleteAddress = !empty($user->userDetail->complete_address) &&
+                    !empty($user->userDetail->country);
+                $addresAdded = false;
+
+                if ($hasCompleteAddress) {
+                    $addresAdded = true;
+                } else {
+                    $addresAdded = false;
                 }
-                else{
-                    $is_added= true;
+
+
+
+                $is_bankdetail = $user->bankAccount;
+                if (is_null($is_bankdetail)) {
+                    $is_added = false;
+                } else {
+                    $is_added = true;
                 }
 
                 if (!$isVerified) {
@@ -151,25 +167,48 @@ class LoginController extends Controller
 
                     return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
                 }
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Login Success!',
+                    'data' => $response = [
+                        'token' => $user->createToken('login')->plainTextToken,
+                        'user_id' => $user->id,
+                        'email_verified_at' => $user->email_verified_at,
+                        'otp_is_verified' => $user->otp_is_verified,
+                        'email' => $user->email,
+                        'phone' => $user->country_code . $user->phone_number,
+                        'profile_pic' => $user->frontend_profile_url,
+                        'name' => $user->name,
+                        'fcm_token' => $user->pushToken->fcm_token,
+                        'device_type' => $user->pushToken->device_type,
+                        'device_id' => $user->pushToken->device_id,
+                        'is_added' => $is_added,
+                        // 'product' => $product,
+                    ],
+                    'product' => $product,
+                    'verify' => $isVerified,
+                    'addres_added'=>$addresAdded,
+                ], 200);
 
-                $apiResponse = 'success';
-                $statusCode = 200;
-                $message = 'Login Success';
-                $response = [
-                    'token' => $user->createToken('login')->plainTextToken,
-                    'user_id' => $user->id,
-                    'email_verified_at' => $user->email_verified_at,
-                    'otp_is_verified' => $user->otp_is_verified,
-                    'email' => $user->email,
-                    'phone' => $user->country_code . $user->phone_number,
-                    'profile_pic' => $user->frontend_profile_url,
-                    'name' => $user->name,
-                    'fcm_token' => $user->pushToken->fcm_token,
-                    'device_type' => $user->pushToken->device_type,
-                    'device_id' => $user->pushToken->device_id,
-                    'is_added' =>$is_added,
-                ];
-                return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
+                // $apiResponse = 'success';
+                // $statusCode = 200;
+                // $message = 'Login Success';
+                // $response = [
+                //     'token' => $user->createToken('login')->plainTextToken,
+                //     'user_id' => $user->id,
+                //     'email_verified_at' => $user->email_verified_at,
+                //     'otp_is_verified' => $user->otp_is_verified,
+                //     'email' => $user->email,
+                //     'phone' => $user->country_code . $user->phone_number,
+                //     'profile_pic' => $user->frontend_profile_url,
+                //     'name' => $user->name,
+                //     'fcm_token' => $user->pushToken->fcm_token,
+                //     'device_type' => $user->pushToken->device_type,
+                //     'device_id' => $user->pushToken->device_id,
+                //     'is_added' => $is_added,
+                //     'product' => $product,
+                // ];
+                // return $this->apiResponse($apiResponse, $statusCode, $message, $response, $isVerified);
             } else {
                 $apiResponse = 'error';
                 $statusCode = 401;

@@ -8,7 +8,7 @@
                 @if ($products->isNotEmpty())
                     <div class="home-product-main">
                         <div class="section-heading">
-                            <h2>Wish List</h2>
+                            <h2>My Wishlist</h2>
                         </div>
                         <div class="home-product-box">
                             @foreach ($products as $favrait)

@@ -1,7 +1,7 @@
 <script>
 jQuery(document).ready(function(){
     const rules = {
-        rental_dates:{
+        rental_start_date:{
             required: true,
         },
         description:{
@@ -13,7 +13,7 @@ jQuery(document).ready(function(){
         // }
     }
     const messages = {
-        rental_dates: {
+        rental_start_date: {
             required:'Please select proper date range',
         },
         description: {

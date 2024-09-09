@@ -694,4 +694,36 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'subcat_id');
     }
+
+
+    public function scopeSort($query)
+    {
+        $request = request();
+
+        $query->when($request->has('sort'), function ($q) use ($request) {
+            switch ($request->sort) {
+                case 'new':
+                    $q->orderBy('created_at', 'desc');
+                    // Code to execute if $variable equals 'value1'
+                    break;
+
+                case 'old':
+                    $q->orderBy('created_at', 'asc');
+                    // Code to execute if $variable equals 'value2'
+                    break;
+
+                case 'costier':
+                    $q->orderBy('rent_day', 'desc');
+
+                    break;
+
+                default:
+                    $q->orderBy('created_at', 'desc');
+                    // Code to execute if $variable doesn't match any cases
+                    break;
+            }
+
+        });
+        return $query;
+    }
 }

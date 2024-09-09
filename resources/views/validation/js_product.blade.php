@@ -95,6 +95,8 @@
                 // required: true,
                 pattern:  /^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(\/[\w#.-]*)*(\?[a-zA-Z0-9_=&%-]*)?\/?$/,
             },
+
+
             min_rent_days: {
                 required: true,
                 regex: minDaysItemRegex,
