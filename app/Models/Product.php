@@ -325,7 +325,6 @@ class Product extends Model
                 $q->whereIn('rating', $ratings);
             });
         }
-        dd($query);
         return $query;
     }
 
