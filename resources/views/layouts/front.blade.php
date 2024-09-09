@@ -412,7 +412,7 @@
                                                 <input type="text" name="non_available_dates"
                                                     id="non_available_date" placeholder="Select Dates"
                                                     class="form-control daterange-cus">
-                                                <span class="form-icon cal-icon">
+                                                <span class="form-icon cal-icon" id="trigger-calendar">
                                                     <img src="{{ asset('front/images/calender-icon.svg') }}"
                                                         alt="img">
                                                 </span>
@@ -423,6 +423,7 @@
                                             @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Condition*</label>
@@ -771,6 +772,14 @@
         //     });
         // });
         // end
+        $(document).ready(function() {
+            // When the calendar icon is clicked, trigger the date picker input
+            $('#trigger-calendar').on('click', function() {
+                $('#non_available_date').focus(); // Focuses the input to trigger the datepicker
+            });
+
+            // Initialize the date range picker (make sure you have daterangepicker.js included)
+        });
         $(document).ready(function() {
             $('#mySelect').click(function() {
                 let $optionToMove = $('.moveMe');
@@ -1257,10 +1266,10 @@
                 var messageCount = countSingleChatCount(chat_list);
                 messageCount.then(m => {
                     // show total number of unseen message in the header
-                    if(m){
-                        console.log(m,'herer')
+                    if (m) {
+                        console.log(m, 'herer')
                         $('.userIconbtn').text(m);
-                    }else{
+                    } else {
                         $('.userIconbtn').text('');
 
                     }
