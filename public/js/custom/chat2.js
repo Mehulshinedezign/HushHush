@@ -294,10 +294,12 @@ $(document).on('click', '.chat-list', function () {
     var classElement = jQuery('.chat-list');
     var count = parseInt($(this).find('p.count-msg').text());
     var chatCount = parseInt($('.userIconbtn').text());
-    if(chatCount >= 0)
+    if(chatCount > 0)
     {
         var renaningCount = chatCount-count
-        $('.userIconbtn').text(renaningCount);
+            $('.userIconbtn').text(renaningCount); 
+    }else{
+        $('.userIconbtn').text(''); 
     }
     $(this).find('p.count-msg').addClass('d-none');
     classElement.removeClass('activecht');
@@ -318,9 +320,10 @@ function getMessages(element) {
     var reciever = element.attr('data-receiverId');
     var userImage = element.find('img').attr('src');
     var name = element.find('p').html()
-
-    var Chatimg = `<img src="${userImage}" class="chat-pro-img"><span>${name}</span>`;
-    $('.chat-product-profile').html(Chatimg);
+    if(userImage){
+        var Chatimg = `<img src="${userImage}" class="chat-pro-img"><span>${name}</span>`;
+        $('.chat-product-profile').html(Chatimg);
+    }
     loadMessages(sender, reciever, userImage);
 }
 

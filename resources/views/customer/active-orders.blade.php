@@ -3,7 +3,7 @@
         @php $empty = true; @endphp
 
         @foreach ($orders as $order)
-            @if ($order->status == 'Waiting' || $order->status == 'Picked Up')
+            @if ($order->status == 'Waiting' || $order->status == 'Picked Up' && $order->dispute_status == 'No')
                 @php $empty = false; @endphp
 
                 <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6">

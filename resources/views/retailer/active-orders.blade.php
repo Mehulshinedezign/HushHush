@@ -32,7 +32,7 @@
 <div class="order-his-card-box">
     <div class="row g-3">
         @forelse ($orders as $order)
-            @if ($order->status == 'Waiting' || $order->status == 'Picked Up')
+            @if ($order->status == 'Waiting' || $order->status == 'Picked Up' && $order->dispute_status == 'No')
                 <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6">
                     <div class="order-his-card">
                         <div class="order-card-top">

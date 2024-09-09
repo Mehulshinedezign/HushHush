@@ -170,35 +170,38 @@ function userliststatus() {
 // chat search form submit
 $("#searchmember").on("submit", function (e) {
     e.preventDefault();
-
-    if ($("input[name='search']").val()) {
-        var get_search_chat = $("input[name='search']").val();
-
+    var search = jQuery(this).find('input').val();
+    // alert('herere');
+    if (search) {
+        var get_search_chat = search;
         dbRef.once("value").then(snap => {
             snap.forEach(message => {
                 if (message.val().name == get_search_chat) {
+                  
                     let activeClass = first ? 'activecht' : '';
 
                     $('.chatlist').text('');
                     $('.chatlist').append(`<li>
-                    <div class="chat-list ${activeClass}"
-                        data-receiverId=${message.key}
-                        data-senderId="${message.val().id}">
-                        <div class="chat-profile-img-box">
-                            <div class="chat-profile-img">
-                                <img src="${message.val().image}" class="img">
-
-                            </div>
-                            <p class="getname">
-                        ${message.val().name}
-                            </p>
+                        <div class="chat-list ${activeClass}"
+                            data-receiverId=${message.key}
+                            data-senderId="${message.val().id}">
+                            <div class="chat-profile-img-box">
+                                <div class="chat-profile-left">
+                                    <div class="chat-profile-img">
+                                        <img src="${message.val().image}" class="img">
+                                    </div>
+                                    <p class="getname">
+                                        ${message.val().name}
+                                    </p>
+                                </div>
+                                <p class='d-none count-msg' id="${message.key + 'count'}">0</p>
+                            </div> 
                         </div>
-                    </div>
-                </li>`);
+                    </li>`);
                     first = false;
                 }
 
-            }).than();
+            });
         })
     }
     else {
@@ -211,19 +214,21 @@ $("#searchmember").on("submit", function (e) {
                         data-receiverId=${message.key}
                         data-senderId="${message.val().id}">
                         <div class="chat-profile-img-box">
-                            <div class="chat-profile-img">
-                                <img src="${message.val().image}" class="img">
-
+                            <div class="chat-profile-left">
+                                <div class="chat-profile-img">
+                                    <img src="${message.val().image}" class="img">
+                                </div>
+                                <p class="getname">
+                                    ${message.val().name}
+                                </p>
                             </div>
-                            <p class="getname">
-                        ${message.val().name}
-                            </p>
-                        </div>
+                            <p class='d-none count-msg' id="${message.key + 'count'}">0</p>
+                        </div> 
                     </div>
                 </li>`);
                 first = false;
 
-            }).than();
+            });
         })
     }
 });

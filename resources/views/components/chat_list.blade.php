@@ -3,8 +3,8 @@
     <form class="" id="searchmember" role="search">
         <div class="form-group">
             <div class="formfield search-field">
-                <input type="search" class="form-control" placeholder="Search" aria-label="Search"
-                    aria-describedby="search-addon" name="search" autocomplete="off">
+                <input type="text" class="form-control" placeholder="Search" aria-label="Search"
+                    aria-describedby="search-addon" name="search" value="" autocomplete="off">
             </div>
         </div>
     </form>

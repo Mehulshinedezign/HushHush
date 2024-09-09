@@ -81,7 +81,8 @@
                     },
                     success: function(response) {
                         $('#single_query_Modal .modal-body').html(response.data);
-                        myModal.show();
+                        // myModal.show();
+                        myModel.show();
                     },
                     error: function(xhr, status, error) {
                         console.error('Error loading query details:', error);
@@ -89,7 +90,11 @@
                 });
             });
         });
-
+        // modal only closed when click on the closed button
+        var myModel = new bootstrap.Modal(document.getElementById('single_query_Modal'), {
+            backdrop: 'static',
+            keyboard: false
+        });
 
         function confirmReject(event, queryId) {
             event.preventDefault();
@@ -149,8 +154,16 @@
                 return false;
             }
 
+            // if (!cleaning_charges || cleaning_charges <= 0 || isNaN(cleaning_charges)) {
+            //     iziToast.error({
+            //         title: 'Error',
+            //         message: 'Please enter a valid cleaning charge',
+            //         position: 'topRight',
+            //     });
+            //     return false;
+            // }
 
-            if (!cleaning_charges || cleaning_charges <= 0 || isNaN(cleaning_charges)) {
+            if (isNaN(cleaning_charges)) {
                 iziToast.error({
                     title: 'Error',
                     message: 'Please enter a valid cleaning charge',
@@ -162,7 +175,7 @@
             // console.log('Delivery option after validation:', deliveryOption);
 
 
-            if (deliveryOption != 'pick_up' && (shipping_charges <= 0 || isNaN(shipping_charges))) {
+            if (deliveryOption != 'pick_up' && (isNaN(shipping_charges))) {
                 iziToast.error({
                     title: 'Error',
                     message: 'Please enter a valid shipping charge',
@@ -173,7 +186,7 @@
 
             Swal.fire({
                 title: 'Are you sure?',
-                text: `Are you sure you want to send an offer for this product at $${parseInt(price) + parseInt(shipping_charges) + parseInt(cleaning_charges)}?`,
+                text: `Are you sure you want to send an offer for this product`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#1B1B1B',

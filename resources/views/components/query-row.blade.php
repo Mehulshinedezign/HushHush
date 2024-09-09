@@ -84,7 +84,7 @@ COMPLETED
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
                     $price = $price + $query->shipping_charges + $query->cleaning_charges;
                 @endphp
-                <a href="{{ route('card.details', ['query' => $query->id, 'price' => $price]) }}"
+                <a href="{{ route('card.details', ['query' => jsencode_userdata($query->id), 'price' => jsencode_userdata($price)]) }}"
                     class="button outline-btn small-btn" data-price="{{ $price }}">Accept
                     offer for
                     {{ $price }}$</a>

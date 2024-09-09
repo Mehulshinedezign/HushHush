@@ -8,6 +8,9 @@
                     @if ($order->status == 'Cancelled')
                         <p class="cancelled-txt">Cancelled</p>
                     @endif
+                    @if ($order->status == 'Picked Up' && $order->dispute_status == 'Yes')
+                        <p class="cancelled-txt">Dispute</p>
+                    @endif
                 </div>
 
                 <div class="order-detail-box">
@@ -28,7 +31,11 @@
                                     <span><b>Cancellation Note: </b>{{ $order->cancellation_note }}</span>
                                 </div>
                             @endif
-
+                            @if (@$order->status == 'Picked Up' && @$order->dispute_status == 'Yes')
+                                <div>
+                                    <span><b>Subject : </b>{{ $order->disputeDetails->subject }}</span>
+                                </div>
+                            @endif
                         </div>
                         <div class="detail-summary right-detail">
                             <h6 class="order-detail-heading">Order Summary</h6>
@@ -65,7 +72,6 @@
                             </ul>
                         </div>
                     </div>
-
 
                     <div class="order-detail-photo">
                         <div class="row g-4">
@@ -276,6 +282,29 @@
                             @endif
                             {{-- end --}}
 
+                                <!-- Dispute images -->
+                        @if ($order->disputedOrderImages->isNotEmpty())
+                        <div class="col-12 col-sm-12 col-md-6">
+                            @if ('customer' == $order->disputedOrderImages[0]->uploaded_by)
+                                <h6 class="largeFont w-600 mb-3">Disputed Images by Customer</h6>
+                            @else
+                                <h6 class="largeFont w-600 mb-3">Disputed Images by You</h6>
+                            @endif
+                            <div class="product-pic-gallery">
+                                <div class="gallery-box">
+                                    @foreach ($order->disputedOrderImages as $disputedOrderImage)
+                                        <div>
+                                            <img src="{{ $disputedOrderImage->url }}" alt="disputed-image" />
+                                            {{-- <a class="download-uploaded-file"
+                                                href="{{ route('downloadattachment', [$disputedOrderImage->order_id, $disputedOrderImage->id]) }}"
+                                                target="_blank"> <i class="fas fa-download"></i></a> --}}
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    <!-- End of dispute images -->
                         </div>
                     </div>
 

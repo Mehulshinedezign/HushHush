@@ -1397,6 +1397,9 @@ border-color: #000;
 .rental-history-badge.danger .rental-badge-dot {
     background-color: #C66060;
 }
+.rental-history-badge.warning .rental-badge-dot {
+    background-color: #efb019;
+}
 
 .rental-history-badge {
     display: flex;
@@ -1886,8 +1889,8 @@ border-color: #000;
     display: flex;
     align-items: center;
     gap: 4px;
-    padding-left: 15px;
-    border-left: 1px solid var(--border-color);
+    /* padding-left: 15px;
+    border-left: 1px solid var(--border-color); */
 }
 
 .order-pro-details {
@@ -1895,6 +1898,7 @@ border-color: #000;
     flex-wrap: wrap;
     gap: 8px;
     row-gap: 15px;
+    flex-direction: column;
 }
 
 .order-details-list:first-child {

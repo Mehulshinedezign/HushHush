@@ -14,8 +14,12 @@ use Stripe\PaymentIntent;
 
 class BookingController extends Controller
 {
-    public function cardDetail(Query $query = null, $price = null)
+    public function cardDetail($query = null, $price = null)
     {
+       
+        $query = jsdecode_userdata($query);
+        $price = jsdecode_userdata($price);
+        // dd($price,$queryId);
         $user = auth()->user();
         $stripeCustomer = $user->createOrGetStripeCustomer();
         $intent = $user->createSetupIntent();
@@ -26,11 +30,12 @@ class BookingController extends Controller
 
     public function charge(Request $request)
     {
-        // dd($request->total_payment);
+        // dd($request->all());
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
         $user = auth()->user();
         $stripeCustomer = $user->createOrGetStripeCustomer();
-        $query =  Query::with('forUser', 'product')->where('id', $request->query_id)->first();
+        $query =  Query::with('forUser', 'product')->where('id', jsdecode_userdata($request->query_id))->first();
+        // dd($query);
         $order_commission = AdminSetting::where('key', 'order_commission')->first();
         //testing
 
@@ -80,7 +85,7 @@ class BookingController extends Controller
         $date = date('Y-m-d H:i:s');
 
         $status = PaymentIntent::create([
-            'amount' => floatval($request->total_payment) * 100, // amount in cents
+            'amount' => floatval(jsdecode_userdata($request->total_payment)) * 100, // amount in cents
             'currency' => 'usd',
             'customer' => $stripeCustomer->id,
             'payment_method' => $request->token,

@@ -92,7 +92,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title" id="exampleModalLabel">Add New Product</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <a href="{{ url('/') }}">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </a>
                 </div>
                 <div class="modal-body">
                     <div class="add-product-main">
@@ -508,7 +510,7 @@
 
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Rent Price/Day*</label>
+                                            <label for="">Rent Price/week*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_day" id=""
                                                     placeholder=""
@@ -525,7 +527,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group ">
-                                            <label for="">Rent Price/Week*</label>
+                                            <label for="">Rent Price/Two Weeks*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_week" id=""
                                                     placeholder=""
@@ -758,6 +760,17 @@
     <script src="{{ asset('js/custom/common.js') }}?ver={{ now() }}"></script>
 
     <script>
+        // close pop-up button remove input field data
+        // $(document).ready(function() {
+        //     $('.btn-close').click(function() {
+        //         // Clear all input fields inside the form
+        //         $('.upload-img-preview').text('');
+        //         $('#addProduct').find(
+        //                 'input[type="text"], input[type="file"], input[type="email"], select, textarea')
+        //             .val('');
+        //     });
+        // });
+        // end
         $(document).ready(function() {
             $('#mySelect').click(function() {
                 let $optionToMove = $('.moveMe');
@@ -774,22 +787,22 @@
         });
 
         $(document).ready(function() {
-        $('#flexSwitchCheckChecked, #shipmentToggle').on('change', function() {
-            // Get the current state of both checkboxes
-            const isManualPickupChecked = $('#flexSwitchCheckChecked').is(':checked');
-            const isShipmentChecked = $('#shipmentToggle').is(':checked');
+            $('#flexSwitchCheckChecked, #shipmentToggle').on('change', function() {
+                // Get the current state of both checkboxes
+                const isManualPickupChecked = $('#flexSwitchCheckChecked').is(':checked');
+                const isShipmentChecked = $('#shipmentToggle').is(':checked');
 
-            // If both are unchecked, prevent the change
-            if (!isManualPickupChecked && !isShipmentChecked) {
-                $(this).prop('checked', true); // Re-check the checkbox that was just unchecked
-                iziToast.error({
+                // If both are unchecked, prevent the change
+                if (!isManualPickupChecked && !isShipmentChecked) {
+                    $(this).prop('checked', true); // Re-check the checkbox that was just unchecked
+                    iziToast.error({
                         title: 'Error',
                         message: 'At least one option must be selected.',
                         position: 'topRight',
                     });
-            }
+                }
+            });
         });
-    });
 
         jQuery(document).ready(function() {
             $('#parent-category').on('change', function() {
@@ -1244,7 +1257,13 @@
                 var messageCount = countSingleChatCount(chat_list);
                 messageCount.then(m => {
                     // show total number of unseen message in the header
-                    $('.userIconbtn').text(m);
+                    if(m){
+                        console.log(m,'herer')
+                        $('.userIconbtn').text(m);
+                    }else{
+                        $('.userIconbtn').text('');
+
+                    }
                 });
 
                 // Set up a listener for new messages in each chat
@@ -1266,7 +1285,11 @@
                             // Update the unseen message count
                             messageCount.then(currentCount => {
                                 let updatedCount = currentCount + 1;
-                                $('.userIconbtn').text(updatedCount);
+                                if (updatedCount > 0) {
+                                    $('.userIconbtn').text(updatedCount);
+                                } else {
+                                    $('.userIconbtn').text('');
+                                }
                             });
                         }
 

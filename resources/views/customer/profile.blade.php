@@ -61,7 +61,7 @@
                                     <h3>Address</h3>
 
                                     @if ($retailer && $retailer->userDetail)
-                                        <p>{{ $retailer->userDetail->complete_address }}</p>
+                                        <p>{{@$retailer->userDetail->city. ' , ' . @$retailer->userDetail->state. ' , ' . @$retailer->userDetail->country}}</p>
                                     @endif
 
                                     {{-- <p>Akshya Nagar 1st Block 1st Cross, Rammurthy nagar Los Angeles , USA</p> --}}

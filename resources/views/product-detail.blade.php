@@ -234,7 +234,7 @@
                                             <div id="collapseTwo" class="accordion-collapse collapse show"
                                                 aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                 <div class="accordion-body">
-                                                    {{ @$product->productCompleteLocation->city . ' ,' . @$product->productCompleteLocation->country }}
+                                                    {{ @$product->productCompleteLocation->city . ' , ' . @$product->productCompleteLocation->state. ' , ' . @$product->productCompleteLocation->country }}
                                                 </div>
                                             </div>
                                         </div>
@@ -269,6 +269,7 @@
                                         </div>
                                         <h4>{{ $product->retailer->name }}</h4>
                                         @auth
+                                        @if($product->user_id != auth()->id())
                                             <div><a href="javascript:void(0)"
                                                     class="button outline-btn small-btn chat-list-profile"
                                                     data-senderId="{{ auth()->user()->id }}"
@@ -279,6 +280,7 @@
                                                     data-name="{{ auth()->user()->name }}"><i
                                                         class="fa-solid fa-comments"></i>
                                                     Chat</a></div>
+                                                    @endif
                                         @endauth
                                         @guest
                                             <div><a href="{{ route('login') }}" class="button outline-btn small-btn"><i

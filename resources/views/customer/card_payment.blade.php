@@ -96,8 +96,8 @@
 
                             </div>
                         </div>
-                        <input type="hidden" value="{{ $price }}" id="total_payment">
-                        <input type="hidden" value="{{ $query->id }}" id="query">
+                        <input type="hidden" value="{{ jsencode_userdata($price) }}" id="total_payment">
+                        <input type="hidden" value="{{ jsencode_userdata($query) }}" id="query">
                         {{-- <input type="hidden" value="{{ $security->type }}" id="security_option_type">
                         <input type="hidden" value="{{ $security->value }}" id="security_option_value"> --}}
                         <button type="submit" id="payNow" class="button primary-btn  full-btn">Pay Now

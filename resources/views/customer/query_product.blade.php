@@ -1,6 +1,6 @@
 <div class="query-detail-box">
     <button type="button" class="btn-close query_btn_close" data-bs-dismiss="modal" aria-label="Close"></button>
-    <h3>Query Product</h3>
+    <h3>Inquiry Product</h3>
     <div class="row g-3">
         <div class="col-md-12">
             <div class="query-detail-img">
@@ -24,48 +24,145 @@
         </div>
         <div class="col-md-12">
             <div class="query-detail-info">
-                <h3>Query</h3>
+                <h3>Message</h3>
                 @if ($query)
                     <p>{{ $query->query_message ?? '' }}</p>
                 @endif
             </div>
         </div>
+        <div class="col-md-12">
+            <div class="query-detail-info">
+                <h3>Actual Price</h3>
+                @if ($query)
+                    <p>{{ $query->getCalculatedPrice($query->date_range) ?? '' }}</p>
+                @endif
+            </div>
+        </div>
+        @if (isset($query->negotiate_price))
+            <div class="col-md-12">
+                <div class="query-detail-info">
+                    <h3>Negotiate Price</h3>
+                    <p>{{ @$query->negotiate_price ?? '' }}</p>
+                </div>
+            </div>
+        @endif
+
+        @if (isset($query->cleaning_charges))
+            <div class="col-md-12">
+                <div class="query-detail-info">
+                    <h3>Cleaning Price</h3>
+                    <p>{{ @$query->cleaning_charges ?? '' }}</p>
+                </div>
+            </div>
+        @endif
+
+        @if (isset($query->shipping_charges) && $query->shipping_charges != 0)
+            <div class="col-md-12">
+                <div class="query-detail-info">
+                    <h3>Shipment Price</h3>
+                    <p>{{ @$query->shipping_charges ?? '' }}</p>
+                </div>
+            </div>
+        @endif
+
         @if (@$query->user_id != auth()->user()->id)
-        <div class="col-md-12">
-            <div class="query-detail-info">
-                <h3>Customer</h3>
-                @if ($query)
-                    <p>{{ $query->user->name ?? '' }}</p>
-                @endif
-            </div>
+            <div class="col-md-12">
+                <div class="query-detail-info">
+                    <h3>Customer</h3>
+                    @if ($query)
+                        <p>{{ $query->user->name ?? '' }}</p>
+                    @endif
+                </div>
 
-        </div>
-        <div class="col-md-12">
-            <div class="query-detail-info">
-                <h3>Customer Address</h3>
-                @if ($query)
-                    <p>{{ @$query->user->userDetail->complete_address ?? 'NA' }}</p>
-                @endif
             </div>
-        </div>
+            @if ($query->status == 'PENDING')
+                <div class="query-detail-info">
+                    @if ($query->delivery_option == 'ship_to_me')
+                        <div class="query-detail-info">
+                            <h3>Shipment Address</h3>
+                            @if ($query)
+                                <p>{{ @$query->user->userDetail->city . ', ' . @$query->user->userDetail->state . ', ' . @$query->user->userDetail->country ?? 'NA' }}
+                                </p>
+                            @endif
+                        </div>
+                    @else
+                        <div class="query-detail-info">
+                            <h3>Picked-up Address</h3>
+                            @if ($query)
+                                <p>{{ @$query->product->locations[0]->city . ', ' . @$query->product->locations[0]->state . ',' . @$query->product->locations[0]->country ?? 'NA' }}
+                                </p>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+            @else
+                <div class="col-md-12">
+                    @if ($query->delivery_option == 'ship_to_me')
+                        <div class="query-detail-info">
+                            <h3>Shipment Address</h3>
+                            @if ($query)
+                                <p>{{ @$query->user->userDetail->complete_address ?? 'NA' }}</p>
+                            @endif
+                        </div>
+                    @else
+                        <div class="query-detail-info">
+                            <h3>Picked-up Address</h3>
+                            @if ($query)
+                                <p>{{ @$query->product->locations[0]->pick_up_location ?? 'NA' }}</p>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+            @endif
         @else
-        <div class="col-md-12">
-            <div class="query-detail-info">
-                <h3>Customer</h3>
-                @if ($query)
-                    <p>{{ $query->forUser->name ?? '' }}</p>
-                @endif
-            </div>
+            <div class="col-md-12">
+                <div class="query-detail-info">
+                    <h3>Lender</h3>
+                    @if ($query)
+                        <p>{{ $query->forUser->name ?? '' }}</p>
+                    @endif
+                </div>
 
-        </div>
-        <div class="col-md-12">
-            <div class="query-detail-info">
-                <h3>Customer Address</h3>
-                @if ($query)
-                    <p>{{ @$query->forUser->userDetail->complete_address ?? 'NA' }}</p>
-                @endif
             </div>
-        </div>
+            @if ($query->status == 'PENDING')
+                <div class="query-detail-info">
+                    @if ($query->delivery_option == 'ship_to_me')
+                        <div class="query-detail-info">
+                            <h3>Shipment Address</h3>
+                            @if ($query)
+                                <p>{{ @$query->user->userDetail->city . ', ' . @$query->user->userDetail->state . ', ' . @$query->user->userDetail->country ?? 'NA' }}
+                                </p>
+                            @endif
+                        </div>
+                    @else
+                        <div class="query-detail-info">
+                            <h3>Picked-up Address</h3>
+                            @if ($query)
+                                <p>{{ @$query->product->locations[0]->city . ', ' . @$query->product->locations[0]->state . ',' . @$query->product->locations[0]->country ?? 'NA' }}
+                                </p>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+            @else
+                <div class="col-md-12">
+                    @if ($query->delivery_option == 'ship_to_me')
+                        <div class="query-detail-info">
+                            <h3>Shipment Address</h3>
+                            @if ($query)
+                                <p>{{ @$query->user->userDetail->complete_address ?? 'NA' }}</p>
+                            @endif
+                        </div>
+                    @else
+                        <div class="query-detail-info">
+                            <h3>Picked-up Address</h3>
+                            @if ($query)
+                                <p>{{ @$query->product->locations[0]->pick_up_location ?? 'NA' }}</p>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+            @endif
         @endif
 
         {{-- @if (@$query->status == 'PENDING')

@@ -42,6 +42,16 @@
                                     </div>
                                 </button>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pills-dispute-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-dispute" type="button" role="tab"
+                                    aria-controls="pills-dispute" aria-selected="false">
+                                    <div class="rental-history-badge wraning">
+                                        <div class="rental-badge-dot"></div>
+                                        <p>Dispute</p>
+                                    </div>
+                                </button>
+                            </li>
                         </ul>
                         {{-- <div class="form-group m-0">
                             <div class="formfield">
@@ -71,6 +81,10 @@
                         <div class="tab-pane fade @if(request()->tab=='cancelled') show active @endif " id="pills-canceled" role="tabpanel"
                             aria-labelledby="pills-canceled-tab" tabindex="0">
                             @include('retailer.cancel-orders')
+                        </div>
+                        <div class="tab-pane fade " id="pills-dispute" role="tabpanel"
+                            aria-labelledby="pills-dispute-tab" tabindex="0">
+                            @include('retailer.dispute-order')
                         </div>
                     </div>
                 </div>

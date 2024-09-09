@@ -133,10 +133,10 @@ class QueryController extends Controller
         // dd($request->all());
         DB::beginTransaction();
         try{
-            Validator::make($request->all(), [
-                'cleaning_charges' => 'required|numeric|min:1',
-                'shipping_charges' => 'required|numeric',
-            ])->validate();
+            // Validator::make($request->all(), [
+            //     'cleaning_charges' => 'required|numeric|min:1',
+            //     'shipping_charges' => 'required|numeric',
+            // ])->validate();
 
             $query_product = Query::where('id', $id)->first();
 

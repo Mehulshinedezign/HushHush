@@ -49,7 +49,6 @@
             <div class="modal-content">
                 <div class="modal-body" id="data-query">
 
-
                 </div>
             </div>
         </div>
@@ -77,7 +76,9 @@
                     },
                     success: function(response) {
                         $('#single_query_Modal .modal-body').html(response.data);
-                        singleQueryModal.show();
+                        // singleQueryModal.show();
+                        myModal.show();
+
                     },
                     error: function(xhr, status, error) {
                         console.error('Error loading query details:', error);
@@ -88,14 +89,19 @@
             $('.my_query_details').hide();
 
             $(document).on('click', '.query_btn_close', function() {
-                singleQueryModal.hide();
+                // singleQueryModal.hide();
+                myModal.hide();
+
             });
             $('#single_query_Modal').on('hidden.bs.modal', function() {
                 $('#single_query_Modal .modal-body').html('');
             });
 
-
-
+            // modal only closed when click on the closed button
+            var myModal = new bootstrap.Modal(document.getElementById('single_query_Modal'), {
+                backdrop: 'static',
+                keyboard: false
+            });
             // Accept Reject and Pendding
             // function fetchQueries(status) {
             //     $.ajax({
