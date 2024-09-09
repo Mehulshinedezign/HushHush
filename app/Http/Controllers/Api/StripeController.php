@@ -99,7 +99,9 @@ class StripeController extends Controller
 
         // Validate the request input
         $validator = Validator::make($request->all(), [
-            'paymentIntentId' => 'required|string', // Expect the paymentIntent ID from the frontend
+            'amount' => 'required|numeric',
+            'currency' => 'required|string',
+            'payment_method' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -117,27 +119,37 @@ class StripeController extends Controller
         }
 
         try {
-            // Fetch the PaymentIntent from Stripe using the provided paymentIntentId
-            $paymentIntent = \Stripe\PaymentIntent::retrieve($request->paymentIntentId);
+            // Calculate total amount
+            $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
+            $complete_amount = $price + $query->cleaning_charges + $query->shipping_charges;
+            // dd($complete_amount);
 
-            // Retrieve the amount and currency directly from the PaymentIntent object
-            $intentAmount = $paymentIntent->amount / 100; // Stripe stores amounts in cents, convert to main currency unit
-            $intentCurrency = $paymentIntent->currency;
+            if ($complete_amount != $request->amount) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Payment amount mismatch',
+                ], 400);
+            }
 
-            // Calculate the total amount based on the query
-            // $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
-            // $completeAmount = $price + $query->cleaning_charges + $query->shipping_charges;
+            // Create or retrieve Stripe customer for the user
+            $stripeCustomer = $user->createOrGetStripeCustomer();
 
-            // if ($completeAmount != $intentAmount) {
-            //     return response()->json([
-            //         'status' => false,
-            //         'message' => 'Payment amount mismatch',
-            //     ], 400);
-            // }
+            // Create the PaymentIntent with Stripe
+            $paymentIntent = PaymentIntent::create([
+                'amount' => $request->amount * 100, // Stripe expects amount in cents
+                'currency' => $request->currency,
+                'payment_method' => $request->payment_method,
+                'confirm' => true,
+                'customer' => $stripeCustomer->id, // Attach the Stripe customer ID
+                'automatic_payment_methods' => [
+                    'enabled' => true,
+                    'allow_redirects' => 'never',
+                ],
+            ]);
 
-            // Check if the payment was successful
+            // Check if the payment succeeded
             if ($paymentIntent->status == 'succeeded') {
-                // Parse the query's date range
+                // Parse date and time from the query
                 $fromDateTime = Carbon::parse($query->from_date);
                 $toDateTime = Carbon::parse($query->to_date);
 
@@ -145,28 +157,26 @@ class StripeController extends Controller
                 $order = Order::create([
                     'user_id' => $query->user_id,
                     'retailer_id' => $query->for_user,
-                    'transaction_id' => null, // Temporary, will update after transaction creation
+                    'transaction_id' => null, // Temporary, will be updated after transaction creation
                     'product_id' => $query->product_id,
                     'query_id' => $query->id,
                     'from_date' => $fromDateTime->toDateString(),
                     'to_date' => $toDateTime->toDateString(),
                     'order_date' => now(),
                     'status' => 'Waiting',
-                    'total' => $intentAmount,
-                    'currency' => strtoupper($intentCurrency), // Store the currency in uppercase
+                    'total' => $request->amount,
                 ]);
 
                 // Mark the query as completed
                 $query->update(['status' => 'COMPLETED']);
 
-                // Create a transaction record
+                // Record the transaction
                 $transaction = Transaction::create([
                     'payment_id' => $paymentIntent->id,
                     'order_id' => $order->id,
                     'user_id' => $user->id,
                     'payment_method' => $paymentIntent->payment_method_types[0],
-                    'total' => $intentAmount,
-                    'currency' => strtoupper($intentCurrency), // Store currency
+                    'total' => $paymentIntent->amount,
                     'date' => now(),
                     'status' => $paymentIntent->status,
                     'gateway_response' => json_encode($paymentIntent),
@@ -177,13 +187,13 @@ class StripeController extends Controller
 
                 return response()->json([
                     'status' => true,
-                    'message' => 'Payment processed and order created successfully',
-                    'order' => $order,
+                    'message' => 'Payment successful',
+                    'order' => $order
                 ], 200);
             } else {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Payment failed on Stripe',
+                    'message' => 'Payment failed',
                     'paymentIntent' => $paymentIntent,
                 ], 400);
             }
@@ -196,52 +206,15 @@ class StripeController extends Controller
     }
 
 
-
-
     public function createIntent(Request $request)
     {
-        // Validate incoming request data
-        $validator = Validator::make($request->all(), [
-            'amount' => 'required|numeric|min:0.5',  // Stripe minimum is $0.50 USD
-            'currency' => 'required|string|size:3',  // Standard currency code size is 3 (e.g., USD, EUR)
-        ]);
-
-        // Check if validation fails
-        if ($validator->fails()) {
-            return response()->json(['status' => false, 'message' => $validator->errors()->first()], 400);
-        }
-
         try {
-            // Create a payment intent in Stripe
-            $paymentIntent = \Stripe\PaymentIntent::create([
-                'amount' => $request->amount * 100,  // Convert amount to cents
-                'currency' => strtolower($request->currency),  // Stripe expects lowercase currency codes
-                'payment_method_types' => ['card'],  // Stripe uses 'card', not 'cards'
-            ]);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Payment Intent Created Successfully',
-                'intent' => $paymentIntent,
-            ], 200);
-        } catch (\Stripe\Exception\CardException $e) {
-            // Handle card-related errors from Stripe
-            return response()->json(['status' => false, 'message' => 'Card Error: ' . $e->getError()->message], 400);
-        } catch (\Stripe\Exception\RateLimitException $e) {
-            // Handle rate limit errors
-            return response()->json(['status' => false, 'message' => 'Rate Limit Error: ' . $e->getError()->message], 429);
-        } catch (\Stripe\Exception\InvalidRequestException $e) {
-            // Handle invalid request errors from Stripe
-            return response()->json(['status' => false, 'message' => 'Invalid Request: ' . $e->getError()->message], 400);
-        } catch (\Stripe\Exception\ApiConnectionException $e) {
-            // Handle network communication errors with Stripe
-            return response()->json(['status' => false, 'message' => 'Network Error: ' . $e->getError()->message], 500);
-        } catch (\Stripe\Exception\ApiErrorException $e) {
-            // Handle general Stripe API errors
-            return response()->json(['status' => false, 'message' => 'Stripe API Error: ' . $e->getError()->message], 500);
+            $user = auth()->user();
+            $stripeCustomer = $user->createOrGetStripeCustomer();
+            $intent = $user->createSetupIntent();
+            return response()->json(['status' => true, 'message' => 'Intent Created Succesfully', 'intent' => $intent], 200);
         } catch (\Exception $e) {
-            // Handle any other non-Stripe-related exceptions
-            return response()->json(['status' => false, 'message' => 'Error: ' . $e->getMessage()], 500);
+            return response()->json(['status' => false, 'message' => $e->getMessage()], 500);
         }
     }
 }
