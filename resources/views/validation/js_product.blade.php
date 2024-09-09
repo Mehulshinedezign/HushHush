@@ -9,7 +9,7 @@
         const commission = parseInt("{{ adminsetting()->value }}");
 
         $.validator.addMethod("completeAddress", function(value, element) {
-            return $('#product_address1').val() !== '' && $('#product_address2').val() !== '' && $(
+            return $('#product_address1').val() !== ''&& $(
                 '#product_country').val() !== '' && $('#product_state').val() !== '' ;
         }, "Please enter the complete address");
         const rules = {

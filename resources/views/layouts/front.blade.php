@@ -161,7 +161,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Category/Subcategory</label>
+                                            <label for="">Category/Subcategory*</label>
                                             <div class="duel-select-field">
                                                 <div class="formfield">
                                                     <select name="category"
@@ -212,7 +212,7 @@
                                             <label for="">Size</label>
                                             <div class="formfield">
                                                 <select class="form-control" name="size">
-                                                    <option value="">Size</option>
+                                                    <option value="">Size*</option>
 
                                                 </select>
                                                 <span class="form-icon">
@@ -231,7 +231,7 @@
                                             <label for="">Brand</label>
                                             <div class="formfield">
                                                 <select class="form-control" id="mySelect" name="brand">
-                                                    <option value="">Brand</option>
+                                                    <option value="">Brand*</option>
                                                     @foreach (getBrands() as $brand)
                                                         <option value="{{ $brand->id }}"
                                                             class="@if ($brand->name == 'Other') moveMe @endif">
@@ -255,7 +255,7 @@
 
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Color</label>
+                                            <label for="">Color*</label>
                                             <div class="formfield">
                                                 <select class="form-control" id="selectColor" name="color">
                                                     <option value="">Color</option>
@@ -280,7 +280,7 @@
                                     <div class="col-lg-12 col-md-12 col-sm-12">
                                         <div class="form-group">
                                             <div class="product_manual_location">
-                                                <label for="">Delivery Option</label>
+                                                <label for="">Delivery Option*</label>
 
                                                 <div class="form-check form-switch">
                                                     <label class="form-check-label"
@@ -328,7 +328,7 @@
 
                                     <div class="col-lg-6 col-md-3 col-sm-12 product_sub_data">
                                         <div class="form-group">
-                                            <label for="">Address line 2*</label>
+                                            <label for="">Address line 2</label>
                                             <div class="formfield">
                                                 <input type="text"
                                                     class="produt_input form-control form-class @error('address2') is-invalid @enderror"
@@ -412,7 +412,7 @@
                                                 <input type="text" name="non_available_dates"
                                                     id="non_available_date" placeholder="Select Dates"
                                                     class="form-control daterange-cus">
-                                                <span class="form-icon cal-icon">
+                                                <span class="form-icon cal-icon" id="trigger-calendar">
                                                     <img src="{{ asset('front/images/calender-icon.svg') }}"
                                                         alt="img">
                                                 </span>
@@ -423,6 +423,7 @@
                                             @enderror
                                         </div>
                                     </div>
+
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Condition*</label>
@@ -772,6 +773,14 @@
         //     });
         // });
         // end
+        $(document).ready(function() {
+            // When the calendar icon is clicked, trigger the date picker input
+            $('#trigger-calendar').on('click', function() {
+                $('#non_available_date').focus(); // Focuses the input to trigger the datepicker
+            });
+
+            // Initialize the date range picker (make sure you have daterangepicker.js included)
+        });
         $(document).ready(function() {
             $('#mySelect').click(function() {
                 let $optionToMove = $('.moveMe');
@@ -1258,10 +1267,10 @@
                 var messageCount = countSingleChatCount(chat_list);
                 messageCount.then(m => {
                     // show total number of unseen message in the header
-                    if(m){
-                        console.log(m,'herer')
+                    if (m) {
+                        console.log(m, 'herer')
                         $('.userIconbtn').text(m);
-                    }else{
+                    } else {
                         $('.userIconbtn').text('');
 
                     }
@@ -1359,7 +1368,7 @@
         <script defer src="{{ asset('js/custom/chatlist.js') }}"></script>
     @endauth
     @include('validation')
-    {{-- @include('validation.js_product') --}}
+    @include('validation.js_product')
     @stack('scripts')
 </body>
 

@@ -30,12 +30,12 @@
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item">Size:</span>
-                                    {{-- <span class="">{{ getsizes($product->size) ?? 'N/A' }}</span> --}}
+                                    <span class="">{{ @$product->get_size->name ?? 'N/A' }}</span>
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item">Rent:</span>
                                     <span
-                                        class="">{{ $product->rent_day ? $product->rent_day."/day" : 'N/A' }},{{ $product->rent_week ? $product->rent_week."/week" : 'N/A' }},{{ $product->rent_month ? $product->rent_month."/month" : 'N/A' }}
+                                        class="">{{ @$product->rent_day ? @$product->rent_day."/day" : 'N/A' }},{{ @$product->rent_week ? @$product->rent_week."/week" : 'N/A' }},{{ @$product->rent_month ? @$product->rent_month."/month" : 'N/A' }}
                                     </span>
                                 </li>
                                 <li class="list-col">
