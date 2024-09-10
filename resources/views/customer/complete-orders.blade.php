@@ -163,7 +163,7 @@
             var product_id = $(this).attr('data-productId')
             var order_id = $(this).attr('data-orderId')
             $('#rating_product_id').val(product_id);
-            $('#rating_order_id').val(product_id);
+            $('#rating_order_id').val(order_id);
         })
         $('#rating_btn').click(function(e) {
             e.preventDefault();
