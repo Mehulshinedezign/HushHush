@@ -113,9 +113,11 @@
                                                             </div>
                                                             <p>{{ @$rating->created_at->format('M d, Y') }}</p>
                                                         </div>
-                                                        <div class="product-review-message">
-                                                            <p>{{ @$rating->review }}</p>
-                                                        </div>
+                                                        @if ($rating->review != null)
+                                                            <div class="product-review-message">
+                                                                <p>{{ @$rating->review }}</p>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </li>
                                             </ul>
@@ -182,9 +184,9 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                                                            <h4>Size :</h4>
-                                                                            <p>{{ $product->size ?? 'N/A' }}</p>
-                                                                        </div> -->
+                                                                                <h4>Size :</h4>
+                                                                                <p>{{ $product->size ?? 'N/A' }}</p>
+                                                                            </div> -->
 
 
                             </div>
