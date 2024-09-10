@@ -124,7 +124,7 @@
                 </div>
 
             </div>
-            @if ($query->status == 'PENDING')
+            @if ($query->status == 'PENDING' || $query->status=='ACCEPTED')
                 <div class="query-detail-info">
                     @if ($query->delivery_option == 'ship_to_me')
                         <div class="query-detail-info">

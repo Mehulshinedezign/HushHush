@@ -155,11 +155,11 @@
                             <div class="pro-desc-info">
                                 <div class="pro-desc-info-box">
                                     <h4>Category :</h4>
-                                    <p>{{ $product->categories->name ?? '' }}</p>
+                                    <p>{{ $product->categories->name ?? 'N/A' }}</p>
                                 </div>
                                 <div class="pro-desc-info-box">
                                     <h4>Size:</h4>
-                                    <p>{{ @$product->size ?? 'L' }}</p>
+                                    <p>{{ @$product->size ?? 'N/A' }}</p>
                                 </div>
 
                             </div>

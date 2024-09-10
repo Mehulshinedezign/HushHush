@@ -141,7 +141,7 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-        // dd('shipment',$request->shipment,'mannual',$request->manual_location);
+        // dd($request->all());
         try {
             DB::beginTransaction();
             $category = jsdecode_userdata($request->category);
@@ -186,6 +186,7 @@ class ProductController extends Controller
                 'non_available_dates' => $request->non_available_dates ?? 0,
             ];
             $product = Product::create($data);
+            // dd($data ,$product);
 
             // Handling images
             if ($request->hasFile('images')) {
@@ -245,7 +246,6 @@ class ProductController extends Controller
             DB::commit();
             return redirect()->route('product')->with('success', "Your product has been uploaded successfully.");
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
         }

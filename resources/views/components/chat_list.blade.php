@@ -5,6 +5,7 @@
             <div class="formfield search-field">
                 <input type="text" class="form-control" placeholder="Search" aria-label="Search"
                     aria-describedby="search-addon" name="search" value="" autocomplete="off">
+                    <span class="form-icon" id="chatClear">X</span>
             </div>
         </div>
     </form>

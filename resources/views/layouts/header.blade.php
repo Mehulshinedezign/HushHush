@@ -157,7 +157,7 @@
                         <a href="{{ route( 'index',['sort'=>'old']) }}">Oldest</a>
                      </li>
                      <li>
-                        <a href="{{ route( 'index',['sort'=>'costier']) }}">Costier</a>
+                        <a href="{{ route( 'index',['sort'=>'costier']) }}">Costlier</a>
                      </li>
                      {{-- <li>
                         <a href="{{ url('/') }}">Categories</a>

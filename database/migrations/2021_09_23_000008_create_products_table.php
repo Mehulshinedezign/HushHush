@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration
             // $table->foreignId('category_id')->constrained('categories');
             $table->foreignId('category_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->integer('subcat_id')->nullable();
-            $table->integer('size')->nullable();
+            $table->string('size')->nullable();
             $table->integer('brand')->nullable();
             $table->integer('color')->nullable();
             $table->string('product_condition');

@@ -1,7 +1,9 @@
-
 <div class="row g-3">
-    @forelse ($orders as $order)
-    @if ($order->status =='Picked Up' && $order->dispute_status == 'Yes')
+    @php $empty = true; @endphp
+
+    @foreach ($orders as $order)
+        @if ($order->status == 'Picked Up' && $order->dispute_status == 'Yes')
+            @php $empty = false; @endphp
             <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6">
                 <div class="order-his-card">
                     <div class="order-card-top">
@@ -13,7 +15,7 @@
                         <div class="name-with-status">
                             <p>{{ $order->product->name }}</p>
                             <p class="cancelled-txt">Dispute</p>
-                       </div>
+                        </div>
                         <div class="pro-desc-prize">
                             <h3>${{ $order->total }}</h3>
                             {{-- <div class="badge day-badge">
@@ -32,13 +34,13 @@
                             </div>
                             <div class="order-details-list">
                                 <p>Subject :</p>
-                                <h4>{{ $order->disputeDetails->subject ??''}}</h4>
+                                <h4>{{ $order->disputeDetails->subject ?? '' }}</h4>
                             </div>
                             <div class="order-details-list">
                                 <p>Description:</p>
-                                <h4>{{ $order->disputeDetails->description ??''}}</h4>
+                                <h4>{{ $order->disputeDetails->description ?? '' }}</h4>
                             </div>
-                            
+
                             {{-- <div class="order-details-list">
                                 <p>Category :</p>
                                 <h4>{{ $order->product->category->name }}</h4>
@@ -64,11 +66,11 @@
                 </div>
             </div>
         @endif
-    @empty
+    @endforeach
+</div>
+@if ($empty)
     <div class="list-empty-box">
-        <img src="{{ asset('front/images/Empty 1.svg') }}">
+        <img src="{{ asset('front/images/Empty 1.svg') }}" alt="No orders available">
         <h3 class="text-center">No orders Available</h3>
     </div>
-    @endforelse
-
-</div>
+@endif

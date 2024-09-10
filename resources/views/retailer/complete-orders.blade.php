@@ -29,8 +29,12 @@
 
 <div class="order-his-card-box">
     <div class="row g-3">
+        @php $empty = true; @endphp
+
         @forelse ($orders as $order)
+
             @if ($order->status == 'Completed')
+                @php $empty = false; @endphp
                 <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6">
                     <div class="order-his-card">
                         <div class="order-card-top">
@@ -85,13 +89,18 @@
                 </div>
             @endif
         @empty
+            <div class="list-empty-box">
+                <img src="{{ asset('front/images/Empty 1.svg') }}">
+                <h3 class="text-center">No orders Available</h3>
+            </div>
+        @endforelse
+    </div>
+    @if ($empty)
         <div class="list-empty-box">
-            <img src="{{ asset('front/images/Empty 1.svg') }}">
+            <img src="{{ asset('front/images/Empty 1.svg') }}" alt="No orders available">
             <h3 class="text-center">No orders Available</h3>
         </div>
-        @endforelse
-
-    </div>
+    @endif
     {{-- <div class="pagination-main">
         <a href="javascript:void(0)" class="pagination-box">
             01

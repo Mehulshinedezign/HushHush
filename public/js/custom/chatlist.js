@@ -166,6 +166,9 @@ function userliststatus() {
     });
 }
 
+$('#chatClear').on('click',function(){
+    $('#searchmember').val('');
+})
 
 // chat search form submit
 $("#searchmember input").on("input", function (e) {
