@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Account Setting</h3>
+                <h3 class="modal-title">Add Your Address</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -38,7 +38,7 @@
                                     <div class="my-pro-edit-form">
                                         <div class="form-group">
                                             <div class="formfield">
-                                                <input type="text" placeholder="address1" id="addressline12"
+                                                <input type="text" placeholder="Address1" id="addressline12"
                                                     name="addressline1"
                                                     class="form-control form-class @error('addressline1') is-invalid @enderror"
                                                     value="{{ $user->userDetail->address1 ?? '' }}">
@@ -58,7 +58,7 @@
                                     <div class="my-pro-edit-form">
                                         <div class="form-group">
                                             <div class="formfield">
-                                                <input type="text" placeholder="address2" id="addressline21"
+                                                <input type="text" placeholder="Address2" id="addressline21"
                                                     name="addressline2"
                                                     class="form-control form-class @error('addressline2') is-invalid @enderror"
                                                     value="{{ $user->userDetail->address2 ?? '' }}">
@@ -98,7 +98,7 @@
                                     <div class="my-pro-edit-form">
                                         <div class="form-group">
                                             <div class="formfield">
-                                                <input type="text" name="state" placeholder="state"
+                                                <input type="text" name="state" placeholder="State"
                                                     value="{{ $user->userDetail->state ?? '' }}" id="selectState"
                                                     class="form-control form-class @error('state') is-invalid @enderror">
                                                 @error('state')
@@ -136,9 +136,9 @@
                                     <div class="my-pro-edit-form">
                                         <div class="form-group">
                                             <div class="formfield">
-                                                <input type="text" name="zipcode" id="zipcode"
+                                                <input type="text" name="zipcode" id="zip-code"
                                                     value="{{ $user->userDetail->zipcode ?? '' }}"
-                                                    placeholder="zipcode"
+                                                    placeholder="Zipcode"
                                                     class="form-control form-class @error('zipcode') is-invalid @enderror">
                                                 @error('zipcode')
                                                     <span class="invalid-feedback" role="alert">
@@ -268,7 +268,7 @@
         $('#address').on('input', function() {
             if ($(this).val() === '') {
                 $(".address_data").slideUp("slow");
-                $('#addressline12, #addressline21, #selectCountry, #selectState, #selectCity, #zipcode').val('');
+                $('#addressline12, #addressline21, #selectCountry, #selectState, #selectCity, #zip-code').val('');
             }
         });
 
@@ -276,12 +276,12 @@
             var input = document.getElementById('address');
             var autocomplete = new google.maps.places.Autocomplete(input);
 
-            $('#selectCountry, #selectState, #selectCity, #zipcode').prop('readonly',
+            $('#selectCountry, #selectState, #selectCity, #zip-code').prop('readonly',
                 true);
 
             autocomplete.addListener('place_changed', function() {
                 var place = autocomplete.getPlace();
-                $('#addressline12, #addressline21, #selectCountry, #selectState, #selectCity, #zipcode').val('');
+                $('#addressline12, #addressline21, #selectCountry, #selectState, #selectCity, #zip-code').val('');
 
                 var zipcode = null; // Initialize zipcode to null
 
@@ -303,12 +303,11 @@
                         $('#selectCity').val(place.address_components[i].long_name);
                     }
                     if (addressType === 'postal_code') {
-                        console.log(place.address_components[i].long_name)
-                        zipcode = place.address_components[i]
-                            .long_name; // Assign zipcode if available
+                        console.log($('#zip-code') , place.address_components[i].long_name)
+                        $('#zip-code').val(place.address_components[i].long_name); // Assign zipcode if available
                     }
                 }
-                $('#zipcode').val(zipcode); // Set zipcode field
+                // $('#zip-code').val(zipcode); // Set zipcode field
 
                 function setReadonly(selector) {
                     if ($(selector).val()) {
