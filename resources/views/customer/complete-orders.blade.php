@@ -27,7 +27,7 @@
                         <div class="order-card-top">
                             <div class="order-card-img">
                                 <a href="{{ route('vieworder', ['order' => $order->id]) }}">
-                                    <img src="{{ @$order->product->thumbnailImage->file_path ?? 'N/a'}}" alt="profile">
+                                    <img src="{{ @$order->product->thumbnailImage->file_path ?? 'N/a' }}" alt="profile">
                                 </a>
                             </div>
                             <p>{{ $order->product->name }}</p>
@@ -76,11 +76,11 @@
                 </div>
             @endif
         @endforeach
-        @if($empty)
-        <div class="list-empty-box">
-            <img src="{{ asset('front/images/Empty 1.svg') }}" alt="No orders available">
-            <h3 class="text-center">No orders Available</h3>
-        </div>
+        @if ($empty)
+            <div class="list-empty-box">
+                <img src="{{ asset('front/images/Empty 1.svg') }}" alt="No orders available">
+                <h3 class="text-center">No orders Available</h3>
+            </div>
         @endif
 
     </div>
@@ -156,35 +156,55 @@
         $('#rating_review').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var productId = button.data('data-productId');
-
             $('#rating_product_id').val(productId);
         });
+
         $('.productReview').on('click', function() {
             var product_id = $(this).attr('data-productId')
             var order_id = $(this).attr('data-orderId')
             $('#rating_product_id').val(product_id);
             $('#rating_order_id').val(order_id);
-        })
-        $('#rating_btn').click(function(e) {
+        });
+
+        $('#rating_btn').on('click', function(e) {
+            // Prevent form submission first
             e.preventDefault();
 
+            // Check if a rating is selected
+            var rating = $('input[name="rating"]:checked').val(); // Get the value of the selected radio button
+            if (!rating) {
+                // Show iziToast message if no rating is selected
+                iziToast.error({
+                    message: "Please select a rating before submitting.",
+                    position: 'topRight'
+                });
+                return; // Prevent further execution
+            }
+
+            // If rating is selected, run form validation
             $("#product_review").validate({
                 rules: {
-                    review: {
+                    rating: {
                         required: true,
+                    },
+                    review: {
                         minlength: 2,
                         maxlength: 1000,
                     },
                 },
                 messages: {
+                    rating: {
+                        required: 'This field is required.',
+                    },
                     review: {
-                        required: 'This filed is required.',
-                        minlength: 'Minumum 2 character are allow.',
-                        maxlength: 'Maximum 1000 character are allow.',
+                        required: 'This field is required.',
+                        minlength: 'Minimum 2 characters are allowed.',
+                        maxlength: 'Maximum 1000 characters are allowed.',
                     },
                 }
             });
 
+            // Check if form is valid before submitting
             if ($('#product_review').valid()) {
                 var formData = jQuery('form#product_review').serialize();
                 $.ajax({
@@ -221,9 +241,7 @@
                         });
                     },
                 });
-
             }
-
         });
     </script>
 @endpush

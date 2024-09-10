@@ -488,7 +488,7 @@ class OrderController extends Controller
             'user_id' => auth()->user()->id,
             'product_id' => $product_id,
             'rating' => $request->rating,
-            'review' => $request->review,
+            'review' => $request->review ?? null,
         ]);
 
         return response()->json([
