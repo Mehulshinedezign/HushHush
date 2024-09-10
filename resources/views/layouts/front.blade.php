@@ -209,10 +209,10 @@
 
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Size</label>
+                                            <label for="">Size*</label>
                                             <div class="formfield">
                                                 <select class="form-control" name="size">
-                                                    <option value="">Size*</option>
+                                                    <option value="">Size</option>
 
                                                 </select>
                                                 <span class="form-icon">
@@ -228,10 +228,10 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Brand</label>
+                                            <label for="">Brand*</label>
                                             <div class="formfield">
                                                 <select class="form-control" id="mySelect" name="brand">
-                                                    <option value="">Brand*</option>
+                                                    <option value="">Brand</option>
                                                     @foreach (getBrands() as $brand)
                                                         <option value="{{ $brand->id }}"
                                                             class="@if ($brand->name == 'Other') moveMe @endif">
@@ -805,7 +805,7 @@
                 // If both are unchecked, prevent the change
                 if (!isManualPickupChecked && !isShipmentChecked) {
                     $(this).prop('checked', true); // Re-check the checkbox that was just unchecked
-                    
+
                     iziToast.error({
                         title: 'Error',
                         message: 'At least one option must be selected.',
@@ -1133,7 +1133,6 @@
             let selectedFiles = [];
 
             function previewImages(input, imgPreviewPlaceholder) {
-                console.log('here');
                 const files = Array.from(input.files);
                 const currentCount = selectedFiles.length;
 
@@ -1144,22 +1143,29 @@
 
                 files.forEach((file) => {
                     selectedFiles.push(file);
+                });
+
+                renderPreview(imgPreviewPlaceholder);
+                updateFileInput();
+            }
+
+            function renderPreview(imgPreviewPlaceholder) {
+                $(imgPreviewPlaceholder).empty(); // Clear the existing preview
+
+                selectedFiles.forEach((file, index) => {
                     const reader = new FileReader();
                     reader.onload = function(event) {
                         const element = `
-                <div class="upload-img-box">
-                    <img src="${event.target.result}" alt="img">
-                    <div class="upload-img-cross">
-                        <i class="fa-regular fa-circle-xmark remove_uploaded"></i>
-                    </div>
-                </div>`;
-
+                    <div class="upload-img-box" data-index="${index}">
+                        <img src="${event.target.result}" alt="img">
+                        <div class="upload-img-cross">
+                            <i class="fa-regular fa-circle-xmark remove_uploaded"></i>
+                        </div>
+                    </div>`;
                         $(imgPreviewPlaceholder).append(element);
                     };
                     reader.readAsDataURL(file);
                 });
-
-                updateFileInput();
             }
 
             function updateFileInput() {
@@ -1173,9 +1179,9 @@
             });
 
             $(document).on('click', '.remove_uploaded', function() {
-                const index = $(this).closest('.upload-img-box').index();
+                const index = $(this).closest('.upload-img-box').data('index');
                 selectedFiles.splice(index, 1);
-                $(this).closest('.upload-img-box').remove();
+                renderPreview('div.upload-img-preview'); // Rerender the preview after removing the file
                 updateFileInput();
             });
 
@@ -1183,14 +1189,14 @@
             const sortable = new Sortable(document.querySelector('.sortable-images'), {
                 animation: 150,
                 onEnd: function(evt) {
-                    const itemEl = evt.item;
-                    const newIndex = evt.newIndex;
                     const oldIndex = evt.oldIndex;
+                    const newIndex = evt.newIndex;
 
                     // Rearrange selectedFiles array based on the new order
                     const movedItem = selectedFiles.splice(oldIndex, 1)[0];
                     selectedFiles.splice(newIndex, 0, movedItem);
 
+                    renderPreview('div.upload-img-preview'); // Rerender the preview in the new order
                     updateFileInput();
                 }
             });
@@ -1216,8 +1222,6 @@
                 const files = e.originalEvent.dataTransfer.files;
                 $('#upload-image-five').prop('files', files);
                 $('#upload-image-five').trigger('change');
-                $('#update-upload-image-five').prop('files', files);
-                $('#update-upload-image-five').trigger('change');
             });
         });
     </script>
