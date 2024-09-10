@@ -167,7 +167,7 @@ function userliststatus() {
 }
 
 $('#chatClear').on('click',function(){
-    $('#searchmember').val('');
+    $('input[name="search"]').val('');
 })
 
 // chat search form submit
