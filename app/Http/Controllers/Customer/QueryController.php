@@ -163,16 +163,16 @@ class QueryController extends Controller
             $startDate = date('Y-m-d', strtotime($dates[0]));
             $endDate = date('Y-m-d', strtotime($dates[1]));
 
-            while ($startDate <= $endDate) {
-                $startDate = date_create($startDate);
-                $query_product->product->disableDates()->create([
-                    'disable_date' => $startDate->format('Y-m-d'),
-                ]);
+            // while ($startDate <= $endDate) {
+            //     $startDate = date_create($startDate);
+            //     $query_product->product->disableDates()->create([
+            //         'disable_date' => $startDate->format('Y-m-d'),
+            //     ]);
 
 
-                $startDate->modify('+1 day');
-                $startDate = $startDate->format('Y-m-d');
-            }
+            //     $startDate->modify('+1 day');
+            //     $startDate = $startDate->format('Y-m-d');
+            // }
 
 
             $userId = jsencode_userdata($query_product->user->id);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProductDisableDate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Stripe\Stripe;
@@ -108,7 +109,6 @@ class StripeController extends Controller
 
         // Retrieve the query associated with the ID
         $query = Query::find($id);
-
         if (!$query) {
             return response()->json([
                 'status' => false,
@@ -118,7 +118,7 @@ class StripeController extends Controller
 
         try {
             // Fetch the PaymentIntent from Stripe using the provided paymentIntentId
-            $paymentIntent = \Stripe\PaymentIntent::retrieve($request->paymentIntentId);
+            $paymentIntent = PaymentIntent::retrieve($request->paymentIntentId);
 
             // Retrieve the amount and currency directly from the PaymentIntent object
             $intentAmount = $paymentIntent->amount / 100; // Stripe stores amounts in cents, convert to main currency unit
@@ -128,12 +128,12 @@ class StripeController extends Controller
             $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
             $completeAmount = $price + $query->cleaning_charges + $query->shipping_charges;
 
-            if ($completeAmount != $intentAmount) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Payment amount mismatch',
-                ], 400);
-            }
+            // if ($completeAmount != $intentAmount) {
+            //     return response()->json([
+            //         'status' => false,
+            //         'message' => 'Payment amount mismatch',
+            //     ], 400);
+            // }
 
             // Check if the payment was successful
             if ($paymentIntent->status == 'succeeded') {
@@ -158,6 +158,20 @@ class StripeController extends Controller
 
                 // Mark the query as completed
                 $query->update(['status' => 'COMPLETED']);
+
+                // Create disable dates for the product based on the query's date range
+                $dateRange = explode(' - ', $query->date_range);
+                $startDate = Carbon::parse($dateRange[0]);
+                $endDate = Carbon::parse($dateRange[1]);
+
+                // Loop through each date within the date range and store in ProductDisableDate
+                while ($startDate <= $endDate) {
+                    ProductDisableDate::create([
+                        'product_id' => $query->product_id,
+                        'disable_date' => $startDate->toDateString(),
+                    ]);
+                    $startDate->addDay();
+                }
 
                 // Create a transaction record
                 $transaction = Transaction::create([
@@ -194,6 +208,7 @@ class StripeController extends Controller
             ], 500);
         }
     }
+
 
 
 
