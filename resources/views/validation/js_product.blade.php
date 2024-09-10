@@ -93,7 +93,7 @@
             },
             product_link: {
                 // required: true,
-                pattern:  /^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}(\/[\w#.-]*)*(\?[a-zA-Z0-9_=&%-]*)?\/?$/,
+                regex:  /\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i,
             },
 
 
@@ -203,7 +203,7 @@
             },
             product_link: {
                 // required: `{{ __('customvalidation.product.product_link.required') }}`,
-                pattern: 'Please enter valid url link.',
+                regex: 'Please enter valid url link.',
             },
             min_rent_days: {
                 required: `{{ __('customvalidation.product.min_rent_days.required') }}`,

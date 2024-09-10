@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\{Country, State, City, Notification, NotificationSetting, Product, RetailerBankInformation, UserDocuments, User, UserCard, UserNotification};
 use Hash, Stripe, Exception, DateTime;
-use App\Http\Requests\{ProfileRequest, UpdateUserProfile, UserDetailRequest};
+use App\Http\Requests\{ProfileRequest, UpdateUserProfile, UserDetailRequest, AccountSettingRequest};
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\{Auth, Session};
 
@@ -569,7 +569,7 @@ class ProfileController extends Controller
         }
     }
 
-    public function accountSetting(Request $request, $type=null)
+    public function accountSetting(AccountSettingRequest $request, $type=null)
     {
         $user =auth()->user();
         $userdetail = [

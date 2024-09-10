@@ -168,41 +168,39 @@ function userliststatus() {
 
 
 // chat search form submit
-$("#searchmember").on("submit", function (e) {
+$("#searchmember input").on("input", function (e) {
     e.preventDefault();
-    var search = jQuery(this).find('input').val();
-    // alert('herere');
-    if (search) {
-        var get_search_chat = search;
-        dbRef.once("value").then(snap => {
-            snap.forEach(message => {
-                if (message.val().name == get_search_chat) {
-                  
-                    let activeClass = first ? 'activecht' : '';
-
-                    $('.chatlist').text('');
-                    $('.chatlist').append(`<li>
-                        <div class="chat-list ${activeClass}"
-                            data-receiverId=${message.key}
-                            data-senderId="${message.val().id}">
-                            <div class="chat-profile-img-box">
-                                <div class="chat-profile-left">
-                                    <div class="chat-profile-img">
-                                        <img src="${message.val().image}" class="img">
+    // if (search) {
+        var search = $(this).val().toLowerCase(); // Normalize case to handle case-insensitive search
+        if (search) {
+            dbRef.orderByChild("name").startAt(search).endAt(search + "\uf8ff").once("value", function(snapshot) {
+                $('.chatlist').empty(); // Clear the chat list before adding new results
+                if (snapshot.exists()) {
+                    snapshot.forEach(function(message) {
+                        let activeClass = first ? 'activecht' : '';
+    
+                        $('.chatlist').append(`<li>
+                            <div class="chat-list ${activeClass}"
+                                data-receiverId=${message.key}
+                                data-senderId="${message.val().id}">
+                                <div class="chat-profile-img-box">
+                                    <div class="chat-profile-left">
+                                        <div class="chat-profile-img">
+                                            <img src="${message.val().image}" class="img">
+                                        </div>
+                                        <p class="getname">
+                                            ${message.val().name}
+                                        </p>
                                     </div>
-                                    <p class="getname">
-                                        ${message.val().name}
-                                    </p>
-                                </div>
-                                <p class='d-none count-msg' id="${message.key + 'count'}">0</p>
-                            </div> 
-                        </div>
-                    </li>`);
-                    first = false;
+                                    <p class='d-none count-msg' id="${message.key + 'count'}">0</p>
+                                </div> 
+                            </div>
+                        </li>`);
+                        first = false;
+                    });
                 }
-
-            });
-        })
+            })
+        // }
     }
     else {
         $('.chatlist').text('');
