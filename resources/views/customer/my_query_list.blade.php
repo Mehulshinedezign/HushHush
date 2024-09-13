@@ -46,15 +46,14 @@
 @push('scripts')
     <script>
       
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
         // Get all tab items
         const tabs = document.querySelectorAll('.tab-item');
 
-        // Check if there's a stored tab status in localStorage or get from URL query string
+        // Check URL for status or use 'PENDING' as the default when coming back to the page
         const urlParams = new URLSearchParams(window.location.search);
         const urlTab = urlParams.get('status');
-        const savedTab = localStorage.getItem('activeTab');
-        const activeTab = urlTab || savedTab || 'PENDING'; // Default to 'PENDING' if none is found
+        const activeTab = urlTab || 'PENDING'; // Default to 'PENDING' when no tab is in URL
 
         // Set the active tab visually
         const activeTabElement = document.querySelector(`.tab-item[data-status="${activeTab}"]`);
@@ -70,15 +69,17 @@
                 // Get the data-status of the clicked tab
                 const status = tab.getAttribute('data-status');
 
-                // Store the clicked tab's status in localStorage
-                localStorage.setItem('activeTab', status);
-
                 // Update the URL without reloading the page
                 window.history.pushState(null, '', `?status=${status}`);
 
                 // Refresh the page to simulate the behavior you want
                 location.reload();
             });
+        });
+
+        // Clear localStorage when navigating away from the page
+        window.addEventListener('beforeunload', function() {
+            localStorage.removeItem('activeTab'); // Clear the stored active tab
         });
     });
     </script>
