@@ -107,9 +107,11 @@ class QueryController extends Controller
     public function myQuery(Request $request)
     {
         $user = auth()->user();
-        $querydatas = Query::where(['user_id' => $user->id, 'status' => 'PENDING'])->get();
+        $status = $request->get('status', 'PENDING'); // Default to 'PENDING' if no status is passed
+        $querydatas = Query::where(['user_id' => $user->id, 'status' => $status])->get();
         return view('customer.my_query_list', compact('querydatas'));
     }
+
 
     public function view(Request $request)
     {
@@ -135,7 +137,7 @@ class QueryController extends Controller
 
         // dd($request->all());
         DB::beginTransaction();
-        try{
+        try {
             // Validator::make($request->all(), [
             //     'cleaning_charges' => 'required|numeric|min:1',
             //     'shipping_charges' => 'required|numeric',

@@ -3,6 +3,7 @@
 @section('links')
     @php
         $user = auth()->user();
+        $currentTab = request()->get('status', 'PENDING'); // Default to 'PENDING' tab if no status is set
     @endphp
 @endsection
 
@@ -13,50 +14,104 @@
                 <div class="rental-header">
                     <h2>My Inquiry List</h2>
                     <div class="form-group">
-                        {{-- <div class="formfield">
-                            <input type="text" placeholder="Select Date" class="form-control">
-                            <span class="form-icon">
-                                <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img" class="cal-icon">
-                            </span>
-                        </div> --}}
                     </div>
                 </div>
+
                 <div class="custom-tab">
                     <ul class="custom-tab-list">
-                        <li class="tab-item active" data-status="PENDING" data-user="borrower"><a
-                                href="javascript:void(0)">Pending</a></li>
-                        <li class="tab-item" data-status="ACCEPTED" data-user="borrower"><a
-                                href="javascript:void(0)">Accepted</a></li>
-                        <li class="tab-item" data-status="REJECTED" data-user="borrower"><a
-                                href="javascript:void(0)">Rejected</a></li>
-                        <li class="tab-item" data-status="COMPLETED" data-user="borrower"><a
-                                href="javascript:void(0)">Completed</a></li>
+                        <li class="tab-item" data-status="PENDING">
+                            <a href="?status=PENDING" class="tab-link">Pending</a>
+                        </li>
+                        <li class="tab-item" data-status="ACCEPTED">
+                            <a href="?status=ACCEPTED" class="tab-link">Accepted</a>
+                        </li>
+                        <li class="tab-item" data-status="REJECTED">
+                            <a href="?status=REJECTED" class="tab-link">Rejected</a>
+                        </li>
+                        <li class="tab-item" data-status="COMPLETED">
+                            <a href="?status=COMPLETED" class="tab-link">Completed</a>
+                        </li>
                     </ul>
                 </div>
+
+
                 <div id="query-list-container">
                     <x-product-query :querydatas="$querydatas" />
                 </div>
             </div>
         </div>
     </section>
-
-
-    {{-- Rating modal  --}}
-
-
-    <div class="modal fade" id="single_query_Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body" id="data-query">
-
-                </div>
-            </div>
-        </div>
-    </div>
-
 @endsection
 
 @push('scripts')
+    <script>
+        $(document).ready(function() {
+            let activeTab = localStorage.getItem('activeTab') || 'PENDING'; // Default to 'PENDING'
+
+            $('.custom-tab-list .tab-item').removeClass('active');
+            $('.custom-tab-list .tab-item[data-status="' + activeTab + '"]').addClass('active');
+
+            $('.custom-tab-list .tab-item').on('click', function() {
+                let selectedTab = $(this).data('status');
+                localStorage.setItem('activeTab', selectedTab);
+            });
+        });
+
+        $(document).ready(function() {
+            // Get the current status from the query string
+            var urlParams = new URLSearchParams(window.location.search);
+            var status = urlParams.get('status') || 'PENDING'; // Default to 'PENDING' if no status is set
+
+            // Automatically trigger a click on the correct tab based on the status
+            $('.tab-item').removeClass('active');
+            var activeTab = $('.tab-item[data-status="' + status + '"]');
+            activeTab.addClass('active');
+
+            // Trigger a click on the tab to load the data
+            activeTab.find('a.tab-link').trigger('click');
+
+            // Handle tab clicks to update URL without reloading the page
+            $('.tab-link').click(function(e) {
+                e.preventDefault(); // Prevent the default link action
+
+                var clickedTab = $(this).parent(); // Get the clicked tab's parent (the <li> element)
+                var selectedStatus = clickedTab.data('status');
+
+                // Set the active tab class
+                $('.tab-item').removeClass('active');
+                clickedTab.addClass('active');
+
+                // Update the URL without refreshing the page
+                var newUrl = new URL(window.location.href);
+                newUrl.searchParams.set('status', selectedStatus);
+                window.history.pushState({}, '', newUrl);
+
+                // Optionally, trigger the form submission or data loading logic here
+                loadDataBasedOnTab(selectedStatus);
+            });
+
+            // Function to load data based on the selected tab
+            function loadDataBasedOnTab(status) {
+                // Logic to load data for the selected tab (AJAX or form submission)
+                // For example:
+                $.ajax({
+                    url: '/my_inquiry', // Adjust URL based on your route
+                    method: 'GET',
+                    data: {
+                        status: status
+                    },
+                    success: function(response) {
+                        // Update your data table with the response data
+                        $('#data-table').html(response); // Assuming you have a table or data container
+                    }
+                });
+            }
+
+            // Trigger data load on page load
+            loadDataBasedOnTab(status);
+        });
+    </script>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     {{-- @includeFirst(['validation']) --}}
     <script>
@@ -102,48 +157,6 @@
                 backdrop: 'static',
                 keyboard: false
             });
-            // Accept Reject and Pendding
-            // function fetchQueries(status) {
-            //     $.ajax({
-            //         url: '/fetch-queries',
-            //         type: 'GET',
-            //         data: {
-            //             status: status
-            //         },
-            //         beforeSend: function() {
-            //             $('body').addClass('loading');
-            //         },
-            //         success: function(response) {
-            //             if (response.success) {
-            //                 $('#query-list-container').html(response.html);
-            //             } else {
-            //                 $('#query-list-container').html(
-            //                     '<div class="error">Failed to load queries.</div>');
-            //             }
-            //         },
-            //         error: function(xhr, status, error) {
-            //             console.error('Error:', error);
-            //             $('#query-list-container').html(
-            //                 '<div class="error">An error occurred. Please try again.</div>');
-            //         },
-            //         complete: function() {
-            //             $('body').removeClass('loading');
-            //         }
-            //     });
-            // }
-
-            // $('.tab-item').on('click', function(e) {
-            //     e.preventDefault();
-
-            //     $('.tab-item').removeClass('active');
-            //     $(this).addClass('active');
-            //     var status = $(this).data('status');
-
-            //     fetchQueries(status);
-            // });
-
-            // var initialStatus = $('.tab-item.active').data('status');
-            // fetchQueries(initialStatus);
 
 
         });
@@ -174,6 +187,5 @@
             window.location.href = url;
             $('.user_query-' + queryId).remove();
         }
-
     </script>
 @endpush

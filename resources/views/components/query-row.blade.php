@@ -22,7 +22,9 @@
     <td>
         <div class="user-table-head">
             {{-- <h5>{{ $query->forUser->name }}</h5> --}}
-            <a href="{{ route('lenderProfile',[jsencode_userdata($query->for_user)]) }}"><h5>{{ $query->forUser->name }}</h5></a>
+            <a href="{{ route('lenderProfile', [jsencode_userdata($query->for_user)]) }}">
+                <h5>{{ $query->forUser->name }}</h5>
+            </a>
         </div>
     </td>
     <td>
@@ -90,7 +92,7 @@ COMPLETED
                     {{ $price }}$</a>
 
 
-                    <a href="javascript:void(0)" class="button reject-btn small-btn"
+                <a href="javascript:void(0)" class="button reject-btn small-btn"
                     onclick="confirmReject(event, '{{ $query->id }}')">
                     <i class="fa-solid fa-circle-xmark"></i> Reject
                 </a>
