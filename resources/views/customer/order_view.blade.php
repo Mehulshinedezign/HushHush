@@ -113,7 +113,7 @@
 
                                             </div>
 
-                                            <div class="upload-img-preview">
+                                            <div class="upload-img-preview mb-3">
                                                 @foreach ($order->customerPickedUpImages as $index => $image)
                                                     <li>
                                                         {{-- <span class="remove-preview-img" data-index="{{ $index + 1 }}"

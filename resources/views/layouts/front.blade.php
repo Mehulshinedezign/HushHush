@@ -901,15 +901,15 @@
         });
 
         //For sticky header
-        $(window).scroll(function() {
-            var scroll = $(window).scrollTop();
+        // $(window).scroll(function() {
+        //     var scroll = $(window).scrollTop();
 
-            if (scroll >= 180) {
-                $("header").addClass("fixed");
-            } else {
-                $("header").removeClass("fixed");
-            }
-        });
+        //     if (scroll >= 100) {
+        //         $("header").addClass("fixed");
+        //     } else {
+        //         $("header").removeClass("fixed");
+        //     }
+        // });
     </script>
 
     {{-- Search the country and state  and GOogle place Api --}}

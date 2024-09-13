@@ -174,7 +174,7 @@
                     <li class="nav-item">
                         <!-- <a class="nav-link" aria-current="page" href="#">What's New</a> -->
                         <div class="dropdown cstm-dropdown">
-                            <div class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            <div class="dropdown-toggle p-0" type="button" id="dropdownMenuButton1"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 Categories
                             </div>
@@ -215,7 +215,7 @@
                 @endforeach --}}
                 </ul>
             </div>
-            <form id="searchForm" action="{{ route('index') }}" method="GET">
+            <form id="searchForm" action="{{ route('index') }}" method="GET" class="mb-0">
                 {{-- @if (request()->route()->getName() == 'index') --}}
                 <input type="hidden" id="currentRoute" name="currentRoute" value="{{ request()->route()->getName() }}">
                 <div class="search-pro-header">

@@ -576,7 +576,7 @@ class OrderController extends Controller
         // ];
         // $this->sendNotification($data);
 
-        return redirect()->back()->with('success', 'Your dispute submitted successfully. We will contact you soon');
+        return redirect()->route('retailercustomer',['tab'=>'dispute'])->with('success', 'Your dispute submitted successfully. We will contact you soon');
     }
 
     // download order attachments

@@ -78,7 +78,9 @@ section.home-sec {
 .home-filter-inner .filter-categories .form-check label {
     cursor: pointer;
 }
-
+.filter-categories.category-hight-fix::-webkit-scrollbar {
+    width: 4px;
+}
 .home-filter-box.expand .home-filter-inner {
     border-bottom: 1px solid var(--border-color);
     padding: 25px 30px;
@@ -2278,14 +2280,14 @@ border-color: #000;
     background-color: green;
 }
 
-.inquiry-list-main table tr th:last-child {
+/* .inquiry-list-main table tr th:last-child {
     float: right;
-}
+} */
 
 .inquiry-list-main .inquiry-actions {
     display: flex;
     gap: 10px;
-    justify-content: flex-end;
+    /* justify-content: flex-end; */
 }
 
 .inquiry-list-main .table-profile img {
