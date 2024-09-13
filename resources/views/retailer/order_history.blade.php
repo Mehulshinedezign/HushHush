@@ -12,7 +12,7 @@
                 <div class="order-his-tab-head">
                     <ul class="nav nav-pills " id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link @if(request()->tab !='cancelled') active @endif" id="pills-home-tab" data-bs-toggle="pill"
+                            <button class="nav-link @if(request()->tab !='cancelled' || request()->tab !='dispute') active @endif" id="pills-home-tab" data-bs-toggle="pill"
                                 data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
                                 aria-selected="true" data-tab="active">
                                 <div class="rental-history-badge">
@@ -42,7 +42,7 @@
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="pills-dispute-tab" data-bs-toggle="pill"
+                            <button class="nav-link  @if(request()->tab=='dispute') active @endif" id="pills-dispute-tab" data-bs-toggle="pill"
                                 data-bs-target="#pills-dispute" type="button" role="tab"
                                 aria-controls="pills-dispute" aria-selected="false" data-tab="dispute">
                                 <div class="rental-history-badge warning">
@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade @if(request()->tab !='cancelled') show active @endif" id="pills-home" role="tabpanel"
+                    <div class="tab-pane fade @if(request()->tab !='cancelled' || request()->tab !='dispute') show active @endif" id="pills-home" role="tabpanel"
                         aria-labelledby="pills-home-tab" tabindex="0">
                         @include('retailer.active-orders')
                     </div>
@@ -67,7 +67,7 @@
                         aria-labelledby="pills-canceled-tab" tabindex="0">
                         @include('retailer.cancel-orders')
                     </div>
-                    <div class="tab-pane fade" id="pills-dispute" role="tabpanel" aria-labelledby="pills-dispute-tab" tabindex="0">
+                    <div class="tab-pane fade @if(request()->tab=='dispute') show active @endif" id="pills-dispute" role="tabpanel" aria-labelledby="pills-dispute-tab" tabindex="0">
                         @include('retailer.dispute-order')
                     </div>
                 </div>
