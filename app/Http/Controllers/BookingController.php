@@ -75,12 +75,27 @@ class BookingController extends Controller
             'status' => 'COMPLETED',
         ]);
 
-        ProductUnavailability::create([
-            'product_id' => $query->product_id,
-            'order_id' => $order->id,
-            'from_date' => $fromstartDate,
-            'to_date' => $fromendDate,
-        ]);
+        $dates = explode(' - ', $query->date_range);
+            $startDate = date('Y-m-d', strtotime($dates[0]));
+            $endDate = date('Y-m-d', strtotime($dates[1]));
+
+            while ($startDate <= $endDate) {
+                $startDate = date_create($startDate);
+                $query->product->disableDates()->create([
+                    'disable_date' => $startDate->format('Y-m-d'),
+                ]);
+
+
+                $startDate->modify('+1 day');
+                $startDate = $startDate->format('Y-m-d');
+            }
+
+        // ProductDisableDate::create([
+        //     'product_id' => $query->product_id,
+        //     'order_id' => $order->id,
+        //     'from_date' => $fromstartDate,
+        //     'to_date' => $fromendDate,
+        // ]);
 
         $date = date('Y-m-d H:i:s');
         $status = PaymentIntent::create([

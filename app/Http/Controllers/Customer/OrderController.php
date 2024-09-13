@@ -31,7 +31,7 @@ class OrderController extends Controller
             }
         }
         // dd($fromDate, $toDate);
-        $orders = Order::with('product.thumbnailImage', 'product.retailer', 'product.category', 'transaction', 'customerquery', 'product.nonAvailableDates')
+        $orders = Order::with('product.thumbnailImage', 'product.retailer','product.ratings', 'product.category', 'transaction', 'customerquery', 'product.nonAvailableDates')
             ->when((!is_null($request->status) && $request->status != 'all' && $request->status != 'disputed'), function ($q) use ($request) {
                 $q->where('status', $request->status);
                 $q->whereIn('dispute_status', ['No', 'Resolved']);

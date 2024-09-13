@@ -2762,5 +2762,22 @@ form#filters {
     cursor: pointer;
 }
 
+.section-heading.grid-head-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.modal-opener-box {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.modal-opener-box .button{
+    cursor: pointer;
+}
+
+
+
+
+
 
 

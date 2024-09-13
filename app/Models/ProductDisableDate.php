@@ -9,7 +9,7 @@ class ProductDisableDate extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['product_id', 'disable_date'];
+    protected $fillable = ['product_id', 'disable_date','added_by'];
 
     public function product()
     {

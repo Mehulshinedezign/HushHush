@@ -19,6 +19,7 @@
                                         <th scope="col">Payment ID</th>
                                         <th scope="col">Amount</th>
                                         <th scope="col">Order Status</th>
+                                        <th scope="col">Status</th>
                                         <th scope="col">Reservation Date</th>
                                     </tr>
                                 </thead>
@@ -34,6 +35,7 @@
                                             <td>{{ $order->transaction->payment_id ?? '0' }}</td>
                                             <td>${{ $order->total }}</td>
                                             <td>{{ $order->status }}</td>
+                                            <td>{{ $order->disputeDetails->status }}</td>
                                             <td>{{ date('m/d/Y', strtotime($order->from_date)) . ' - ' . date('m/d/Y', strtotime($order->to_date)) }}
                                             </td>
                                         </tr>

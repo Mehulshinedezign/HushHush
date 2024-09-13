@@ -17,7 +17,7 @@ class CreateRetailerPayoutsTable extends Migration
             $table->id();
             $table->foreignId('retailer_id')->constrained('users');
             $table->string('transaction_id',50);
-            $table->string('order_id',50);
+            $table->foreignId('order_id')->constrained('orders');
             $table->decimal('amount',8,2);
             $table->longText('gateway_response');
             $table->timestamps();

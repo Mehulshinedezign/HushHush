@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->date('disable_date');
+            $table->string('added_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

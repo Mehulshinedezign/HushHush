@@ -92,7 +92,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 class="modal-title" id="exampleModalLabel">Add New Product</h3>
-                    <a href="{{ url('/') }}">
+                    <a href="{{ url()->current() }}">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </a>
                 </div>
@@ -405,7 +405,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                    {{-- <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Non-Available Dates</label>
                                             <div class="formfield">
@@ -422,8 +422,10 @@
                                                 </span>
                                             @enderror
                                         </div>
+                                    </div> --}}
+                                    <div class="col-md-4">
+                                        <x-product-date-avaliable />
                                     </div>
-
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Condition*</label>
@@ -511,7 +513,7 @@
 
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
-                                            <label for="">Rent Price/week*</label>
+                                            <label for="">Rent Price/Day*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_day" id=""
                                                     placeholder=""
@@ -528,7 +530,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group ">
-                                            <label for="">Rent Price/Two Weeks*</label>
+                                            <label for="">Rent Price/Weeks*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_week" id=""
                                                     placeholder=""
@@ -649,7 +651,7 @@
         </div>
     @endauth
     {{-- Query modal section success and error  --}}
-    <div class="modal fade query_msg" id="query_msg" tabindex="-1" aria-labelledby="exampleModalLabel"
+    <div class="modal fade query_msg" id="query_msg" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
