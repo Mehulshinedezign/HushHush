@@ -45,71 +45,42 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
-            let activeTab = localStorage.getItem('activeTab') || 'PENDING'; // Default to 'PENDING'
+      
+        document.addEventListener('DOMContentLoaded', function() {
+        // Get all tab items
+        const tabs = document.querySelectorAll('.tab-item');
 
-            $('.custom-tab-list .tab-item').removeClass('active');
-            $('.custom-tab-list .tab-item[data-status="' + activeTab + '"]').addClass('active');
+        // Check if there's a stored tab status in localStorage or get from URL query string
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlTab = urlParams.get('status');
+        const savedTab = localStorage.getItem('activeTab');
+        const activeTab = urlTab || savedTab || 'PENDING'; // Default to 'PENDING' if none is found
 
-            $('.custom-tab-list .tab-item').on('click', function() {
-                let selectedTab = $(this).data('status');
-                localStorage.setItem('activeTab', selectedTab);
+        // Set the active tab visually
+        const activeTabElement = document.querySelector(`.tab-item[data-status="${activeTab}"]`);
+        if (activeTabElement) {
+            activeTabElement.classList.add('active'); // Add active class to the selected tab
+        }
+
+        // Add click event listener to all tabs
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default link behavior
+                
+                // Get the data-status of the clicked tab
+                const status = tab.getAttribute('data-status');
+
+                // Store the clicked tab's status in localStorage
+                localStorage.setItem('activeTab', status);
+
+                // Update the URL without reloading the page
+                window.history.pushState(null, '', `?status=${status}`);
+
+                // Refresh the page to simulate the behavior you want
+                location.reload();
             });
         });
-
-        $(document).ready(function() {
-            // Get the current status from the query string
-            var urlParams = new URLSearchParams(window.location.search);
-            var status = urlParams.get('status') || 'PENDING'; // Default to 'PENDING' if no status is set
-
-            // Automatically trigger a click on the correct tab based on the status
-            $('.tab-item').removeClass('active');
-            var activeTab = $('.tab-item[data-status="' + status + '"]');
-            activeTab.addClass('active');
-
-            // Trigger a click on the tab to load the data
-            activeTab.find('a.tab-link').trigger('click');
-
-            // Handle tab clicks to update URL without reloading the page
-            $('.tab-link').click(function(e) {
-                e.preventDefault(); // Prevent the default link action
-
-                var clickedTab = $(this).parent(); // Get the clicked tab's parent (the <li> element)
-                var selectedStatus = clickedTab.data('status');
-
-                // Set the active tab class
-                $('.tab-item').removeClass('active');
-                clickedTab.addClass('active');
-
-                // Update the URL without refreshing the page
-                var newUrl = new URL(window.location.href);
-                newUrl.searchParams.set('status', selectedStatus);
-                window.history.pushState({}, '', newUrl);
-
-                // Optionally, trigger the form submission or data loading logic here
-                loadDataBasedOnTab(selectedStatus);
-            });
-
-            // Function to load data based on the selected tab
-            function loadDataBasedOnTab(status) {
-                // Logic to load data for the selected tab (AJAX or form submission)
-                // For example:
-                $.ajax({
-                    url: '/my_inquiry', // Adjust URL based on your route
-                    method: 'GET',
-                    data: {
-                        status: status
-                    },
-                    success: function(response) {
-                        // Update your data table with the response data
-                        $('#data-table').html(response); // Assuming you have a table or data container
-                    }
-                });
-            }
-
-            // Trigger data load on page load
-            loadDataBasedOnTab(status);
-        });
+    });
     </script>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
