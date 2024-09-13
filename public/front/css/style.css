@@ -302,6 +302,7 @@ input[type="checkbox"] {
     min-width: 90px;
     text-transform: capitalize;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 button {
@@ -2775,10 +2776,6 @@ form#filters {
     cursor: pointer;
 }
 
-
-
-
-
 .nav-item .cstm-dropdown .dropdown-toggle{
     padding: 0 !important;
 }
@@ -2793,3 +2790,18 @@ form#filters {
     font-weight: 500 !important;
     color: #000 !important;
 }
+
+.append-non-available-dates {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+.color-white-bss {
+    background-color: #fff !important;
+}
+
+
+
+
+
+

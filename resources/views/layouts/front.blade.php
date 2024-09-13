@@ -423,10 +423,24 @@
                                             @enderror
                                         </div>
                                     </div> --}}
+                                    
                                     <div class="col-md-4">
-                                        <x-product-date-avaliable />
+                                        <div class="form-group">
+                                            <label for="">Product market value*</label>
+                                            <div class="formfield right-icon-field">
+                                                <input type="number"
+                                                    class="produt_input form-control form-class @error('product_market_value') is-invalid @enderror"
+                                                    name="product_market_value" value="" min="1">
+                                                <span class="form-icon">$</span>
+                                                @error('product_market_value')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-lg-8 col-md-8 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Condition*</label>
                                             <div class="formfield">
@@ -452,24 +466,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Product market value*</label>
-                                            <div class="formfield right-icon-field">
-                                                <input type="number"
-                                                    class="produt_input form-control form-class @error('product_market_value') is-invalid @enderror"
-                                                    name="product_market_value" value="" min="1">
-                                                <span class="form-icon">$</span>
-                                                @error('product_market_value')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        {{ $message }}
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <x-product-date-avaliable />
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Product link</label>
                                             <div class="formfield">
@@ -485,7 +486,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days*</label>
                                             <div class="formfield ">

@@ -303,7 +303,21 @@
                                         </div>
                                     </div> --}}
                                     <div class="col-md-4">
-                                        <x-edit-date-avaliable :product="$ranges" />
+                                        <div class="form-group">
+                                            <label for="">Product market value*</label>
+                                            <div class="formfield right-icon-field">
+                                                <input type="number"
+                                                    class="produt_input form-control form-class @error('product_market_value') is-invalid @enderror"
+                                                    name="product_market_value"
+                                                    value="{{ number_format($product->product_market_value, 0, '', '') }}"
+                                                    min="1">
+                                                <span class="form-icon">$</span>
+                                                @error('product_market_value')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    @enderror
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
@@ -349,26 +363,12 @@
                                         </div>
                                     </div> --}}
 
-
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Product market value*</label>
-                                            <div class="formfield right-icon-field">
-                                                <input type="number"
-                                                    class="produt_input form-control form-class @error('product_market_value') is-invalid @enderror"
-                                                    name="product_market_value"
-                                                    value="{{ number_format($product->product_market_value, 0, '', '') }}"
-                                                    min="1">
-                                                <span class="form-icon">$</span>
-                                                @error('product_market_value')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        {{ $message }}
-                                                    @enderror
-                                            </div>
-                                        </div>
+                                    <div class="col-md-12">
+                                        <x-edit-date-avaliable :product="$ranges" />
                                     </div>
+                                   
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Product link</label>
                                             <div class="formfield">
@@ -383,7 +383,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days*</label>
                                             <!-- <div class="formfield ">
