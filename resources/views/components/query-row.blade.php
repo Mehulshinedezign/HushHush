@@ -88,6 +88,12 @@ COMPLETED
                     class="button outline-btn small-btn" data-price="{{ $price }}">Accept
                     offer for
                     {{ $price }}$</a>
+
+
+                    <a href="javascript:void(0)" class="button reject-btn small-btn"
+                    onclick="confirmReject(event, '{{ $query->id }}')">
+                    <i class="fa-solid fa-circle-xmark"></i> Reject
+                </a>
                 {{-- @else
                     <a href="{{ route('card.details', ['query' => $query->id, 'price' => $query->negotiate_price]) }}"
                         class="button outline-btn small-btn" data-price="{{ $query->totalBookPrice() }}">Accept offer for

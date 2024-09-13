@@ -287,9 +287,11 @@ class Order extends Model
     public static function countOtherOrders($retailerId)
     {
         return self::where('retailer_id', $retailerId)
-            ->where('status', '!=', 'Completed')
+            ->where(function ($query) {
+                $query->where('status', 'Waiting')
+                    ->orWhere('status', 'Picked Up');
+            })
+            ->where('dispute_status', '!=', 'yes') // Exclude if disputed_status is 'yes'
             ->count();
     }
-
-
 }

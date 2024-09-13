@@ -31,7 +31,7 @@ Route::get('/guest/product-details/{id}', [App\Http\Controllers\Api\ProductContr
 Route::get('/guest/lender-profile/{id}', [App\Http\Controllers\Api\ProductController::class, 'guestLenderInfo']);
 
 Route::post('/logout', [App\Http\Controllers\Api\LoginController::class, 'logout']);
-Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {
+Route::middleware(['auth:sanctum', 'prevent.admin'])->group(function () {
     Route::get('/product', [App\Http\Controllers\Api\ProductController::class, 'index']);
     // Product API
     Route::get('/my-wishlist', [App\Http\Controllers\Api\ProductController::class, 'wishlist']);
@@ -104,6 +104,5 @@ Route::middleware(['auth:sanctum','prevent.admin'])->group(function () {
     Route::post('/stripe/onboarding/redirect', [App\Http\Controllers\Api\StripeController::class, 'redirectToStripe'])->name('api.stripe.onboarding.redirect');
     Route::get('/stripe/onboarding/refresh', [App\Http\Controllers\Api\StripeController::class, 'refreshOnboarding'])->name('api.stripe.onboarding.refresh');
     Route::get('/stripe/onboarding/complete', [App\Http\Controllers\Api\StripeController::class, 'completeOnboarding'])->name('api.stripe.onboarding.complete');
-
 });
 Route::post('/stripe/webhook', [App\Http\Controllers\Api\StripeWebhookController::class, 'handleWebhook'])->name('api.stripe.webhook');

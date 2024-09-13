@@ -23,7 +23,9 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+        $this->middleware('store.guest.redirect.url')->only('showLoginForm');
     }
+
 
     public function showLoginForm()
     {
@@ -54,10 +56,54 @@ class LoginController extends Controller
         }
     }
 
+    // protected function authenticated(Request $request, $user)
+    // {
+    //     // dd('here');
+
+    //     $remember = $request->has('remember');
+    //     if ($remember) {
+    //         $loginby = $request->email . '_' . $request->password;
+    //         $cookie = Cookie::get('rememberme');
+
+    //         if (!$cookie || ($request->email != explode("_", $cookie)[0] || $request->password != explode("_", $cookie)[1])) {
+    //             Cookie::queue('rememberme', $loginby, 2628000);  // 2628000 minutes (five years)
+    //         }
+    //     } else {
+    //         Cookie::queue(Cookie::forget('rememberme'));
+    //     }
+    //     // Check OTP verification and email verification
+    //     if ($user->otp_is_verified != 1 || is_null($user->email_verified_at)) {
+    //         $user = $user->id;
+    //         return view('auth.verify_otp');
+    //         // return redirect()->route('auth.verify_otp_form', ['user' => $user->id]);
+    //     }
+
+    //     // Set redirection based on user role
+    //     if ($user->role->name == 'admin') {
+    //         $this->redirectTo = 'admin/dashboard';
+    //     } elseif ($user->role->name == 'retailer') {
+    //         $this->redirectTo = 'retailer/dashboard';
+    //     }
+
+    //     if (!is_null(session('redirectUrl'))) {
+    //         $this->redirectTo = session('redirectUrl');
+    //         session()->forget('redirectUrl');
+    //     } elseif ($user->role->name == 'customer') {
+    //         $this->redirectTo = route('index');
+    //     }
+
+    //     if (Session::has('lendurl')) {
+    //         $this->redirectTo = route('index');
+    //     }
+
+    //     return redirect($this->redirectTo);
+    // }
+
+
+
     protected function authenticated(Request $request, $user)
     {
-        // dd('here');
-
+        // Remember me cookie logic
         $remember = $request->has('remember');
         if ($remember) {
             $loginby = $request->email . '_' . $request->password;
@@ -69,18 +115,25 @@ class LoginController extends Controller
         } else {
             Cookie::queue(Cookie::forget('rememberme'));
         }
-        // Check OTP verification and email verification
+
+        // OTP and email verification
         if ($user->otp_is_verified != 1 || is_null($user->email_verified_at)) {
-            $user = $user->id;
-            return view('auth.verify_otp');
-            // return redirect()->route('auth.verify_otp_form', ['user' => $user->id]);
+            return redirect()->route('auth.verify_otp_form', ['user' => $user->id]);
         }
 
-        // Set redirection based on user role
+        // Redirect back to product details if stored
+        if (Session::has('redirect_after_login')) {
+            $redirectUrl = Session::get('redirect_after_login');
+            Session::forget('redirect_after_login');
+
+            return redirect()->to($redirectUrl);
+        }
+
+        // Role-based redirect logic
         if ($user->role->name == 'admin') {
-            $this->redirectTo = 'admin/dashboard';
+            $this->redirectTo = route('admin.dashboard');
         } elseif ($user->role->name == 'retailer') {
-            $this->redirectTo = 'retailer/dashboard';
+            $this->redirectTo = route('retailer.dashboard');
         }
 
         if (!is_null(session('redirectUrl'))) {
@@ -90,13 +143,13 @@ class LoginController extends Controller
             $this->redirectTo = route('index');
         }
 
+        // Handle lendurl session
         if (Session::has('lendurl')) {
             $this->redirectTo = route('index');
         }
 
         return redirect($this->redirectTo);
     }
-
 
 
     public function logout(Request $request)

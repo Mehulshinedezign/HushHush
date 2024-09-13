@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Order,RetailerPayout};
+use App\Models\Order;
+use App\Models\RetailerPayout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
@@ -103,14 +104,24 @@ class StripeOnboardingController extends Controller
     public function transaction()
     {
         $orders = Order::with('product', 'retailer.vendorPayout', 'transaction')->where('user_id', auth()->id())->get();
-        
+
         return view('transaction-history', compact('orders'));
     }
 
     public function earningTransaction()
     {
-        $orders = Order::with('product', 'retailer.vendorPayout', 'transaction')->where('retailer_id', auth()->id())->orderBy('id','desc')->get();
-    //    $order =  RetailerPayout::where('retailer_id',auth()->id())->get();
+        // Fetch transactions for the authenticated retailer
+        $transactions = RetailerPayout::where('retailer_id', auth()->id())->get();
+
+        // Extract the order IDs from the transactions
+        $orderIds = $transactions->pluck('order_id');
+
+        // Fetch orders based on order IDs and eager load relationships
+        $orders = Order::with(['product.thumbnailImage', 'retailer.vendorPayout', 'transaction'])
+            ->whereIn('id', $orderIds)
+            ->get();
+
+        // Pass data to the Blade view
         return view('earning-transaction', compact('orders'));
     }
 }

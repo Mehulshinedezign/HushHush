@@ -147,5 +147,33 @@
 
 
         });
+
+        function confirmReject(event, queryId) {
+            event.preventDefault();
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure you want to reject this product?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#1B1B1B',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, reject it!',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('body').addClass('loading');
+                    rejectQuery(queryId);
+                }
+            });
+        }
+
+        function rejectQuery(queryId) {
+            var url = `{{ url('/reject_query') }}/${queryId}`;
+            window.location.href = url;
+            $('.user_query-' + queryId).remove();
+        }
+
     </script>
 @endpush

@@ -82,6 +82,7 @@ class Kernel extends HttpKernel
         'web.admin' => \App\Http\Middleware\webadmin::class,
         'auth_verified' => \App\Http\Middleware\RedirectToOtpPage::class,
         // 'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        'store.guest.redirect.url' => \App\Http\Middleware\StoreGuestRedirectUrl::class,
 
     ];
     protected $commands = [

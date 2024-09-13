@@ -1,4 +1,47 @@
 @extends('layouts.front')
+<style>
+    /* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 999;
+    padding-top: 60px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.9); /* Black with opacity */
+}
+
+/* Modal Content (Image) */
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+}
+
+/* The Close Button */
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+</style>
 @section('title', $product->name)
 @php
     $user = auth()->user();
@@ -29,8 +72,17 @@
                                     <div class="slider slider-content">
                                         @if ($productImages->isNotEmpty())
                                             @foreach ($productImages as $image)
-                                                <div><img src="{{ $image->file_path }}" class="zoomout" alt=""
-                                                        loading="lazy"></div>
+                                                {{-- <div><img src="{{ $image->file_path }}" class="zoomout" alt=""
+                                                        loading="lazy"></div> --}}
+
+                                                <!-- Image that opens the modal -->
+                                                <div>
+                                                    <img src="{{ $image->file_path }}"  alt=""
+                                                        loading="lazy" onclick="openModal(this.src)">
+                                                </div>
+
+                                                <!-- Modal Structure -->
+
                                             @endforeach
                                         @else
                                             <div><img src="{{ asset('front/images/pro-description-img.png') }}"
@@ -86,726 +138,755 @@
                                 @endif
 
                                 @if (count($product->ratings) > 0)
+                                    @php $count = 0; @endphp
                                     @foreach ($product->ratings as $rating)
-                                        <div class="product-review-body">
-                                            <ul class="product-review-list">
-                                                <li>
-                                                    <div class="product-review-box">
-                                                        <div class="product-review-profile">
-                                                            <div class="review-profile-box">
-                                                                <div class="sm-dp-box">
-                                                                    @if ($rating->user->profile_file)
-                                                                        <img src="{{ asset('storage/' . $rating->user->profile_file) }}"
-                                                                            alt="img">
-                                                                    @else
-                                                                        <img src="{{ asset('front/images/pro-1.png') }}"
-                                                                            alt="img">
-                                                                    @endif
-                                                                </div>
-                                                                <div class="sm-dp-data">
-                                                                    <h3>{{ @$rating->user->name }}</h3>
-                                                                    <div class="review-profile-rating-box">
-                                                                        @for ($i = 0; $i < $rating->rating; $i++)
-                                                                            <i class="fa-sharp fa-solid fa-star"></i>
-                                                                        @endfor
+                                        @if ($count < 2)
+                                            <div class="product-review-body">
+                                                <ul class="product-review-list">
+                                                    <li>
+                                                        <div class="product-review-box">
+                                                            <div class="product-review-profile">
+                                                                <div class="review-profile-box">
+                                                                    <div class="sm-dp-box">
+                                                                        @if ($rating->user->profile_file)
+                                                                            <img src="{{ asset('storage/' . $rating->user->profile_file) }}"
+                                                                                alt="img">
+                                                                        @else
+                                                                            <img src="{{ asset('front/images/pro-1.png') }}"
+                                                                                alt="img">
+                                                                        @endif
+                                                                    </div>
+                                                                    <div class="sm-dp-data">
+                                                                        <h3>{{ @$rating->user->name }}</h3>
+                                                                        <div class="review-profile-rating-box">
+                                                                            @for ($i = 0; $i < $rating->rating; $i++)
+                                                                                <i class="fa-sharp fa-solid fa-star"></i>
+                                                                            @endfor
+                                                                        </div>
                                                                     </div>
                                                                 </div>
+                                                                <p>{{ @$rating->created_at->format('M d, Y') }}</p>
                                                             </div>
-                                                            <p>{{ @$rating->created_at->format('M d, Y') }}</p>
+                                                            @if ($rating->review != null)
+                                                                <div class="product-review-message">
+                                                                    <p>{{ @$rating->review }}</p>
+                                                                </div>
+                                                            @endif
                                                         </div>
-                                                        @if ($rating->review != null)
-                                                            <div class="product-review-message">
-                                                                <p>{{ @$rating->review }}</p>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    @endforeach
-                                @endif
-                            </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            @php $count++; @endphp
+                                        @else
+                                        @break
+                                    @endif
+                                @endforeach
+                            @endif
+
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-12">
-                        <div class="pro-desc-details-main">
-                            <h4 class="pro-desc-name">{{ $product->name }}</h4>
-                            <div class="pro-desc-prize-wrapper">
-                                <div class="pro-desc-prize">
-                                    <h3>${{ $product->rent_day }}</h3>
-                                    <div class="badge day-badge">
-                                        Per day
-                                    </div>
-
-                                </div>
-                                <div class="pro-desc-prize">
-                                    <h3>${{ $product->rent_week }}</h3>
-                                    <div class="badge day-badge">
-                                        Per week
-                                    </div>
-
-                                </div>
-                                <div class="pro-desc-prize">
-                                    <h3>${{ $product->rent_month }}</h3>
-                                    <div class="badge day-badge">
-                                        Per month
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="pro-desc-info">
-                                <div class="pro-desc-info-box">
-                                    <h4>Category :</h4>
-                                    <p>{{ $product->categories->name ?? 'N/A' }}</p>
-                                </div>
-                                <div class="pro-desc-info-box">
-                                    <h4>Size:</h4>
-                                    <p>{{ @$product->size ?? 'N/A' }}</p>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="pro-desc-details-main">
+                        <h4 class="pro-desc-name">{{ $product->name }}</h4>
+                        <div class="pro-desc-prize-wrapper">
+                            <div class="pro-desc-prize">
+                                <h3>${{ $product->rent_day }}</h3>
+                                <div class="badge day-badge">
+                                    Per day
                                 </div>
 
                             </div>
-
-                            <div class="pro-desc-info">
-                                <div class="pro-desc-info-box">
-                                    <h4>Brand :</h4>
-                                    <p>{{ $product->get_brand->name ?? 'N/A' }}</p>
-                                </div>
-
-                                <div class="pro-desc-info-box">
-                                    <h4>Color :</h4>
-                                    <p>{{ $product->get_color->name ?? 'N/A' }}</p>
+                            <div class="pro-desc-prize">
+                                <h3>${{ $product->rent_week }}</h3>
+                                <div class="badge day-badge">
+                                    Per week
                                 </div>
 
                             </div>
-                            <div class="pro-desc-info">
-                                <div class="pro-desc-info-box">
-                                    <h4>Min Rental Days :</h4>
-                                    <p>{{ $product->min_days_rent_item }}</p>
+                            <div class="pro-desc-prize">
+                                <h3>${{ $product->rent_month }}</h3>
+                                <div class="badge day-badge">
+                                    Per month
                                 </div>
-                                <!-- <div class="pro-desc-info-box">
+
+                            </div>
+                        </div>
+                        <div class="pro-desc-info">
+                            <div class="pro-desc-info-box">
+                                <h4>Category :</h4>
+                                <p>{{ $product->categories->name ?? 'N/A' }}</p>
+                            </div>
+                            <div class="pro-desc-info-box">
+                                <h4>Size:</h4>
+                                <p>{{ @$product->size ?? 'N/A' }}</p>
+                            </div>
+
+                        </div>
+
+                        <div class="pro-desc-info">
+                            <div class="pro-desc-info-box">
+                                <h4>Brand :</h4>
+                                <p>{{ $product->get_brand->name ?? 'N/A' }}</p>
+                            </div>
+
+                            <div class="pro-desc-info-box">
+                                <h4>Color :</h4>
+                                <p>{{ $product->get_color->name ?? 'N/A' }}</p>
+                            </div>
+
+                        </div>
+                        <div class="pro-desc-info">
+                            <div class="pro-desc-info-box">
+                                <h4>Min Rental Days :</h4>
+                                <p>{{ $product->min_days_rent_item }}</p>
+                            </div>
+                            <!-- <div class="pro-desc-info-box">
                                                                                 <h4>Size :</h4>
                                                                                 <p>{{ $product->size ?? 'N/A' }}</p>
                                                                             </div> -->
 
 
-                            </div>
-                            @auth
-                                @if (@$product->user_id != auth()->user()->id)
-                                    @if (is_null($user->userDetail->complete_address))
-                                        {{-- <div data-bs-toggle="modal" data-bs-target="#addaddress-Modal">
+                        </div>
+                        @auth
+                            @if (@$product->user_id != auth()->user()->id)
+                                @if (is_null($user->userDetail->complete_address))
+                                    {{-- <div data-bs-toggle="modal" data-bs-target="#addaddress-Modal">
                                         Send Request
                                     </div> --}}
-                                        <a href="#" class="button primary-btn full-btn mt-3 sendQuery"
-                                            data-bs-toggle="modal" data-bs-target="#accountSetting"
-                                            aria-controls="offcanvasRight">Send Request</a>
-                                    @else
-                                        <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
-                                            data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Send Request</a>
-                                    @endif
+                                    <a href="#" class="button primary-btn full-btn mt-3 sendQuery"
+                                        data-bs-toggle="modal" data-bs-target="#accountSetting"
+                                        aria-controls="offcanvasRight">Send Request</a>
+                                @else
+                                    <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
+                                        data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Send Request</a>
                                 @endif
-                            @endauth
-                            @guest
-                                <a href="{{ route('login') }}" class="button primary-btn full-btn mt-3">Send Request</a>
-                            @endguest
+                            @endif
+                        @endauth
+                        @guest
+                            {{-- <a href="{{ route('login') }}" class="button primary-btn full-btn mt-3">Send Request</a> --}}
+                            <a href="{{ route('login', ['redirect_url' => url()->current()]) }}"
+                                class="button primary-btn full-btn mt-3">Send Request</a>
+
+                        @endguest
+                        <div class="pro-info-accordian">
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseOne" aria-expanded="true"
+                                            aria-controls="collapseOne">
+                                            Description
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show"
+                                        aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            {{ $product->description }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                             <div class="pro-info-accordian">
                                 <div class="accordion" id="accordionExample">
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="headingOne">
                                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#collapseOne" aria-expanded="true"
-                                                aria-controls="collapseOne">
-                                                Description
+                                                data-bs-target="#collapseTwo" aria-expanded="true"
+                                                aria-controls="collapseTwo">
+                                                Pickup Location
                                             </button>
                                         </h2>
-                                        <div id="collapseOne" class="accordion-collapse collapse show"
+                                        <div id="collapseTwo" class="accordion-collapse collapse show"
                                             aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
-                                                {{ $product->description }}
+                                                {{ @$product->productCompleteLocation->city . ' , ' . @$product->productCompleteLocation->state . ' , ' . @$product->productCompleteLocation->country }}
                                             </div>
                                         </div>
                                     </div>
 
                                 </div>
-                                <div class="pro-info-accordian">
-                                    <div class="accordion" id="accordionExample">
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="headingOne">
-                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                    data-bs-target="#collapseTwo" aria-expanded="true"
-                                                    aria-controls="collapseTwo">
-                                                    Pickup Location
-                                                </button>
-                                            </h2>
-                                            <div id="collapseTwo" class="accordion-collapse collapse show"
-                                                aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                                                <div class="accordion-body">
-                                                    {{ @$product->productCompleteLocation->city . ' , ' . @$product->productCompleteLocation->state . ' , ' . @$product->productCompleteLocation->country }}
-                                                </div>
-                                            </div>
-                                        </div>
+                            </div>
 
-                                    </div>
-                                </div>
-
-                                <div class="lender-profile">
-                                    <p>Lender</p>
-                                    <div class="lender-profile-box">
-                                        <div class="lender-dp-box">
-                                            @auth
-                                                <a href="{{ route('lenderProfile', jsencode_userdata($product->user_id)) }}">
-                                                    @if ($product->retailer->profile_file)
-                                                        <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
-                                                            alt="Profile Picture">
-                                                    @else
-                                                        <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
-                                                    @endif
-                                                </a>
-                                            @endauth
-                                            @guest
-                                                <a href="{{ route('login') }}">
-                                                    @if ($product->retailer->profile_file)
-                                                        <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
-                                                            alt="Profile Picture">
-                                                    @else
-                                                        <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
-                                                    @endif
-                                                </a>
-                                            @endguest
-                                        </div>
-                                        <h4>{{ $product->retailer->name }}</h4>
+                            <div class="lender-profile">
+                                <p>Lender</p>
+                                <div class="lender-profile-box">
+                                    <div class="lender-dp-box">
                                         @auth
-                                            @if ($product->user_id != auth()->id())
-                                                <div><a href="javascript:void(0)"
-                                                        class="button outline-btn small-btn chat-list-profile"
-                                                        data-senderId="{{ auth()->user()->id }}"
-                                                        data-receverId="{{ @$product->user_id }}"
-                                                        data-receverName = "{{ @$product->retailer->name }}"
-                                                        data-receverImage="{{ isset($product->retailer->profile_file) ? Storage::url($product->retailer->profile_file) : asset('img/avatar.png') }}"
-                                                        data-profile="{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}"
-                                                        data-name="{{ auth()->user()->name }}"><i
-                                                            class="fa-solid fa-comments"></i>
-                                                        Chat</a></div>
-                                            @endif
+                                            <a href="{{ route('lenderProfile', jsencode_userdata($product->user_id)) }}">
+                                                @if ($product->retailer->profile_file)
+                                                    <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
+                                                        alt="Profile Picture">
+                                                @else
+                                                    <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
+                                                @endif
+                                            </a>
                                         @endauth
                                         @guest
-                                            <div><a href="{{ route('login') }}" class="button outline-btn small-btn"><i
-                                                        class="fa-solid fa-comments"></i>
-                                                    Chat</a></div>
+                                            <a href="{{ route('login') }}">
+                                                @if ($product->retailer->profile_file)
+                                                    <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
+                                                        alt="Profile Picture">
+                                                @else
+                                                    <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
+                                                @endif
+                                            </a>
                                         @endguest
                                     </div>
-                                </div>
-                                <div class="pro-dec-rating-main mb-0">
-                                    <div class="pro-rating-head">
-                                        <h4>Ratings & Reviews</h4>
-
-                                    </div>
-                                    <div class="pro-rating-body">
-                                        <div class="pro-rating-left">
-                                            <h3>{{ $product->average_rating }}</h3>
-                                            <p>{{ $product->ratings()->count() }} & {{ $product->ratings()->count() }}
-                                                Reviews</p>
-                                        </div>
-                                        <div class="pro-rating-right">
-                                            <ul>
-                                                <li>
-                                                    <p>5</p>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <div class="progress">
-                                                        <div class="progress-bar " role="progressbar"
-                                                            style="background-color: #517B5D; width:{{ $rating_progress['fivestar'] }}%"
-                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <p>4</p>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar"
-                                                            style="background-color: #517B5D; width:{{ $rating_progress['fourstar'] }}%"
-                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <p>3</p>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar"
-                                                            style="background-color: #517B5D; width:{{ $rating_progress['threestar'] }}%"
-                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <p>2</p>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar"
-                                                            style="background-color: #517B5D; width:{{ $rating_progress['twostar'] }}%"
-                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <p>1</p>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar"
-                                                            style="background-color: #517B5D; width:{{ $rating_progress['onestar'] }}%"
-                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @php
-                $authUser = auth()->user();
-            @endphp
-            <div class="offcanvas offcanvas-end inquiry-sidebar" tabindex="-1" id="inquiry-sidebar"
-                aria-labelledby="offcanvasExampleLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Send Request</h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <div class="book-item-sidebar">
-                        <div class="book-item-main">
-                            <div class="book-item-profile">
-                                <div class="book-item-profile-img">
-                                    <!-- <img src="images/style-single2.png" alt="img"> -->
-                                    @if ($productImages->isNotEmpty())
-                                        @foreach ($productImages as $image)
-                                            <div><img src="{{ $image->file_path }}" alt="" loading="lazy"></div>
-                                        @endforeach
-                                    @else
-                                        <div><img src="{{ asset('front/images/pro-description-img.png') }}"
-                                                alt="img"></div>
-                                    @endif
-                                </div>
-                                <div class="book-item-profile-info">
-                                    <h3>{{ @$product->name }}</h3>
-                                    <div class="pro-desc-prize-wrapper">
-                                        <div class="pro-desc-prize">
-                                            <h3>${{ @$product->rent_day }}</h3>
-                                            <div class="badge day-badge">
-                                                Per day
-                                            </div>
-
-                                        </div>
-                                        <div class="pro-desc-prize">
-                                            <h3>${{ @$product->rent_week }}</h3>
-                                            <div class="badge day-badge">
-                                                Per week
-                                            </div>
-
-                                        </div>
-                                        <div class="pro-desc-prize">
-                                            <h3>${{ @$product->rent_month }}</h3>
-                                            <div class="badge day-badge">
-                                                Per month
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                    <div class="pro-desc-prize-wrapper">
-                                        <label for="">Min Rental days: </label>
-                                        <div class="min-rental-date">
-                                            <h3>{{ @$product->min_days_rent_item }}</h3>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- <x-alert /> --}}
-                            <form id="Sendquery">
-                                @csrf
-                                <input type="hidden" name="for_user"
-                                    value="{{ jsencode_userdata($product->user_id) }}">
-                                <input type="hidden" name="product_id" value="{{ jsencode_userdata($product->id) }}">
-                                <div class="book-item-date">
-                                    <div class="form-group">
-                                        <label for="">Select your Rental date</label>
-                                        <div class="formfield">
-                                            <input type="text" name="rental_dates" id="rental_dates"
-                                                class="form-control rent_dates form-class @error('rental_dates') is-invalid @enderror"
-                                                placeholder="Select rental date">
-                                            <label for="rental_dates" class="form-icon">
-                                                <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
-                                            </label>
-
-
-
-                                        </div>
-                                        @error('rental_dates')
-                                            <span class="invalid-feedback" role="alert">
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="form-group my-3">
-                                        <label for="">Message to lender</label>
-                                        <div class="formfield">
-                                            <textarea name="description" cols="30" rows="3"
-                                                class="form-control form-class @error('description') is-invalid @enderror" placeholder="message to lender"></textarea>
-                                        </div>
-                                        @error('description')
-                                            <span class="invalid-feedback" role="alert">
-                                                {{ $message }}
-                                            </span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="item-pickup-loc-main">
-                                        @if (
-                                            $product->productCompleteLocation &&
-                                                $product->productCompleteLocation->manul_pickup_location == '1' &&
-                                                $product->productCompleteLocation->shipment == '1')
-                                            <h4>Choose Location</h4>
-
-                                            <input type="radio" id="pick_up" name="delivery_option" value="pick_up"
-                                                @if ($product->productCompleteLocation->shipment == '0') checked @endif>
-                                            <label for="pick_up">Pick up from lender location</label><br>
-
-                                            <input type="radio" id="ship_to_me" name="delivery_option"
-                                                value="ship_to_me" @if ($product->productCompleteLocation->manual_pickup_location == '0') checked @endif>
-                                            <label for="ship_to_me">Ship it to me</label><br>
-
-                                            <input type="text" id="selected_value" readonly class="form-control"
-                                                placeholder="Selected option will appear here"
-                                                value="Please select the value">
-                                            @error('delivery_option')
-                                                <span class="invalid-feedback" role="alert">
-                                                    {{ $message }}
-                                                </span>
-                                            @enderror
-                                        @elseif(
-                                            $product->productCompleteLocation &&
-                                                $product->productCompleteLocation->manul_pickup_location == '1' &&
-                                                $product->productCompleteLocation->shipment == '0')
-                                            <h4>Pick up Location</h4>
-                                            <input type="radio" id="pick_up" name="delivery_option" value="pick_up"
-                                                checked>
-                                            <label for="pick_up">Pick up from lender location</label><br>
-
-                                            <input type="text" id="selected_value" readonly class="form-control"
-                                                value="{{ @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state }}">
-                                        @elseif(
-                                            $product->productCompleteLocation &&
-                                                $product->productCompleteLocation->manul_pickup_location == '0' &&
-                                                $product->productCompleteLocation->shipment == '1')
-                                            <h4>Delivery Location</h4>
-                                            <input type="radio" id="ship_to_me" name="delivery_option"
-                                                value="ship_to_me" checked>
-                                            <label for="ship_to_me">Ship it to me</label><br>
-
-                                            <input type="text" id="selected_value" readonly class="form-control"
-                                                value="{{ @$authUser->userDetail->complete_address }}">
-                                        @else
-                                            <input type="text" id="ship" readonly class="form-control"
-                                                placeholder="No available pickup or shipment location">
+                                    <h4>{{ $product->retailer->name }}</h4>
+                                    @auth
+                                        @if ($product->user_id != auth()->id())
+                                            <div><a href="javascript:void(0)"
+                                                    class="button outline-btn small-btn chat-list-profile"
+                                                    data-senderId="{{ auth()->user()->id }}"
+                                                    data-receverId="{{ @$product->user_id }}"
+                                                    data-receverName = "{{ @$product->retailer->name }}"
+                                                    data-receverImage="{{ isset($product->retailer->profile_file) ? Storage::url($product->retailer->profile_file) : asset('img/avatar.png') }}"
+                                                    data-profile="{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}"
+                                                    data-name="{{ auth()->user()->name }}"><i
+                                                        class="fa-solid fa-comments"></i>
+                                                    Chat</a></div>
                                         @endif
+                                    @endauth
+                                    @guest
+                                        <div><a href="{{ route('login') }}" class="button outline-btn small-btn"><i
+                                                    class="fa-solid fa-comments"></i>
+                                                Chat</a></div>
+                                    @endguest
+                                </div>
+                            </div>
+                            <div class="pro-dec-rating-main mb-0">
+                                <div class="pro-rating-head">
+                                    <h4>Ratings & Reviews</h4>
 
-
+                                </div>
+                                <div class="pro-rating-body">
+                                    <div class="pro-rating-left">
+                                        <h3>{{ $product->average_rating }}</h3>
+                                        <p>{{ $product->ratings()->count() }} & {{ $product->ratings()->count() }}
+                                            Reviews</p>
+                                    </div>
+                                    <div class="pro-rating-right">
+                                        <ul>
+                                            <li>
+                                                <p>5</p>
+                                                <i class="fa-solid fa-star"></i>
+                                                <div class="progress">
+                                                    <div class="progress-bar " role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['fivestar'] }}%"
+                                                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <p>4</p>
+                                                <i class="fa-solid fa-star"></i>
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['fourstar'] }}%"
+                                                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <p>3</p>
+                                                <i class="fa-solid fa-star"></i>
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['threestar'] }}%"
+                                                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <p>2</p>
+                                                <i class="fa-solid fa-star"></i>
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['twostar'] }}%"
+                                                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <p>1</p>
+                                                <i class="fa-solid fa-star"></i>
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar"
+                                                        style="background-color: #517B5D; width:{{ $rating_progress['onestar'] }}%"
+                                                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
-
-                                <button type="button" class="button primary-btn full-btn mt-3 mb-3"
-                                    id="Askquery">Next</button>
-                            </form>
-
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-    </section>
+        </div>
+        <div id="imageModal" class="modal" style="display: none;">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img class="modal-content" id="modalImage">
+        </div>
+        @php
+            $authUser = auth()->user();
+        @endphp
+        <div class="offcanvas offcanvas-end inquiry-sidebar" tabindex="-1" id="inquiry-sidebar"
+            aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Send Request</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div class="book-item-sidebar">
+                    <div class="book-item-main">
+                        <div class="book-item-profile">
+                            <div class="book-item-profile-img">
+                                <!-- <img src="images/style-single2.png" alt="img"> -->
+                                @if ($productImages->isNotEmpty())
+                                    @foreach ($productImages as $image)
+                                        <div><img src="{{ $image->file_path }}" alt="" loading="lazy"></div>
+                                    @endforeach
+                                @else
+                                    <div><img src="{{ asset('front/images/pro-description-img.png') }}"
+                                            alt="img"></div>
+                                @endif
+                            </div>
+                            <div class="book-item-profile-info">
+                                <h3>{{ @$product->name }}</h3>
+                                <div class="pro-desc-prize-wrapper">
+                                    <div class="pro-desc-prize">
+                                        <h3>${{ @$product->rent_day }}</h3>
+                                        <div class="badge day-badge">
+                                            Per day
+                                        </div>
+
+                                    </div>
+                                    <div class="pro-desc-prize">
+                                        <h3>${{ @$product->rent_week }}</h3>
+                                        <div class="badge day-badge">
+                                            Per week
+                                        </div>
+
+                                    </div>
+                                    <div class="pro-desc-prize">
+                                        <h3>${{ @$product->rent_month }}</h3>
+                                        <div class="badge day-badge">
+                                            Per month
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="pro-desc-prize-wrapper">
+                                    <label for="">Min Rental days: </label>
+                                    <div class="min-rental-date">
+                                        <h3>{{ @$product->min_days_rent_item }}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- <x-alert /> --}}
+                        <form id="Sendquery">
+                            @csrf
+                            <input type="hidden" name="for_user"
+                                value="{{ jsencode_userdata($product->user_id) }}">
+                            <input type="hidden" name="product_id" value="{{ jsencode_userdata($product->id) }}">
+                            <div class="book-item-date">
+                                <div class="form-group">
+                                    <label for="">Select your Rental date</label>
+                                    <div class="formfield">
+                                        <input type="text" name="rental_dates" id="rental_dates"
+                                            class="form-control rent_dates form-class @error('rental_dates') is-invalid @enderror"
+                                            placeholder="Select rental date">
+                                        <label for="rental_dates" class="form-icon">
+                                            <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
+                                        </label>
+
+
+
+                                    </div>
+                                    @error('rental_dates')
+                                        <span class="invalid-feedback" role="alert">
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group my-3">
+                                    <label for="">Message to lender</label>
+                                    <div class="formfield">
+                                        <textarea name="description" cols="30" rows="3"
+                                            class="form-control form-class @error('description') is-invalid @enderror" placeholder="message to lender"></textarea>
+                                    </div>
+                                    @error('description')
+                                        <span class="invalid-feedback" role="alert">
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+
+                                <div class="item-pickup-loc-main">
+                                    @if (
+                                        $product->productCompleteLocation &&
+                                            $product->productCompleteLocation->manul_pickup_location == '1' &&
+                                            $product->productCompleteLocation->shipment == '1')
+                                        <h4>Choose Location</h4>
+
+                                        <input type="radio" id="pick_up" name="delivery_option" value="pick_up"
+                                            @if ($product->productCompleteLocation->shipment == '0') checked @endif>
+                                        <label for="pick_up">Pick up from lender location</label><br>
+
+                                        <input type="radio" id="ship_to_me" name="delivery_option"
+                                            value="ship_to_me" @if ($product->productCompleteLocation->manual_pickup_location == '0') checked @endif>
+                                        <label for="ship_to_me">Ship it to me</label><br>
+
+                                        <input type="text" id="selected_value" readonly class="form-control"
+                                            placeholder="Selected option will appear here"
+                                            value="Please select the value">
+                                        @error('delivery_option')
+                                            <span class="invalid-feedback" role="alert">
+                                                {{ $message }}
+                                            </span>
+                                        @enderror
+                                    @elseif(
+                                        $product->productCompleteLocation &&
+                                            $product->productCompleteLocation->manul_pickup_location == '1' &&
+                                            $product->productCompleteLocation->shipment == '0')
+                                        <h4>Pick up Location</h4>
+                                        <input type="radio" id="pick_up" name="delivery_option" value="pick_up"
+                                            checked>
+                                        <label for="pick_up">Pick up from lender location</label><br>
+
+                                        <input type="text" id="selected_value" readonly class="form-control"
+                                            value="{{ @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state }}">
+                                    @elseif(
+                                        $product->productCompleteLocation &&
+                                            $product->productCompleteLocation->manul_pickup_location == '0' &&
+                                            $product->productCompleteLocation->shipment == '1')
+                                        <h4>Delivery Location</h4>
+                                        <input type="radio" id="ship_to_me" name="delivery_option"
+                                            value="ship_to_me" checked>
+                                        <label for="ship_to_me">Ship it to me</label><br>
+
+                                        <input type="text" id="selected_value" readonly class="form-control"
+                                            value="{{ @$authUser->userDetail->complete_address }}">
+                                    @else
+                                        <input type="text" id="ship" readonly class="form-control"
+                                            placeholder="No available pickup or shipment location">
+                                    @endif
+
+
+                                </div>
+                            </div>
+
+                            <button type="button" class="button primary-btn full-btn mt-3 mb-3"
+                                id="Askquery">Next</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
 @endsection
 
 @push('scripts')
-    <script>
-        $('.sendQuery').on('click', function() {
-            console.log('herer', $('#saveProfile'))
-            //    var url={{ route('Userprofile', ['type' => 'query']) }}
-            var url = APP_URL + '/update-profile/query';
-            $('#saveProfile').attr('action', url);
-        })
-        $('.zoomout').on('click', function() {
-            $(this).toggleClass('img-scalable');
-        })
+<script>
+    $('.sendQuery').on('click', function() {
+        console.log('herer', $('#saveProfile'))
+        //    var url={{ route('Userprofile', ['type' => 'query']) }}
+        var url = APP_URL + '/update-profile/query';
+        $('#saveProfile').attr('action', url);
+    })
+    $('.zoomout').on('click', function() {
+        $(this).toggleClass('img-scalable');
+    })
 
-        $('.slider-content').slick({
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            arrows: true,
-            fade: false,
-            infinite: true,
-            speed: 1000,
-            asNavFor: '.slider-thumb',
-            prevArrow: $('.prev-prodec-btn'),
-            nextArrow: $('.next-prodec-btn'),
-            arrows: true,
-            responsive: [{
-                    breakpoint: 1400,
-                    settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1,
-                    }
-                },
-                {
-                    breakpoint: 992,
-                    settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1,
-                    }
-                },
-                {
-                    breakpoint: 575,
-                    settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1,
-                    }
+    $('.slider-content').slick({
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: true,
+        fade: false,
+        infinite: true,
+        speed: 1000,
+        asNavFor: '.slider-thumb',
+        prevArrow: $('.prev-prodec-btn'),
+        nextArrow: $('.next-prodec-btn'),
+        arrows: true,
+        responsive: [{
+                breakpoint: 1400,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 }
-
-            ]
-        });
-        $('.slider-thumb').slick({
-            slidesToShow: 3,
-            slidesToScroll: 1,
-            asNavFor: '.slider-content',
-            dots: false,
-            focusOnSelect: true
-        });
-
-        $(document).ready(function() {
-            $('#Askquery').on('click', function(e) {
-                let form = $('form#Sendquery')[0];
-                let formData = new FormData(form);
-                let hasErrors = false;
-
-                // Validate Rental Date
-                if (!$('#rental_dates').val()) {
-                    iziToast.error({
-                        title: 'Error',
-                        message: 'Please select a rental date.',
-                        position: 'topRight',
-                    });
-                    hasErrors = true;
+            },
+            {
+                breakpoint: 992,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 }
-
-                // // Validate Delivery Option
-                // if (!$('input[name="delivery_option"]:checked').val()) {
-                //     iziToast.error({
-                //         title: 'Error',
-                //         message: 'Please select a delivery option.',
-                //         position: 'topRight',
-                //     });
-                //     hasErrors = true;
-                // }
-
-                // Check for incomplete profile if "Ship it to me" is selected
-                // if ($('#ship_to_me').is(':checked') &&
-                //     {{ is_null(@$user->userDetail->complete_address) ? 'true' : 'false' }}) {
-                //     iziToast.error({
-                //         title: 'Error',
-                //         message: 'Please complete your profile to enable this option.',
-                //         position: 'topRight',
-                //     });
-                //     hasErrors = true;
-                // }
-
-                if (hasErrors) {
-                    e.preventDefault(); // Prevent form submission if there are errors
-                    return;
+            },
+            {
+                breakpoint: 575,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
                 }
-
-                if ($('#Sendquery').valid()) {
-                    $('#Askquery').prop('disabled', true);
-                    var url = `{{ route('query') }}`;
-                    $.ajax({
-                        type: "post",
-                        url: url,
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        beforeSend: function() {
-                            $('body').addClass('loading');
-                        },
-                        complete: function() {
-                            $('body').removeClass('loading');
-                        },
-                        success: function(response) {
-                            var modalContent = '';
-                            if (response.success) {
-                                modalContent =
-                                    `<div class="success-text" role="alert"><img src="` +
-                                    "{{ asset('front/images/query1.png') }}" +
-                                    `" style="max-width: 180px;">` + response.message +
-                                    `</div>`;
-                            } else {
-                                modalContent = '<div class="alert alert-danger" role="alert">' +
-                                    response.message + '</div>';
-                            }
-
-                            $('#query_msg .modal-body').html(
-                                '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
-                                modalContent
-                            );
-
-                            $('#query_msg').modal('show');
-                            $('#Askquery').prop('disabled', false);
-                            $("#Sendquery")[0].reset();
-                            $('#closeModalBtn').on('click', function() {
-                                $('#query_msg').modal('hide');
-                                location.reload();
-                            });
-                        },
-                        error: function(response) {
-                            $('#Askquery').prop('disabled', false);
-                            $('#query_msg .modal-body').html(
-                                '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
-                                '<div class="alert alert-danger" role="alert">' + response
-                                .message + '</div>'
-                            );
-                            $('#query_msg').modal('show');
-                            $('#closeModalBtn').on('click', function() {
-                                $('#query_msg').modal('hide');
-                                location.reload();
-                            });
-                        }
-                    });
-                } else {
-                    e.preventDefault(); // Prevent the default action of the button click
-                }
-            });
-
-            // Date range picker setup
-            var queryDates = @json($querydates);
-            var disableDates = @json($disable_dates);
-            var disabledDateRanges = queryDates.map(function(query) {
-                var dateRange = query.date_range.split(' - ');
-                return {
-                    start: moment(dateRange[0]),
-                    end: moment(dateRange[1])
-                };
-            });
-
-            var noneAvailableDates = disableDates.map(function(dateRange) {
-                return {
-                    start: moment(dateRange),
-                    end: moment(dateRange)
-                };
-            }).filter(function(range) {
-                return range !== null;
-            });
-
-            function isDateDisabled(date) {
-                var inQueryDates = disabledDateRanges.some(function(range) {
-                    return date.isBetween(range.start, range.end, 'day', '[]');
-                });
-
-                var inDisableDates = noneAvailableDates.some(function(range) {
-                    return date.isSame(range.start, 'day') || date.isSame(range.end, 'day');
-                });
-
-                return inQueryDates || inDisableDates;
             }
 
-            $('.rent_dates').daterangepicker({
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                },
-                drops: 'down',
-                opens: 'right',
-                minDate: moment().startOf('day'),
-                isInvalidDate: isDateDisabled
-            }).on('apply.daterangepicker', function(ev, picker) {
-                var startDate = picker.startDate;
-                var endDate = picker.endDate;
-                var duration = endDate.diff(startDate, 'days');
+        ]
+    });
+    $('.slider-thumb').slick({
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        asNavFor: '.slider-content',
+        dots: false,
+        focusOnSelect: true
+    });
 
-                // Correctly assigning the value from the Blade template
-                var count = {{ $product->min_days_rent_item }};
+    $(document).ready(function() {
+        $('#Askquery').on('click', function(e) {
+            let form = $('form#Sendquery')[0];
+            let formData = new FormData(form);
+            let hasErrors = false;
 
-                // console.log(count);
+            // Validate Rental Date
+            if (!$('#rental_dates').val()) {
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Please select a rental date.',
+                    position: 'topRight',
+                });
+                hasErrors = true;
+            }
 
-                if (duration < count - 1) {
-                    iziToast.error({
-                        title: 'Error',
-                        message: 'Please select a date range of at least ' + count + ' days.',
-                        position: 'topRight',
-                    });
-                    $(this).val('');
-                } else {
-                    $(this).val(startDate.format('YYYY-MM-DD') + ' - ' + endDate.format('YYYY-MM-DD'));
-                }
-            });
+            // // Validate Delivery Option
+            // if (!$('input[name="delivery_option"]:checked').val()) {
+            //     iziToast.error({
+            //         title: 'Error',
+            //         message: 'Please select a delivery option.',
+            //         position: 'topRight',
+            //     });
+            //     hasErrors = true;
+            // }
 
-            $('.daterange-btn').daterangepicker({
-                autoUpdateInput: false,
-                locale: {
-                    format: 'YYYY-MM-DD'
-                },
-                drops: 'down',
-                opens: 'right',
-                minDate: moment().startOf('day'),
-                isInvalidDate: isDateDisabled,
-                ranges: {
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
-                        'month').endOf('month')]
-                }
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format(
-                    'MMMM D, YYYY'));
-            });
-        });
+            // Check for incomplete profile if "Ship it to me" is selected
+            // if ($('#ship_to_me').is(':checked') &&
+            //     {{ is_null(@$user->userDetail->complete_address) ? 'true' : 'false' }}) {
+            //     iziToast.error({
+            //         title: 'Error',
+            //         message: 'Please complete your profile to enable this option.',
+            //         position: 'topRight',
+            //     });
+            //     hasErrors = true;
+            // }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const radioButtons = document.querySelectorAll('input[name="delivery_option"]');
-            const selectedValueInput = document.getElementById('selected_value');
+            if (hasErrors) {
+                e.preventDefault(); // Prevent form submission if there are errors
+                return;
+            }
 
-            // Function to update the value based on selected radio button
-            const updateSelectedValue = () => {
-                const checkedRadio = document.querySelector('input[name="delivery_option"]:checked');
-                if (checkedRadio) {
-                    if (checkedRadio.id === 'pick_up') {
-                        selectedValueInput.value =
-                            "{{ @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state }}";
-                    } else if (checkedRadio.id === 'ship_to_me') {
-                        selectedValueInput.value = "{{ @$authUser->userDetail->complete_address }}";
+            if ($('#Sendquery').valid()) {
+                $('#Askquery').prop('disabled', true);
+                var url = `{{ route('query') }}`;
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    beforeSend: function() {
+                        $('body').addClass('loading');
+                    },
+                    complete: function() {
+                        $('body').removeClass('loading');
+                    },
+                    success: function(response) {
+                        var modalContent = '';
+                        if (response.success) {
+                            modalContent =
+                                `<div class="success-text" role="alert"><img src="` +
+                                "{{ asset('front/images/query1.png') }}" +
+                                `" style="max-width: 180px;">` + response.message +
+                                `</div>`;
+                        } else {
+                            modalContent = '<div class="alert alert-danger" role="alert">' +
+                                response.message + '</div>';
+                        }
+
+                        $('#query_msg .modal-body').html(
+                            '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
+                            modalContent
+                        );
+
+                        $('#query_msg').modal('show');
+                        $('#Askquery').prop('disabled', false);
+                        $("#Sendquery")[0].reset();
+                        $('#closeModalBtn').on('click', function() {
+                            $('#query_msg').modal('hide');
+                            location.reload();
+                        });
+                    },
+                    error: function(response) {
+                        $('#Askquery').prop('disabled', false);
+                        $('#query_msg .modal-body').html(
+                            '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
+                            '<div class="alert alert-danger" role="alert">' + response
+                            .message + '</div>'
+                        );
+                        $('#query_msg').modal('show');
+                        $('#closeModalBtn').on('click', function() {
+                            $('#query_msg').modal('hide');
+                            location.reload();
+                        });
                     }
-                } else {
-                    selectedValueInput.value = "Please select the value";
-                }
-            };
-
-            // Initially call the function to set the default value
-            updateSelectedValue();
-
-            // Add event listeners to radio buttons
-            radioButtons.forEach(radio => {
-                radio.addEventListener('change', updateSelectedValue);
-            });
+                });
+            } else {
+                e.preventDefault(); // Prevent the default action of the button click
+            }
         });
-    </script>
 
-    {{-- @include('validation') --}}
-    @include('validation.js_query')
+        // Date range picker setup
+        var queryDates = @json($querydates);
+        var disableDates = @json($disable_dates);
+        var disabledDateRanges = queryDates.map(function(query) {
+            var dateRange = query.date_range.split(' - ');
+            return {
+                start: moment(dateRange[0]),
+                end: moment(dateRange[1])
+            };
+        });
+
+        var noneAvailableDates = disableDates.map(function(dateRange) {
+            return {
+                start: moment(dateRange),
+                end: moment(dateRange)
+            };
+        }).filter(function(range) {
+            return range !== null;
+        });
+
+        function isDateDisabled(date) {
+            var inQueryDates = disabledDateRanges.some(function(range) {
+                return date.isBetween(range.start, range.end, 'day', '[]');
+            });
+
+            var inDisableDates = noneAvailableDates.some(function(range) {
+                return date.isSame(range.start, 'day') || date.isSame(range.end, 'day');
+            });
+
+            return inQueryDates || inDisableDates;
+        }
+
+        $('.rent_dates').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: 'YYYY-MM-DD'
+            },
+            drops: 'down',
+            opens: 'right',
+            minDate: moment().startOf('day'),
+            isInvalidDate: isDateDisabled
+        }).on('apply.daterangepicker', function(ev, picker) {
+            var startDate = picker.startDate;
+            var endDate = picker.endDate;
+            var duration = endDate.diff(startDate, 'days');
+
+            // Correctly assigning the value from the Blade template
+            var count = {{ $product->min_days_rent_item }};
+
+            // console.log(count);
+
+            if (duration < count - 1) {
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Please select a date range of at least ' + count + ' days.',
+                    position: 'topRight',
+                });
+                $(this).val('');
+            } else {
+                $(this).val(startDate.format('YYYY-MM-DD') + ' - ' + endDate.format('YYYY-MM-DD'));
+            }
+        });
+
+        $('.daterange-btn').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: 'YYYY-MM-DD'
+            },
+            drops: 'down',
+            opens: 'right',
+            minDate: moment().startOf('day'),
+            isInvalidDate: isDateDisabled,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
+                    'month').endOf('month')]
+            }
+        }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format(
+                'MMMM D, YYYY'));
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const radioButtons = document.querySelectorAll('input[name="delivery_option"]');
+        const selectedValueInput = document.getElementById('selected_value');
+
+        // Function to update the value based on selected radio button
+        const updateSelectedValue = () => {
+            const checkedRadio = document.querySelector('input[name="delivery_option"]:checked');
+            if (checkedRadio) {
+                if (checkedRadio.id === 'pick_up') {
+                    selectedValueInput.value =
+                        "{{ @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state }}";
+                } else if (checkedRadio.id === 'ship_to_me') {
+                    selectedValueInput.value = "{{ @$authUser->userDetail->complete_address }}";
+                }
+            } else {
+                selectedValueInput.value = "Please select the value";
+            }
+        };
+
+        // Initially call the function to set the default value
+        updateSelectedValue();
+
+        // Add event listeners to radio buttons
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', updateSelectedValue);
+        });
+    });
+
+    // Function to open the modal and display the image
+    function openModal(src) {
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+
+        modal.style.display = "block"; // Show the modal
+        modalImg.src = src; // Set the image source to the clicked image
+    }
+
+    // Function to close the modal
+    function closeModal() {
+        const modal = document.getElementById("imageModal");
+        modal.style.display = "none"; // Hide the modal
+    }
+</script>
+
+{{-- @include('validation') --}}
+@include('validation.js_query')
 @endpush

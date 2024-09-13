@@ -12,8 +12,6 @@
             <div class="rental-request-wrapper order-trans-wrap">
                 <div class="rental-header">
                     <h2>Transaction</h2>
-                    <div class="form-group">
-                    </div>
                 </div>
 
                 <div id="query-list-container">
@@ -35,8 +33,8 @@
                                                 <td>
                                                     <a href="#" class="user-table-profile">
                                                         <div class="table-profile">
-                                                            @if ($order->product->name)
-                                                                <img src="{{ $order->product->thumbnailImage->file_path ?? '' }}"
+                                                            @if ($order->product->thumbnailImage)
+                                                                <img src="{{ $order->product->thumbnailImage->file_path }}"
                                                                     alt="tb-profile" width="26" height="27">
                                                             @else
                                                                 <img src="{{ asset('front/images/table-profile1.png') }}"
@@ -47,7 +45,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="user-table-head">
-                                                        <h5>{{ $order->product->name ?? '' }}</h5>
+                                                        <h5>{{ $order->product->name ?? 'N/A' }}</h5>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -59,16 +57,16 @@
                                                         </h5>
                                                     </div>
                                                 </td>
-
                                                 <td>
                                                     <div class="user-table-head">
-                                                        <h5>{{ $order->transaction->date }}</h5>
+                                                        <h5>{{ $order->transaction->date ?? 'N/A' }}</h5>
                                                     </div>
                                                 </td>
-
                                             </tr>
                                         @empty
-                                            <div class="no-transation-txt">Transaction Not Exist</div>
+                                            <tr>
+                                                <td colspan="4" class="no-transation-txt">Transaction Not Exist</td>
+                                            </tr>
                                         @endforelse
                                     </tbody>
                                 </table>

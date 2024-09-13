@@ -174,12 +174,12 @@ class Product extends Model
      */
     public function allImages()
     {
-        return $this->hasMany(ProductImage::class)->orderBy('created_at','desc');
+        return $this->hasMany(ProductImage::class)->orderBy('created_at', 'desc');
     }
 
     public function allImages1()
     {
-        return $this->hasMany(ProductImage::class)->orderBy('created_at','asc');
+        return $this->hasMany(ProductImage::class)->orderBy('created_at', 'asc');
     }
 
     /**
@@ -297,22 +297,22 @@ class Product extends Model
         return $query;
     }
 
-    public function scopeFilterByPriceRange($query, $priceRange)
-    {
-        if (in_array('1', $priceRange)) {
-            $query->orWhere('price', '<', 1000);
-        }
-        if (in_array('2', $priceRange)) {
-            $query->orWhereBetween('price', [1000, 2000]);
-        }
-        if (in_array('3', $priceRange)) {
-            $query->orWhereBetween('price', [2000, 3000]);
-        }
-        if (in_array('4', $priceRange)) {
-            $query->orWhere('price', '>', 3000);
-        }
-        return $query;
-    }
+    // public function scopeFilterByPriceRange($query, $priceRange)
+    // {
+    //     if (in_array('1', $priceRange)) {
+    //         $query->orWhere('price', '<', 1000);
+    //     }
+    //     if (in_array('2', $priceRange)) {
+    //         $query->orWhereBetween('price', [1000, 2000]);
+    //     }
+    //     if (in_array('3', $priceRange)) {
+    //         $query->orWhereBetween('price', [2000, 3000]);
+    //     }
+    //     if (in_array('4', $priceRange)) {
+    //         $query->orWhere('price', '>', 3000);
+    //     }
+    //     return $query;
+    // }
 
     public function scopeFilterByCondition($query, $conditions)
     {
@@ -330,6 +330,32 @@ class Product extends Model
                 $q->whereIn('rating', $ratings);
             });
         }
+        return $query;
+    }
+
+    public function scopeFilterByPriceRange($query, $minPrice, $maxPrice)
+    {
+        return $query->whereBetween('rent_day', [$minPrice, $maxPrice]);
+    }
+
+    public function scopeFilterByDateRange1($query, $startDate, $endDate)
+    {
+        return $query->whereDoesntHave('disableDates', function ($q) use ($startDate, $endDate) {
+            $q->whereBetween('disable_date', [$startDate, $endDate]);
+        });
+    }
+    public function scopeFilterByLocation($query, $city = null, $state = null, $country = null)
+    {
+        if ($city) {
+            $query->where('city', $city);
+        }
+        if ($state) {
+            $query->where('state', $state);
+        }
+        if ($country) {
+            $query->where('country', $country);
+        }
+
         return $query;
     }
 
@@ -393,7 +419,7 @@ class Product extends Model
         // Rating filter
         $query->when($request->rating, function ($q) use ($request) {
             $q->whereHas('ratings', function ($q) use ($request) {
-                $q->havingRaw('AVG(rating) >= ?', [$request->rating])->orderBy('rating','asc');
+                $q->havingRaw('AVG(rating) >= ?', [$request->rating])->orderBy('rating', 'asc');
             });
         });
 
@@ -503,7 +529,6 @@ class Product extends Model
                     // Code to execute if $variable doesn't match any cases
                     break;
             }
-
         });
         return $query;
     }
