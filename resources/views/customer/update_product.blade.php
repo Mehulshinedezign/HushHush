@@ -288,7 +288,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                    {{-- <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Non-Available Dates*</label>
                                             <div class="formfield">
@@ -301,6 +301,9 @@
                                                 </span>
                                             </div>
                                         </div>
+                                    </div> --}}
+                                    <div class="col-md-4">
+                                        <x-edit-date-avaliable :product="$ranges" />
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         <div class="form-group">

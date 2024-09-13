@@ -319,17 +319,17 @@ class AdminController extends Controller
         // dd("refund", $request, $order->toArray());
         $dateTime = date('Y-m-d H:i:s');
         $message = 'Dispute for the order has been resolved.';
-        $orderItemData = [
-            'status' => $request->resolved_status,
-            'dispute_status' => 'Resolved'
-        ];
+        // $orderItemData = [
+        //     'status' => $request->resolved_status,
+        //     'dispute_status' => 'Resolved'
+        // ];
         $disputedOrderData = [
             "refund_amount" => 0,
+            'status'=>$request->status,
             'resolved_status' => $request->resolved_status,
             'resolved_date' => $dateTime,
         ];
-
-        if ('Pending' == $order->status && 'Completed' == $request->resolved_status) {
+        if ('Picked Up' == $order->status && 'Completed' == $request->resolved_status) {
 
             /*RETRIEVE PAYMENT INTENT DETAILS*/
             $paymentIntentData = $this->stripeClient->paymentIntents->retrieve($order->transaction->payment_id);
@@ -350,31 +350,30 @@ class AdminController extends Controller
                 $message = 'Refund has been successfully processed. The amount will credit to customer card with in 5-7 business days.';
             }
         }
-
         /*UPDATE ORDER*/
-        Order::where('id', $order->id)->update($orderItemData);
-        OrderItem::where('order_id', $order->id)->update($orderItemData);
+        // Order::where('id', $order->id)->update($orderItemData);
+        // OrderItem::where('order_id', $order->id)->update($orderItemData);
         DisputeOrder::where('id', $order->disputeDetails->id)->update($disputedOrderData);
         ProductUnavailability::where('order_id', $order->id)->delete();
-        $data = [
-            [
-                'order_id' => $order->id,
-                'sender_id' => auth()->user()->id,
-                'receiver_id' => $order->item->retailer->id,
-                'action_type' => 'Order Dispute Resolved',
-                'created_at' => $dateTime,
-                'message' => 'Dispute for the order #' . $order->id . ' has been resolved by the site administrator.'
-            ],
-            [
-                'order_id' => $order->id,
-                'sender_id' => auth()->user()->id,
-                'receiver_id' => $order->user_id,
-                'action_type' => 'Order Dispute Resolved',
-                'created_at' => $dateTime,
-                'message' => 'Dispute for the order #' . $order->id . ' has been resolved by the site administrator.'
-            ]
-        ];
-        $this->sendNotification($data);
+        // $data = [
+        //     [
+        //         'order_id' => $order->id,
+        //         'sender_id' => auth()->user()->id,
+        //         'receiver_id' => $order->item->retailer->id,
+        //         'action_type' => 'Order Dispute Resolved',
+        //         'created_at' => $dateTime,
+        //         'message' => 'Dispute for the order #' . $order->id . ' has been resolved by the site administrator.'
+        //     ],
+        //     [
+        //         'order_id' => $order->id,
+        //         'sender_id' => auth()->user()->id,
+        //         'receiver_id' => $order->user_id,
+        //         'action_type' => 'Order Dispute Resolved',
+        //         'created_at' => $dateTime,
+        //         'message' => 'Dispute for the order #' . $order->id . ' has been resolved by the site administrator.'
+        //     ]
+        // ];
+        // $this->sendNotification($data);
 
         return redirect()->back()->with('success', $message);
     }

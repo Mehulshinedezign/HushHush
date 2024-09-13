@@ -123,7 +123,6 @@
                                             </ul>
                                         </div>
                                     @endforeach
-
                                 @endif
                             </div>
                         </div>

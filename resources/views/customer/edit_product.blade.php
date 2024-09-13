@@ -4,8 +4,28 @@
     <section class="home-sec fill-hight">
         <div class="container">
             <div class="home-wrapper">
-                <div class="section-heading">
+                <div class="section-heading grid-head-box">
+                    <div></div>
                     <h2>Products List</h2>
+                    @php
+                        $user = auth()->user();
+                        $userBankInfo = auth()->user()->userBankInfo;
+                    @endphp
+                    @if (is_null($userBankInfo))
+                        <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
+                            Add Your Product
+                        </div>
+                    @elseif (is_null($user->userDetail->complete_address))
+                        <div data-bs-toggle="modal" data-bs-target="#accountSetting">
+                            Add Your Product
+                        </div>
+                    @else
+                        <div class="modal-opener-box">
+                            <div data-bs-toggle="modal" class="button primary-btn" data-bs-target="#addproduct-Modal">
+                                Add Your Product
+                            </div>
+                        </div>
+                    @endif
                 </div>
                 <div class="home-filter-product">
                     @if ($products->isNotEmpty())
@@ -16,10 +36,11 @@
                                     <div class="product-card">
                                         <div class="product-img-box">
 
-                                            <a href="{{ route('viewproduct', jsencode_userdata($product->id)) }}" class="productLink">
+                                            <a href="{{ route('viewproduct', jsencode_userdata($product->id)) }}"
+                                                class="productLink">
                                                 @if (isset($product->thumbnailImage->file_path))
-                                                    <img src="{{$product->thumbnailImage->file_path }}"
-                                                        alt="" loading="lazy">
+                                                    <img src="{{ $product->thumbnailImage->file_path }}" alt=""
+                                                        loading="lazy">
                                                 @else
                                                     <img src="{{ asset('front/images/pro-0.png') }}" alt="img">
                                                 @endif
@@ -73,24 +94,24 @@
 @push('scripts')
     <script>
         function confirmDelete(event) {
-    event.preventDefault();
+            event.preventDefault();
 
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "Are you sure you want to delete this product?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#1B1B1B',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'Cancel',
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $('body').addClass('loading');
-            window.location.href = event.target.href;
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Are you sure you want to delete this product?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#1B1B1B',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('body').addClass('loading');
+                    window.location.href = event.target.href;
+                }
+            });
         }
-    });
-}
     </script>
 @endpush

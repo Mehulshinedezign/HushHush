@@ -159,9 +159,9 @@ class QueryController extends Controller
 
             $query_product->update($data);
 
-            $dates = explode(' - ', $query_product->date_range);
-            $startDate = date('Y-m-d', strtotime($dates[0]));
-            $endDate = date('Y-m-d', strtotime($dates[1]));
+            // $dates = explode(' - ', $query_product->date_range);
+            // $startDate = date('Y-m-d', strtotime($dates[0]));
+            // $endDate = date('Y-m-d', strtotime($dates[1]));
 
             // while ($startDate <= $endDate) {
             //     $startDate = date_create($startDate);

@@ -352,7 +352,7 @@ jQuery(document).ready(function () {
         let nonAvailableDateCounterElem = jQuery('input[name="non_available_date_count"]');
         let nonAvailableDateCounterVal = parseInt(nonAvailableDateCounterElem.val()) + 1;
         nonAvailableDateCounterElem.val(nonAvailableDateCounterVal)
-        let cloneDiv = jQuery('.clone-non-available-date-container').clone();
+        let cloneDiv = jQuery('.clone-non-available-date-container').first().clone();
         cloneDiv.removeClass('clone-non-available-date-container hidden')
         cloneDiv.find('input').addClass('non-availability')
         jQuery('.append-non-available-dates').append(cloneDiv)

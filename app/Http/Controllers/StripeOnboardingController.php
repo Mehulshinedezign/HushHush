@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
+use App\Models\{Order,RetailerPayout};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
@@ -103,13 +103,14 @@ class StripeOnboardingController extends Controller
     public function transaction()
     {
         $orders = Order::with('product', 'retailer.vendorPayout', 'transaction')->where('user_id', auth()->id())->get();
+        
         return view('transaction-history', compact('orders'));
     }
 
     public function earningTransaction()
     {
-        $orders = Order::with('product', 'retailer.vendorPayout', 'transaction')->where('retailer_id', auth()->id())->get();
-        // dd($orders);
+        $orders = Order::with('product', 'retailer.vendorPayout', 'transaction')->where('retailer_id', auth()->id())->orderBy('id','desc')->get();
+    //    $order =  RetailerPayout::where('retailer_id',auth()->id())->get();
         return view('earning-transaction', compact('orders'));
     }
 }

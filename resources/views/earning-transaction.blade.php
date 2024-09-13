@@ -54,6 +54,7 @@
                                                     <div class="user-table-head">
                                                         <h5 class="plus-earning">
                                                             <i class="fa-solid fa-plus"></i>
+                                                            {{-- @dd($order->retailer->vendorPayout[0]->amount ) --}}
                                                             ${{ $order->retailer->vendorPayout[0]->amount ?? '0' }}
                                                         </h5>
                                                     </div>

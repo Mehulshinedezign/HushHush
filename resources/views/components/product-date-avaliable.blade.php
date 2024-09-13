@@ -5,7 +5,7 @@
         <input type="text" name="non_availabile_dates[0]" class="input-bg mb-3 date-icon form-control non-availability"
             placeholder="{{ __('product.placeholders.nonAvailableDates') }}" autocomplete="off"
             onfocus="initDateRangePicker(this, dateOptions)"
-            @if (count($product->nonAvailableDates) > 0) value="{{ date('m/d/Y', strtotime($product->nonAvailableDates[0]->from_date)) . ' ' . $global_date_separator . ' ' . date('m/d/Y', strtotime($product->nonAvailableDates[0]->to_date)) }}" @endif
+           
             readonly>
 
         @error('non_availabile_dates.0')
@@ -15,7 +15,7 @@
     <div class="append-non-available-dates col-md-12">
         <span class="add-more-daterangepicker addlocation adddate float-left"> <span><i class="fas fa-plus"></i></span>
             Add</span>
-        @for ($i = 1; $i < old('non_available_date_count', $product->nonAvailableDates->count()); $i++)
+        {{-- @for ($i = 1; $i < old('non_available_date_count', $product->nonAvailableDates->count()); $i++)
             <div class="cp-unavailabilities">
                 <div class="">
 
@@ -34,7 +34,7 @@
                     @enderror
                 </div>
             </div>
-        @endfor
+        @endfor --}}
     </div>
     <div class="clone-non-available-date-container hidden cp-unavailabilities">
         <div class="">

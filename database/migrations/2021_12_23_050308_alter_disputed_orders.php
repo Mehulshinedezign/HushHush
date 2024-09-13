@@ -18,6 +18,7 @@ class AlterDisputedOrders extends Migration
             $table->enum("refund_type",["Full","Security","Insurance"])->after("transaction_id")->nullable();
             $table->decimal("refund_amount")->after("refund_type")->nullable();
             $table->enum("resolved_status",["Cancelled","Completed"])->after("refund_amount")->nullable();
+            $table->enum("resolved_status",["new","viewed","resolved"])->default('new')->nullable();
             $table->dateTime("resolved_date")->after("resolved_status")->nullable();
             $table->longText("gateway_response")->after("resolved_date")->nullable();
         });

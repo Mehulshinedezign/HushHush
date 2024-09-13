@@ -259,8 +259,17 @@
                     <div class="row">
                         <div class="col-12 col-sm-12 col-lg-12 col-md-12">
                             <div class="card ">
-                                <div class="card-header">
+                                <div class="card-header dispute-details-head">
                                     <h4>Dispute Details</h4>
+                                    <form action="{{route('admin.resolve-dispute-order', [$order->id])}}" method="post">
+                                        @csrf
+                                    <select name="status" id="" class="form-control">
+                                        <option value="new">New</option>
+                                        <option value="Viewed">Viewed</option>
+                                        <option value="Resolved">Resolved</option>
+                                    </select>
+                                <button type="submit" class="btn btn-primary mt-4">Resolve Dispute</button>
+                                </form>
                                     {{-- @if (!is_null($order->disputeDetails) && $order->dispute_status == 'Yes')
                                         <button class="btn btn-success small-btn" data-toggle="modal"
                                             data-target="#resolveDispute">Resolve Dispute</button>
@@ -368,10 +377,10 @@
                                             ${{ $order->security_option == 'security' && $order->status == 'Picked Up' ? '0.00' : ($order->dispute_status == 'Resolved' && $order->disputeDetails->refund_amount > '0.00' ? $order->disputeDetails->refund_amount : ($order->disputeDetails->refund_amount == '0.00' ? $order->disputeDetails->refund_amount : $order->total)) }}
                                         </span></li>
                                 </ul>
-                                @foreach ($order->disputedOrderImages as $disputedOrderImage)
+                                {{-- @foreach ($order->disputedOrderImages as $disputedOrderImage)
                                     <img class="dispute-admin-img" src="{{ $disputedOrderImage->url }}" height="100"
                                         width="100">
-                                @endforeach
+                                @endforeach --}}
                             </div>
                         </div>
                         <div class="mt-4">

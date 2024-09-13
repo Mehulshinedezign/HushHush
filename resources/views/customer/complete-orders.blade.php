@@ -65,12 +65,13 @@
                                 </div>
                             </div>
                         </div>
+                       
                         <div class="order-card-footer">
                             <a href="javascript:void(0)" data-orderId="{{ $order->id }}"
                                 data-productId="{{ @$order->product->id }}"
                                 class="button outline-btn full-btn productReview" data-bs-toggle="modal"
-                                data-bs-target="#rating_review">Write
-                                Review</a>
+                                data-bs-target="#rating_review">@if(@$order->product->ratings[0]->user_id !=auth()->id())Write
+                                Review @else Already reviewed @endif</a>
                         </div>
                     </div>
                 </div>
