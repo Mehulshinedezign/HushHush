@@ -7,7 +7,7 @@
                         <tr>
                             <th>Image</th>
                             <th>Product Name</th>
-                            <th>User Name</th>
+                            <th>Lender Name</th>
                             <th>Actual Price</th>
                             @if($querydatas->first()->status != 'PENDING')
                             <th>Agreed Price</th>

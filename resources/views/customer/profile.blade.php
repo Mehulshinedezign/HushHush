@@ -76,6 +76,7 @@
                 <div class="product-slider-heading">
                     <h3>Products by {{ $retailer->name }}</h3>
                 </div>
+                @if(!empty($product))
                 <div class="product-slider-main">
                     <div class="product-slider">
                         @foreach ($products as $product)
@@ -114,6 +115,7 @@
                             </div>
                         @endforeach
 
+
                     </div>
                     <div class="prev-product-btn">
 
@@ -136,6 +138,12 @@
 
                     </div>
                 </div>
+                @else
+                        <div class="list-empty-box">
+                            <img src="{{ asset('front/images/Empty 1.svg') }}">
+                            <h3 class="text-center">No Products Available</h3>
+                        </div>
+                        @endif
             </div>
         </div>
     </section>
