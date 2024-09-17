@@ -127,7 +127,7 @@ class QueryController extends Controller
 
     public function receiveQuery(Request $request)
     {
-        
+
         $user = auth()->user();
         $status = $request->query('status', 'PENDING');
         $querydatas = Query::where(['for_user' => $user->id, 'status' => $status])->orderBy('created_at', 'desc')->get();

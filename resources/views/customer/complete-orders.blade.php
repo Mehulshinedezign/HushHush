@@ -139,7 +139,8 @@
                                 </div>
                             </div>
                         </div>
-                        <textarea class="form-control mb-3" name="review" rows="3" placeholder="Please write product review here...."></textarea>
+                        <textarea class="form-control mb-3" name="review" rows="3"
+                            placeholder="Please write product review here...."></textarea>
                         <p class="popup-p">By submitting review you give us consent to publish and process personal
                             information in accordance with Term of use and Privacy Policy</p>
                         <button type="submit" class="button full-btn primary-btn submit mt-3"
