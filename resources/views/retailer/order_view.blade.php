@@ -53,7 +53,7 @@
 
                                 <li class="summary-item">
                                     <span class="summery-name">Rental Days: </span>
-                                    <span>{{ diffBetweenToDate(@$order->from_date, @$order->to_date) }} </span>
+                                    <span>{{ diffBetweenToDate(@$order->from_date, @$order->to_date) == 1 ? 1 : diffBetweenToDate(@$order->from_date, @$order->to_date) +1  }}  </span>
                                 </li>
                                 {{-- <li class="summary-item">
                                     <span class="summery-name">Rental Amount: </span>
