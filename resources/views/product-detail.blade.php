@@ -903,7 +903,7 @@
                         "{{ @$authUser->userDetail->complete_address }}";
                 }
             } else {
-                selectedValueInput.value = "Please select the value";
+                selectedValueInput.value = "Please select one of the above options";
             }
         };
 

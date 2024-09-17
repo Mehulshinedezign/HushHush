@@ -108,7 +108,7 @@ class QueryController extends Controller
     {
         $user = auth()->user();
         $status = $request->get('status', 'PENDING'); // Default to 'PENDING' if no status is passed
-        $querydatas = Query::where(['user_id' => $user->id, 'status' => $status])->get();
+        $querydatas = Query::where(['user_id' => $user->id, 'status' => $status])->orderByDesc('id')->get();
         return view('customer.my_query_list', compact('querydatas'));
     }
 
@@ -126,16 +126,13 @@ class QueryController extends Controller
     public function receiveQuery(Request $request)
     {
         $user = auth()->user();
-        $querydatas = Query::where(['for_user' => $user->id, 'status' => 'PENDING'])->get();
+        $querydatas = Query::where(['for_user' => $user->id, 'status' => 'PENDING'])->orderBy('created_at', 'desc')->get();
         $accept = true;
         return view('customer.receive_query_list', compact('querydatas', 'accept'));
     }
 
     public function acceptQuery(Request $request, $id)
     {
-        // dd($request->all());
-
-        // dd($request->all());
         DB::beginTransaction();
         try {
             // Validator::make($request->all(), [

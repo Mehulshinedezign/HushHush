@@ -67,17 +67,19 @@
                         </div>
 
                         <div class="order-card-footer">
-                            <a href="javascript:void(0)" data-orderId="{{ $order->id }}"
-                                data-productId="{{ @$order->product->id }}"
-                                class="button outline-btn full-btn productReview" data-bs-toggle="modal"
-                                data-bs-target="#rating_review">
-                                @if (@$order->product->ratings[0]->user_id != auth()->id())
-                                    Write
-                                    Review
-                                @else
-                                    Already reviewed
-                                @endif
-                            </a>
+                            @if (@$order->product->ratings[0]->user_id != auth()->id())
+                                <a href="javascript:void(0)" data-orderId="{{ $order->id }}"
+                                    data-productId="{{ @$order->product->id }}"
+                                    class="button outline-btn full-btn productReview" data-bs-toggle="modal"
+                                    data-bs-target="#rating_review">Write
+                                    Review </a>
+                            @else
+                                <a href="javascript:void(0)"
+                                    class="button outline-btn full-btn productReview">
+                                        Already reviewed
+                                </a>
+                            @endif
+
                         </div>
                     </div>
                 </div>
@@ -145,7 +147,8 @@
                                 </div>
                             </div>
                         </div>
-                        <textarea class="form-control mb-3" name="review" rows="3" placeholder="Please write product review here...."></textarea>
+                        <textarea class="form-control mb-3" name="review" rows="3"
+                            placeholder="Please write product review here...."></textarea>
                         <p class="popup-p">By submitting review you give us consent to publish and process personal
                             information in accordance with Term of use and Privacy Policy</p>
                         <button type="submit" class="button full-btn primary-btn submit mt-3"

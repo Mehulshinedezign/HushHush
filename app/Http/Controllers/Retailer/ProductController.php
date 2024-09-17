@@ -145,18 +145,19 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
             $category = jsdecode_userdata($request->category);
-
-            // Geocoding the complete location
-            $product_complete_location = $request->input('product_complete_location');
-            $address = urlencode($product_complete_location);
-            $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=" . config('services.google_maps.api_key');
-            $response = file_get_contents($url);
-            $raw_address = json_decode($response, true);
-            if (!empty($raw_address['results'])) {
-                $formatted_address = json_encode($raw_address['results'][0]);
+            if($request->input('product_complete_location')!=null)
+            {
+                // Geocoding the complete location
+                $product_complete_location = $request->input('product_complete_location');
+                $address = urlencode($product_complete_location);
+                $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=" . config('services.google_maps.api_key');
+                $response = file_get_contents($url);
+                $raw_address = json_decode($response, true);
+                if (!empty($raw_address['results'])) {
+                    $formatted_address = json_encode($raw_address['results'][0]);
+                }
             }
 
-            // dd('user');
 
             // Create the product
             $userId = auth()->user()->id;
@@ -179,8 +180,8 @@ class ProductController extends Controller
                 'color' => $request->color ?? null,
                 'price' => $request->price ?? null,
                 'city' => $request->city ?? null,
-                'state' => $request->state,
-                'country' => $request->country,
+                'state' => $request->state ?? null,
+                'country' => $request->country ?? null,
                 'status' => '1',
                 'modified_by' => $userId,
                 'modified_user_type' => 'Self',
@@ -203,18 +204,17 @@ class ProductController extends Controller
                 }
             }
             // dd('images');
-
             // Store product location
             ProductLocation::create([
                 'product_id' => $product->id,
-                'address1' => $request->address1,
-                'address2' => $request->address2,
+                'address1' => $request->address1 ?? null,
+                'address2' => $request->address2 ?? null,
                 'manul_pickup_location' => $request->manual_location ? '1' : '0',
                 'shipment' => $request->shipment ? '1' : '0',
-                'country' => $request->country,
-                'state' => $request->state,
+                'country' => $request->country ?? null,
+                'state' => $request->state ?? null,
                 'city' => $request->city ?? null,
-                'pick_up_location' => $request->product_complete_location,
+                'pick_up_location' => $request->product_complete_location ?? null,
                 'raw_address' => $formatted_address ?? null,
                 'postcode' => $request->zipcode ?? null,
             ]);
@@ -264,7 +264,6 @@ class ProductController extends Controller
             DB::commit();
             return redirect()->route('product')->with('success', "Your product has been uploaded successfully.");
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
         }

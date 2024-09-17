@@ -81,7 +81,7 @@
                         <div class="query-detail-info">
                             <h3>Shipment Address</h3>
                             @if ($query)
-                                <p>{{ @$query->user->userDetail->city . ', ' . @$query->user->userDetail->state . ', ' . @$query->user->userDetail->country ?? 'NA' }}
+                                <p>{{ @$query->user->userDetail->complete_address ?? 'NA' }}
                                 </p>
                             @endif
                         </div>
@@ -130,7 +130,7 @@
                         <div class="query-detail-info">
                             <h3>Shipment Address</h3>
                             @if ($query)
-                                <p>{{ @$query->user->userDetail->city . ', ' . @$query->user->userDetail->state . ', ' . @$query->user->userDetail->country ?? 'NA' }}
+                                <p>{{ @$query->user->userDetail->complete_address ?? 'NA' }}
                                 </p>
                             @endif
                         </div>

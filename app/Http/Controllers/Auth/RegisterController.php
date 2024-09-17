@@ -74,7 +74,7 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'regex: ' . $emailRegex],
             'phone_number.main' => ['required', 'digits:' . config('validation.phone_minlength'), 'min:' . config('validation.phone_minlength'), 'max:' . config('validation.phone_maxlength')],
             'password' => ['required', 'string', 'min:8', 'max:32', 'confirmed'],
-            'gov_id' => 'required|file|mimes:jpg,png,jpeg,pdf|max:2048',
+            // 'gov_id' => 'required|file|mimes:jpg,png,jpeg,pdf|max:2048',
         ];
 
         $message = [
