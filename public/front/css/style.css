@@ -2803,5 +2803,17 @@ form#filters {
 
 
 
-
-
+.nav-item .cstm-dropdown .dropdown-toggle{
+    padding: 0 !important;
+}
+.sub-categeory-menu {
+    padding: 0px 15px;
+}
+.sub-categeory-links > a + a {
+    margin-top: 15px;
+}
+.sub-categeory-links > a {
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    color: #000 !important;
+}
