@@ -32,17 +32,17 @@
                     <div class="col-md-5">
 
                         {{-- @if (!is_null($retailer->userDetail->about)) --}}
-                            <div class="profile-about-detail">
-                                <h4>About me</h4>
+                        <div class="profile-about-detail">
+                            <h4>About me</h4>
 
-                                @if ($retailer && $retailer->userDetail)
-                                    <p>{{ $retailer->userDetail->about }}</p>
-                                @endif
+                            @if ($retailer && $retailer->userDetail)
+                                <p>{{ $retailer->userDetail->about }}</p>
+                            @endif
 
-                                {{-- <p>Safer For The Environment: Our denim factory partner recycles 98% of their water using
+                            {{-- <p>Safer For The Environment: Our denim factory partner recycles 98% of their water using
                                 reverse osmosis filtration and keeps byproducts out of the environment by mixing them with
                                 concrete.</p> --}}
-                            </div>
+                        </div>
                         {{-- @endif --}}
                     </div>
                     <div class="col-md-5">
@@ -61,7 +61,8 @@
                                     <h3>Address</h3>
 
                                     @if ($retailer && $retailer->userDetail)
-                                        <p>{{@$retailer->userDetail->city. ' , ' . @$retailer->userDetail->state. ' , ' . @$retailer->userDetail->country}}</p>
+                                        <p>{{ @$retailer->userDetail->city . ' , ' . @$retailer->userDetail->state . ' , ' . @$retailer->userDetail->country }}
+                                        </p>
                                     @endif
 
                                     {{-- <p>Akshya Nagar 1st Block 1st Cross, Rammurthy nagar Los Angeles , USA</p> --}}
@@ -76,74 +77,79 @@
                 <div class="product-slider-heading">
                     <h3>Products by {{ $retailer->name }}</h3>
                 </div>
-                @if(!empty($product))
-                <div class="product-slider-main">
-                    <div class="product-slider">
-                        @foreach ($products as $product)
-                        {{-- @dd($product); --}}
-                            <div class="product-card">
-                                <div class="product-img-box">
-                                    <a href="{{ route('viewproduct', ['id' => jsencode_userdata($product->id)]) }}">
-                                        @if (isset($product->thumbnailImage->file_path))
-                                            <img src="{{ $product->thumbnailImage->file_path }}" alt=""
-                                                loading="lazy">
-                                        @else
-                                            <img src="{{ asset('front/images/pro-0.png') }}" alt="img">
-                                        @endif
-                                    </a>
-                                    {{-- <img src="{{ asset('front/images/pro-0.png') }}" alt="img"> --}}
-                                    {{-- <div class="product-card-like">
+                @if ($products->isNotEmpty())
+                    <div class="product-slider-main">
+                        <div class="product-slider">
+                            @foreach ($products as $product)
+                                {{-- @dd($product); --}}
+                                <div class="product-card">
+                                    <div class="product-img-box">
+                                        <a href="{{ route('viewproduct', ['id' => jsencode_userdata($product->id)]) }}">
+                                            @if (isset($product->thumbnailImage->file_path))
+                                                <img src="{{ $product->thumbnailImage->file_path }}" alt=""
+                                                    loading="lazy">
+                                            @else
+                                                <img src="{{ asset('front/images/pro-0.png') }}" alt="img">
+                                            @endif
+                                        </a>
+                                        {{-- <img src="{{ asset('front/images/pro-0.png') }}" alt="img"> --}}
+                                        {{-- <div class="product-card-like">
                                         <i class="fa-solid fa-heart"></i>
                                     </div> --}}
-                                    {{-- <div class="product-card-status">
+                                        {{-- <div class="product-card-status">
                                         <p>in Stock</p>
                                     </div> --}}
-                                </div>
-                                <div class="product-card-detail">
-                                    <p>{{ $product->name }}</p>
-                                    <div class="product-prize-rating">
-                                        <h4>${{ $product->rent_day }}/day</h4>
-                                        <div class="review-profile-rating-box">
-                                            <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                            <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                            <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                            <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
-                                            <a href="#"><i class="fa-solid fa-star" style="color: #DEE0E3;"></i></a>
+                                    </div>
+                                    <div class="product-card-detail">
+                                        <p>{{ $product->name }}</p>
+                                        <div class="product-prize-rating">
+                                            <h4>${{ $product->rent_day }}/day</h4>
+                                            <div class="review-profile-rating-box">
+                                                <a href="#"><i class="fa-solid fa-star"
+                                                        style="color: #DEE0E3;"></i></a>
+                                                <a href="#"><i class="fa-solid fa-star"
+                                                        style="color: #DEE0E3;"></i></a>
+                                                <a href="#"><i class="fa-solid fa-star"
+                                                        style="color: #DEE0E3;"></i></a>
+                                                <a href="#"><i class="fa-solid fa-star"
+                                                        style="color: #DEE0E3;"></i></a>
+                                                <a href="#"><i class="fa-solid fa-star"
+                                                        style="color: #DEE0E3;"></i></a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
 
 
-                    </div>
-                    <div class="prev-product-btn">
-
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="9" viewBox="0 0 26 18"
-                            fill="none">
-                            <path
-                                d="M24.8854 9.15808L17.2806 16.763C17.0074 17.082 16.5273 17.1192 16.2083 16.8459C15.8893 16.5727 15.8521 16.0926 16.1254 15.7736C16.1509 15.7439 16.1786 15.7161 16.2083 15.6907L22.5127 9.37865H0.901088C0.481121 9.37865 0.140625 9.03815 0.140625 8.61812C0.140625 8.19809 0.481121 7.85766 0.901088 7.85766H22.5127L16.2083 1.55325C15.8893 1.28007 15.8521 0.799974 16.1254 0.48098C16.3986 0.161985 16.8787 0.1248 17.1977 0.398046C17.2274 0.423534 17.2552 0.451242 17.2806 0.48098L24.8855 8.08587C25.1803 8.38239 25.1803 8.86143 24.8854 9.15808Z"
-                                fill="#1B1B1B"></path>
-                        </svg>
-
-                    </div>
-                    <div class="next-product-btn">
-
-                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="9" viewBox="0 0 26 18"
-                            fill="none">
-                            <path
-                                d="M24.8854 9.15808L17.2806 16.763C17.0074 17.082 16.5273 17.1192 16.2083 16.8459C15.8893 16.5727 15.8521 16.0926 16.1254 15.7736C16.1509 15.7439 16.1786 15.7161 16.2083 15.6907L22.5127 9.37865H0.901088C0.481121 9.37865 0.140625 9.03815 0.140625 8.61812C0.140625 8.19809 0.481121 7.85766 0.901088 7.85766H22.5127L16.2083 1.55325C15.8893 1.28007 15.8521 0.799974 16.1254 0.48098C16.3986 0.161985 16.8787 0.1248 17.1977 0.398046C17.2274 0.423534 17.2552 0.451242 17.2806 0.48098L24.8855 8.08587C25.1803 8.38239 25.1803 8.86143 24.8854 9.15808Z"
-                                fill="#1B1B1B"></path>
-                        </svg>
-
-                    </div>
-                </div>
-                @else
-                        <div class="list-empty-box">
-                            <img src="{{ asset('front/images/Empty 1.svg') }}">
-                            <h3 class="text-center">No Products Available</h3>
                         </div>
-                        @endif
+                        <div class="prev-product-btn">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="9" viewBox="0 0 26 18"
+                                fill="none">
+                                <path
+                                    d="M24.8854 9.15808L17.2806 16.763C17.0074 17.082 16.5273 17.1192 16.2083 16.8459C15.8893 16.5727 15.8521 16.0926 16.1254 15.7736C16.1509 15.7439 16.1786 15.7161 16.2083 15.6907L22.5127 9.37865H0.901088C0.481121 9.37865 0.140625 9.03815 0.140625 8.61812C0.140625 8.19809 0.481121 7.85766 0.901088 7.85766H22.5127L16.2083 1.55325C15.8893 1.28007 15.8521 0.799974 16.1254 0.48098C16.3986 0.161985 16.8787 0.1248 17.1977 0.398046C17.2274 0.423534 17.2552 0.451242 17.2806 0.48098L24.8855 8.08587C25.1803 8.38239 25.1803 8.86143 24.8854 9.15808Z"
+                                    fill="#1B1B1B"></path>
+                            </svg>
+
+                        </div>
+                        <div class="next-product-btn">
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="9" viewBox="0 0 26 18"
+                                fill="none">
+                                <path
+                                    d="M24.8854 9.15808L17.2806 16.763C17.0074 17.082 16.5273 17.1192 16.2083 16.8459C15.8893 16.5727 15.8521 16.0926 16.1254 15.7736C16.1509 15.7439 16.1786 15.7161 16.2083 15.6907L22.5127 9.37865H0.901088C0.481121 9.37865 0.140625 9.03815 0.140625 8.61812C0.140625 8.19809 0.481121 7.85766 0.901088 7.85766H22.5127L16.2083 1.55325C15.8893 1.28007 15.8521 0.799974 16.1254 0.48098C16.3986 0.161985 16.8787 0.1248 17.1977 0.398046C17.2274 0.423534 17.2552 0.451242 17.2806 0.48098L24.8855 8.08587C25.1803 8.38239 25.1803 8.86143 24.8854 9.15808Z"
+                                    fill="#1B1B1B"></path>
+                            </svg>
+
+                        </div>
+                    </div>
+                @else
+                    <div class="list-empty-box">
+                        <img src="{{ asset('front/images/Empty 1.svg') }}">
+                        <h3 class="text-center">No Products Available</h3>
+                    </div>
+                @endif
             </div>
         </div>
     </section>

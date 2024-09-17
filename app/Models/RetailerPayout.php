@@ -25,4 +25,9 @@ class RetailerPayout extends Model
     {
         return self::where('retailer_id', $retailerId)->sum('amount');
     }
+
+    public function Orders()
+    {
+        return $this->belongsTo(Order::class,'order_id','id');
+    }
 }

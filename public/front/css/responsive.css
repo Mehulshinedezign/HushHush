@@ -311,6 +311,9 @@
 }
 
 @media screen and (max-width:1199px) {
+    .search-pro-header ul li input {
+        font-size: 12px;
+    }
     .pro-desc-info-box:first-child {
         border-left: 0;
         padding-left: 0px;
@@ -781,6 +784,21 @@
 }
 
 @media screen and (max-width:767px) {
+    .search-pro-header button.primary-btn {
+        min-height: 0px;
+        gap: 10px;
+        font-size: 12px;
+        padding: 0 !important;
+        white-space: nowrap;
+        min-width: unset !important;
+        background-color: #fff;
+    }
+    .formfield.icon-new-bx .form-icon {
+        display: none;
+    }
+    .search-pro-header button.primary-btn i{
+        color: #000;
+    }
     .home-filter-inner h4 {
         font-size: 15px;
         line-height: 30px;
@@ -1422,6 +1440,27 @@
 }
 
 @media screen and (max-width:575px) {
+    .addproduct-Modal .modal-body {
+        padding: 20px 20px;
+    }
+    .product_manual_location {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-direction: column;
+    }
+    .home-wrapper:has(.grid-head-box) .home-product-box {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 60px 25px;
+    }
+    .section-heading.grid-head-box {
+        display: flex;
+        justify-content: space-between;
+    }
+    .section-heading.grid-head-box > div:first-child{
+        display: none;
+    }
     .header-cart>ul {
         display: flex;
         gap: 15px;

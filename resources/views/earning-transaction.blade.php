@@ -56,13 +56,15 @@
                                                     </div>
                                                 </td>
                                                 <td>
+                                                    {{-- @dd($order->retailePayout); --}}
+
                                                     <div class="user-table-head">
                                                         <h5 class="plus-earning">
                                                             <i class="fa-solid fa-plus"></i>
-                                                            {{-- @dd($order->retailer->vendorPayout[0]->amount ) --}}
-                                                            ${{ $order->retailer->vendorPayout[0]->amount ?? '0' }}
+                                                            ${{ $order->retailePayout->amount ?? '0' }}
                                                         </h5>
                                                     </div>
+
                                                 </td>
                                                 <td>
                                                     <div class="user-table-head">

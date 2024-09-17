@@ -485,6 +485,7 @@ class ProductController extends Controller
                                 ProductDisableDate::create([
                                     'product_id' => $product->id,
                                     'disable_date' => $start->format('Y-m-d'),
+                                    'added_by'=>auth()->id(),
                                 ]);
                                 $start->modify('+1 day');
                             }
@@ -499,6 +500,7 @@ class ProductController extends Controller
                 ProductDisableDate::create([
                     'product_id' => $product->id,
                     'disable_date' => $futureDate->format('Y-m-d'),
+                    // 'added_by' => auth()->id(),
                 ]);
             }
 
@@ -663,6 +665,7 @@ class ProductController extends Controller
                             ProductDisableDate::create([
                                 'product_id' => $product->id,
                                 'disable_date' => $start->format('Y-m-d'),
+                                'added_by'=>auth()->id(),
                             ]);
                             $start->modify('+1 day');
                         }
@@ -839,167 +842,407 @@ class ProductController extends Controller
      */
 
 
+    // public function getAllProducts(Request $request)
+    // {
+    //     try {
+    //         $authUser = auth()->user();
+
+    //         $is_bankdetail = $authUser->bankAccount;
+    //         if (is_null($is_bankdetail)) {
+    //             $bankdetails = false;
+    //         } else {
+    //             $bankdetails = true;
+    //         }
+    //         $hasCompleteAddress = !empty($authUser->userDetail->complete_address) &&
+    //             !empty($authUser->userDetail->country);
+    //         $addresAdded = false;
+
+    //         if ($hasCompleteAddress) {
+    //             $addresAdded = true;
+    //         } else {
+    //             $addresAdded = false;
+    //         }
+
+    //         $query = Product::where('user_id', '!=', $authUser->id);
+
+    //         $filterApplied = false;
+
+    //         if ($request->has('Category')) {
+    //             $categories = explode(',', $request->input('Category'));
+    //             $query->filterByCategories($categories);
+    //             $filterApplied = true;
+    //         }
+
+    //         if ($request->has('Brand')) {
+    //             $brands = explode(',', $request->input('Brand'));
+    //             $query->filterByBrands($brands);
+    //             $filterApplied = true;
+    //         }
+
+    //         if ($request->has('Size')) {
+    //             $sizes = explode(',', $request->input('Size'));
+    //             $query->filterBySizes($sizes);
+    //             $filterApplied = true;
+    //         }
+
+    //         if ($request->has('Color')) {
+    //             $colors = explode(',', $request->input('Color'));
+    //             $query->filterByColors($colors);
+    //             $filterApplied = true;
+    //         }
+
+    //         if ($request->has('Price')) {
+    //             $priceRange = explode(',', $request->input('Price'));
+    //             $query->filterByPriceRange($priceRange);
+    //             $filterApplied = true;
+    //         }
+    //         if ($request->has('Date')) {
+    //             $priceRange = explode(',', $request->input('Date'));
+    //             $query->filterByPriceRange($priceRange);
+    //             $filterApplied = true;
+    //         }
+    //         if ($request->has('Location')) {
+    //             $priceRange = explode(',', $request->input('Location'));
+    //             $query->filterByPriceRange($priceRange);
+    //             $filterApplied = true;
+    //         }
+
+    //         // if ($request->has('Condition')) {
+    //         //     $conditions = explode(',', $request->input('Condition'));
+    //         //     $query->filterByCondition($conditions);
+    //         //     $filterApplied = true;
+    //         // }
+
+    //         // Add Ratings filter
+    //         if ($request->has('Ratings')) {
+    //             $ratings = explode(',', $request->input('Ratings'));
+    //             $query->filterByRatings($ratings);
+    //             $filterApplied = true;
+    //         }
+
+    //         $products = $query->get();
+
+    //         $categories = getParentCategory();
+    //         $brands = getBrands();
+    //         $sizes = getAllsizes();
+    //         $colors = getColors();
+
+    //         $filters = [
+    //             [
+    //                 'id' => '1',
+    //                 'name' => 'Category',
+    //                 'subItems' => $categories->map(function ($category) {
+    //                     return [
+    //                         'id' => $category->id,
+    //                         'name' => $category->name,
+    //                         'isSelect' => false,
+    //                         'Subcategory' => getChild($category->id)->map(function ($subCategory) {
+    //                             return [
+    //                                 'id' => $subCategory->id,
+    //                                 'name' => $subCategory->name,
+    //                                 'isSelect' => false,
+    //                             ];
+    //                         }),
+
+    //                     ];
+    //                 })->toArray(),
+    //             ],
+    //             [
+    //                 'id' => '2',
+    //                 'name' => 'Size',
+    //                 'subItems' => $sizes->map(function ($size) {
+    //                     return [
+    //                         'id' => $size->id,
+    //                         'name' => $size->name,
+    //                         'isSelect' => false,
+    //                     ];
+    //                 })->toArray(),
+    //             ],
+    //             [
+    //                 'id' => '3',
+    //                 'name' => 'Color',
+    //                 'subItems' => $colors->map(function ($color) {
+    //                     return [
+    //                         'id' => $color->id,
+    //                         'name' => $color->name,
+    //                         'isSelect' => false,
+    //                     ];
+    //                 })->toArray(),
+    //             ],
+    //             [
+    //                 'id' => '4',
+    //                 'name' => 'Brand',
+    //                 'subItems' => $brands->map(function ($brand) {
+    //                     return [
+    //                         'id' => $brand->id,
+    //                         'name' => $brand->name,
+    //                         'isSelect' => false,
+    //                     ];
+    //                 })->toArray(),
+    //             ],
+    //             [
+    //                 'id' => '5',
+    //                 'name' => 'Price',
+    //                 // 'subItems' => [
+    //                 //     ['id' => '1', 'name' => 'below 1000', 'isSelect' => false],
+    //                 //     ['id' => '2', 'name' => '1000-2000', 'isSelect' => false],
+    //                 //     ['id' => '3', 'name' => '2000-3000', 'isSelect' => false],
+    //                 //     ['id' => '4', 'name' => 'above 3000', 'isSelect' => false],
+    //                 // ],
+    //             ],
+    //             [
+    //                 'id' => '8',
+    //                 'name' => 'Date',
+    //                 // 'subItems' => [
+    //                 //     ['id' => '1', 'name' => 'below 1000', 'isSelect' => false],
+    //                 //     ['id' => '2', 'name' => '1000-2000', 'isSelect' => false],
+    //                 //     ['id' => '3', 'name' => '2000-3000', 'isSelect' => false],
+    //                 //     ['id' => '4', 'name' => 'above 3000', 'isSelect' => false],
+    //                 // ],
+    //             ],
+    //             [
+    //                 'id' => '9',
+    //                 'name' => 'Location',
+    //                 // 'subItems' => [
+    //                 //     ['id' => '1', 'name' => 'below 1000', 'isSelect' => false],
+    //                 //     ['id' => '2', 'name' => '1000-2000', 'isSelect' => false],
+    //                 //     ['id' => '3', 'name' => '2000-3000', 'isSelect' => false],
+    //                 //     ['id' => '4', 'name' => 'above 3000', 'isSelect' => false],
+    //                 // ],
+    //             ],
+    //             [
+    //                 'id' => '6',
+    //                 'name' => 'Condition',
+    //                 'subItems' => [
+    //                     ['id' => '1', 'name' => 'Excellent', 'isSelect' => false],
+    //                     ['id' => '2', 'name' => 'Good', 'isSelect' => false],
+    //                     ['id' => '3', 'name' => 'Fair', 'isSelect' => false],
+    //                 ],
+    //             ],
+    //             [
+    //                 'id' => '7',
+    //                 'name' => 'Ratings',
+    //                 'subItems' => [
+    //                     ['id' => '1', 'name' => '1 Star', 'isSelect' => false],
+    //                     ['id' => '2', 'name' => '2 Stars', 'isSelect' => false],
+    //                     ['id' => '3', 'name' => '3 Stars', 'isSelect' => false],
+    //                     ['id' => '4', 'name' => '4 Stars', 'isSelect' => false],
+    //                     ['id' => '5', 'name' => '5 Stars', 'isSelect' => false],
+    //                 ],
+    //             ],
+    //         ];
+
+    //         // Transform the products
+    //         $transformedProducts = $products->map(function ($product) {
+    //             $allImages = $product->allImages->map(function ($image) {
+    //                 return [
+    //                     'id' => $image->id,
+    //                     'product_id' => $image->product_id,
+    //                     'file_name' => $image->file_name,
+    //                     'file_path' => $image->file_path,
+    //                     'created_at' => $image->created_at,
+    //                     'updated_at' => $image->updated_at,
+    //                 ];
+    //             });
+
+    //             return [
+    //                 'id' => $product->id,
+    //                 'name' => $product->name,
+    //                 'description' => $product->description,
+    //                 'specification' => $product->specification,
+    //                 'rentaltype' => $product->rentaltype,
+    //                 'user_id' => $product->user_id,
+    //                 'category_id' => $product->category_id,
+    //                 'subcat_id' => $product->subcat_id,
+    //                 'quantity' => $product->quantity,
+    //                 'rent' => $product->rent,
+    //                 'min_days_rent_item' => $product->min_days_rent_item,
+    //                 'price' => $product->price,
+    //                 'security' => $product->security,
+    //                 'status' => $product->status,
+    //                 'other_size' => $product->other_size,
+    //                 'condition' => $product->condition,
+    //                 'brand' => $product->get_brand->name ?? null,
+    //                 'color' => $product->get_color->name ?? null,
+    //                 'size' => $product->get_size->name ?? null,
+    //                 'rent_day' => $product->rent_day,
+    //                 'rent_week' => $product->rent_week,
+    //                 'rent_month' => $product->rent_month,
+    //                 'modified_by' => $product->modified_by,
+    //                 'modified_user_type' => $product->modified_user_type,
+    //                 'available' => $product->available,
+    //                 'city' => $product->city,
+    //                 'product_market_value' => $product->product_market_value,
+    //                 'product_link' => $product->product_link,
+    //                 'average_rating' => $product->average_rating,
+    //                 'product_image_url' => $product->thumbnailImage->file_path ?? null,
+    //                 'all_images' => $allImages,
+    //                 'favourites' => !is_null($product->favorites) ? true : false,
+    //                 'created_at' => $product->created_at,
+    //             ];
+    //         })->toArray();
+
+    //         return response()->json([
+    //             'status' => true,
+    //             'message' => 'Products fetched successfully!',
+    //             'data' => [
+    //                 'products' => $transformedProducts,
+    //                 'filters' => $filters,
+    //                 'filter_applied' => $filterApplied,
+    //                 'account_added' => $bankdetails,
+    //                 'address_added' =>$addresAdded,
+
+    //             ],
+    //         ], 200);
+    //     } catch (\Throwable $e) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => $e->getMessage(),
+    //             'errors' => [],
+    //         ], 500);
+    //     }
+    // }
+
     public function getAllProducts(Request $request)
     {
         try {
             $authUser = auth()->user();
-
             $is_bankdetail = $authUser->bankAccount;
-            if (is_null($is_bankdetail)) {
-                $bankdetails = false;
-            } else {
-                $bankdetails = true;
-            }
+            $bankdetails = is_null($is_bankdetail) ? false : true;
             $hasCompleteAddress = !empty($authUser->userDetail->complete_address) &&
                 !empty($authUser->userDetail->country);
-            $addresAdded = false;
-
-            if ($hasCompleteAddress) {
-                $addresAdded = true;
-            } else {
-                $addresAdded = false;
-            }
+            $addresAdded = $hasCompleteAddress ? true : false;
+            $fcm_token = is_null( $authUser->pushToken->fcm_token) ? false : true ;
 
             $query = Product::where('user_id', '!=', $authUser->id);
-
             $filterApplied = false;
 
+            // Category Filter
             if ($request->has('Category')) {
                 $categories = explode(',', $request->input('Category'));
                 $query->filterByCategories($categories);
                 $filterApplied = true;
             }
 
+            // Brand Filter
             if ($request->has('Brand')) {
                 $brands = explode(',', $request->input('Brand'));
                 $query->filterByBrands($brands);
                 $filterApplied = true;
             }
 
+            // Size Filter
             if ($request->has('Size')) {
                 $sizes = explode(',', $request->input('Size'));
                 $query->filterBySizes($sizes);
                 $filterApplied = true;
             }
 
+            // Color Filter
             if ($request->has('Color')) {
                 $colors = explode(',', $request->input('Color'));
                 $query->filterByColors($colors);
                 $filterApplied = true;
             }
 
-            if ($request->has('Price')) {
-                $priceRange = explode(',', $request->input('Price'));
-                $query->filterByPriceRange($priceRange);
+            // Price Range Filter
+            if ($request->has('min_price') && $request->has('max_price')) {
+                $minPrice = $request->input('min_price');
+                $maxPrice = $request->input('max_price');
+                $query->filterByPriceRange($minPrice, $maxPrice);
                 $filterApplied = true;
             }
 
-            if ($request->has('Condition')) {
-                $conditions = explode(',', $request->input('Condition'));
-                $query->filterByCondition($conditions);
+            // Date Range Filter
+            if ($request->has('start_date') && $request->has('end_date')) {
+                $startDate = $request->input('start_date');
+                $endDate = $request->input('end_date');
+                $query->filterByDateRange($startDate, $endDate);
                 $filterApplied = true;
             }
 
-            // Add Ratings filter
+            // Location Filter (city, state, country)
+            if ($request->has('city') || $request->has('state') || $request->has('country')) {
+                $query->filterByLocation(
+                    $request->input('city'),
+                    $request->input('state'),
+                    $request->input('country')
+                );
+                $filterApplied = true;
+            }
+
+            // Ratings Filter
             if ($request->has('Ratings')) {
                 $ratings = explode(',', $request->input('Ratings'));
                 $query->filterByRatings($ratings);
                 $filterApplied = true;
             }
 
+            // Fetch the products
             $products = $query->get();
 
+            // Get filters
             $categories = getParentCategory();
             $brands = getBrands();
             $sizes = getAllsizes();
             $colors = getColors();
 
+            // Define filters structure
             $filters = [
-                [
-                    'id' => '1',
-                    'name' => 'Category',
-                    'subItems' => $categories->map(function ($category) {
-                        return [
-                            'id' => $category->id,
-                            'name' => $category->name,
-                            'isSelect' => false,
-                            'Subcategory' => getChild($category->id)->map(function ($subCategory) {
-                                return [
-                                    'id' => $subCategory->id,
-                                    'name' => $subCategory->name,
-                                    'isSelect' => false,
-                                ];
-                            }),
-
-                        ];
-                    })->toArray(),
-                ],
-                [
-                    'id' => '2',
-                    'name' => 'Size',
-                    'subItems' => $sizes->map(function ($size) {
-                        return [
-                            'id' => $size->id,
-                            'name' => $size->name,
-                            'isSelect' => false,
-                        ];
-                    })->toArray(),
-                ],
-                [
-                    'id' => '3',
-                    'name' => 'Color',
-                    'subItems' => $colors->map(function ($color) {
-                        return [
-                            'id' => $color->id,
-                            'name' => $color->name,
-                            'isSelect' => false,
-                        ];
-                    })->toArray(),
-                ],
-                [
-                    'id' => '4',
-                    'name' => 'Brand',
-                    'subItems' => $brands->map(function ($brand) {
-                        return [
-                            'id' => $brand->id,
-                            'name' => $brand->name,
-                            'isSelect' => false,
-                        ];
-                    })->toArray(),
-                ],
-                [
-                    'id' => '5',
-                    'name' => 'Price',
-                    'subItems' => [
-                        ['id' => '1', 'name' => 'below 1000', 'isSelect' => false],
-                        ['id' => '2', 'name' => '1000-2000', 'isSelect' => false],
-                        ['id' => '3', 'name' => '2000-3000', 'isSelect' => false],
-                        ['id' => '4', 'name' => 'above 3000', 'isSelect' => false],
-                    ],
-                ],
-                [
-                    'id' => '6',
-                    'name' => 'Condition',
-                    'subItems' => [
-                        ['id' => '1', 'name' => 'Excellent', 'isSelect' => false],
-                        ['id' => '2', 'name' => 'Good', 'isSelect' => false],
-                        ['id' => '3', 'name' => 'Fair', 'isSelect' => false],
-                    ],
-                ],
-                [
-                    'id' => '7',
-                    'name' => 'Ratings',
-                    'subItems' => [
-                        ['id' => '1', 'name' => '1 Star', 'isSelect' => false],
-                        ['id' => '2', 'name' => '2 Stars', 'isSelect' => false],
-                        ['id' => '3', 'name' => '3 Stars', 'isSelect' => false],
-                        ['id' => '4', 'name' => '4 Stars', 'isSelect' => false],
-                        ['id' => '5', 'name' => '5 Stars', 'isSelect' => false],
-                    ],
-                ],
+                ['id' => '1', 'name' => 'Category', 'subItems' => $categories->map(function ($category) {
+                    return [
+                        'id' => $category->id,
+                        'name' => $category->name,
+                        'isSelect' => false,
+                        'Subcategory' => getChild($category->id)->map(function ($subCategory) {
+                            return [
+                                'id' => $subCategory->id,
+                                'name' => $subCategory->name,
+                                'isSelect' => false,
+                            ];
+                        }),
+                    ];
+                })->toArray()],
+                ['id' => '2', 'name' => 'Size', 'subItems' => $sizes->map(function ($size) {
+                    return [
+                        'id' => $size->id,
+                        'name' => $size->name,
+                        'isSelect' => false,
+                    ];
+                })->toArray()],
+                ['id' => '3', 'name' => 'Color', 'subItems' => $colors->map(function ($color) {
+                    return [
+                        'id' => $color->id,
+                        'name' => $color->name,
+                        'isSelect' => false,
+                    ];
+                })->toArray()],
+                ['id' => '4', 'name' => 'Brand', 'subItems' => $brands->map(function ($brand) {
+                    return [
+                        'id' => $brand->id,
+                        'name' => $brand->name,
+                        'isSelect' => false,
+                    ];
+                })->toArray()],
+                ['id' => '5', 'name' => 'Price'],
+                ['id' => '8', 'name' => 'Date'],
+                ['id' => '9', 'name' => 'Location'],
+                ['id' => '6', 'name' => 'Condition', 'subItems' => [
+                    ['id' => '1', 'name' => 'Excellent', 'isSelect' => false],
+                    ['id' => '2', 'name' => 'Good', 'isSelect' => false],
+                    ['id' => '3', 'name' => 'Fair', 'isSelect' => false],
+                ]],
+                ['id' => '7', 'name' => 'Ratings', 'subItems' => [
+                    ['id' => '1', 'name' => '1 Star', 'isSelect' => false],
+                    ['id' => '2', 'name' => '2 Stars', 'isSelect' => false],
+                    ['id' => '3', 'name' => '3 Stars', 'isSelect' => false],
+                    ['id' => '4', 'name' => '4 Stars', 'isSelect' => false],
+                    ['id' => '5', 'name' => '5 Stars', 'isSelect' => false],
+                ]],
             ];
 
             // Transform the products
+            //         // Transform the products
             $transformedProducts = $products->map(function ($product) {
                 $allImages = $product->allImages->map(function ($image) {
                     return [
@@ -1057,7 +1300,8 @@ class ProductController extends Controller
                     'filters' => $filters,
                     'filter_applied' => $filterApplied,
                     'account_added' => $bankdetails,
-                    'address_added' =>$addresAdded,
+                    'address_added' => $addresAdded,
+                    'fcm_token'=>$fcm_token,
 
                 ],
             ], 200);
@@ -1069,6 +1313,8 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
+
 
 
 
@@ -1113,7 +1359,7 @@ class ProductController extends Controller
                     'condition' => $product->condition,
                     'brand' => $product->get_brand->name ?? null,
                     'color' => $product->get_color->name ?? null,
-                    'size' => $product->get_size->name ?? null,
+                    'size' => $product->size ?? null,
                     'rent_day' => $product->rent_day,
                     'rent_week' => $product->rent_week,
                     'rent_month' => $product->rent_month,

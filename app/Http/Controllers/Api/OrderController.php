@@ -11,6 +11,7 @@ use App\Models\OrderImage;
 use App\Models\Product;
 use App\Models\ProductDisableDate;
 use App\Models\Query;
+use App\Models\RetailerPayout;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -218,6 +219,8 @@ class OrderController extends Controller
 
                 if ($order->customer_confirmed_returned == '1' && $order->status !== 'Completed') {
                     $order->update(['status' => 'Completed', 'returned_date' => $dateTime]);
+                    dd('herer');
+                    $this->payToRetailer($order);
                 }
             }
 
@@ -279,6 +282,8 @@ class OrderController extends Controller
 
                 if ($order->retailer_confirmed_returned == '1' && $order->status !== 'Completed') {
                     $order->update(['status' => 'Completed',  'returned_date' => $dateTime]);
+                    // dd('herer');
+                    $this->payToRetailer($order);
                 }
             }
 
@@ -300,6 +305,58 @@ class OrderController extends Controller
             ], 500);
         }
     }
+
+    private function payToRetailer($order)
+    {
+        try {
+            $order->load(["transaction", "retailer", "queryOf"]);
+
+            $order_commission = AdminSetting::where('key', 'order_commission')->first();
+
+            if ($order_commission->type === 'Percentage') {
+                $amount = $order->total * ($order_commission->value / 100);
+            } else if ($order_commission->type === 'Fixed') {
+                $amount = $order_commission->value;
+            }
+
+            $retailerAmount = $order->total - $amount;
+
+            $payoutData = [
+                "amount" => floatval($retailerAmount) * 100, // Amount in cents
+                "currency" => "usd",
+                "destination" => $order->queryOf->forUser->bankAccount->stripe_id,
+                "metadata" => [
+                    "order_ids" => $order->id
+                ]
+            ];
+
+            $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+            $transfer = $stripe->transfers->create($payoutData);
+
+
+
+            $retailerPayout = RetailerPayout::create([
+                "retailer_id" => $order->queryOf->forUser->id,
+                "transaction_id" => $transfer['id'],
+                "order_id" => $order->id,
+                "amount" => $transfer['amount'] / 100,
+                "gateway_response" => json_encode($transfer)
+            ]);
+
+            return true;
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => [
+                    'errors' => [],
+                ],
+            ], 500);
+        }
+    }
+
+
+
 
     public function orderDisputeApi(DisputeRequest $request, Order $order)
     {
@@ -561,5 +618,4 @@ class OrderController extends Controller
             ], 500);
         }
     }
-
 }

@@ -71,6 +71,11 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
         Route::get('neighborhoodcity/{id}', [App\Http\Controllers\AjaxController::class, 'get_city']);
 
 
+
+
+        Route::post('/report-product/{id}', [App\Http\Controllers\Customer\ProductController::class, 'reportProduct']);
+
+
         // add product
         Route::get('/lend', [App\Http\Controllers\Customer\ProductController::class, 'openModel'])->name('open.model');
 

@@ -338,7 +338,7 @@ class QueryController extends Controller
                         'lender_profile_pic' => $lender->frontend_profile_url ?? null,
                         'lender_id' => $lender->id,
                         'brand' => $product->get_brand->name ?? null,
-                        'size' => $product->get_size->name ?? null,
+                        'size' => $product->size ?? null,
                         'price' => $price,
 
                     ];
@@ -426,7 +426,7 @@ class QueryController extends Controller
                         'borrower_profile_pic' => $borrower->frontend_profile_url ?? null,
                         'borrower_id' => $borrower->id ?? null,
                         'brand' => $product->get_brand->name ?? 'N/A',
-                        'size' => $product->get_size->name ?? "N/A",
+                        'size' => $product->size ?? "N/A",
                         'price' => $price,
                     ];
                 });

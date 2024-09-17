@@ -110,28 +110,22 @@ class StripeOnboardingController extends Controller
 
     public function earningTransaction()
     {
-        // Fetch transactions for the authenticated retailer
         $transactions = RetailerPayout::where('retailer_id', auth()->id())->get();
 
-        // Debugging: Check if transactions are fetched correctly
         if ($transactions->isEmpty()) {
             return view('earning-transaction')->with('orders', collect()); // Return empty collection if no transactions
         }
 
-        // Extract the order IDs from the transactions
         $orderIds = $transactions->pluck('order_id');
 
-        // Fetch orders based on order IDs and eager load relationships
         $orders = Order::with(['product.thumbnailImage', 'retailer.vendorPayout', 'transaction'])
             ->whereIn('id', $orderIds)
             ->get();
 
-        // Debugging: Check if orders are fetched correctly
         if ($orders->isEmpty()) {
             return view('earning-transaction')->with('orders', collect()); // Return empty collection if no orders
         }
 
-        // Pass data to the Blade view
         return view('earning-transaction', compact('orders'));
     }
 }

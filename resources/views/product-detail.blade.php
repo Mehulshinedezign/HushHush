@@ -367,6 +367,26 @@
                                                     class="fa-solid fa-comments"></i>
                                                 Chat</a></div>
                                     @endguest
+                                    @php
+                                        // Check if the current user has already reported this product
+                                        $userHasReported = $product->reportedProducts->contains(function ($report) {
+                                            return $report->user_id == auth()->id();
+                                        });
+                                    @endphp
+
+                                    @if (!$userHasReported)
+                                        <div>
+                                            <button id="report-btn" data-product-id="{{ $product->id }}"
+                                                class="btn btn-danger">Report Product</button>
+                                        </div>
+                                    @else
+                                        <div>
+                                            <button class="btn btn-danger">Already Reported Product</button>
+                                        </div>
+                                    @endif
+
+
+
                                 </div>
                             </div>
                             <div class="pro-dec-rating-main mb-0">
@@ -443,7 +463,13 @@
         </div>
         <div id="imageModal" class="modal" style="display: none;">
             <span class="close" onclick="closeModal()">&times;</span>
-            <img class="modal-content" id="modalImage">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="product-popup-box">
+                        <img class="" id="modalImage">
+                    </div>
+                </div>
+            </div>
         </div>
         @php
             $authUser = auth()->user();
@@ -607,6 +633,57 @@
 @endsection
 
 @push('scripts')
+<script>
+    document.getElementById('report-btn').addEventListener('click', function() {
+        var productId = this.getAttribute('data-product-id');
+
+        // Open Swal for confirmation
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you really want to report this product?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, report it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Send the report request via AJAX
+                fetch(`/report-product/${productId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Add CSRF token
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            Swal.fire(
+                                'Reported!',
+                                data.message,
+                                'success'
+                            );
+                            // location.reload();
+                        } else {
+                            Swal.fire(
+                                'Oops!',
+                                data.message,
+                                'error'
+                            );
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire(
+                            'Error!',
+                            'Something went wrong, please try again later.',
+                            'error'
+                        );
+                    });
+            }
+        });
+    });
+</script>
 <script>
     $('.sendQuery').on('click', function() {
         console.log('herer', $('#saveProfile'))

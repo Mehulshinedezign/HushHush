@@ -11,6 +11,7 @@ use App\Http\Traits\ProductTrait;
 use App\Models\{User, Product, ProductFavorite, Category, NeighborhoodCity, Order, Query};
 use Illuminate\Support\Facades\Cookie;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -355,5 +356,38 @@ class ProductController extends Controller
         }
 
         return view('customer.profile', compact('products', 'retailer'));
+    }
+
+
+    public function reportProduct(Request $request, $id)
+    {
+        $userId = auth()->id();  // Assuming the user is authenticated
+        $productId = $id;
+
+        // Check if the product has already been reported by this user
+        $alreadyReported = DB::table('reported_products')
+            ->where('user_id', $userId)
+            ->where('product_id', $productId)
+            ->exists();
+
+        if ($alreadyReported) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You have already reported this product.'
+            ], 400);
+        }
+
+        // Report the product
+        DB::table('reported_products')->insert([
+            'user_id' => $userId,
+            'product_id' => $productId,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Product has been reported successfully!'
+        ]);
     }
 }

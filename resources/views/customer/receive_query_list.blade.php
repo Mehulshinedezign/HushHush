@@ -24,14 +24,14 @@
                 </div>
                 <div class="custom-tab">
                     <ul class="custom-tab-list">
-                        <li class="tab-item active" data-status="PENDING" data-user="lender">
-                            <a href="?status=PENDING" class="tab-link">Pending</a>
+                        <li class="tab-item " data-status="PENDING" data-user="lender">
+                            <a href="received_query?status=PENDING" class="tab-link">Pending</a>
                         </li>
-                        <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a href="?status=ACCEPTED"
+                        <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a href="received_query?status=ACCEPTED"
                                 class="tab-link">Accepted</a></li>
-                        <li class="tab-item" data-status="REJECTED" data-user="lender"><a href="?status=REJECTED"
+                        <li class="tab-item" data-status="REJECTED" data-user="lender"><a href="received_query?status=REJECTED"
                                 class="tab-link">Rejected</a></li>
-                        <li class="tab-item" data-status="COMPLETED" data-user="lender"><a href="?status=COMPLETED"
+                        <li class="tab-item" data-status="COMPLETED" data-user="lender"><a href="received_query?status=COMPLETED"
                                 class="tab-link">Completed</a></li>
 
                     </ul>
@@ -64,72 +64,44 @@
 @endsection
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            let activeTab = localStorage.getItem('activeTab') || 'PENDING'; // Default to 'PENDING'
+<script>
 
-            $('.custom-tab-list .tab-item').removeClass('active');
-            $('.custom-tab-list .tab-item[data-status="' + activeTab + '"]').addClass('active');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all tab items
+        const tabs = document.querySelectorAll('.tab-item');
 
-            $('.custom-tab-list .tab-item').on('click', function() {
-                let selectedTab = $(this).data('status');
-                localStorage.setItem('activeTab', selectedTab);
+        // Check URL for status or use 'PENDING' as the default when coming back to the page
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlTab = urlParams.get('status');
+        const activeTab = urlTab || 'PENDING'; // Default to 'PENDING' when no tab is in URL
+
+        // Set the active tab visually
+        const activeTabElement = document.querySelector(`.tab-item[data-status="${activeTab}"]`);
+        if (activeTabElement) {
+            activeTabElement.classList.add('active'); // Add active class to the selected tab
+        }
+
+        // Add click event listener to all tabs
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default link behavior
+
+                // Get the data-status of the clicked tab
+                const status = tab.getAttribute('data-status');
+
+                // Update the URL without reloading the page
+                window.history.pushState(null, '', `?status=${status}`);
+
+                // Refresh the page to simulate the behavior you want
+                location.reload();
             });
         });
 
-        $(document).ready(function() {
-            // Get the current status from the query string
-            var urlParams = new URLSearchParams(window.location.search);
-            var status = urlParams.get('status') || 'PENDING'; // Default to 'PENDING' if no status is set
-
-            // Automatically trigger a click on the correct tab based on the status
-            $('.tab-item').removeClass('active');
-            var activeTab = $('.tab-item[data-status="' + status + '"]');
-            activeTab.addClass('active');
-
-            // Trigger a click on the tab to load the data
-            activeTab.find('a.tab-link').trigger('click');
-
-            // Handle tab clicks to update URL without reloading the page
-            $('.tab-link').click(function(e) {
-                e.preventDefault(); // Prevent the default link action
-
-                var clickedTab = $(this).parent(); // Get the clicked tab's parent (the <li> element)
-                var selectedStatus = clickedTab.data('status');
-
-                // Set the active tab class
-                $('.tab-item').removeClass('active');
-                clickedTab.addClass('active');
-
-                // Update the URL without refreshing the page
-                var newUrl = new URL(window.location.href);
-                newUrl.searchParams.set('status', selectedStatus);
-                window.history.pushState({}, '', newUrl);
-
-                // Optionally, trigger the form submission or data loading logic here
-                loadDataBasedOnTab(selectedStatus);
-            });
-
-            // Function to load data based on the selected tab
-            function loadDataBasedOnTab(status) {
-                // Logic to load data for the selected tab (AJAX or form submission)
-                // For example:
-                $.ajax({
-                    url: '/received_query', // Adjust URL based on your route
-                    method: 'GET',
-                    data: {
-                        status: status
-                    },
-                    success: function(response) {
-                        // Update your data table with the response data
-                        $('#data-table').html(response); // Assuming you have a table or data container
-                    }
-                });
-            }
-
-            // Trigger data load on page load
-            loadDataBasedOnTab(status);
+        // Clear localStorage when navigating away from the page
+        window.addEventListener('beforeunload', function() {
+            localStorage.removeItem('activeTab'); // Clear the stored active tab
         });
+    });
     </script>
     <script>
         $(document).ready(function() {

@@ -55,7 +55,7 @@
                                                         <div class="user-table-head">
                                                             <h5 class="plus-minus">
                                                                 <i class="fa-solid fa-minus"></i>
-                                                                ${{ $order->transaction->total ?? '0' }}
+                                                                ${{ $order->retailePayout->total ?? '0' }}
                                                             </h5>
                                                         </div>
                                                     </td>

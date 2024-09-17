@@ -110,6 +110,13 @@
                 </ul>
             </li>
 
+            <li class="dropdown @if (Route::current()->getName() == 'admin.reportedProducts') active @endif">
+                <a href="{{ route('admin.reportedProducts') }}" class="nav-link"><i
+                        data-feather="file"></i><span>{{ 'Reported Products'}}</span></a>
+            </li>
+
+
+
         </ul>
     </aside>
 </div>

@@ -532,4 +532,9 @@ class Product extends Model
         });
         return $query;
     }
+
+    public function reportedProducts()
+    {
+        return $this->hasMany(ReportedProduct::class);
+    }
 }
