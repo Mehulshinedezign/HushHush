@@ -95,12 +95,7 @@
             </div>
         @endforelse
     </div>
-    @if ($empty)
-        <div class="list-empty-box">
-            <img src="{{ asset('front/images/Empty 1.svg') }}" alt="No orders available">
-            <h3 class="text-center">No orders Available</h3>
-        </div>
-    @endif
+    
     {{-- <div class="pagination-main">
         <a href="javascript:void(0)" class="pagination-box">
             01

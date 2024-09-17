@@ -4,7 +4,7 @@
         <div class="form-group">
             <label for="">Non-Available Dates</label>
             <div class="formfield">
-                <input type="text" name="non_availabile_dates[0]"
+                <input type="text" name="non_availabile_dates[]"
                     class="input-bg mb-3 date-icon form-control non-availability color-white-bss" readonly
                     placeholder="{{ __('product.placeholders.nonAvailableDates') }}" autocomplete="off"
                     onfocus="initDateRangePicker(this, dateOptions)">
@@ -27,6 +27,6 @@
             <input type="text" class="form-control input-bg mb-3 date-icon color-white-bss" readonly
                 placeholder="{{ __('product.placeholders.nonAvailableDates') }}"
                 onfocus="initDateRangePicker(this, dateOptions)" autocomplete="off">
-        </div>     
+        </div>
     </div>
 </div>

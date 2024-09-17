@@ -423,7 +423,7 @@
                                             @enderror
                                         </div>
                                     </div> --}}
-                                    
+
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Product market value*</label>
@@ -531,7 +531,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group ">
-                                            <label for="">Rent Price/Weeks*</label>
+                                            <label for="">Rent Price/Week*</label>
                                             <div class="formfield right-icon-field">
                                                 <input type="number" name="rent_price_week" id=""
                                                     placeholder=""
@@ -608,7 +608,7 @@
                                     class="button outline-btn full-btn">Cancel</a>
 
                                 <button type="submit" class="button primary-btn full-btn"
-                                    id="bank_info">Yes</button>
+                                    id="bank_info">Add</button>
 
                             </div>
                         </div>
@@ -652,8 +652,8 @@
         </div>
     @endauth
     {{-- Query modal section success and error  --}}
-    <div class="modal fade query_msg" id="query_msg" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade query_msg" id="query_msg" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
@@ -741,6 +741,7 @@
 
 
     <!--JS-->
+    
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ asset('front/js/bootstrap.bundle.min.js') }}"></script>
@@ -754,7 +755,7 @@
     <script src="{{ asset('js/jquery-validation.min.js') }}"></script>
     <script src="{{ asset('js/additional-methods.min.js') }}"></script>
     <script
-        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places">
+    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places">
     </script>
     </script>
     <!-- Include DateRangePicker JS -->
@@ -763,6 +764,81 @@
     <script src="{{ asset('js/custom/product-list.js') }}"></script>
     <script src="{{ asset('js/custom/add-wishlist.js') }}"></script>
     <script src="{{ asset('js/custom/common.js') }}?ver={{ now() }}"></script>
+    <script>
+        // Initialize the daterangepicker for a given element
+        function initDaterangepicker($element) {
+            $element.daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                drops: 'down',
+                opens: 'right',
+                minDate: moment().startOf('day'),
+            }).on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            });
+        }
+
+        // Reposition the daterangepicker relative to the input field when scrolling
+        function repositionDatepicker($element) {
+            var $container = $element.data('daterangepicker').container;
+            var elementOffset = $element.offset();
+            $container.css({
+                top: elementOffset.top + $element.outerHeight(),
+                left: elementOffset.left
+            });
+        }
+
+        // Scroll event to reposition the calendar when modal or page scrolls
+        function initScrollListener($element) {
+            var $modal = $('.update_product-modal, .product-modal');
+
+            $modal.on('scroll', function() {
+                if ($element.data('daterangepicker')) {
+                    repositionDatepicker($element);
+                }
+            });
+        }
+
+        // Initialize the datepicker when the input field is focused
+        $(document).on('focus', '.non-availability', function() {
+            var $this = $(this);
+            initDaterangepicker($this);
+            initScrollListener($this);
+            repositionDatepicker($this); // Initial position on focus
+        });
+
+        // Adding more date fields dynamically
+        $('.add-more-daterangepicker').on('click', function() {
+            var $clone = $('.clone-non-available-date-container').clone().removeClass('hidden');
+            $('.append-non-available-dates').append($clone);
+        });
+
+        // Remove the dynamically added datepicker field
+        $(document).on('click', '.remove-daterangepicker', function() {
+            $(this).closest('.clone-non-available-date-container').remove();
+        });
+
+        // Static initialization for date ranges, e.g., buttons
+        $('.daterange-btn').daterangepicker({
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            autoUpdateInput: false,
+            minDate: moment().startOf('day')
+        }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
+        });
+
+    </script>
+
+
 
     <script>
         // close pop-up button remove input field data
@@ -977,69 +1053,8 @@
 
             });
 
-            function initDaterangepicker($element) {
-                $element.daterangepicker({
-                    autoUpdateInput: false,
-                    locale: {
-                        format: 'YYYY-MM-DD'
-                    },
-                    drops: 'down',
-                    opens: 'right',
-                    minDate: moment().startOf('day')
-                }).on('apply.daterangepicker', function(ev, picker) {
-                    $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format(
-                        'YYYY-MM-DD'));
-                });
-            }
-
-            $('#non_available_date').on('click', function(e) {
-                e.preventDefault();
-                var $modal;
-                var currentScrollTop;
-                var targetOffset;
-                if ($('.update_product-modal').length) {
-                    $modal = $('.update_product-modal');
-                    targetOffset = $(this).offset().top + 210;
-                    currentScrollTop = $(".update_product-modal").scrollTop();
-                } else {
-                    targetOffset = $(this).offset().top - 100;
-                    $modal = $('.product-modal');
-                    currentScrollTop = $modal.scrollTop();
-                }
-
-                if (currentScrollTop >= targetOffset) {
-                    initDaterangepicker($('#non_available_date'));
-                    $('#non_available_date').data('daterangepicker').show();
-                } else {
-                    $modal.animate({
-                        scrollTop: targetOffset
-                    }, 500, function() {
-                        setTimeout(function() {
-                            initDaterangepicker($('#non_available_date'));
-                            $('#non_available_date').data('daterangepicker').show();
-                        }, 100);
-                    });
-                }
-            });
 
 
-            // Initialize daterangepicker for other elements if needed
-            $('.daterange-btn').daterangepicker({
-                ranges: {
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
-                        'month').endOf('month')]
-                },
-                autoUpdateInput: false,
-                minDate: moment().startOf('day')
-            }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format(
-                    'MMMM D, YYYY'));
-            });
 
             $('.productLink').on('click', function() {
                 console.log("click");

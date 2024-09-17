@@ -17,6 +17,13 @@
                 <div id="query-list-container">
                     <div class="inquiry-list-main mt-4">
                         <div class="db-table">
+                            {{-- @dd($orders); --}}
+                            @if($orders->isEmpty())
+                            <div class="list-empty-box">
+                                <img src="{{ asset('front/images/Empty 1.svg') }}">
+                                <h3 class="text-center">Not earning yet</h3>
+                            </div>
+                            @else
                             <div class="tb-table transaction-table">
                                 <table>
                                     <thead>
@@ -71,6 +78,8 @@
                                     </tbody>
                                 </table>
                             </div>
+
+                            @endif
                         </div>
                     </div>
                 </div>

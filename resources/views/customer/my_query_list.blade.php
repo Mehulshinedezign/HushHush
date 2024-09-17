@@ -34,6 +34,17 @@
                     </ul>
                 </div>
 
+                <div class="modal fade" id="single_query_Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body" id="data-query">
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <div id="query-list-container">
                     <x-product-query :querydatas="$querydatas" />
@@ -45,7 +56,7 @@
 
 @push('scripts')
     <script>
-      
+
     document.addEventListener('DOMContentLoaded', function() {
         // Get all tab items
         const tabs = document.querySelectorAll('.tab-item');
@@ -65,7 +76,7 @@
         tabs.forEach(tab => {
             tab.addEventListener('click', function(event) {
                 event.preventDefault(); // Prevent default link behavior
-                
+
                 // Get the data-status of the clicked tab
                 const status = tab.getAttribute('data-status');
 

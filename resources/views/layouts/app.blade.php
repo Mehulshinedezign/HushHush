@@ -40,8 +40,9 @@
                 <div class="cust-nav-header-sec">
                     <div class="logo mobile-logo">
                         <a class="navbar-brand" href="{{ url('/') }}"><img
-                                src="{{ asset('front/images/logo.svg') }}" alt="logo" width="91"
+                                src="{{ asset('front/images/HUSH HUSH CLOSET.svg') }}" alt="logo" width="91"
                                 height="63"></a>
+
                     </div>
                     <div class="collapse navbar-collapse cust-navbar-header" id="navbarNav">
                         <ul class="navbar-nav">

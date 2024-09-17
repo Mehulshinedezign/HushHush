@@ -524,6 +524,7 @@
                     autoUpdateInput: false,
                     opens: option,
                     drops: 'auto',
+                    minDate: moment(),
                     locale: {
                         format: customDateFormat,
                         separator: ' - ',

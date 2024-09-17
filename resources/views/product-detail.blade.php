@@ -1,46 +1,60 @@
 @extends('layouts.front')
 <style>
+    .formfield {
+        position: relative;
+        /* Ensure the date picker stays relative to the input field */
+    }
+
+    .daterangepicker {
+        z-index: 9999 !important;
+        /* Ensure the calendar stays on top */
+        position: absolute !important;
+        /* Prevent it from being fixed */
+    }
+
     /* The Modal (background) */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed;
-    z-index: 999;
-    padding-top: 60px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.9); /* Black with opacity */
-}
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        z-index: 999;
+        padding-top: 60px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        /* Fallback color */
+        background-color: rgba(0, 0, 0, 0.9);
+        /* Black with opacity */
+    }
 
-/* Modal Content (Image) */
-.modal-content {
-    margin: auto;
-    display: block;
-    width: 80%;
-    max-width: 700px;
-}
+    /* Modal Content (Image) */
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+    }
 
-/* The Close Button */
-.close {
-    position: absolute;
-    top: 15px;
-    right: 35px;
-    color: white;
-    font-size: 40px;
-    font-weight: bold;
-    transition: 0.3s;
-}
+    /* The Close Button */
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
 
-.close:hover,
-.close:focus {
-    color: #bbb;
-    text-decoration: none;
-    cursor: pointer;
-}
-
+    .close:hover,
+    .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
 </style>
 @section('title', $product->name)
 @php
@@ -77,12 +91,11 @@
 
                                                 <!-- Image that opens the modal -->
                                                 <div>
-                                                    <img src="{{ $image->file_path }}"  alt=""
-                                                        loading="lazy" onclick="openModal(this.src)">
+                                                    <img src="{{ $image->file_path }}" alt="" loading="lazy"
+                                                        onclick="openModal(this.src)">
                                                 </div>
 
                                                 <!-- Modal Structure -->
-
                                             @endforeach
                                         @else
                                             <div><img src="{{ asset('front/images/pro-description-img.png') }}"
@@ -502,14 +515,11 @@
                                     <label for="">Select your Rental date</label>
                                     <div class="formfield">
                                         <input type="text" name="rental_dates" id="rental_dates"
-                                            class="form-control rent_dates form-class @error('rental_dates') is-invalid @enderror"
-                                            placeholder="Select rental date">
+                                            class="form-control rent_dates @error('rental_dates') is-invalid @enderror"
+                                            placeholder="Select rental date" readonly autocomplete="off">
                                         <label for="rental_dates" class="form-icon">
                                             <img src="{{ asset('front/images/calender-icon.svg') }}" alt="img">
                                         </label>
-
-
-
                                     </div>
                                     @error('rental_dates')
                                         <span class="invalid-feedback" role="alert">
@@ -667,27 +677,6 @@
                 hasErrors = true;
             }
 
-            // // Validate Delivery Option
-            // if (!$('input[name="delivery_option"]:checked').val()) {
-            //     iziToast.error({
-            //         title: 'Error',
-            //         message: 'Please select a delivery option.',
-            //         position: 'topRight',
-            //     });
-            //     hasErrors = true;
-            // }
-
-            // Check for incomplete profile if "Ship it to me" is selected
-            // if ($('#ship_to_me').is(':checked') &&
-            //     {{ is_null(@$user->userDetail->complete_address) ? 'true' : 'false' }}) {
-            //     iziToast.error({
-            //         title: 'Error',
-            //         message: 'Please complete your profile to enable this option.',
-            //         position: 'topRight',
-            //     });
-            //     hasErrors = true;
-            // }
-
             if (hasErrors) {
                 e.preventDefault(); // Prevent form submission if there are errors
                 return;
@@ -796,50 +785,27 @@
             drops: 'down',
             opens: 'right',
             minDate: moment().startOf('day'),
-            isInvalidDate: isDateDisabled
+            isInvalidDate: isDateDisabled,
+            parentEl: 'body' // Ensure the calendar moves with the page scroll
         }).on('apply.daterangepicker', function(ev, picker) {
             var startDate = picker.startDate;
             var endDate = picker.endDate;
             var duration = endDate.diff(startDate, 'days');
 
-            // Correctly assigning the value from the Blade template
-            var count = {{ $product->min_days_rent_item }};
-
-            // console.log(count);
+            var count = {{ $product->min_days_rent_item }}; // Retrieve the minimum rent days
 
             if (duration < count - 1) {
                 iziToast.error({
                     title: 'Error',
-                    message: 'Please select a date range of at least ' + count + ' days.',
+                    message: 'Please select a date range of at least ' + count +
+                        ' days.',
                     position: 'topRight',
                 });
                 $(this).val('');
             } else {
-                $(this).val(startDate.format('YYYY-MM-DD') + ' - ' + endDate.format('YYYY-MM-DD'));
+                $(this).val(startDate.format('YYYY-MM-DD') + ' - ' + endDate.format(
+                    'YYYY-MM-DD'));
             }
-        });
-
-        $('.daterange-btn').daterangepicker({
-            autoUpdateInput: false,
-            locale: {
-                format: 'YYYY-MM-DD'
-            },
-            drops: 'down',
-            opens: 'right',
-            minDate: moment().startOf('day'),
-            isInvalidDate: isDateDisabled,
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
-                    'month').endOf('month')]
-            }
-        }).on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format(
-                'MMMM D, YYYY'));
         });
     });
 
@@ -849,13 +815,15 @@
 
         // Function to update the value based on selected radio button
         const updateSelectedValue = () => {
-            const checkedRadio = document.querySelector('input[name="delivery_option"]:checked');
+            const checkedRadio = document.querySelector(
+                'input[name="delivery_option"]:checked');
             if (checkedRadio) {
                 if (checkedRadio.id === 'pick_up') {
                     selectedValueInput.value =
                         "{{ @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state }}";
                 } else if (checkedRadio.id === 'ship_to_me') {
-                    selectedValueInput.value = "{{ @$authUser->userDetail->complete_address }}";
+                    selectedValueInput.value =
+                        "{{ @$authUser->userDetail->complete_address }}";
                 }
             } else {
                 selectedValueInput.value = "Please select the value";

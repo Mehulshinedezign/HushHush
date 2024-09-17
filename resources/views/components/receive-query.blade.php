@@ -7,9 +7,9 @@
                         <tr>
                             <th>Image</th>
                             <th>Product Name</th>
-                            <th>User Name</th>
+                            <th>Borrower Name</th>
                             <th>Actual Price</th>
-                            <th>Shipment Type</th>
+                            <th>Delivery Type</th>
                             @if ($querydatas->first()->status != 'PENDING')
                                 <th>Agreed Price</th>
                                 <th>Cleaning Price</th>
@@ -36,6 +36,6 @@
 @else
     <div class="list-empty-box">
         <img src="{{ asset('front/images/Empty 1.svg') }}">
-        <h3 class="text-center">Receive Query is empty</h3>
+        <h3 class="text-center">Receive inquiry is empty</h3>
     </div>
 @endif

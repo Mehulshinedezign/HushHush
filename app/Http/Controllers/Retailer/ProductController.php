@@ -156,6 +156,8 @@ class ProductController extends Controller
                 $formatted_address = json_encode($raw_address['results'][0]);
             }
 
+            // dd('user');
+
             // Create the product
             $userId = auth()->user()->id;
             $data = [
@@ -200,6 +202,7 @@ class ProductController extends Controller
                     ]);
                 }
             }
+            // dd('images');
 
             // Store product location
             ProductLocation::create([
@@ -219,22 +222,32 @@ class ProductController extends Controller
             // Handle disable dates
             if ($request->has('non_availabile_dates') && $request->filled('non_availabile_dates')) {
 
-                foreach($request->non_availabile_dates as $dateRange){
-                    // $dateRange = $request->non_available_dates;
-                    list($startDateStr, $endDateStr) = array_map('trim', explode(' - ', $dateRange));
-                    $startDate = Carbon::parse($startDateStr);;
-                    $endDate = Carbon::parse($endDateStr);;
-    
-                    // Insert selected date range
+                foreach ($request->non_availabile_dates as $dateRange) {
+                    // dd($request->non_availabile_dates,'location');
+
+                    // Check if the date range has a valid format with " - "
+                    if (strpos($dateRange, ' - ') !== false) {
+                        list($startDateStr, $endDateStr) = array_map('trim', explode(' - ', $dateRange));
+                    } else {
+                        // If there's no range separator, assume it's a single date
+                        $startDateStr = $endDateStr = trim($dateRange);
+                    }
+
+                    $startDate = Carbon::parse($startDateStr);
+                    $endDate = Carbon::parse($endDateStr);
+
+                    // Insert the selected date range
                     for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
                         ProductDisableDate::create([
                             'product_id' => $product->id,
                             'disable_date' => $date->format('Y-m-d'),
-                            'added_by'=>auth()->id(),
+                            'added_by' => auth()->id(),
                         ]);
                     }
                 }
+                // dd('dates'); // for debugging
             }
+
 
             // Automatically add 4 days from the creation date
             $createdDate = Carbon::now()->startOfDay();
@@ -247,7 +260,7 @@ class ProductController extends Controller
 
                 ]);
             }
-
+            // dd('sample');
             DB::commit();
             return redirect()->route('product')->with('success', "Your product has been uploaded successfully.");
         } catch (\Exception $e) {
@@ -286,8 +299,8 @@ class ProductController extends Controller
         $state = State::where('id', $product->state)->first();
         $pickuplocation = ProductLocation::where('product_id', $product->id)->first();
 
-       // Retrieve and process the disabled dates
-        $disableDates = $product->disableDates->where('added_by',auth()->id());
+        // Retrieve and process the disabled dates
+        $disableDates = $product->disableDates->where('added_by', auth()->id());
         $disableDatesArray = [];
 
         // Extract the 'disable_date' field and remove duplicates
@@ -308,7 +321,7 @@ class ProductController extends Controller
 
         foreach ($disableDatesArray as $key => $date) {
             $currentDate = Carbon::parse($date);
-            
+
             if (!$start) {
                 // Start a new range
                 $start = $currentDate;
@@ -337,7 +350,7 @@ class ProductController extends Controller
 
         // Display the ranges
         // dd($ranges);
-// end
+        // end
         // dd("here",$disabledDates);
         // if ($disabledDates->isNotEmpty()) {
         //     $sortedDates = $disabledDates->sortBy('disable_date');
@@ -454,7 +467,7 @@ class ProductController extends Controller
             //         list($startDateStr, $endDateStr) = array_map('trim', explode(' - ', $dateRange));
             //         $startDate = Carbon::parse($startDateStr);;
             //         $endDate = Carbon::parse($endDateStr);;
-    
+
             //         // Insert selected date range
             //         for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
             //             ProductDisableDate::create([
@@ -464,34 +477,34 @@ class ProductController extends Controller
             //         }
             //     }
             // }
-    // date range or single date
+            // date range or single date
             if ($request->has('non_availabile_dates')) {
                 // Delete existing disabled dates for this product
                 ProductDisableDate::where('product_id', $product->id)->delete();
-            
+
                 // Loop through each date or date range in the request
-                foreach($request->non_availabile_dates as $dateRange){
-                    
+                foreach ($request->non_availabile_dates as $dateRange) {
+
                     // Check if the current entry is a date range or a single date
                     if (strpos($dateRange, ' - ') !== false) {
                         // This is a date range, so split it
                         list($startDateStr, $endDateStr) = array_map('trim', explode(' - ', $dateRange));
                         $startDate = Carbon::parse($startDateStr);
                         $endDate = Carbon::parse($endDateStr);
-            
+
                         // Insert each date in the range into the database
                         for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
-                           $data =  ProductDisableDate::create([
+                            $data =  ProductDisableDate::create([
                                 'product_id' => $product->id,
                                 'disable_date' => $date->format('Y-m-d'),
-                                'added_by'=> auth()->id(),
+                                'added_by' => auth()->id(),
 
                             ]);
                         }
                     } else {
                         // This is a single date, process it directly
                         $singleDate = Carbon::parse($dateRange);
-            
+
                         // Insert the single date into the database
                         ProductDisableDate::create([
                             'product_id' => $product->id,
@@ -513,7 +526,7 @@ class ProductController extends Controller
                 'pick_up_location' => $request->product_complete_location,
                 // 'product_complete_location' => $request->product_complete_location,
                 'raw_address' => $formatted_address ?? null,
-                'shipment'=> $request->shipment  ? '1' : '0',
+                'shipment' => $request->shipment  ? '1' : '0',
             ]);
             return redirect()->route('product')->with('success', 'Product updated successfully.');
             // return redirect()->back()->with('success', 'Product updated successfully.');

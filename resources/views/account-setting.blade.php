@@ -132,7 +132,7 @@
                             </div>
                             <div class="col-md-3 address_data">
                                 <div class="my-pro-detail-para">
-                                    <p>Zip-Code/Postal Code</p>
+                                    <p>Zipcode/Postal Code</p>
                                     <div class="my-pro-edit-form">
                                         <div class="form-group">
                                             <div class="formfield">
@@ -181,7 +181,7 @@
             // }, "Please enter the complete address");
 
             $.validator.addMethod("userCompleteAddress", function(value, element) {
-                return $('#selectCountry').val() !== '' && $('#selectState').val() !== '' && $('#selectCity').val() !== '';
+                return $('#selectCountry').val() !== '' && $('#selectState').val() !== '' ;
             }, "Please enter the complete address");
 
             const rules = {
