@@ -13,17 +13,19 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('registered:users')
-            ->daily();
+        // $schedule->command('registered:users')
+        //     ->daily();
 
-        $schedule->command('pickup:users')
-            ->dailyAt('04:00');
+        // $schedule->command('pickup:users')
+        //     ->dailyAt('04:00');
 
-        $schedule->command('dropoff:user')
-            ->dailyAt('04:00');
+        // $schedule->command('dropoff:user')
+        //     ->dailyAt('04:00');
 
-        $schedule->command('verification:users')
-            ->daily();
+        // $schedule->command('verification:users')
+        //     ->daily();
+        $schedule->command('query:cancel')
+        ->everyTwentySeconds();
     }
 
     /**

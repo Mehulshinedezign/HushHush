@@ -10,7 +10,7 @@ class DisputeOrder extends Model
     use HasFactory;
 
     protected $fillable = [
-        'reported_id','order_id', 'subject', 'description','reported_by', 'transaction_id', 'refund_type', 'refund_amount', 'resolved_status', 'resolved_date', 'gateway_response'
+        'reported_id','order_id', 'subject', 'description','reported_by', 'transaction_id', 'refund_type', 'refund_amount', 'resolved_status','status', 'resolved_date', 'gateway_response'
     ];
 
     /**
