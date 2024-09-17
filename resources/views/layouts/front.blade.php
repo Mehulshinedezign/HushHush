@@ -810,10 +810,10 @@
         });
 
         // Adding more date fields dynamically
-        $('.add-more-daterangepicker').on('click', function() {
-            var $clone = $('.clone-non-available-date-container').clone().removeClass('hidden');
-            $('.append-non-available-dates').append($clone);
-        });
+        // $('.add-more-daterangepicker').on('click', function() {
+        //     var $clone = $('.clone-non-available-date-container').clone().removeClass('hidden');
+        //     $('.append-non-available-dates').append($clone);
+        // });
 
         // Remove the dynamically added datepicker field
         $(document).on('click', '.remove-daterangepicker', function() {

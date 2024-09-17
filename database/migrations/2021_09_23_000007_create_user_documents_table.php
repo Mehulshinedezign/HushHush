@@ -17,8 +17,8 @@ class CreateUserDocumentsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('proof_type')->nullable();
-            $table->string('file');
-            $table->string('url');
+            $table->string('file')->nullable();
+            $table->string('url')->nullable();
             $table->timestamps();
         });
     }

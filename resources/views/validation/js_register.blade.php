@@ -62,11 +62,11 @@
             //     minlength: minCompleteAddress,
             //     maxlength: maxCompleteAddress,
             // },
-            gov_id: {
-                required: true,
-                filesize: gov_idSize,
-                extension: gov_idMimes,
-            },
+            // gov_id: {
+            //     required: true,
+            //     filesize: gov_idSize,
+            //     extension: gov_idMimes,
+            // },
         }
         const messages = {
             username: {

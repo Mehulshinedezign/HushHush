@@ -8,9 +8,13 @@
         // const url = action1+'/'+action2;
         const commission = parseInt("{{ adminsetting()->value }}");
 
+        // if ($('#flexSwitchCheckChecked').ischecked() == true) {
+
+        // }
         $.validator.addMethod("completeAddress", function(value, element) {
-            return $('#product_address1').val() !== ''&& $(
-                '#product_country').val() !== '' && $('#product_state').val() !== '' ;
+           
+                return $('#product_address1').val() !== '' && $(
+                    '#product_country').val() !== '' && $('#product_state').val() !== '';
         }, "Please enter the complete address");
         const rules = {
             name: {
@@ -93,7 +97,7 @@
             },
             product_link: {
                 // required: true,
-                regex:  /\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i,
+                regex: /\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i,
             },
 
 
@@ -125,8 +129,16 @@
             //     required:true,
             // },
             product_complete_location: {
-                required: true,
-                completeAddress: true,
+                required: {
+                    depends: function(element) {
+                        return jQuery('#flexSwitchCheckChecked').is(':checked');
+                    }
+                },
+                completeAddress: {
+                    depends: function(element) {
+                        return jQuery('#flexSwitchCheckChecked').is(':checked');
+                    }
+                }
             },
 
 

@@ -9,7 +9,7 @@
                             <th>Product Name</th>
                             <th>Borrower Name</th>
                             <th>Actual Price</th>
-                            <th>Delivery Type</th>
+                            <th>Delivery Method</th>
                             @if ($querydatas->first()->status != 'PENDING')
                                 <th>Agreed Price</th>
                                 <th>Cleaning Price</th>

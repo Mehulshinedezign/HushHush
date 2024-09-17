@@ -27,7 +27,7 @@
                         <span><i class="fas fa-minus"></i></span> Remove
                     </span>
                     <input type="text" name="non_availabile_dates[{{ $i }}]"
-                        class="form-control input-bg mb-3 date-icon non-availability"
+                        class="form-control input-bg mb-3 date-icon non-availability color-white-bss"
                         placeholder="{{ __('product.placeholders.nonAvailableDates') }}" autocomplete="off"
                         value="{{ old('non_availabile_dates.' . $i, $product[$i]) }}"
                         readonly

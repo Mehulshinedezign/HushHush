@@ -14,16 +14,17 @@ class StoreProductRequest extends FormRequest
 
     public function rules()
     {
-        return [
+        $validate = [];
+       
+        $validate = [
             'images' => 'required|array|min:1|max:5',
             'images.*' => 'image',
             'product_name' => 'required',
             'category' => 'required',
-            'product_complete_location' => 'required',
-            'address1' => 'required',
+           
+          
             // 'address2' => 'required',
-            'country' => 'required',
-            'state' => 'required',
+          
             // 'city' => 'required',
             'product_link' => ['nullable'],
             'description' => 'required',
@@ -34,6 +35,13 @@ class StoreProductRequest extends FormRequest
             'rent_price_month' => 'required',
 
         ];
+        if(request()->manual_location=='on'){
+            $validate['product_complete_location']  = 'required';
+            $validate['address1'] = 'required';
+            $validate['country'] = 'required';
+            $validate['state'] = 'required';
+        }
+        return $validate;
     }
 
     public function messages()
