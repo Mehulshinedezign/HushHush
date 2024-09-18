@@ -10,8 +10,10 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\NotificationSetting;
 use App\Models\Product;
+use App\Models\ReportedProduct;
 use App\Models\State;
 use App\Models\UserDetail;
+use App\Notifications\CustomerImageUpload;
 use App\Notifications\DeleteUser;
 use Illuminate\Http\Request;
 use App\Models\{BillingToken, Order, ProductImage, ProductLocation, Role, User};
@@ -349,4 +351,16 @@ class UserController extends Controller
     {
         return Excel::download(new CustomersExport, 'customers.xlsx');
     }
+
+
+    public function ReportedProducts()
+{
+    $products = ReportedProduct::select('product_id', DB::raw('count(*) as occurrences'))
+        ->groupBy('product_id')
+        ->with('product')
+        ->get();
+
+    return view('admin.reportedProducts', compact('products'));
+}
+
 }

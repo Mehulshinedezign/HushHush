@@ -93,6 +93,7 @@ Route::middleware(['auth:sanctum', 'prevent.admin'])->group(function () {
 
 
     Route::get('testing', [App\Http\Controllers\Api\ProfileController::class, 'test']);
+    Route::post('pushToken/add', [App\Http\Controllers\Api\ProfileController::class, 'addFcm']);
 
     //Bank Deatils APIs
     Route::post('/bank-account', [App\Http\Controllers\Api\BankAccountController::class, 'addOrUpdateBankAccount']);

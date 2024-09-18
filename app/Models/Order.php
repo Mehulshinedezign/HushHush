@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DateTime;
+use Illuminate\Contracts\Queue\ShouldQueue; // Add this import
 
-class Order extends Model
+class Order extends Model implements ShouldQueue // Implement ShouldQueue
 {
     use HasFactory;
 
@@ -293,5 +294,10 @@ class Order extends Model
             })
             ->where('dispute_status', '!=', 'yes') // Exclude if disputed_status is 'yes'
             ->count();
+    }
+
+    public function retailePayout()
+    {
+        return $this->hasOne(RetailerPayout::class, 'order_id', 'id');
     }
 }

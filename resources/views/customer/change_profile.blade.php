@@ -272,21 +272,15 @@
     @includeFirst(['validation'])
     <script src="{{ asset('js/sweetalert.min.js') }}"></script>
 
-
     <script>
         jQuery(document).ready(function() {
+            // Enable the save button on load
             $("#save_user").find('button').attr('disabled', false);
 
             const nameRegex = /^[a-zA-Z\s]+$/;
-            const lastNameRegex = /^[a-zA-Z]+$/;
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-
-            // $.validator.addMethod("userCompleteAddress", function(value, element) {
-            //     return $('#addressline1').val() !== '' && $('#addressline2').val() !== '' && $('#country')
-            //         .val() !== '' && $('#state').val() !== '' && $('#city').val() !== '';
-            // }, "Please enter the complete address");
-
+            // Custom validation for complete address
             $.validator.addMethod("userCompleteAddress", function(value, element) {
                 return $('#country').val() !== '' && $('#state').val() !== '' && $('#city').val() !== '';
             }, "Please enter the complete address");
@@ -306,9 +300,8 @@
                     userCompleteAddress: true,
                 },
                 about: {
-                    required:true,
-                },
-
+                    required: true,
+                }
             };
 
             const messages = {
@@ -326,29 +319,28 @@
                     userCompleteAddress: 'Please enter the complete address.',
                 },
                 about: {
-                    required:'This field is required.',
-                },
-
+                    required: 'This field is required.',
+                }
             };
 
+            // Form validation
             handleValidation('save_user', rules, messages, function(form) {
                 $('body').addClass('loading');
                 form.submit();
             });
 
-            // Trigger validation when country, state, or city fields change
-            $('#addressline1, #addressline2, #country, #state, ').on('change', function() {
+            // Trigger validation when address fields change
+            $('#addressline1, #addressline2, #country, #state').on('change', function() {
                 $('#address').valid();
             });
-        });
 
-        $(document).ready(function() {
-
+            // Image upload validation and preview
             $('#upload-my-pro').change(function() {
                 var file = this.files[0];
                 var fileType = file.type;
+                var fileSize = file.size / 1024 / 1024; // Convert to MB
 
-                // Check if the file type is not jpeg, png, or jpg
+                // Validate file type
                 if (fileType !== 'image/jpeg' && fileType !== 'image/png' && fileType !== 'image/jpg') {
                     iziToast.error({
                         title: 'Error',
@@ -359,128 +351,78 @@
                     return;
                 }
 
-                var fileSize = file.size / 1024 / 1024; // in MB
-
                 // Validate file size
                 if (fileSize > 2) {
                     alert('File size exceeds the limit of 2 MB.');
                     $('#upload-my-pro').val(''); // Clear input
                     return;
                 }
-            });
 
-            // SHow the preview of image
-
-            $(document).ready(function() {
-                $('#upload-my-pro').change(function() {
-                    var file = this.files[0];
-                    var fileType = file.type;
-
-                    if (fileType !== 'image/jpeg' && fileType !== 'image/png' && fileType !==
-                        'image/jpg') {
-                        iziToast.error({
-                            title: 'Error',
-                            message: 'Only JPEG, PNG, and JPG files are allowed.',
-                            position: 'topRight',
-                        });
-                        $('#upload-my-pro').val('');
-                        return;
-                    }
-
-                    var fileSize = file.size / 1024 / 1024;
-
-                    if (fileSize > 2) {
-                        alert('File size exceeds the limit of 2 MB.');
-                        $('#upload-my-pro').val('');
-                        return;
-                    }
-                });
-
-                $('#upload-my-pro').change(function() {
-                    var input = this;
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-
-                        reader.onload = function(e) {
-                            $('#preview-img').attr('src', e.target.result);
-                        }
-
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                });
-
-                $('.address_data').hide();
-
-                $('#address').on('focus', function() {
-                    $(".address_data").slideDown("slow");
-                    initAutocomplete();
-                });
-
-                $('#address').on('input', function() {
-                    if ($(this).val() === '') {
-                        $(".address_data").slideUp("slow");
-                        $('#addressline1, #addressline2, #country, #state, #city, #zipcode').val(
-                            '');
-                    }
-                });
-
-                function initAutocomplete() {
-                    var input = document.getElementById('address');
-                    console.log(input,'herere');
-                    var autocomplete = new google.maps.places.Autocomplete(input);
-
-                    $('#addressline1, #addressline2, #country, #state, #city, #zipcode').prop('readonly',
-                        true);
-
-                    autocomplete.addListener('place_changed', function() {
-                        var place = autocomplete.getPlace();
-
-                        $('#addressline1, #addressline2, #country, #state, #city, #zipcode').val(
-                            '');
-
-                        var zipcode = null; // Initialize zipcode to null
-
-                        for (var i = 0; i < place.address_components.length; i++) {
-                            var addressType = place.address_components[i].types[0];
-                            console.log(addressType);
-                            if (addressType === 'street_number') {
-                                $('#addressline1').val(place.address_components[i].long_name);
-                            }
-                            if (addressType === 'route') {
-                                $('#addressline2').val(place.address_components[i].long_name);
-                            }
-                            if (addressType === 'country') {
-                                $('#country').val(place.address_components[i].long_name);
-                            }
-                            if (addressType === 'administrative_area_level_1') {
-                                $('#state').val(place.address_components[i].long_name);
-                            }
-                            if (addressType === 'locality') {
-                                $('#city').val(place.address_components[i].long_name);
-                            }
-                            if (addressType === 'postal_code') {
-                            $('#zipcode').val(place.address_components[i].long_name); // Assign zipcode if available
-                        }
-                        }
-
-                        $('#zipcode').val(zipcode); // Set zipcode field
-
-                        function setReadonly(selector) {
-                            if ($(selector).val()) {
-                                $(selector).prop('readonly', true);
-                            } else {
-                                $(selector).prop('readonly', false);
-                            }
-                        }
-                        setReadonly('#addressline1');
-                        setReadonly('#addressline2');
-
-                        $(".address_data").slideDown("slow");
-                    });
+                // Image preview
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#preview-img').attr('src', e.target.result);
                 }
+                reader.readAsDataURL(file);
             });
 
+            // Initialize Google Places Autocomplete
+            function initAutocomplete() {
+                var input = document.getElementById('address');
+                var autocomplete = new google.maps.places.Autocomplete(input);
+
+                $('#addressline1, #addressline2, #country, #state, #city, #zipcode').prop('readonly', true);
+
+                autocomplete.addListener('place_changed', function() {
+                    var place = autocomplete.getPlace();
+
+                    // Clear address fields
+                    $('#addressline1, #addressline2, #country, #state, #city, #zipcode').val('');
+
+                    // Populate address fields based on the selected place
+                    place.address_components.forEach(function(component) {
+                        var addressType = component.types[0];
+                        switch (addressType) {
+                            case 'street_number':
+                                $('#addressline1').val(component.long_name);
+                                break;
+                            case 'route':
+                                $('#addressline2').val(component.long_name || '');
+                                break;
+                            case 'country':
+                                $('#country').val(component.long_name);
+                                break;
+                            case 'administrative_area_level_1':
+                                $('#state').val(component.long_name);
+                                break;
+                            case 'locality':
+                                $('#city').val(component.long_name || '');
+                                break;
+                            case 'postal_code':
+                                $('#zipcode').val(component.long_name || ''); // Zipcode is optional
+                                break;
+                        }
+                    });
+
+                    // Enable or disable readonly state based on field values
+                    function setReadonly(selector) {
+                        if ($(selector).val()) {
+                            $(selector).prop('readonly', true);
+                        } else {
+                            $(selector).prop('readonly', false);
+                        }
+                    }
+
+                    setReadonly('#addressline1');
+                    setReadonly('#addressline2');
+                    $(".address_data").slideDown("slow");
+                });
+            }
+
+            // Initialize autocomplete for the address field
+            initAutocomplete();
 
         });
     </script>
 @endpush
+

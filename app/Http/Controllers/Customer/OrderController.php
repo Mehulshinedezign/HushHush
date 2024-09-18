@@ -471,11 +471,14 @@ class OrderController extends Controller
     }
     public function addReview(RatingRequest $request)
     {
+        // dd('here',$request->all());
         // $url = route('orders');
         $product_id = $request->product_id;
+        // dd($product_id);
         // dd("here",$product_id);
         // $chk_review = ProductRating::whereOrderId(1)->whereUserId(auth()->user()->id)->whereProductId($product_id)->exists();
         $chk_review = ProductRating::whereUserId(auth()->user()->id)->whereProductId($product_id)->exists();
+        // dd($chk_review);
         if ($chk_review) {
             return response()->json([
                 'success'    =>  false,
@@ -490,6 +493,7 @@ class OrderController extends Controller
             'rating' => $request->rating,
             'review' => $request->review ?? null,
         ]);
+        // dd('create');
 
         return response()->json([
             'success'    =>  true,
@@ -515,7 +519,7 @@ class OrderController extends Controller
         $order->load(["transaction", "retailer", "queryOf"]);
         $order_commission = AdminSetting::where('key', 'order_commission')->first();
         $url = route('orders',['tab'=>'cancelled']);
-        
+
         if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
             session()->flash('warning', "You can not cancel the disputed order");
             return response()->json([

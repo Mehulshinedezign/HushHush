@@ -163,35 +163,29 @@
 
 @push('scripts')
     <script>
-        $('#rating_review').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget);
-            var productId = button.data('data-productId');
-            $('#rating_product_id').val(productId);
-        });
-
+        // Show modal and populate data
         $('.productReview').on('click', function() {
-            var product_id = $(this).attr('data-productId')
-            var order_id = $(this).attr('data-orderId')
+            var product_id = $(this).attr('data-productId');
+            var order_id = $(this).attr('data-orderId');
             $('#rating_product_id').val(product_id);
             $('#rating_order_id').val(order_id);
         });
 
+        // Submit form with validation and show iziToast messages
         $('#rating_btn').on('click', function(e) {
-            // Prevent form submission first
-            e.preventDefault();
+            e.preventDefault(); // Prevent default form submission
 
-            // Check if a rating is selected
-            var rating = $('input[name="rating"]:checked').val(); // Get the value of the selected radio button
+            // Ensure a rating is selected
+            var rating = $('input[name="rating"]:checked').val();
             if (!rating) {
-                // Show iziToast message if no rating is selected
                 iziToast.error({
                     message: "Please select a rating before submitting.",
                     position: 'topRight'
                 });
-                return; // Prevent further execution
+                return;
             }
 
-            // If rating is selected, run form validation
+            // Form validation rules
             $("#product_review").validate({
                 rules: {
                     rating: {
@@ -204,40 +198,47 @@
                 },
                 messages: {
                     rating: {
-                        required: 'This field is required.',
+                        required: 'Please select a rating.',
                     },
                     review: {
-                        required: 'This field is required.',
-                        minlength: 'Minimum 2 characters are allowed.',
-                        maxlength: 'Maximum 1000 characters are allowed.',
+                        minlength: 'Review must be at least 2 characters.',
+                        maxlength: 'Review can be a maximum of 1000 characters.',
                     },
                 }
             });
 
-            // Check if form is valid before submitting
+            // Submit form via AJAX if valid
             if ($('#product_review').valid()) {
-                var formData = jQuery('form#product_review').serialize();
+                var formData = $('#product_review').serialize();
+
                 $.ajax({
                     type: "POST",
                     url: APP_URL + '/order/add-review',
                     data: formData,
                     beforeSend: function() {
-                        $('body').addClass('loading');
-                    },
-                    complete: function() {
-                        $('body').removeClass('loading');
+                        $('body').addClass('loading'); // Show loader
                     },
                     success: function(response) {
-                        if (response.success == true) {
-                            $('#rating_review').find('.close').trigger('click');
-                            $('#product_review')[0].reset();
+                        $('body').removeClass('loading'); // Hide loader
+
+                        if (response.success === true) {
                             iziToast.success({
                                 message: response.messages,
                                 position: 'topRight'
                             });
-                        } else {
-                            $('#rating_review').find('.close').trigger('click');
+
+                            // Close the modal
+                            $('#rating_review').modal('hide');
+
+                            // Reset form fields
                             $('#product_review')[0].reset();
+
+                            // Optionally refresh the page after success
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1500);
+
+                        } else {
                             iziToast.error({
                                 message: response.messages,
                                 position: 'topRight'
@@ -250,8 +251,12 @@
                             position: 'topRight'
                         });
                     },
+                    complete: function() {
+                        $('body').removeClass('loading'); // Always hide the loader
+                    }
                 });
             }
         });
     </script>
 @endpush
+

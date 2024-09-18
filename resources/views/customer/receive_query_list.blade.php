@@ -25,13 +25,13 @@
                 <div class="custom-tab">
                     <ul class="custom-tab-list">
                         <li class="tab-item " data-status="PENDING" data-user="lender">
-                            <a href="?status=PENDING" class="tab-link">Pending</a>
+                            <a href="received_query?status=PENDING" class="tab-link">Pending</a>
                         </li>
-                        <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a href="?status=ACCEPTED"
+                        <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a href="received_query?status=ACCEPTED"
                                 class="tab-link">Accepted</a></li>
-                        <li class="tab-item" data-status="REJECTED" data-user="lender"><a href="?status=REJECTED"
+                        <li class="tab-item" data-status="REJECTED" data-user="lender"><a href="received_query?status=REJECTED"
                                 class="tab-link">Rejected</a></li>
-                        <li class="tab-item" data-status="COMPLETED" data-user="lender"><a href="?status=COMPLETED"
+                        <li class="tab-item" data-status="COMPLETED" data-user="lender"><a href="received_query?status=COMPLETED"
                                 class="tab-link">Completed</a></li>
 
                     </ul>

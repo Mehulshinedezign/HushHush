@@ -107,4 +107,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get("view-order/{order}", [App\Http\Controllers\AdminController::class, 'viewOrder'])->name("view-order");
     Route::get("disputed-orders", [App\Http\Controllers\AdminController::class, 'disputedOrders'])->name("disputed-orders");
     Route::post("resolve-dispute-order/{order}", [App\Http\Controllers\AdminController::class, 'resolveDisputeOrder'])->name("resolve-dispute-order");
+
+
+    Route::get("reported/products", [App\Http\Controllers\Admin\UserController::class, 'ReportedProducts'])->name("reportedProducts");
+
+
+
 });

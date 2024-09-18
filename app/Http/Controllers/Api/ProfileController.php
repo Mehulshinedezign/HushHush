@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\PushToken;
 use App\Models\Query;
 use App\Models\RetailerPayout;
 use App\Models\User;
@@ -295,38 +296,76 @@ class ProfileController extends Controller
 
 
 
-    public function destory(Request $request)
+    public function destroy(Request $request)
     {
         DB::beginTransaction();
-        $user = auth()->user();
-        $products = Product::where('user_id', $user->id)->get();
-        foreach ($products as $product) {
-            $product->locations()->delete();
+        try {
+            $user = auth()->user();
 
-            foreach ($product->allImages as $image) {
-                Storage::disk('public')->delete($image->file_path);
-                $image->delete();
+            // Check if the user has any orders where they are either the buyer (user_id) or the retailer (retailer_id)
+            $activeOrders = Order::where(function ($query) use ($user) {
+                $query->where('user_id', $user->id)
+                    ->orWhere('retailer_id', $user->id);
+            })
+                ->where(function ($query) {
+                    $query->whereIn('status', ['Waiting', 'Picked up'])
+                        ->orWhere('dispute_status', 'Yes');
+                })
+                ->exists();
+
+            // If there are active orders, return an error message
+            if ($activeOrders) {
+                return response()->json([
+                    'status' => false,
+                    'data' => [
+                        'message' => 'Your account cannot be deleted because you have active orders in "Waiting", "Picked up", or "Disputed" state. Please resolve them first.',
+                    ],
+                ], 403); // Return a 403 Forbidden status code
             }
 
-            $product->delete();
+            // If no active orders, proceed to delete products and the user account
+            $products = Product::where('user_id', $user->id)->get();
+            foreach ($products as $product) {
+                $product->locations()->delete();
+                foreach ($product->allImages as $image) {
+                    Storage::disk('public')->delete($image->file_path);
+                    $image->delete();
+                }
+                $product->delete();
+            }
+
+            // Delete user details
+            UserDetail::where('user_id', $user->id)->delete();
+
+            // Delete user's tokens (e.g., Laravel Passport or Sanctum)
+            $user->tokens()->delete();
+
+            // Update user's email to a unique value to prevent reuse
+            $user->update(['email' => $user->email . '.' . now()->timestamp]);
+
+            // Delete the user account
+            $user->delete();
+
+            DB::commit();
+            return response()->json([
+                'status' => true,
+                'data' => [
+                    'message' => 'Account deleted successfully.',
+                ],
+            ], 200);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => false,
+                'data' => [
+                    'message' => 'Failed to delete account. Please try again.',
+                    'error' => $e->getMessage(),
+                ],
+            ], 500);
         }
-
-        UserDetail::where('user_id', $user->id)->delete();
-
-        $user->delete();
-
-        // $user->logout();
-        $user->tokens()->delete();
-
-        DB::commit();
-        return response()->json([
-            'status' => true,
-            'data' => [
-                'message' => 'Account deleted',
-
-            ],
-        ], 200);
     }
+
+
 
 
     public function test()
@@ -467,11 +506,12 @@ class ProfileController extends Controller
                 ->where('retailer_id', $user->id)
                 ->get();
             $data = $orders->map(function ($order) {
+                // dd($order->retailePayout->amount);
                 return [
                     'date' => $order->transaction->date ?? '',
                     'product_image_url' => $order->product->thumbnailImage->file_path ?? null,
                     'name' => $order->product->name ?? '',
-                    'amount' => $order->retailer->vendorPayout[0]->amount ?? 'N/a',
+                    'amount' => $order->retailePayout->amount ?? 'N/a',
                 ];
             });
 
@@ -486,5 +526,68 @@ class ProfileController extends Controller
                 'errors' => []
             ], 500);
         }
+    }
+
+    public function addFcm(Request $request)
+    {
+        $user = auth()->user();
+
+        // Check if the user is authenticated
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not authenticated',
+                'errors' => []
+            ], 401);
+        }
+
+        // Validate the request input
+        $validator = Validator::make($request->all(), [
+            // 'device_id' => 'required|string',
+            // 'device_type' => 'required|string',
+            'fcm_token' => 'required|string',
+        ]);
+
+        // If validation fails, return the errors
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Check if the device ID already exists for the authenticated user
+        $pushToken = PushToken::where('user_id', $user->id)
+            ->first();
+
+        // If the device ID exists, update the FCM token
+        if ($pushToken) {
+            $pushToken->update([
+                // 'device_id' => $request->device_id,
+                'fcm_token' => $request->fcm_token,
+                // 'device_type' => $request->device_type
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'FCM token updated successfully',
+                'data' => $pushToken
+            ]);
+        }
+
+        // If the device ID does not exist, create a new record
+        // $newPushToken = PushToken::create([
+        //     'user_id' => $user->id,
+        //     'device_id' => $request->device_id,
+        //     'device_type' => $request->device_type,
+        //     'fcm_token' => $request->fcm_token
+        // ]);
+
+        // return response()->json([
+        //     'status' => true,
+        //     'message' => 'FCM token added successfully',
+        //     'data' => $newPushToken
+        // ]);
     }
 }

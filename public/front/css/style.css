@@ -2766,6 +2766,7 @@ form#filters {
 .section-heading.grid-head-box {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
 }
 .modal-opener-box {
     display: flex;
@@ -2799,8 +2800,18 @@ form#filters {
 .color-white-bss {
     background-color: #fff !important;
 }
+.product-popup-box img {
+    max-height: 600px;
+    width: 100%;
+    object-fit: contain;
+}
 
-
+#imageModal .modal-content{
+    background-color: transparent;
+}
+/* .product-desc-slider .slider-thumb.slick-slider .slick-track{
+    transform: translate3d(0, 0, 0) !important;
+} */
 
 
 .nav-item .cstm-dropdown .dropdown-toggle{

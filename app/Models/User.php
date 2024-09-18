@@ -267,4 +267,10 @@ class User extends Authenticatable
     public function usernotification(){
         return $this->hasone(UserNotification::class);
     }
+
+    public function reportedProducts(){
+        return $this->hasone(ReportedProduct::class);
+    }
+
+
 }
