@@ -192,7 +192,6 @@ class QueryController extends Controller
     public function rejectQuery(Request $request, $id)
     {
 
-
         $query_product = Query::where('id', $id)->first();
 
         $data = [

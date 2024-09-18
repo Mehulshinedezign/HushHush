@@ -233,7 +233,7 @@
                                                 <select class="form-control" id="mySelect" name="brand">
                                                     <option value="">Brand</option>
                                                     @foreach (getBrands() as $brand)
-                                                        <option value="{{ $brand->id }}"
+                                                        <option value="{{ $brand->name }}"
                                                             class="@if ($brand->name == 'Other') moveMe @endif">
                                                             {{ $brand->name }}</option>
                                                         {{-- @if ($brand->name == 'Other')
@@ -252,7 +252,16 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <div class="col-lg-6 col-md-3 col-sm-12 d-none" id="other">
+                                        <div class="form-group">
+                                            <label for="">Other Brand</label>
+                                            <div class="formfield">
+                                                <input type="text" value="" class="produt_input form-control form-class"
+                                                    placeholder="other" name="other_brand">
 
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Color*</label>
@@ -741,7 +750,7 @@
 
 
     <!--JS-->
-    
+
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ asset('front/js/bootstrap.bundle.min.js') }}"></script>
@@ -755,7 +764,7 @@
     <script src="{{ asset('js/jquery-validation.min.js') }}"></script>
     <script src="{{ asset('js/additional-methods.min.js') }}"></script>
     <script
-    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places">
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places">
     </script>
     </script>
     <!-- Include DateRangePicker JS -->
@@ -765,6 +774,27 @@
     <script src="{{ asset('js/custom/add-wishlist.js') }}"></script>
     <script src="{{ asset('js/custom/common.js') }}?ver={{ now() }}"></script>
     <script>
+        jQuery(document).on("change", 'select[name="brand"]', function() {
+            const selectedValue = $(this).val();
+            const otherBrandField = $('#other');
+
+            console.log('Selected Value:', selectedValue);
+            console.log('Other Brand Field:', otherBrandField);
+
+            if (selectedValue === 'Other') {
+                if (otherBrandField.length > 0) { // Check if the element exists
+                    otherBrandField.removeClass('d-none');
+                } else {
+                    console.log('Other brand field not found');
+                }
+            } 
+            else {
+                otherBrandField.addClass('d-none');
+            }
+        });
+
+
+
         // Initialize the daterangepicker for a given element
         function initDaterangepicker($element) {
             $element.daterangepicker({
@@ -828,14 +858,14 @@
                 'Last 7 Days': [moment().subtract(6, 'days'), moment()],
                 'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                 'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf(
+                    'month')]
             },
             autoUpdateInput: false,
             minDate: moment().startOf('day')
         }).on('apply.daterangepicker', function(ev, picker) {
             $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
         });
-
     </script>
 
 

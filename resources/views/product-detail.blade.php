@@ -240,7 +240,7 @@
                         <div class="pro-desc-info">
                             <div class="pro-desc-info-box">
                                 <h4>Brand :</h4>
-                                <p>{{ $product->get_brand->name ?? 'N/A' }}</p>
+                                <p>{{ @$product->brand ?? 'N/A' }}</p>
                             </div>
 
                             <div class="pro-desc-info-box">

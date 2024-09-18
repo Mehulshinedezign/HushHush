@@ -90,7 +90,6 @@
            
                 $('.tab-item').removeClass('active');
                 clickedTab.addClass('active');
-
             
                 localStorage.setItem('activeTab', selectedStatus);
 

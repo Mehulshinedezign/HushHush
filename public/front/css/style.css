@@ -373,8 +373,9 @@ footer {
 
 footer {
     background-color: var(--primary-color);
+    position: relative;
+    z-index: 10;
 }
-
 .copyright.footer-section {
     display: flex;
     justify-content: space-between;
