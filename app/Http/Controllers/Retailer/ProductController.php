@@ -176,7 +176,7 @@ class ProductController extends Controller
                 'product_market_value' => $request->product_market_value,
                 'product_link' => $request->product_link,
                 'size' => $request->size ?? null,
-                'brand' => $request->brand ?? null,
+                // 'brand' => $request->brand ?? null,
                 'color' => $request->color ?? null,
                 'price' => $request->price ?? null,
                 'city' => $request->city ?? null,
@@ -187,8 +187,9 @@ class ProductController extends Controller
                 'modified_user_type' => 'Self',
                 'non_available_dates' => $request->non_available_dates ?? 0,
             ];
+
+            $data['brand'] = $request->brand == "Other" ? $request->other_brand : $request->brand;
             $product = Product::create($data);
-            // dd($data ,$product);
 
             // Handling images
             if ($request->hasFile('images')) {

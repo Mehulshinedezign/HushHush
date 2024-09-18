@@ -471,21 +471,21 @@ class OrderController extends Controller
     }
     public function addReview(RatingRequest $request)
     {
-        // dd('here',$request->all());
+        try{
+
         // $url = route('orders');
         $product_id = $request->product_id;
-        // dd($product_id);
-        // dd("here",$product_id);
+        
         // $chk_review = ProductRating::whereOrderId(1)->whereUserId(auth()->user()->id)->whereProductId($product_id)->exists();
-        $chk_review = ProductRating::whereUserId(auth()->user()->id)->whereProductId($product_id)->exists();
-        // dd($chk_review);
+
+        // $chk_review = ProductRating::whereUserId(auth()->user()->id)->whereProductId($product_id)->exists();
+        $chk_review = ProductRating::whereUserId(auth()->user()->id)->whereIn('order_id' ,[$request->order_id])->exists();
         if ($chk_review) {
             return response()->json([
                 'success'    =>  false,
                 'messages'       =>   'Review already added'
             ], 200);
         }
-
         ProductRating::create([
             'order_id' => $request->order_id,
             'user_id' => auth()->user()->id,
@@ -500,6 +500,11 @@ class OrderController extends Controller
             'messages' => 'Review added successfully',
             // 'url'       =>   $url
         ], 200);
+    }catch(Exception $e){
+        return response()->json([
+            'success'    =>  false,
+        ]);
+        }
     }
 
     public function downloadImage(Request $request, Order $order, Chat $chat)

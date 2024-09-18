@@ -74,10 +74,11 @@
                                     data-bs-target="#rating_review">Write
                                     Review </a>
                             @else
-                                <a href="javascript:void(0)"
-                                    class="button outline-btn full-btn productReview">
-                                        Already reviewed
-                                </a>
+                            <a href="javascript:void(0)" data-orderId="{{ $order->id }}"
+                                data-productId="{{ @$order->product->id }}"
+                                class="button outline-btn full-btn productReview" data-bs-toggle="modal"
+                                data-bs-target="#rating_review"> Already reviewed </a>
+                              
                             @endif
 
                         </div>
@@ -220,7 +221,6 @@
                     },
                     success: function(response) {
                         $('body').removeClass('loading'); // Hide loader
-
                         if (response.success === true) {
                             iziToast.success({
                                 message: response.messages,

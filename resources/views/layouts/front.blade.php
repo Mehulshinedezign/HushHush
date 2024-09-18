@@ -233,7 +233,7 @@
                                                 <select class="form-control" id="mySelect" name="brand">
                                                     <option value="">Brand</option>
                                                     @foreach (getBrands() as $brand)
-                                                        <option value="{{ $brand->id }}"
+                                                        <option value="{{ $brand->name }}"
                                                             class="@if ($brand->name == 'Other') moveMe @endif">
                                                             {{ $brand->name }}</option>
                                                         {{-- @if ($brand->name == 'Other')
@@ -252,7 +252,16 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    <div class="col-lg-6 col-md-3 col-sm-12 d-none" id="other">
+                                        <div class="form-group">
+                                            <label for="">Other Brand</label>
+                                            <div class="formfield">
+                                                <input type="text" value="" class="produt_input form-control form-class"
+                                                    placeholder="other" name="other_brand">
 
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Color*</label>
@@ -817,6 +826,53 @@
     </script>
 
     <script>
+        document.getElementById('identity').addEventListener('click', async function() {
+            try {
+                const response = await fetch('/send-verification-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    window.location.href = data.url; // Redirect to Stripe verification
+                } else {
+                    alert('Error: ' + data.message); // Handle error
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+
+        });
+    </script>
+
+    <script>
+        jQuery(document).on("change", 'select[name="brand"]', function() {
+            const selectedValue = $(this).val();
+            const otherBrandField = $('#other');
+
+            console.log('Selected Value:', selectedValue);
+            console.log('Other Brand Field:', otherBrandField);
+
+            if (selectedValue === 'Other') {
+                if (otherBrandField.length > 0) { // Check if the element exists
+                    otherBrandField.removeClass('d-none');
+                } else {
+                    console.log('Other brand field not found');
+                }
+            }
+            else {
+                otherBrandField.addClass('d-none');
+            }
+        });
+
+
+
         // Initialize the daterangepicker for a given element
         function initDaterangepicker($element) {
             $element.daterangepicker({
