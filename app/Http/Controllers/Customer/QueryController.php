@@ -125,8 +125,10 @@ class QueryController extends Controller
 
     public function receiveQuery(Request $request)
     {
+        
         $user = auth()->user();
-        $querydatas = Query::where(['for_user' => $user->id, 'status' => 'PENDING'])->orderBy('created_at', 'desc')->get();
+        $status = $request->query('status', 'PENDING');
+        $querydatas = Query::where(['for_user' => $user->id, 'status' => $status])->orderBy('created_at', 'desc')->get();
         $accept = true;
         return view('customer.receive_query_list', compact('querydatas', 'accept'));
     }
