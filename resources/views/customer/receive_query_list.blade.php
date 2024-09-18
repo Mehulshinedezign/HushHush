@@ -24,7 +24,7 @@
                 </div>
                 <div class="custom-tab">
                     <ul class="custom-tab-list">
-                        <li class="tab-item " data-status="PENDING" data-user="lender">
+                        <li class="tab-item active" data-status="PENDING" data-user="lender">
                             <a href="?status=PENDING" class="tab-link">Pending</a>
                         </li>
                         <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a href="received_query?status=ACCEPTED"
@@ -41,9 +41,7 @@
                     <div id="query-list-container">
                         <x-receive-query :querydatas="$querydatas" :accept="$accept" />
                     </div>
-
                 </div>
-
             </div>
         </div>
     </section>
@@ -64,44 +62,68 @@
 @endsection
 
 @push('scripts')
-<script>
+    <script>
+        $(document).ready(function() {
+            // Retrieve the active tab status from localStorage or URL, default to 'PENDING'
+            let status = localStorage.getItem('activeTab') || new URLSearchParams(window.location.search).get(
+                'status') || 'PENDING';
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get all tab items
-        const tabs = document.querySelectorAll('.tab-item');
+            // Set the active tab based on the stored or URL value
+            $('.tab-item').removeClass('active');
+            let activeTab = $('.tab-item[data-status="' + status + '"]');
 
-        // Check URL for status or use 'PENDING' as the default when coming back to the page
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlTab = urlParams.get('status');
-        const activeTab = urlTab || 'PENDING'; // Default to 'PENDING' when no tab is in URL
+            if (window.location.href === APP_URL+'/received_query') {
+                // Fallback to 'PENDING' tab if the current status is not found
+                activeTab = $('.tab-item[data-status="PENDING"]');
+                status = 'PENDING';
+            }
+            activeTab.addClass('active');
 
-        // Set the active tab visually
-        const activeTabElement = document.querySelector(`.tab-item[data-status="${activeTab}"]`);
-        if (activeTabElement) {
-            activeTabElement.classList.add('active'); // Add active class to the selected tab
-        }
+            loadDataBasedOnTab(status);
 
-        // Add click event listener to all tabs
-        tabs.forEach(tab => {
-            tab.addEventListener('click', function(event) {
-                event.preventDefault(); // Prevent default link behavior
+            // Handle tab click events
+            $('.tab-link').click(function(e) {
+                e.preventDefault(); // Prevent default anchor behavior
+                let clickedTab = $(this).parent(); // Get the clicked tab
+                let selectedStatus = clickedTab.data('status'); // Get the status from the clicked tab
 
-                // Get the data-status of the clicked tab
-                const status = tab.getAttribute('data-status');
 
-                // Update the URL without reloading the page
-                window.history.pushState(null, '', `?status=${status}`);
+                $('.tab-item').removeClass('active');
+                clickedTab.addClass('active');
 
-                // Refresh the page to simulate the behavior you want
-                location.reload();
+
+                localStorage.setItem('activeTab', selectedStatus);
+
+
+                let newUrl = new URL(window.location.href);
+                newUrl.searchParams.set('status', selectedStatus);
+                window.history.pushState({}, '', newUrl);
+
+
+                loadDataBasedOnTab(selectedStatus);
             });
-        });
 
-        // Clear localStorage when navigating away from the page
-        window.addEventListener('beforeunload', function() {
-            localStorage.removeItem('activeTab'); // Clear the stored active tab
+
+            function loadDataBasedOnTab(status) {
+                $.ajax({
+                    url: '/received_query',
+                    method: 'GET',
+                    data: {
+                        status: status
+                    },
+                    success: function(response) {
+
+                        $('#data-table').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error loading data:', error);
+                    }
+                });
+            }
+
+            // Load data for the initially active tab on page load
+            loadDataBasedOnTab(status);
         });
-    });
     </script>
     <script>
         $(document).ready(function() {
