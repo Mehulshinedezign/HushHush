@@ -24,7 +24,7 @@
                 </div>
                 <div class="custom-tab">
                     <ul class="custom-tab-list">
-                        <li class="tab-item " data-status="PENDING" data-user="lender">
+                        <li class="tab-item active" data-status="PENDING" data-user="lender">
                             <a href="?status=PENDING" class="tab-link">Pending</a>
                         </li>
                         <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a
