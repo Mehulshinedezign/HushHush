@@ -433,7 +433,7 @@ class ProductController extends Controller
             }
 
             $data['brand'] = $request->brand == "Other" ? $request->other_brand : $request->brand;
-            
+
             $product->update($data);
 
             $currentImageIds = $product->allImages()->pluck('id')->toArray();
