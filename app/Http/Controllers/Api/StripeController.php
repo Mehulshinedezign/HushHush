@@ -17,6 +17,7 @@ use Stripe\PaymentIntent;
 use App\Models\Order;
 use App\Models\Query;
 use App\Models\Transaction;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 
@@ -128,14 +129,6 @@ class StripeController extends Controller
             $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
             $completeAmount = $price + $query->cleaning_charges + $query->shipping_charges;
 
-            // if ($completeAmount != $intentAmount) {
-            //     return response()->json([
-            //         'status' => false,
-            //         'message' => 'Payment amount mismatch',
-            //     ], 400);
-            // }
-
-            // Check if the payment was successful
             if ($paymentIntent->status == 'succeeded') {
                 // Parse the query's date range
                 $fromDateTime = Carbon::parse($query->from_date);
@@ -156,8 +149,13 @@ class StripeController extends Controller
                     'currency' => strtoupper($intentCurrency), // Store the currency in uppercase
                 ]);
 
-                // Mark the query as completed
                 $query->update(['status' => 'COMPLETED']);
+
+
+
+
+
+
 
                 // Create disable dates for the product based on the query's date range
                 $dateRange = explode(' - ', $query->date_range);
@@ -188,7 +186,18 @@ class StripeController extends Controller
 
                 // Update the order with the correct transaction ID
                 $order->update(['transaction_id' => $transaction->id]);
+                $forUser = User::where('id', $query->for_user)->with('usernotification', 'pushToken')->first();
 
+                if ($forUser && $forUser->usernotification && $forUser->usernotification->order_req == '1') {
+                    $payload['id'] = $order->id;
+                    $payload['content'] = "Order Place succesfully";
+                    $payload['role'] = 'lender';
+                    $payload['type'] = 'inquiry';
+
+                    if ($forUser->pushToken) {
+                        sendPushNotifications($forUser->pushToken->fcm_token, $payload);
+                    }
+                }
                 return response()->json([
                     'status' => true,
                     'message' => 'Payment processed and order created successfully',

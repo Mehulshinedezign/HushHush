@@ -38,8 +38,8 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
     Route::any('/update-password', [App\Http\Controllers\Auth\ResetPasswordController::class, 'update'])->name('user.updatepassword');
 
     Route::middleware(['web.admin'])->group(function () {
-    Route::any('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index')->middleware('auth_verified');
-    Route::get('product/{id}', [App\Http\Controllers\Customer\ProductController::class, 'view'])->name('viewproduct');
+        Route::any('/', [App\Http\Controllers\Customer\ProductController::class, 'index'])->name('index')->middleware('auth_verified');
+        Route::get('product/{id}', [App\Http\Controllers\Customer\ProductController::class, 'view'])->name('viewproduct');
     });
     Auth::routes();
 
@@ -251,6 +251,14 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
             Route::post('order/add-review', [App\Http\Controllers\Customer\OrderController::class, 'addReview'])->name('addreview');
 
             Route::get('user/notification', [App\Http\Controllers\Api\ProfileController::class, 'test']);
+
+
+            
+            Route::post('/send-verification-email', [App\Http\Controllers\StripeIdentityController::class, 'sendVerificationEmail'])->name('send.verification.email');
+            Route::get('/verification/success', [App\Http\Controllers\StripeIdentityController::class, 'verificationSuccess'])->name('verification.success');
+            Route::post('/webhook/stripe', [App\Http\Controllers\StripeIdentityController::class, 'handleStripeWebhook']);
         });
     });
 });
+
+

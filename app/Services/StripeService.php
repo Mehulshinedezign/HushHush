@@ -1,34 +1,28 @@
 <?php
+
 namespace App\Services;
 
 use Stripe\Stripe;
-use Stripe\Token;
-use Stripe\Account;
+use Stripe\Identity\VerificationSession;
 
 class StripeService
 {
     public function __construct()
     {
-        Stripe::setApiKey(config('services.stripe.secret'));
+        Stripe::setApiKey(config('services.stripe.secret')); // Set your Stripe secret key
     }
 
-    public function verifyBankAccount($accountDetails,$country = 'US', $currency = 'usd')
+    public function createVerificationSession($email, $options = [])
     {
-        try {
-            $token = Token::create([
-                'bank_account' => [
-                    'country' => $country,
-                    'currency' => $currency,
-                    'account_holder_name' => $accountDetails['account_holder_name'],
-                    // 'account_holder_type' => $accountDetails['account_holder_type'],
-                    'routing_number' => $accountDetails['routing_number'],
-                    'account_number' => $accountDetails['account_number'],
-                ],
-            ]);
-
-            return $token;
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
+        return VerificationSession::create([
+            'type' => 'document', // or other types depending on your use case
+            'metadata' => [
+                'email' => $email,
+            ],
+            'return_url' => $options['return_url'] ?? null,
+        ]);
     }
+
+
+
 }

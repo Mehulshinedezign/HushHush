@@ -627,6 +627,32 @@
             </div>
         </div>
     </div>
+    <div class="modal fade addbank-Modal" id="identity" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form action="{{ route('send.verification.email') }}" method="POST">
+                        <h3 class="modal-title" id="exampleModalLabel">Verify Your Identity</h3>
+                        @csrf
+                        <img src="{{ asset('front/images/bank-img.png') }}" alt="">
+                        <div class="profile-select-box border-disabled">
+                            <div class="profile-check-list">
+
+                                <a href="javascript:void(0)" data-bs-dismiss="modal" arial-label="Close"
+                                    class="button outline-btn full-btn">No</a>
+
+                                <button type="submit" class="button primary-btn full-btn"
+                                    id="bank_info">Yes</button>
+
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
     @include('account-setting')
     @php
         $user = auth()->user();
@@ -787,6 +813,80 @@
                     console.log('Other brand field not found');
                 }
             } 
+            else {
+                otherBrandField.addClass('d-none');
+            }
+        });
+
+        $(document).on('click','.non-availability',function(){
+            $('.daterangepicker, .ltr, .show-calendar, .opensright').addClass('testCheck')
+        })
+
+        document.getElementById('identity').addEventListener('click', async function() {
+            try {
+                const response = await fetch('/send-verification-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    window.location.href = data.url; // Redirect to Stripe verification
+                } else {
+                    alert('Error: ' + data.message); // Handle error
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+
+        });
+    </script>
+
+    <script>
+        document.getElementById('identity').addEventListener('click', async function() {
+            try {
+                const response = await fetch('/send-verification-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    window.location.href = data.url; // Redirect to Stripe verification
+                } else {
+                    alert('Error: ' + data.message); // Handle error
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+
+        });
+    </script>
+
+    <script>
+        jQuery(document).on("change", 'select[name="brand"]', function() {
+            const selectedValue = $(this).val();
+            const otherBrandField = $('#other');
+            console.log('Selected Value:', selectedValue);
+            console.log('Other Brand Field:', otherBrandField);
+
+            if (selectedValue === 'Other') {
+                if (otherBrandField.length > 0) { // Check if the element exists
+                    otherBrandField.removeClass('d-none');
+                } else {
+                    console.log('Other brand field not found');
+                }
+            }
             else {
                 otherBrandField.addClass('d-none');
             }
@@ -1164,8 +1264,14 @@
             }
 
 
+            @if (session('showModal1'))
+                $('#addbank-Modal').modal('show');
+            @endif
+            @if (session('showModal2'))
+                $('#addaddress-Modal').modal('show');
+            @endif
             // after account details open a modal
-            @if (session('showModal'))
+            @if (session('showModal3'))
                 $('#addproduct-Modal').modal('show');
             @endif
 

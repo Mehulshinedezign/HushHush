@@ -49,7 +49,7 @@ Route::middleware(['auth:sanctum', 'prevent.admin'])->group(function () {
 
     Route::get('/product-category', [App\Http\Controllers\Api\ProductController::class, 'getFormData']);
     Route::get('/view-product/{id}', [App\Http\Controllers\Api\ProductController::class, 'view']);
-    Route::get('/products/listing', [App\Http\Controllers\Api\ProductController::class, 'getAllProducts']);
+    Route::get('/products/listing', [App\Http\Controllers\Api\ProductController::class, 'getAllProducts'])->name('apiIndex');
     Route::get('/product-details/{id}', [App\Http\Controllers\Api\ProductController::class, 'getAllProductsById']);
     Route::get('/editProduct/{id}', [App\Http\Controllers\Api\ProductController::class, 'editProduct']);
     Route::get('/user/products/listing', [App\Http\Controllers\Api\ProductController::class, 'getAuthUserProducts']);
@@ -95,15 +95,29 @@ Route::middleware(['auth:sanctum', 'prevent.admin'])->group(function () {
     Route::get('testing', [App\Http\Controllers\Api\ProfileController::class, 'test']);
     Route::post('pushToken/add', [App\Http\Controllers\Api\ProfileController::class, 'addFcm']);
 
+    Route::post('/report/product/{id}', [App\Http\Controllers\Api\ProductController::class, 'reportProduct']);
+    Route::post('/add-brand', [App\Http\Controllers\Api\ProductController::class, 'addBrand']);
+
     //Bank Deatils APIs
     Route::post('/bank-account', [App\Http\Controllers\Api\BankAccountController::class, 'addOrUpdateBankAccount']);
     Route::get('/bank-account/details', [App\Http\Controllers\Api\BankAccountController::class, 'getDetails']);
-
-
-
 
     Route::post('/stripe/onboarding/redirect', [App\Http\Controllers\Api\StripeController::class, 'redirectToStripe'])->name('api.stripe.onboarding.redirect');
     Route::get('/stripe/onboarding/refresh', [App\Http\Controllers\Api\StripeController::class, 'refreshOnboarding'])->name('api.stripe.onboarding.refresh');
     Route::get('/stripe/onboarding/complete', [App\Http\Controllers\Api\StripeController::class, 'completeOnboarding'])->name('api.stripe.onboarding.complete');
 });
 Route::post('/stripe/webhook', [App\Http\Controllers\Api\StripeWebhookController::class, 'handleWebhook'])->name('api.stripe.webhook');
+
+use App\Http\Controllers\Api\StripeIdentityController;
+
+// Route to create a verification session
+Route::post('/stripe/verification-session', [StripeIdentityController::class, 'createVerificationSession'])
+    ->middleware('auth:sanctum'); // Add auth middleware if necessary
+
+// Route to handle Stripe webhooks
+Route::post('/stripe/webhook', [StripeIdentityController::class, 'handleWebhook']);
+
+// Route to handle success redirection
+Route::get('/verification-success', [StripeIdentityController::class, 'verificationSuccess'])
+    ->name('api.verification.success');
+

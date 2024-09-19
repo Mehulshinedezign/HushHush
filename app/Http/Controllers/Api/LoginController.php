@@ -72,6 +72,12 @@ class LoginController extends Controller
                     $addresAdded = false;
                 }
 
+                $identity = $user->identity_verified_at;
+                if (is_null($identity)) {
+                    $identity = false;
+                } else {
+                    $identity = true;
+                }
 
 
                 $is_bankdetail = $user->bankAccount;
@@ -183,6 +189,7 @@ class LoginController extends Controller
                         'device_type' => $user->pushToken->device_type,
                         'device_id' => $user->pushToken->device_id,
                         'is_added' => $is_added,
+                        'identity' =>$identity,
                         // 'product' => $product,
                     ],
                     'product' => $product,

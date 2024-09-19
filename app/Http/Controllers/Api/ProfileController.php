@@ -368,32 +368,34 @@ class ProfileController extends Controller
 
 
 
-    public function test()
-    {
-        // Check if the user is authenticated
-        if (!auth()->check()) {
-            return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
-        }
+    // public function test()
+    // {
+    //     // Check if the user is authenticated
+    //     // if (!auth()->check()) {
+    //     //     return response()->json(['status' => 'error', 'message' => 'User not authenticated'], 401);
+    //     // }
 
-        $user = auth()->user();
-        // dd($user->pushToken->fcm_token);
+    //     // $user = auth()->user();
+    //     // // dd($user->pushToken->fcm_token);
 
-        if (!$user->pushToken || !$user->pushToken->fcm_token) {
-            return response()->json(['status' => 'error', 'message' => 'FCM token not found'], 404);
-        }
+    //     // if (!$user->pushToken || !$user->pushToken->fcm_token) {
+    //     //     return response()->json(['status' => 'error', 'message' => 'FCM token not found'], 404);
+    //     // }
 
-        $payload = [
-            'id' => 'dhfgdh',
-            'content' => 'You have received an inquiry about a product'
-        ];
-        $response = sendPushNotifications($user->pushToken->fcm_token, $payload);
+    //     $payload = [
+    //         'id' => 'dhfgdh',
+    //         'content' => 'boldo  sir aaya notification',
+    //         'role' =>'borrower',
+    //         'type'=>'inquiery',
+    //     ];
+    //     $response = sendPushNotifications('f1P4fUqu_01Yjaw2zFCslf:APA91bH8Sn2-jeLPe6FkXnRlPKdvqMt_78qTTFUgsj1dmEsm3daDgTskJUjAljqDAY67ORV0I1Owe1WRipqRrHgi_9qD2_yaZEIM3e4L7Zz56DLH-okfs27opGvwFQxrH8V1J2Ox8-io', $payload);
 
-        if ($response === false) {
-            return response()->json(['status' => 'error', 'message' => 'Failed to send notification'], 500);
-        }
+    //     if ($response === false) {
+    //         return response()->json(['status' => 'error', 'message' => 'Failed to send notification'], 500);
+    //     }
 
-        return response()->json(['status' => 'success', 'message' => 'Notification sent successfully', 'response' => $response]);
-    }
+    //     return response()->json(['status' => 'success', 'message' => 'Notification sent successfully', 'response' => $response]);
+    // }
 
 
     public function userNotification(Request $request)
@@ -589,5 +591,29 @@ class ProfileController extends Controller
         //     'message' => 'FCM token added successfully',
         //     'data' => $newPushToken
         // ]);
+    }
+
+
+    public function test()
+    {
+        // Assuming user authentication is handled elsewhere
+
+        $payload = [
+            'id' => 'dhfgdh',
+            'content' => 'boldo sir aaya notification',
+            'role' => 'borrower',
+            'type' => 'inquiery',
+        ];
+
+        // Example FCM token
+        $fcmToken = 'f1P4fUqu_01Yjaw2zFCslf:APA91bH8Sn2-jeLPe6FkXnRlPKdvqMt_78qTTFUgsj1dmEsm3daDgTskJUjAljqDAY67ORV0I1Owe1WRipqRrHgi_9qD2_yaZEIM3e4L7Zz56DLH-okfs27opGvwFQxrH8V1J2Ox8-io';
+
+        $response = sendPushNotifications($fcmToken, $payload);
+
+        if ($response === false) {
+            return response()->json(['status' => 'error', 'message' => 'Failed to send notification'], 500);
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'Notification sent successfully', 'response' => $response]);
     }
 }

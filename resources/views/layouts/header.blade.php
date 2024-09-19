@@ -30,6 +30,10 @@
                                     <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
                                         Rent your Closet
                                     </div>
+                                @elseif (is_null($user->identity_verified_at))
+                                    <div data-bs-toggle="modal" data-bs-target="#identity">
+                                        Rent your Closet
+                                    </div>
                                 @elseif (is_null($user->userDetail->complete_address))
                                     <div data-bs-toggle="modal" data-bs-target="#accountSetting">
                                         Rent your Closet
@@ -156,6 +160,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+
                     <li>
                         <a href="{{ url('/') }}">Home</a>
                     </li>
@@ -259,6 +265,7 @@
 </header>
 {{-- @include('common.alert') --}}
 @push('scripts')
+
     <script>
         function clearForm() {
             document.getElementById('searchForm').reset();

@@ -18,6 +18,7 @@ use App\Models\ProductLocation;
 use App\Models\ProductRating;
 use App\Models\ProductUnavailability;
 use App\Models\Query;
+use App\Models\ReportedProduct;
 use App\Models\Size;
 use App\Models\User;
 use App\Notifications\ItemYouLike;
@@ -485,7 +486,7 @@ class ProductController extends Controller
                                 ProductDisableDate::create([
                                     'product_id' => $product->id,
                                     'disable_date' => $start->format('Y-m-d'),
-                                    'added_by'=>auth()->id(),
+                                    'added_by' => auth()->id(),
                                 ]);
                                 $start->modify('+1 day');
                             }
@@ -665,7 +666,7 @@ class ProductController extends Controller
                             ProductDisableDate::create([
                                 'product_id' => $product->id,
                                 'disable_date' => $start->format('Y-m-d'),
-                                'added_by'=>auth()->id(),
+                                'added_by' => auth()->id(),
                             ]);
                             $start->modify('+1 day');
                         }
@@ -1109,10 +1110,14 @@ class ProductController extends Controller
             $authUser = auth()->user();
             $is_bankdetail = $authUser->bankAccount;
             $bankdetails = is_null($is_bankdetail) ? false : true;
+
+            $verified = $authUser->identity_verified_at;
+            $identity = is_null($verified) ? false : true;
+
             $hasCompleteAddress = !empty($authUser->userDetail->complete_address) &&
                 !empty($authUser->userDetail->country);
             $addresAdded = $hasCompleteAddress ? true : false;
-            $fcm_token = is_null( $authUser->pushToken->fcm_token) ? false : true ;
+            $fcm_token = is_null($authUser->pushToken->fcm_token) ? false : true;
 
             $query = Product::where('user_id', '!=', $authUser->id);
             $filterApplied = false;
@@ -1301,7 +1306,8 @@ class ProductController extends Controller
                     'filter_applied' => $filterApplied,
                     'account_added' => $bankdetails,
                     'address_added' => $addresAdded,
-                    'fcm_token'=>$fcm_token,
+                    'fcm_token' => $fcm_token,
+                    'identity'=>$identity,
 
                 ],
             ], 200);
@@ -1400,6 +1406,7 @@ class ProductController extends Controller
         try {
             $product = Product::with('allImages', 'ratings.user')->findOrFail($id);
 
+
             if (is_null($product)) {
                 return response()->json([
                     'status' => false,
@@ -1412,6 +1419,13 @@ class ProductController extends Controller
 
             $user = auth()->user();
             $authUserId = $user->id;
+
+            $reported = ReportedProduct::where('product_id', $product->id)->where('user_id', $authUserId)->get();
+            if ($reported->isEmpty()) {
+                $repoerted_product = false;
+            } else {
+                $repoerted_product = true;
+            }
 
             $queries = Query::where('product_id', $id)->where('user_id', $authUserId)->get();
 
@@ -1474,10 +1488,8 @@ class ProductController extends Controller
 
             $productDetails = $this->getProduct($id);
 
-            // Include subcategory name in product details
             $productDetails->subcategory_name = $productDetails->subcategory ? $productDetails->subcategory->name : null;
 
-            // Count the number of reviews and calculate rating percentage
             $reviewCount = $product->ratings->count();
             $ratingPercentages = [];
 
@@ -1487,7 +1499,6 @@ class ProductController extends Controller
                 $ratingPercentages[] = ['id' => $i, 'per' => "{$percentage}%"];
             }
 
-            // Map the images and reviews
             $productDetails->all_images = $product->allImages->map(function ($image) {
                 return [
                     'id' => $image->id,
@@ -1543,6 +1554,7 @@ class ProductController extends Controller
                     'rating_percentages' => $ratingPercentages,
                     'loggedInUser' => $user,
                     'loggedInUserAddress' => $user->userDetail,
+                    'reported' => $repoerted_product,
                 ],
             ], 200);
         } catch (\Throwable $e) {
@@ -2236,6 +2248,96 @@ class ProductController extends Controller
                 'status' => false,
                 'message' => 'Failed to fetch user details. Error: ' . $e->getMessage(),
                 'errors' => [],
+            ], 500);
+        }
+    }
+
+
+    public function reportProduct(Request $request, $id)
+    {
+        $userId = auth()->id();
+        $productId = $id;
+
+        $product = Product::find($productId);
+        if ($product == null) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This Product Id is not available',
+            ], 422);
+        }
+
+        try {
+            $alreadyReported = DB::table('reported_products')
+                ->where('user_id', $userId)
+                ->where('product_id', $productId)
+                ->exists();
+
+            if ($alreadyReported) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'You have already reported this product.'
+                ], 400);
+            }
+
+            DB::table('reported_products')->insert([
+                'user_id' => $userId,
+                'product_id' => $productId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Product has been reported successfully!'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error reporting product: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while reporting the product. Please try again later.'
+            ], 500);
+        }
+    }
+
+
+    public function addBrand(Request $request)
+    {
+
+        try {
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+            $data = [
+                'name' => $request->name,
+                // 'status'=>
+            ];
+            $brand = strToLower($request->name);
+            $exsist = Brand::where('name',$brand)->first();
+            if($exsist){
+                $product = $exsist;
+            }else{
+
+                $product = Brand::create($data);
+            }
+            return response()->json([
+                'status' => true,
+                'message' => 'Brand Added Succesfully',
+                'data' => [
+                    'id' => $product->id,
+                    'label' => $product->name,
+                    'value'=>$product->name,
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while adding the product. Please try again later.'
             ], 500);
         }
     }

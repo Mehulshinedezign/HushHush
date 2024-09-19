@@ -73,6 +73,35 @@ class OrderController extends Controller
                     ]);
                 }
 
+                if ($type == 'pickedup') {
+                    $forUser = User::where('id', auth()->id())->with('usernotification', 'pushToken')->first();
+
+                    if ($forUser && $forUser->usernotification && $forUser->usernotification->lender_order_pickup == '1') {
+                        $payload['id'] = $id;
+                        $payload['content'] = "Retailer Uploaded the image please verify";
+                        $payload['role'] = 'borrower';
+                        $payload['type'] = 'order';
+
+                        if ($forUser->pushToken) {
+                            sendPushNotifications($forUser->pushToken->fcm_token, $payload);
+                        }
+                    }
+                }
+                if ($type == 'returned') {
+                    $forUser = User::where('id', auth()->id())->with('usernotification', 'pushToken')->first();
+
+                    if ($forUser && $forUser->usernotification && $forUser->usernotification->lender_order_return == '1') {
+                        $payload['id'] = $id;
+                        $payload['content'] = "Retailer Uploaded the image please verify";
+                        $payload['role'] = 'borrower';
+                        $payload['type'] = 'order';
+
+                        if ($forUser->pushToken) {
+                            sendPushNotifications($forUser->pushToken->fcm_token, $payload);
+                        }
+                    }
+                }
+
                 // Log the success of the upload process
                 // Log::info('Images uploaded successfully', [
                 //     'order_id' => $id,
@@ -152,6 +181,35 @@ class OrderController extends Controller
                         'type' => $type,
                         'uploaded_by' => 'customer',
                     ]);
+                }
+
+                if ($type == 'pickedup') {
+                    $forUser = User::where('id', $user->id)->with('usernotification', 'pushToken')->first();
+
+                    if ($forUser && $forUser->usernotification && $forUser->usernotification->customer_order_pickup == '1') {
+                        $payload['id'] = $id;
+                        $payload['content'] = "Lender Uploaded the image please verify";
+                        $payload['role'] = 'lender';
+                        $payload['type'] = 'order';
+
+                        if ($forUser->pushToken) {
+                            sendPushNotifications($forUser->pushToken->fcm_token, $payload);
+                        }
+                    }
+                }
+                if ($type == 'returned') {
+                    $forUser = User::where('id', $user->id)->with('usernotification', 'pushToken')->first();
+
+                    if ($forUser && $forUser->usernotification && $forUser->usernotification->customer_order_return == '1') {
+                        $payload['id'] = $id;
+                        $payload['content'] = "Lender Uploaded the image please verify";
+                        $payload['role'] = 'lender';
+                        $payload['type'] = 'order';
+
+                        if ($forUser->pushToken) {
+                            sendPushNotifications($forUser->pushToken->fcm_token, $payload);
+                        }
+                    }
                 }
 
                 return response()->json([
