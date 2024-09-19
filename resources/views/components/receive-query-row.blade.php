@@ -65,12 +65,12 @@
     @if ($query->status == 'PENDING')
         <td class = "negotiation-price-td">
             <input type="text" id="negotiate_price_{{ $query->id }}" value="{{ $query->getCalculatedPrice($query->date_range) }}" placeholder="Enter agreed price"
-                min='0' class="negotiation_price_{{ $query->id }}" name="negotiate_price">
+                min='0' class="negotiation_price_{{ $query->id }} charge" name="negotiate_price">
             <input type="text" id="cleaning_charges_{{ $query->id }}" placeholder="Enter cleaning charges"
-                min='0' class="cleaning_charges_{{ $query->id }}" name="cleaning_price">
+                min='0' class="cleaning_charges_{{ $query->id }} charge" name="cleaning_price">
                 @if($query->delivery_option =='ship_to_me')
             <input type="text" id="shipping_charges_{{ $query->id }}" placeholder="Enter shipping charges"
-                min='0' class="shipping_charges_{{ $query->id }}" name="shipping_price">
+                min='0' class="shipping_charges_{{ $query->id }} charge" name="shipping_price">
             @endif
         </td>
     @endif

@@ -10,6 +10,8 @@
 @section('content')
     <section class="rental-request-bx min-height-100">
         <div class="container">
+            <X-alert />
+
             <div class="rental-request-wrapper">
                 <div class="rental-header">
                     <h2>My Inquiry List</h2>

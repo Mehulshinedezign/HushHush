@@ -855,7 +855,6 @@
         jQuery(document).on("change", 'select[name="brand"]', function() {
             const selectedValue = $(this).val();
             const otherBrandField = $('#other');
-
             console.log('Selected Value:', selectedValue);
             console.log('Other Brand Field:', otherBrandField);
 
@@ -871,7 +870,9 @@
             }
         });
 
-
+        $(document).on('click','.non-availability',function(){
+            $('.daterangepicker, .ltr, .show-calendar, .opensright').addClass('testCheck')
+        })
 
         // Initialize the daterangepicker for a given element
         function initDaterangepicker($element) {

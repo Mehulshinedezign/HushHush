@@ -27,12 +27,12 @@
                         <li class="tab-item active" data-status="PENDING" data-user="lender">
                             <a href="?status=PENDING" class="tab-link">Pending</a>
                         </li>
-                        <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a href="received_query?status=ACCEPTED"
-                                class="tab-link">Accepted</a></li>
-                        <li class="tab-item" data-status="REJECTED" data-user="lender"><a href="received_query?status=REJECTED"
-                                class="tab-link">Rejected</a></li>
-                        <li class="tab-item" data-status="COMPLETED" data-user="lender"><a href="received_query?status=COMPLETED"
-                                class="tab-link">Completed</a></li>
+                        <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a
+                                href="received_query?status=ACCEPTED" class="tab-link">Accepted</a></li>
+                        <li class="tab-item" data-status="REJECTED" data-user="lender"><a
+                                href="received_query?status=REJECTED" class="tab-link">Rejected</a></li>
+                        <li class="tab-item" data-status="COMPLETED" data-user="lender"><a
+                                href="received_query?status=COMPLETED" class="tab-link">Completed</a></li>
 
                     </ul>
 
@@ -64,6 +64,31 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+
+            $(".charge").on("keypress", function(evt) {
+                var txtBox = $(this);
+                var charCode = (evt.which) ? evt.which : evt.keyCode
+                if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
+                    return false;
+                else {
+                    var len = txtBox.val().length;
+                    var index = txtBox.val().indexOf('.');
+                    if (index > 0 && charCode == 46) {
+                        return false;
+                    }
+                    if (index > 0) {
+                        var charAfterdot = (len + 1) - index;
+                        if (charAfterdot > 3) {
+                            return false;
+                        }
+                    }
+                }
+                return txtBox;
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
             // Retrieve the active tab status from localStorage or URL, default to 'PENDING'
             let status = localStorage.getItem('activeTab') || new URLSearchParams(window.location.search).get(
                 'status') || 'PENDING';
@@ -90,7 +115,6 @@
 
                 $('.tab-item').removeClass('active');
                 clickedTab.addClass('active');
-
 
                 localStorage.setItem('activeTab', selectedStatus);
 

@@ -18,7 +18,7 @@
 
                             <div class="profile-detail">
                                 <h4>{{ $product->name }}</h4>
-                                <p>{{ $product->rent_day ? $product->rent_day."/day" : 'N/A' }},{{ $product->rent_week ? $product->rent_week."/week" : 'N/A' }},{{ $product->rent_month ? $product->rent_month."/month" : 'N/A' }}
+                                <p>{{ $product->rent_day ? $product->rent_day."/day" : 'N/A' }}, {{ $product->rent_week ? $product->rent_week."/week" : 'N/A' }}, {{ $product->rent_month ? $product->rent_month."/month" : 'N/A' }}
                                 </p>
                             </div>
                         </div>

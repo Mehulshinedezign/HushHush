@@ -131,9 +131,9 @@
                         </ul>
                     </div>
                     <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                                                                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                                                                    <span class="navbar-toggler-icon"></span>
-                                                                </button> -->
+                                                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                                <span class="navbar-toggler-icon"></span>
+                                            </button> -->
                 </div>
             @endauth
             @guest
@@ -161,7 +161,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-                    
+
                     <li>
                         <a href="{{ url('/') }}">Home</a>
                     </li>
@@ -276,6 +276,15 @@
             const filterForm = document.getElementById('filters');
             const searchForm = document.getElementById('searchForm');
             const filterInputs = filterForm.querySelectorAll('input[name]');
+
+            const searchInput = document.querySelector('input[name="search"]').value.trim();
+            const dateInput = document.querySelector('input[name="filter_date"]').value.trim();
+
+            // Validation: Check if both fields are filled
+            if (searchInput === '' && dateInput === '') {
+                return; // Prevent form submission if both are empty
+            }
+
             filterInputs.forEach(function(input) {
                 const clone = input.cloneNode(true);
                 clone.style.display = 'none';
@@ -291,6 +300,13 @@
             const currentRouteName = document.getElementById('currentRoute') ? document.getElementById(
                 'currentRoute').value : document.body.getAttribute('data-route-name');
 
+            const searchInput = document.querySelector('input[name="search"]').value.trim();
+            const dateInput = document.querySelector('input[name="filter_date"]').value.trim();
+
+            // Validation: Check if both fields are filled
+            if (searchInput === '' && dateInput === '') {
+                return; // Prevent form submission if both are empty
+            }
             // If the route is 'index', submit the form with all fields
             if (currentRouteName === 'index') {
                 this.submit();

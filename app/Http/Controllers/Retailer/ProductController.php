@@ -141,7 +141,8 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-        // dd($request->all());
+        // dd('herererer',$request->all());
+
         try {
             DB::beginTransaction();
             $category = jsdecode_userdata($request->category);
@@ -187,6 +188,11 @@ class ProductController extends Controller
                 'modified_user_type' => 'Self',
                 'non_available_dates' => $request->non_available_dates ?? 0,
             ];
+            if(isset($request->other_brand)){
+                Brand::create([
+                    'name'=> $request->other_brand,
+                ]);
+            }
 
             $data['brand'] = $request->brand == "Other" ? $request->other_brand : $request->brand;
             $product = Product::create($data);
@@ -246,7 +252,6 @@ class ProductController extends Controller
                         ]);
                     }
                 }
-                // dd('dates'); // for debugging
             }
 
 
@@ -376,12 +381,14 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, $id)
     {
+        if($request->input('product_complete_location')!=null)
+        {
         $product_complete_location = $request->input('product_complete_location');
         $address = urlencode($product_complete_location);
         $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$address}&key=" . config('services.google_maps.api_key');
         $response = file_get_contents($url);
         $raw_address = json_decode($response, true);
-
+        }
         if (!empty($raw_address['results'])) {
             $formatted_address = json_encode($raw_address['results'][0]);
         }
@@ -419,7 +426,14 @@ class ProductController extends Controller
                 'modified_user_type' => 'Self',
                 'non_available_dates' => $request->non_available_dates ?? 1,
             ];
+            if(isset($request->other_brand)){
+                Brand::create([
+                    'name'=> $request->other_brand,
+                ]);
+            }
 
+            $data['brand'] = $request->brand == "Other" ? $request->other_brand : $request->brand;
+            
             $product->update($data);
 
             $currentImageIds = $product->allImages()->pluck('id')->toArray();

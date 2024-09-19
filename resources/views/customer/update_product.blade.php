@@ -90,7 +90,8 @@
                                                         @endforeach
                                                     </select>
                                                     <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                            alt="img">
                                                     </span>
                                                     @error('category')
                                                         <span class="invalid-feedback" role="alert">
@@ -100,11 +101,13 @@
                                                 </div>
 
                                                 <div class="formfield">
-                                                    <select name="subcategory" id="subcategory" class="produt_input form-class @error('subcategory') is-invalid @enderror">
+                                                    <select name="subcategory" id="subcategory"
+                                                        class="produt_input form-class @error('subcategory') is-invalid @enderror">
                                                         <option value="">Subcategory</option>
                                                     </select>
                                                     <span class="form-icon">
-                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
+                                                        <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                            alt="img">
                                                     </span>
                                                 </div>
                                                 @error('subcategory')
@@ -137,8 +140,9 @@
                                                 <select class="form-control" name="brand">
                                                     <option value="">Brand</option>
                                                     @foreach (getBrands() as $brand)
-                                                        <option value="{{ $brand->id }}"
-                                                            @if ($product->brand == $brand->id) selected @endif>
+                                                        <option value="{{ $brand->name }}"
+                                                            class="@if ($brand->name == 'Other') moveMe @endif"
+                                                            @if ($product->brand == $brand->name) selected @endif>
                                                             {{ $brand->name }}</option>
                                                     @endforeach
                                                 </select>
@@ -146,6 +150,16 @@
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                         alt="img">
                                                 </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-3 col-sm-12 d-none" id="other">
+                                        <div class="form-group">
+                                            <label for="">Other Brand</label>
+                                            <div class="formfield">
+                                                <input type="text" value="" class="produt_input form-control form-class"
+                                                    placeholder="other" name="other_brand">
+
                                             </div>
                                         </div>
                                     </div>
@@ -174,12 +188,17 @@
                                                 <label for="">Delivery Option*</label>
 
                                                 <div class="form-check form-switch">
-                                                    <label class="form-check-label" for="flexSwitchCheckChecked">Pickup</label>
-                                                    <input class="form-check-input" type="checkbox" role="switch" name="manual_location" id="flexSwitchCheckChecked" {{ $product->productCompleteLocation->manul_pickup_location ? 'checked' : '' }}>
+                                                    <label class="form-check-label"
+                                                        for="flexSwitchCheckChecked">Pickup</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                        name="manual_location" id="flexSwitchCheckChecked"
+                                                        {{ $product->productCompleteLocation->manul_pickup_location ? 'checked' : '' }}>
                                                 </div>
                                                 <div class="form-check form-switch">
                                                     <label class="form-check-label" for="shipmentToggle">Shipment</label>
-                                                    <input class="form-check-input" type="checkbox" role="switch" name="shipment" id="shipmentToggle" {{ $product->productCompleteLocation->shipment ? 'checked' : '' }}>
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                        name="shipment" id="shipmentToggle"
+                                                        {{ $product->productCompleteLocation->shipment ? 'checked' : '' }}>
                                                 </div>
                                             </div>
                                             <div class="form-field">
@@ -366,7 +385,7 @@
                                     <div class="col-md-12">
                                         <x-edit-date-avaliable :product="$ranges" />
                                     </div>
-                                   
+
 
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -387,9 +406,9 @@
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days*</label>
                                             <!-- <div class="formfield ">
-                                                                <input type="number" class="form-control" name="min_rent_days"
-                                                                    value="{{ $product->min_days_rent_item }}" min="1">
-                                                            </div> -->
+                                                                        <input type="number" class="form-control" name="min_rent_days"
+                                                                            value="{{ $product->min_days_rent_item }}" min="1">
+                                                                    </div> -->
                                             <div class="formfield">
                                                 <select
                                                     class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
@@ -403,7 +422,7 @@
                                                     <option value="30"
                                                         @if ($product->min_days_rent_item == 30) selected @endif>30 Days</option>
                                                     <!-- <option value="Fair"
-                                                                            @if ($product->product_condition == 'Fair') selected @endif>Fair condition</option> -->
+                                                                                    @if ($product->product_condition == 'Fair') selected @endif>Fair condition</option> -->
                                                 </select>
                                                 <span class="form-icon">
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
@@ -496,7 +515,6 @@
 @endsection
 
 @push('scripts')
-
     <script>
         // The same script as in Blade 1
         $(document).ready(function() {
@@ -508,7 +526,8 @@
                 subcategorySelect.empty().append('<option value="">Subcategory</option>');
                 if (subcategories) {
                     $.each(subcategories, function(index, subcategory) {
-                        subcategorySelect.append('<option value="' + subcategory.id + '">' + subcategory.name + '</option>');
+                        subcategorySelect.append('<option value="' + subcategory.id + '">' +
+                            subcategory.name + '</option>');
                     });
                 }
             });
@@ -521,7 +540,9 @@
                 subcategorySelect.empty().append('<option value="">Subcategory</option>');
                 if (subcategories) {
                     $.each(subcategories, function(index, subcategory) {
-                        subcategorySelect.append('<option value="' + subcategory.id + '" ' + (subcategory.id == selectedSubcategoryId ? 'selected' : '') + '>' + subcategory.name + '</option>');
+                        subcategorySelect.append('<option value="' + subcategory.id + '" ' + (subcategory
+                                .id == selectedSubcategoryId ? 'selected' : '') + '>' + subcategory
+                            .name + '</option>');
                     });
                 }
             }
@@ -561,16 +582,25 @@
                 };
                 const extension = mimeTypeToExtension[blob.type] || 'bin';
                 const fileName = `new_${Date.now()}.${extension}`;
-                const file = new File([blob], fileName, { type: blob.type });
+                const file = new File([blob], fileName, {
+                    type: blob.type
+                });
                 let dt = new DataTransfer();
                 dt.items.add(file);
                 let reader = new FileReader();
 
                 reader.onload = function(e) {
                     let imgWrapper = $('<div>').addClass('image-wrapper');
-                    let img = $('<img>').attr({ src: e.target.result, alt: '', loading: 'lazy' });
+                    let img = $('<img>').attr({
+                        src: e.target.result,
+                        alt: '',
+                        loading: 'lazy'
+                    });
                     let removeBtn = $('<span>').addClass('remove-image').html('&times;');
-                    let hiddenInput = $('<input>').attr({ type: 'hidden', name: 'new_images[]' }).val(file.name);
+                    let hiddenInput = $('<input>').attr({
+                        type: 'hidden',
+                        name: 'new_images[]'
+                    }).val(file.name);
                     imgWrapper.append(img, removeBtn, hiddenInput);
                     $('.update-upload-img-preview').append(imgWrapper);
 
@@ -582,7 +612,10 @@
 
                 reader.readAsDataURL(file);
                 fileInput.files = dt.files;
-                newFiles.add({ file, existing: false });
+                newFiles.add({
+                    file,
+                    existing: false
+                });
                 updateFileInput();
             } catch (error) {
                 console.error('Error fetching the image:', error);
@@ -619,13 +652,23 @@
 
                     reader.onload = function(e) {
                         let imgWrapper = $('<div>').addClass('image-wrapper');
-                        let img = $('<img>').attr({ src: e.target.result, alt: '', loading: 'lazy' });
+                        let img = $('<img>').attr({
+                            src: e.target.result,
+                            alt: '',
+                            loading: 'lazy'
+                        });
                         let removeBtn = $('<span>').addClass('remove-image').html('&times;');
-                        let hiddenInput = $('<input>').attr({ type: 'hidden', name: 'new_images[]' }).val(file.name);
+                        let hiddenInput = $('<input>').attr({
+                            type: 'hidden',
+                            name: 'new_images[]'
+                        }).val(file.name);
                         imgWrapper.append(img, removeBtn, hiddenInput);
                         $('.update-upload-img-preview').append(imgWrapper);
 
-                        newFiles.add({ file, existing: false });
+                        newFiles.add({
+                            file,
+                            existing: false
+                        });
                         uploadedFiles.add(file.name);
                         updateRemoveButtons();
                         processFiles(files);
@@ -670,7 +713,9 @@
                     alert("Please upload at least one image before submitting.");
                 } else if (newFiles.size > maxFiles) {
                     e.preventDefault();
-                    alert(`You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`);
+                    alert(
+                        `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`
+                        );
                 }
             });
 
@@ -689,6 +734,4 @@
             });
         });
     </script>
-
-
 @endpush
