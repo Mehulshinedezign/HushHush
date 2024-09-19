@@ -618,6 +618,32 @@
             </div>
         </div>
     </div>
+    <div class="modal fade addbank-Modal" id="identity" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form action="{{ route('send.verification.email') }}" method="POST">
+                        <h3 class="modal-title" id="exampleModalLabel">Verify Your Identity</h3>
+                        @csrf
+                        <img src="{{ asset('front/images/bank-img.png') }}" alt="">
+                        <div class="profile-select-box border-disabled">
+                            <div class="profile-check-list">
+
+                                <a href="javascript:void(0)" data-bs-dismiss="modal" arial-label="Close"
+                                    class="button outline-btn full-btn">No</a>
+
+                                <button type="submit" class="button primary-btn full-btn"
+                                    id="bank_info">Yes</button>
+
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
     @include('account-setting')
     @php
         $user = auth()->user();
@@ -741,7 +767,7 @@
 
 
     <!--JS-->
-    
+
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ asset('front/js/bootstrap.bundle.min.js') }}"></script>
@@ -755,7 +781,7 @@
     <script src="{{ asset('js/jquery-validation.min.js') }}"></script>
     <script src="{{ asset('js/additional-methods.min.js') }}"></script>
     <script
-    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places">
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places">
     </script>
     </script>
     <!-- Include DateRangePicker JS -->
@@ -764,6 +790,32 @@
     <script src="{{ asset('js/custom/product-list.js') }}"></script>
     <script src="{{ asset('js/custom/add-wishlist.js') }}"></script>
     <script src="{{ asset('js/custom/common.js') }}?ver={{ now() }}"></script>
+    <script>
+        document.getElementById('identity').addEventListener('click', async function() {
+            try {
+                const response = await fetch('/send-verification-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    window.location.href = data.url; // Redirect to Stripe verification
+                } else {
+                    alert('Error: ' + data.message); // Handle error
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+
+        });
+    </script>
+
     <script>
         // Initialize the daterangepicker for a given element
         function initDaterangepicker($element) {
@@ -828,14 +880,14 @@
                 'Last 7 Days': [moment().subtract(6, 'days'), moment()],
                 'Last 30 Days': [moment().subtract(29, 'days'), moment()],
                 'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf(
+                    'month')]
             },
             autoUpdateInput: false,
             minDate: moment().startOf('day')
         }).on('apply.daterangepicker', function(ev, picker) {
             $(this).val(picker.startDate.format('MMMM D, YYYY') + ' - ' + picker.endDate.format('MMMM D, YYYY'));
         });
-
     </script>
 
 
@@ -1133,8 +1185,14 @@
             }
 
 
+            @if (session('showModal1'))
+                $('#addbank-Modal').modal('show');
+            @endif
+            @if (session('showModal2'))
+                $('#addaddress-Modal').modal('show');
+            @endif
             // after account details open a modal
-            @if (session('showModal'))
+            @if (session('showModal3'))
                 $('#addproduct-Modal').modal('show');
             @endif
 

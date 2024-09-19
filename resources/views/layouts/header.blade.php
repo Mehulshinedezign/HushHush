@@ -30,6 +30,10 @@
                                     <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
                                         Rent your Closet
                                     </div>
+                                @elseif (is_null($user->identity_verified_at))
+                                    <div data-bs-toggle="modal" data-bs-target="#identity">
+                                        Rent your Closet
+                                    </div>
                                 @elseif (is_null($user->userDetail->complete_address))
                                     <div data-bs-toggle="modal" data-bs-target="#accountSetting">
                                         Rent your Closet
@@ -127,9 +131,9 @@
                         </ul>
                     </div>
                     <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                                            <span class="navbar-toggler-icon"></span>
-                                        </button> -->
+                                                                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                                                    <span class="navbar-toggler-icon"></span>
+                                                                </button> -->
                 </div>
             @endauth
             @guest
@@ -156,6 +160,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    
                     <li>
                         <a href="{{ url('/') }}">Home</a>
                     </li>
@@ -217,7 +223,8 @@
             </div>
             <form id="searchForm" action="{{ route('index') }}" method="GET" class="mb-0">
                 {{-- @if (request()->route()->getName() == 'index') --}}
-                <input type="hidden" id="currentRoute" name="currentRoute" value="{{ request()->route()->getName() }}">
+                <input type="hidden" id="currentRoute" name="currentRoute"
+                    value="{{ request()->route()->getName() }}">
                 <div class="search-pro-header">
                     <ul>
                         <li>
@@ -258,6 +265,7 @@
 </header>
 {{-- @include('common.alert') --}}
 @push('scripts')
+
     <script>
         function clearForm() {
             document.getElementById('searchForm').reset();
@@ -280,7 +288,8 @@
         document.getElementById('searchForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 
-            const currentRouteName = document.getElementById('currentRoute') ? document.getElementById('currentRoute').value : document.body.getAttribute('data-route-name');
+            const currentRouteName = document.getElementById('currentRoute') ? document.getElementById(
+                'currentRoute').value : document.body.getAttribute('data-route-name');
 
             // If the route is 'index', submit the form with all fields
             if (currentRouteName === 'index') {
@@ -318,8 +327,7 @@
             document.getElementById('searchForm').reset();
         }
         jQuery(this).daterangepicker({
-                    minDate: moment(),
-                });
+            minDate: moment(),
+        });
     </script>
-
 @endpush

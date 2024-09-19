@@ -361,10 +361,9 @@ class ProductController extends Controller
 
     public function reportProduct(Request $request, $id)
     {
-        $userId = auth()->id();  // Assuming the user is authenticated
+        $userId = auth()->id();  
         $productId = $id;
 
-        // Check if the product has already been reported by this user
         $alreadyReported = DB::table('reported_products')
             ->where('user_id', $userId)
             ->where('product_id', $productId)

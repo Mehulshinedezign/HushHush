@@ -370,67 +370,140 @@ if (!function_exists('check_order_list_paginate_retailer')) {
 
 
 
+    // if (!function_exists('sendPushNotifications')) {
+    //     function sendPushNotifications($token, $payload)
+    //     {
+    //         // dd($token);
+    //         if (!is_null($token)) {
+    //             // Initialize Google Client
+    //             $client = new Google_Client();
+    //             $client->setAuthConfig('../pushCredentials.json'); // Path to your service account key file
+    //             $client->addScope('https://www.googleapis.com/auth/cloud-platform');
+    //             $client->fetchAccessTokenWithAssertion(); // Fetch the OAuth 2.0 access token
+
+    //             $accessToken = $client->getAccessToken()['access_token'];
+
+    //             $url = 'https://fcm.googleapis.com/v1/projects/test-hush-app/messages:send';
+
+    //             $notification = [
+    //                 'title' => 'HushHush',
+    //                 'body' => $payload['content'],
+    //             ];
+
+    //             $data = [
+    //                 'id' => strval($payload['id']),
+    //                 "content" => $payload['content']
+    //             ];
+    //             $fcmNotification = [
+    //                 'message' => [
+    //                     'token' => $token,
+    //                     'notification' => $notification,
+    //                     'data' => $data,
+    //                     'android' => [
+    //                         'priority' => 'high',
+    //                     ],
+    //                     'apns' => [
+    //                         'payload' => [
+    //                             'aps' => [
+    //                                 'priority' => 'high',
+    //                             ],
+    //                         ],
+    //                     ],
+    //                 ],
+    //             ];
+
+    //             $headers = [
+    //                 'Authorization: Bearer ' . $accessToken,
+    //                 'Content-Type: application/json',
+    //             ];
+
+    //             $ch = curl_init();
+    //             curl_setopt($ch, CURLOPT_URL, $url);
+    //             curl_setopt($ch, CURLOPT_POST, true);
+    //             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    //             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    //             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fcmNotification));
+    //             $result = curl_exec($ch);
+    //             curl_close($ch);
+    //             // dd($result);
+    //             return $result;
+    //         }
+    //         return false;
+    //     }
+    // }
+
+
+
+
     if (!function_exists('sendPushNotifications')) {
-        function sendPushNotifications($token, $payload)
-        {
-            // dd($token);
-            if (!is_null($token)) {
-                // Initialize Google Client
-                $client = new Google_Client();
-                $client->setAuthConfig('../pushCredentials.json'); // Path to your service account key file
-                $client->addScope('https://www.googleapis.com/auth/cloud-platform');
-                $client->fetchAccessTokenWithAssertion(); // Fetch the OAuth 2.0 access token
+    function sendPushNotifications($token, $payload)
+    {
+        if (!is_null($token)) {
+            // Initialize Google Client
+            $client = new Google_Client();
+            $client->setAuthConfig('../pushCredentials.json'); // Path to your service account key file
+            $client->addScope('https://www.googleapis.com/auth/cloud-platform');
+            $client->fetchAccessTokenWithAssertion(); // Fetch the OAuth 2.0 access token
 
-                $accessToken = $client->getAccessToken()['access_token'];
+            $accessToken = $client->getAccessToken()['access_token'];
 
-                $url = 'https://fcm.googleapis.com/v1/projects/test-hush-app/messages:send';
+            $url = 'https://fcm.googleapis.com/v1/projects/test-hush-app/messages:send';
 
-                $notification = [
-                    'title' => 'HushHush',
-                    'body' => $payload['content'],
-                ];
+            // Prepare notification content
+            $notification = [
+                'title' => 'HushHush',
+                'body' => $payload['content'],  // Your notification content
+            ];
 
-                $data = [
-                    'id' => strval($payload['id']),
-                    "content" => $payload['content']
-                ];
-                $fcmNotification = [
-                    'message' => [
-                        'token' => $token,
-                        'notification' => $notification,
-                        'data' => $data,
-                        'android' => [
-                            'priority' => 'high',
-                        ],
-                        'apns' => [
-                            'payload' => [
-                                'aps' => [
-                                    'priority' => 'high',
-                                ],
+            // Prepare data block with type, role, and content
+            $data = [
+                'id' => strval($payload['id']),
+                'content' => $payload['content'],
+                'role' => $payload['role'],
+                'type' => $payload['type'],
+            ];
+
+            $fcmNotification = [
+                'message' => [
+                    'token' => $token,
+                    'notification' => $notification,
+                    'data' => $data,
+                    'android' => [
+                        'priority' => 'high',
+                    ],
+                    'apns' => [
+                        'payload' => [
+                            'aps' => [
+                                'priority' => 'high',
                             ],
                         ],
                     ],
-                ];
+                ],
+            ];
 
-                $headers = [
-                    'Authorization: Bearer ' . $accessToken,
-                    'Content-Type: application/json',
-                ];
+            $headers = [
+                'Authorization: Bearer ' . $accessToken,
+                'Content-Type: application/json',
+            ];
 
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fcmNotification));
-                $result = curl_exec($ch);
-                curl_close($ch);
-                // dd($result);
-                return $result;
-            }
-            return false;
+            // Send the notification via CURL
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fcmNotification));
+            $result = curl_exec($ch);
+            curl_close($ch);
+            // dd($result);
+            return $result;
         }
+
+        return false;
     }
+}
 
 }
+

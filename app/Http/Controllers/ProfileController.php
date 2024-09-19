@@ -587,6 +587,7 @@ class ProfileController extends Controller
             $userdetail
         );
         if($type=='product'){
+            // session()->flash('showModal3', true);
             return response()->json(['type'=>'product']);
         }else{
             return response()->json(['type'=>'query']);
@@ -622,9 +623,21 @@ class ProfileController extends Controller
                 );
             }
             return response()->json([
-                'success'    =>  true,
-                'msg' =>'Notification set successfully!'
+                'status'    =>  true,
+                'message' =>'Notification set successfully!'
             ], 200);
+
+            // return response()->json([
+            //     'status' => true,
+            //     'message' => 'Product details fetched successfully',
+            //     'data' => [
+            //         'product' => $productDetailsArray,
+            //         'lender' => $user,
+            //         'locations' => $productDetails->locations,
+            //         'queries' => $query,
+            //         'price' => $price,
+            //     ],
+            // ], 200);
         }catch (\Exception $e) {
             return response()->json([
                 'success'    =>  false,

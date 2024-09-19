@@ -22,7 +22,7 @@ class QueryController extends Controller
                 'query_message' => 'nullable|string',
                 'start' => 'required|date',
                 'end' => 'required|date',
-                'delivery_option' =>'required',
+                'delivery_option' => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
@@ -45,12 +45,22 @@ class QueryController extends Controller
                 'date_range' => $startDate . ' - ' . $endDate,
                 'delivery_option' => $request->delivery_option
             ]);
+            // $forUser = User::Where('id', $product->user_id)->with('usernotification')->get();
+            // dd('here');
+            $forUser = User::where('id', $product->user_id)->with('usernotification', 'pushToken')->first();
 
-            $payload['id'] = $query->id;
-            $payload['content']= "You have received an inquriy product #".str_pad($product->name, 5, '0', STR_PAD_LEFT);
+            if ($forUser && $forUser->usernotification && $forUser->usernotification->query_receive == '1') {
+                $payload['id'] = $query->id;
+                $payload['content'] = "You have received an inquiry for product #" . str_pad($product->name, 5, '0', STR_PAD_LEFT);
+                $payload['role'] = 'lender';
+                $payload['type'] = 'inquiry';
 
-            // if(@$started_order->driverDetail->userNotifications->updated_order)
-            sendPushNotifications(@$product->user_id->driverDetail->fcm_token,$payload);
+                // Check if pushToken exists to avoid errors
+                if ($forUser->pushToken) {
+                    sendPushNotifications($forUser->pushToken->fcm_token, $payload);
+                }
+            }
+
 
             return response()->json([
                 'status' => true,
@@ -88,17 +98,14 @@ class QueryController extends Controller
                     $lender = User::where('id', $query->for_user)->first();
                     $price = $query->negotiate_price  ?? $query->getCalculatedPrice($query->date_range);
                     $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
-                    $actual_price =$query->getCalculatedPrice($query->date_range);
+                    $actual_price = $query->getCalculatedPrice($query->date_range);
                     // $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
                     // $actual_price =$query->getCalculatedPrice($query->date_range);
                     // $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
 
-                    if($query->delivery_option == 'pick_up')
-                    {
+                    if ($query->delivery_option == 'pick_up') {
                         $address = $product->productCompleteLocation ?? Null;
-                    }
-                    else
-                    {
+                    } else {
                         $address = auth()->user()->userDetail ?? NUll;
                     }
                     // dd($price);
@@ -120,13 +127,13 @@ class QueryController extends Controller
                         'lender' => $lender->name ?? null,
                         'lender_profile_pic' => $lender->frontend_profile_url ?? null,
                         'lender_id' => $lender->id ?? null,
-                        'created_at'=>$query->created_at,
-                        'negotiated_price'=>$query->negotiate_price ?? Null,
+                        'created_at' => $query->created_at,
+                        'negotiated_price' => $query->negotiate_price ?? Null,
                         'cleaning_charge' => $query->cleaning_charges ?? Null,
                         'shipping_charge' => $query->shipping_charges ?? null,
                         'actual_price' => $actual_price ?? null,
-                        'shipment_type' =>$query->delivery_option,
-                        'address'=> $address,
+                        'shipment_type' => $query->delivery_option,
+                        'address' => $address,
                     ];
                 });
 
@@ -174,13 +181,10 @@ class QueryController extends Controller
                     $borrower = User::where('id', $query->user_id)->first();
                     // dd($borrower);
                     $price = $query->negotiate_price ?? $query->getCalculatedPrice($query->date_range);
-                    $actual_price =$query->getCalculatedPrice($query->date_range);
-                    if($query->delivery_option == 'pick_up')
-                    {
+                    $actual_price = $query->getCalculatedPrice($query->date_range);
+                    if ($query->delivery_option == 'pick_up') {
                         $address = $product->productCompleteLocation ?? null;
-                    }
-                    else
-                    {
+                    } else {
                         $address = auth()->user()->userDetail ?? null;
                     }
                     return [
@@ -200,13 +204,13 @@ class QueryController extends Controller
                         'borrower' => $borrower->name ?? null,
                         'borrower_profile_pic' => $borrower->frontend_profile_url ?? null,
                         'borrower_id' => $borrower->id ?? null,
-                        'created_at'=>$query->created_at,
-                        'negotiated_price'=>$query->negotiate_price ?? Null,
+                        'created_at' => $query->created_at,
+                        'negotiated_price' => $query->negotiate_price ?? Null,
                         'cleaning_charge' => $query->cleaning_charges ?? Null,
                         'shipping_charge' => $query->shipping_charges ?? null,
                         'actual_price' => $actual_price ?? null,
-                        'shipment_type' =>$query->delivery_option,
-                        'address'=> $address,
+                        'shipment_type' => $query->delivery_option,
+                        'address' => $address,
                     ];
                 });
 
@@ -235,14 +239,34 @@ class QueryController extends Controller
     {
         try {
             $query_details = Query::findOrFail($id);
-            // dd($query_details);
-
             if ($type == 'ACCEPTED') {
                 $query_details->update(['status' => 'ACCEPTED']);
+                $forUser = User::where('id', $query_details->user_id)->with('usernotification', 'pushToken')->first();
 
+                if ($forUser && $forUser->usernotification && $forUser->usernotification->accept_item == '1') {
+                    $payload['id'] = $query_details->id;
+                    $payload['content'] = "Your Inquiry get accepted ";
+                    $payload['role'] = 'lender';
+                    $payload['type'] = 'inquiry';
 
+                    if ($forUser->pushToken) {
+                        sendPushNotifications($forUser->pushToken->fcm_token, $payload);
+                    }
+                }
             } elseif ($type == 'REJECTED') {
                 $query_details->update(['status' => 'REJECTED']);
+                $forUser = User::where('id', $query_details->user_id)->with('usernotification', 'pushToken')->first();
+
+                if ($forUser && $forUser->usernotification && $forUser->usernotification->reject_item == '1') {
+                    $payload['id'] = $query_details->id;
+                    $payload['content'] = "Your Inquiry get rejected ";
+                    $payload['role'] = 'lender';
+                    $payload['type'] = 'inquiry';
+
+                    if ($forUser->pushToken) {
+                        sendPushNotifications($forUser->pushToken->fcm_token, $payload);
+                    }
+                }
             } elseif ($type == 'price') {
                 $validator = Validator::make($request->all(), [
                     // 'price' => 'required',
@@ -314,10 +338,9 @@ class QueryController extends Controller
                         $status = 'COMPLETED';
                     } elseif ($order && $order->status == 'Picked Up') {
                         $status = 'ACTIVE';
-                    }
-                    elseif ($order && $order->status == 'Cancelled') {
+                    } elseif ($order && $order->status == 'Cancelled') {
                         $status = 'CANCELLED';
-                     } else {
+                    } else {
                         $status = 'UNKNOWN';
                     }
 
@@ -402,10 +425,9 @@ class QueryController extends Controller
                         $status = 'COMPLETED';
                     } elseif ($order && $order->status == 'Picked Up') {
                         $status = 'ACTIVE';
-                    }
-                    elseif ($order && $order->status == 'Cancelled') {
+                    } elseif ($order && $order->status == 'Cancelled') {
                         $status = 'CANCELLED';
-                     } else {
+                    } else {
                         $status = 'UNKNOWN';
                     }
 

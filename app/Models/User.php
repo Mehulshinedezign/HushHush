@@ -41,7 +41,8 @@ class User extends Authenticatable
         'push_notifications',
         'country_code',
         'stripe_account_id',
-        'email_verified_at'
+        'email_verified_at',
+        'identity_verified_at',
     ];
 
     /**
