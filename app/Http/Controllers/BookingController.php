@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AdminSetting;
 use App\Models\Order;
 use App\Models\ProductUnavailability;
-use App\Models\Query;
+use App\Models\{Query,ProductDisableDate};
 use App\Models\Transaction;
 use App\Notifications\BookorderReq;
 use Illuminate\Http\Request;
@@ -16,7 +16,6 @@ class BookingController extends Controller
 {
     public function cardDetail($query = null, $price = null)
     {
-       
         $query = jsdecode_userdata($query);
         $price = jsdecode_userdata($price);
         // dd($price,$queryId);
@@ -25,6 +24,15 @@ class BookingController extends Controller
         $intent = $user->createSetupIntent();
         $insurance =  AdminSetting::where('key', 'insurance_fee')->first();
         $security =  AdminSetting::where('key', 'security_fee')->first();
+        $queryData =  Query::with('forUser', 'product')->where('id', $query)->first();
+        $dates = explode(' - ', $queryData->date_range);
+        $startDate = date('Y-m-d', strtotime($dates[0]));
+        $endDate = date('Y-m-d', strtotime($dates[1]));
+        $disabledDates = ProductDisableDate::where('product_id',$queryData->product->id)->whereBetween('disable_date', [$startDate, $endDate])->get();
+        if(!$disabledDates->isEmpty()){
+            return redirect()->back()->with('error', 'This product not longer should available for this date ');
+        }
+
         return view('customer.card_payment', compact('intent', 'query', 'price', 'insurance', 'security'));
     }
 
@@ -75,10 +83,12 @@ class BookingController extends Controller
             'status' => 'COMPLETED',
         ]);
 
+
         $dates = explode(' - ', $query->date_range);
             $startDate = date('Y-m-d', strtotime($dates[0]));
             $endDate = date('Y-m-d', strtotime($dates[1]));
-
+        // dd($startDate ,$endDate);
+         
             while ($startDate <= $endDate) {
                 $startDate = date_create($startDate);
                 $query->product->disableDates()->create([
@@ -89,6 +99,7 @@ class BookingController extends Controller
                 $startDate->modify('+1 day');
                 $startDate = $startDate->format('Y-m-d');
             }
+       
 
         // ProductDisableDate::create([
         //     'product_id' => $query->product_id,

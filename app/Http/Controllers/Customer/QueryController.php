@@ -52,7 +52,9 @@ class QueryController extends Controller
 
             foreach ($product->disableDates as $disabled_date) {
                 if ($startDate <= $disabled_date->disable_date && $endDate >= $disabled_date->disable_date) {
-                    throw new \Exception("Product is not available in this date range.");
+                    // throw new \Exception("Product is not available in this date range.");
+                    return response()->json(['success' => false, 'message' => 'Product is not available in this date range.']);
+
                 }
             }
 

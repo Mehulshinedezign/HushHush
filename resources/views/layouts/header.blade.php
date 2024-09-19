@@ -127,9 +127,9 @@
                         </ul>
                     </div>
                     <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                                            <span class="navbar-toggler-icon"></span>
-                                        </button> -->
+                                                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                                <span class="navbar-toggler-icon"></span>
+                                            </button> -->
                 </div>
             @endauth
             @guest
@@ -217,7 +217,8 @@
             </div>
             <form id="searchForm" action="{{ route('index') }}" method="GET" class="mb-0">
                 {{-- @if (request()->route()->getName() == 'index') --}}
-                <input type="hidden" id="currentRoute" name="currentRoute" value="{{ request()->route()->getName() }}">
+                <input type="hidden" id="currentRoute" name="currentRoute"
+                    value="{{ request()->route()->getName() }}">
                 <div class="search-pro-header">
                     <ul>
                         <li>
@@ -268,6 +269,15 @@
             const filterForm = document.getElementById('filters');
             const searchForm = document.getElementById('searchForm');
             const filterInputs = filterForm.querySelectorAll('input[name]');
+
+            const searchInput = document.querySelector('input[name="search"]').value.trim();
+            const dateInput = document.querySelector('input[name="filter_date"]').value.trim();
+
+            // Validation: Check if both fields are filled
+            if (searchInput === '' && dateInput === '') {
+                return; // Prevent form submission if both are empty
+            }
+
             filterInputs.forEach(function(input) {
                 const clone = input.cloneNode(true);
                 clone.style.display = 'none';
@@ -280,8 +290,16 @@
         document.getElementById('searchForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 
-            const currentRouteName = document.getElementById('currentRoute') ? document.getElementById('currentRoute').value : document.body.getAttribute('data-route-name');
+            const currentRouteName = document.getElementById('currentRoute') ? document.getElementById(
+                'currentRoute').value : document.body.getAttribute('data-route-name');
 
+            const searchInput = document.querySelector('input[name="search"]').value.trim();
+            const dateInput = document.querySelector('input[name="filter_date"]').value.trim();
+
+            // Validation: Check if both fields are filled
+            if (searchInput === '' && dateInput === '') {
+                return; // Prevent form submission if both are empty
+            }
             // If the route is 'index', submit the form with all fields
             if (currentRouteName === 'index') {
                 this.submit();
@@ -318,8 +336,7 @@
             document.getElementById('searchForm').reset();
         }
         jQuery(this).daterangepicker({
-                    minDate: moment(),
-                });
+            minDate: moment(),
+        });
     </script>
-
 @endpush

@@ -27,12 +27,12 @@
                         <li class="tab-item active" data-status="PENDING" data-user="lender">
                             <a href="?status=PENDING" class="tab-link">Pending</a>
                         </li>
-                        <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a href="received_query?status=ACCEPTED"
-                                class="tab-link">Accepted</a></li>
-                        <li class="tab-item" data-status="REJECTED" data-user="lender"><a href="received_query?status=REJECTED"
-                                class="tab-link">Rejected</a></li>
-                        <li class="tab-item" data-status="COMPLETED" data-user="lender"><a href="received_query?status=COMPLETED"
-                                class="tab-link">Completed</a></li>
+                        <li class="tab-item" data-status="ACCEPTED" data-user="lender"><a
+                                href="received_query?status=ACCEPTED" class="tab-link">Accepted</a></li>
+                        <li class="tab-item" data-status="REJECTED" data-user="lender"><a
+                                href="received_query?status=REJECTED" class="tab-link">Rejected</a></li>
+                        <li class="tab-item" data-status="COMPLETED" data-user="lender"><a
+                                href="received_query?status=COMPLETED" class="tab-link">Completed</a></li>
 
                     </ul>
 
@@ -64,6 +64,31 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+
+            $(".charge").on("keypress", function(evt) {
+                var txtBox = $(this);
+                var charCode = (evt.which) ? evt.which : evt.keyCode
+                if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
+                    return false;
+                else {
+                    var len = txtBox.val().length;
+                    var index = txtBox.val().indexOf('.');
+                    if (index > 0 && charCode == 46) {
+                        return false;
+                    }
+                    if (index > 0) {
+                        var charAfterdot = (len + 1) - index;
+                        if (charAfterdot > 3) {
+                            return false;
+                        }
+                    }
+                }
+                return txtBox;
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
             // Retrieve the active tab status from localStorage or URL, default to 'PENDING'
             let status = localStorage.getItem('activeTab') || new URLSearchParams(window.location.search).get(
                 'status') || 'PENDING';
@@ -71,8 +96,8 @@
             // Set the active tab based on the stored or URL value
             $('.tab-item').removeClass('active');
             let activeTab = $('.tab-item[data-status="' + status + '"]');
-           
-            if (window.location.href === APP_URL+'/received_query') {
+
+            if (window.location.href === APP_URL + '/received_query') {
                 // Fallback to 'PENDING' tab if the current status is not found
                 activeTab = $('.tab-item[data-status="PENDING"]');
                 status = 'PENDING';
@@ -87,32 +112,32 @@
                 let clickedTab = $(this).parent(); // Get the clicked tab
                 let selectedStatus = clickedTab.data('status'); // Get the status from the clicked tab
 
-           
+
                 $('.tab-item').removeClass('active');
                 clickedTab.addClass('active');
-            
+
                 localStorage.setItem('activeTab', selectedStatus);
 
-           
+
                 let newUrl = new URL(window.location.href);
                 newUrl.searchParams.set('status', selectedStatus);
                 window.history.pushState({}, '', newUrl);
 
-              
+
                 loadDataBasedOnTab(selectedStatus);
             });
 
-          
+
             function loadDataBasedOnTab(status) {
                 $.ajax({
-                    url: '/received_query', 
+                    url: '/received_query',
                     method: 'GET',
                     data: {
-                        status: status 
+                        status: status
                     },
                     success: function(response) {
-                       
-                        $('#data-table').html(response); 
+
+                        $('#data-table').html(response);
                     },
                     error: function(xhr, status, error) {
                         console.error('Error loading data:', error);

@@ -786,8 +786,14 @@
                                 `" style="max-width: 180px;">` + response.message +
                                 `</div>`;
                         } else {
-                            modalContent = '<div class="alert alert-danger" role="alert">' +
-                                response.message + '</div>';
+                            // modalContent = '<div class="alert alert-danger" role="alert">' +
+                            //     response.message + '</div>';
+                            iziToast.error({
+                                title: 'Error',
+                                message: response.message,
+                                position: 'topRight',
+                            });
+                            return;
                         }
 
                         $('#query_msg .modal-body').html(

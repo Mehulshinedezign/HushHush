@@ -359,10 +359,14 @@ if (!function_exists('check_order_list_paginate_retailer')) {
         }
     }
     if (!function_exists('getBrandsName')) {
-        function getBrandsName($id)
+        function getBrandsName($name)
         {
-            $brandName = Brand::where('id', $id)->first();
-            return $brandName->name;
+            $brandName = Brand::where('name', $name)->first();
+            if($brandName){
+                return $brandName->name;
+            }else{
+                return null;
+            }
         }
     }
 

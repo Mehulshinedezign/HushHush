@@ -117,16 +117,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-3 col-sm-12 d-none" id="other">
-                                        <div class="form-group">
-                                            <label for="">Other Brand</label>
-                                            <div class="formfield">
-                                                <input type="text" value="" class="produt_input form-control form-class"
-                                                    placeholder="other" name="other_brand">
 
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Color</label>
