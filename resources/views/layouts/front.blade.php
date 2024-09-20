@@ -800,6 +800,28 @@
     <script src="{{ asset('js/custom/add-wishlist.js') }}"></script>
     <script src="{{ asset('js/custom/common.js') }}?ver={{ now() }}"></script>
     <script>
+        jQuery(document).on("change", 'select[name="brand"]', function() {
+            const selectedValue = $(this).val();
+            const otherBrandField = $('#other');
+            console.log('Selected Value:', selectedValue);
+            console.log('Other Brand Field:', otherBrandField);
+
+            if (selectedValue === 'Other') {
+                if (otherBrandField.length > 0) { // Check if the element exists
+                    otherBrandField.removeClass('d-none');
+                } else {
+                    console.log('Other brand field not found');
+                }
+            } 
+            else {
+                otherBrandField.addClass('d-none');
+            }
+        });
+
+        $(document).on('click','.non-availability',function(){
+            $('.daterangepicker, .ltr, .show-calendar, .opensright').addClass('testCheck')
+        })
+
         document.getElementById('identity').addEventListener('click', async function() {
             try {
                 const response = await fetch('/send-verification-email', {
@@ -1475,7 +1497,7 @@
                 });
             }
         </script>
-
+@yield('custom_variables')
         <script defer src="{{ asset('js/custom/chat2.js') }}"></script>
         <script defer src="{{ asset('js/custom/chatlist.js') }}"></script>
     @endauth

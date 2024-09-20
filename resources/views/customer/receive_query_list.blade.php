@@ -97,7 +97,7 @@
             $('.tab-item').removeClass('active');
             let activeTab = $('.tab-item[data-status="' + status + '"]');
 
-            if (window.location.href === APP_URL+'/received_query') {
+            if (window.location.href === APP_URL + '/received_query') {
                 // Fallback to 'PENDING' tab if the current status is not found
                 activeTab = $('.tab-item[data-status="PENDING"]');
                 status = 'PENDING';

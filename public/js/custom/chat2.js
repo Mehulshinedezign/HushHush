@@ -50,8 +50,8 @@ $(document).ready(function () {
         var data = userData(element);
         onlinePresence(data['id'], data['created']);
         // unSeenMessages(data['id'], data['receiverId']);
-        createUser(data['id'], data['receiverId'], data['created'], data['image'], data['name'], data);
-        createUser(data['receiverId'], data['id'], data['created'], data['authprofile'], data['authName'], data);
+        createUser(data['id'], data['receiverId'], data['created'], data['image'], data['name'], data, check = 1);
+        createUser(data['receiverId'], data['id'], data['created'], data['authprofile'], data['authName'], data , check = 2);
 
     })
 
@@ -90,7 +90,7 @@ $(document).ready(function () {
         return messageData;
     }
 
-    function createUser(adminId, receiverId, timestamp, image, name, data) {
+    function createUser(adminId, receiverId, timestamp, image, name, data ,check) {
 
         let response = new Promise((resolve, reject) => {
 
@@ -104,7 +104,7 @@ $(document).ready(function () {
                 isSeen: '1',
                 a_remove: '0',
                 msgtype: 'one',
-            }).then(() => window.location.href = APP_URL + '/chat')
+            }).then(() =>(check==1) ? window.location.href = APP_URL + '/chat?reciever_id=' + receiverId : '')
                 .catch(function (error) {
                     reject(error)
                     console.log('error', error);
