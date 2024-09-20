@@ -79,7 +79,7 @@ section.home-sec {
     cursor: pointer;
 }
 .filter-categories.category-hight-fix::-webkit-scrollbar {
-    width: 4px;
+    width: 10px;
 }
 .home-filter-box.expand .home-filter-inner {
     border-bottom: 1px solid var(--border-color);
@@ -2450,7 +2450,7 @@ header.cust-header.fixed nav.sticky-nav {
 }
 
 .product-desc-sec .slider.slider-thumb.slick-initialized.slick-slider {
-    margin-top: -200px;
+    margin-top: -100px;
 }
 
 .product-slider .slick-track {

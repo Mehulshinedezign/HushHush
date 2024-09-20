@@ -1348,7 +1348,7 @@
                 storageBucket: "{{ env('STORAGEBUCKET') }}",
                 messagingSenderId: "{{ env('MESSAGINGSENDERID') }}",
                 appId: "{{ env('APPID') }}",
-                measurementId: "{{ env('MEASUREMENTID') }}"
+                // measurementId: "{{ env('MEASUREMENTID') }}"
             };
             var senderId = "{{ auth()->user()->id }}";
             const authUserId = "{{ auth()->user()->id }}";
@@ -1380,7 +1380,6 @@
                 messageCount.then(m => {
                     // show total number of unseen message in the header
                     if (m) {
-                        console.log(m, 'herer')
                         $('.userIconbtn').text(m);
                     } else {
                         $('.userIconbtn').text('');

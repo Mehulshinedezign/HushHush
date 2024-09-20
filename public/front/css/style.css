@@ -2829,3 +2829,40 @@ form#filters {
     font-weight: 500 !important;
     color: #000 !important;
 }
+.query_msg .modal-body  .btn-close{
+    position: absolute;
+    top: 11px;
+    right: 15px;
+    min-height: unset;
+}
+.upload-img-preview li {
+    list-style-type: none;
+}
+.upload-img-preview li .product-image-box {
+    padding: 0;
+    max-width: 100px;
+    width: 100%;
+    height: 125px;
+    overflow: hidden;
+    border-radius: 10px;
+    position: relative;
+}
+.upload-img-preview li .product-image-box img{
+    height: 100%;
+}
+
+.order-trans-wrap .db-table {
+    background: #ffffff;
+}
+.product-popup-box {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    position: relative;
+}
+.product-popup-box .btn-close{
+    position: absolute;
+    top: 7px;
+    right: 7px;
+}
+

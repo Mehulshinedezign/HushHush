@@ -72,14 +72,14 @@ function unSeenMessages(sender, receiver) {
 
     // Initialize count variable
     let count = 0;
-    let totalMessage = 0;
+    // let totalMessage = 0;
     // Define the child_added listener
     const childAdded = db.ref('messeges/' + chatKey).on('child_added', (snap) => {
         const message = snap.val();
-        if(message.isSeen==='true')
-        {
-            totalMessage +=1;
-        }
+        // if(message.isSeen==='true')
+        // {
+        //     totalMessage +=1;
+        // }
 
         if (message.isSeen === 'false') {   
             count += 1;
@@ -96,11 +96,12 @@ function unSeenMessages(sender, receiver) {
             count -= 1;
            
 
-        } else if (message.isSeen === 'false' && !message.isSeenBefore) {
-            count += 1;
-           
         }
-        
+        //  else if (message.isSeen === 'false' && !message.isSeenBefore) {
+        //     count += 1;
+           
+        // }
+        console.log(count , 'hererre');
         updateCountUI(sender, count);
         updateTotalUnseenMessages();
     });
@@ -121,7 +122,7 @@ function updateTotalUnseenMessages() {
     }
 
     const userElement = $('.userIconbtn');
-    if (totalUnseenCount > 0) {
+    if (totalUnseenCount > 0 ) {
         userElement.text(totalUnseenCount);
     } else {
         userElement.text('');
@@ -225,11 +226,12 @@ $('#chatClear').on('click',function(){
 
 
 // chat search form submit
-$("#searchmember input").on("input", function (e) {
+$("#searchmember input").on("keyup", function (e) {
     e.preventDefault();
     // if (search) {
         var search = $(this).val().toLowerCase(); // Normalize case to handle case-insensitive search
-        if (search) {
+        console.log(search , 'jjjjj')
+        if (search != '') {
             dbRef.orderByChild("name").startAt(search).endAt(search + "\uf8ff").once("value", function(snapshot) {
                 $('.chatlist').empty(); // Clear the chat list before adding new results
                 if (snapshot.exists()) {
@@ -261,6 +263,7 @@ $("#searchmember input").on("input", function (e) {
     }
     else {
         let first = true;
+        $('.chatlist').text('');
         let response = new Promise((resolve, reject) => {
             dbRef.once("value").then(snap => {
                 snap.forEach(message => {
@@ -298,6 +301,6 @@ $("#searchmember input").on("input", function (e) {
                 })
         
         })
-            }
+        }
 });
 
