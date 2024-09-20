@@ -826,32 +826,6 @@
     </script>
 
     <script>
-        document.getElementById('identity').addEventListener('click', async function() {
-            try {
-                const response = await fetch('/send-verification-email', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                            'content')
-                    }
-                });
-
-                const data = await response.json();
-
-                if (data.status === 'success') {
-                    window.location.href = data.url; // Redirect to Stripe verification
-                } else {
-                    alert('Error: ' + data.message); // Handle error
-                }
-            } catch (error) {
-                console.error('Error:', error);
-            }
-
-        });
-    </script>
-
-    <script>
         jQuery(document).on("change", 'select[name="brand"]', function() {
             const selectedValue = $(this).val();
             const otherBrandField = $('#other');

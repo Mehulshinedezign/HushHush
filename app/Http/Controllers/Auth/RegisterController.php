@@ -135,15 +135,18 @@ class RegisterController extends Controller
             'user_id' => $signUpData->id,
         ]);
 
-        $path = $data['gov_id']->store('user_documents');
-        $filePath = str_replace("public/", "", $path);
-        $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+        if(isset($data['gov_id'])){
 
-        UserDocuments::create([
-            'user_id' => $signUpData->id,
-            'file' => $fileExtension,
-            'url' => $filePath,
-        ]);
+            $path = $data['gov_id']->store('user_documents');
+            $filePath = str_replace("public/", "", $path);
+            $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+    
+            UserDocuments::create([
+                'user_id' => $signUpData->id,
+                'file' => $fileExtension,
+                'url' => $filePath,
+            ]);
+        }
 
         UserNotification::updateOrCreate(['user_id' => $signUpData->id]);
 
