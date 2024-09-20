@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Mail\VerificationMail;
 use Illuminate\Support\Facades\Mail;
 use App\Services\StripeService;
+use Exception;
 
 class StripeIdentityController extends Controller
 {
@@ -20,28 +21,44 @@ class StripeIdentityController extends Controller
     {
         $user = auth()->user();
 
-        $returnUrl = route('verification.success'); // This route handles success after verification
+        $returnUrl = route('verification.success');
 
-        $session = $this->stripeService->createVerificationSession($user->email, [
-            'return_url' => $returnUrl, // Stripe will redirect here upon completion
-        ]);
+        try {
+            $session = $this->stripeService->createVerificationSession($user->email, [
+                'return_url' => $returnUrl,
+            ]);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Verification email sent.',
-            'url' => $session->url, // Stripe verification URL
-            'return_url' => $returnUrl, // Send return URL
-            'session_id' => $session->id,
-        ]);
+            session()->flash('message', 'Verification email sent successfully. Please check your inbox.');
+            session()->flash('alert-type', 'success');
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Verification email sent.',
+                'url' => $session->url,
+                'return_url' => $returnUrl,
+                'session_id' => $session->id,
+            ]);
+        } catch (Exception $e) {
+            session()->flash('message', 'Failed to send verification email. Please try again.');
+            session()->flash('alert-type', 'error');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to send verification email.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
-
-
-
 
     public function verificationSuccess()
     {
-
-        session()->flash('showModal1', true);
+        session()->flash('message', 'Your identity verification has been successfully completed.');
+        session()->flash('alert-type', 'success');
+        if (auth()->user()->identity_verified_at != null){
+            session()->flash('showModal1', true);
         return redirect()->route('index')->with('success', 'Your identity verification has been successfully completed.');
+        }
+        else{
+            return redirect()->route('index')->with('success', 'Your identity verification is under process.');
+        }
     }
 }

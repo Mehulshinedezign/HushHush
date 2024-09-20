@@ -373,20 +373,20 @@
                                             return $report->user_id == auth()->id();
                                         });
                                     @endphp
-
-                                    @if (!$userHasReported)
-                                        <div>
-                                            <button id="report-btn" data-product-id="{{ $product->id }}"
-                                                class="btn btn-danger">Report Product</button>
-                                        </div>
-                                    @else
-                                        <div>
-                                            <button class="btn btn-danger">Already Reported Product</button>
-                                        </div>
-                                    @endif
-
-
-
+                                    @auth
+                                        @if ($product->user_id != auth()->id())
+                                            @if (!$userHasReported)
+                                                <div>
+                                                    <button id="report-btn" data-product-id="{{ $product->id }}"
+                                                        class="btn btn-danger">Report Product</button>
+                                                </div>
+                                            @else
+                                                <div>
+                                                    <button class="btn btn-danger">Already Reported Product</button>
+                                                </div>
+                                            @endif
+                                        @endif
+                                    @endauth
                                 </div>
                             </div>
                             <div class="pro-dec-rating-main mb-0">
