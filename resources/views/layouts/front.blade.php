@@ -1497,7 +1497,7 @@
                 });
             }
         </script>
-
+@yield('custom_variables')
         <script defer src="{{ asset('js/custom/chat2.js') }}"></script>
         <script defer src="{{ asset('js/custom/chatlist.js') }}"></script>
     @endauth

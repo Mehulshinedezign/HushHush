@@ -4,8 +4,14 @@ let first = true;
 let response = new Promise((resolve, reject) => {
     dbRef.once("value").then(snap => {
         snap.forEach(message => {
+            let activeClass = '';
+            console.log(sel_reciever );
+            if(sel_reciever != "" && message.key == sel_reciever  ){
+                activeClass = 'activecht';
+            }else{
+                activeClass = sel_reciever != "" ? '' :(first ? 'activecht' : '');
+            }
 
-            let activeClass = first ? 'activecht' : '';
             $('.chatlist').append(`<li>
                 <div class="chat-list ${activeClass}"
                     data-receiverId=${message.key}

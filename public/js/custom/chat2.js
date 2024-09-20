@@ -104,7 +104,7 @@ $(document).ready(function () {
                 isSeen: '1',
                 a_remove: '0',
                 msgtype: 'one',
-            }).then(() => window.location.href = APP_URL + '/chat')
+            }).then(() => window.location.href = APP_URL + '/chat?reciever_id='+receiverId)
                 .catch(function (error) {
                     reject(error)
                     console.log('error', error);
