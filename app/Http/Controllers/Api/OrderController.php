@@ -652,6 +652,38 @@ class OrderController extends Controller
                     ->whereBetween('disable_date', [$order->from_date, $order->to_date])
                     ->delete();
 
+                    if($request->type=='lender')
+                    {
+                        $forUser = User::where('id', $order->user_id)->with('usernotification', 'pushToken')->first();
+
+                    if ($forUser && $forUser->usernotification && $forUser->usernotification->order_canceled_by_lender == '1') {
+                        $payload['id'] = $id;
+                        $payload['content'] = "Lender cancel your order";
+                        $payload['role'] = 'lender';
+                        $payload['type'] = 'order';
+
+                        if ($forUser->pushToken) {
+                            sendPushNotifications($forUser->pushToken->fcm_token, $payload);
+                        }
+                    }
+                    }
+                    if($request->type=='borrower')
+                    {
+                        $forUser = User::where('id', $order->retailer_id)->with('usernotification', 'pushToken')->first();
+
+                        if ($forUser && $forUser->usernotification && $forUser->usernotification->order_canceled_by_customer == '1') {
+                            $payload['id'] = $id;
+                            $payload['content'] = "Borrower cancel your received order";
+                            $payload['role'] = 'borrower';
+                            $payload['type'] = 'order';
+
+                            if ($forUser->pushToken) {
+                                sendPushNotifications($forUser->pushToken->fcm_token, $payload);
+                            }
+                        }
+
+                    }
+
                 return response()->json([
                     'status'  => true,
                     'message' => __("order.messages.cancel.success"),
@@ -660,6 +692,7 @@ class OrderController extends Controller
                         'cancelled_date' => $dateTime
                     ]
                 ], 200);
+
             }
 
             return response()->json([

@@ -2183,7 +2183,7 @@ class ProductController extends Controller
 
             $userDetails = User::with(['userDetail'])->whereId($id)->firstOrFail();
 
-            $products = Product::with(['locations', 'allImages', 'thumbnailImage', 'get_size', 'favorites', 'category', 'disableDates', 'get_brand', 'get_color'])
+            $products = Product::with(['locations', 'allImages', 'thumbnailImage', 'get_size', 'favorites', 'category', 'disableDates', 'get_brand', 'get_color'])->where('user_id',$id)
                 ->get();
 
             $transformedProducts = $products->map(function ($product) {

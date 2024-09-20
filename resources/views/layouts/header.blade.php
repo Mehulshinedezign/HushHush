@@ -26,12 +26,12 @@
                         @endphp
                         <ul>
                             <li>
-                                @if (is_null($userBankInfo))
-                                    <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
+                                @if (is_null($user->identity_verified_at))
+                                    <div data-bs-toggle="modal" data-bs-target="#identity">
                                         Rent your Closet
                                     </div>
-                                @elseif (is_null($user->identity_verified_at))
-                                    <div data-bs-toggle="modal" data-bs-target="#identity">
+                                @elseif(is_null($userBankInfo))
+                                    <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
                                         Rent your Closet
                                     </div>
                                 @elseif (is_null($user->userDetail->complete_address))
@@ -265,7 +265,6 @@
 </header>
 {{-- @include('common.alert') --}}
 @push('scripts')
-
     <script>
         function clearForm() {
             document.getElementById('searchForm').reset();
