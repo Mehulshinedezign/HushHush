@@ -10,7 +10,6 @@
         </div>
     </section>
 @endsection
-
 @section('custom_variables')
 <script>
     const sel_reciever = "{{request()->has('reciever_id') ?request()->reciever_id :''}}";

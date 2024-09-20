@@ -6,7 +6,7 @@ let response = new Promise((resolve, reject) => {
         snap.forEach(message => {
             let activeClass = '';
             console.log(sel_reciever );
-            if(sel_reciever != "" && message.key == sel_reciever  ){
+            if(sel_reciever != "" && message.key == sel_reciever){
                 activeClass = 'activecht';
             }else{
                 activeClass = sel_reciever != "" ? '' :(first ? 'activecht' : '');
