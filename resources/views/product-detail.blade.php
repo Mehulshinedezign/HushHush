@@ -462,10 +462,10 @@
             </div>
         </div>
         <div id="imageModal" class="modal" style="display: none;">
-            <span class="close" onclick="closeModal()">&times;</span>
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="product-popup-box">
+                        <span class="close" onclick="closeModal()">&times;</span>
                         <img class="" id="modalImage">
                     </div>
                 </div>
