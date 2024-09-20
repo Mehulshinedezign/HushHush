@@ -174,7 +174,55 @@ function userliststatus() {
 
 $('#chatClear').on('click',function(){
     $('input[name="search"]').val('');
+
+    clearData();
 })
+
+ function clearData()
+ {
+    let first = true;
+    $('.chatlist').text('');
+    let response = new Promise((resolve, reject) => {
+        dbRef.once("value").then(snap => {
+            snap.forEach(message => {
+                let activeClass = '';
+                console.log(sel_reciever );
+                if(sel_reciever != "" && message.key == sel_reciever){
+                    activeClass = 'activecht';
+                }else{
+                    activeClass = sel_reciever != "" ? '' :(first ? 'activecht' : '');
+                }
+    
+                $('.chatlist').append(`<li>
+                    <div class="chat-list ${activeClass}"
+                        data-receiverId=${message.key}
+                        data-senderId="${message.val().id}">
+                        <div class="chat-profile-img-box">
+                            <div class="chat-profile-left">
+                                <div class="chat-profile-img">
+                                    <img src="${message.val().image}" class="img">
+                                </div>
+                                <p class="getname">
+                                    ${message.val().name}
+                                </p>
+                            </div>
+                            <p class='d-none count-msg' id="${message.key + 'count'}">0</p>
+                        </div> 
+                    </div>
+                </li>`);
+                first = false;
+            });
+    
+        }).then(() => getFirstChatData())
+            .catch(error => {
+                console.log("error".error)
+            })
+    
+    })
+
+ }
+
+
 
 // chat search form submit
 $("#searchmember input").on("input", function (e) {
@@ -212,31 +260,44 @@ $("#searchmember input").on("input", function (e) {
         // }
     }
     else {
-        $('.chatlist').text('');
-        dbRef.once("value").then(snap => {
-            snap.forEach(message => {
-                let activeClass = first ? 'activecht' : '';
-                $('.chatlist').append(`<li>
-                    <div class="chat-list ${activeClass}"
-                        data-receiverId=${message.key}
-                        data-senderId="${message.val().id}">
-                        <div class="chat-profile-img-box">
-                            <div class="chat-profile-left">
-                                <div class="chat-profile-img">
-                                    <img src="${message.val().image}" class="img">
+        let first = true;
+        let response = new Promise((resolve, reject) => {
+            dbRef.once("value").then(snap => {
+                snap.forEach(message => {
+                    let activeClass = '';
+                    console.log(sel_reciever );
+                    if(sel_reciever != "" && message.key == sel_reciever){
+                        activeClass = 'activecht';
+                    }else{
+                        activeClass = sel_reciever != "" ? '' :(first ? 'activecht' : '');
+                    }
+        
+                    $('.chatlist').append(`<li>
+                        <div class="chat-list ${activeClass}"
+                            data-receiverId=${message.key}
+                            data-senderId="${message.val().id}">
+                            <div class="chat-profile-img-box">
+                                <div class="chat-profile-left">
+                                    <div class="chat-profile-img">
+                                        <img src="${message.val().image}" class="img">
+                                    </div>
+                                    <p class="getname">
+                                        ${message.val().name}
+                                    </p>
                                 </div>
-                                <p class="getname">
-                                    ${message.val().name}
-                                </p>
-                            </div>
-                            <p class='d-none count-msg' id="${message.key + 'count'}">0</p>
-                        </div> 
-                    </div>
-                </li>`);
-                first = false;
-
-            });
+                                <p class='d-none count-msg' id="${message.key + 'count'}">0</p>
+                            </div> 
+                        </div>
+                    </li>`);
+                    first = false;
+                });
+        
+            }).then(() => getFirstChatData())
+                .catch(error => {
+                    console.log("error".error)
+                })
+        
         })
-    }
+            }
 });
 
