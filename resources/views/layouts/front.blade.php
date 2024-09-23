@@ -1417,6 +1417,7 @@
                         // Alternatively, you can update the count by re-checking all messages
                         countSingleChatCount(chat_list).then(updatedCount => {
                             if (updatedCount > 0) {
+
                                 $('.userIconbtn').text(updatedCount);
                             } else {
                                 $('.userIconbtn').text('');

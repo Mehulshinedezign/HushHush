@@ -32,12 +32,12 @@
                                                 <a
                                                     href="{{ route('admin.view-order', [$order->id]) }}">#{{ $order->id }}</a>
                                             </td>
-                                            <td>{{ $order->user->email }}</td>
-                                            <td>{{ $order->retailer->email ?? 'n/a' }} </td>
+                                            <td>{{ $order->user->email ?? 'N/A'}}</td>
+                                            <td>{{ $order->retailer->email ?? 'N/A' }} </td>
                                             <td>{{ $order->transaction->payment_id ?? '0' }}</td>
                                             <td>${{ $order->total }}</td>
-                                            <td>{{ $order->status }}</td>
-                                            <td>{{ $order->disputeDetails->status }}</td>
+                                            <td>{{ $order->status ?? 'N/A'}}</td>
+                                            <td>{{ $order->disputeDetails->status ?? 'N/A' }}</td>
                                             <td>{{ date('m/d/Y', strtotime($order->from_date)) . ' - ' . date('m/d/Y', strtotime($order->to_date)) }}
                                             </td>
                                         </tr>

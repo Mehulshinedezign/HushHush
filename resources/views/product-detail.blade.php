@@ -377,11 +377,11 @@
                                     @if (!$userHasReported)
                                         <div>
                                             <button id="report-btn" data-product-id="{{ $product->id }}"
-                                                class="btn btn-danger">Report Product</button>
+                                                class="btn btn-danger small-btn">Report Product</button>
                                         </div>
                                     @else
                                         <div>
-                                            <button class="btn btn-danger">Already Reported Product</button>
+                                            <button class="btn btn-danger small-btn">Already Reported Product</button>
                                         </div>
                                     @endif
 

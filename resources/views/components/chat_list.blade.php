@@ -4,8 +4,8 @@
         <div class="form-group">
             <div class="formfield search-field">
                 <input type="text" class="form-control" placeholder="Search" aria-label="Search"
-                    aria-describedby="search-addon" name="search" value="" autocomplete="off">
-                    <span class="form-icon" id="chatClear"><i class="fa-solid fa-xmark"></i></span>
+                    aria-describedby="search-addon" name="search" value="">
+                    <span class="form-icon" id="chatClear"><i class="fa-solid fa-xmark crossicon d-none"></i></span>
             </div>
         </div>
     </form>

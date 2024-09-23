@@ -5,7 +5,6 @@ let response = new Promise((resolve, reject) => {
     dbRef.once("value").then(snap => {
         snap.forEach(message => {
             let activeClass = '';
-            console.log(sel_reciever );
             if(sel_reciever != "" && message.key == sel_reciever){
                 activeClass = 'activecht';
             }else{
@@ -42,6 +41,11 @@ let response = new Promise((resolve, reject) => {
 // show first chat active and load all messages
 function getFirstChatData() {
     element = $('.activecht');
+    if(element.length===0)
+    {
+        $('#chatWindow').append(`<div class="no-chat-available-box"><i class="fa-solid fa-comments"></i><div class="no-chat-available">No chats available.</div></div>`);
+        $('#chatForm').addClass('d-none');
+    }
     userliststatus();
     getMessages(element);
     checkmessagecount();
@@ -70,18 +74,13 @@ function unSeenMessages(sender, receiver) {
         db.ref('messeges/' + chatKey).off('child_changed', unseenMessageListeners[chatKey].childChanged);
     }
 
-    // Initialize count variable
+    // Initialize count variable for unseen messages
     let count = 0;
-    // let totalMessage = 0;
+
     // Define the child_added listener
     const childAdded = db.ref('messeges/' + chatKey).on('child_added', (snap) => {
         const message = snap.val();
-        // if(message.isSeen==='true')
-        // {
-        //     totalMessage +=1;
-        // }
-
-        if (message.isSeen === 'false') {   
+        if (message.isSeen === 'false') {
             count += 1;
         }
        
@@ -92,16 +91,9 @@ function unSeenMessages(sender, receiver) {
     // Define the child_changed listener
     const childChanged = db.ref('messeges/' + chatKey).on('child_changed', (snap) => {
         const message = snap.val();
-        if (message.isSeen === 'true') {
-            count -= 1;
-           
-
+        if (message.isSeen === 'true' && count > 0) {
+            count -= 1; // Decrease for each message that is seen
         }
-        //  else if (message.isSeen === 'false' && !message.isSeenBefore) {
-        //     count += 1;
-           
-        // }
-        console.log(count , 'hererre');
         updateCountUI(sender, count);
         updateTotalUnseenMessages();
     });
@@ -112,6 +104,7 @@ function unSeenMessages(sender, receiver) {
         childChanged
     };
 }
+
 // Update the total unseen message count for the user
 function updateTotalUnseenMessages() {
     let totalUnseenCount = 0;
@@ -120,21 +113,49 @@ function updateTotalUnseenMessages() {
         const count = parseInt(countElement.text()) || 0;
         totalUnseenCount += count;
     }
-
     const userElement = $('.userIconbtn');
-    if (totalUnseenCount > 0 ) {
+    if (totalUnseenCount > 0) {
         userElement.text(totalUnseenCount);
     } else {
         userElement.text('');
     }
 }
 
+// Handle marking all unseen messages as seen when a chat is clicked
+// function handleChatClick(sender, receiver) {
+//     const chatKey = `${receiver}_${sender}`;
+
+//     // Get all unseen messages in the selected chat and update count
+//     const chatMessagesRef = db.ref('messeges/' + chatKey);
+//     chatMessagesRef.once('value', (snapshot) => {
+//         let unseenMessagesCount = 0;
+        
+//         snapshot.forEach((childSnapshot) => {
+//             const message = childSnapshot.val();
+//             if (message.isSeen === 'false') {
+//                 unseenMessagesCount += 1;
+//                 // Mark the message as seen in the database
+//                 db.ref('messeges/' + chatKey + '/' + childSnapshot.key).update({
+//                     isSeen: 'true'
+//                 });
+//             }
+//         });
+
+//         // Immediately set count to 0 since all messages are now seen
+//         const countElement = $("#" + receiver + 'count');
+//         updateCountUI(sender, 0);  // Force count to 0 after setting all as seen
+//         updateTotalUnseenMessages();
+//     });
+// }
+
+// Update the count UI for each chat
 function updateCountUI(sender, count) {
     const countElement = $("#" + sender + 'count');
     if (count > 0) {
         countElement.text(count);
         countElement.removeClass('d-none');
     } else {
+        countElement.text('0');
         countElement.addClass('d-none');
     }
 }
@@ -173,111 +194,40 @@ function userliststatus() {
     });
 }
 
-$('#chatClear').on('click',function(){
+let isClearingInProgress = false;
+
+$('#chatClear').off('click').on('click', function() {
+    if (isClearingInProgress) return; // Exit if already in progress
+
+    isClearingInProgress = true; // Set flag to true
+
     $('input[name="search"]').val('');
-
-    clearData();
-})
-
- function clearData()
- {
+    clearData().finally(() => {
+        isClearingInProgress = false; // Reset flag when done
+    });
+});
+// $(document).on('keydown','#chatClear',function(){
+//     console.log('here');    
+//     alert('herer');
+// })
+function clearData() {
     let first = true;
-    $('.chatlist').text('');
-    let response = new Promise((resolve, reject) => {
-        dbRef.once("value").then(snap => {
+    $('.chatlist').text(''); // Clear the chat list
+
+    return dbRef.once("value")
+        .then(snap => {
             snap.forEach(message => {
                 let activeClass = '';
-                console.log(sel_reciever );
-                if(sel_reciever != "" && message.key == sel_reciever){
+                if (sel_reciever != "" && message.key == sel_reciever) {
                     activeClass = 'activecht';
-                }else{
-                    activeClass = sel_reciever != "" ? '' :(first ? 'activecht' : '');
+                } else {
+                    activeClass = sel_reciever != "" ? '' : (first ? 'activecht' : '');
                 }
-    
-                $('.chatlist').append(`<li>
-                    <div class="chat-list ${activeClass}"
-                        data-receiverId=${message.key}
-                        data-senderId="${message.val().id}">
-                        <div class="chat-profile-img-box">
-                            <div class="chat-profile-left">
-                                <div class="chat-profile-img">
-                                    <img src="${message.val().image}" class="img">
-                                </div>
-                                <p class="getname">
-                                    ${message.val().name}
-                                </p>
-                            </div>
-                            <p class='d-none count-msg' id="${message.key + 'count'}">0</p>
-                        </div> 
-                    </div>
-                </li>`);
-                first = false;
-            });
-    
-        }).then(() => getFirstChatData())
-            .catch(error => {
-                console.log("error".error)
-            })
-    
-    })
 
- }
-
-
-
-// chat search form submit
-$("#searchmember input").on("keyup", function (e) {
-    e.preventDefault();
-    // if (search) {
-        var search = $(this).val().toLowerCase(); // Normalize case to handle case-insensitive search
-        console.log(search , 'jjjjj')
-        if (search != '') {
-            dbRef.orderByChild("name").startAt(search).endAt(search + "\uf8ff").once("value", function(snapshot) {
-                $('.chatlist').empty(); // Clear the chat list before adding new results
-                if (snapshot.exists()) {
-                    snapshot.forEach(function(message) {
-                        let activeClass = first ? 'activecht' : '';
-    
-                        $('.chatlist').append(`<li>
-                            <div class="chat-list ${activeClass}"
-                                data-receiverId=${message.key}
-                                data-senderId="${message.val().id}">
-                                <div class="chat-profile-img-box">
-                                    <div class="chat-profile-left">
-                                        <div class="chat-profile-img">
-                                            <img src="${message.val().image}" class="img">
-                                        </div>
-                                        <p class="getname">
-                                            ${message.val().name}
-                                        </p>
-                                    </div>
-                                    <p class='d-none count-msg' id="${message.key + 'count'}">0</p>
-                                </div> 
-                            </div>
-                        </li>`);
-                        first = false;
-                    });
-                }
-            })
-        // }
-    }
-    else {
-        let first = true;
-        $('.chatlist').text('');
-        let response = new Promise((resolve, reject) => {
-            dbRef.once("value").then(snap => {
-                snap.forEach(message => {
-                    let activeClass = '';
-                    console.log(sel_reciever );
-                    if(sel_reciever != "" && message.key == sel_reciever){
-                        activeClass = 'activecht';
-                    }else{
-                        activeClass = sel_reciever != "" ? '' :(first ? 'activecht' : '');
-                    }
-        
-                    $('.chatlist').append(`<li>
+                $('.chatlist').append(`
+                    <li>
                         <div class="chat-list ${activeClass}"
-                            data-receiverId=${message.key}
+                            data-receiverId="${message.key}"
                             data-senderId="${message.val().id}">
                             <div class="chat-profile-img-box">
                                 <div class="chat-profile-left">
@@ -291,16 +241,40 @@ $("#searchmember input").on("keyup", function (e) {
                                 <p class='d-none count-msg' id="${message.key + 'count'}">0</p>
                             </div> 
                         </div>
-                    </li>`);
-                    first = false;
-                });
-        
-            }).then(() => getFirstChatData())
-                .catch(error => {
-                    console.log("error".error)
-                })
-        
+                    </li>
+                `);
+                first = false;
+            });
         })
-        }
-});
+        .then(() => getFirstChatData())
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
+}
 
+// search the user 
+$("#searchmember input").on("keyup", function (e) {
+    e.preventDefault();
+    var search = $(this).val().toLowerCase(); // Normalize case to handle case-insensitive search
+    $('.crossicon').removeClass('d-none')
+    
+    // If the search input is empty, show all items
+    if (search === '') {
+    $('.crossicon').addClass('d-none')
+        $('.chatlist').find('li').removeClass('d-none');
+    } else {
+    $('.crossicon').removeClass('d-none')
+
+        $('.chatlist').find('li').each(function () {
+            var listItem = $(this);
+            var listItemText = listItem.find('div:first').text().toLowerCase(); // Get the text and normalize case
+            console.log(listItemText.indexOf(search));
+            // Check if the list item contains the search text
+            if (listItemText.indexOf(search) !== -1) {
+                listItem.removeClass('d-none'); // Show item
+            } else {
+                listItem.addClass('d-none'); // Hide item
+            }
+        });
+    }
+});

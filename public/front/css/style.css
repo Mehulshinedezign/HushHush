@@ -319,7 +319,7 @@ button {
 
 .outline-btn {
     color: var(--primary-color);
-    border: 1px solid var(--primary-color);
+    border: 1px solid var(--primary-color) !important;
     background-color: #fff;
 }
 
@@ -2865,4 +2865,25 @@ form#filters {
     top: 7px;
     right: 7px;
 }
+
+.lender-profile-box .chat-list-profile{
+    border: 1px solid #3a3a3a !important;
+}
+.no-chat-available {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 600;
+}
+.no-chat-available-box {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.no-chat-available-box i{
+    font-size: 32px;
+}
+.chat-screen-area:has(.no-chat-available-box) {
+    justify-content: center;
+}
+
 
