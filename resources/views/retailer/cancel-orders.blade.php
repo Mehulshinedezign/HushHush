@@ -57,7 +57,7 @@
                             </div>
                             <div class="order-details-list">
                                 <p>Cancelation Note:</p>
-                                <h4>{{ $order->cancellation_note }}</h4>
+                                <h4>{{ $order->cancellation_note ?? 'N/A' }}</h4>
                             </div>
 
                             {{-- <div class="order-details-list">

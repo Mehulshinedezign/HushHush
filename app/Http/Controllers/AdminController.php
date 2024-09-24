@@ -88,17 +88,28 @@ class AdminController extends Controller
             //     "security_fee" => "required|min:1",
             //     "security_fee_type" => "required|in:Fixed,Percentage",
             // ]);
+            // dd($request->toArray());
+            // $formRequest = $request->except(["_token", "global_dateformat", "global_timeformat", "global_datetimeformat", "global_jquery_dateformat", "global_pagination"]);
+            // foreach ($formRequest as $key => $value) {
+            //     AdminSetting::where('key', $key)->update(['value' => $value, 'type' => $request->input($key . '_type')]);
+            // }
 
-            $formRequest = $request->except(["_token", "global_dateformat", "global_timeformat", "global_datetimeformat", "global_jquery_dateformat", "global_pagination"]);
-            foreach ($formRequest as $key => $value) {
-                AdminSetting::where('key', $key)->update(['value' => $value, 'type' => $request->input($key . '_type')]);
-            }
+            $adminSetting = AdminSetting::where('key','order_commission')->first();
+            $adminSetting->update([
+                'type'=>$request->order_commission_type,
+                'value'=>$request->order_commission,
+            ]);
+            $identityCommissionSettings = AdminSetting::where('key','identity_commission')->first();
+            $identityCommissionSettings->update([
+                'type'=>$request->identity_type,
+                'value'=>$request->identity_commission,
+            ]);
             return redirect()->route("admin.commission")->with("success", "Commission updated successfully.");
         }
 
-        $adminSettings = AdminSetting::where('key', '!=', 'renter_transaction_fee')->get();
-
-        return view('admin.commission.commission', compact('adminSettings'));
+        $adminSetting = AdminSetting::where('key','order_commission')->first();
+        $identityCommissionSettings = AdminSetting::where('key','identity_commission')->first();
+        return view('admin.commission.commission', compact('adminSetting','identityCommissionSettings'));
     }
 
     public function cms()

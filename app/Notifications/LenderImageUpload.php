@@ -37,9 +37,9 @@ class LenderImageUpload extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('Dear Retailer')
-                    ->line($this->customer_name .'is upload the image for pick up a product plase verify.')
-                    ->action('Receive order', route('retailercustomer'))
+                    // ->line('Dear Retailer')
+                    // ->line($this->customer_name .'is upload the image for pick up a product plase verify.')
+                    // ->action('Receive order', route('retailercustomer'))
                     ->line('Thank you for using our application!');
     }
 

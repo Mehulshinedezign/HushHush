@@ -294,13 +294,8 @@ $(document).on('click', '.chat-list', function () {
     var classElement = jQuery('.chat-list');
     var count = parseInt($(this).find('p.count-msg').text());
     var chatCount = parseInt($('.userIconbtn').text());
-    if(chatCount > 0)
-    {
-        var renaningCount = chatCount-count
-            $('.userIconbtn').text(renaningCount); 
-    }else{
-        $('.userIconbtn').text(''); 
-    }
+   
+
     $(this).find('p.count-msg').addClass('d-none');
     classElement.removeClass('activecht');
     // $("#" + sender + 'count').addClass('d-none');
@@ -335,54 +330,70 @@ function loadMessages(sender, receiver, userImage) {
         return;
     }
 
-    jQuery('#chatWindow').html('');
+    jQuery('#chatWindow').html(''); // Clear the previous chat window
     const listenerKey = `${sender}_${receiver}`;
+    const chatRef = db.ref('messeges/' + listenerKey).orderByChild('created');
 
-    // Detach existing listener if it exists
+    // Detach the existing listener if it exists
     if (fireBaseListeners[listenerKey]) {
-        db.ref('messeges/' + listenerKey).off("child_added", fireBaseListeners[listenerKey]); // Detach the existing listener
+        chatRef.off("child_added", fireBaseListeners[listenerKey]); // Detach existing listener
     }
 
-    // Attach a new listener
-    fireBaseListeners[listenerKey] = db.ref('messeges/' + listenerKey).on("child_added", (message) => {
-        var messageList = '';
-
-        let date = moment(new Date()).format('YYYY-MM-DD');
-        var msgDate = moment(new Date(parseInt(message.val().created))).format('YYYY-MM-DD');
-
-        var time = date == msgDate
-            ? moment(new Date(parseInt(message.val().created))).format('h:mm a')
-            : msgDate;
-
-        if (parseInt(authUserId) === parseInt(message.val().sender)) {
-            messageList += '<div class="chat-screen-right-wrapper">';
-            messageList += '<div class="chat-screenmsg-wrapper">';
-            messageList += '<div class="chat-screen-name-time">';
-            messageList += '<span>' + time + '</span><p>You</p></div>';
-            if (message.val().msg) {
-                messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message.val().msg)) + '</div></div>';
-            }
-            messageList += '<div class="chat-screen-img"><img src="' + authUserprofile + '?id=' + message.val() + '"></div>';
-            messageList += '</div>';
-        } else {
-            messageList += '<div class="chat-screen-left-wrapper">';
-            messageList += '<div class="chat-screen-img"><img src="' + userImage + '?id=' + message.val() + '"></div>';
-            messageList += '<div class="msg-data"><div class="pro_name d-flex">';
-            messageList += '<span>' + time + '</span></div>';
-            if (message.val().msg) {
-                messageList += '<div class="chat-txt-box">' + parseMessage(urlify(message.val().msg)) + '</div>';
-            }
-            messageList += '</div></div>';
-        }
-        // console.log(authUserId,message.val().receiver,"test1234",message.val());
-        if (parseInt(authUserId) === parseInt(message.val().reciever)) {
-            if(message.val().isSeen != 'true' ){
-                messageUpdate(message, 'true');
-            }
-        }
-        jQuery('#chatWindow').append(messageList);
+    // Fetch existing messages first and display them
+    chatRef.once('value', (snapshot) => {
+        snapshot.forEach((messageSnapshot) => {
+            appendMessageToChatWindow(messageSnapshot, userImage);  // Display each message
+        });
+    }).then(() => {
+        // Now attach the listener for new messages
+        fireBaseListeners[listenerKey] = chatRef.on("child_added", (messageSnapshot) => {
+            appendMessageToChatWindow(messageSnapshot, userImage);
+        });
     });
 }
+
+// Function to append a message to the chat window
+function appendMessageToChatWindow(messageSnapshot, userImage) {
+    var messageList = '';
+    let date = moment(new Date()).format('YYYY-MM-DD');
+    var msgDate = moment(new Date(parseInt(messageSnapshot.val().created))).format('YYYY-MM-DD');
+
+    var time = date == msgDate
+        ? moment(new Date(parseInt(messageSnapshot.val().created))).format('h:mm a')
+        : msgDate;
+
+    if (parseInt(authUserId) === parseInt(messageSnapshot.val().sender)) {
+        messageList += '<div class="chat-screen-right-wrapper">';
+        messageList += '<div class="chat-screenmsg-wrapper">';
+        messageList += '<div class="chat-screen-name-time">';
+        messageList += '<span>' + time + '</span><p>You</p></div>';
+        if (messageSnapshot.val().msg) {
+            messageList += '<div class="chat-txt-box">' + parseMessage(urlify(messageSnapshot.val().msg)) + '</div></div>';
+        }
+        messageList += '<div class="chat-screen-img"><img src="' + authUserprofile + '?id=' + messageSnapshot.val() + '"></div>';
+        messageList += '</div>';
+    } else {
+        messageList += '<div class="chat-screen-left-wrapper">';
+        messageList += '<div class="chat-screen-img"><img src="' + userImage + '?id=' + messageSnapshot.val() + '"></div>';
+        messageList += '<div class="msg-data"><div class="pro_name d-flex">';
+        messageList += '<span>' + time + '</span></div>';
+        if (messageSnapshot.val().msg) {
+            messageList += '<div class="chat-txt-box">' + parseMessage(urlify(messageSnapshot.val().msg)) + '</div>';
+        }
+        messageList += '</div></div>';
+    }
+
+    // Mark the message as seen if received by the current user
+    if (parseInt(authUserId) === parseInt(messageSnapshot.val().reciever)) {
+        if (messageSnapshot.val().isSeen != 'true') {
+            messageUpdate(messageSnapshot, 'true');
+        }
+    }
+
+    // Append the message in ascending order
+    jQuery('#chatWindow').append(messageList);
+}
+
 
 function disableOtherListeners(except) {
     var elements = $('.chatlist').find('li');

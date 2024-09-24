@@ -465,7 +465,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="product-popup-box">
-                        <span class="close" onclick="closeModal()">&times;</span>
+                        <span class="btn-close" onclick="closeModal()"></span>
                         <img class="" id="modalImage">
                     </div>
                 </div>
@@ -731,10 +731,11 @@
         ]
     });
     $('.slider-thumb').slick({
-        slidesToShow: 3,
+        slidesToShow: 2,
         slidesToScroll: 1,
         asNavFor: '.slider-content',
         dots: false,
+        centerMode: true,
         focusOnSelect: true
     });
 
@@ -797,7 +798,7 @@
                         }
 
                         $('#query_msg .modal-body').html(
-                            '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
+                            '<button type="button" class="btn-close" id="closeModalBtn">&times;</button>' +
                             modalContent
                         );
 

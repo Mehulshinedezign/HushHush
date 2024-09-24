@@ -15,7 +15,7 @@
                         </div>
                        <div class="name-with-status">
                             <p>{{ $order->product->name }}</p>
-                            <p class="cancelled-txt">Dispute</p>
+                            <p class="cancelled-txt">{{ $order->disputeDetails->status=='resolved' ? 'Resolved' : 'Dispute'}} </p>
                        </div>
                         <div class="pro-desc-prize">
                             <h3>${{ $order->total }}</h3>

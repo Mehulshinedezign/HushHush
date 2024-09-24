@@ -43,6 +43,7 @@ class User extends Authenticatable
         'stripe_account_id',
         'email_verified_at',
         'identity_verified_at',
+        'identity_status',
     ];
 
     /**

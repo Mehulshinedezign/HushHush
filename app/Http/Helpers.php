@@ -371,7 +371,15 @@ if (!function_exists('check_order_list_paginate_retailer')) {
     }
 
 
-
+    if (!function_exists('get_admin_settion')) {
+        function get_admin_settion($name)
+        {
+            $record = AdminSetting::where('name', $name)->first();
+            if ($record)
+                return $record->value;
+            return "";
+        }
+    }
 
 
     // if (!function_exists('sendPushNotifications')) {

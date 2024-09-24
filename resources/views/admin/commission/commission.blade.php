@@ -12,13 +12,13 @@
                         @csrf
                         <div class="card-body">
                             <div class="row">
-                                @foreach ($adminSettings as $adminSetting)
+                                {{-- @foreach ($adminSettings as $adminSetting) --}}
                                     <div class="form-group col-md-6 col-12">
-                                        <label>{{ ucwords(str_replace('_', ' ', $adminSetting->key)) }} Type</label>
+                                        <label>Order Commission Type</label>
                                         <div class="input-group">
                                             <div class="formfield symbol-formfield">
-                                                <select name="{{ $adminSetting->key }}_type"
-                                                    class="form-control checktype @error("{{ $adminSetting->key }}_type") is-invalid @enderror">
+                                                <select name="order_commission_type"
+                                                    class="form-control checktype @error("order_commission_type") is-invalid @enderror">
                                                     <option value="Percentage"
                                                         @if ($adminSetting->type == 'Percentage') selected @endif>Percentage
                                                     </option>
@@ -32,18 +32,46 @@
                                     </div>
 
                                     <div class="form-group col-md-6 col-12">
-                                        <label>{{ ucwords(str_replace('_', ' ', $adminSetting->key)) }}</label>
+                                        <label>Order Commission</label>
                                         <div class="input-group">
                                             <input type="text"
-                                                class="form-control two-decimals @error("$adminSetting->key") is-invalid @enderror"
-                                                name="{{ $adminSetting->key }}" value="{{ $adminSetting->value }}"
+                                                class="form-control two-decimals @error("order_commission") is-invalid @enderror"
+                                                name="order_commission" value="{{ $adminSetting->value }}"
                                                 maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
-                                            @error($adminSetting->key)
+                                            @error('order_commission')
                                                 <label class="error-messages">{{ $message }}</label>
                                             @enderror
                                         </div>
                                     </div>
-                                @endforeach
+                                {{-- @endforeach --}}
+                            </div>
+                            <div class="row">
+
+                            <div class="form-group col-md-6 col-12">
+                                <label>Identity Commission Type</label>
+                                <div class="input-group">
+                                    <div class="formfield symbol-formfield">
+                                        <select name="identity_type"
+                                            class="form-control checktype @error("identity_type") is-invalid @enderror">
+                                            <option value="Fixed">
+                                                Fixed</option>
+                                        </select>
+                                        <div class="dollor-symbol">$</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6 col-12">
+                                <label>Identity Commission</label>
+                                <div class="input-group">
+                                    <input type="text"
+                                        class="form-control two-decimals @error("identity_commission") is-invalid @enderror"
+                                        name="identity_commission" value="{{ $identityCommissionSettings->value }}"
+                                        maxlength="10" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
+                                    @error('identity_commission')
+                                        <label class="error-messages">{{ $message }}</label>
+                                    @enderror
+                                </div>
+                            </div>
                             </div>
                             <button id="userSave" class="btn btn-primary">{{ __('buttons.saveChanges') }}</button>
                         </div>

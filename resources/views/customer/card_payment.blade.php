@@ -96,13 +96,13 @@
 
                             </div>
                         </div>
-                        <input type="hidden" value="{{ jsencode_userdata($price) }}" id="total_payment">
+                        <input type="hidden" value="@if(isset(auth()->user()->identity_status) && auth()->user()->identity_status=='unpaid'){{ jsencode_userdata($price + $identity_amount) }} @else{{ jsencode_userdata($price) }} @endif" id="total_payment">
                         <input type="hidden" value="{{ jsencode_userdata($query) }}" id="query">
                         {{-- <input type="hidden" value="{{ $security->type }}" id="security_option_type">
                         <input type="hidden" value="{{ $security->value }}" id="security_option_value"> --}}
-                        <button type="submit" id="payNow" class="button primary-btn  full-btn">Pay Now
+                        <button type="submit" id="payNow" class="button primary-btn  full-btn"><span>The identity verification fee also add in you first payment</span> Pay Now
                             {{-- <!-- ${{ $price + $query->shipping_charges + $query->cleaning_charges }} --> --}}
-                            ${{ $price }}
+                            @if(isset(auth()->user()->identity_status) && auth()->user()->identity_status=='unpaid') ${{ $price + $identity_amount }} @else ${{ $price }} @endif
                         </button>
                     </form>
                 </div>

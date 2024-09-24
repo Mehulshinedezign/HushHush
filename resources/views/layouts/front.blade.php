@@ -1353,7 +1353,7 @@
                 storageBucket: "{{ env('STORAGEBUCKET') }}",
                 messagingSenderId: "{{ env('MESSAGINGSENDERID') }}",
                 appId: "{{ env('APPID') }}",
-                measurementId: "{{ env('MEASUREMENTID') }}"
+                // measurementId: "{{ env('MEASUREMENTID') }}"
             };
             var senderId = "{{ auth()->user()->id }}";
             const authUserId = "{{ auth()->user()->id }}";
@@ -1385,7 +1385,6 @@
                 messageCount.then(m => {
                     // show total number of unseen message in the header
                     if (m) {
-                        console.log(m, 'herer')
                         $('.userIconbtn').text(m);
                     } else {
                         $('.userIconbtn').text('');
@@ -1423,6 +1422,7 @@
                         // Alternatively, you can update the count by re-checking all messages
                         countSingleChatCount(chat_list).then(updatedCount => {
                             if (updatedCount > 0) {
+
                                 $('.userIconbtn').text(updatedCount);
                             } else {
                                 $('.userIconbtn').text('');

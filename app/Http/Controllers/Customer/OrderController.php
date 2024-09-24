@@ -126,6 +126,7 @@ class OrderController extends Controller
         if ($order->status != "Waiting") {
             return redirect()->back()->with("warning", 'Order must be in waiting state to upload the images.');
         }
+        $order->load(['retailer']);
 
         if ($order->retailer_confirmed_pickedup == 0) {
             $userId = auth()->user()->id;
@@ -171,7 +172,8 @@ class OrderController extends Controller
             }
             // }
             $customer_name = $order->user->name;
-            $order->retailer->notify(new LenderImageUpload($customer_name));
+            $retailer = $order->retailer;
+            $retailer->notify(new LenderImageUpload($customer_name));
             return redirect()->back()->with('success', 'Images uploaded successfully');
         }
 
@@ -437,6 +439,8 @@ class OrderController extends Controller
     {
         $order->load(["transaction", "retailer", "queryOf"]);
         $order_commission = AdminSetting::where('key', 'order_commission')->first();
+        $identity_amount = AdminSetting::where('key','identity_commission')->pluck('value')->first();
+       
 
         if (isset($order->queryOf->negotiate_price)) {
             $amount = $order->queryOf->negotiate_price * ($order_commission->value / 100);
@@ -445,7 +449,11 @@ class OrderController extends Controller
             $amount = $order->queryOf->getCalculatedPrice($order->queryOf->date_range) * ($order_commission->value / 100);
             $dealerAmount = $order->total - $amount;
         }
+        if(isset(auth()->user()->identity_status) && auth()->user()->identity_status=='unpaid')
+        {
+           $dealerAmount =  $dealerAmount - $identity_amount;
 
+        }
         $payoutData = [
             "amount" => floatval($dealerAmount) * 100,
             "currency" => "usd",

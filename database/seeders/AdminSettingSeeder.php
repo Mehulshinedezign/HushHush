@@ -15,13 +15,13 @@ class AdminSettingSeeder extends Seeder
     public function run()
     {
         $keys = [
-            "renter_transaction_fee" => [
-                "value" => "0",
-                "type" => "Percentage",
-            ],
             "order_commission" => [
                 "value" => "1",
                 "type" => "Percentage",
+            ],
+            "identity_commission" => [
+                "value" => "1",
+                "type" => "fixed",
             ],
             // "insurance_fee" => [
             //     "value" => "25",

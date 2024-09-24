@@ -110,7 +110,7 @@ class OrderController extends Controller
 
     public function orderPickUp(OrderPickUpReturnRequest $request, Order $order)
     {
-
+        $order->load('retailer' ,'user');
         if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
             return redirect()->back()->with("warning", "You can not allot dispute order to customer");
         }
@@ -118,7 +118,7 @@ class OrderController extends Controller
         if ($order->status != "Waiting") {
             return redirect()->back()->with("warning", 'Order must be in waiting state to upload the images.');
         }
-
+       
         if ($order->customer_confirmed_pickedup == 0) {
             $userId = auth()->user()->id;
             // $removedImageIds = explode(',', $request->removed_images);
@@ -164,9 +164,10 @@ class OrderController extends Controller
                 OrderImage::insert($images);
             }
             // }
-            $lender_name = $order->retailer->name;
+            
+            $lender_name = $order->retailer->name;        
             $order->user->notify(new CustomerImageUpload($lender_name));
-
+           
             return redirect()->back()->with('success', 'Images uploaded successfully');
         }
 
@@ -369,10 +370,10 @@ class OrderController extends Controller
                 ];
 
                 if (@$order->user->usernotification->customer_order_return == '1') {
-                    $order->user->notify(new CutomerOrderReturn($customer_info));
+                    @$order->user->notify(new CutomerOrderReturn($customer_info));
                 }
                 if (@$order->retailer->usernotification->lender_order_return == '1') {
-                    $order->retailer->notify(new LenderOrderReturn($lender_info));
+                    @$order->retailer->notify(new LenderOrderReturn($lender_info));
                 }
                 // check the retailer order return status before sending the notification
                 // if (@$user->notification->order_return == 'on') {
@@ -432,7 +433,8 @@ class OrderController extends Controller
     {
         $order->load(["transaction", "retailer", "queryOf"]);
         $order_commission = AdminSetting::where('key', 'order_commission')->first();
-
+        $identity_amount = AdminSetting::where('key','identity_commission')->pluck('value')->first();
+       
         if (isset($order->queryOf->negotiate_price)) {
             $amount = $order->queryOf->negotiate_price * ($order_commission->value / 100);
             $dealerAmount = $order->total - $amount;
@@ -441,6 +443,10 @@ class OrderController extends Controller
             $dealerAmount = $order->total - $amount;
         }
 
+        if(isset(auth()->user()->identity_status) && auth()->user()->identity_status=='unpaid')
+        {
+            $dealerAmount =  $dealerAmount - $identity_amount;
+        }
         $payoutData = [
             "amount" => floatval($dealerAmount) * 100,
             "currency" => "usd",
@@ -461,6 +467,11 @@ class OrderController extends Controller
             "amount" => $transfer['amount'] / 100,
             "gateway_response" => str_replace("Stripe\Transfer JSON: ", "", $transfer)
 
+        ]);
+
+        $user = auth()->user();
+        $user->update([
+            'identity_status'=>'paid'
         ]);
         return true;
     }
