@@ -32,8 +32,8 @@ class BookingController extends Controller
         if(!$disabledDates->isEmpty()){
             return redirect()->back()->with('error', 'This product not longer should available for this date ');
         }
-
-        return view('customer.card_payment', compact('intent', 'query', 'price', 'insurance', 'security'));
+        $identity_amount = AdminSetting::where('key','identity_commission')->pluck('value')->first();
+        return view('customer.card_payment', compact('intent', 'query', 'price', 'insurance', 'security','identity_amount'));
     }
 
     public function charge(Request $request)
@@ -53,6 +53,8 @@ class BookingController extends Controller
         $fromendDate = date('Y-m-d', strtotime($fromAndToDate[1]));
         // dd($request->token);
         // dd($fromAndToDate, $fromAndToDate[0], $fromAndToDate[1], $fromstartDate, $fromendDate);
+        $identity_amount = AdminSetting::where('key','identity_commission')->pluck('value')->first();
+
         $orderData = [
             'user_id' => $user->id,
             'retailer_id' => $query->for_user,
@@ -63,7 +65,6 @@ class BookingController extends Controller
             'to_date' => $fromendDate,
             'order_date' => date('Y-m-d H:i:s'),
             'pickedup_date' => null,
-            'total' =>jsdecode_userdata($request->total_payment),
             'status' => 'Waiting',
             // 'security_option' => null,
             // 'security_option_type' => $request->securityOptionType,
@@ -78,6 +79,13 @@ class BookingController extends Controller
             'order_commission_amount' => null,
         ];
         DB::beginTransaction();
+        if(isset(auth()->user()->identity_status) && auth()->user()->identity_status=='unpaid')
+        {
+           $orderData['total'] =jsdecode_userdata($request->total_payment) - $identity_amount;
+        }else{
+           $orderData['total'] =jsdecode_userdata($request->total_payment);
+        }
+
         $order = Order::create($orderData);
         $query->update([
             'status' => 'COMPLETED',
@@ -153,6 +161,10 @@ class BookingController extends Controller
             'date' => $date,
             'status' => 'Completed',
             'gateway_response' => $status
+        ]);
+        $user = auth()->user();
+        $user->update([
+            'identity_status'=>'paid'
         ]);
         DB::commit();
         $lender = $query->forUser;

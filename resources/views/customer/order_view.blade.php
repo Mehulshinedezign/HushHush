@@ -11,7 +11,7 @@
                     @endif
 
                     @if ($order->status == 'Picked Up' && $order->dispute_status == 'Yes')
-                        <p class="cancelled-txt">Dispute</p>
+                        <p class="cancelled-txt">{{ $order->disputeDetails->status=='resolved' ? 'Resolved' : 'Dispute'}}</p>
                     @endif
 
                 </div>

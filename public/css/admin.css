@@ -2255,3 +2255,8 @@ img#customer-img {
 .commission-card .form-group:has(.invalid-feedback) input {
   background-image: unset !important;
 }
+.dollor-symbol {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+}

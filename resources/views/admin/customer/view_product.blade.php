@@ -30,7 +30,7 @@
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item">Size:</span>
-                                    <span class="">{{ @$product->get_size->name ?? 'N/A' }}</span>
+                                    <span class="">{{ @$product->size ?? 'N/A' }}</span>
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item">Rent:</span>
