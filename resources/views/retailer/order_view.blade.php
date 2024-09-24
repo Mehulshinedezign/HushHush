@@ -59,10 +59,10 @@
                                     <span class="summery-name">Rental Amount: </span>
                                     <span>$90.00</span>
                                 </li> --}}
-                                {{-- <li class="summary-item">
-                                    <span class="summery-name"> Security: </span>
-                                    <span>$272.40</span>
-                                </li> --}}
+                                <li class="summary-item">
+                                    <span class="summery-name"> Order Id: </span>
+                                    <span>{{ $order->id ?? 'N/A' }}</span>
+                                </li>
 
                                 <li class="summary-item price-total">
                                     <span class="summery-name">Total: </span>
