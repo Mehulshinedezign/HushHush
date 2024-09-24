@@ -157,8 +157,9 @@
                                         <div class="form-group">
                                             <label for="">Other Brand</label>
                                             <div class="formfield">
-                                                <input type="text" value="" class="produt_input form-control form-class"
-                                                    placeholder="other" name="other_brand">
+                                                <input type="text" value=""
+                                                    class="produt_input form-control form-class" placeholder="other"
+                                                    name="other_brand">
 
                                             </div>
                                         </div>
@@ -405,11 +406,18 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days*</label>
-                                            <!-- <div class="formfield ">
-                                                                        <input type="number" class="form-control" name="min_rent_days"
-                                                                            value="{{ $product->min_days_rent_item }}" min="1">
-                                                                    </div> -->
-                                            <div class="formfield">
+                                            <div class="formfield ">
+                                                <input type="number"
+                                                    class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
+                                                    name="min_rent_days" value="{{ $product->min_days_rent_item }}"
+                                                    min="5">
+                                                @error('min_rent_days')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                            {{-- <div class="formfield">
                                                 <select
                                                     class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
                                                     name="min_rent_days">
@@ -433,7 +441,7 @@
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
                                                     @enderror
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -715,7 +723,7 @@
                     e.preventDefault();
                     alert(
                         `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`
-                        );
+                    );
                 }
             });
 

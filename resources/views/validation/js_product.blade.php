@@ -12,7 +12,7 @@
 
         // }
         $.validator.addMethod("completeAddress", function(value, element) {
-           
+
                 return $('#product_address1').val() !== '' && $(
                     '#product_country').val() !== '' && $('#product_state').val() !== '';
         }, "Please enter the complete address");
@@ -104,7 +104,7 @@
             min_rent_days: {
                 required: true,
                 regex: minDaysItemRegex,
-                range: [1, 30],
+                range: [5, 30],
             },
             rent_price_day: {
                 required: true,
@@ -220,7 +220,7 @@
             min_rent_days: {
                 required: `{{ __('customvalidation.product.min_rent_days.required') }}`,
                 regex: `{{ __('customvalidation.product.min_rent_days.regex', ['regex' => '${minDaysItemRegex}']) }}`,
-                range: `{{ __('customvalidation.product.min_rent_days.range', ['min' => 1, 'max' => 30]) }}`
+                range: `{{ __('customvalidation.product.min_rent_days.range', ['min' => 5, 'max' => 30]) }}`
             },
             // country:{
             //     required: "Please enter country.",

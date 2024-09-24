@@ -347,7 +347,7 @@ return [
             'max' => 'Maximum rent days must be 30 days.',
             'string' => 'Please enter only digit values.',
             'regex' => 'Please enter only digit values.',
-            'range' => 'Please enter the days from 1 to 30.',
+            'range' => 'Please enter the days from 5 to 30.',
         ],
         'rent_price_day' =>[
             'required' => 'Please enter Rental price per day.',

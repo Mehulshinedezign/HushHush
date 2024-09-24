@@ -499,19 +499,24 @@
                                         <div class="form-group">
                                             <label for="">Minimum number of rental days*</label>
                                             <div class="formfield ">
-                                                <select
+                                                {{-- <select
                                                     class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
                                                     name="min_rent_days">
+
+
                                                     <option value="">Select Rental days</option>
                                                     <option value="7">7 Days</option>
                                                     <option value="14">14 Days</option>
                                                     <option value="30">30 Days</option>
                                                     <!-- <option value="Fair">Fair condition</option> -->
-                                                </select>
-                                                <span class="form-icon">
+                                                </select> --}}
+                                                <input type="number"
+                                                    class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
+                                                    name="min_rent_days" placeholder="Enter min rental days" value="" min="5">
+                                                {{-- <span class="form-icon">
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                         alt="img">
-                                                </span>
+                                                </span> --}}
                                                 @error('min_rent_days')
                                                     <span class="invalid-feedback" role="alert">
                                                         {{ $message }}
@@ -812,7 +817,7 @@
                 } else {
                     console.log('Other brand field not found');
                 }
-            } 
+            }
             else {
                 otherBrandField.addClass('d-none');
             }

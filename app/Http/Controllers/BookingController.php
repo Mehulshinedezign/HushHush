@@ -30,7 +30,10 @@ class BookingController extends Controller
         $endDate = date('Y-m-d', strtotime($dates[1]));
         $disabledDates = ProductDisableDate::where('product_id',$queryData->product->id)->whereBetween('disable_date', [$startDate, $endDate])->get();
         if(!$disabledDates->isEmpty()){
-            return redirect()->back()->with('error', 'This product not longer should available for this date ');
+            $queryData->update([
+                'status' => 'REJECTED',
+            ]);
+            return redirect()->back()->with('error', ' This offer is not longer should available, please try some different product');
         }
 
         return view('customer.card_payment', compact('intent', 'query', 'price', 'insurance', 'security'));
@@ -88,7 +91,7 @@ class BookingController extends Controller
             $startDate = date('Y-m-d', strtotime($dates[0]));
             $endDate = date('Y-m-d', strtotime($dates[1]));
         // dd($startDate ,$endDate);
-         
+
             while ($startDate <= $endDate) {
                 $startDate = date_create($startDate);
                 $query->product->disableDates()->create([
@@ -99,7 +102,7 @@ class BookingController extends Controller
                 $startDate->modify('+1 day');
                 $startDate = $startDate->format('Y-m-d');
             }
-       
+
 
         // ProductDisableDate::create([
         //     'product_id' => $query->product_id,
