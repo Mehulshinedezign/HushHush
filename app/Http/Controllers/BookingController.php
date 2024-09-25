@@ -54,8 +54,7 @@ class BookingController extends Controller
 
         $fromstartDate = date('Y-m-d', strtotime($fromAndToDate[0]));
         $fromendDate = date('Y-m-d', strtotime($fromAndToDate[1]));
-        // dd($request->token);
-        // dd($fromAndToDate, $fromAndToDate[0], $fromAndToDate[1], $fromstartDate, $fromendDate);
+
         $identity_amount = AdminSetting::where('key','identity_commission')->pluck('value')->first();
 
         $orderData = [

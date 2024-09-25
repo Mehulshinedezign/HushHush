@@ -7,21 +7,20 @@
                 <div class="col-12 col-md-12 col-lg-12">
                     <div class="card customer-card">
                         <x-admin_alert />
-                        <div class="card-header">
+                        <div class="card-header align-items-start flex-column">
+                            <a href="{{ route('admin.customers')}}" class="back-btn"><i class="fa-solid fa-angle-left"></i>Back</span></a>
                             <h4>Products</h4>
                         </div>
-                        <div class="card-body">
 
+                        <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-md">
 
                                     <tr>
                                         <th>#</th>
                                         <th>Name</th>
-                                        <!-- <th>Quantity</th> -->
                                         <th>Size</th>
                                         <th>Rent</th>
-                                        <!-- <th>Price</th> -->
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -29,10 +28,8 @@
                                         <tr>
                                             <td>{{ $index + 1 }}</th>
                                             <td>{{ $product->name ??'N/A' }}</td>
-                                            <!-- <td>{{ $product->quantity }}</td> -->
                                             <td>{{ $product->size ?? 'N/A'}}</td>
                                             <td>{{ $product->rent_day??'N/A' }}</td>
-                                            <!-- <td>{{ $product->price }}</td> -->
 
                                             <td>
                                                 <label class="custom-switch">

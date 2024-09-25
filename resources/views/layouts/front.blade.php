@@ -777,9 +777,6 @@
     </div>
     @include('layouts.filter_popup')
 
-
-
-
     <!--JS-->
 
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
@@ -1140,9 +1137,6 @@
                 }
 
             });
-
-
-
 
             $('.productLink').on('click', function() {
                 console.log("click");

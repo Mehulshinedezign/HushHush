@@ -123,9 +123,14 @@ class AdminController extends Controller
     {
         return view('admin.cms.cms_edit', compact('page'));
     }
-    public function transaction()
+    public function transaction(Request $request)
     {
-        $orders = Order::with('transaction', 'retailer', 'user')->get();
+        $keyword = @$request->search;
+        $orders = Order::with('transaction', 'retailer', 'user')->when(!is_null($keyword), function ($q) use ($keyword) {
+            $q->whereHas('user', function ($q) use ($keyword) {
+                $q->where("email", "like", strtolower($keyword) . "%");
+            });
+        })->get();
 
         return view('admin.transaction', compact('orders'));
     }

@@ -6,9 +6,11 @@
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-6">
                     <div class="profile-view-outer">
+                        <a href="{{ route('admin.vendor-product-list',['user'=>$product->user_id])}}" class="back-btn"><i class="fa-solid fa-angle-left"></i>Back</span></a>
                         <div class="profile-header">
+
                             <div class="profile-big-image">
-                                {{-- @dd($product) --}}
+
                                 @if (isset($product->thumbnailImage->file_path))
                                     <img src="{{ $product->thumbnailImage->file_path }}" alt="" loading="lazy">
                                 @else
@@ -44,11 +46,11 @@
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item"> Brand:</span>
-                                    <span class="">{{ (@getBrandsName(@$product->brand)) ?? 'N/A' }}</span>
+                                    <span class="">{{ (@$product->brand) ?? 'N/A' }}</span>
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item">Color:</span>
-                                    <span class="">{{ @getColorsName(@$product->color) ?? 'N/A' }}</span>
+                                    <span class="">{{ (@$product->color) ?? 'N/A' }}</span>
                                 </li>
 
                                 {{-- <li class="list-col">

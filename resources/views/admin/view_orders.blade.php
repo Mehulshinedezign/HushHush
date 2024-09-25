@@ -8,6 +8,7 @@
                 <x-admin_alert />
                 <div class="card admin-card">
                     <div class="card-body">
+                        <a href="{{ url()->previous()}}" class="back-btn"><i class="fa-solid fa-angle-left"></i>Back</span></a><span>
                         <ul class="list-unstyled listing-row">
                             <li class="d-flex align-items-center">
                                 <h6 class="mr-2 mb-0"> {{ config('constants.renter') }} Email :</h6>

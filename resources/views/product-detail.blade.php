@@ -314,7 +314,11 @@
                                         <div id="collapseTwo" class="accordion-collapse collapse show"
                                             aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
-                                                {{ @$product->productCompleteLocation->city . ' , ' . @$product->productCompleteLocation->state . ' , ' . @$product->productCompleteLocation->country }}
+                                              @if(isset($product->productCompleteLocation->city) && isset($product->productCompleteLocation->state) && isset($product->productCompleteLocation->country))  
+                                              {{ @$product->productCompleteLocation->city . ' , ' . @$product->productCompleteLocation->state . ' , ' . @$product->productCompleteLocation->country }}
+                                              @else
+                                              {{ @$product->productCompleteLocation->city . '  ' . @$product->productCompleteLocation->state . '  ' . @$product->productCompleteLocation->country }}
+                                              @endif
                                             </div>
                                         </div>
                                     </div>
