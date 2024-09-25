@@ -23,6 +23,7 @@ class Query extends Model
         'shipping_charges',
         'cleaning_charges',
         'delivery_option',
+        'address_id',
     ];
 
     public function product()

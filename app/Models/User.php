@@ -86,7 +86,12 @@ class User extends Authenticatable
 
     public function userDetail()
     {
-        return $this->hasOne(UserDetail::class);
+        return $this->hasOne(UserDetail::class)->where('is_default','1');
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(UserDetail::class);
     }
 
     public function emailOtp()

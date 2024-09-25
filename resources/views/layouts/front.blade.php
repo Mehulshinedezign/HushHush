@@ -449,7 +449,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-8 col-md-8 col-sm-12">
+                                    <div class="col-lg-4 col-md-4 col-sm-6">
                                         <div class="form-group">
                                             <label for="">Condition*</label>
                                             <div class="formfield">
@@ -473,6 +473,32 @@
                                                     </span>
                                                 @enderror
                                             </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-6">
+                                        <div class="form-group">
+                                            <label for="">Choose cancellation Policy*</label>
+                                            <div class="formfield">
+
+                                                <select
+                                                    class="produt_input form-control form-class @error('cancellation_policy') is-invalid @enderror"
+                                                    name="cancellation_policy">
+                                                    <option value="flexiable">flexiable</option>
+                                                    <option value="firm">Firm</option>
+                                                </select>
+                                                <span class="form-icon">
+                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                        alt="img">
+                                                </span>
+                                                @error('cancellation_policy')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#cancellationModal">Read More</a>
+
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12">
@@ -746,8 +772,7 @@
         </div>
     </div>
 
-
-
+@include('modal.cancellationModal')
     {{-- Notifications --}}
     {{-- @include('layouts.notifications') --}}
 

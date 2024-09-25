@@ -80,6 +80,8 @@
                         </a>
                     </div> --}}
                         </div>
+
+
                     @else
                         <div class="list-empty-box">
                             <img src="{{ asset('front/images/Empty 1.svg') }}">
@@ -87,6 +89,19 @@
                         </div>
                     @endif
                 </div>
+            </div>
+            <div class="pagination-main">
+                @if ($products->onFirstPage())
+                    <a href="#" class="pagination-box disabled">Previous</a>
+                @else
+                    <a href="{{ $products->previousPageUrl() }}" class="pagination-box">Previous</a>
+                @endif
+
+                @if ($products->hasMorePages())
+                    <a href="{{ $products->nextPageUrl() }}" class="pagination-box">Next</a>
+                @else
+                    <a href="#" class="pagination-box disabled">Next</a>
+                @endif
             </div>
         </div>
     </section>

@@ -253,12 +253,13 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
             Route::get('user/notification', [App\Http\Controllers\Api\ProfileController::class, 'test']);
 
 
-            
+
             Route::post('/send-verification-email', [App\Http\Controllers\StripeIdentityController::class, 'sendVerificationEmail'])->name('send.verification.email');
             Route::get('/verification/success', [App\Http\Controllers\StripeIdentityController::class, 'verificationSuccess'])->name('verification.success');
             Route::post('/webhook/stripe', [App\Http\Controllers\StripeIdentityController::class, 'handleStripeWebhook']);
+
+            Route::post('/address/store', [App\Http\Controllers\ProfileController::class, 'addressStore'])->name('address.store');
+            Route::delete('/address/{id}', [App\Http\Controllers\ProfileController::class, 'addressDestroy'])->name('address.destroy');
         });
     });
 });
-
-

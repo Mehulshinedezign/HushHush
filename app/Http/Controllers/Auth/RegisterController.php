@@ -133,6 +133,7 @@ class RegisterController extends Controller
 
         UserDetail::create([
             'user_id' => $signUpData->id,
+            'is_default' =>'1',
         ]);
 
         if(isset($data['gov_id'])){
@@ -140,7 +141,7 @@ class RegisterController extends Controller
             $path = $data['gov_id']->store('user_documents');
             $filePath = str_replace("public/", "", $path);
             $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
-    
+
             UserDocuments::create([
                 'user_id' => $signUpData->id,
                 'file' => $fileExtension,

@@ -2,6 +2,8 @@
 
 @section('content')
     <section class="section">
+
+        <div><a href="{{ url()->previous() }}"><i class="fa-solid fa-angle-left"></i></a></div>
         <div class="section-body">
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-12">
@@ -57,17 +59,24 @@
                                             </td>
 
                                             <td>
+                                                @if (
+                                                    $category->name != 'men_shoe' &&
+                                                        $category->name != 'women_shoe' &&
+                                                        $category->name != 'clothing_size' &&
+                                                        $category->name != 'bra_size')
+                                                    <a class="btn btn-success"
+                                                        href="{{ route('admin.editcategory', [$category->id]) }}"
+                                                        title="Edit">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>
 
-                                                <a class="btn btn-success"
-                                                    href="{{ route('admin.editcategory', [$category->id]) }}"
-                                                    title="Edit">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
+
                                                 <a class="btn btn-danger delete-category"
                                                     href="{{ route('admin.deletecategory', [$category->id]) }}"
                                                     title="Delete">
                                                     <i class="fa fa-trash"></i>
                                                 </a>
+                                                @endif
                                                 {{-- <a class="btn btn-primary"
                                                     href="{{ route('admin.categoryproduct', [$category->id]) }}"
                                                     title="Products">

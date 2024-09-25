@@ -621,6 +621,15 @@ class OrderController extends Controller
                 $customerAmount = $order->total - $amount;
             }
 
+
+            if ($order->cancellation_time_left < 1) {
+                  return response()->json([
+                    'status'  => false,
+                    'message' => "Your cancellation time period has gone",
+                    'data'    => []
+                ], 403);
+            }
+
             // Convert to cents
             $customerAmountInCents = intval($customerAmount * 100);
 

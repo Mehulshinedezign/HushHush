@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <section class="section">
+        <div><a href="{{ url()->previous() }}"><i class="fa-solid fa-angle-left"></i></a></div>
         <div class="section-body">
             <x-admin_alert />
             <div class="row">

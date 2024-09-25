@@ -7,13 +7,13 @@ $sizes = [
         "UK" => ["UK4", "UK6", "UK8", "UK10", "UK12", "UK14", "UK16", "UK18", "UK20", "UK22", "UK24", "UK26"],
         "EU" => ["EU32", "EU34", "EU36", "EU38", "EU40", "EU42", "EU44", "EU46", "EU48", "EU50", "EU52", "EU54"],
     ],
-     
+
     'bra_size' => [
         "US" => ["US32A", "US32B", "US32C", "US32D", "US32DD/E", "US32DDD/F", "US32G", "US34A", "US34B", "US34C", "US34D", "US34DD/E", "US34DDD/F", "US34G", "US36A", "US36B", "US36C", "US36D", "US36DD/E", "US36DDD/F", "US36G", "US38A", "US38B", "US38C", "US38D", "US38DD/E", "US38DDD/F", "US38G"],
         "UK" => ["UK32A", "UK32B", "UK32C", "UK32D", "UK32DD", "UK32E", "UK32F", "UK34A", "UK34B", "UK34C", "UK34D", "UK34DD", "UK34E", "UK34F", "UK36A", "UK36B", "UK36C", "UK36D", "UK36DD", "UK36E", "UK36F", "UK38A", "UK38B", "UK38C", "UK38D", "UK38DD", "UK38E", "UK38F"],
         "EU" => ["EU70A", "EU70B", "EU70C", "EU70D", "EU70E", "EU70F", "EU70G", "EU75A", "EU75B", "EU75C", "EU75D", "EU75E", "EU75F", "EU75G", "EU80A", "EU80B", "EU80C", "EU80D", "EU80E", "EU80F", "EU80G", "EU85A", "EU85B", "EU85C", "EU85D", "EU85E", "EU85F", "EU85G"],
     ],
-     
+
     'men_shoe' => [
         "EU" => ["EU39", "EU40", "EU40-41", "EU41", "EU41-42", "EU42", "EU42-43", "EU43", "EU43-44", "EU44", "EU44-45", "EU45", "EU46", "EU47", "EU48", "EU49"],
         "US" => ["US6", "US6.5", "US7", "US7.5", "US8", "US8.5", "US9", "US9.5", "US10", "US10.5", "US11", "US11.5", "US12", "US13", "US14", "US15", "US16"],
@@ -34,9 +34,9 @@ $sizes = [
         "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11",
         "35", "35.5", "36", "36.5", "37", "37.5", "38", "38.5", "39", "40", "40.5", "41",
     ],
-    
-    
-    
+
+
+
 ];
 
 

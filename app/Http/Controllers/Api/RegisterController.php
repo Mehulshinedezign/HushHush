@@ -58,8 +58,10 @@ class RegisterController extends Controller
                 'user_id' => $user->id,
                 // 'address1' =>$data['complete_address'],
                 // 'about' =>$data['about'],
+                'is_default' => '1',
+
             ]);
-            
+
             UserNotification::Create(['user_id' => $user->id]);
 
             // $path = $data['gov_id']->store('user_documents');
