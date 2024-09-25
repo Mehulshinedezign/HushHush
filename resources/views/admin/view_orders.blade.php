@@ -255,6 +255,7 @@
                         </div>
                     @endif
                 </div>
+                {{-- @dd($order->disputeDetails); --}}
                 @if (!is_null($order->disputeDetails))
                     <div class="row">
                         <div class="col-12 col-sm-12 col-lg-12 col-md-12">
@@ -264,9 +265,9 @@
                                     <form action="{{route('admin.resolve-dispute-order', [$order->id])}}" method="post">
                                         @csrf
                                     <select name="status" id="" class="form-control">
-                                        <option value="new">New</option>
-                                        <option value="Viewed">Viewed</option>
-                                        <option value="Resolved">Resolved</option>
+                                        <option value="new" @if(isset($order->disputeDetails->status) && $order->disputeDetails->status == 'new') selected @endif>New</option>
+                                        <option value="Viewed" @if(isset($order->disputeDetails->status) && $order->disputeDetails->status == 'viewed') selected @endif>Viewed</option>
+                                        <option value="Resolved"@if(isset($order->disputeDetails->status) && $order->disputeDetails->status == 'resolved') selected @endif>Resolved</option>
                                     </select>
                                 <button type="submit" class="btn btn-primary mt-4">Resolve Dispute</button>
                                 </form>
@@ -304,21 +305,21 @@
                                                         ? '<span class="badge badge-danger">Disputed</span>'
                                                         : '<span class="badge badge-success">Resolved</span>' !!}
                                                 </li>
-                                                <li class="list-col"><span class="list-item">Amount to Refund : </span>
+                                                {{-- <li class="list-col"><span class="list-item">Amount to Refund : </span>
                                                     ${{ $order->security_option == 'security' && $order->status == 'Picked Up' ? '0.00' : ($order->dispute_status == 'Resolved' && $order->disputeDetails->refund_amount > '0.00' ? $order->disputeDetails->refund_amount : ($order->disputeDetails->refund_amount == '0.00' ? $order->disputeDetails->refund_amount : $order->total)) }}
-                                                </li>
+                                                </li> --}}
                                                 @if (!is_null($order->disputeDetails->resolved_date))
                                                     <li class="list-col"><span class="list-item">Disputed Resolved Date -
                                                             Time : </span>
                                                         <span>{{ date('m/d/Y h:i:a', strtotime($order->disputeDetails->resolved_date)) }}
                                                         </span>
                                                     </li>
-                                                    <li class="list-col">
+                                                    {{-- <li class="list-col">
                                                         <span class="list-item">Refunded Amount : </span>
                                                         <span>
                                                             ${{ is_null($order->disputeDetails->refund_amount) ? '0' : $order->disputeDetails->refund_amount }}
                                                         </span>
-                                                    </li>
+                                                    </li> --}}
                                                 @endif
                                             </ul>
 

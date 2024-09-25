@@ -475,6 +475,10 @@ class OrderController extends Controller
             "gateway_response" => str_replace("Stripe\Transfer JSON: ", "", $transfer)
 
         ]);
+        $user = User::find($order->queryOf->forUser->id);
+        $user->update([
+            'identity_status'=>'paid'
+        ]);
         return true;
     }
     public function addReview(RatingRequest $request)
