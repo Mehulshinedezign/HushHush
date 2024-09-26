@@ -43,7 +43,8 @@ class Product extends Model
         'rent_month',
         'state',
         'country',
-        'deleted_at'
+        'deleted_at',
+        'cancellation_policy',
     ];
 
     protected $appends = [

@@ -12,7 +12,7 @@ use App\Models\Transaction;
 use Stripe, Exception, DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\{AdminSetting, BillingToken, Order, Chat, CustomerBillingDetails, CustomerRating, DisputeOrder, OrderImage, OrderItem, Product, User, RetailerPayout, ProductDisableDate};
+use App\Models\{AdminSetting, BillingToken, Order, Chat, CustomerBillingDetails, CustomerRating, DisputeOrder, OrderImage, OrderItem, Product, User, RetailerPayout, ProductDisableDate, Refund};
 use App\Notifications\{CustomerImageUpload, CustomerImageUploadForReturn, CustomerOrderPickup, CutomerOrderReturn, LenderOrderPickup, LenderOrderReturn, OrderPickUp, OrderReturn, VendorOrderPickedUp, VendorOrderReturn, RateYourExperience,VendorOrderCancelled};
 
 
@@ -118,7 +118,7 @@ class OrderController extends Controller
         if ($order->status != "Waiting") {
             return redirect()->back()->with("warning", 'Order must be in waiting state to upload the images.');
         }
-       
+
         if ($order->customer_confirmed_pickedup == 0) {
             $userId = auth()->user()->id;
             // $removedImageIds = explode(',', $request->removed_images);
@@ -164,10 +164,10 @@ class OrderController extends Controller
                 OrderImage::insert($images);
             }
             // }
-            
-            $lender_name = $order->retailer->name;        
+
+            $lender_name = $order->retailer->name;
             $order->user->notify(new CustomerImageUpload($lender_name));
-           
+
             return redirect()->back()->with('success', 'Images uploaded successfully');
         }
 
@@ -298,7 +298,7 @@ class OrderController extends Controller
 
                 // $file = $request->file('image'.$i);
                 // $path = $file->store('orders/return', 's3');
-                // $url = Storage::disk('s3')->url($path);                    
+                // $url = Storage::disk('s3')->url($path);
                 // $images[] = [
                 //     'order_id' => $order->id,
                 //     'user_id' => $userId,
@@ -434,7 +434,7 @@ class OrderController extends Controller
         $order->load(["transaction", "retailer", "queryOf"]);
         $order_commission = AdminSetting::where('key', 'order_commission')->first();
         $identity_amount = AdminSetting::where('key','identity_commission')->pluck('value')->first();
-       
+
         if (isset($order->queryOf->negotiate_price)) {
             $amount = $order->queryOf->negotiate_price * ($order_commission->value / 100);
             $dealerAmount = $order->total - $amount;
@@ -660,6 +660,7 @@ class OrderController extends Controller
 
             $refundStatus = $stripe->refunds->create([
                 'charge' => $paymentIntentData->latest_charge,
+                'amount ' => $order->total,
             ]);
         } catch (Exception $e) {
             session()->flash('error', str_replace("Charge " . $paymentIntentData->latest_charge, "Order ", $e->getMessage()));
@@ -679,6 +680,13 @@ class OrderController extends Controller
                 "status" => "Cancelled",
                 "cancelled_date" => $dateTime,
                 'cancellation_note' => $request->cancellation_note
+            ]);
+
+            Refund::create([
+                'orderId' => $order->id,
+                'refund_amount' => $order->total,
+                'canceled_by' => auth()->id(),
+                'refund_type' => 'complete',
             ]);
 
             /*UPDATE ORDER ITEMS*/

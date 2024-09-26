@@ -339,7 +339,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="col-lg-4 col-md-4 col-sm-6">
                                         <div class="form-group">
                                             <label for="">Condition*</label>
                                             <div class="formfield">
@@ -371,6 +371,37 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-6">
+                                        <div class="form-group">
+                                            <label for="">Choose cancellation Policy*</label>
+                                            <div class="formfield">
+                                                <select
+                                                    class="produt_input form-control form-class @error('cancellation_policy') is-invalid @enderror"
+                                                    name="cancellation_policy">
+                                                    {{-- <option value="">Condition</option> --}}
+                                                    <option value="flexible"
+                                                        @if ($product->cancellation_policy == 'flexible') selected @endif>Flexible
+                                                    </option>
+                                                    <option value="firm"
+                                                        @if ($product->cancellation_policy == 'firm') selected @endif>Firm
+                                                    </option>
+
+                                                </select>
+                                                <span class="form-icon">
+                                                    <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
+                                                        alt="img">
+                                                </span>
+                                                @error('product_condition')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        {{ $message }}
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#cancellationModal">Read More</a>
+                                        </div>
+                                    </div>
+
+
                                     {{-- <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="form-group">
                                             <label for="">Pickup Location*</label>
@@ -520,6 +551,7 @@
             </div>
         </div>
     </section>
+    @include('modal.cancellationModal')
 @endsection
 
 @push('scripts')

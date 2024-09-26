@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Color;
 use App\Models\NeighborhoodCity;
 use App\Models\Order;
+use App\Models\UserDetail;
 use App\Models\OrderImage;
 use App\Models\Product;
 use App\Models\ProductDisableDate;
@@ -447,6 +448,7 @@ class ProductController extends Controller
                 'rent_day' => $request->rent_day,
                 'rent_week' => $request->rent_week,
                 'rent_month' => $request->rent_month,
+                'cancellation_policy' => $request->cancellation_policy ,
             ];
             // dd($data,$is_bankdetail);
             $product = Product::create($data);
@@ -615,6 +617,7 @@ class ProductController extends Controller
                 'rent_day' => $request->rent_day,
                 'rent_week' => $request->rent_week,
                 'rent_month' => $request->rent_month,
+                'cancellation_policy' => $request->cancellation_policy ,
             ];
 
             $product->update($data);
@@ -746,6 +749,12 @@ class ProductController extends Controller
             $colors = getColors();
 
             $categoryData = $categories->map(function ($category) {
+                if (in_array($category->name, ['women_shoe', 'men_shoe', 'bra_size', 'clothing_size'])) {
+                    $test = 'size.' . $category->name;
+                } else {
+                    $test = 'size.bydefault';
+                }
+                // dd($test);
                 return [
                     'id' => $category->id,
                     'label' => $category->name,
@@ -757,6 +766,7 @@ class ProductController extends Controller
                             'value' => $subCategory->name
                         ];
                     }),
+                    'size' => config($test)
                 ];
             });
 
@@ -1307,7 +1317,7 @@ class ProductController extends Controller
                     'account_added' => $bankdetails,
                     'address_added' => $addresAdded,
                     'fcm_token' => $fcm_token,
-                    'identity'=>$identity,
+                    'identity' => $identity,
 
                 ],
             ], 200);
@@ -1435,6 +1445,11 @@ class ProductController extends Controller
             $colors = getColors();
 
             $categoryData = $categories->map(function ($category) {
+                if (in_array($category->name, ['women_shoe', 'men_shoe', 'bra_size', 'clothing_size'])) {
+                    $test = 'size.' . $category->name;
+                } else {
+                    $test = 'size.bydefault';
+                }
                 return [
                     'id' => $category->id,
                     'label' => $category->name,
@@ -1446,6 +1461,7 @@ class ProductController extends Controller
                             'value' => $subCategory->name
                         ];
                     }),
+                    'size'=>config($test)
                 ];
             });
 
@@ -1609,7 +1625,7 @@ class ProductController extends Controller
             $product_id = $query->product_id;
             $productDetails = $this->getProduct($product_id);
             $user_id = $productDetails->user_id;
-            $user = User::findOrFail($user_id);
+            $user = User::findOrFail(id: $user_id);
             // dd($user);
 
             $productDetails->all_images = $productDetails->allImages->map(function ($image) {
@@ -1642,7 +1658,7 @@ class ProductController extends Controller
                 'condition' => $productDetails->condition,
                 'brand' => $productDetails->get_brand->name ?? null,
                 'color' => $productDetails->get_color->name ?? null,
-                'size' => $productDetails->get_size->name ?? null,
+                'size' => $productDetails->size ?? null,
                 'rent_day' => $productDetails->rent_day,
                 'rent_week' => $productDetails->rent_week,
                 'rent_month' => $productDetails->rent_month,
@@ -1663,15 +1679,25 @@ class ProductController extends Controller
             $price = $query->negotiate_price  ?? $productDetails->getCalculatedPrice($query->date_range);
             $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
 
+            if($query->delivery_option == 'ship_to_me')
+            {
+                $address = UserDetail::where('user_id',$query->user_id)->where('is_default','1')->get();
+            }
+            else
+            {
+                $address =$productDetails->locations;
+            }
+
             return response()->json([
                 'status' => true,
                 'message' => 'Product details fetched successfully',
                 'data' => [
                     'product' => $productDetailsArray,
                     'lender' => $user,
-                    'locations' => $productDetails->locations,
+                    'locations' => $address,
                     'queries' => $query,
                     'price' => $price,
+
                 ],
             ], 200);
         } catch (\Exception $e) {
@@ -2183,7 +2209,7 @@ class ProductController extends Controller
 
             $userDetails = User::with(['userDetail'])->whereId($id)->firstOrFail();
 
-            $products = Product::with(['locations', 'allImages', 'thumbnailImage', 'get_size', 'favorites', 'category', 'disableDates', 'get_brand', 'get_color'])->where('user_id',$id)
+            $products = Product::with(['locations', 'allImages', 'thumbnailImage', 'get_size', 'favorites', 'category', 'disableDates', 'get_brand', 'get_color'])->where('user_id', $id)
                 ->get();
 
             $transformedProducts = $products->map(function ($product) {
@@ -2317,10 +2343,10 @@ class ProductController extends Controller
                 // 'status'=>
             ];
             $brand = strToLower($request->name);
-            $exsist = Brand::where('name',$brand)->first();
-            if($exsist){
+            $exsist = Brand::where('name', $brand)->first();
+            if ($exsist) {
                 $product = $exsist;
-            }else{
+            } else {
 
                 $product = Brand::create($data);
             }
@@ -2330,7 +2356,7 @@ class ProductController extends Controller
                 'data' => [
                     'id' => $product->id,
                     'label' => $product->name,
-                    'value'=>$product->name,
+                    'value' => $product->name,
                 ],
             ], 200);
         } catch (\Exception $e) {

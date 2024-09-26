@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('city')->nullable();
             $table->text('zipcode')->nullable();
             $table->text('about')->nullable();
+            $table->enum('is_default', ['0', '1'])->default('0');
             $table->timestamps();
         });
     }

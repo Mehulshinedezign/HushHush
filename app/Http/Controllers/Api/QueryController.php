@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Query;
 use App\Models\User;
+use App\Models\UserDetail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -43,7 +44,8 @@ class QueryController extends Controller
                 'query_message' => $request->query_message,
                 'status' => 'PENDING',
                 'date_range' => $startDate . ' - ' . $endDate,
-                'delivery_option' => $request->delivery_option
+                'delivery_option' => $request->delivery_option,
+                'address_id' => $request->address_id,
             ]);
             // $forUser = User::Where('id', $product->user_id)->with('usernotification')->get();
             // dd('here');
@@ -106,7 +108,8 @@ class QueryController extends Controller
                     if ($query->delivery_option == 'pick_up') {
                         $address = $product->productCompleteLocation ?? Null;
                     } else {
-                        $address = auth()->user()->userDetail ?? NUll;
+                        $delivery_address = UserDetail::where('id',$query->address_id)->first();
+                        $address = $delivery_address ?? NUll;
                     }
                     // dd($price);
 
@@ -185,7 +188,8 @@ class QueryController extends Controller
                     if ($query->delivery_option == 'pick_up') {
                         $address = $product->productCompleteLocation ?? null;
                     } else {
-                        $address = auth()->user()->userDetail ?? null;
+                        $delivery_address = UserDetail::where('id',$query->address_id)->first();
+                        $address = $delivery_address ?? NUll;
                     }
                     return [
                         'id' => $query->id ?? null,

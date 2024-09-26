@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="section-body">
+        <div><a href="{{ url()->previous() }}"><i class="fa-solid fa-angle-left"></i></a></div>
         <div class="card">
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-6">

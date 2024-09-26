@@ -18,6 +18,7 @@ class QueryController extends Controller
 {
     public function store(Request $request)
     {
+        // dd($request->all());
         DB::beginTransaction();
 
         try {
@@ -90,6 +91,7 @@ class QueryController extends Controller
                 'status' => 'PENDING',
                 'date_range' => $startDate . ' - ' . $endDate,
                 'delivery_option' => $request->delivery_option,
+                'address_id' => $request->address_id,
             ];
 
             Query::create($data);

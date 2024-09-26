@@ -8,7 +8,7 @@
             <div class="cust-nav-header-sec">
                 <div class="logo mobile-logo">
                     <a class="navbar-brand" href=" {{ url('/') }} "><img
-                            src="{{ asset('front/images/HUSH HUSH CLOSET.svg') }}" alt="logo" width="91"
+                            src="{{ asset('front/images/HUSH HUSH CLOSET.svg') }}" alt="logo" width="220"
                             height="63"></a>
                 </div>
                 <div class="collapse navbar-collapse cust-navbar-header" id="navbarNav">
@@ -98,7 +98,7 @@
                                                 password</a></li>
                                         {{-- <li><a class="dropdown-item" href="{{ route('common.chat') }}"><i
                                                     class="fa-solid fa-comment"></i>Chat
-                                             
+
                                             </a></li> --}}
                                         {{-- <li><a class="dropdown-item" href="{{ route('order.spent.transaction') }}"><i
                                                 class="fa-solid fa-comment"></i>Spent Transaction

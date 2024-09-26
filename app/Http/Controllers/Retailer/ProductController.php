@@ -187,6 +187,7 @@ class ProductController extends Controller
                 'modified_by' => $userId,
                 'modified_user_type' => 'Self',
                 'non_available_dates' => $request->non_available_dates ?? 0,
+                'cancellation_policy' => $request->cancellation_policy ,
             ];
             if(isset($request->other_brand)){
                 Brand::create([
@@ -425,6 +426,8 @@ class ProductController extends Controller
                 'modified_by' => $userId,
                 'modified_user_type' => 'Self',
                 'non_available_dates' => $request->non_available_dates ?? 1,
+                'cancellation_policy' => $request->cancellation_policy ,
+
             ];
             if(isset($request->other_brand)){
                 Brand::create([

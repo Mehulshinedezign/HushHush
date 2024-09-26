@@ -9,7 +9,7 @@ class UserDetail extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id','address1','address2','country','state','city','about','complete_address','zipcode'];
+    protected $fillable = ['user_id','address1','address2','country','state','city','about','complete_address','zipcode','is_default'];
 
      /**
       * User country
@@ -42,5 +42,10 @@ class UserDetail extends Model
       public function city()
       {
           return $this->belongsTo(City::class);
+      }
+
+      public function users()
+      {
+        return $this->belongsTo(User::class);
       }
 }

@@ -23,6 +23,7 @@ class ReportedProduct extends Model
     public function product()
     {
         return $this->belongsTo(Product::class)->withTrashed();
+
     }
 
     public function countOccurrences()

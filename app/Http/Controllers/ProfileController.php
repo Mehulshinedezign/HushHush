@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Country, State, City, Notification, NotificationSetting, Product, RetailerBankInformation, UserDocuments, User, UserCard, UserNotification};
+use App\Models\{Country, State, City, Notification, NotificationSetting, Product, RetailerBankInformation, UserDocuments, User, UserCard, UserNotification, UserDetail};
 use Hash, Stripe, Exception, DateTime;
 use App\Http\Requests\{ProfileRequest, UpdateUserProfile, UserDetailRequest, AccountSettingRequest};
 use Illuminate\Support\Facades\Storage;
@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\{Auth, Session};
 
 class ProfileController extends Controller
 {
-    public function handle(){
+    public function handle()
+    {
         return view('edit_prodcut');
     }
     public function profile()
@@ -27,8 +28,8 @@ class ProfileController extends Controller
             $file = 'retailer.profile';
         }
 
-        $products = Product::where('user_id',$retailer->id)->get();
-        return view($file,compact('products','retailer'));
+        $products = Product::where('user_id', $retailer->id)->get();
+        return view($file, compact('products', 'retailer'));
     }
 
     public function edit_profile()
@@ -498,10 +499,10 @@ class ProfileController extends Controller
         return view('customer.change_password');
     }
 
-    public function changeProfile(User $user,Request $request)
+    public function changeProfile(User $user, Request $request)
     {
         $bank = $request->input('bank') ?? null;
-        return view('customer.change_profile', compact('user','bank'));
+        return view('customer.change_profile', compact('user', 'bank'));
     }
 
     public function saveUserprofile(UpdateUserProfile $request)
@@ -534,7 +535,7 @@ class ProfileController extends Controller
                 'state' => $request->state,
                 'city' => $request->city,
                 'about' => $request->about ?? null,
-                'zipcode'=>$request->zipcode ??null,
+                'zipcode' => $request->zipcode ?? null,
             ];
 
             //  RetailerBankInformation::where('retailer_id', auth()->user()->id)->first();
@@ -569,9 +570,9 @@ class ProfileController extends Controller
         }
     }
 
-    public function accountSetting(AccountSettingRequest $request, $type=null)
+    public function accountSetting(AccountSettingRequest $request, $type = null)
     {
-        $user =auth()->user();
+        $user = auth()->user();
         $userdetail = [
             'complete_address' => $request->complete_address,
             'address1' => $request->addressline1,
@@ -580,25 +581,26 @@ class ProfileController extends Controller
             'state' => $request->state,
             'city' => $request->city,
             'about' => $request->about ?? null,
-            'zipcode'=>$request->zipcode ??null,
+            'zipcode' => $request->zipcode ?? null,
         ];
         $user->userDetail()->updateOrCreate(
             ['user_id' => $user->id],
             $userdetail
         );
-        if($type=='product'){
+        if ($type == 'product') {
             // session()->flash('showModal3', true);
-            return response()->json(['type'=>'product']);
-        }else{
-            return response()->json(['type'=>'query']);
+            return response()->json(['type' => 'product']);
+        } else {
+            return response()->json(['type' => 'query']);
         }
     }
 
-    public function notificationPrefrence(Request $request){
+    public function notificationPrefrence(Request $request)
+    {
 
         $user = auth()->user();
 
-        try{
+        try {
             $fieldData = [
                 'query_receive' => 'query_receive',
                 'accept_item' => 'accept_item',
@@ -624,7 +626,7 @@ class ProfileController extends Controller
             }
             return response()->json([
                 'status'    =>  true,
-                'message' =>'Notification set successfully!'
+                'message' => 'Notification set successfully!'
             ], 200);
 
             // return response()->json([
@@ -638,12 +640,83 @@ class ProfileController extends Controller
             //         'price' => $price,
             //     ],
             // ], 200);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'success'    =>  false,
                 'msg'      =>  $e->getMessage()
             ]);
         }
+    }
+    public function addressStore(Request $request)
+    {
+        $validated = $request->validate([
+            'city' => 'required',
+            'state' => 'required',
+            'country' => 'required',
+            // 'zipcode' => 'required',
+        ]);
 
+        $address = UserDetail::updateOrCreate(
+            ['id' => $request->address_id],
+            [
+                'user_id' => auth()->id(),
+                'address1' => $request->address1,
+                'address2' => $request->address2,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country' => $request->country,
+                'zipcode' => $request->zipcode ?? 'N/A',
+                'complete_address' => "{$request->address1}, {$request->address2}, {$request->city}, {$request->state}, {$request->country} - {$request->zipcode}",
+            ]
+        );
+
+        if ($request->is_default == '1') {
+            UserDetail::where('user_id', auth()->id())
+            ->where('is_default', '1')
+            ->update(['is_default' => '0']);
+
+            UserDetail::where('id',  $address->id)->update(['is_default' => '1']);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Address saved successfully',
+            'data' => $address,
+        ]);
+    }
+
+
+    // Delete Address
+    public function addressDestroy($id)
+    {
+        $user = auth()->user();
+
+        $multipleAddresses = UserDetail::where('user_id', $user->id)->get();
+
+        if ($multipleAddresses->count() == 1) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You cannot delete the only address associated with your account.',
+            ], 400);
+        }
+
+        $address = UserDetail::findOrFail($id);
+
+        if ($address->is_default == '1') {
+            $newDefaultAddress = UserDetail::where('user_id', $user->id)
+                ->where('id', '!=', $id)
+                ->first();
+
+            if ($newDefaultAddress) {
+                $newDefaultAddress->update(['is_default' => '1']);
+            }
+        }
+
+        $address->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Address deleted successfully, and a new default address has been assigned if necessary.',
+        ]);
     }
 }

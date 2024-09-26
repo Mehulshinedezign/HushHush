@@ -159,6 +159,7 @@ class ProfileController extends Controller
                     'city' => $city,
                     'about' => $about,
                     'zipcode' => $zipcode,
+                    'is_default' => '1'
 
 
                 ]
@@ -615,5 +616,126 @@ class ProfileController extends Controller
         }
 
         return response()->json(['status' => 'success', 'message' => 'Notification sent successfully', 'response' => $response]);
+    }
+
+    public function getAddress()
+    {
+        try {
+            $address = UserDetail::where('user_id', auth()->id())->get();
+            return response()->json([
+                'status' => true,
+                'data' => $address,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'errors' => []
+            ], 500);
+        }
+    }
+
+    public function saveAddress(Request $request)
+    {
+        // dd('here', $request->all());
+        $user = auth()->user();
+
+        try {
+            // Validate input data
+            $validator = Validator::make($request->all(), [
+                'zipcode' => 'required',
+                'address1' => 'required',
+                // 'address2' => 'required',
+                'country' => 'required',
+                'state' => 'required',
+                'city' => 'required',
+            ]);
+
+            // Validation fails
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validation Error',
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+
+            // Create or update the address
+            $address = UserDetail::updateOrCreate(
+                ['id' => $request->address_id],
+                [
+                    'user_id' => auth()->id(),
+                    'address1' => $request->address1,
+                    'address2' => $request->address2 ?? null,
+                    'city' => $request->city,
+                    'state' => $request->state,
+                    'country' => $request->country,
+                    'zipcode' => $request->zipcode ?? 'N/A',
+                    'complete_address' => "{$request->address1}, {$request->address2}, {$request->city}, {$request->state}, {$request->country} - {$request->zipcode}",
+                    'is_default' => $request->has('is_default') ? $request->is_default : '0', // Ensure a default value is set if not provided
+                ]
+            );
+
+            // Handle the default address logic
+            if ($request->is_default == '1') {
+                // Reset other default addresses for the user
+                UserDetail::where('user_id', auth()->id())
+                    ->where('is_default', '1')
+                    ->update(['is_default' => '0']);
+
+                UserDetail::where('user_id', $address->user_id)->update(['is_default' => '0']);
+
+                // Then, set the selected address as the default
+                $is_default = UserDetail::where('id', $address->id)->update(['is_default' => '1']);
+
+                // Set the newly created/updated address as default
+
+            }
+
+            return response()->json([
+                'status' => true,
+                'data' => $address,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'errors' => []
+            ], 500);
+        }
+    }
+
+
+    public function addressDestroy($id)
+    {
+        $user = auth()->user();
+
+        $multipleAddresses = UserDetail::where('user_id', $user->id)->get();
+
+        if ($multipleAddresses->count() == 1) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You cannot delete the only address associated with your account.',
+            ], 400);
+        }
+
+        $address = UserDetail::findOrFail($id);
+
+        if ($address->is_default == '1') {
+            $newDefaultAddress = UserDetail::where('user_id', $user->id)
+                ->where('id', '!=', $id)
+                ->first();
+
+            if ($newDefaultAddress) {
+                $newDefaultAddress->update(['is_default' => '1']);
+            }
+        }
+
+        $address->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Address deleted successfully, and a new default address has been assigned if necessary.',
+        ], 200);
     }
 }

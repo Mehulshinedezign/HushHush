@@ -490,7 +490,6 @@
                     <div class="book-item-main">
                         <div class="book-item-profile">
                             <div class="book-item-profile-img">
-                                <!-- <img src="images/style-single2.png" alt="img"> -->
                                 @if ($productImages->isNotEmpty())
                                     @foreach ($productImages as $image)
                                         <div><img src="{{ $image->file_path }}" alt="" loading="lazy"></div>
@@ -540,6 +539,8 @@
                             <input type="hidden" name="for_user"
                                 value="{{ jsencode_userdata($product->user_id) }}">
                             <input type="hidden" name="product_id" value="{{ jsencode_userdata($product->id) }}">
+                            <input type="hidden" id="address_id" name="address_id"
+                                value="{{ @$authUser->userDetail->id }}">
                             <div class="book-item-date">
                                 <div class="form-group">
                                     <label for="">Select your Rental date</label>
@@ -590,10 +591,12 @@
                                             placeholder="Selected option will appear here"
                                             value="Please select the value">
                                         @error('delivery_option')
-                                            <span class="invalid-feedback" role="alert">
-                                                {{ $message }}
-                                            </span>
+                                            <span class="invalid-feedback" role="alert">{{ $message }}</span>
                                         @enderror
+
+
+                                        <a href="javascript:void(0);" id="manage_address_link"
+                                            class="manage-address-link">Change Address</a>
                                     @elseif(
                                         $product->productCompleteLocation &&
                                             $product->productCompleteLocation->manul_pickup_location == '1' &&
@@ -616,13 +619,22 @@
 
                                         <input type="text" id="selected_value" readonly class="form-control"
                                             value="{{ @$authUser->userDetail->complete_address }}">
+                                        <input type="hidden" value="{{ @$authUser->userDetail->id }}"
+                                            name='address_id'>
+
+                                        <a href="javascript:void(0);" id="manage_address_link"
+                                            class="manage-address-link">Change Address</a>
                                     @else
                                         <input type="text" id="ship" readonly class="form-control"
                                             placeholder="No available pickup or shipment location">
                                     @endif
-
-
                                 </div>
+
+
+
+
+
+
                             </div>
 
                             <button type="button" class="button primary-btn full-btn mt-3 mb-3"
@@ -630,6 +642,9 @@
                         </form>
 
                     </div>
+                    @auth
+                        @include('modal.addressModal')
+                    @endauth
                 </div>
             </div>
         </div>
@@ -641,7 +656,6 @@
     document.getElementById('report-btn').addEventListener('click', function() {
         var productId = this.getAttribute('data-product-id');
 
-        // Open Swal for confirmation
         Swal.fire({
             title: 'Are you sure?',
             text: "Do you really want to report this product?",
@@ -652,7 +666,6 @@
             confirmButtonText: 'Yes, report it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Send the report request via AJAX
                 fetch(`/report-product/${productId}`, {
                         method: 'POST',
                         headers: {
@@ -689,15 +702,28 @@
     });
 </script>
 <script>
+    document.getElementById('manage_address_link').addEventListener('click', function() {
+        // Open the modal when clicking on "Change Address"
+        new bootstrap.Modal(document.getElementById('addressModal')).show();
+    });
+
+    // Function to handle address selection from the modal
+    function selectAddress(id, fullAddress) {
+        // Update selected address in the form
+        document.getElementById('selected_value').value = fullAddress;
+
+        // Update hidden address_id field
+        document.getElementById('address_id').value = id;
+    }
+</script>
+<script>
     $('.sendQuery').on('click', function() {
         console.log('herer', $('#saveProfile'))
         //    var url={{ route('Userprofile', ['type' => 'query']) }}
         var url = APP_URL + '/update-profile/query';
         $('#saveProfile').attr('action', url);
     })
-    $('.zoomout').on('click', function() {
-        $(this).toggleClass('img-scalable');
-    })
+
 
     $('.slider-content').slick({
         slidesToShow: 1,
@@ -743,97 +769,118 @@
         focusOnSelect: true
     });
 
+
+
+
     $(document).ready(function() {
-        $('#Askquery').on('click', function(e) {
-            let form = $('form#Sendquery')[0];
-            let formData = new FormData(form);
-            let hasErrors = false;
+        $(document).ready(function() {
+            $('#Askquery').on('click', function(e) {
+                let form = $('form#Sendquery')[0];
+                let formData = new FormData(form);
+                let hasErrors = false;
 
-            // Validate Rental Date
-            if (!$('#rental_dates').val()) {
-                iziToast.error({
-                    title: 'Error',
-                    message: 'Please select a rental date.',
-                    position: 'topRight',
-                });
-                hasErrors = true;
-            }
+                // Check if rental dates are selected
+                if (!$('#rental_dates').val()) {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Please select a rental date.',
+                        position: 'topRight',
+                    });
+                    hasErrors = true;
+                }
 
-            if (hasErrors) {
-                e.preventDefault(); // Prevent form submission if there are errors
-                return;
-            }
-
-            if ($('#Sendquery').valid()) {
-                $('#Askquery').prop('disabled', true);
-                var url = `{{ route('query') }}`;
-                $.ajax({
-                    type: "post",
-                    url: url,
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    beforeSend: function() {
-                        $('body').addClass('loading');
-                    },
-                    complete: function() {
-                        $('body').removeClass('loading');
-                    },
-                    success: function(response) {
-                        var modalContent = '';
-                        if (response.success) {
-                            modalContent =
-                                `<div class="success-text" role="alert"><img src="` +
-                                "{{ asset('front/images/query1.png') }}" +
-                                `" style="max-width: 180px;">` + response.message +
-                                `</div>`;
-                        } else {
-                            // modalContent = '<div class="alert alert-danger" role="alert">' +
-                            //     response.message + '</div>';
-                            iziToast.error({
-                                title: 'Error',
-                                message: response.message,
-                                position: 'topRight',
-                            });
-                            return;
-                        }
-
-                        $('#query_msg .modal-body').html(
-                            '<button type="button" class="btn-close" id="closeModalBtn">&times;</button>' +
-                            modalContent
-                        );
-
-                        $('#query_msg').modal('show');
-                        $('#Askquery').prop('disabled', false);
-                        $("#Sendquery")[0].reset();
-                        $('#closeModalBtn').on('click', function() {
-                            $('#query_msg').modal('hide');
-                            location.reload();
+                // Determine selected delivery option and get the associated address_id
+                if ($('#ship_to_me').is(':checked')) {
+                    // Use the existing address ID for "Ship to Me" option
+                    let addressId = $('#address_id').val();
+                    formData.append('address_id', addressId);
+                    if (!addressId) {
+                        iziToast.error({
+                            title: 'Error',
+                            message: 'Please select an address for shipping.',
+                            position: 'topRight',
                         });
-                    },
-                    error: function(response) {
-                        $('#Askquery').prop('disabled', false);
-                        $('#query_msg .modal-body').html(
-                            '<button type="button" class="close" id="closeModalBtn">&times;</button>' +
-                            '<div class="alert alert-danger" role="alert">' + response
-                            .message + '</div>'
-                        );
-                        $('#query_msg').modal('show');
-                        $('#closeModalBtn').on('click', function() {
-                            $('#query_msg').modal('hide');
-                            location.reload();
-                        });
+                        hasErrors = true;
                     }
-                });
-            } else {
-                e.preventDefault(); // Prevent the default action of the button click
-            }
+                } else if ($('#pick_up').is(':checked')) {
+                    // If "Pick Up" is selected, clear the address_id as it's not needed
+                    formData.delete('address_id');
+                }
+
+                // If there are errors, prevent form submission
+                if (hasErrors) {
+                    e.preventDefault();
+                    return;
+                }
+
+                // Proceed if form is valid
+                if ($('#Sendquery').valid()) {
+                    var url = `{{ route('query') }}`;
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        beforeSend: function() {
+                            $('body').addClass('loading');
+                        },
+                        complete: function() {
+                            $('body').removeClass('loading');
+                        },
+                        success: function(response) {
+                            var modalContent = '';
+                            if (response.success) {
+                                modalContent = `<div class="success-text" role="alert">
+                                            <img src="{{ asset('front/images/query1.png') }}" style="max-width: 180px;">
+                                            ${response.message}
+                                        </div>`;
+                            } else {
+                                iziToast.error({
+                                    title: 'Error',
+                                    message: response.message,
+                                    position: 'topRight',
+                                });
+                                return;
+                            }
+
+                            $('#query_msg .modal-body').html(
+                                `<button type="button" class="btn-close" id="closeModalBtn">&times;</button>` +
+                                modalContent
+                            );
+
+                            $('#query_msg').modal('show');
+                            $('#Askquery').prop('disabled', false);
+                            $("#Sendquery")[0].reset();
+                            $('#closeModalBtn').on('click', function() {
+                                $('#query_msg').modal('hide');
+                                location.reload();
+                            });
+                        },
+                        error: function(response) {
+                            $('#Askquery').prop('disabled', false);
+                            $('#query_msg .modal-body').html(
+                                `<button type="button" class="close" id="closeModalBtn">&times;</button>
+                         <div class="alert alert-danger" role="alert">${response.message}</div>`
+                            );
+                            $('#query_msg').modal('show');
+                            $('#closeModalBtn').on('click', function() {
+                                $('#query_msg').modal('hide');
+                                location.reload();
+                            });
+                        }
+                    });
+                } else {
+                    e.preventDefault();
+                }
+            });
         });
 
-        // Date range picker setup
+
+
         var queryDates = @json($querydates);
         var disableDates = @json($disable_dates);
         var disabledDateRanges = queryDates.map(function(query) {
@@ -874,14 +921,13 @@
             opens: 'right',
             minDate: moment().startOf('day'),
             isInvalidDate: isDateDisabled,
-            parentEl: 'body' // Ensure the calendar moves with the page scroll
+            parentEl: 'body'
         }).on('apply.daterangepicker', function(ev, picker) {
             var startDate = picker.startDate;
             var endDate = picker.endDate;
             var duration = endDate.diff(startDate, 'days');
 
-            var count = {{ $product->min_days_rent_item }}; // Retrieve the minimum rent days
-
+            var count = {{ $product->min_days_rent_item }};
             if (duration < count - 1) {
                 iziToast.error({
                     title: 'Error',
@@ -897,49 +943,229 @@
         });
     });
 
+
     document.addEventListener('DOMContentLoaded', function() {
         const radioButtons = document.querySelectorAll('input[name="delivery_option"]');
         const selectedValueInput = document.getElementById('selected_value');
+        const manageAddressLink = document.getElementById('manage_address_link');
 
-        // Function to update the value based on selected radio button
         const updateSelectedValue = () => {
-            const checkedRadio = document.querySelector(
-                'input[name="delivery_option"]:checked');
+            const checkedRadio = document.querySelector('input[name="delivery_option"]:checked');
             if (checkedRadio) {
                 if (checkedRadio.id === 'pick_up') {
                     selectedValueInput.value =
-                        "{{ @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state }}";
+                        "{{ @$product->productCompleteLocation->city . ' ' . @$product->productCompleteLocation->state }}";
+                    manageAddressLink.style.display =
+                        'none';
                 } else if (checkedRadio.id === 'ship_to_me') {
                     selectedValueInput.value =
                         "{{ @$authUser->userDetail->complete_address }}";
+                    manageAddressLink.style.display =
+                        'block';
                 }
             } else {
                 selectedValueInput.value = "Please select one of the above options";
+                manageAddressLink.style.display = 'none';
             }
         };
 
-        // Initially call the function to set the default value
         updateSelectedValue();
 
-        // Add event listeners to radio buttons
         radioButtons.forEach(radio => {
             radio.addEventListener('change', updateSelectedValue);
         });
+
+        manageAddressLink.addEventListener('click', function() {
+            $('#addressModal').modal('show');
+        });
+
+        document.querySelectorAll('input[name="selected_address"]').forEach(addressRadio => {
+            addressRadio.addEventListener('change', function() {
+                const selectedAddress = this.nextElementSibling.textContent;
+                selectedValueInput.value = selectedAddress;
+                $('#addressModal').modal('hide');
+            });
+        });
     });
 
-    // Function to open the modal and display the image
+    document.addEventListener('DOMContentLoaded', () => {
+        const manageAddressLink = document.getElementById('manage_address_link');
+        const selectedValueInput = document.getElementById('selected_value');
+
+        const initializeAddressManagement = () => {
+            const addressList = document.querySelectorAll('.complete-address');
+
+            addressList.forEach((address, index) => {
+                address.addEventListener('click', () => {
+                    document.querySelectorAll('.address-details').forEach((details, i) => {
+                        details.classList.toggle('d-none', i !== index);
+                    });
+                });
+            });
+
+            document.getElementById('addNewAddressBtn').addEventListener('click', showAddAddressForm);
+            setupEditAndDeleteButtons();
+            setupAddressForm();
+        };
+
+        $(document).ready(function() {
+            $('#addNewAddressBtn').click(function() {
+                $('#addEditAddressForm').find(
+                        'input[type="text"], input[type="file"], input[type="email"], select, textarea'
+                    )
+                    .val('');
+            });
+        });
+
+        const showAddAddressForm = () => {
+            document.getElementById('formTitle').textContent = 'Add Address';
+            document.getElementById('addEditAddressForm').classList.remove('d-none');
+            document.getElementById('addressForm').reset();
+            document.getElementById('address_id').value = '';
+        };
+
+        const setupEditAndDeleteButtons = () => {
+            document.querySelectorAll('.edit-address').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = this.dataset.index;
+                    const addressData = JSON.parse(document.getElementById(
+                        `address-details-${index}`).dataset.address);
+                    populateAddressForm(addressData);
+                });
+            });
+
+            document.querySelectorAll('.delete-address').forEach(button => {
+                button.addEventListener('click', function() {
+                    const addressId = this.dataset.id;
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "Do you really want to delete this address?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            deleteAddress(addressId);
+                        }
+                    });
+                });
+            });
+        };
+
+        const populateAddressForm = (data) => {
+            document.getElementById('formTitle').textContent = 'Edit Address';
+            document.getElementById('addEditAddressForm').classList.remove('d-none');
+            document.getElementById('address_id').value = data.id;
+            document.getElementById('autocomplete').value = data.complete_address;
+            document.getElementById('street_number').value = data.address1;
+            document.getElementById('route').value = data.address2;
+            document.getElementById('locality').value = data.city;
+            document.getElementById('administrative_area_level_1').value = data.state;
+            document.getElementById('country').value = data.country;
+            document.getElementById('postal_code').value = data.zipcode;
+            document.getElementById('is_default').checked = data.is_default;
+        };
+
+        const deleteAddress = (id) => {
+            $.ajax({
+                url: `/address/${id}`,
+                method: 'DELETE',
+                success: (response) => {
+                    Swal.fire({
+                        title: 'Success',
+                        text: response.message,
+                        icon: 'success',
+                    }).then(() => {
+                        setTimeout(() => location.reload(), 1500);
+                    });
+                },
+                error: (response) => {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.responseJSON
+                            .message,
+                        icon: 'error',
+                    });
+                }
+            });
+        };
+
+        const setupAddressForm = () => {
+            document.getElementById('submitAddressBtn').addEventListener('click', () => {
+                const formData = {
+                    address_id: document.getElementById('address_id').value,
+                    address1: document.getElementById('street_number').value,
+                    address2: document.getElementById('route').value,
+                    city: document.getElementById('locality').value,
+                    state: document.getElementById('administrative_area_level_1').value,
+                    country: document.getElementById('country').value,
+                    zipcode: document.getElementById('postal_code').value,
+                    is_default: document.getElementById('is_default').checked ? 1 : 0,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/address/store',
+                    data: formData,
+                    success: (response) => {
+                        Swal.fire('Success', response.message, 'success');
+                        setTimeout(() => location.reload(), 1500);
+                    },
+                    error: (xhr) => {
+                        Swal.fire('Error', xhr.responseJSON.message, 'error');
+                    }
+                });
+            });
+        };
+
+        const initAutocomplete = () => {
+            const autocomplete = new google.maps.places.Autocomplete(document.getElementById(
+                'autocomplete'), {
+                types: ['geocode']
+            });
+
+            autocomplete.addListener('place_changed', () => {
+                const place = autocomplete.getPlace();
+                const addressComponents = place.address_components.reduce((acc, component) => {
+                    acc[component.types[0]] = component.long_name;
+                    return acc;
+                }, {});
+
+                $('#street_number').val(addressComponents.street_number || '');
+                $('#route').val(addressComponents.route || '');
+                $('#locality').val(addressComponents.locality || '');
+                $('#administrative_area_level_1').val(addressComponents
+                    .administrative_area_level_1 || '');
+                $('#country').val(addressComponents.country || '');
+                $('#postal_code').val(addressComponents.postal_code || '');
+            });
+        };
+
+        manageAddressLink.addEventListener('click', () => {
+            initializeAddressManagement();
+            initAutocomplete();
+        });
+    });
+
+
+
+
     function openModal(src) {
         const modal = document.getElementById("imageModal");
         const modalImg = document.getElementById("modalImage");
 
-        modal.style.display = "block"; // Show the modal
-        modalImg.src = src; // Set the image source to the clicked image
+        modal.style.display = "block";
+        modalImg.src = src;
     }
 
-    // Function to close the modal
     function closeModal() {
         const modal = document.getElementById("imageModal");
-        modal.style.display = "none"; // Hide the modal
+        modal.style.display = "none";
     }
 </script>
 
