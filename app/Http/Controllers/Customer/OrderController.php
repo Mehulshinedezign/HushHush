@@ -443,8 +443,14 @@ class OrderController extends Controller
        
 
         if (isset($order->queryOf->negotiate_price)) {
-            $amount = $order->queryOf->negotiate_price * ($order_commission->value / 100);
-            $dealerAmount = $order->total - $amount;
+            if($order_commission->type=='Percentage'){
+
+                $amount = $order->queryOf->negotiate_price * ($order_commission->value / 100);
+                $dealerAmount = $order->total - $amount;
+            }else{
+                $amount = $order->queryOf->negotiate_price - ($order_commission->value);
+                $dealerAmount = $order->total - $amount;
+            }
         } else {
             $amount = $order->queryOf->getCalculatedPrice($order->queryOf->date_range) * ($order_commission->value / 100);
             $dealerAmount = $order->total - $amount;

@@ -821,7 +821,7 @@
         });
 
         $(document).on('click','.non-availability',function(){
-            $('.daterangepicker, .ltr, .show-calendar, .opensright').addClass('testCheck')
+            $('.daterangepicker, .ltr, .show-calendar, .opensright').last().addClass('testCheck')
         })
 
         document.getElementById('identity').addEventListener('click', async function() {

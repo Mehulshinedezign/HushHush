@@ -84,8 +84,12 @@ class BookingController extends Controller
         if(isset(auth()->user()->identity_status) && auth()->user()->identity_status=='unpaid')
         {
            $orderData['total'] =jsdecode_userdata($request->total_payment) - $identity_amount;
+        //    $transactionData['total']  = jsdecode_userdata($request->total_payment) - $identity_amount;
+
         }else{
            $orderData['total'] =jsdecode_userdata($request->total_payment);
+        //    $transactionData['total']  = jsdecode_userdata($request->total_payment);
+
         }
 
         $order = Order::create($orderData);
@@ -156,14 +160,22 @@ class BookingController extends Controller
         // ]);
 
 
-        $transaction = Transaction::create([
+        $transactionData = [
             'payment_id' => $status->id,
             'user_id' => $user->id,
-            'total' => jsdecode_userdata($request->total_payment),
             'date' => $date,
             'status' => 'Completed',
             'gateway_response' => $status
-        ]);
+        ];
+        if(isset(auth()->user()->identity_status) && auth()->user()->identity_status=='unpaid')
+        {
+           $transactionData['total']  = jsdecode_userdata($request->total_payment) - $identity_amount;
+
+        }else{
+           $transactionData['total']  = jsdecode_userdata($request->total_payment);
+
+        }
+       $transaction= Transaction::create($transactionData);
         $user = auth()->user();
         $user->update([
             'identity_status'=>'paid'
