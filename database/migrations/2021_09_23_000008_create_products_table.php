@@ -35,7 +35,7 @@ class CreateProductsTable extends Migration
             $table->float('price', 8, 2)->nullable();
             $table->string('city')->nullable();
             $table->string('state')->nullable();
-            $table->enum('cancellation_policy',['flexiable','firm'])->default('flexiable');
+            $table->enum('cancellation_policy',['flexible','firm'])->default('flexible');
             // $table->float('security', 8, 2);
             $table->enum('status', ['0', '1'])->default('1');
             $table->foreignId('modified_by')->nullable()->constrained('users');

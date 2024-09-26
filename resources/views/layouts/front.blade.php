@@ -484,7 +484,7 @@
                                                 <select
                                                     class="produt_input form-control form-class @error('cancellation_policy') is-invalid @enderror"
                                                     name="cancellation_policy">
-                                                    <option value="flexiable">flexiable</option>
+                                                    <option value="flexible">Flexible</option>
                                                     <option value="firm">Firm</option>
                                                 </select>
                                                 <span class="form-icon">

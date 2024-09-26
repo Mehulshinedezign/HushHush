@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <div>
                     <h3>
-                        Flexiable
+                        Flexible
                     </h3>
                     <div>
                         To open a modal when clicking the "Read More" link, you can use Bootstrap's modal component or

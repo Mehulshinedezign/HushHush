@@ -448,6 +448,7 @@ class ProductController extends Controller
                 'rent_day' => $request->rent_day,
                 'rent_week' => $request->rent_week,
                 'rent_month' => $request->rent_month,
+                'cancellation_policy' => $request->cancellation_policy ,
             ];
             // dd($data,$is_bankdetail);
             $product = Product::create($data);
@@ -616,6 +617,7 @@ class ProductController extends Controller
                 'rent_day' => $request->rent_day,
                 'rent_week' => $request->rent_week,
                 'rent_month' => $request->rent_month,
+                'cancellation_policy' => $request->cancellation_policy ,
             ];
 
             $product->update($data);

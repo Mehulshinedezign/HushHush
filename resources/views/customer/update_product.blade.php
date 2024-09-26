@@ -379,8 +379,8 @@
                                                     class="produt_input form-control form-class @error('cancellation_policy') is-invalid @enderror"
                                                     name="cancellation_policy">
                                                     {{-- <option value="">Condition</option> --}}
-                                                    <option value="flexiable"
-                                                        @if ($product->cancellation_policy == 'flexiable') selected @endif>Flexiable
+                                                    <option value="flexible"
+                                                        @if ($product->cancellation_policy == 'flexible') selected @endif>Flexible
                                                     </option>
                                                     <option value="firm"
                                                         @if ($product->cancellation_policy == 'firm') selected @endif>Firm

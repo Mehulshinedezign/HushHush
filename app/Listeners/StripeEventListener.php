@@ -47,6 +47,8 @@ class StripeEventListener implements ShouldQueue
                                 'country' => $account['country'],
                                 'raw_data' => json_encode($account),
                             ]
+
+
                         );
 
                         Log::info('Stripe account details updated', ['account' => $account]);
@@ -69,7 +71,9 @@ class StripeEventListener implements ShouldQueue
 
                     if ($user) {
                         $user->identity_verified_at = now();
+                        $user->identity_status ='unpaid';
                         $user->save();
+
 
                         Log::info('User verification status updated', ['email' => $userEmail]);
                     } else {
