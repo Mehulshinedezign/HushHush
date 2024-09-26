@@ -151,6 +151,10 @@ class StripeController extends Controller
 
                 $query->update(['status' => 'COMPLETED']);
 
+                // $user->identity_verified_at = now();
+                $user->identity_status ='paid';
+                $user->save();
+
 
 
 

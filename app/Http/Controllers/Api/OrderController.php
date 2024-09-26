@@ -371,13 +371,19 @@ class OrderController extends Controller
             $order->load(["transaction", "retailer", "queryOf"]);
 
             $order_commission = AdminSetting::where('key', 'order_commission')->first();
+            $identity_amount = AdminSetting::where('key','identity_commission')->pluck('value')->first();
 
             if ($order_commission->type === 'Percentage') {
                 $amount = $order->total * ($order_commission->value / 100);
             } else if ($order_commission->type === 'Fixed') {
                 $amount = $order_commission->value;
             }
-
+            $user=User::where('id',$order->retailer_id)->first();
+            if ($user->identity_status == 'unpaid') {
+                $retailerAmount = $order->total - $amount - $identity_amount;
+            } else {
+                $retailerAmount = $order->total - $amount ;
+            }
             $retailerAmount = $order->total - $amount;
 
             $payoutData = [
@@ -401,6 +407,9 @@ class OrderController extends Controller
                 "amount" => $transfer['amount'] / 100,
                 "gateway_response" => json_encode($transfer)
             ]);
+
+            $user->identity_status ='paid';
+            $user->save();
 
             return true;
         } catch (\Throwable $e) {

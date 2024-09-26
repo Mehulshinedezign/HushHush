@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\ProductTrait;
+use App\Models\AdminSetting;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Color;
@@ -448,7 +449,7 @@ class ProductController extends Controller
                 'rent_day' => $request->rent_day,
                 'rent_week' => $request->rent_week,
                 'rent_month' => $request->rent_month,
-                'cancellation_policy' => $request->cancellation_policy ,
+                'cancellation_policy' => $request->cancellation_policy,
             ];
             // dd($data,$is_bankdetail);
             $product = Product::create($data);
@@ -617,7 +618,7 @@ class ProductController extends Controller
                 'rent_day' => $request->rent_day,
                 'rent_week' => $request->rent_week,
                 'rent_month' => $request->rent_month,
-                'cancellation_policy' => $request->cancellation_policy ,
+                'cancellation_policy' => $request->cancellation_policy,
             ];
 
             $product->update($data);
@@ -1461,7 +1462,7 @@ class ProductController extends Controller
                             'value' => $subCategory->name
                         ];
                     }),
-                    'size'=>config($test)
+                    'size' => config($test)
                 ];
             });
 
@@ -1626,6 +1627,8 @@ class ProductController extends Controller
             $productDetails = $this->getProduct($product_id);
             $user_id = $productDetails->user_id;
             $user = User::findOrFail(id: $user_id);
+            $OrderUser = auth()->user();
+            $identity_amount = AdminSetting::where('key', 'identity_commission')->pluck('value')->first();
             // dd($user);
 
             $productDetails->all_images = $productDetails->allImages->map(function ($image) {
@@ -1675,17 +1678,19 @@ class ProductController extends Controller
 
 
             ];
-
-            $price = $query->negotiate_price  ?? $productDetails->getCalculatedPrice($query->date_range);
-            $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
-
-            if($query->delivery_option == 'ship_to_me')
-            {
-                $address = UserDetail::where('user_id',$query->user_id)->where('is_default','1')->get();
+            if ($OrderUser->identity_status == 'unpaid') {
+                $price = $query->negotiate_price  ?? $productDetails->getCalculatedPrice($query->date_range);
+                $price = $price + ($query->cleaning_charges) + ($query->shipping_charges) + $identity_amount;
+            } else {
+                $price = $query->negotiate_price  ?? $productDetails->getCalculatedPrice($query->date_range);
+                $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
             }
-            else
-            {
-                $address =$productDetails->locations;
+
+
+            if ($query->delivery_option == 'ship_to_me') {
+                $address = UserDetail::where('user_id', $query->user_id)->where('is_default', '1')->get();
+            } else {
+                $address = $productDetails->locations;
             }
 
             return response()->json([
