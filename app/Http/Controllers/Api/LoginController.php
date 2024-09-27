@@ -73,7 +73,7 @@ class LoginController extends Controller
                 }
 
                 $identity = $user->identity_verified;
-                if (($identity)== 'verified') {
+                if (($identity)!= 'verified') {
                     $identity = false;
                 } else {
                     $identity = true;
