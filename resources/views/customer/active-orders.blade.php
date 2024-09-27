@@ -189,7 +189,6 @@
 
                 swal({
                     title: 'Cancel Order',
-                    // text: 'The platform charges will be deducted by Stripe this product have {{ $order->product->cancellation_policy }} cancellation policy refund will initiate according it.' ,
                     content: {
                         element: "span",
                         attributes: {
