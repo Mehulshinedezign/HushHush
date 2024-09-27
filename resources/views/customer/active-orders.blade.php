@@ -192,7 +192,7 @@
                     content: {
                         element: "span",
                         attributes: {
-                            innerHTML: 'The platform charges will be deducted by Stripe. This product has <strong>{{ $order->product->cancellation_policy }}</strong> cancellation policy. Refund will initiate according to it.',
+                            innerHTML: 'The platform charges will be deducted by Stripe. This product has <strong>{{ @$order->product->cancellation_policy }}</strong> cancellation policy. Refund will initiate according to it.',
                         },
                     },
                     icon: 'warning',
