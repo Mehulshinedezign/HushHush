@@ -2797,6 +2797,10 @@ form#filters {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
+    border: 1px solid #dee0e3;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
 }
 .color-white-bss {
     background-color: #fff !important;
@@ -2886,3 +2890,105 @@ form#filters {
     justify-content: center;
 }
 
+/********** 27 sep 24 **********/
+
+.address-list-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+#addressModal .modal-content {
+    width: 100%;
+    max-width: 100%;
+}
+#addressModal .modal-dialog {
+    max-width: 60%;
+}
+#addEditAddressForm {
+    border: 1px solid rgba(0, 0, 0, .125);
+    padding: 16px 10px !important;
+    border-radius: 5px;
+}
+.edit-delete-address-btn {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding-top: 10px;
+}
+.edit-address, .delete-address {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #d1d1d1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.edit-address:hover, .delete-address:hover {
+  background-color: #d1d1d1;
+}
+.edit-delete-address-btn button {
+    min-width: 100px;
+    min-height: 38px;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+.address-list li {
+    margin-bottom: 15px;
+    padding: 16px 10px;
+    cursor: pointer;
+    border-radius: 5px !important;
+}
+.address-list .list-group-item+.list-group-item {
+    border-top-width: 1px;
+}
+.address-list {
+    max-height: 500px;
+    overflow-y: auto;
+}
+#addressModal .modal-title {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 20px;
+}
+.form-check-input:checked, #addressModal .btn-success {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color) ;
+}
+button#addNewAddressBtn {
+    height: 40px;
+    padding: 9px;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+#addressModal .modal-header .btn-close {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    padding: 0;
+    margin: 0;
+}
+.cp-unavailabilities, .add-more-daterangepicker-main {
+    text-align: right;
+}
+
+.remove-daterangepicker i:before {
+    background: #cb8888;
+    padding: 1px;
+    width: 19px;
+    height: 19px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 14px;
+    line-height: 20px;
+    position: relative;
+    left: -5px;
+    cursor: pointer;
+}
+.lender-profile-box .btn-danger {
+    min-height: 35px;
+}

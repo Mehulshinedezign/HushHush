@@ -1630,6 +1630,11 @@ class ProductController extends Controller
             $OrderUser = auth()->user();
             $identity_amount = AdminSetting::where('key', 'identity_commission')->pluck('value')->first();
             // dd($user);
+            if ($OrderUser->identity_status == 'unpaid') {
+                $identity_fee = $identity_amount;
+            } else {
+                $identity_fee = 0;
+            }
 
             $productDetails->all_images = $productDetails->allImages->map(function ($image) {
                 return [
@@ -1678,13 +1683,10 @@ class ProductController extends Controller
 
 
             ];
-            if ($OrderUser->identity_status == 'unpaid') {
-                $price = $query->negotiate_price  ?? $productDetails->getCalculatedPrice($query->date_range);
-                $price = $price + ($query->cleaning_charges) + ($query->shipping_charges) + $identity_amount;
-            } else {
-                $price = $query->negotiate_price  ?? $productDetails->getCalculatedPrice($query->date_range);
-                $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
-            }
+
+            $price = $query->negotiate_price  ?? $productDetails->getCalculatedPrice($query->date_range);
+            $price = $price + ($query->cleaning_charges) + ($query->shipping_charges);
+
 
 
             if ($query->delivery_option == 'ship_to_me') {
@@ -1702,6 +1704,7 @@ class ProductController extends Controller
                     'locations' => $address,
                     'queries' => $query,
                     'price' => $price,
+                    'identity_fee' => (int)($identity_fee),
 
                 ],
             ], 200);

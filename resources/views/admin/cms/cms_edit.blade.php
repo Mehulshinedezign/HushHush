@@ -44,7 +44,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="card-footer text-center">
+                                <div class="card-footer text-right mt-5">
                                     <button class="btn btn-primary">Update</button>
                                     <a class="btn btn-dark" href="{{ url()->previous() }}">Back</a>
                                 </div>
