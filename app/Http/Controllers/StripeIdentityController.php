@@ -53,9 +53,21 @@ class StripeIdentityController extends Controller
     {
         session()->flash('message', 'Your identity verification has been successfully completed.');
         session()->flash('alert-type', 'success');
-        if (auth()->user()->identity_verified_at != null){
+        if (auth()->user()->identity_verified == 'verified'){
             session()->flash('showModal1', true);
         return redirect()->route('index')->with('success', 'Your identity verification has been successfully completed.');
+        }
+        elseif(auth()->user()->identity_verified == 'failed')
+        {
+            session()->flash('showModal4', true);
+            return redirect()->route('index')->with('success', 'Your identity verification has been failed please try again.');
+
+        }
+        elseif(auth()->user()->identity_verified == 'canceled')
+        {
+            // session()->flash('showModal4', true);
+            return redirect()->route('index')->with('success', 'Your identity verification has been failed please try again.');
+
         }
         else{
             return redirect()->route('index')->with('success', 'Your identity verification is under process.');

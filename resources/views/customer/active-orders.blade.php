@@ -3,7 +3,7 @@
         @php $empty = true; @endphp
 
         @foreach ($orders as $order)
-            @if ($order->status == 'Waiting' || $order->status == 'Picked Up' && $order->dispute_status == 'No')
+            @if ($order->status == 'Waiting' || ($order->status == 'Picked Up' && $order->dispute_status == 'No'))
                 @php $empty = false; @endphp
 
                 <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-6">
@@ -82,29 +82,29 @@
     </div>
 </div>
 <div class="modal fade cencel-order-modal" id="cancellation-note" data-bs-backdrop="static" tabindex="-1"
-aria-labelledby="cancellation-noteLabel" aria-hidden="true">
-<div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-body">
-            <div class="ajax-response"></div>
-            <form method="post" id="cancel-order">
-                @csrf
-                <div class="cancellation-popup-sec">
-                    <div class="popup-head">
-                        <h6>Cancellation Note</h6>
-                        <button type="" class="close" data-bs-dismiss="modal"><i
-                                class="fa-solid fa-xmark"></i></button>
+    aria-labelledby="cancellation-noteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="ajax-response"></div>
+                <form method="post" id="cancel-order">
+                    @csrf
+                    <div class="cancellation-popup-sec">
+                        <div class="popup-head">
+                            <h6>Cancellation Note</h6>
+                            <button type="" class="close" data-bs-dismiss="modal"><i
+                                    class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <textarea class="form-control mt-3" name="cancellation_note" rows="5"
+                            placeholder="Please write cancellation note here"></textarea>
+                        <button type="submit" class="button primary-btn full-btn mt-3  submit">Submit&nbsp;<i
+                                class="fa-solid fa-circle-notch fa-spin show-loader" style="display:none;"></i>
+                        </button>
                     </div>
-                    <textarea class="form-control mt-3" name="cancellation_note" rows="5"
-                        placeholder="Please write cancellation note here"></textarea>
-                    <button type="submit" class="button primary-btn full-btn mt-3  submit">Submit&nbsp;<i
-                            class="fa-solid fa-circle-notch fa-spin show-loader" style="display:none;"></i>
-                    </button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 </div>
 @push('scripts')
     <div class="modal fade book-product-modal" id="orderDisputeModal" tabindex="-1" role="dialog"
@@ -180,6 +180,7 @@ aria-labelledby="cancellation-noteLabel" aria-hidden="true">
             </div>
         </div>
     </div>
+    @include('modal.cancellationModal')
     <script>
         $(document).ready(function() {
 
@@ -187,21 +188,61 @@ aria-labelledby="cancellation-noteLabel" aria-hidden="true">
                 // $('.modal fade').addClass('d-none');
 
                 swal({
-                        title: 'Cancel Order',
-                        text: 'The platform charges will be deducted by stripe',
-                        icon: 'warning',
-                        buttons: true,
-                        dangerMode: true,
-                        buttons: ["No", "Yes"],
-                    })
-                    .then((willOpen) => {
-                        if (willOpen) {
-                            // $('.modal fade').removeClass('d-none');
-                            $('#cancellation-note').modal('show');
-                        } else {
-                            jQuery('body').removeClass('modal-open');
+                    title: 'Cancel Order',
+                    // text: 'The platform charges will be deducted by Stripe this product have {{ $order->product->cancellation_policy }} cancellation policy refund will initiate according it.' ,
+                    content: {
+                        element: "span",
+                        attributes: {
+                            innerHTML: 'The platform charges will be deducted by Stripe. This product has <strong>{{ $order->product->cancellation_policy }}</strong> cancellation policy. Refund will initiate according to it.',
+                        },
+                    },
+                    icon: 'warning',
+                    buttons: {
+                        cancel: {
+                            text: "No",
+                            value: null,
+                            visible: true,
+                            className: "btn btn-secondary",
+                            closeModal: true,
+                        },
+                        confirm: {
+                            text: "Yes",
+                            value: true,
+                            visible: true,
+                            className: "btn btn-primary",
+                            closeModal: true,
+                        },
+                        policy: {
+                            text: "Cancellation Policy",
+                            value: "policy",
+                            visible: true,
+                            className: "btn btn-info",
+                            // closeModal: false, // Keep the swal open
                         }
-                    });
+                    },
+                    dangerMode: true,
+                }).then((value) => {
+                    if (value === "policy") {
+                        // Open the cancellation modal
+                        $('#cancellationModal').modal('show');
+
+
+                    }
+                    if (value == true) {
+                        $('#cancellation-note').modal('show');
+                    }
+                    // .then((willOpen) => {
+                    //     console.log(willOpen);
+                    //     if (willOpen) {
+                    //         // $('.modal fade').removeClass('d-none');
+                    //         $('#cancellation-note').modal('show');
+                    //     } else {
+                    //         jQuery('body').removeClass('modal-open');
+                    //     }
+                    // });
+                })
+
+
             })
 
             $('#cancel-order').submit(function(e) {

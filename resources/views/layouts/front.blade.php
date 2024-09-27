@@ -37,6 +37,19 @@
             }
         });
     </script> -->
+    <style>
+        /* Custom CSS to darken modal backdrop */
+        .modal-backdrop.show {
+            opacity: 0.8 !important;
+            /* Increase this value for a darker effect */
+        }
+
+        /* Custom CSS to darken background specifically for the cancellation modal */
+        #cancellationModal.modal-backdrop.show {
+            opacity: 0.8 !important;
+            /* Adjust opacity as needed */
+        }
+    </style>
 
 
     <script>
@@ -256,8 +269,9 @@
                                         <div class="form-group">
                                             <label for="">Other Brand</label>
                                             <div class="formfield">
-                                                <input type="text" value="" class="produt_input form-control form-class"
-                                                    placeholder="other" name="other_brand">
+                                                <input type="text" value=""
+                                                    class="produt_input form-control form-class" placeholder="other"
+                                                    name="other_brand">
 
                                             </div>
                                         </div>
@@ -497,7 +511,8 @@
                                                     </span>
                                                 @enderror
                                             </div>
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#cancellationModal">Read More</a>
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#cancellationModal">Read More</a>
 
                                         </div>
                                     </div>
@@ -538,7 +553,8 @@
                                                 </select> --}}
                                                 <input type="number"
                                                     class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
-                                                    name="min_rent_days" placeholder="Enter min rental days" value="" min="5">
+                                                    name="min_rent_days" placeholder="Enter min rental days"
+                                                    value="" min="5">
                                                 {{-- <span class="form-icon">
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                         alt="img">
@@ -658,7 +674,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade addbank-Modal" id="identity" tabindex="-1" aria-labelledby="exampleModalLabel"
+    {{-- <div class="modal fade addbank-Modal" id="identity" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -683,7 +699,36 @@
                 </div>
             </div>
         </div>
+    </div> --}}
+    <div class="modal fade addbank-Modal" id="identity" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form action="{{ route('send.verification.email') }}" method="POST">
+                        <h3 class="modal-title" id="exampleModalLabel">Verify Your Identity</h3>
+                        @csrf
+                        <img src="{{ asset('front/images/identity.png') }}" alt="Bank Image" height="220">
+
+                        <div class="profile-select-box border-disabled">
+                            <div class="profile-check-list">
+                                <a href="javascript:void(0)" data-bs-dismiss="modal" aria-label="Close"
+                                    class="button outline-btn full-btn">
+                                    No
+                                </a>
+
+                                <button type="submit" class="button primary-btn full-btn" id="">
+                                    Yes
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
     </div>
+
     @include('account-setting')
     @php
         $user = auth()->user();
@@ -772,7 +817,7 @@
         </div>
     </div>
 
-@include('modal.cancellationModal')
+    @include('modal.cancellationModal')
     {{-- Notifications --}}
     {{-- @include('layouts.notifications') --}}
 
@@ -827,6 +872,16 @@
     <script src="{{ asset('js/custom/add-wishlist.js') }}"></script>
     <script src="{{ asset('js/custom/common.js') }}?ver={{ now() }}"></script>
     <script>
+        // Ensure background modal still has the fade effect when the second modal is opened
+        $('#cancellationModal').on('show.bs.modal', function() {
+            $('.addproduct-Modal, .product-modal').css('opacity', 0.5); // Darken the background modal
+        });
+
+        $('#cancellationModal').on('hide.bs.modal', function() {
+            $('.addproduct-Modal, .product-modal').css('opacity', 1); // Restore the original opacity
+        });
+    </script>
+    <script>
         jQuery(document).on("change", 'select[name="brand"]', function() {
             const selectedValue = $(this).val();
             const otherBrandField = $('#other');
@@ -839,16 +894,18 @@
                 } else {
                     console.log('Other brand field not found');
                 }
-            }
-            else {
+            } else {
                 otherBrandField.addClass('d-none');
             }
         });
 
-        $(document).on('click','.non-availability',function(){
+        $(document).on('click', '.non-availability', function() {
             $('.daterangepicker, .ltr, .show-calendar, .opensright').last().addClass('testCheck')
         })
 
+
+    </script>
+    <script>
         document.getElementById('identity').addEventListener('click', async function() {
             try {
                 const response = await fetch('/send-verification-email', {
@@ -1250,6 +1307,10 @@
             @if (session('showModal3'))
                 $('#addproduct-Modal').modal('show');
             @endif
+            @if (session('showModal4'))
+                $('#identity').modal('show');
+            @endif
+
 
             @if ($errors->has('add_product_error'))
                 $('#addproduct-Modal').modal('show');
@@ -1499,7 +1560,7 @@
                 });
             }
         </script>
-@yield('custom_variables')
+        @yield('custom_variables')
         <script defer src="{{ asset('js/custom/chat2.js') }}"></script>
         <script defer src="{{ asset('js/custom/chatlist.js') }}"></script>
     @endauth

@@ -19,7 +19,7 @@
                                 {{ $address->complete_address }}</div>
                             <div class="address-details d-none" id="address-details-{{ $index }}"
                                 data-address='@json($address)'>
-                                <p>{{ $address->complete_address }}</p>
+                                {{-- <p>{{ $address->complete_address }}</p> --}}
                                 <p>{{ $address->address1 }}</p>
                                 <p>{{ $address->address2 }}</p>
                                 <p>{{ $address->state }}</p>
@@ -48,7 +48,7 @@
                         </li>
                     @endforeach
                 </div>
-                <div id="addEditAddressForm" class="d-none">
+                <div id="addEditAddressForm" >
                     <h4 id="formTitle">Add Address</h4>
                     <form id="addressForm">
                         <div class="row">
