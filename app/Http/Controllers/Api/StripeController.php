@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdminSetting;
 use App\Models\ProductDisableDate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -123,10 +124,10 @@ class StripeController extends Controller
 
             // Retrieve the amount and currency directly from the PaymentIntent object
             if (isset(auth()->user()->identity_status) && auth()->user()->identity_status == 'unpaid') {
-                $intentAmount = ($paymentIntent->amount / 100)-$identity_amount; 
+                $intentAmount = ($paymentIntent->amount / 100)-$identity_amount;
             }
             else{
-                $intentAmount = ($paymentIntent->amount / 100); 
+                $intentAmount = ($paymentIntent->amount / 100);
             }
         // Stripe stores amounts in cents, convert to main currency unit
             $intentCurrency = $paymentIntent->currency;

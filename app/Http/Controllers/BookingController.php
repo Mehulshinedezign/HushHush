@@ -191,7 +191,7 @@ class BookingController extends Controller
         ];
 
         if(@$lender->usernotification->order_req == '1'){
-            $lender->Notify(new BookorderReq($product_info));
+            // $lender->Notify(new BookorderReq($product_info));
         }
         if ($status->status == "succeeded") {
             $order->update(['transaction_id' => $transaction->id]);

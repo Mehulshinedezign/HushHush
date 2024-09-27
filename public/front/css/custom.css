@@ -261,7 +261,9 @@ span.left-form-icon {
 
 .home-product-main {
     width: 100%;
-    position: relative;
+    position: sticky;
+    top: 0;
+    height: 100%;
 }
 
 .home-product-main .list-empty-box {
@@ -277,7 +279,7 @@ span.left-form-icon {
     gap: 60px 25px;
 }
 
-.product-card {
+.product-img-box {
     cursor: pointer;
 }
 
@@ -924,8 +926,8 @@ border-color: #000;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    max-width: 180px;
-    min-width: 180px;
+    /* max-width: 180px;
+    min-width: 180px; */
 }
 
 .slider-content .slick-slide img {
@@ -2449,9 +2451,9 @@ header.cust-header.fixed nav.sticky-nav {
     box-shadow: 0px 0px 10px #0606061f;
 }
 
-.product-desc-sec .slider.slider-thumb.slick-initialized.slick-slider {
+/* .product-desc-sec .slider.slider-thumb.slick-initialized.slick-slider {
     margin-top: -100px;
-}
+} */
 
 .product-slider .slick-track {
     margin: 0;

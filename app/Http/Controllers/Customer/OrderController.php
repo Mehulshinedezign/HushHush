@@ -809,7 +809,7 @@ class OrderController extends Controller
                 } elseif ($differenceInDays > 7 && $differenceInDays < 30) {
                     $refundStatus = $stripe->refunds->create([
                         'charge' => $paymentIntentData->latest_charge,
-                        'amount' => floatval($customerAmount / 2) * 100,
+                        'amount' => (int)(floatval($customerAmount / 2) * 100),
                     ]);
                     $refundAmount = $customerAmount / 2;
                     $refundType = 'firm';
@@ -845,7 +845,7 @@ class OrderController extends Controller
             ->delete();
 
         if (isset($order->retailer->usernotification) && $order->retailer->usernotification->order_canceled_by_customer == 1) {
-            $order->retailer->notify(new RentalCancelorder());
+            // $order->retailer->notify(new RentalCancelorder());
         }
 
         session()->flash('success', __("order.messages.cancel.success"));
