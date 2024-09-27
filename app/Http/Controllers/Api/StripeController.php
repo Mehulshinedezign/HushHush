@@ -98,7 +98,7 @@ class StripeController extends Controller
     public function createPaymentIntent(Request $request, $id)
     {
         $user = auth()->user();
-
+        $identity_amount = AdminSetting::where('key','identity_commission')->pluck('value')->first();
         // Validate the request input
         $validator = Validator::make($request->all(), [
             'paymentIntentId' => 'required|string', // Expect the paymentIntent ID from the frontend
@@ -122,7 +122,13 @@ class StripeController extends Controller
             $paymentIntent = PaymentIntent::retrieve($request->paymentIntentId);
 
             // Retrieve the amount and currency directly from the PaymentIntent object
-            $intentAmount = $paymentIntent->amount / 100; // Stripe stores amounts in cents, convert to main currency unit
+            if (isset(auth()->user()->identity_status) && auth()->user()->identity_status == 'unpaid') {
+                $intentAmount = ($paymentIntent->amount / 100)-$identity_amount; 
+            }
+            else{
+                $intentAmount = ($paymentIntent->amount / 100); 
+            }
+        // Stripe stores amounts in cents, convert to main currency unit
             $intentCurrency = $paymentIntent->currency;
 
             // Calculate the total amount based on the query
