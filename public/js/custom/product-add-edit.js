@@ -349,6 +349,7 @@ const addImages = [];
 
 jQuery(document).ready(function () {
     jQuery(document).on("click", ".add-more-daterangepicker", function () {
+        $('.append-non-available-dates').removeClass('d-none');
         let nonAvailableDateCounterElem = jQuery('input[name="non_available_date_count"]');
         let nonAvailableDateCounterVal = parseInt(nonAvailableDateCounterElem.val()) + 1;
         nonAvailableDateCounterElem.val(nonAvailableDateCounterVal)
@@ -364,20 +365,32 @@ jQuery(document).ready(function () {
     // jQuery(document).on('hover', '.btnaction', function () {
     //     jQuery(this).toggleClass('a-action');
     // });
-    $(".btnaction").hover(function () {
-        $(this).toggleClass("a-action");
-    });
+   
+
 
     jQuery(document).on('click', '.remove-daterangepicker', function () {
         let nonAvailableDateCounterElem = jQuery('input[name="non_available_date_count"]');
         let nonAvailableDateCounterVal = parseInt(nonAvailableDateCounterElem.val()) - 1;
-        nonAvailableDateCounterElem.val(nonAvailableDateCounterVal)
-        jQuery(this).parents('.cp-unavailabilities').remove();
-        jQuery(document).find('.non-availability').each(function (index) {
-            jQuery(this).attr('name', 'non_availabile_dates[' + index + ']')
+        nonAvailableDateCounterElem.val(nonAvailableDateCounterVal);
+    
+        // Remove the parent element
+        jQuery(this).closest('.cp-unavailabilities').remove();
+    
+        // Check if there are any remaining elements
+        if (jQuery('.cp-unavailabilities').length === 0) {
+            jQuery('.append-non-available-dates').addClass('d-none'); // Hide the div if no elements remain
+        }
+    
+        // Update the names of remaining non-availability inputs
+        jQuery('.non-availability').each(function (index) {
+            jQuery(this).attr('name', 'non_availabile_dates[' + index + ']');
         });
-    })
-
+    });
+    
+    $(".btnaction").hover(function () {
+        $(this).toggleClass("a-action");
+    });
+    
     jQuery(document).on("click", ".add-more-location", function () {
         let locationCounterElem = jQuery('input[name="location_count"]');
         let locationCounterVal = parseInt(locationCounterElem.val()) + 1;

@@ -926,9 +926,9 @@
         // });
 
         // Remove the dynamically added datepicker field
-        $(document).on('click', '.remove-daterangepicker', function() {
-            $(this).closest('.clone-non-available-date-container').remove();
-        });
+        // $(document).on('click', '.remove-daterangepicker', function() {
+        //     $(this).closest('.clone-non-available-date-container').remove();
+        // });
 
         // Static initialization for date ranges, e.g., buttons
         $('.daterange-btn').daterangepicker({

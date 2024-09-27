@@ -498,7 +498,7 @@
                                                                     style="font-size: 16px; line-height: 26px;color: #606060; width:80%">
                                                                     <p
                                                                         style="box-sizing: border-box; position: relative; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin-top: 0; font-size: 16px; font-family: 'Inter', sans-serif; color: #606060; line-height: 24px;text-align:left;">
-                                                                        This password reset link will expire in 10
+                                                                        This reset password link will expire in 10
                                                                         minutes.</p>
                                                                 </td>
                                                                 <td width="10%" style="width: 10%;"></td>
@@ -509,7 +509,7 @@
                                                                     style="font-size: 16px; line-height: 26px;color: #606060; width:80%">
                                                                     <p
                                                                         style="box-sizing: border-box; position: relative; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin-top: 0; font-size: 16px; font-family: 'Inter', sans-serif; color: #606060; line-height: 24px;text-align:left;">
-                                                                        If you did not request a password reset, no
+                                                                        If you did not request a reset password, no
                                                                         further action is required.</p>
                                                                 </td>
                                                                 <td width="10%" style="width: 10%;"></td>

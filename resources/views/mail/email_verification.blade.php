@@ -469,7 +469,7 @@
                                                                     </strong>
                                                                     <p
                                                                         style="box-sizing: border-box; position: relative; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; margin-top: 0; font-size: 14px; font-family: 'Inter', sans-serif; color: #606060; line-height: 24px;text-align:center;">
-                                                                        This verification link will expire in 15
+                                                                        This otp will expire in 15
                                                                         minutes.</p>
                                                                 </td>
                                                                 <td style="width: 10%;"></td>

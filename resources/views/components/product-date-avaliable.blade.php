@@ -19,14 +19,14 @@
         <span class="add-more-daterangepicker addlocation adddate float-left button outline-btn"> <span><i class="fas fa-plus"></i></span>
             Add
         </span>
-        <div class="append-non-available-dates">
+        <div class="append-non-available-dates d-none">
         </div>
         <div class="clone-non-available-date-container hidden cp-unavailabilities text-right">
 
             <input type="text" class="form-control input-bg date-icon color-white-bss" readonly
                 placeholder="{{ __('product.placeholders.nonAvailableDates') }}"
                 onfocus="initDateRangePicker(this, dateOptions)" autocomplete="off">
-                <span class="remove-daterangepicker float-right red-text "> <span><i class="fas fa-minus"></i></span>
+                <span class="remove-daterangepicker float-right red-text "> <span><i class="fas fa-minus"></i>Remove</span>
                 </span>
         </div>
     </div>

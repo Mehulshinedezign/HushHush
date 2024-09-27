@@ -1345,6 +1345,7 @@ border-color: #000;
     display: flex;
     gap: 10px;
     align-items: center;
+    cursor: none;
 }
 
 .user-table-head h5 {

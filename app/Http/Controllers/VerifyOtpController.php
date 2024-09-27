@@ -127,6 +127,7 @@ class VerifyOtpController extends Controller
                     'status' => '0',
                 ]
             );
+            $status= 'OTP resent successfully on your email.';
         } elseif ($type === 'phone_number') {
             $otp = $this->otpService->generateOtp($user);
             // $message = "Login OTP is " . $otp;
@@ -152,11 +153,13 @@ class VerifyOtpController extends Controller
                     'status' => '0',
                 ]
             );
+            $status= 'OTP resent successfully on your phone number.';
+
         } else {
             return redirect()->route('auth.verify_otp_form', ['user' => $user->id])->with('error', 'Invalid OTP type.');
         }
 
         return redirect()->route('auth.verify_otp_form',  ['user' => $user->id])
-            ->with('status', ' OTP resent successfully on your email/phone number.');
+            ->with('status', $status);
     }
 }

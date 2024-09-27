@@ -397,7 +397,8 @@
                                                     </span>
                                                 @enderror
                                             </div>
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#cancellationModal">Read More</a>
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#cancellationModal">Read More</a>
                                         </div>
                                     </div>
 
@@ -612,14 +613,15 @@
                 const response = await fetch(url);
                 const blob = await response.blob();
                 const mimeTypeToExtension = {
-                    'image/jpeg': 'jpeg',
-                    'image/jfif': 'jpg',
-                    'image/png': 'png',
-                    'image/gif': 'gif',
-                    'image/webp': 'webp',
-                    'image/bmp': 'bmp',
-                    'image/svg+xml': 'svg'
+                    'image/jpeg': 'jpg', // Standard format for JPEG images
+                    'image/jfif': 'jpg', // JPEG File Interchange Format
+                    'image/png': 'png', // Portable Network Graphics
+                    'image/gif': 'gif', // Graphics Interchange Format
+                    'image/webp': 'webp', // WebP format
+                    'image/bmp': 'bmp', // Bitmap image
+                    'image/svg+xml': 'svg' // Scalable Vector Graphics
                 };
+
                 const extension = mimeTypeToExtension[blob.type] || 'bin';
                 const fileName = `new_${Date.now()}.${extension}`;
                 const file = new File([blob], fileName, {

@@ -937,6 +937,7 @@ table {
     position: absolute;
     top: 1px;
     right: 5px;
+    cursor: pointer;
 }
 
 label#upload-image-five-error {
@@ -982,6 +983,7 @@ span.remove-image {
     color: #fff;
     font-size: 32px;
     line-height: 18px;
+    cursor: pointer;
 }
 
 .add-pro-form .form-group textarea.form-control {
@@ -2797,8 +2799,8 @@ form#filters {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
-    border: 1px solid #dee0e3;
-    padding: 10px;
+    /* border: 1px solid #dee0e3; */
+    /* padding: 10px; */
     margin: 10px 0;
     border-radius: 5px;
 }
@@ -2974,11 +2976,11 @@ button#addNewAddressBtn {
 }
 
 .remove-daterangepicker i:before {
-    background: #cb8888;
+    /* background: #cb8888; */
     padding: 1px;
     width: 19px;
     height: 19px;
-    color: #ffffff;
+    /* color: #ffffff; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2991,4 +2993,7 @@ button#addNewAddressBtn {
 }
 .lender-profile-box .btn-danger {
     min-height: 35px;
+}
+.add-more-daterangepicker-main {
+    text-align: left;
 }

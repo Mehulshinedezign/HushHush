@@ -19,6 +19,7 @@
     <span class="add-more-daterangepicker addlocation adddate float-left button outline-btn">
         <span><i class="fas fa-plus"></i></span> Add
     </span>
+    {{-- @dd(count($product)); --}}
     <div class="append-non-available-dates col-md-12">
         @for ($i = 1; $i < old('non_available_date_count', count($product)); $i++)
             <div class="cp-unavailabilities">
@@ -42,12 +43,12 @@
 
     <div class="clone-non-available-date-container hidden cp-unavailabilities">
         <div class="">
-            <span class="remove-daterangepicker float-right red-text" style="cursor: pointer;">
-                <span><i class="fas fa-minus"></i></span> Remove
-            </span>
-            <input type="text" class="form-control input-bg mb-3 date-icon color-white-bss" readonly
+            <input type="text" class="form-control input-bg date-icon color-white-bss" readonly
                 placeholder="{{ __('product.placeholders.nonAvailableDates') }}"
                 onfocus="initDateRangePicker(this, dateOptions)" autocomplete="off">
+                <span class="remove-daterangepicker float-right red-text" style="cursor: pointer;">
+                    <span><i class="fas fa-minus"></i></span> Remove
+                </span>
         </div>
     </div>
 </div>
