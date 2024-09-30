@@ -102,7 +102,7 @@
                                 <div class="my-pro-notify-box">
                                     <div class="my-pro-detail-left">
                                         <div class="my-pro-detail-para">
-                                            <h4 class="m-0">Lender receive query</h4>
+                                            <h4 class="m-0">Lender receive inquery</h4>
                                         </div>
                                     </div>
                                     <div class="my-pro-detail-right">
@@ -117,7 +117,7 @@
                                 <div class="my-pro-notify-box">
                                     <div class="my-pro-detail-left">
                                         <div class="my-pro-detail-para">
-                                            <h4 class="m-0">Customer query accepted</h4>
+                                            <h4 class="m-0">Customer inquery accepted</h4>
                                         </div>
                                     </div>
                                     {{-- @dd(@$user->usernotification); --}}
@@ -132,7 +132,7 @@
                                 <div class="my-pro-notify-box">
                                     <div class="my-pro-detail-left">
                                         <div class="my-pro-detail-para">
-                                            <h4 class="m-0">Customer query rejected</h4>
+                                            <h4 class="m-0">Customer inquery rejected</h4>
                                         </div>
                                     </div>
                                     <div class="my-pro-detail-right">
@@ -229,7 +229,7 @@
                                 <div class="my-pro-notify-box">
                                     <div class="my-pro-detail-left">
                                         <div class="my-pro-detail-para">
-                                            <h4 class="m-0"> order canceled by Lender</h4>
+                                            <h4 class="m-0"> Order canceled by Lender</h4>
                                         </div>
                                     </div>
                                     <div class="my-pro-detail-right">
@@ -243,7 +243,7 @@
                                 <div class="my-pro-notify-box">
                                     <div class="my-pro-detail-left">
                                         <div class="my-pro-detail-para">
-                                            <h4 class="m-0"> order canceled by customer</h4>
+                                            <h4 class="m-0"> Order canceled by customer</h4>
                                         </div>
                                     </div>
                                     <div class="my-pro-detail-right">
