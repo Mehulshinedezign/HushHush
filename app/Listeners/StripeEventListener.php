@@ -70,7 +70,7 @@ class StripeEventListener implements ShouldQueue
                     $user = User::where('email', $userEmail)->first();
 
                     if ($user) {
-                        $user->identity_verified_at = now();
+                        $user->identity_verified = 'verified';
                         $user->identity_status ='unpaid';
                         $user->save();
 
@@ -83,6 +83,59 @@ class StripeEventListener implements ShouldQueue
                     Log::warning('No user email found in verification session metadata');
                 }
                 break;
+
+                case 'identity.verification_session.requires_input':
+
+                    Log::info('Handling identity.verification_session.verified event', ['type' => $event->payload['type']]);
+                    $verificationSession = $eventObject;
+
+                    // Get the user email from metadata
+                    $userEmail = $verificationSession['metadata']['email'] ?? null;
+
+                    if ($userEmail) {
+                        // Find the user by email and update their verification status
+                        $user = User::where('email', $userEmail)->first();
+
+                        if ($user) {
+                            $user->identity_verified='failed';
+                            // $user->identity_status ='unpaid';
+                            $user->save();
+
+
+                            Log::info('User verification status updated', ['email' => $userEmail]);
+                        } else {
+                            Log::warning('User not found for verification update', ['email' => $userEmail]);
+                        }
+                    } else {
+                        Log::warning('No user email found in verification session metadata');
+                    }
+                    break;
+                    case 'identity.verification_session.canceled':
+
+                        Log::info('Handling identity.verification_session.verified event', ['type' => $event->payload['type']]);
+                        $verificationSession = $eventObject;
+
+                        // Get the user email from metadata
+                        $userEmail = $verificationSession['metadata']['email'] ?? null;
+
+                        if ($userEmail) {
+                            // Find the user by email and update their verification status
+                            $user = User::where('email', $userEmail)->first();
+
+                            if ($user) {
+                                $user->identity_verified='canceled';
+                                // $user->identity_status ='unpaid';
+                                $user->save();
+
+
+                                Log::info('User verification status updated', ['email' => $userEmail]);
+                            } else {
+                                Log::warning('User not found for verification update', ['email' => $userEmail]);
+                            }
+                        } else {
+                            Log::warning('No user email found in verification session metadata');
+                        }
+                        break;
 
 
                 // return redirect()->back();

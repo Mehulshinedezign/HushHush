@@ -1122,8 +1122,13 @@ class ProductController extends Controller
             $is_bankdetail = $authUser->bankAccount;
             $bankdetails = is_null($is_bankdetail) ? false : true;
 
-            $verified = $authUser->identity_verified_at;
-            $identity = is_null($verified) ? false : true;
+            $verified = $authUser->identity_verified;
+            if (($verified)!= 'verified') {
+                $identity = false;
+            } else {
+                $identity = true;
+            }
+            // $identity = ($verified) ? false : true;
 
             $hasCompleteAddress = !empty($authUser->userDetail->complete_address) &&
                 !empty($authUser->userDetail->country);

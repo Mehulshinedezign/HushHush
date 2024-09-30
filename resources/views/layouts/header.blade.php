@@ -26,10 +26,11 @@
                         @endphp
                         <ul>
                             <li>
-                                @if (is_null($user->identity_verified_at))
+                                @if (($user->identity_verified) != 'verified')
                                     <div data-bs-toggle="modal" data-bs-target="#identity">
                                         Rent your Closet
                                     </div>
+
                                 @elseif(is_null($userBankInfo))
                                     <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
                                         Rent your Closet

@@ -72,8 +72,8 @@ class LoginController extends Controller
                     $addresAdded = false;
                 }
 
-                $identity = $user->identity_verified_at;
-                if (is_null($identity)) {
+                $identity = $user->identity_verified;
+                if (($identity)!= 'verified') {
                     $identity = false;
                 } else {
                     $identity = true;

@@ -44,7 +44,7 @@ class User extends Authenticatable implements ShouldQueue
         'country_code',
         'stripe_account_id',
         'email_verified_at',
-        'identity_verified_at',
+        'identity_verified',
         'identity_status',
     ];
 

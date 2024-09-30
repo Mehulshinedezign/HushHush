@@ -12,7 +12,7 @@ return new class extends Migration
     public function up()
 {
     Schema::table('users', function (Blueprint $table) {
-        $table->timestamp('identity_verified_at')->nullable();
+        $table->enum('identity_verified',['verified','canceled','failed'])->nullable();
     });
 }
 
