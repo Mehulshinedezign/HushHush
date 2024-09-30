@@ -522,8 +522,7 @@
                                             </div>
                                             <a href="#" data-bs-toggle="modal"
                                                 data-bs-target="#cancellationModal">Read More</a>
-                                            <a href="#" data-bs-toggle="modal"
-                                                data-bs-target="#cancellationModal">Read More</a>
+
 
                                         </div>
                                     </div>
@@ -566,7 +565,7 @@
                                                     class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
                                                     name="min_rent_days" placeholder="Enter min rental days"
                                                     value="" min="5">
-                                            
+
                                                 {{-- <span class="form-icon">
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                         alt="img">
@@ -1442,8 +1441,7 @@
                 // Set the files to the input and trigger the change event
                 $('#upload-image-five').prop('files', files);
                 $('#upload-image-five').trigger('change');
-                $('#update-upload-image-five').prop('files', files);
-                $('#update-upload-image-five').trigger('change');
+
 
             });
         });
