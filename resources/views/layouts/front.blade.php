@@ -709,36 +709,8 @@
                 </div>
             </div>
         </div>
-    </div> --}}
-    <div class="modal fade addbank-Modal" id="identity" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <form action="{{ route('send.verification.email') }}" method="POST">
-                        <h3 class="modal-title" id="exampleModalLabel">Verify Your Identity</h3>
-                        @csrf
-                        <img src="{{ asset('front/images/identity.png') }}" alt="Bank Image" height="220">
-
-                        <div class="profile-select-box border-disabled">
-                            <div class="profile-check-list">
-                                <a href="javascript:void(0)" data-bs-dismiss="modal" aria-label="Close"
-                                    class="button outline-btn full-btn">
-                                    No
-                                </a>
-
-                                <button type="submit" class="button primary-btn full-btn" id="">
-                                    Yes
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                    <button type="button" class="btn-close" id="closeModalBtn" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-            </div>
-        </div>
     </div>
+   
     @include('account-setting')
     @php
         $user = auth()->user();
@@ -911,7 +883,7 @@
             }
         });
 
-        $(document).on('click', '.non-availability', function() {
+      
         $(document).on('click', '.non-availability', function() {
             $('.daterangepicker, .ltr, .show-calendar, .opensright').last().addClass('testCheck')
         })
