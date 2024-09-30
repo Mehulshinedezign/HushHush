@@ -240,9 +240,10 @@
                         } else {
                             $('.spinner-border').addClass('d-none');
                             $('#accountSetting').modal('hide');
-                            const offcanvasElement = document.getElementById('inquiry-sidebar');
-                            const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                            offcanvas.show();
+                            // const offcanvasElement = document.getElementById('inquiry-sidebar');
+                            // const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                            // offcanvas.show();
+                            location.reload();
                         }
 
                     })
