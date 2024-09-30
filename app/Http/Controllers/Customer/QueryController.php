@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Query;
 use App\Models\User;
+use App\Models\UserDetail;
 use App\Notifications\AcceptItem;
 use App\Notifications\QueryReceived;
 use App\Notifications\RejectItem;
@@ -55,7 +56,6 @@ class QueryController extends Controller
                 if ($startDate <= $disabled_date->disable_date && $endDate >= $disabled_date->disable_date) {
                     // throw new \Exception("Product is not available in this date range.");
                     return response()->json(['success' => false, 'message' => 'Product is not available in this date range.']);
-
                 }
             }
 
@@ -120,12 +120,26 @@ class QueryController extends Controller
     public function view(Request $request)
     {
         $query_id = $request->query_id;
+
+        // Retrieve the query using the provided query_id
         $query = Query::findOrFail($query_id);
 
-        $view = view('customer.query_product', compact('query'))->render();
+        // Initialize the address variable
+        $address = null;
 
+        // Check the delivery option
+        if ($query->delivery_option === 'ship_to_me') {
+            // Retrieve the address associated with the query
+            $address = UserDetail::find($query->address_id);
+        }
+
+        // Render the view, passing the query and address if it exists
+        $view = view('customer.query_product', compact('query', 'address'))->render();
+
+        // Return the response as JSON
         return response()->json(['success' => true, 'data' => $view]);
     }
+
 
     public function receiveQuery(Request $request)
     {

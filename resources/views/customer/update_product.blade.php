@@ -689,6 +689,15 @@
                 }
 
                 let file = files.shift();
+
+                // Check if the file extension is 'jfif'
+                if (file.name.toLowerCase().endsWith('.jfif')) {
+                    alert('Only images in JPG, JPEG, SVG, and PNG formats are allowed for upload. Please upload a different image format.');
+
+                    processFiles(files); // Continue processing the next file
+                    return;
+                }
+
                 if (!uploadedFiles.has(file.name)) {
                     let reader = new FileReader();
 

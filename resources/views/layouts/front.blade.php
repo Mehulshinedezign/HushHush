@@ -1329,16 +1329,28 @@
             const MAX_IMAGES = 5;
             let selectedFiles = [];
 
+            // Function to preview images
             function previewImages(input, imgPreviewPlaceholder) {
                 const files = Array.from(input.files);
                 const currentCount = selectedFiles.length;
 
+                // Check if the total files exceed the max limit
                 if (currentCount + files.length > MAX_IMAGES) {
                     alert(`You can upload up to ${MAX_IMAGES} images.`);
                     return;
                 }
 
-                files.forEach((file) => {
+                // Filter out files with .jfif extension
+                const filteredFiles = files.filter((file) => {
+                    const fileExtension = file.name.split('.').pop().toLowerCase();
+                    if (fileExtension === 'jfif') {
+                        alert('Only images in JPG, JPEG, SVG, and PNG formats are allowed for upload. Please upload a different image format.');
+                        return false;
+                    }
+                    return true;
+                });
+
+                filteredFiles.forEach((file) => {
                     selectedFiles.push(file);
                 });
 
@@ -1346,6 +1358,7 @@
                 updateFileInput();
             }
 
+            // Function to render image preview
             function renderPreview(imgPreviewPlaceholder) {
                 $(imgPreviewPlaceholder).empty(); // Clear the existing preview
 
@@ -1353,28 +1366,32 @@
                     const reader = new FileReader();
                     reader.onload = function(event) {
                         const element = `
-                    <div class="upload-img-box" data-index="${index}">
-                        <img src="${event.target.result}" alt="img">
-                        <div class="upload-img-cross">
-                            <i class="fa-regular fa-circle-xmark remove_uploaded"></i>
-                        </div>
-                    </div>`;
+                            <div class="upload-img-box" data-index="${index}">
+                                <img src="${event.target.result}" alt="img">
+                                <div class="upload-img-cross">
+                                    <i class="fa-regular fa-circle-xmark remove_uploaded"></i>
+                                </div>
+                            </div>`;
                         $(imgPreviewPlaceholder).append(element);
                     };
                     reader.readAsDataURL(file);
                 });
             }
 
+            // Function to update the file input
             function updateFileInput() {
                 const dataTransfer = new DataTransfer();
+
                 selectedFiles.forEach((file) => dataTransfer.items.add(file));
                 $('#upload-image-five')[0].files = dataTransfer.files;
             }
 
+            // Handle image selection and preview
             $('#upload-image-five').on('change', function() {
                 previewImages(this, 'div.upload-img-preview');
             });
 
+            // Remove an image from the preview
             $(document).on('click', '.remove_uploaded', function() {
                 const index = $(this).closest('.upload-img-box').data('index');
                 selectedFiles.splice(index, 1);
@@ -1382,7 +1399,7 @@
                 updateFileInput();
             });
 
-            // Initialize Sortable.js
+            // Initialize Sortable.js for reordering images
             const sortable = new Sortable(document.querySelector('.sortable-images'), {
                 animation: 150,
                 onEnd: function(evt) {
@@ -1417,11 +1434,17 @@
                 $(this).removeClass('drag-over');
 
                 const files = e.originalEvent.dataTransfer.files;
+
+                // Set the files to the input and trigger the change event
                 $('#upload-image-five').prop('files', files);
                 $('#upload-image-five').trigger('change');
+                $('#update-upload-image-five').prop('files', files);
+                $('#update-upload-image-five').trigger('change');
+
             });
         });
     </script>
+
     {{-- end header --}}
     @auth
         {{-- chat --}}
