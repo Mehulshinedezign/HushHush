@@ -704,13 +704,13 @@
                             </div>
                         </div>
                     </form>
-                    <button type="button" class="btn-close" id="closeModalBtn" data-bs-dismiss="modal"
+                    <button type="button" class="btn-close" id="closeModalBtn1" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
             </div>
         </div>
     </div>
-   
+
     @include('account-setting')
     @php
         $user = auth()->user();
@@ -883,7 +883,7 @@
             }
         });
 
-      
+
         $(document).on('click', '.non-availability', function() {
             $('.daterangepicker, .ltr, .show-calendar, .opensright').last().addClass('testCheck')
         })
@@ -916,7 +916,7 @@
         });
 
         // Close modal button
-        document.getElementById('closeModalBtn').addEventListener('click', function() {
+        document.getElementById('closeModalBtn1').addEventListener('click', function() {
             const modal = bootstrap.Modal.getInstance(document.getElementById('identity'));
             if (modal) {
                 modal.hide(); // Hide the modal
