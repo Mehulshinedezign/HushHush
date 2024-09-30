@@ -8,6 +8,11 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+
     <title>@yield('title') | {{ config('app.name', 'Home') }}</title>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('front/css/bootstrap.min.css') }}">
@@ -561,8 +566,8 @@
                                                     class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
                                                     name="min_rent_days" placeholder="Enter min rental days"
                                                     value="" min="5">
-                                                    name="min_rent_days" placeholder="Enter min rental days"
-                                                    value="" min="5">
+                                                name="min_rent_days" placeholder="Enter min rental days"
+                                                value="" min="5">
                                                 {{-- <span class="form-icon">
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                         alt="img">
@@ -704,7 +709,7 @@
                             </div>
                         </div>
                     </form>
-                    <button type="button" class="btn-close" id="closeModalBtn1" data-bs-dismiss="modal"
+                    <button type="button" class="btn-close" id="closeModalBtn" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
             </div>
@@ -878,7 +883,6 @@
                     console.log('Other brand field not found');
                 }
             } else {
-            } else {
                 otherBrandField.addClass('d-none');
             }
         });
@@ -916,7 +920,7 @@
         });
 
         // Close modal button
-        document.getElementById('closeModalBtn1').addEventListener('click', function() {
+        document.getElementById('closeModalBtn').addEventListener('click', function() {
             const modal = bootstrap.Modal.getInstance(document.getElementById('identity'));
             if (modal) {
                 modal.hide(); // Hide the modal
@@ -1344,7 +1348,8 @@
                 const filteredFiles = files.filter((file) => {
                     const fileExtension = file.name.split('.').pop().toLowerCase();
                     if (fileExtension === 'jfif') {
-                        alert('Only images in JPG, JPEG, SVG, and PNG formats are allowed for upload. Please upload a different image format.');
+                        alert(
+                            'Only images in JPG, JPEG, SVG, and PNG formats are allowed for upload. Please upload a different image format.');
                         return false;
                     }
                     return true;
