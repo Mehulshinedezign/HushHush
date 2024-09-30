@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>@yield('title') | {{ config('app.name', 'Home') }}</title>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('front/css/bootstrap.min.css') }}">
@@ -256,8 +257,9 @@
                                         <div class="form-group">
                                             <label for="">Other Brand</label>
                                             <div class="formfield">
-                                                <input type="text" value="" class="produt_input form-control form-class"
-                                                    placeholder="other" name="other_brand">
+                                                <input type="text" value=""
+                                                    class="produt_input form-control form-class" placeholder="other"
+                                                    name="other_brand">
 
                                             </div>
                                         </div>
@@ -497,7 +499,8 @@
                                                     </span>
                                                 @enderror
                                             </div>
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#cancellationModal">Read More</a>
+                                            <a href="#" data-bs-toggle="modal"
+                                                data-bs-target="#cancellationModal">Read More</a>
 
                                         </div>
                                     </div>
@@ -538,7 +541,8 @@
                                                 </select> --}}
                                                 <input type="number"
                                                     class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"
-                                                    name="min_rent_days" placeholder="Enter min rental days" value="" min="5">
+                                                    name="min_rent_days" placeholder="Enter min rental days"
+                                                    value="" min="5">
                                                 {{-- <span class="form-icon">
                                                     <img src="{{ asset('front/images/dorpdown-icon.svg') }}"
                                                         alt="img">
@@ -658,12 +662,13 @@
             </div>
         </div>
     </div>
-    <div class="modal fade addbank-Modal" id="identity" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+
+    <div class="modal fade addbank-Modal" id="identity" tabindex="-1" data-bs-backdrop="static"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form action="{{ route('send.verification.email') }}" method="POST">
+                    <form action="{{ route('send.verification.email') }}" method="POST" id="verificationForm">
                         <h3 class="modal-title" id="exampleModalLabel">Verify Your Identity</h3>
                         @csrf
                         <img src="{{ asset('front/images/bank-img.png') }}" alt="">
@@ -679,7 +684,8 @@
                             </div>
                         </div>
                     </form>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" id="closeModalBtn" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
             </div>
         </div>
@@ -772,7 +778,7 @@
         </div>
     </div>
 
-@include('modal.cancellationModal')
+    @include('modal.cancellationModal')
     {{-- Notifications --}}
     {{-- @include('layouts.notifications') --}}
 
@@ -839,38 +845,60 @@
                 } else {
                     console.log('Other brand field not found');
                 }
-            }
-            else {
+            } else {
                 otherBrandField.addClass('d-none');
             }
         });
 
-        $(document).on('click','.non-availability',function(){
+        $(document).on('click', '.non-availability', function() {
             $('.daterangepicker, .ltr, .show-calendar, .opensright').last().addClass('testCheck')
         })
 
-        document.getElementById('identity').addEventListener('click', async function() {
+        document.getElementById('verificationForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(this); // Collect form data
+
             try {
-                const response = await fetch('/send-verification-email', {
+                const response = await fetch(this.action, {
                     method: 'POST',
+                    body: formData,
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                            'content')
+                        'X-Requested-With': 'XMLHttpRequest' // Optional
                     }
                 });
 
-                const data = await response.json();
+                const data = await response.json(); // Parse JSON response
 
                 if (data.status === 'success') {
-                    window.location.href = data.url; // Redirect to Stripe verification
+                    window.location.href = data.url; // Redirect to the return URL
                 } else {
-                    alert('Error: ' + data.message); // Handle error
+                    alert(data.message || 'An error occurred'); // Handle error
                 }
             } catch (error) {
-                console.error('Error:', error);
+                console.error('There was a problem with the fetch operation:', error);
+                alert('There was an error with the form submission. Please try again.'); // Error handling
             }
+        });
 
+        // Close modal button
+        document.getElementById('closeModalBtn').addEventListener('click', function() {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('identity'));
+            if (modal) {
+                modal.hide(); // Hide the modal
+            }
+        });
+
+        // Prevent form submission on Enter key when focus is on modal
+        document.getElementById('verificationForm').addEventListener('keydown', function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+            }
+        });
+
+        // Prevent form submission if clicking outside the modal content
+        document.getElementById('identity').addEventListener('click', function(event) {
+            event.stopPropagation(); // Prevent click events from propagating
         });
     </script>
 
@@ -1499,7 +1527,7 @@
                 });
             }
         </script>
-@yield('custom_variables')
+        @yield('custom_variables')
         <script defer src="{{ asset('js/custom/chat2.js') }}"></script>
         <script defer src="{{ asset('js/custom/chatlist.js') }}"></script>
     @endauth

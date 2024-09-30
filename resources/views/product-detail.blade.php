@@ -630,11 +630,6 @@
                                     @endif
                                 </div>
 
-
-
-
-
-
                             </div>
 
                             <button type="button" class="button primary-btn full-btn mt-3 mb-3"
@@ -1097,6 +1092,7 @@
         const setupAddressForm = () => {
             document.getElementById('submitAddressBtn').addEventListener('click', () => {
                 const formData = {
+                    complete_address: document.getElementById('autocomplete').value,
                     address_id: document.getElementById('address_id').value,
                     address1: document.getElementById('street_number').value,
                     address2: document.getElementById('route').value,
@@ -1124,10 +1120,8 @@
         };
 
         const initAutocomplete = () => {
-            const autocomplete = new google.maps.places.Autocomplete(document.getElementById(
-                'autocomplete'), {
-                types: ['geocode']
-            });
+            var input = document.getElementById('autocomplete');
+            const autocomplete = new google.maps.places.Autocomplete(input);
 
             autocomplete.addListener('place_changed', () => {
                 const place = autocomplete.getPlace();

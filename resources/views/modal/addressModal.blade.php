@@ -55,8 +55,9 @@
                             <div class="col-md-12 mb-3">
                                 <label for="autocomplete" class="form-label">Enter
                                     your address*</label>
-                                <input id="autocomplete" placeholder="Start typing your address" class="form-control"
-                                    type="text" />
+                                <input id="autocomplete" name ="complete_address" placeholder="Start typing your address" class="form-control"
+                                    type="text" >
+                                    
                             </div>
                             <input type="hidden" id="address_id" name="address_id">
                             <div class="col-lg-6 mb-3">

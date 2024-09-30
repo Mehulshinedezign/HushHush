@@ -655,7 +655,6 @@ class ProfileController extends Controller
             'country' => 'required',
             // 'zipcode' => 'required',
         ]);
-
         $address = UserDetail::updateOrCreate(
             ['id' => $request->address_id],
             [
@@ -666,7 +665,7 @@ class ProfileController extends Controller
                 'state' => $request->state,
                 'country' => $request->country,
                 'zipcode' => $request->zipcode ?? 'N/A',
-                'complete_address' => "{$request->address1}, {$request->address2}, {$request->city}, {$request->state}, {$request->country} - {$request->zipcode}",
+                'complete_address' => $request->complete_address,
             ]
         );
 
