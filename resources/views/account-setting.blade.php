@@ -268,7 +268,7 @@
         $('#address').on('input', function() {
             if ($(this).val() === '') {
                 $(".address_data").slideUp("slow");
-                $('#addressline12, #addressline21, #selectCountry, #selectState, #selectCity, #zip-code').val('');
+                $('#addressline12, #addressline21, #selectCountry, #selectState, ').val('');
             }
         });
 
@@ -278,7 +278,7 @@
 
             $('#selectCountry, #selectState, #selectCity, #zip-code').prop('readonly',
                 true);
-
+            
             autocomplete.addListener('place_changed', function() {
                 var place = autocomplete.getPlace();
                 $('#addressline12, #addressline21, #selectCountry, #selectState, #selectCity, #zip-code').val('');

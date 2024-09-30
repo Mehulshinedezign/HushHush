@@ -314,11 +314,13 @@
                                         <div id="collapseTwo" class="accordion-collapse collapse show"
                                             aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
-                                              @if(isset($product->productCompleteLocation->city) && isset($product->productCompleteLocation->state) && isset($product->productCompleteLocation->country))  
-                                              {{ @$product->productCompleteLocation->city . ' , ' . @$product->productCompleteLocation->state . ' , ' . @$product->productCompleteLocation->country }}
-                                              @else
-                                              {{ @$product->productCompleteLocation->city . '  ' . @$product->productCompleteLocation->state . '  ' . @$product->productCompleteLocation->country }}
-                                              @endif
+                                                @if (isset($product->productCompleteLocation->city) &&
+                                                        isset($product->productCompleteLocation->state) &&
+                                                        isset($product->productCompleteLocation->country))
+                                                    {{ @$product->productCompleteLocation->city . ' , ' . @$product->productCompleteLocation->state . ' , ' . @$product->productCompleteLocation->country }}
+                                                @else
+                                                    {{ @$product->productCompleteLocation->city . '  ' . @$product->productCompleteLocation->state . '  ' . @$product->productCompleteLocation->country }}
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -1137,12 +1139,16 @@
                     .administrative_area_level_1 || '');
                 $('#country').val(addressComponents.country || '');
                 $('#postal_code').val(addressComponents.postal_code || '');
+                $('#postal_code').val(addressComponents.postal_code || '');
             });
         };
 
         manageAddressLink.addEventListener('click', () => {
             initializeAddressManagement();
             initAutocomplete();
+            const offcanvasElement = document.getElementById('inquiry-sidebar');
+            const offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+            offcanvas.show();
         });
     });
 
