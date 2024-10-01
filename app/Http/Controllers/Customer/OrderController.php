@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\RetailerPayout;
 use App\Notifications\RentalCancelorder;
+use App\Traits\SmsTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\{ChatRequest, DisputeRequest, OrderPickUpReturnRequest, RatingRequest};
@@ -15,6 +16,7 @@ use Stripe, Exception, DateTime;
 
 class OrderController extends Controller
 {
+    use SmsTrait;
     public function index(Request $request)
     {
         // dd($request->toArray());
@@ -174,6 +176,13 @@ class OrderController extends Controller
             $customer_name = $order->user->name;
             $retailer = $order->retailer;
             $retailer->notify(new LenderImageUpload($customer_name));
+            $otpMessage = [
+                'message' => 'Lender uploaded the image for order ID' . $order->id . ' kindly verify ',
+                'route' => route('retailercustomer') // Optional link'
+            ];
+            $phoneNumber = $retailer->country_code . $retailer->phone_number;
+
+            $this->sendSms($phoneNumber, $otpMessage);
             return redirect()->back()->with('success', 'Images uploaded successfully');
         }
 
@@ -221,9 +230,17 @@ class OrderController extends Controller
                 ];
                 if (@$order->user->usernotification->customer_order_pickup == '1') {
                     $order->user->notify(new CustomerOrderPickup($customer_info));
+                    $otpMessage = ['message' => 'customer Confirm the pickup of your product with orderID ' . $order->id . '.'];
+                    $phoneNumber = $order->user->country_code . $order->user->phone_number;
+
+                    $this->sendSms($phoneNumber, $otpMessage);
                 }
                 if (@$order->retailer->usernotification->lender_order_pickup == '1') {
                     $order->retailer->notify(new LenderOrderPickup($lender_info));
+                    $otpMessage = ['message' => 'Retailer Confirm the pickup of your product with orderID ' . $order->id . '.'];
+                    $phoneNumber = $order->retailer->country_code . $order->retailer->phone_number;
+
+                    $this->sendSms($phoneNumber, $otpMessage);
                 }
             }
 
@@ -324,6 +341,10 @@ class OrderController extends Controller
         // }
         $customer_name = $order->user->name;
         $order->retailer->notify(new LenderImageUploadForReturn($customer_name));
+        $otpMessage = ['message' => 'Lender uploded the image of your product for verify that assosiate with the order-id' . $order->id];
+        $phoneNumber = $order->retailer->country_code . $order->retailer->phone_number;
+
+        $this->sendSms($phoneNumber, $otpMessage);
         return redirect()->back()->with('success', 'Images uploaded successfully');
         // }
 
@@ -375,9 +396,17 @@ class OrderController extends Controller
                 ];
                 if (@$order->user->usernotification->customer_order_return == '1') {
                     $order->user->notify(new CutomerOrderReturn($customer_info));
+                    $otpMessage = ['message' => 'Your customer succesfully return the product ' . $order->product->name];
+                    $phoneNumber = $order->user->country_code . $order->user->phone_number;
+
+                    $this->sendSms($phoneNumber, $otpMessage);
                 }
                 if (@$order->retailer->usernotification->lender_order_return == '1') {
                     $order->retailer->notify(new LenderOrderReturn($lender_info));
+                    $otpMessage = ['message' => 'Your retailer succesfully return the product ' . $order->product->name];
+                    $phoneNumber = $order->retailer->country_code . $order->retailer->phone_number;
+
+                    $this->sendSms($phoneNumber, $otpMessage);
                 }
                 // send mail to customer whe lender verify product
                 // mail
@@ -443,11 +472,11 @@ class OrderController extends Controller
 
 
         if (isset($order->queryOf->negotiate_price)) {
-            if($order_commission->type=='Percentage'){
+            if ($order_commission->type == 'Percentage') {
 
                 $amount = $order->queryOf->negotiate_price * ($order_commission->value / 100);
                 $dealerAmount = $order->total - $amount;
-            }else{
+            } else {
                 $amount = $order->queryOf->negotiate_price - ($order_commission->value);
                 $dealerAmount = $order->total - $amount;
             }

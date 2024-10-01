@@ -1769,6 +1769,12 @@ class ProductController extends Controller
 
             // Check if the logged-in user has a review on the product
             $userHasReview = $productDetails->ratings->where('user_id', $user->id)->isNotEmpty();
+            if($query->delivery_option == 'ship_to_me'){
+                $address = UserDetail::where('id',$query->address_id)->first();
+            }
+            else{
+                $address = ProductLocation::where('product_id',$product->id)->first();
+            }
 
             // Organize images
             $customerPickedUpImages = $order->customerPickedUpImages->map(function ($image) {
@@ -1839,6 +1845,7 @@ class ProductController extends Controller
                         'retailerPickedUpImages' => $retailerPickedUpImages,
                         'retailerReturnedImages' => $retailerReturnedImages,
                     ],
+                    'address' => $address,
                 ],
             ], 200);
         } catch (\Throwable $e) {

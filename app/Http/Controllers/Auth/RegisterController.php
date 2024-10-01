@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Traits\SmsTrait;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
-
 use App\Http\Controllers\Controller;
 use App\Models\NotificationSetting;
 use App\Providers\RouteServiceProvider;
@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Http;
 
 class RegisterController extends Controller
 {
+    use SmsTrait;
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -118,9 +119,9 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $fullName = $data['first_name'] . ' ' . $data['last_name'];
-        $number =$data['phone_number']['full'];
-        $main =$data['phone_number']['main'];
-        $number1=$this->splitDynamicCountryCode($number,$main);
+        $number = $data['phone_number']['full'];
+        $main = $data['phone_number']['main'];
+        $number1 = $this->splitDynamicCountryCode($number, $main);
         $signUpData = User::create([
             'name' => $fullName,
             'status' => '0',
@@ -133,10 +134,10 @@ class RegisterController extends Controller
 
         UserDetail::create([
             'user_id' => $signUpData->id,
-            'is_default' =>'1',
+            'is_default' => '1',
         ]);
 
-        if(isset($data['gov_id'])){
+        if (isset($data['gov_id'])) {
 
             $path = $data['gov_id']->store('user_documents');
             $filePath = str_replace("public/", "", $path);
@@ -217,25 +218,54 @@ class RegisterController extends Controller
      * @param  mixed  $user
      * @return mixed
      */
+    // protected function registered(Request $request, $user)
+    // {
+    //     if (isset($request->is_captcha) && $request->is_captcha != null) {
+    //         DB::table('users')->where('id', $user->id)->delete();
+    //         auth()->logout();
+    //         return redirect()->back()->with(['message' => 'data store successfully']);
+    //     }
+
+    //     // auth()->logout();
+
+    //     try {
+    //         $otp = $user->emailOtp->otp;
+    //         $user->notify(new VerificationEmail($user, $otp));
+    //         // $otp = rand(100000, 999999);  // Generate OTP
+    //         $otpMessage = 'This is your verification code: ' . $user->phoneOtp->otp;  // Define the OTP message
+
+    //          $this->sendSms($user->phone_number, $otpMessage);  // Call the sendSms function from the service or trait
+
+    //         // $request->session()->put('userId', $user->id);
+    //         // return redirect()->route('verify.otp', compact('user'));
+
+    //         return view('auth.verify_otp');
+
+    //         // return redirect()->route('login')->with('success', 'Registration successful. A confirmation email has been sent to ' . $user->email . '. Please verify to log in.');
+    //     } catch (Exception $ex) {
+    //         return redirect()->route('login')->with('error', $ex->getMessage());
+    //     }
+    // }
+
+
     protected function registered(Request $request, $user)
     {
         if (isset($request->is_captcha) && $request->is_captcha != null) {
             DB::table('users')->where('id', $user->id)->delete();
             auth()->logout();
-            return redirect()->back()->with(['message' => 'data store successfully']);
+            return redirect()->back()->with(['message' => 'Data stored successfully']);
         }
-
-        // auth()->logout();
 
         try {
             $otp = $user->emailOtp->otp;
             $user->notify(new VerificationEmail($user, $otp));
-            // $request->session()->put('userId', $user->id);
-            // return redirect()->route('verify.otp', compact('user'));
+
+            $otpMessage = ['message'=>'This is your verification code: ' . $user->phoneOtp->otp];
+            $phoneNumber =$user->country_code . $user->phone_number;
+
+            $this->sendSms( $phoneNumber, $otpMessage);
 
             return view('auth.verify_otp');
-
-            // return redirect()->route('login')->with('success', 'Registration successful. A confirmation email has been sent to ' . $user->email . '. Please verify to log in.');
         } catch (Exception $ex) {
             return redirect()->route('login')->with('error', $ex->getMessage());
         }

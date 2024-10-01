@@ -10,6 +10,7 @@ use App\Models\UserDetail;
 use App\Notifications\AcceptItem;
 use App\Notifications\QueryReceived;
 use App\Notifications\RejectItem;
+use App\Traits\SmsTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 
 class QueryController extends Controller
 {
+    use SmsTrait;
     public function store(Request $request)
     {
         // dd($request->all());
@@ -197,6 +199,17 @@ class QueryController extends Controller
             $userId = jsencode_userdata($query_product->user->id);
             if (@$query_product->user->usernotification->accept_item == '1') {
                 // $query_product->user->notify(new AcceptItem($userId));
+                $otpMessage = [
+                    'message' => 'Your query is accepted by the retailer for product ' . $query_product->product->name,
+                    'route' => route('my_query') // Optional link
+                ];
+
+                $phoneNumber = $query_product->user->country_code . $query_product->user->phone_number;
+
+                $this->sendSms($phoneNumber, $otpMessage);
+
+
+                // $this->sendSms($phoneNumber, $otpMessage);
             }
 
             DB::commit();
@@ -226,6 +239,13 @@ class QueryController extends Controller
         $userId = jsencode_userdata($query_product->user->id);
         if (@$query_product->user->usernotification->reject_item == '1') {
             $query_product->user->notify(new RejectItem($userId));
+            $otpMessage = [
+                'message' => 'Your query on product ' . $query_product->product->name . 'is reject by the retailer.',
+                'route' => route('my_query') // Optional link
+            ];
+            $phoneNumber = $query_product->user->country_code . $query_product->userphone_number;
+
+            $this->sendSms($phoneNumber, $otpMessage);
         }
         return redirect()->back()->with('success', 'Query rejected successfully.');
     }

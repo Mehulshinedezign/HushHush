@@ -7,6 +7,7 @@ use App\Models\PhoneOtp;
 use App\Models\User;
 use App\Notifications\VerificationEmail;
 use App\Services\OtpService;
+use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ use Twilio\Rest\Client;
 
 class VerifyOtpController extends Controller
 {
+    use SmsTrait;
     protected $otpService;
 
     public function __construct(OtpService $otpService = null)
@@ -109,57 +111,67 @@ class VerifyOtpController extends Controller
 
     public function resendOtp(Request $request, $type)
     {
-        // $userId = $request->query('user_id');
         $user = User::findOrFail(auth()->user()->id);
 
-        if ($type === 'email') {
-            $otp = $this->otpService->generateOtp($user);
+        $otp = $this->otpService->generateOtp($user);
 
-            // Uncomment the following line to actually send the email OTP
-            // $this->otpService->sendEmailOtp($user, $otp);
+        if ($type === 'email') {
             $user->notify(new VerificationEmail($user, $otp));
 
             EmailOtp::updateOrCreate(
                 ['user_id' => $user->id],
                 [
                     'otp' => $otp,
-                    'expires_at' => date('Y-m-d H:i:s'),
-                    'status' => '0',
+                    'expires_at' => now()->addMinutes(15), // OTP expires after 15 minutes
+                    'status' => 'pending', // Status is 'pending' until verified
                 ]
             );
-            $status= 'OTP resent successfully on your email.';
+            $status = 'OTP resent successfully to your email.';
         } elseif ($type === 'phone_number') {
-            $otp = $this->otpService->generateOtp($user);
-            // $message = "Login OTP is " . $otp;
-            // $account_sid = env("TWILIO_SID");
-            // $auth_token = env("TWILIO_TOKEN");
-            // $twilio_number = env("TWILIO_FROM");
-            // $client = new Client($account_sid, $auth_token);
-            // $client->messages->create("+919463833241", [
-            //     'from' => $twilio_number,
-            //     'body' => $message
-            // ]);
-            // info('SMS Sent Successfully.');
-            // }
-            // return "Otp sent successfully";
-            // Uncomment the following line to actually send the phone OTP
-            // $this->otpService->sendPhoneOtp($user, $otp);
+            if (empty($user->phone_number)) {
+                return redirect()->route('auth.verify_otp_form', ['user' => $user->id])
+                    ->with('error', 'No phone number available for this user.');
+            }
 
-            PhoneOtp::updateOrCreate(
-                ['user_id' => $user->id],
-                [
-                    'otp' => $otp,
-                    'expires_at' => date('Y-m-d H:i:s'),
-                    'status' => '0',
-                ]
-            );
-            $status= 'OTP resent successfully on your phone number.';
+            $message = "Your login OTP is " . $otp;
+            $account_sid = env("TWILIO_ACCOUNT_SID");
+            $auth_token = env("TWILIO_AUTH_TOKEN");
+            $twilio_number = env("TWILIO_PHONE_NUMBER");
 
+            if (empty($account_sid) || empty($auth_token) || empty($twilio_number)) {
+                return redirect()->route('auth.verify_otp_form', ['user' => $user->id])
+                    ->with('error', 'Twilio configuration is missing or invalid.');
+            }
+
+            try {
+                $client = new Client($account_sid, $auth_token);
+                $client->messages->create('+918210331846', [
+                    'from' => $twilio_number, // Use the Twilio number from env
+                    'body' => $message,
+                ]);
+
+                info('SMS sent successfully.');
+
+                PhoneOtp::updateOrCreate(
+                    ['user_id' => $user->id],
+                    [
+                        'otp' => $otp,
+                        'expires_at' => now()->addMinutes(15), // OTP expires after 15 minutes
+                        'status' => 'pending', // Status is 'pending' until verified
+                    ]
+                );
+                $status = 'OTP resent successfully to your phone number.';
+            } catch (\Exception $e) {
+                info('SMS sending failed: ' . $e->getMessage());
+                return redirect()->route('auth.verify_otp_form', ['user' => $user->id])
+                    ->with('error', 'Failed to send OTP to phone number.');
+            }
         } else {
-            return redirect()->route('auth.verify_otp_form', ['user' => $user->id])->with('error', 'Invalid OTP type.');
+            return redirect()->route('auth.verify_otp_form', ['user' => $user->id])
+                ->with('error', 'Invalid OTP type.');
         }
 
-        return redirect()->route('auth.verify_otp_form',  ['user' => $user->id])
+        return redirect()->route('auth.verify_otp_form', ['user' => $user->id])
             ->with('status', $status);
     }
 }
