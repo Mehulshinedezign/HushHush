@@ -190,8 +190,8 @@ class ProductController extends Controller
                 'cancellation_policy' => $request->cancellation_policy ,
             ];
             if(isset($request->other_brand)){
-                Brand::create([
-                    'name'=> $request->other_brand,
+                Brand::updateOrCreate(['name'=> $request->other_brand],
+                    ['name'=> $request->other_brand,
                 ]);
             }
 
@@ -430,8 +430,8 @@ class ProductController extends Controller
 
             ];
             if(isset($request->other_brand)){
-                Brand::create([
-                    'name'=> $request->other_brand,
+                Brand::updateOrCreate(['name'=> $request->other_brand],
+                    ['name'=> $request->other_brand,
                 ]);
             }
 

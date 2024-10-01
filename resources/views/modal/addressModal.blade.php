@@ -48,7 +48,7 @@
                         </li>
                     @endforeach
                 </div>
-                <div id="addEditAddressForm" >
+                <div id="addEditAddressForm">
                     <h4 id="formTitle">Add Address</h4>
                     <form id="addressForm">
                         <div class="row">

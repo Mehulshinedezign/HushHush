@@ -2997,3 +2997,8 @@ button#addNewAddressBtn {
 .add-more-daterangepicker-main {
     text-align: left;
 }
+.info-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

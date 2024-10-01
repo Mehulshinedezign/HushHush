@@ -192,7 +192,7 @@
                     content: {
                         element: "span",
                         attributes: {
-                            innerHTML: 'The platform charges will be deducted by Stripe. This product has <strong>{{ @$order->product->cancellation_policy }}</strong> cancellation policy. Refund will initiate according to it.',
+                            innerHTML: 'This product has <strong>{{ @$order->product->cancellation_policy }}</strong> cancellation policy. Refund will initiate according to it.',
                         },
                     },
                     icon: 'warning',
@@ -212,7 +212,7 @@
                             closeModal: true,
                         },
                         policy: {
-                            text: "Cancellation Policy",
+                            text: "View Cancellation Policy",
                             value: "policy",
                             visible: true,
                             className: "btn btn-info",

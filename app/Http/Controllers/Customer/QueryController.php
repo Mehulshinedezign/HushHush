@@ -195,7 +195,7 @@ class QueryController extends Controller
 
             $userId = jsencode_userdata($query_product->user->id);
             if (@$query_product->user->usernotification->accept_item == '1') {
-                $query_product->user->notify(new AcceptItem($userId , $query_product));
+                @$query_product->user->notify(new AcceptItem($userId , $query_product));
             }
 
             DB::commit();

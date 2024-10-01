@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="section-body">
-        <div><a href="{{ url()->previous() }}"><i class="fa-solid fa-angle-left"></i></a></div>
         <div class="card">
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-6">
@@ -51,7 +50,7 @@
                                 </li>
                                 <li class="list-col">
                                     <span class="list-item">Color:</span>
-                                    <span class="">{{ (@$product->color) ?? 'N/A' }}</span>
+                                    <span class="">{{ (@$product->get_color->name) ?? 'N/A' }}</span>
                                 </li>
 
                                 {{-- <li class="list-col">
