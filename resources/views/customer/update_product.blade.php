@@ -158,7 +158,7 @@
                                         <div class="form-group">
                                             <label for="">Other Brand</label>
                                             <div class="formfield">
-                                                <input type="text" value=""
+                                                <input type="text" value="Other"
                                                     class="produt_input form-control form-class" placeholder="other"
                                                     name="other_brand">
 
@@ -374,7 +374,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-6">
                                         <div class="form-group">
-                                            <label for="">Choose cancellation Policy*</label>
+                                            <label for="" class="info-label">Choose cancellation Policy* <a href="#"data-bs-toggle="modal" data-bs-target="#cancellationModal" ><i class="fa-solid fa-circle-info"></i></a></label>
                                             <div class="formfield">
                                                 <select
                                                     class="produt_input form-control form-class @error('cancellation_policy') is-invalid @enderror"
@@ -398,8 +398,6 @@
                                                     </span>
                                                 @enderror
                                             </div>
-                                            <a href="#" data-bs-toggle="modal"
-                                                data-bs-target="#cancellationModal">Read More</a>
                                         </div>
                                     </div>
 

@@ -699,10 +699,26 @@
     });
 </script>
 <script>
-    document.getElementById('manage_address_link').addEventListener('click', function() {
-        // Open the modal when clicking on "Change Address"
-        new bootstrap.Modal(document.getElementById('addressModal')).show();
+  document.getElementById('manage_address_link').addEventListener('click', function() {
+    // Open the modal when clicking on "Change Address"
+    var modalElement = document.getElementById('addressModal');
+    var modal = new bootstrap.Modal(modalElement);
+    modal.show();
+
+    // Wait for the modal to be fully shown before triggering the button click
+    modalElement.addEventListener('shown.bs.modal', function () {
+        let btn = document.getElementById('addNewAddressBtn');
+
+        // Check if the button exists in the modal
+        if (btn) {
+            console.log('Button exists, triggering click programmatically...');
+            // Programmatically trigger the click event
+            btn.click();
+        } else {
+            console.log('Button not found');
+        }
     });
+});
 
     // Function to handle address selection from the modal
     function selectAddress(id, fullAddress) {

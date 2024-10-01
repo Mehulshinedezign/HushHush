@@ -787,12 +787,12 @@ jQuery(document).ready(function () {
     //     $(this).attr("checked", true);
     // });
 
-    jQuery(document).on("change", 'select[name="brand"]', function () {
-        //console.log($(this).val());
-        if ($(this).val() == '96') {
-            $('#other_brand').removeClass('d-none');
-        } else {
-            $('#other_brand').addClass('d-none');
-        }
-    });
+    // jQuery(document).on("change", 'select[name="brand"]', function () {
+    //     //console.log($(this).val());
+    //     if ($(this).val() == '96') {
+    //         $('#other_brand').removeClass('d-none');
+    //     } else {
+    //         $('#other_brand').addClass('d-none');
+    //     }
+    // });
 });
