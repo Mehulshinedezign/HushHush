@@ -37,7 +37,6 @@ class CustomerImageUpload extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $lender_name = $this->lender_name;
-        $data = $this->data;
 
         return (new MailMessage)
                     ->line('Dear customer.')
