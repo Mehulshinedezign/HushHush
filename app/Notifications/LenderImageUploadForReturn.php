@@ -14,10 +14,11 @@ class LenderImageUploadForReturn extends Notification
     /**
      * Create a new notification instance.
      */
-    protected $customer_name;
-    public function __construct($customer_name)
+    protected $customer_name , $order;
+    public function __construct($customer_name , $order)
     {
         $this->customer_name = $customer_name;
+        $this->order = $order;
     }
 
     /**
@@ -35,9 +36,13 @@ class LenderImageUploadForReturn extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $order = $this->order;
+
         return (new MailMessage)
                     ->line('Dear Retailer')
-                    ->line($this->customer_name .' is upload the image for Return a product plase verify.')
+                    ->line('Product Name: '. $order->product->name)
+                    ->line('Order Id: '. $order->id)
+                    ->line($this->customer_name .' is upload the image for Return a product please verify.')
                     ->action('Receive order', route('retailercustomer'))
                     ->line('Thank you for using our application!');
     }

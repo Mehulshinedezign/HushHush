@@ -707,7 +707,7 @@
                             </div>
                         </div>
                     </form>
-                    <button type="button" class="btn-close" id="closeModalBtn" data-bs-dismiss="modal"
+                    <button type="button" class="btn-close" id="closeModalBtn1" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
             </div>
@@ -918,7 +918,7 @@
         });
 
         // Close modal button
-        document.getElementById('closeModalBtn').addEventListener('click', function() {
+        document.getElementById('closeModalBtn1').addEventListener('click', function() {
             const modal = bootstrap.Modal.getInstance(document.getElementById('identity'));
             if (modal) {
                 modal.hide(); // Hide the modal
@@ -1170,8 +1170,6 @@
             $('.parent_category').change(function() {
                 var categoryId = $(this).val();
                 var route = '{{ url('sub_category') }}/' + categoryId;
-
-
 
                 if (categoryId) {
                     $.ajax({

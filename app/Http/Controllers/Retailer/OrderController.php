@@ -110,7 +110,7 @@ class OrderController extends Controller
 
     public function orderPickUp(OrderPickUpReturnRequest $request, Order $order)
     {
-        $order->load('retailer', 'user');
+        $order->load('retailer', 'user','product');
         if ('Yes' == $order->dispute_status || 'Resolved' == $order->dispute_status) {
             return redirect()->back()->with("warning", "You can not allot dispute order to customer");
         }
@@ -164,9 +164,8 @@ class OrderController extends Controller
                 OrderImage::insert($images);
             }
             // }
-
             $lender_name = $order->retailer->name;
-            $order->user->notify(new CustomerImageUpload($lender_name));
+            $order->user->notify(new CustomerImageUpload($lender_name , $order));
 
             return redirect()->back()->with('success', 'Images uploaded successfully');
         }
@@ -321,7 +320,7 @@ class OrderController extends Controller
             OrderImage::insert($images);
         }
         $lender_name = $order->retailer->name;
-        $order->user->notify(new CustomerImageUploadForReturn($lender_name));
+        $order->user->notify(new CustomerImageUploadForReturn($lender_name, $order));
         return redirect()->back()->with('success', 'Images uploaded successfully');
         // }
         // }

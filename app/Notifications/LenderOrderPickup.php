@@ -38,8 +38,8 @@ class LenderOrderPickup extends Notification
         return (new MailMessage)
                     ->subject('Your Order is Ready for Pickup!')
                     ->greeting('Dear Retailer ' . $this->lender_info['lender_name'] . ',')
-                    ->line('from date '.$this->lender_info['from_date'])
-                    ->line('to date'.$this->lender_info['to_date'])
+                    ->line('From Date '.$this->lender_info['from_date'])
+                    ->line('To Date '.$this->lender_info['to_date'])
                     ->line('We are excited to inform you that your order is now ready for pickup at ' . $this->lender_info['pickup_location'] . '!')
                     ->line('Thank you for shopping with us! If you have any questions or need further assistance, please do not hesitate to contact us.')
                     ->line('Thank you for using our application!');

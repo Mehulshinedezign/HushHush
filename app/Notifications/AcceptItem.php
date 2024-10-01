@@ -15,10 +15,11 @@ class AcceptItem extends Notification
      * Create a new notification instance.
      */
 
-     protected $userId;
-    public function __construct($userId)
+     protected $userId ,$data;
+    public function __construct($userId , $data)
     {
-        $this->userId=$userId;
+        $this->userId = $userId;
+        $this->data = $data;
     }
 
     /**
@@ -36,10 +37,13 @@ class AcceptItem extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+         $data = $this->data;
         return (new MailMessage)
-                    ->subject('Product Query Accepted')
-                    ->line('Your query is accepted .')
-                    ->action('View Query', route('my_query'))
+                    ->subject('Product Inquiry  Accepted')
+                    ->line('Your Inquiry is accepted .')
+                    ->line('Product Name: '.$data->product->name)
+                    ->line('Date: '.$data->date_range)
+                    ->action('View Inquiry ', route('my_query'). ('?status=ACCEPTED'))
                     ->line('Thank you for using our application!');
     }
 

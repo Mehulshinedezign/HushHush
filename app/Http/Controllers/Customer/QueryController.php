@@ -160,8 +160,7 @@ class QueryController extends Controller
             //     'shipping_charges' => 'required|numeric',
             // ])->validate();
 
-            $query_product = Query::where('id', $id)->first();
-
+            $query_product = Query::with('product')->where('id', $id)->first();
 
             // dd($query_product->toArray());
 
@@ -196,7 +195,7 @@ class QueryController extends Controller
 
             $userId = jsencode_userdata($query_product->user->id);
             if (@$query_product->user->usernotification->accept_item == '1') {
-                // $query_product->user->notify(new AcceptItem($userId));
+                $query_product->user->notify(new AcceptItem($userId , $query_product));
             }
 
             DB::commit();

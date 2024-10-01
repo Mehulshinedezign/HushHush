@@ -50,9 +50,9 @@ class VerificationEmail extends Notification implements ShouldQueue
         ->subject('Verify your email')
         ->greeting('Hello,' . $user->name . ',')
         ->line('Welcome to Nudora.')
-        ->line('Please verify your email below to join the party.')
-        ->line('This otp will expire in 15 minutes'. '!')
-        ->line('Your OTP: ' . $otp);
+        ->line('Please verify your email.')
+        ->line('Your OTP: ' . $otp)
+        ->line('This otp will expire in 15 minutes'. '!');
     }
 
     /**
