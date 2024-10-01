@@ -1326,6 +1326,7 @@
     </script>
 
     {{-- This code show the image preview option --}}
+    @if (Route::currentRouteName() !== 'editproduct')
     <script>
         $(document).ready(function() {
             const MAX_IMAGES = 5;
@@ -1420,18 +1421,24 @@
 
             // Drag and drop file upload
             $('.img-upload-box').on('dragover', function(e) {
+                console.log('here');
+
                 e.preventDefault();
                 e.stopPropagation();
                 $(this).addClass('drag-over');
             });
 
             $('.img-upload-box').on('dragleave', function(e) {
+                console.log('here2');
+
                 e.preventDefault();
                 e.stopPropagation();
                 $(this).removeClass('drag-over');
             });
 
             $('.img-upload-box').on('drop', function(e) {
+                console.log('here3');
+
                 e.preventDefault();
                 e.stopPropagation();
                 $(this).removeClass('drag-over');
@@ -1441,11 +1448,14 @@
                 // Set the files to the input and trigger the change event
                 $('#upload-image-five').prop('files', files);
                 $('#upload-image-five').trigger('change');
+                console.log('hrehge');
+
 
 
             });
         });
     </script>
+    @endif
 
     {{-- end header --}}
     @auth

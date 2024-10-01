@@ -594,6 +594,9 @@
         let fileInput = document.getElementById('update-upload-image-five');
         let uploadedFiles = new Set();
 
+
+
+
         function updateFileInput() {
             let dt = new DataTransfer();
             newFiles.forEach(item => {
@@ -692,7 +695,9 @@
 
                 // Check if the file extension is 'jfif'
                 if (file.name.toLowerCase().endsWith('.jfif')) {
-                    alert('Only images in JPG, JPEG, SVG, and PNG formats are allowed for upload. Please upload a different image format.');
+                    alert(
+                        'Only images in JPG, JPEG, SVG, and PNG formats are allowed for upload. Please upload a different image format.'
+                        );
 
                     processFiles(files); // Continue processing the next file
                     return;
@@ -714,6 +719,8 @@
                             name: 'new_images[]'
                         }).val(file.name);
                         imgWrapper.append(img, removeBtn, hiddenInput);
+                        console.log('here');
+
                         $('.update-upload-img-preview').append(imgWrapper);
 
                         newFiles.add({
@@ -758,6 +765,38 @@
                 }
             });
 
+            $('.img-upload-box').on('dragover', function(e) {
+                console.log('here');
+
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).addClass('drag-over');
+            });
+
+            $('.img-upload-box').on('dragleave', function(e) {
+                console.log('here1');
+
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).removeClass('drag-over');
+            });
+
+            $('.img-upload-box').on('drop', function(e) {
+                console.log('here2');
+
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).removeClass('drag-over');
+
+                const files = e.originalEvent.dataTransfer.files;
+
+                // Set the files to the input and trigger the change event
+                $('#update-upload-image-five').prop('files', files);
+                $('#update-upload-image-five').trigger('change');
+                console.log('done');
+
+            });
+
             $('form').on('submit', function(e) {
                 if (newFiles.size === 0) {
                     e.preventDefault();
@@ -783,6 +822,7 @@
                 var isSelected = confSize === size ? ' selected' : '';
                 selectedOption.append(`<option value="${confSize}"${isSelected}>${confSize}</option>`);
             });
+            
         });
     </script>
 @endpush
