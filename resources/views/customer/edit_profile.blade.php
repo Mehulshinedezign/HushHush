@@ -102,7 +102,7 @@
                                 <div class="my-pro-notify-box">
                                     <div class="my-pro-detail-left">
                                         <div class="my-pro-detail-para">
-                                            <h4 class="m-0">Lender receive inquery</h4>
+                                            <h4 class="m-0">Lender receive Inquiry</h4>
                                         </div>
                                     </div>
                                     <div class="my-pro-detail-right">
@@ -117,7 +117,7 @@
                                 <div class="my-pro-notify-box">
                                     <div class="my-pro-detail-left">
                                         <div class="my-pro-detail-para">
-                                            <h4 class="m-0">Customer inquery accepted</h4>
+                                            <h4 class="m-0">Customer Inquiry accepted</h4>
                                         </div>
                                     </div>
                                     {{-- @dd(@$user->usernotification); --}}
@@ -132,7 +132,7 @@
                                 <div class="my-pro-notify-box">
                                     <div class="my-pro-detail-left">
                                         <div class="my-pro-detail-para">
-                                            <h4 class="m-0">Customer inquery rejected</h4>
+                                            <h4 class="m-0">Customer Inquiry rejected</h4>
                                         </div>
                                     </div>
                                     <div class="my-pro-detail-right">

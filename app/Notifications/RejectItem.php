@@ -37,8 +37,8 @@ class RejectItem extends Notification
     {
         return (new MailMessage)
         ->subject('Product Query Rejected')
-        ->line('Your product query is rejected .')
-        ->action('View Query', route('my_query'))
+        ->line('Your product Inquiry is rejected .')
+        ->action('View Inquiry', route('my_query'))
         ->line('Thank you for using our application!');
     }
 
