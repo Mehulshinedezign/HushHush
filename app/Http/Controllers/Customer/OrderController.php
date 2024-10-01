@@ -128,8 +128,7 @@ class OrderController extends Controller
         if ($order->status != "Waiting") {
             return redirect()->back()->with("warning", 'Order must be in waiting state to upload the images.');
         }
-        $order->load(['retailer']);
-
+        $order->load(['retailer','product']);
         if ($order->retailer_confirmed_pickedup == 0) {
             $userId = auth()->user()->id;
             $removedImageIds = explode(',', $request->removed_images);
@@ -175,7 +174,7 @@ class OrderController extends Controller
             // }
             $customer_name = $order->user->name;
             $retailer = $order->retailer;
-            $retailer->notify(new LenderImageUpload($customer_name));
+            $retailer->notify(new LenderImageUpload($customer_name , $order));
             $otpMessage = [
                 'message' => 'Lender uploaded the image for order ID' . $order->id . ' kindly verify ',
                 'route' => route('retailercustomer') // Optional link'
@@ -215,6 +214,8 @@ class OrderController extends Controller
                 $user = auth()->user();
 
                 $customer_info = [
+                    'order_id'=>$order->id,
+                    'product_name'=>$order->product->name,
                     'user_name' => $order->user->name,
                     'from_date' => $order->from_date,
                     'to_date' => $order->to_date,
@@ -222,6 +223,8 @@ class OrderController extends Controller
                 ];
 
                 $lender_info = [
+                    'order_id'=>$order->id,
+                    'product_name'=>$order->product->name,
                     'lender_name' => $order->retailer->name,
                     'from_date' => $order->from_date,
                     'to_date' => $order->to_date,
@@ -340,7 +343,7 @@ class OrderController extends Controller
         }
         // }
         $customer_name = $order->user->name;
-        $order->retailer->notify(new LenderImageUploadForReturn($customer_name));
+        $order->retailer->notify(new LenderImageUploadForReturn($customer_name , $order));
         $otpMessage = ['message' => 'Lender uploded the image of your product for verify that assosiate with the order-id' . $order->id];
         $phoneNumber = $order->retailer->country_code . $order->retailer->phone_number;
 
@@ -381,6 +384,8 @@ class OrderController extends Controller
                 $this->payToRetailer($order);
 
                 $customer_info = [
+                    'product_name'=>$order->product->name,
+                    'order_id'=>$order->id,
                     'user_name' => $order->user->name,
                     'from_date' => $order->from_date,
                     'to_date' => $order->to_date,
@@ -388,6 +393,8 @@ class OrderController extends Controller
                 ];
 
                 $lender_info = [
+                    'product_name'=>$order->product->name,
+                    'order_id'=>$order->id,
                     'lender_name' => $order->retailer->name,
                     'from_date' => $order->from_date,
                     'to_date' => $order->to_date,

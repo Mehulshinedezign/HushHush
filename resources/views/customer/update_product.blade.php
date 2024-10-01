@@ -84,6 +84,7 @@
                                                         @foreach (getParentCategory() as $category)
                                                             <option value="{{ jsencode_userdata($category->id) }}"
                                                                 data-subcategories="{{ getChild($category->id) }}"
+                                                                data-fetchSize="{{ $category->name }}"
                                                                 @if ($product->category_id == $category->id) selected @endif>
                                                                 {{ $category->name }}
                                                             </option>
@@ -697,7 +698,7 @@
                 if (file.name.toLowerCase().endsWith('.jfif')) {
                     alert(
                         'Only images in JPG, JPEG, SVG, and PNG formats are allowed for upload. Please upload a different image format.'
-                        );
+                    );
 
                     processFiles(files); // Continue processing the next file
                     return;
@@ -810,19 +811,28 @@
             });
 
             var sizes = @json(config('size'));
-            var category_size = $('select[name="size"]').find('option:selected').data('fetchsize');
+            var category_size = $('select[name="category"]').find('option:selected').data('fetchsize');
             var size = "{{ $product->size }}";
+
             var selectedOption = $('select[name="size"]');
             selectedOption.empty();
 
             var sizeOptions = sizes[category_size] || [];
-            var defaultSizes = sizeOptions.length === 0 ? sizes['bydefault'] : sizeOptions;
+          
 
-            defaultSizes.forEach(confSize => {
-                var isSelected = confSize === size ? ' selected' : '';
-                selectedOption.append(`<option value="${confSize}"${isSelected}>${confSize}</option>`);
+            var defaultSizes = Object.keys(sizeOptions).length === 0 ? sizes['bydefault'] : sizeOptions;
+            // defaultSizes.forEach(confSize => {  
+            //     var isSelected = confSize === size ? ' selected' : '';
+            //     selectedOption.append(`<option value="${confSize}"${isSelected}>${confSize}</option>`);
+            // });
+
+            Object.keys(sizeOptions).forEach(category => {
+                sizeOptions[category].forEach(confSize => {
+                    const isSelected = confSize === size ? ' selected' : '';
+                    selectedOption.append(
+                        `<option value="${confSize}"${isSelected}>${confSize}</option>`);
+                });
             });
-            
         });
     </script>
 @endpush

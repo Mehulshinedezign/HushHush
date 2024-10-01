@@ -15,10 +15,11 @@ class LenderImageUpload extends Notification
      * Create a new notification instance.
      */
 
-    protected $customer_name;
-    public function __construct($customer_name)
+    protected $customer_name , $data;
+    public function __construct($customer_name , $data)
     {
         $this->customer_name = $customer_name;
+        $this->data = $data;
     }
 
     /**
@@ -36,10 +37,13 @@ class LenderImageUpload extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+         $data = $this->data;
         return (new MailMessage)
-                    // ->line('Dear Retailer')
-                    // ->line($this->customer_name .'is upload the image for pick up a product plase verify.')
-                    // ->action('Receive order', route('retailercustomer'))
+                    ->line('Dear Retailer')
+                    ->line('Product Name: '. $data->product->name)
+                    ->line('Order Id: '. $data->id)
+                    ->line($this->customer_name .'is upload the image for pick up a product Please verify.')
+                    ->action('Receive order', route('retailercustomer'))
                     ->line('Thank you for using our application!');
     }
 

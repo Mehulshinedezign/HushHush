@@ -162,8 +162,7 @@ class QueryController extends Controller
             //     'shipping_charges' => 'required|numeric',
             // ])->validate();
 
-            $query_product = Query::where('id', $id)->first();
-
+            $query_product = Query::with('product')->where('id', $id)->first();
 
             // dd($query_product->toArray());
 

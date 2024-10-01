@@ -1171,8 +1171,6 @@
                 var categoryId = $(this).val();
                 var route = '{{ url('sub_category') }}/' + categoryId;
 
-
-
                 if (categoryId) {
                     $.ajax({
                         type: 'GET',
