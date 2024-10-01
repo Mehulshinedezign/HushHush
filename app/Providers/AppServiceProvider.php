@@ -43,12 +43,12 @@ class AppServiceProvider extends ServiceProvider
                 $view->with($setting->key, $setting->value);
             }
 
-            if (Auth::check()) {
-                $notifications = Notification::with('order.item.product.thumbnailImage', 'sender')->where('receiver_id', auth()->user()->id)->where('is_read', 0)->orderByDesc('id')->take(5)->get();
-                $view->with('notifications', $notifications);
-            } else {
-                $view->with('notifications', []);
-            }
+            // if (Auth::check()) {
+            //     $notifications = Notification::with('order.item.product.thumbnailImage', 'sender')->where('receiver_id', auth()->user()->id)->where('is_read', 0)->orderByDesc('id')->take(5)->get();
+            //     $view->with('notifications', $notifications);
+            // } else {
+            //     $view->with('notifications', []);
+            // }
 
             // if ($this->isMobileDevice()) {
             //     $view->with('isMobile', 'yes');

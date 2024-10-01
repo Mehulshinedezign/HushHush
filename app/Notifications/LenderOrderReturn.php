@@ -27,7 +27,7 @@ class LenderOrderReturn extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -54,8 +54,17 @@ class LenderOrderReturn extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        return [
-            //
-        ];
+
+    return [
+        'lender_name' => $this->lender_info['lender_name'],
+        'product_name' => $this->lender_info['product_name'],
+        'order_id' => $this->lender_info['order_id'],
+        'from_date' => $this->lender_info['from_date'],
+        'to_date' => $this->lender_info['to_date'],
+        'pickup_location' => $this->lender_info['pickup_location'],
+        'message' => 'Dear Retailer ' . $this->lender_info['lender_name'] . ', your order with ID ' . $this->lender_info['order_id'] . ' is ready for return from ' . $this->lender_info['from_date'] . ' to ' . $this->lender_info['to_date'] . ' at ' . $this->lender_info['pickup_location'] . '.',
+        'notification_type' => 'order',
+        'url' => route('orders') // Link to the order return page
+    ];
     }
 }

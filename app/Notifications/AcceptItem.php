@@ -15,8 +15,8 @@ class AcceptItem extends Notification
      * Create a new notification instance.
      */
 
-     protected $userId ,$data;
-    public function __construct($userId , $data)
+    protected $userId, $data;
+    public function __construct($userId, $data)
     {
         $this->userId = $userId;
         $this->data = $data;
@@ -29,7 +29,7 @@ class AcceptItem extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -37,14 +37,14 @@ class AcceptItem extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-         $data = $this->data;
+        $data = $this->data;
         return (new MailMessage)
-                    ->subject('Product Inquiry  Accepted')
-                    ->line('Your Inquiry is accepted .')
-                    ->line('Product Name: '.$data->product->name)
-                    ->line('Date: '.$data->date_range)
-                    ->action('View Inquiry ', route('my_query'). ('?status=ACCEPTED'))
-                    ->line('Thank you for using our application!');
+            ->subject('Product Inquiry  Accepted')
+            ->line('Your Inquiry is accepted .')
+            ->line('Product Name: ' . $data->product->name)
+            ->line('Date: ' . $data->date_range)
+            ->action('View Inquiry ', route('my_query') . ('?status=ACCEPTED'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -54,7 +54,13 @@ class AcceptItem extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        $data = $this->data;
         return [
+            'id' => $data->id,
+            'message' => 'Your query is got accepted by the retailer ',
+            'user_type' => 'borrower',
+            'notification_type' => 'query',
+            'url' => route('my_query') . ('?status=ACCEPTED')// Include the route link in the notification array
             //
         ];
     }

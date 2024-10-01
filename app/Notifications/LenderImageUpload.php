@@ -15,8 +15,8 @@ class LenderImageUpload extends Notification
      * Create a new notification instance.
      */
 
-    protected $customer_name , $data;
-    public function __construct($customer_name , $data)
+    protected $customer_name, $data;
+    public function __construct($customer_name, $data)
     {
         $this->customer_name = $customer_name;
         $this->data = $data;
@@ -29,7 +29,7 @@ class LenderImageUpload extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -37,14 +37,14 @@ class LenderImageUpload extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-         $data = $this->data;
+        $data = $this->data;
         return (new MailMessage)
-                    ->line('Dear Retailer')
-                    ->line('Product Name: '. $data->product->name)
-                    ->line('Order Id: '. $data->id)
-                    ->line($this->customer_name .'is upload the image for pick up a product Please verify.')
-                    ->action('Receive order', route('retailercustomer'))
-                    ->line('Thank you for using our application!');
+            ->line('Dear Retailer')
+            ->line('Product Name: ' . $data->product->name)
+            ->line('Order Id: ' . $data->id)
+            ->line($this->customer_name . 'is upload the image for pick up a product Please verify.')
+            ->action('Receive order', route('retailercustomer'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -54,8 +54,14 @@ class LenderImageUpload extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        $data = $this->data;
+
         return [
-            //
+            'id' => $data->id,
+            'message' => 'Dear Retailer, ' . $this->customer_name . ' has uploaded the image for the pickup of the product ' . $data->product->name . '. Please verify the image for order ID ' . $data->id . '.',
+            'user_type' => 'Retailer',
+            'notification_type' => 'image_upload',
+            'url' => route('retailercustomer') // URL for the retailer to verify the order
         ];
     }
 }

@@ -28,7 +28,7 @@ class CustomerImageUploadForReturn extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -54,8 +54,15 @@ class CustomerImageUploadForReturn extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        $lender_name = $this->lender_name;
+        $order = $this->order;
         return [
-            //
+            'id' => $order->id,
+            'message' => 'Retailer uploaded the image for return on orderId '. $order->id . ' for product name ' . $order->product->name . '. Please verify the image.',
+            'user_type' => 'Retailer',
+            'notification_type' => 'order',
+            'url' => route('orders') // Include the route link in the notification array
         ];
     }
+    
 }
