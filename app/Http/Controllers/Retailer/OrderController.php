@@ -677,7 +677,6 @@ class OrderController extends Controller
             if($refundAmount > 0){
                 $refundStatus = $stripe->refunds->create([
                     'charge' => $paymentIntentData->latest_charge,
-                    'amount' => $refundAmount, // Stripe works with cents and expects an integer
                 ]);
             }
 
