@@ -639,6 +639,9 @@ class OrderController extends Controller
         try {
             // Retrieve payment intent details
             $paymentIntentData = $stripe->paymentIntents->retrieve($order->transaction->payment_id);
+            $charge = $stripe->charges->retrieve($paymentIntentData->latest_charge);
+            $remainingRefundableAmount = $charge->amount - $charge->amount_refunded;
+            // dd($charge ,$charge->amount , $charge->amount_refunded);
         } catch (\Exception $e) {
             session()->flash('error', __("order.messages.cancel.paymentIncomplete"));
             return response()->json(['success' => false, 'url' => $url], 201);
@@ -650,13 +653,17 @@ class OrderController extends Controller
         }
 
         try {
-            // Process refund
-            $refundAmount = (int) (floatval($order->total) * 100);
-            $refundStatus = $stripe->refunds->create([
-                'charge' => $paymentIntentData->latest_charge,
-                'amount' => $refundAmount,
-            ]);
-        } catch (\Exception $e) {
+            $refundAmount = min((int)(floatval($order->total) * 100), $remainingRefundableAmount);
+            // dd($refundAmount);
+            if($refundAmount > 0){
+                $refundStatus = $stripe->refunds->create([
+                    'charge' => $paymentIntentData->latest_charge,
+                    'amount' => $refundAmount, // Stripe works with cents and expects an integer
+                ]);
+            }
+
+
+        } catch (Exception $e) {
             session()->flash('error', str_replace("Charge " . $paymentIntentData->latest_charge, "Order ", $e->getMessage()));
             return response()->json(['success' => false, 'url' => $url], 201);
         }

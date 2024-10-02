@@ -180,6 +180,7 @@
             </div>
         </div>
     </div>
+    {{-- @dd($order->product) --}}
     @include('modal.cancellationModal')
     <script>
         $(document).ready(function() {
