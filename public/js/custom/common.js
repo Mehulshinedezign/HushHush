@@ -738,7 +738,7 @@ function fetchQueries(status, user) {
         },
         error: function (xhr, status, error) {
             console.error('Error:', error);
-            $('#query-list-container').html('<div class="error">An error occurred. Please try again.</div>');
+            // $('#query-list-container').html('<div class="error">An error occurred. Please try again.</div>');
         },
         complete: function () {
             $('body').removeClass('loading');

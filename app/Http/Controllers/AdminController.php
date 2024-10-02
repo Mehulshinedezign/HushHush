@@ -312,10 +312,17 @@ class AdminController extends Controller
     public function viewOrder(Request $request, Order $order)
     {
         $order->load(["user", "transaction", "item.retailer", "disputeDetails"]);
-
-        return view('admin.view_orders', compact('order'));
+        $data = 'viewOrder';
+        return view('admin.view_orders', compact('order','data'));
     }
 
+    public function disputeOrderView(Request $request, Order $order)
+    {
+        $order->load(["user", "transaction", "item.retailer", "disputeDetails"]);
+        $data = 'viewDisputeOrder';
+
+        return view('admin.view_orders', compact('order','data'));
+    }
     public function upload(Request $request)
     {
         $fileName = $request->file('file')->getClientOriginalName();

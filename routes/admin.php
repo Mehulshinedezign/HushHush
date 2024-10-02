@@ -105,6 +105,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     //Orders
     Route::get("orders", [App\Http\Controllers\AdminController::class, 'orders'])->name("orders");
     Route::get("view-order/{order}", [App\Http\Controllers\AdminController::class, 'viewOrder'])->name("view-order");
+    Route::get("view-dispute-order/{order}", [App\Http\Controllers\AdminController::class, 'disputeOrderView'])->name("dispute-view-order");
     Route::get("disputed-orders", [App\Http\Controllers\AdminController::class, 'disputedOrders'])->name("disputed-orders");
     Route::post("resolve-dispute-order/{order}", [App\Http\Controllers\AdminController::class, 'resolveDisputeOrder'])->name("resolve-dispute-order");
 

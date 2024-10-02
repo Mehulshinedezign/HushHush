@@ -155,7 +155,7 @@ class ProductController extends Controller
 
         $querydates = [];
         if (auth()->check()) {  // Only execute if the user is authenticated
-            $querydates = Query::where(['product_id' => $id, 'user_id' => auth()->user()->id])->whereIn('status', ['PENDING', 'ACCEPTED'])
+            $querydates = Query::where(['product_id' => $id, 'user_id' => auth()->user()->id])
                 ->select('date_range')
                 ->get();
 
