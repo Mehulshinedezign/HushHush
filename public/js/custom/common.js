@@ -568,12 +568,13 @@ $('#cancel-order').submit(function (e) {
                         position: 'topRight'
                     });
                 }
-            }, function () {
-                iziToast.error({
-                    title: 'Error',
-                    message: 'Something went wrong!',
-                    position: 'topRight'
-                });
+            }, 
+            function () {
+                // iziToast.error({
+                //     title: 'Error',
+                //     message: 'Something went wrong!',
+                //     position: 'topRight'
+                // });
             }).finally(function () {
                 console.log("error");
             });

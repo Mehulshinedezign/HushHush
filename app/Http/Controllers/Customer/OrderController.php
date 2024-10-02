@@ -762,6 +762,11 @@ class OrderController extends Controller
 
         $stripe = new Stripe\StripeClient(env('STRIPE_SECRET'));
         $paymentIntentData = $stripe->paymentIntents->retrieve($order->transaction->payment_id);
+        $charge = $stripe->charges->retrieve($paymentIntentData->latest_charge);
+
+        // Calculate the remaining unrefunded amount
+        $remainingRefundableAmount = $charge->amount - $charge->amount_refunded;
+        
         if (!isset($paymentIntentData->latest_charge)) {
             session()->flash('error', __("order.messages.cancel.paymentIncomplete"));
             return response()->json([
@@ -769,7 +774,6 @@ class OrderController extends Controller
                 'url' => $url,
             ], 201);
         }
-
         // Calculate refund amounts
         if (isset($order->queryOf->negotiate_price)) {
             $amount = $order->queryOf->negotiate_price * ($order_commission->value / 100);
@@ -778,53 +782,77 @@ class OrderController extends Controller
             $amount = $order->queryOf->getCalculatedPrice($order->queryOf->date_range) * ($order_commission->value / 100);
             $customerAmount = $order->total - $amount;
         }
-
         try {
             $refundAmount = 0;
             $refundType = 'none';
             $now = Carbon::now();
             $date = $order->from_date;
             $differenceInDays = $now->diffInDays(Carbon::parse($date));
-
             // Refund logic based on cancellation policy
+
             if ($product->cancellation_policy == 'flexible') {
                 if ($differenceInDays > 7) {
-                    $refundStatus = $stripe->refunds->create([
-                        'charge' => $paymentIntentData->latest_charge,
-                        'amount' => floatval($customerAmount) * 100,
-                    ]);
-                    $refundAmount = $customerAmount;
-                    $refundType = 'flexible';
+                    $refundAmount = min((int)(floatval($customerAmount) * 100), $remainingRefundableAmount);
+                   
+                    if ($refundAmount > 0) {
+                        $refundStatus = $stripe->refunds->create([
+                            'charge' => $paymentIntentData->latest_charge,
+                        ]);
+                        $refundAmount = $customerAmount;
+                        $refundType = 'flexible';
+                    } else {
+                        session()->flash('warning', 'No remaining refundable amount for this charge.');
+                    }
+            
                 } elseif ($differenceInDays <= 7 && $differenceInDays > 0) {
-                    $refundStatus = $stripe->refunds->create([
-                        'charge' => $paymentIntentData->latest_charge,
-                        'amount' => floatval($customerAmount / 2) * 100,
-                    ]);
-                    $refundAmount = $customerAmount / 2;
-                    $refundType = 'flexible';
+                    $refundAmount = min((floatval($customerAmount / 2) * 100), $remainingRefundableAmount);
+                   
+                    if ($refundAmount > 0) {
+                        $refundStatus = $stripe->refunds->create([
+                            'charge' => $paymentIntentData->latest_charge,
+                            'amount' => $refundAmount,
+                        ]);
+                        $refundAmount = $customerAmount / 2;
+                        $refundType = 'flexible';
+                    } else {
+                        session()->flash('warning', 'No remaining refundable amount for this charge.');
+                    }
                 } else {
                     session()->flash('warning', 'The order has been canceled, but no refund will be initiated since cancellation is too close to the booking date.');
                 }
-            } elseif ($product->cancellation_policy == 'firm') {
+            }elseif ($product->cancellation_policy == 'firm') {
                 if ($differenceInDays >= 30) {
-                    $refundStatus = $stripe->refunds->create([
-                        'charge' => $paymentIntentData->latest_charge,
-                        'amount' => floatval($customerAmount) * 100,
-                    ]);
-                    $refundAmount = $customerAmount;
-                    $refundType = 'firm';
+                    $refundAmount = min((int)(floatval($customerAmount) * 100), $remainingRefundableAmount);
+                    if ($refundAmount > 0) {
+                        $refundStatus = $stripe->refunds->create([
+                            'charge' => $paymentIntentData->latest_charge,
+                        ]);
+                        $refundAmount = $customerAmount;
+                        $refundType = 'firm';
+                    } else {
+                        session()->flash('warning', 'No remaining refundable amount for this charge.');
+                    }
+            
                 } elseif ($differenceInDays > 7 && $differenceInDays < 30) {
-                    $refundStatus = $stripe->refunds->create([
-                        'charge' => $paymentIntentData->latest_charge,
-                        'amount' => (int)(floatval($customerAmount / 2) * 100),
-                    ]);
-                    $refundAmount = $customerAmount / 2;
-                    $refundType = 'firm';
+                    $refundAmount = min((int)(floatval($customerAmount / 2) * 100), $remainingRefundableAmount);
+                   
+                    if ($refundAmount > 0) {
+                        $refundStatus = $stripe->refunds->create([
+                            'charge' => $paymentIntentData->latest_charge,
+                            'amount' => $refundAmount,
+                        ]);
+                        $refundAmount = $customerAmount / 2;
+                        $refundType = 'firm';
+                    } else {
+                        session()->flash('warning', 'No remaining refundable amount for this charge.');
+                    }
+            
                 } else {
                     session()->flash('warning', 'The order has been canceled, but no refund will be initiated due to late cancellation.');
                 }
             }
-
+            
+        
             // Store refund details in refunds table
             Refund::create([
                 'orderId' => $order->id,
@@ -833,6 +861,7 @@ class OrderController extends Controller
                 'refund_type' => $refundType,
             ]);
         } catch (Exception $e) {
+            dd($e->getMessage());
             session()->flash('error', str_replace("Charge " . $paymentIntentData->latest_charge, "Order ", $e->getMessage()));
             return response()->json([
                 'success' => false,
