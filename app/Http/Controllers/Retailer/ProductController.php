@@ -194,8 +194,8 @@ class ProductController extends Controller
                     ['name'=> $request->other_brand,
                 ]);
             }
+            $data['brand'] = $request->brand == "Other" ? (isset($request->other_brand) ? $request->other_brand : 'Other') : $request->brand;
 
-            $data['brand'] = $request->brand == "Other" ? $request->other_brand : $request->brand;
             $product = Product::create($data);
 
             // Handling images
@@ -433,9 +433,16 @@ class ProductController extends Controller
                 Brand::updateOrCreate(['name'=> $request->other_brand],
                     ['name'=> $request->other_brand,
                 ]);
+            }else{
+                $check = Brand::updateOrCreate(['name'=> 'Other'],
+                    ['name'=> 'Other',
+                ]);
             }
-
-            $data['brand'] = $request->brand == "Other" ? $request->other_brand : $request->brand;
+            if(isset($request->brand)){
+                $data['brand'] = $request->brand == "Other" ? (isset($request->other_brand) ? $request->other_brand:'Other') : $request->brand;
+            }else{
+                $data['brand'] = 'Other';
+            }
 
             $product->update($data);
 

@@ -29,8 +29,13 @@
                                     {{-- @dd($order->disputeDetails,$order->status); --}}
                                         <tr>
                                             <td scope="row">
-                                                <a
-                                                    href="{{ route('admin.view-order', [$order->id]) }}">#{{ $order->id }}</a>
+                                                @if($title=='Disputed Orders')
+                                                <a href="{{ route('admin.dispute-view-order', [$order->id]) }}">#{{ $order->id }}</a>
+                                                @else 
+                                                <a href="{{ route('admin.view-order', [$order->id]) }}">#{{ $order->id }}</a>
+                                                
+                                                @endif
+                                                
                                             </td>
                                             <td>{{ $order->user->email ?? 'N/A'}}</td>
                                             <td>{{ $order->retailer->email ?? 'N/A' }} </td>

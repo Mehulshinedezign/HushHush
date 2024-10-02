@@ -216,15 +216,16 @@
                             value: "policy",
                             visible: true,
                             className: "btn btn-info",
-                            // closeModal: false, // Keep the swal open
+                            closeModal: false, // Keep the swal open
                         }
                     },
                     dangerMode: true,
+                    closeOnClickOutside: false,
                 }).then((value) => {
                     if (value === "policy") {
                         // Open the cancellation modal
                         $('#cancellationModal').modal('show');
-
+                        $('.modal').css('z-index', parseInt($('.swal-modal').css('z-index')) + 1);
 
                     }
                     if (value == true) {
