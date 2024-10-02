@@ -11,14 +11,16 @@ class VendorOrderCancelled extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $message;
+    protected $order;
+
     /**
      * Create a new notification instance.
      *
-     * @return void
+     * @param $order
      */
-    public function __construct()
+    public function __construct($order)
     {
+        $this->order = $order;
     }
 
     /**
@@ -29,7 +31,7 @@ class VendorOrderCancelled extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -40,14 +42,17 @@ class VendorOrderCancelled extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-
-        return (new MailMessage)->subject('Oder Canceled BY Lender')
-        ->line('Your order canceled by lender .')
-        ->line('Thank you for using our application!');
+        return (new MailMessage)
+            ->subject('Order Cancelled by Lender')
+            ->line('Your order for ' . $this->order->product->name . ' has been cancelled by the lender.')
+            ->line('Order ID: ' . $this->order->id)
+            ->line('Cancelled Date: ' . $this->order->cancelled_date)
+            ->line('Cancellation Note: ' . $this->order->cancellation_note)
+            ->line('Thank you for using our application!');
     }
 
     /**
-     * Get the array representation of the notification.
+     * Get the array representation of the notification for database.
      *
      * @param  mixed  $notifiable
      * @return array
@@ -55,7 +60,9 @@ class VendorOrderCancelled extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            //
+            'message' => 'Your order for product ' . $this->order->product->name . ' has been cancelled by the lender.',
+            'order_id' => $this->order->id,
+            'url' => route('retailercustomer', ['tab' => 'cancelled']),
         ];
     }
 }

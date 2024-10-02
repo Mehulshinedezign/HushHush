@@ -53,7 +53,7 @@ class LenderOrderPickup extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'id'=>$this->lender_info['id'],
+            'id'=>$this->lender_info['order_id'],
             'message' => 'Dear Retailer ' . $this->lender_info['lender_name'] . ', your order is ready for pickup from ' . $this->lender_info['from_date'] . ' to ' . $this->lender_info['to_date'] . ' at ' . $this->lender_info['pickup_location'] . '.',
             'notification_type' => 'order_pickup',
             'url' => route('orders') // Link to the order pickup page

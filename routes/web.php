@@ -260,6 +260,9 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
 
             Route::post('/address/store', [App\Http\Controllers\ProfileController::class, 'addressStore'])->name('address.store');
             Route::delete('/address/{id}', [App\Http\Controllers\ProfileController::class, 'addressDestroy'])->name('address.destroy');
+
+            Route::get('/notifications/mark-as-read/{id}', [App\Http\Controllers\HomeController::class, 'markAsRead'])->name('notifications.markAsRead');
+
         });
     });
 });

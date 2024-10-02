@@ -1,23 +1,26 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<head>
+  <title>Pusher Test</title>
+  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+  <script>
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+    var pusher = new Pusher('a7888a61753129b04876', {
+      cluster: 'ap2'
+    });
 
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+      alert(JSON.stringify(data));
+    });
+  </script>
+</head>
+<body>
+  <h1>Pusher Test</h1>
+  <p>
+    Try publishing an event to channel <code>my-channel</code>
+    with event name <code>my-event</code>.
+  </p>
+</body>

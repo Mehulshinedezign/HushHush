@@ -743,6 +743,13 @@ class ProductController extends Controller
         } else {
             $added = true;
         }
+        if($user->identity_verified == 'verified' )
+        {
+            $verified = true;
+        }
+        else{
+            $verified = false;
+        }
         try {
             $categories = getParentCategory();
             $brands = getBrands();
@@ -816,6 +823,7 @@ class ProductController extends Controller
                 'Condition' => $conditionData,
                 'rentaldays' => $rentalDays,
                 'bank_account' => $added,
+                'identity_verified' => $verified,
             ];
 
             return response()->json([

@@ -23,14 +23,14 @@
                         @php
                             $user = auth()->user();
                             $userBankInfo = auth()->user()->userBankInfo;
+                            $notifications = $user->unreadNotifications;
                         @endphp
                         <ul>
                             <li>
-                                @if (($user->identity_verified) != 'verified')
+                                @if ($user->identity_verified != 'verified')
                                     <div data-bs-toggle="modal" data-bs-target="#identity">
                                         Rent your Closet
                                     </div>
-
                                 @elseif(is_null($userBankInfo))
                                     <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
                                         Rent your Closet
@@ -46,6 +46,34 @@
                                 @endif
 
                             </li>
+
+                            <li class="dropdown">
+                                <div class="dropdown-toggle" type="button" id="notificationsDropdown"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-regular fa-bell"></i>
+                                    <span class="badge">{{ $notifications->count() }}</span>
+                                </div>
+
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+                                    @forelse($notifications as $notification)
+                                        <li class="dropdown-item">
+                                            @if (isset($notification->data['url']) && $notification->data['url'])
+                                                <a href="{{ $notification->data['url'] }}" class="d-block">
+                                                    {{ $notification->data['message'] ?? 'New Notification' }}
+                                                </a>
+                                            @else
+                                                {{ $notification->data['message'] ?? 'New Notification' }}
+                                            @endif
+                                            {{-- Mark as read --}}
+                                            <a href="{{ route('notifications.markAsRead', $notification->id) }}"
+                                                class="text-muted small">Mark as read</a>
+                                        </li>
+                                    @empty
+                                        <li class="dropdown-item">No new notifications</li>
+                                    @endforelse
+                                </ul>
+                            </li>
+
                             <li>
                                 <a class="header-chat-icon" href="{{ route('common.chat') }}">
                                     {{-- <i class="fa-solid fa-comment"></i> --}}
@@ -79,8 +107,9 @@
                                         <li><a class="dropdown-item" href="{{ route('my_query') }}">
                                                 <i class="fa fa-question-circle" aria-hidden="true"></i>
                                                 My Inquiry</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('receive_query') }}"><img width="15"
-                                                    height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
+                                        <li><a class="dropdown-item" href="{{ route('receive_query') }}"><img
+                                                    width="15" height="14"
+                                                    src="{{ asset('front/images/my-query-icon.svg') }}"
                                                     alt="img">Received Inquiry</a></li>
                                         <li><a class="dropdown-item" href="{{ route('profile') }}">
                                                 <i class="fa-solid fa-user"></i>
@@ -132,9 +161,9 @@
                         </ul>
                     </div>
                     <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                                                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                                                <span class="navbar-toggler-icon"></span>
-                                            </button> -->
+                                                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                                        <span class="navbar-toggler-icon"></span>
+                                                    </button> -->
                 </div>
             @endauth
             @guest

@@ -8,12 +8,14 @@ use App\Models\ProductUnavailability;
 use App\Models\{Query,ProductDisableDate};
 use App\Models\Transaction;
 use App\Notifications\BookorderReq;
+use App\Traits\SmsTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Stripe\PaymentIntent;
 
 class BookingController extends Controller
 {
+    use SmsTrait;
     public function cardDetail($query = null, $price = null)
     {
         $query = jsdecode_userdata($query);
@@ -184,6 +186,7 @@ class BookingController extends Controller
         $lender = $query->forUser;
 
         $product_info=[
+            'id'=>$order->id,
             'customer_name'=>$user->name,
             'from_date' =>$fromstartDate,
             'to_date' =>$fromendDate,
@@ -191,7 +194,15 @@ class BookingController extends Controller
         ];
 
         if(@$lender->usernotification->order_req == '1'){
-            // $lender->Notify(new BookorderReq($product_info));
+            $lender->Notify(new BookorderReq($product_info));
+            $otpMessage = [
+                'message' => 'The booking for your product is done ' . $query->product->name .'from date ' .$product_info['from_date'] .'to ' .$product_info['to_date'],
+                'route' => route('retailercustomer') // Optional link
+            ];
+
+            $phoneNumber = $lender->country_code . $lender->phone_number;
+
+            $this->sendSms($phoneNumber, $otpMessage);
         }
         if ($status->status == "succeeded") {
             $order->update(['transaction_id' => $transaction->id]);

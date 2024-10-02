@@ -29,9 +29,22 @@ class HomeController extends Controller
 
     public function testing(Request $request)
     {
-        $test = Storage::url('products\images\15_1724412712_3.jpg');
-        $imageData = @file_get_contents($test);
-        dd($request,$test,$imageData , 'hererer');
+        // $test = Storage::url('products\images\15_1724412712_3.jpg');
+        // $imageData = @file_get_contents($test);
+        // dd($request, $test, $imageData, 'hererer');
         return view('home');
+    }
+
+
+
+    public function markAsRead($id)
+    {
+        $notification = auth()->user()->notifications()->find($id);
+
+        if ($notification) {
+            $notification->markAsRead();
+        }
+
+        return redirect()->back(); // Redirect back to the previous page
     }
 }

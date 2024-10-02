@@ -167,15 +167,15 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         // App\Services\OtpService::class,
-    
-        
+
+
     ])->toArray(),
 
     /*
@@ -195,5 +195,5 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
 
-   
+
 ];

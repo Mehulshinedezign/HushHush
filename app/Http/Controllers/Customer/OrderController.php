@@ -881,7 +881,15 @@ class OrderController extends Controller
             ->delete();
 
         if (isset($order->retailer->usernotification) && $order->retailer->usernotification->order_canceled_by_customer == 1) {
-            // $order->retailer->notify(new RentalCancelorder());
+            $order->retailer->notify(new RentalCancelorder($order));
+            $otpMessage = [
+                'message' => 'Your order cancelled by retailer for product ' . $order->product->name,
+                'route' => route('retailercustomer') // Optional link
+            ];
+
+            $phoneNumber = $order->retailer->country_code . $order->retailer->phone_number;
+
+            $this->sendSms($phoneNumber, $otpMessage);
         }
 
         session()->flash('success', __("order.messages.cancel.success"));
