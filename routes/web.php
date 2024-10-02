@@ -263,6 +263,7 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
 
             Route::get('/notifications/mark-as-read/{id}', [App\Http\Controllers\HomeController::class, 'markAsRead'])->name('notifications.markAsRead');
 
+            Route::get('/notifications/fetch', [App\Http\Controllers\HomeController::class, 'fetch'])->name('notifications.fetch');
         });
     });
 });

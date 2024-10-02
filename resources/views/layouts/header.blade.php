@@ -48,15 +48,15 @@
                             </li>
 
                             <li class="dropdown">
-                                <div class="dropdown-toggle" type="button" id="notificationsDropdown"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="dropdown-toggle" type="button" id="notificationsDropdown" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
                                     <i class="fa-regular fa-bell"></i>
                                     <span class="badge">{{ $notifications->count() }}</span>
                                 </div>
 
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
                                     @forelse($notifications as $notification)
-                                        <li class="dropdown-item">
+                                        <li class="dropdown-item-notification">
                                             @if (isset($notification->data['url']) && $notification->data['url'])
                                                 <a href="{{ $notification->data['url'] }}" class="d-block">
                                                     {{ $notification->data['message'] ?? 'New Notification' }}
@@ -64,9 +64,9 @@
                                             @else
                                                 {{ $notification->data['message'] ?? 'New Notification' }}
                                             @endif
-                                            {{-- Mark as read --}}
-                                            <a href="{{ route('notifications.markAsRead', $notification->id) }}"
-                                                class="text-muted small">Mark as read</a>
+                                            <!-- Mark as read link -->
+                                            <a href="{{ route('notifications.markAsRead', $notification->id) }}" class="text-muted small">Mark as
+                                                read</a>
                                         </li>
                                     @empty
                                         <li class="dropdown-item">No new notifications</li>
@@ -161,9 +161,9 @@
                         </ul>
                     </div>
                     <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                                                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                                                        <span class="navbar-toggler-icon"></span>
-                                                    </button> -->
+                                                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                                            <span class="navbar-toggler-icon"></span>
+                                                        </button> -->
                 </div>
             @endauth
             @guest
@@ -375,4 +375,71 @@
             minDate: moment(),
         });
     </script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script>
+        Pusher.logToConsole = true;
+
+        // Initialize Pusher
+        var pusher = new Pusher('a7888a61753129b04876', {
+            cluster: 'ap2'
+        });
+
+        // Listen for notifications on the 'notifications-channel'
+        window.Echo.channel('notifications-channel')
+            .listen('NewNotificationEvent', (e) => {
+                // Alert to check if the notification is received correctly
+                alert(JSON.stringify(e));
+
+                // Generate HTML for new notification
+                let notificationHtml = `<li class="dropdown-item">
+                    <a href="${e.url}" class="d-block">${e.message}</a>
+                    <a href="/notifications/mark-as-read/${e.id}" class="text-muted small">Mark as read</a>
+                </li>`;
+
+                // Append the notification to the dropdown
+                $('.dropdown-menu').prepend(notificationHtml);
+
+                // Update the notification count badge
+                let count = parseInt($('.badge').text()) + 1;
+                $('.badge').text(count);
+            });
+    </script>
+
+    <script>
+        // Function to load notifications via AJAX
+        function loadNotifications() {
+            $.ajax({
+                url: '{{ route('notifications.fetch') }}',
+                type: 'GET',
+                success: function(response) {
+                    let notifications = response.notifications;
+                    let notificationsHtml = '';
+
+                    notifications.forEach(notification => {
+                        notificationsHtml += `<li class="dropdown-item-notification">
+                            <a href="${notification.data.url}" class="d-block">${notification.data.message}</a>
+                            <a href="/notifications/mark-as-read/${notification.id}" class="text-muted small">Mark as read</a>
+                        </li>`;
+                    });
+
+                    // Update the dropdown with notifications
+                    $('.dropdown-menu').html(notificationsHtml);
+
+                    // Update the badge count
+                    $('.badge').text(notifications.length);
+                }
+            });
+        }
+
+        // Call the function when the page loads
+        $(document).ready(function() {
+            loadNotifications();
+        });
+    </script>
 @endpush
+
+
+
+
+<!-- Dropdown for notifications -->
+

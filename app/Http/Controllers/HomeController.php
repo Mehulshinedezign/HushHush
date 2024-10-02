@@ -35,6 +35,14 @@ class HomeController extends Controller
         return view('home');
     }
 
+    public function fetch()
+    {
+        $notifications = auth()->user()->unreadNotifications;
+        // dd($notifications);
+        return response()->json(['notifications' => $notifications]);
+    }
+
+
 
 
     public function markAsRead($id)
