@@ -47,8 +47,10 @@
 
                             </li>
 
-                            <li class="dropdown">
-                                @include('modal.notification')
+                            <li>
+                                <div class="dropdown" id="notificationContainer">
+                                    @include('modal.notification')
+                                </div>
                             </li>
 
                             <li>
@@ -137,9 +139,9 @@
                         </ul>
                     </div>
                     <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                                                                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                                                                <span class="navbar-toggler-icon"></span>
-                                                            </button> -->
+                                                                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                                                            <span class="navbar-toggler-icon"></span>
+                                                                        </button> -->
                 </div>
             @endauth
             @guest
@@ -354,6 +356,7 @@
     </script>
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
     <script>
+        // Function to fetch notifications
         function fetchNotifications() {
             console.log('funcall');
 
@@ -361,30 +364,76 @@
                 url: '/notifications/fetch', // The route to fetch notifications
                 method: 'GET',
                 success: function(response) {
-                    console.log('ajzxcall');
+                    console.log('ajxcall');
                     console.log(response);
 
-                    $('#notification-count').text(response.notifications.length);
-                    // Optionally, update the dropdown content with the new notifications
-                    let notificationDropdown = '';
-                    if (response.notifications.length > 0) {
-                        response.notifications.forEach(notification => {
-                            notificationDropdown += `
-                            <li class="dropdown-item">
-                                ${notification.data.url ? `<a href="${notification.data.url}" class="d-block">${notification.data.message}</a>` : `${notification.data.message}`}
-                                <a href="/notifications/markAsRead/${notification.id}" class="text-muted small">Mark as read</a>
-                            </li>`;
-                        });
-                    } else {
-                        notificationDropdown = '<li class="dropdown-item">No new notifications</li>';
-                    }
-                    $('.dropdown-menu').html(notificationDropdown);
+                    $('#notificationContainer').html(response.data);
+
+                    //     // Update the dropdown content with the new notifications
+                    //     let notificationDropdown = '';
+                    //     if (response.notifications.length > 0) {
+                    //         notificationDropdown += `
+                // <div class="mark-as-read">
+                //     <button id="markAllAsRead" class="btn btn-link" style="font-size: 12px;">Mark All as Read</button>
+                // </div>`;
+
+                    //         response.notifications.forEach(notification => {
+                    //             notificationDropdown += `
+                //     <li class="dropdown-item-end">
+                //         ${notification.data.url ? `<a href="${notification.data.url}" class="d-block">${notification.data.message}</a>` : `${notification.data.message}`}
+                //     </li>`;
+                    //         });
+                    //     } else {
+                    //         notificationDropdown = '<li class="dropdown-item">No new notifications</li>';
+                    //     }
+                    //     $('.dropdown-menu').html(notificationDropdown);
+
+                    //     // Add event listener for "Mark All as Read"
+                    // $('#markAllAsRead').on('click', function() {
+                    //     markAllNotificationsAsRead();
+                    // });
                 },
                 error: function(error) {
                     console.error('Error fetching notifications:', error);
                 }
             });
         }
+
+        // Function to mark all notifications as read
+        function markAllNotificationsAsRead() {
+            // Prevent multiple calls by disabling the button or triggering only once
+            $.ajax({
+                url: '/notifications/mark-all-as-read', // The route to mark all notifications as read
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Include the CSRF token if needed
+                },
+                success: function(response) {
+                    // Ensure iziToast is called only once
+                    if (typeof iziToast !== 'undefined') {
+                        iziToast.success({
+                            title: 'Success',
+                            message: response.message,
+                            position: 'topRight',
+                        });
+                    }
+
+                    console.log('All notifications marked as read', response);
+
+                    // Update the notification count and dropdown
+                    $('#notification-count').text('0');
+                    $('.dropdown-menu').html('<li class="dropdown-item">No new notifications</li>');
+                },
+                error: function(error) {
+                    console.error('Error marking notifications as read:', error);
+                }
+            });
+        }
+
+
+        // Call fetchNotifications on page load or at regular intervals (optional)
+        fetchNotifications();
+
         Pusher.logToConsole = true;
 
         const pusher = new Pusher('3ad68eabe9728651c27d', {
@@ -400,7 +449,7 @@
 
             // When a notification event is received, fetch the notifications
             var test = fetchNotifications();
-            console.log('end',test);
+            console.log('end', test);
         });
     </script>
 @endpush

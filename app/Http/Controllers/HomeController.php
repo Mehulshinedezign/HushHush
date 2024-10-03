@@ -42,20 +42,27 @@ class HomeController extends Controller
     {
         $notifications = auth()->user()->unreadNotifications;
         // dd($notifications);
-        return response()->json(['notifications' => $notifications]);
+        $html = view('modal.notification',compact('notifications'))->render();
+        return response()->json(['status'=>true,'message' => "notifications fetched",'data'=>$html],200);
     }
 
 
 
 
-    public function markAsRead($id)
+    // public function markAsRead($id)
+    // {
+    //     $notification = auth()->user()->notifications()->find($id);
+
+    //     if ($notification) {
+    //         $notification->markAsRead();
+    //     }
+
+    //     return redirect()->back(); // Redirect back to the previous page
+    // }
+
+    public function markAllAsRead()
     {
-        $notification = auth()->user()->notifications()->find($id);
-
-        if ($notification) {
-            $notification->markAsRead();
-        }
-
-        return redirect()->back(); // Redirect back to the previous page
+        auth()->user()->unreadNotifications->markAsRead();
+        return response()->json(['status'=>true,'message' => "All notification is marked as read"],200);
     }
 }

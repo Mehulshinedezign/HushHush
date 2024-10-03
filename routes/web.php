@@ -261,7 +261,7 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
             Route::post('/address/store', [App\Http\Controllers\ProfileController::class, 'addressStore'])->name('address.store');
             Route::delete('/address/{id}', [App\Http\Controllers\ProfileController::class, 'addressDestroy'])->name('address.destroy');
 
-            Route::get('/notifications/mark-as-read/{id}', [App\Http\Controllers\HomeController::class, 'markAsRead'])->name('notifications.markAsRead');
+            Route::POST('/notifications/mark-all-as-read', [App\Http\Controllers\HomeController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
 
             Route::get('/notifications/fetch', [App\Http\Controllers\HomeController::class, 'fetch'])->name('notifications.fetch');
         });
