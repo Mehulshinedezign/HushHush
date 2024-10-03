@@ -2,10 +2,9 @@
     aria-hidden="true">
     <div class="modal-dialog  modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header pb-0">
                 <h3 class="modal-title">Manage Your Addresses
-                    <button id="addNewAddressBtn" class="btn btn-primary">Add New
-                        Address</button>
+                   
                 </h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -49,10 +48,14 @@
                     @endforeach
                 </div>
                 <div id="addEditAddressForm">
-                    <h4 id="formTitle">Add Address</h4>
+                    <div class="add-adress-bx">
+                        <h4 id="formTitle">Add Address</h4>
+                        <button id="addNewAddressBtn" class="btn btn-primary">Add New
+                            Address</button>
+                    </div>
                     <form id="addressForm">
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
+                        <div class="row g-3">
+                            <div class="col-md-12">
                                 <label for="autocomplete" class="form-label">Enter
                                     your address*</label>
                                 <input id="autocomplete" name ="complete_address" placeholder="Start typing your address" class="form-control"
@@ -60,40 +63,44 @@
                                     
                             </div>
                             <input type="hidden" id="address_id" name="address_id">
-                            <div class="col-lg-6 mb-3">
+                            <div class="col-lg-6">
                                 <label for="street_number">Address Line 1*</label>
                                 <input id="street_number" name="address1" class="form-control"
                                     placeholder="Street number" />
                             </div>
-                            <div class="col-lg-6 mb-3">
+                            <div class="col-lg-6">
                                 <label for="route">Address Line 2</label>
                                 <input id="route" name="address2" class="form-control" placeholder="Street name" />
                             </div>
-                            <div class="col-lg-3 mb-3">
+                            <div class="col-lg-6">
                                 <label for="locality">City*</label>
                                 <input id="locality" name="city" class="form-control" placeholder="City" readonly />
                             </div>
-                            <div class="col-lg-3 mb-3">
+                            <div class="col-lg-6">
                                 <label for="administrative_area_level_1">State*</label>
                                 <input id="administrative_area_level_1" name="state" class="form-control"
                                     placeholder="State" readonly />
                             </div>
-                            <div class="col-lg-3 mb-3">
+                            <div class="col-lg-6">
                                 <label for="country">Country*</label>
                                 <input id="country" name="country" class="form-control" placeholder="Country"
                                     readonly />
                             </div>
-                            <div class="col-lg-3 mb-3">
+                            <div class="col-lg-6">
                                 <label for="postal_code">Postal Code*</label>
                                 <input id="postal_code" name="zipcode" class="form-control" placeholder="Postal Code"
                                     readonly />
                             </div>
-                            <div class="col-lg-3 mb-3">
-                                <label for="is_default">Make Default</label>
-                                <input type="checkbox" name="is_default" id="is_default" class="form-check-input" />
+                            <div class="col-lg-">
+                                <div class="checkbox-field">
+                                    <input type="checkbox" name="is_default" id="is_default" class="form-check-input" />
+                                    <label for="is_default">Make Default</label>
+                                </div>
                             </div>
                         </div>
-                        <button type="button" id="submitAddressBtn" class="btn btn-success">Submit Address</button>
+                        <div class="right-btn-bx">
+                           <button type="button" id="submitAddressBtn" class="btn btn-success">Submit Address</button>
+                        </div>
                     </form>
                 </div>
             </div>

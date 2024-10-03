@@ -184,6 +184,9 @@
     @include('modal.cancellationModal')
     <script>
         $(document).ready(function() {
+            $('#policiesClose').on('click', function() {
+                $('.cancel-order').trigger('click');
+            })
 
             $('.cancel-order').on('click', function() {
                 // $('.modal fade').addClass('d-none');

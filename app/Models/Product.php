@@ -200,7 +200,7 @@ class Product extends Model
      */
     public function ratings()
     {
-        return $this->hasMany(ProductRating::class);
+        return $this->hasMany(ProductRating::class)->orderBy('id','desc');
     }
 
     public function orders()

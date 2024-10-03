@@ -9,6 +9,8 @@
                         <img src="{{ $query->product->thumbnailImage->file_path ?? '' }}" alt="tb-profile" width="26"
                             height="27">
                     </a>
+                    <p class="table-pro-name">{{ $query->product->name ?? '' }}</p>
+
                 @else
                     <img src="{{ asset('front/images/table-profile1.png') }}" alt="tb-profile" width="26"
                         height="27">
@@ -16,11 +18,10 @@
             </div>
         </a>
     </td>
-    <td>
+    {{-- <td>
         <div class="user-table-head">
-            <h5>{{ $query->product->name ?? '' }}</h5>
         </div>
-    </td>
+    </td> --}}
     <td>
         <div class="user-table-head">
 
@@ -76,30 +77,74 @@
     @endif
     {{-- @dd($query->id ); --}}
     <td class="user-active">
-        <div class="inquiry-actions">
+        {{-- <div class="inquiry-actions ">
+            <div class="btn-group dropstart">
+                <div type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+                <ul class="dropdown-menu" style="">
+                    
+                </ul>
+              </div> --}}
+            {{-- <div class="dropdown">
+                <div class=" dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    
+                </div>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <div class="align-dropdown">
+                        @if ($query->status == 'PENDING')
+                            <a href="javascript:void(0)" class="button accept-btn small-btn"
+                                onclick="confirmAccept(event, '{{ $query->id }}','{{ $query->date_range }}','{{ $query->product->rent_day }}','{{ $query->product->rent_week }}','{{ $query->product->rent_month }}','{{ $query->delivery_option }}')">
+                                <i class="fa-solid fa-circle-check"></i> Send Offer
+                            </a>
+                            <a href="javascript:void(0)" class="button reject-btn small-btn"
+                                onclick="confirmReject(event, '{{ $query->id }}')">
+                                <i class="fa-solid fa-circle-xmark"></i> Reject
+                            </a>
+                        @endif
+    
+                        @if ($query->status != 'COMPLETED')
+                            <a href="javascript:void(0)" class="button outline-btn small-btn chat-list-profile"
+                                data-senderId="{{ auth()->user()->id }}" data-receverId="{{ $query->user_id }}"
+                                data-receverName = "{{ $query->user->name }}"
+                                data-receverImage="{{ isset($query->user->profile_file) ? Storage::url($query->user->profile_file) : asset('img/avatar.png') }}"
+                                data-profile="{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}"
+                                data-name="{{ auth()->user()->name }}"><i class="fa-solid fa-comments"></i>
+                                Chat</a>
+                        @endif
+                        <a href="{{ route('query_view') }}" class="button primary-btn small-btn single_query"
+                            data-bs-toggle="modal" data-query-id="{{ $query->id }}" data-query-ship ="{{ $query->delivery_option }}">
+                            <i class="fa-solid fa-eye"></i> View
+                        </a>
+                    </div>
+                </ul>
+            </div> --}}
+            
+        {{-- </div> --}}
+        <div class="align-dropdown-row">
             @if ($query->status == 'PENDING')
-                <a href="javascript:void(0)" class="button accept-btn small-btn"
+                <a href="javascript:void(0)" class="accept-btn"  data-bs-toggle="tooltip" data-bs-placement="top" title="Send Offer"
                     onclick="confirmAccept(event, '{{ $query->id }}','{{ $query->date_range }}','{{ $query->product->rent_day }}','{{ $query->product->rent_week }}','{{ $query->product->rent_month }}','{{ $query->delivery_option }}')">
-                    <i class="fa-solid fa-circle-check"></i> Send Offer
+                    <i class="fa-solid fa-circle-check"></i>
                 </a>
-                <a href="javascript:void(0)" class="button reject-btn small-btn"
+                <a href="javascript:void(0)" class="reject-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Reject"
                     onclick="confirmReject(event, '{{ $query->id }}')">
-                    <i class="fa-solid fa-circle-xmark"></i> Reject
+                    <i class="fa-solid fa-circle-xmark"></i>
                 </a>
             @endif
 
             @if ($query->status != 'COMPLETED')
-                <a href="javascript:void(0)" class="button outline-btn small-btn chat-list-profile"
+                <a href="javascript:void(0)" class="chat-list-profile no-btn"data-bs-toggle="tooltip" data-bs-placement="top" title="Chat"
                     data-senderId="{{ auth()->user()->id }}" data-receverId="{{ $query->user_id }}"
                     data-receverName = "{{ $query->user->name }}"
                     data-receverImage="{{ isset($query->user->profile_file) ? Storage::url($query->user->profile_file) : asset('img/avatar.png') }}"
                     data-profile="{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}"
                     data-name="{{ auth()->user()->name }}"><i class="fa-solid fa-comments"></i>
-                    Chat</a>
+                    </a>
             @endif
-            <a href="{{ route('query_view') }}" class="button primary-btn small-btn single_query"
+            <a href="{{ route('query_view') }}" class="single_query" data-bs-toggle="tooltip" data-bs-placement="top" title="View"
                 data-bs-toggle="modal" data-query-id="{{ $query->id }}" data-query-ship ="{{ $query->delivery_option }}">
-                <i class="fa-solid fa-eye"></i> View
+                <i class="fa-solid fa-eye"></i>
             </a>
         </div>
     </td>

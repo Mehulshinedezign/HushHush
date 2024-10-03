@@ -5,8 +5,8 @@
                 <table class="inquiry-table">
                     <thead>
                         <tr>
-                            <th>Image</th>
-                            <th>Product Name</th>
+                            <th>Product</th>
+                            {{-- <th>Product Name</th> --}}
                             <th>Borrower Name</th>
                             <th>Actual Price</th>
                             <th>Delivery Method</th>

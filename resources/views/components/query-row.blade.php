@@ -7,6 +7,7 @@
                         <img src="{{ $query->product->thumbnailImage->file_path ?? '' }}" alt="tb-profile" width="26"
                             height="27">
                     </a>
+                    <p>{{ $query->product->name ?? '' }}</p>
                 @else
                     <img src="{{ asset('front/images/table-profile1.png') }}" alt="tb-profile" width="26"
                         height="27">
@@ -14,11 +15,10 @@
             </div>
         </a>
     </td>
-    <td>
+    {{-- <td>
         <div class="user-table-head">
-            <h5>{{ $query->product->name ?? '' }}</h5>
         </div>
-    </td>
+    </td> --}}
     <td>
         <div class="user-table-head">
             {{-- <h5>{{ $query->forUser->name }}</h5> --}}
@@ -68,17 +68,17 @@ COMPLETED
     <td class="user-active">
         <div class="inquiry-actions">
             @if ($query->status != 'COMPLETED')
-                <a href="javascript:void(0)" class="button outline-btn small-btn chat-list-profile"
+                <a href="javascript:void(0)" class="chat-list-profile no-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Chat"
                     data-senderId="{{ auth()->user()->id }}" data-receverId="{{ @$query->product->user_id }}"
                     data-receverName = "{{ @$query->product->retailer->name }}"
                     data-receverImage="{{ isset($product->retailer->profile_file) ? Storage::url($product->retailer->profile_file) : asset('img/avatar.png') }}"
                     data-profile="{{ isset(auth()->user()->profile_file) ? Storage::url(auth()->user()->profile_file) : asset('img/avatar.png') }}"
                     data-name="{{ auth()->user()->name }}"><i class="fa-solid fa-comments"></i>
-                    Chat</a>
+                    </a>
             @endif
-            <a href="{{ route('query_view') }}" class="button primary-btn small-btn single_query_Modal"
+            <a href="{{ route('query_view') }}" class="single_query_Modal"data-bs-toggle="tooltip" data-bs-placement="top" title="View"
                 data-bs-toggle="modal" data-query-id="{{ $query->id }}">
-                <i class="fa-solid fa-eye"></i> View
+                <i class="fa-solid fa-eye"></i> 
             </a>
             @if ($query->status == 'ACCEPTED')
                 {{-- @if (is_null($query->negotiate_price)) --}}

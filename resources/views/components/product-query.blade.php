@@ -5,8 +5,8 @@
                 <table >
                     <thead>
                         <tr>
-                            <th>Image</th>
-                            <th>Product Name</th>
+                            <th>Product</th>
+                            {{-- <th>Product Name</th> --}}
                             <th>Lender Name</th>
                             <th>Actual Price</th>
                             @if($querydatas->first()->status != 'PENDING')

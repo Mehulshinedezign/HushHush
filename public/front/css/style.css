@@ -2897,7 +2897,7 @@ form#filters {
 .address-list-main {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 30px;
+    gap: 15px;
 }
 #addressModal .modal-content {
     width: 100%;
@@ -2908,14 +2908,34 @@ form#filters {
 }
 #addEditAddressForm {
     border: 1px solid rgba(0, 0, 0, .125);
-    padding: 16px 10px !important;
+    padding: 18px 18px !important;
     border-radius: 5px;
+}
+#formTitle {
+    font-size: 20px;
+    margin-bottom: 4px;
 }
 .edit-delete-address-btn {
     display: flex;
     gap: 10px;
     align-items: center;
     padding-top: 10px;
+}
+.checkbox-field input {
+    margin: 0;
+}
+.checkbox-field {
+    gap: 5px;
+    margin-bottom: 17px;
+    display: flex;
+}
+form#addressForm {
+    margin: 0;
+}
+.modal-footer-cstm {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
 }
 .edit-address, .delete-address {
     width: 38px;
@@ -2945,31 +2965,43 @@ form#filters {
     border-top-width: 1px;
 }
 .address-list {
-    max-height: 500px;
+    max-height: 536px;
     overflow-y: auto;
 }
 #addressModal .modal-title {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    padding-top: 20px;
+    padding-top: 0;
+    font-size: 24px;
 }
 .form-check-input:checked, #addressModal .btn-success {
     background-color: var(--primary-color);
     border-color: var(--primary-color) ;
 }
 button#addNewAddressBtn {
-    height: 40px;
-    padding: 9px;
+    height: 38px;
+    min-height: 38px;
+    padding: 5px 15px;
     background-color: var(--primary-color);
     border-color: var(--primary-color);
 }
 #addressModal .modal-header .btn-close {
-    position: absolute;
+    /* position: absolute;
     top: -10px;
     right: 10px;
-    padding: 0;
+    padding: 0; */
     margin: 0;
+    min-height: 20px;
+}
+#addressModal .form-control {
+    min-height: 50px;
+}
+.add-adress-bx {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
 }
 .cp-unavailabilities, .add-more-daterangepicker-main {
     text-align: right;
@@ -3001,4 +3033,32 @@ button#addNewAddressBtn {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.review-row-box {
+    max-height: 200px;
+    overflow: auto;
+}
+.right-btn-bx {
+    display: flex;
+    justify-content: flex-end;
+}
+.negotiation-price-td input {
+    max-width: 160px;
+}
+.align-dropdown-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.align-dropdown-row a {
+    font-size: 16px;
+}
+.table-pro-name {
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+    max-width: 71px;
+    margin-top: 2px;
+    font-size: 14px;
 }

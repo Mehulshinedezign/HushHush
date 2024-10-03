@@ -663,13 +663,13 @@
             $to.prop("value", to);
         };
 
-        $range.ionRangeSlider({
-            onChange: function(data) {
-                from = data.from;
-                to = data.to;
-                updateValues();
-            }
-        });
+        // $range.ionRangeSlider({
+        //     onChange: function(data) {
+        //         from = data.from;
+        //         to = data.to;
+        //         updateValues();
+        //     }
+        // });
 
         range = $range.data("ionRangeSlider");
         var updateRange = function() {
