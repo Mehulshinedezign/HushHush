@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewNotificationEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -32,6 +33,8 @@ class HomeController extends Controller
         // $test = Storage::url('products\images\15_1724412712_3.jpg');
         // $imageData = @file_get_contents($test);
         // dd($request, $test, $imageData, 'hererer');
+        event(new NewNotificationEvent("dfdsfsdfsdfsdfsdf"));
+
         return view('home');
     }
 

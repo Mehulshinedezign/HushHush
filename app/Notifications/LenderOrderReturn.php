@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Events\NewNotificationEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -54,6 +55,10 @@ class LenderOrderReturn extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        $message = 'You have a new notification!';
+
+        // Trigger the event
+        event(new NewNotificationEvent($message));
 
     return [
         'lender_name' => $this->lender_info['lender_name'],

@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Events\NewNotificationEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -52,6 +53,10 @@ class RentalCancelorder extends Notification implements ShouldQueue
      */
     public function toArray(object $notifiable): array
     {
+        $message = 'You have a new notification!';
+
+        // Trigger the event
+        event(new NewNotificationEvent($message));
         return [
             'id' => $this->order_info['id'],
             'message' => 'Your order for the product ' . $this->order_info['product_name'] . ' has been canceled by the customer.',

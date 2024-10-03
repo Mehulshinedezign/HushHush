@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Events\NewNotificationEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -36,6 +37,7 @@ class CustomerImageUpload extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $data =$this->data;
         $lender_name = $this->lender_name;
 
         return (new MailMessage)
@@ -56,6 +58,10 @@ class CustomerImageUpload extends Notification
     {
 
         $data= $this->data;
+        $message = 'You have a new notification!';
+
+        // Trigger the event
+        event(new NewNotificationEvent($message));
         return [
             'id' => $data->id,
             'message' => 'Retailer uploded the image for pickup on orderId '. $data->id . 'product name '.$data->product->name .'please verify the image',

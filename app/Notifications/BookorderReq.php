@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Events\NewNotificationEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -52,6 +53,10 @@ class BookorderReq extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        $message = 'You have a new notification!';
+
+        // Trigger the event
+        event(new NewNotificationEvent($message));
         return [
             'id' => $this->product_info['id'],
             'message' => 'Your product get booked by the customer '. $this->product_info['customer_name'] .'from date'. $this->product_info['from_date'] .'to date'. $this->product_info['to_date'],

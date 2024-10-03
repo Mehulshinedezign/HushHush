@@ -48,30 +48,7 @@
                             </li>
 
                             <li class="dropdown">
-                                <div class="dropdown-toggle" type="button" id="notificationsDropdown" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    <i class="fa-regular fa-bell"></i>
-                                    <span class="badge">{{ $notifications->count() }}</span>
-                                </div>
-
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
-                                    @forelse($notifications as $notification)
-                                        <li class="dropdown-item-notification">
-                                            @if (isset($notification->data['url']) && $notification->data['url'])
-                                                <a href="{{ $notification->data['url'] }}" class="d-block">
-                                                    {{ $notification->data['message'] ?? 'New Notification' }}
-                                                </a>
-                                            @else
-                                                {{ $notification->data['message'] ?? 'New Notification' }}
-                                            @endif
-                                            <!-- Mark as read link -->
-                                            <a href="{{ route('notifications.markAsRead', $notification->id) }}" class="text-muted small">Mark as
-                                                read</a>
-                                        </li>
-                                    @empty
-                                        <li class="dropdown-item">No new notifications</li>
-                                    @endforelse
-                                </ul>
+                                @include('modal.notification')
                             </li>
 
                             <li>
@@ -107,9 +84,8 @@
                                         <li><a class="dropdown-item" href="{{ route('my_query') }}">
                                                 <i class="fa fa-question-circle" aria-hidden="true"></i>
                                                 My Inquiry</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('receive_query') }}"><img
-                                                    width="15" height="14"
-                                                    src="{{ asset('front/images/my-query-icon.svg') }}"
+                                        <li><a class="dropdown-item" href="{{ route('receive_query') }}"><img width="15"
+                                                    height="14" src="{{ asset('front/images/my-query-icon.svg') }}"
                                                     alt="img">Received Inquiry</a></li>
                                         <li><a class="dropdown-item" href="{{ route('profile') }}">
                                                 <i class="fa-solid fa-user"></i>
@@ -161,9 +137,9 @@
                         </ul>
                     </div>
                     <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                                                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                                                            <span class="navbar-toggler-icon"></span>
-                                                        </button> -->
+                                                                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                                                <span class="navbar-toggler-icon"></span>
+                                                            </button> -->
                 </div>
             @endauth
             @guest
@@ -291,6 +267,7 @@
                 {{-- @endif --}}
             </form>
         </div>
+
     </nav>
 </header>
 {{-- @include('common.alert') --}}
@@ -377,63 +354,53 @@
     </script>
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
     <script>
-        Pusher.logToConsole = true;
+        function fetchNotifications() {
+            console.log('funcall');
 
-        // Initialize Pusher
-        var pusher = new Pusher('a7888a61753129b04876', {
-            cluster: 'ap2'
-        });
-
-        // Listen for notifications on the 'notifications-channel'
-        window.Echo.channel('notifications-channel')
-            .listen('NewNotificationEvent', (e) => {
-                // Alert to check if the notification is received correctly
-                alert(JSON.stringify(e));
-
-                // Generate HTML for new notification
-                let notificationHtml = `<li class="dropdown-item">
-                    <a href="${e.url}" class="d-block">${e.message}</a>
-                    <a href="/notifications/mark-as-read/${e.id}" class="text-muted small">Mark as read</a>
-                </li>`;
-
-                // Append the notification to the dropdown
-                $('.dropdown-menu').prepend(notificationHtml);
-
-                // Update the notification count badge
-                let count = parseInt($('.badge').text()) + 1;
-                $('.badge').text(count);
-            });
-    </script>
-
-    <script>
-        // Function to load notifications via AJAX
-        function loadNotifications() {
             $.ajax({
-                url: '{{ route('notifications.fetch') }}',
-                type: 'GET',
+                url: '/notifications/fetch', // The route to fetch notifications
+                method: 'GET',
                 success: function(response) {
-                    let notifications = response.notifications;
-                    let notificationsHtml = '';
+                    console.log('ajzxcall');
+                    console.log(response);
 
-                    notifications.forEach(notification => {
-                        notificationsHtml += `<li class="dropdown-item-notification">
-                            <a href="${notification.data.url}" class="d-block">${notification.data.message}</a>
-                            <a href="/notifications/mark-as-read/${notification.id}" class="text-muted small">Mark as read</a>
-                        </li>`;
-                    });
-
-                    // Update the dropdown with notifications
-                    $('.dropdown-menu').html(notificationsHtml);
-
-                    // Update the badge count
-                    $('.badge').text(notifications.length);
+                    $('#notification-count').text(response.notifications.length);
+                    // Optionally, update the dropdown content with the new notifications
+                    let notificationDropdown = '';
+                    if (response.notifications.length > 0) {
+                        response.notifications.forEach(notification => {
+                            notificationDropdown += `
+                            <li class="dropdown-item">
+                                ${notification.data.url ? `<a href="${notification.data.url}" class="d-block">${notification.data.message}</a>` : `${notification.data.message}`}
+                                <a href="/notifications/markAsRead/${notification.id}" class="text-muted small">Mark as read</a>
+                            </li>`;
+                        });
+                    } else {
+                        notificationDropdown = '<li class="dropdown-item">No new notifications</li>';
+                    }
+                    $('.dropdown-menu').html(notificationDropdown);
+                },
+                error: function(error) {
+                    console.error('Error fetching notifications:', error);
                 }
             });
         }
+        Pusher.logToConsole = true;
 
-        // Call the function when the page loads
-        $(document).ready(function() {
-            loadNotifications();
+        const pusher = new Pusher('3ad68eabe9728651c27d', {
+            cluster: 'ap2',
+            encrypted: true
+        });
+
+        // Subscribe to the channel and event
+        const channel = pusher.subscribe('notifications-channel');
+        channel.bind('App\\Events\\NewNotificationEvent', function(data) {
+            console.log('mainaccount');
+            console.log('start');
+
+            // When a notification event is received, fetch the notifications
+            var test = fetchNotifications();
+            console.log('end',test);
         });
     </script>
 @endpush
@@ -442,4 +409,3 @@
 
 
 <!-- Dropdown for notifications -->
-

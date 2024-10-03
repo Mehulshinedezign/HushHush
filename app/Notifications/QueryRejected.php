@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Events\NewNotificationEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -26,7 +27,7 @@ class QueryRejected extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -47,8 +48,19 @@ class QueryRejected extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        // $data = $this->data;
+        $message = 'You have a new notification!';
+
+        // Trigger the event
+        event(new NewNotificationEvent($message));
         return [
-            //
+            'id' => '5',
+            'message' => 'Your query was rejected by the retailer',
+            'user_type' => 'borrower',
+            'notification_type' => 'query',
+            'url' => route('my_query') . ('?status=REJECTED'),
         ];
     }
+
+
 }

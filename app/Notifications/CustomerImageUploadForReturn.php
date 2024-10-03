@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Events\NewNotificationEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -56,6 +57,10 @@ class CustomerImageUploadForReturn extends Notification
     {
         $lender_name = $this->lender_name;
         $order = $this->order;
+        $message = 'You have a new notification!';
+
+        // Trigger the event
+        event(new NewNotificationEvent($message));
         return [
             'id' => $order->id,
             'message' => 'Retailer uploaded the image for return on orderId '. $order->id . ' for product name ' . $order->product->name . '. Please verify the image.',
@@ -64,5 +69,5 @@ class CustomerImageUploadForReturn extends Notification
             'url' => route('orders') // Include the route link in the notification array
         ];
     }
-    
+
 }

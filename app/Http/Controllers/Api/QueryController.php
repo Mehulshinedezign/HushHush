@@ -364,7 +364,7 @@ class QueryController extends Controller
                         'lender' => $lender->name ?? null,
                         'lender_profile_pic' => $lender->frontend_profile_url ?? null,
                         'lender_id' => $lender->id,
-                        'brand' => $product->get_brand->name ?? null,
+                        'brand' => $product->brand ?? null,
                         'size' => $product->size ?? null,
                         'price' => $price,
 
@@ -451,7 +451,7 @@ class QueryController extends Controller
                         'borrower' => $borrower->name ?? null,
                         'borrower_profile_pic' => $borrower->frontend_profile_url ?? null,
                         'borrower_id' => $borrower->id ?? null,
-                        'brand' => $product->get_brand->name ?? 'N/A',
+                        'brand' => $product->brand ?? 'N/A',
                         'size' => $product->size ?? "N/A",
                         'price' => $price,
                     ];

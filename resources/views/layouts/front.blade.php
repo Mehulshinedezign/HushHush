@@ -93,7 +93,7 @@
         var loaderIcon = '<span class="loader" id="loader"><img src="{{ asset('img/loader-icon.svg') }}"></span>';
         var rentPrice = '';
     </script>
-  
+
     @yield('links')
 
 </head>
@@ -280,7 +280,7 @@
                                                 <input type="text" value="Other"
                                                     class="produt_input form-control form-class" placeholder="other"
                                                     name="other_brand">
-                                                
+
 
                                             </div>
                                         </div>

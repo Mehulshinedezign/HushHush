@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Events\NewNotificationEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -55,6 +56,10 @@ class CustomerOrderPickup extends Notification
      */
     public function toArray(object $notifiable): array
     {
+        $message = 'You have a new notification!';
+
+        // Trigger the event
+        event(new NewNotificationEvent($message));
         return [
             'id' => $this->customer_info['order_id'],
             'message' => 'Dear ' . $this->customer_info['user_name'] . ', your order for product ' . $this->customer_info['product_name'] . ' is ready for pickup from ' . $this->customer_info['from_date'] . ' to ' . $this->customer_info['to_date'] . ' at ' . $this->customer_info['pickup_location'] . '.',

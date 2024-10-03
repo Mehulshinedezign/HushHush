@@ -53,7 +53,7 @@ class LenderController extends Controller
                     'status' => $product->status,
                     'other_size' => $product->other_size,
                     'condition' => $product->condition,
-                    'brand' => $product->get_brand->name ?? null,
+                    'brand' => $product->brand ?? null,
                     'color' => $product->get_color->name ?? null,
                     'size' => $product->get_size->name ?? null,
                     'rent_day' => $product->rent_day,

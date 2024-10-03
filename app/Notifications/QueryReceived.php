@@ -1,6 +1,7 @@
 <?php
 namespace App\Notifications;
 
+use App\Events\NewNotificationEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -30,7 +31,7 @@ class QueryReceived extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail']; // or 'database', 'nexmo', etc.
+        return ['mail','database']; // or 'database', 'nexmo', etc.
     }
 
     /**
@@ -53,8 +54,20 @@ class QueryReceived extends Notification
 
     public function toArray(object $notifiable): array
     {
+
+        $message = 'You have a new notification!';
+
+        // Trigger the event
+        event(new NewNotificationEvent($message));
+
         return [
-            //
+            'id' => $this->product_date['id'],
+            'message' => 'You have received a new query for a product.'.'Customer Name: ' . $this->product_date['customer_name'] .'Selected Date: ' . $this->product_date['date']. 'Message for product: '.$this->product_date['query_message'] ,
+            'user_type' => 'lender',
+            'notification_type' => 'query',
+            'url' => route('receive_query') . ('?status=PENDING'),
         ];
     }
+
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Events\NewNotificationEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -59,6 +60,10 @@ class VendorOrderCancelled extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
+        $message = 'You have a new notification!';
+
+        // Trigger the event
+        event(new NewNotificationEvent($message));
         return [
             'message' => 'Your order for product ' . $this->order->product->name . ' has been cancelled by the lender.',
             'order_id' => $this->order->id,
