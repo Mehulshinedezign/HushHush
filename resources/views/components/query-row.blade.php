@@ -76,7 +76,7 @@ COMPLETED
                     data-name="{{ auth()->user()->name }}"><i class="fa-solid fa-comments"></i>
                     </a>
             @endif
-            <a href="{{ route('query_view') }}" class="single_query_Modal"data-bs-toggle="tooltip" data-bs-placement="top" title="View"
+            <a href="{{ route('query_view') }}" class="single_query_Modal" data-bs-toggle="tooltip" data-bs-placement="top" title="View"
                 data-bs-toggle="modal" data-query-id="{{ $query->id }}">
                 <i class="fa-solid fa-eye"></i> 
             </a>
@@ -87,14 +87,14 @@ COMPLETED
                     $price = $price + $query->shipping_charges + $query->cleaning_charges;
                 @endphp
                 <a href="{{ route('card.details', ['query' => jsencode_userdata($query->id), 'price' => jsencode_userdata($price)]) }}"
-                    class="button outline-btn small-btn" data-price="{{ $price }}">Accept
-                    offer for
-                    {{ $price }}$</a>
+                    class="" data-bs-toggle="tooltip" data-bs-placement="top" title="offer for
+                    {{ $price }}$" data-price="{{ $price }}">
+                    <i class="fa-solid fa-sack-dollar"></i></a>
 
 
-                <a href="javascript:void(0)" class="button reject-btn small-btn"
-                    onclick="confirmReject(event, '{{ $query->id }}')">
-                    <i class="fa-solid fa-circle-xmark"></i> Reject
+                <a href="javascript:void(0)" class="reject-btn"
+                    onclick="confirmReject(event, '{{ $query->id }}')" data-bs-toggle="tooltip" data-bs-placement="top" title="Reject">
+                    <i class="fa-solid fa-circle-xmark"></i> 
                 </a>
                 {{-- @else
                     <a href="{{ route('card.details', ['query' => $query->id, 'price' => $query->negotiate_price]) }}"

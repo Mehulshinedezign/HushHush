@@ -114,7 +114,7 @@
                                                 </p>
 
                                             </div>
-                                            <div class="upload-img-preview">
+                                            <div class="upload-img-preview mb-3">
                                                 @foreach ($order->retailerPickedUpImages as $index => $image)
                                                     <li>
                                                         {{-- <span class="remove-preview-img" data-index="{{ $index + 1 }}"
@@ -127,7 +127,7 @@
                                                 @endforeach
                                             </div>
 
-                                            <button class="btn btn-dark " type="submit"><i class="fa-solid fa-upload"></i>
+                                            <button class="btn btn-dark upload-image" type="submit"><i class="fa-solid fa-upload"></i>
                                                 Upload</button>
                                         </div>
                                     </form>
@@ -214,7 +214,7 @@
                                                 </p>
 
                                             </div>
-                                            <div class="upload-img-preview">
+                                            <div class="upload-img-preview mb-3">
                                                 @foreach ($order->retailerReturnedImages as $index => $image)
                                                     <li>
                                                         {{-- <span class="remove-preview-img" data-index="{{ $index + 1 }}"
@@ -227,7 +227,7 @@
                                                 @endforeach
                                             </div>
 
-                                            <button class="btn btn-dark " type="submit"><i
+                                            <button class="btn btn-dark upload-image" type="submit"><i
                                                     class="fa-solid fa-upload"></i>
                                                 Upload</button>
                                         </div>

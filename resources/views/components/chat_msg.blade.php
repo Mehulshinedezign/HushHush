@@ -72,7 +72,7 @@
             <textarea class="commentarea" id="message" placeholder="Type a Message"></textarea>
             <div class="upload-img-chat">
                 <label for="upload-img">
-                    <img src="images/img-upload-svg.svg" alt="">
+                    {{-- <img src="images/img-upload-svg.svg" alt=""> --}}
                     {{-- <input type="file" id="attachment" /> --}}
                 </label>
             </div>

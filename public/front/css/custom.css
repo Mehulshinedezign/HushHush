@@ -905,11 +905,11 @@ span.left-form-icon {
     width: 180px !important;
     height: 180px;
 }
-
+/* 
 .slider.slider-thumb.slick-initialized.slick-slider {
     max-width: 584px;
     margin: 0 auto;
-}
+} */
 .slider.slider-thumb .slick-slide.slick-current.slick-active {
 border-color: #000;
 }
@@ -2582,4 +2582,8 @@ table.inquiry-table {
 .no-btn {
     padding: 0;
     border: 0;
+}
+.thumb-slide {
+    width: 70px !important;
+    height: 70px !important;
 }

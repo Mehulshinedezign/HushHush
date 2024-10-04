@@ -73,11 +73,13 @@
         if (activeTabElement) {
             activeTabElement.classList.add('active'); // Add active class to the selected tab
         }
+        $('.page-loader').addClass('d-none');
 
         // Add click event listener to all tabs
         tabs.forEach(tab => {
             tab.addEventListener('click', function(event) {
                 event.preventDefault(); // Prevent default link behavior
+                $('.page-loader').removeClass('d-none');
 
                 // Get the data-status of the clicked tab
                 const status = tab.getAttribute('data-status');
@@ -87,6 +89,7 @@
 
                 // Refresh the page to simulate the behavior you want
                 location.reload();
+
             });
         });
 

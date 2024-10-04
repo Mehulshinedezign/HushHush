@@ -27,7 +27,7 @@
     @include('customer.bank_details_model')
 @endauth
 @push('scripts')
-    @includeFirst(['validation'])
+    {{-- @includeFirst(['validation']) --}}
     @includefirst(['validation.js_product'])
     @includefirst(['layouts.notification-alert'])
     @auth

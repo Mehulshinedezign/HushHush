@@ -47,7 +47,7 @@
 @endsection
 
 @push('scripts')
-@includeFirst(['validation'])
+{{-- @includeFirst(['validation']) --}}
 @includeFirst(['validation.js_changePassword'])
 @includeFirst(['validation.js_show_password'])
     <script src="{{ asset('js/custom/profile.js') }}"></script>

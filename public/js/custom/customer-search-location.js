@@ -62,7 +62,7 @@ jQuery(document).ready(function() {
     /*AUTOCOMPLETE FUNCTION*/
     let autocomplete;
 
-    autocomplete = new google.maps.places.Autocomplete(document.getElementById("location"));
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById("filter_address"));
     autocomplete.addListener('place_changed', function() {
         var place = autocomplete.getPlace();
         var latitude = place.geometry.location.lat();

@@ -184,7 +184,7 @@
     @include('modal.cancellationModal')
     <script>
         $(document).ready(function() {
-            $('#policiesClose').on('click', function() {
+            $('.policiesClose').on('click', function() {
                 $('.cancel-order').trigger('click');
             })
 
@@ -216,7 +216,7 @@
                             closeModal: true,
                         },
                         policy: {
-                            text: "View Cancellation Policy",
+                            text: "View Cancellation Policies",
                             value: "policy",
                             visible: true,
                             className: "btn btn-info",
@@ -249,34 +249,34 @@
 
             })
 
-            $('#cancel-order').submit(function(e) {
+            // $('#cancel-order').submit(function(e) {
 
-                e.preventDefault();
-                if ($('#cancel-order').valid()) {
-                    var formData = new FormData($('form#cancel-order').get(0));
-                    ajaxCall($("#cancel-order").attr("action"), 'post', formData)
-                        .then(function(response) {
-                            if (response) {
-                                //console.log(response.url)
-                                window.location.replace(response.url);
-                            } else {
-                                iziToast.error({
-                                    title: 'Error',
-                                    message: 'Something went wrong!',
-                                    position: 'topRight'
-                                });
-                            }
-                        }, function() {
-                            iziToast.error({
-                                title: 'Error',
-                                message: 'Something went wrong!',
-                                position: 'topRight'
-                            });
-                        }).finally(function() {
-                            console.log("error");
-                        });
-                }
-            });
+            //     e.preventDefault();
+            //     if ($('#cancel-order').valid()) {
+            //         var formData = new FormData($('form#cancel-order').get(0));
+            //         ajaxCall($("#cancel-order").attr("action"), 'post', formData)
+            //             .then(function(response) {
+            //                 if (response) {
+            //                     //console.log(response.url)
+            //                     window.location.replace(response.url);
+            //                 } else {
+            //                     iziToast.error({
+            //                         title: 'Error',
+            //                         message: 'Something went wrong!',
+            //                         position: 'topRight'
+            //                     });
+            //                 }
+            //             }, function() {
+            //                 iziToast.error({
+            //                     title: 'Error',
+            //                     message: 'Something went wrong!',
+            //                     position: 'topRight'
+            //                 });
+            //             }).finally(function() {
+            //                 console.log("error");
+            //             });
+            //     }
+            // });
         });
     </script>
 

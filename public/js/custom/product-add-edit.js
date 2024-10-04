@@ -1,23 +1,23 @@
 jQuery(document).on("click", ".open-product-popup", function (event) {
     event.preventDefault();
 
-    if (jQuery(this).attr("href")) {
-        jQuery('#NproductModal').modal('show')
+    // if (jQuery(this).attr("href")) {
+    //     jQuery('#NproductModal').modal('show')
 
-    }
-    //  else if (product_check == 1 && checkdocuments == 0) {
+    // }
+    // //  else if (product_check == 1 && checkdocuments == 0) {
+    // //     jQuery('#NproductModal').modal('hide')
+    // //     jQuery('#mutlistepForm1').modal("show");
+
+    // // } 
+    // else if (product_check == 1 && !is_bankdetail) {
     //     jQuery('#NproductModal').modal('hide')
-    //     jQuery('#mutlistepForm1').modal("show");
+    //     jQuery('#mutlistepForm2').modal("show");
 
-    // } 
-    else if (product_check == 1 && !is_bankdetail) {
-        jQuery('#NproductModal').modal('hide')
-        jQuery('#mutlistepForm2').modal("show");
+    // } else {
 
-    } else {
-
-        jQuery('#NproductModal').modal('show')
-    }
+    //     jQuery('#NproductModal').modal('show')
+    // }
     var insertHtml = htmlForm;
     var other = '';
     if ($(this).attr("href")) {
@@ -139,33 +139,31 @@ jQuery('#close_bankdetails').on('click', function () {
 });
 
 
-jQuery(document).ready(function () {
+// jQuery(document).ready(function () {
 
-    var product = localStorage.getItem("getid", getId);
-    // console.log("checkproduct", product);
-    if (!is_bankdetail && product) {
-        var productformData = new FormData();
+//     var product = localStorage.getItem("getid", getId);
+//     // console.log("checkproduct", product);
+//     if (!is_bankdetail && product) {
+//         var productformData = new FormData();
 
-        productformData.append('text', 'product');
-        var producturl = APP_URL + "/" + "products/" + product + "/delete";
-        var response = ajaxCall(producturl, 'post', productformData);
-        response.then(response => {
-            //console.log(response.success);
-            if (response.success) {
-                localStorage.removeItem('getid');
-                window.location.replace(APP_URL + '/' + 'products')
-            }
+//         productformData.append('text', 'product');
+//         var producturl = APP_URL + "/" + "products/" + product + "/delete";
+//         var response = ajaxCall(producturl, 'post', productformData);
+//         response.then(response => {
+//             //console.log(response.success);
+//             if (response.success) {
+//                 localStorage.removeItem('getid');
+//                 window.location.replace(APP_URL + '/' + 'products')
+//             }
 
-        })
-    }
-});
+//         })
+//     }
+// });
 // end
 
 // jQuery(document).on('click', "#submit-identification", function () {
 jQuery(document).ready(function () {
-    if (!is_bankdetail) {
-        var startDate = moment().subtract(13, 'year');
-    }
+    
     // else if (is_bankdetail) {
     //     var startDate = getstartDate;
     // }

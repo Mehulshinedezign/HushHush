@@ -33,7 +33,7 @@ let response = new Promise((resolve, reject) => {
 
     }).then(() => getFirstChatData())
         .catch(error => {
-            console.log("error".error)
+            // console.log("error".error)
         })
 
 });

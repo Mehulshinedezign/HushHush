@@ -126,7 +126,7 @@
                                                 @endforeach
                                             </div>
 
-                                            <button class="btn btn-dark " type="submit"><i class="fa-solid fa-upload"></i>
+                                            <button class="btn btn-dark upload-image" type="submit"><i class="fa-solid fa-upload"></i>
                                                 Upload</button>
                                         </div>
                                     </form>
@@ -206,7 +206,7 @@
 
                                                 </p>
                                             </div>
-                                            <div class="upload-img-preview">
+                                            <div class="upload-img-preview mb-3">
                                                 @foreach ($order->customerReturnedImages as $index => $image)
                                                     <li>
                                                         {{-- <span class="remove-preview-img" data-index="{{ $index + 1 }}"
@@ -219,7 +219,7 @@
                                                 @endforeach
                                             </div>
 
-                                            <button class="btn btn-dark " type="submit"><i
+                                            <button class="btn btn-dark upload-image" type="submit"><i
                                                     class="fa-solid fa-upload"></i>
                                                 Upload</button>
                                         </div>
@@ -360,6 +360,8 @@
                 updateImageCount(-1);
             });
         });
+
+       
     </script>
     <script>
         $(document).ready(function() {
@@ -384,9 +386,7 @@
 
             $('#orderDetail').submit(function(e) {
                 e.preventDefault(); // Prevent form submission
-
-                // Perform form validation
-
+     
                 // Check if the form is valid
                 if ($('#orderDetail').valid()) {
                     $('#orderDetail').submit(); // Submit form
