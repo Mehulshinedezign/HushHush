@@ -671,7 +671,15 @@
 
             let prev_images = @json($product->allImages->pluck('file_path')->toArray());
             console.log(prev_images);
-            prev_images.forEach(imageUrl => await fetchAndDisplayImage(imageUrl, true));
+            async function loadPreviousImages(prev_images) {
+                for (let imageUrl of prev_images) {
+                    await fetchAndDisplayImage(imageUrl, true);
+                }
+            }
+
+// Call the function for previous images
+                loadPreviousImages(prev_images);
+            // prev_images.forEach(imageUrl => await fetchAndDisplayImage(imageUrl, true));
 
             $('#update-upload-image-five').on('change', function(e) {
                 let files = e.target.files;
