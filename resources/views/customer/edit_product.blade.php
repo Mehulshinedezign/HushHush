@@ -90,6 +90,7 @@
                     @endif
                 </div>
             </div>
+            @if(count($products) >= 10)
             <div class="pagination-main">
                 @if ($products->onFirstPage())
                     <a href="#" class="pagination-box disabled">Previous</a>
@@ -103,6 +104,7 @@
                     <a href="#" class="pagination-box disabled">Next</a>
                 @endif
             </div>
+            @endif
         </div>
     </section>
 @endsection

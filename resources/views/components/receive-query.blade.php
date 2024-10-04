@@ -36,6 +36,6 @@
 @else
     <div class="list-empty-box">
         <img src="{{ asset('front/images/Empty 1.svg') }}">
-        <h3 class="text-center">Receive inquiry is empty</h3>
+        <h3 class="text-center">Received inquiry list is empty</h3>
     </div>
 @endif

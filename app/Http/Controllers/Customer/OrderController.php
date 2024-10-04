@@ -861,7 +861,6 @@ class OrderController extends Controller
                 'refund_type' => $refundType,
             ]);
         } catch (Exception $e) {
-            dd($e->getMessage());
             session()->flash('error', str_replace("Charge " . $paymentIntentData->latest_charge, "Order ", $e->getMessage()));
             return response()->json([
                 'success' => false,

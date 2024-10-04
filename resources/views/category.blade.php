@@ -418,7 +418,6 @@
 
             function loadMoreData(page) {
                 let url = createPaginationUrl(page);
-                console.log(url, 'gdhg');
 
                 $.ajax({
                         url: url,
@@ -496,7 +495,7 @@
         });
     </script>
     <script>
-        const customDateFormat = 'MM/DD/YYYY';
+        // const customDateFormat = 'MM/DD/YYYY';
 
 
         jQuery(function() {

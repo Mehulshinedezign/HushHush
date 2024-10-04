@@ -97,6 +97,23 @@
 </head>
 
 <body>
+    <div id="fullPageLoader" class="page-loader d-none">
+        <div class="sk-circle">
+            <div class="sk-circle1 sk-child"></div>
+            <div class="sk-circle2 sk-child"></div>
+            <div class="sk-circle3 sk-child"></div>
+            <div class="sk-circle4 sk-child"></div>
+            <div class="sk-circle5 sk-child"></div>
+            <div class="sk-circle6 sk-child"></div>
+            <div class="sk-circle7 sk-child"></div>
+            <div class="sk-circle8 sk-child"></div>
+            <div class="sk-circle9 sk-child"></div>
+            <div class="sk-circle10 sk-child"></div>
+            <div class="sk-circle11 sk-child"></div>
+            <div class="sk-circle12 sk-child"></div>
+        </div>
+    </div>
+
     <div class="overlay" id="overlay"></div>
     @include('layouts.header')
 
@@ -850,17 +867,19 @@
     </script>
     <!-- Include DateRangePicker JS -->
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <script src="{{ asset('js/custom/customer-search-location.js') }}"></script>
+    @if (Route::currentRouteName() == 'index')
+        <script src="{{ asset('js/custom/customer-search-location.js') }}"></script>
+    @endif
     <script src="{{ asset('js/custom/product-list.js') }}"></script>
     <script src="{{ asset('js/custom/add-wishlist.js') }}"></script>
     <script src="{{ asset('js/custom/common.js') }}?ver={{ now() }}"></script>
     <script>
         // tooltip
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
+        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
         })
-// end tooltip
+        // end tooltip
         // Ensure background modal still has the fade effect when the second modal is opened
         $('#cancellationModal').on('show.bs.modal', function() {
             $('.addproduct-Modal, .product-modal').css('opacity', 0.5); // Darken the background modal
@@ -869,6 +888,16 @@
         $('#cancellationModal').on('hide.bs.modal', function() {
             $('.addproduct-Modal, .product-modal').css('opacity', 1); // Restore the original opacity
         });
+
+        $(document).ready(function() {
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 120) {
+                    $('.header').addClass('fixed');
+                } else {
+                    $('.header').removeClass('fixed');
+                }
+            });
+        })
     </script>
     <script>
         jQuery(document).on("change", 'select[name="brand"]', function() {
@@ -1350,7 +1379,7 @@
                         if (fileExtension === 'jfif') {
                             alert(
                                 'Only images in JPG, JPEG, SVG, and PNG formats are allowed for upload. Please upload a different image format.'
-                                );
+                            );
                             return false;
                         }
                         return true;
@@ -1602,7 +1631,6 @@
                 });
             }
         </script>
-        @yield('custom_variables')
         @yield('custom_variables')
         <script defer src="{{ asset('js/custom/chat2.js') }}"></script>
         <script defer src="{{ asset('js/custom/chatlist.js') }}"></script>

@@ -82,35 +82,38 @@
                         <div class="product-desc-box">
                             <div class="product-desc-slider single-img-slider">
                                 <div class="container">
-
-                                    <div class="slider slider-content">
-                                        @if ($productImages->isNotEmpty())
-                                            @foreach ($productImages as $image)
-                                                {{-- <div><img src="{{ $image->file_path }}" class="zoomout" alt=""
-                                                        loading="lazy"></div> --}}
-
-                                                <!-- Image that opens the modal -->
-                                                <div>
-                                                    <img src="{{ $image->file_path }}" alt="" loading="lazy"
-                                                        onclick="openModal(this.src)">
-                                                </div>
-
-                                                <!-- Modal Structure -->
-                                            @endforeach
-                                        @else
-                                            <div><img src="{{ asset('front/images/pro-description-img.png') }}"
-                                                    alt="img"></div>
-                                        @endif
-                                    </div>
-                                    <!-- <div class="product-desc-slider-small"> -->
+                                    <div class="desc-slider-main">
                                     <div class="slider slider-thumb">
-                                        @if ($productImages->isNotEmpty() && count($productImages) > 1)
-                                            @foreach ($productImages as $image)
-                                                <div><img src="{{ $image->file_path }}" alt="" loading="lazy"></div>
-                                            @endforeach
+                                            @if ($productImages->isNotEmpty() && count($productImages) > 1)
+                                                @foreach ($productImages as $image)
+                                                    <div class="thumb-slide"><img src="{{ $image->file_path }}" alt="" loading="lazy">
+                                                    </div>
+                                                @endforeach
 
-                                        @endif
+                                            @endif
 
+                                        </div>
+                                        <div class="slider slider-content">
+                                            @if ($productImages->isNotEmpty())
+                                                @foreach ($productImages as $image)
+                                                    {{-- <div><img src="{{ $image->file_path }}" class="zoomout" alt=""
+                                                            loading="lazy"></div> --}}
+
+                                                    <!-- Image that opens the modal -->
+                                                    <div>
+                                                        <img src="{{ $image->file_path }}" alt="" loading="lazy"
+                                                            onclick="openModal(this.src)">
+                                                    </div>
+
+                                                    <!-- Modal Structure -->
+                                                @endforeach
+                                            @else
+                                                <div><img src="{{ asset('front/images/pro-description-img.png') }}"
+                                                        alt="img"></div>
+                                            @endif
+                                        </div>
+                                        <!-- <div class="product-desc-slider-small"> -->
+                                       
                                     </div>
                                 </div>
                                 <div class="prev-prodec-btn {{ count($productImages) > 1 ? '' : 'd-none' }}">
@@ -260,9 +263,9 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                                                                    <h4>Size :</h4>
-                                                                                    <p>{{ $product->size ?? 'N/A' }}</p>
-                                                                                </div> -->
+                                                                                        <h4>Size :</h4>
+                                                                                        <p>{{ $product->size ?? 'N/A' }}</p>
+                                                                                    </div> -->
 
 
                             </div>
@@ -307,9 +310,9 @@
 
                                 </div>
                                 <div class="pro-info-accordian">
-                                    <div class="accordion" id="accordionExample">
+                                    <div class="accordion" id="accordionExample1">
                                         <div class="accordion-item">
-                                            <h2 class="accordion-header" id="headingOne">
+                                            <h2 class="accordion-header" id="headingtwo">
                                                 <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                                     data-bs-target="#collapseTwo" aria-expanded="true"
                                                     aria-controls="collapseTwo">
@@ -317,7 +320,7 @@
                                                 </button>
                                             </h2>
                                             <div id="collapseTwo" class="accordion-collapse collapse show"
-                                                aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                                aria-labelledby="headingtwo" data-bs-parent="#accordionExample1">
                                                 <div class="accordion-body">
                                                     @if (isset($product->productCompleteLocation->city) &&
                                                             isset($product->productCompleteLocation->state) &&
@@ -742,6 +745,11 @@
             $('#saveProfile').attr('action', url);
         })
 
+        $(document).ready(function() {
+            $('.edit-address').on('click', function() {
+               $('#addNewAddressBtn').removeClass('d-none');
+            })
+        })
 
         $('.slider-content').slick({
             slidesToShow: 1,
@@ -779,12 +787,14 @@
             ]
         });
         $('.slider-thumb').slick({
-            slidesToShow: 2,
-            slidesToScroll: 1,
-            asNavFor: '.slider-content',
-            dots: false,
-            centerMode: true,
-            focusOnSelect: true
+            slidesToShow: 10,
+                        slidesToScroll: 1,
+                        vertical: true,
+                        asNavFor: '.slider-content',
+                        dots: false,
+                        focusOnSelect: true,
+                        arrows: false,
+                        verticalSwiping: true
         });
 
 
@@ -1040,6 +1050,8 @@
                 document.getElementById('addEditAddressForm').classList.remove('d-none');
                 document.getElementById('addressForm').reset();
                 document.getElementById('address_id').value = '';
+                document.getElementById('submitAddressBtn').textContent = 'Save Address';
+
             };
 
             const setupEditAndDeleteButtons = () => {
@@ -1048,6 +1060,7 @@
                         const index = this.dataset.index;
                         const addressData = JSON.parse(document.getElementById(
                             `address-details-${index}`).dataset.address);
+                            document.getElementById('submitAddressBtn').textContent='Update Address'
                         populateAddressForm(addressData);
                     });
                 });
@@ -1203,6 +1216,5 @@
         }
     </script>
 
-    {{-- @include('validation') --}}
     @include('validation.js_query')
 @endpush

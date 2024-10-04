@@ -37,7 +37,7 @@
                                 aria-controls="pills-canceled" aria-selected="false" data-tab="cancelled">
                                 <div class="rental-history-badge danger">
                                     <div class="rental-badge-dot"></div>
-                                    <p>Canceled</p>
+                                    <p>Cancelled</p>
                                 </div>
                             </button>
                         </li>
@@ -78,7 +78,7 @@
 @endsection
 
 @push('scripts')
-    @includeFirst(['validation'])
+    {{-- @includeFirst(['validation']) --}}
     @includeFirst(['validation.js_cancel_order'])
     @includeFirst(['validation.js_dispute_order'])
     @includeFirst(['validation.js_product_review'])

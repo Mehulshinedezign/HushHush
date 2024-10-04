@@ -11,6 +11,8 @@
             <div class="modal-body">
                 <div class="address-list-main">
                 <div class="address-list">
+                    <button id="addNewAddressBtn" class="adress-btm d-none"><i class="fa-solid fa-plus"></i> Add New
+                        Address</button>
                     @foreach ($user->addresses as $index => $address)
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div class="address-card col-md-12">
@@ -46,12 +48,12 @@
                         </div>
                         </li>
                     @endforeach
+                    
                 </div>
                 <div id="addEditAddressForm">
                     <div class="add-adress-bx">
                         <h4 id="formTitle">Add Address</h4>
-                        <button id="addNewAddressBtn" class="btn btn-primary">Add New
-                            Address</button>
+                       
                     </div>
                     <form id="addressForm">
                         <div class="row g-3">
