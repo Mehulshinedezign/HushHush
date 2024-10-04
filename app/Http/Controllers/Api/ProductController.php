@@ -743,11 +743,9 @@ class ProductController extends Controller
         } else {
             $added = true;
         }
-        if($user->identity_verified == 'verified' )
-        {
+        if ($user->identity_verified == 'verified') {
             $verified = true;
-        }
-        else{
+        } else {
             $verified = false;
         }
         try {
@@ -786,13 +784,7 @@ class ProductController extends Controller
                 ];
             });
 
-            $sizeData = $sizes->map(function ($size) {
-                return [
-                    'id' => $size->id,
-                    'label' => $size->name,
-                    'value' => $size->name,
-                ];
-            });
+            $sizeData = $sizes->pluck('name')->all();
 
             $colorData = $colors->map(function ($color) {
                 return [
@@ -1131,7 +1123,7 @@ class ProductController extends Controller
             $bankdetails = is_null($is_bankdetail) ? false : true;
 
             $verified = $authUser->identity_verified;
-            if (($verified)!= 'verified') {
+            if (($verified) != 'verified') {
                 $identity = false;
             } else {
                 $identity = true;
@@ -1457,6 +1449,19 @@ class ProductController extends Controller
             $brands = getBrands();
             $sizes = getAllsizes();
             $colors = getColors();
+            $reviewAdded = false;
+            $reviews = ProductRating::where('product_id', $product->id)->get();
+
+            if ($reviews->isNotEmpty()) {
+                foreach ($reviews as $review) {
+                    if ($review->user_id == auth()->id()) {
+                        $reviewAdded = true;
+                        break;  // Exit the loop once we find a match
+                    }
+                }
+            }
+
+
 
             $categoryData = $categories->map(function ($category) {
                 if (in_array($category->name, ['women_shoe', 'men_shoe', 'bra_size', 'clothing_size'])) {
@@ -1487,13 +1492,8 @@ class ProductController extends Controller
                 ];
             });
 
-            $sizeData = $sizes->map(function ($size) {
-                return [
-                    'id' => $size->id,
-                    'label' => $size->name,
-                    'value' => $size->name,
-                ];
-            });
+            $sizeData = $sizes->pluck('name')->all();
+
 
             $colorData = $colors->map(function ($color) {
                 return [
@@ -1585,6 +1585,7 @@ class ProductController extends Controller
                     'loggedInUser' => $user,
                     'loggedInUserAddress' => $user->userDetail,
                     'reported' => $repoerted_product,
+                    'reviewAdded' =>  $reviewAdded,
                 ],
             ], 200);
         } catch (\Throwable $e) {
