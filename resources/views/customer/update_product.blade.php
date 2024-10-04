@@ -670,7 +670,8 @@
             const maxFiles = 5;
 
             let prev_images = @json($product->allImages->pluck('file_path')->toArray());
-            prev_images.forEach(imageUrl => fetchAndDisplayImage(imageUrl, true));
+            console.log(prev_images);
+            prev_images.forEach(imageUrl => await fetchAndDisplayImage(imageUrl, true));
 
             $('#update-upload-image-five').on('change', function(e) {
                 let files = e.target.files;
