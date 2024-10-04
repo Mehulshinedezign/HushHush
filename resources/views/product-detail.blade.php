@@ -71,7 +71,8 @@
                 <a href="{{ url('/') }}" class="breadcrum-list">Home</a>
                 <a href="#" class="breadcrum-list">{{ $product->categories->name ?? '' }}</a>
                 {{-- @dd($product->categories->singlesubcategory); --}}
-                @if (!is_null($product->categories->singlesubcategory))
+                @if ($product->categories && !is_null($product->categories->singlesubcategory))
+                
                     <a href="#"
                         class="breadcrum-list active">{{ $product->categories->singlesubcategory->name ?? '' }}</a>
                 @endif
