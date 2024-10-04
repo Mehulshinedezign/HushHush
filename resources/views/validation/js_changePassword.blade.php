@@ -15,7 +15,7 @@
             },
             confirm_password: {
                 required: true,
-                equalTo: "#confirm_password"
+                equalTo: "#newPassword"
             },
 
         }

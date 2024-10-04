@@ -79,7 +79,10 @@
                                         <div class="col-md-12">
                                             <div class="my-pro-detail-left">
                                                 <div class="my-pro-detail-para">
-                                                    <p>Address</p>
+                                                    <p>Default Address</p>
+                                                    <div class="profile-edit-btn">
+                                                    <a href="javascript:void(0);" id="manage_address_link" class=" ">Manage Address</a>
+                                                    </div>
                                                     <div class="my-pro-edit-form">
                                                         <div class="form-group">
                                                             <div class="formfield">
@@ -264,7 +267,9 @@
                 </div>
             </div>
         </div>
+        @include('modal.addressModal')
     </section>
+
 
 @endsection
 
@@ -423,6 +428,14 @@
             initAutocomplete();
 
         });
+    </script>
+    <script>
+        $(document).ready(function() {
+    $('#manage_address_link').on('click', function() {
+        // Open the modal when the link is clicked
+        $('#addressModal').modal('show');
+    });
+});
     </script>
 @endpush
 

@@ -144,12 +144,13 @@
                                                     accept="image/*"
                                                     class="produt_input d-none form-control form-class @error('images') is-invalid @enderror">
                                             </label>
-                                            @error('images')
-                                                {{-- <span class="invalid-feedback" role="alert"> --}}
-                                                <span class="text-danger"
-                                                    style="font-size: 14px;">{{ $message }}</span>
-                                                {{-- </span> --}}
-                                            @enderror
+                                            <div class="error-images-div">
+                                                @error('images')
+                                                    <span class="text-danger"
+                                                        style="font-size: 14px;">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
                                         </div>
                                         {{-- <div class="upload-img-preview-box">
                                             <div class="upload-img-preview">
@@ -1340,21 +1341,73 @@
 
                     // Check if the total files exceed the max limit
                     if (currentCount + files.length > MAX_IMAGES) {
-                        alert(`You can upload up to ${MAX_IMAGES} images.`);
+                        const closestDiv = document.querySelector(
+                            '.error-images-div'); // Update this selector as needed
+
+                        // Check if the div exists
+                        if (closestDiv) {
+                            // Create an error message element
+                            const errorMessage = document.createElement('span');
+                            errorMessage.innerText = `You can upload up to ${MAX_IMAGES} images.`;
+                            errorMessage.classList.add('text-danger'); // Apply text-danger class
+                            errorMessage.style.fontSize = '14px'; // Optional inline style
+                            const existingErrorMessage = closestDiv.querySelector('span.text-danger');
+                            if (existingErrorMessage) {
+                                closestDiv.removeChild(existingErrorMessage);
+                            }
+
+                            closestDiv.appendChild(errorMessage);
+
+                            // Set timeout to remove the error message after 15 seconds
+                            // 15000 milliseconds = 15 seconds
+                        }
+
                         return;
                     }
 
                     // Filter out files with .jfif extension
                     const filteredFiles = files.filter((file) => {
                         const fileExtension = file.name.split('.').pop().toLowerCase();
+                        const closestDiv = document.querySelector(
+                            '.error-images-div'); // Error div for messages
+
+                        // Check if the file is a JFIF image
                         if (fileExtension === 'jfif') {
-                            alert(
-                                'Only images in JPG, JPEG, SVG, and PNG formats are allowed for upload. Please upload a different image format.'
-                                );
-                            return false;
+                            // Check if the error div exists
+                            if (closestDiv) {
+                                // Create an error message element
+                                const errorMessage = document.createElement('span');
+                                errorMessage.innerText = "JFIF files are not allowed.";
+                                errorMessage.classList.add('text-danger'); // Apply text-danger class
+                                errorMessage.style.fontSize = '14px'; // Optional inline style
+
+                                // Append the error message to the closest div
+                                const existingErrorMessage = closestDiv.querySelector('span.text-danger');
+                                if (existingErrorMessage) {
+                                    closestDiv.removeChild(existingErrorMessage);
+                                }
+                                closestDiv.appendChild(errorMessage);
+
+                                // Set timeout to remove the error message after 15 seconds
+                                // 15000 milliseconds = 15 seconds
+                            }
+
+                            return false; // Exclude the jfif file from the filtered list
                         }
-                        return true;
+
+                        // If the file is valid (not JFIF), remove any existing error messages immediately
+                        if (closestDiv) {
+                            const existingErrorMessage = closestDiv.querySelector('span.text-danger');
+                            if (existingErrorMessage) {
+                                closestDiv.removeChild(existingErrorMessage);
+                            }
+                        }
+
+                        return true; // Include valid files in the filtered list
                     });
+
+
+
 
                     filteredFiles.forEach((file) => {
                         selectedFiles.push(file);
