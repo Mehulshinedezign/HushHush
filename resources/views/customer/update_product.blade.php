@@ -556,6 +556,10 @@
 
 @push('scripts')
     <script>
+        $(document).on('click', '.non-availability', function() {
+            $('.daterangepicker, .ltr, .show-calendar, .opensright').last().addClass('testCheck')
+        })
+       
         // The same script as in Blade 1
         $(document).ready(function() {
             var subcategorySelect = $('#subcategory');

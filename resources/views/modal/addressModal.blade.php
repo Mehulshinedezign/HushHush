@@ -183,7 +183,6 @@
             };
 
             const populateAddressForm = (data) => {
-                console.log(data, 'herere check')
                 document.getElementById('formTitle').textContent = 'Edit Address';
                 document.getElementById('addEditAddressForm').classList.remove('d-none');
                 document.getElementById('address_id').value = data.id;

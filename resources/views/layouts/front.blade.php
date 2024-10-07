@@ -904,9 +904,6 @@
         jQuery(document).on("change", 'select[name="brand"]', function() {
             const selectedValue = $(this).val();
             const otherBrandField = $('#other');
-            console.log('Selected Value:', selectedValue);
-            console.log('Other Brand Field:', otherBrandField);
-
             if (selectedValue === 'Other') {
                 if (otherBrandField.length > 0) { // Check if the element exists
                     otherBrandField.removeClass('d-none');
@@ -917,11 +914,6 @@
                 otherBrandField.addClass('d-none');
             }
         });
-
-
-        $(document).on('click', '.non-availability', function() {
-            $('.daterangepicker, .ltr, .show-calendar, .opensright').last().addClass('testCheck')
-        })
 
         document.getElementById('verificationForm').addEventListener('submit', async function(event) {
             event.preventDefault(); // Prevent default form submission

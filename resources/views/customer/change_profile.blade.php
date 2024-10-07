@@ -279,6 +279,10 @@
 
     <script>
         jQuery(document).ready(function() {
+            $('.edit-address').on('click', function() {
+               $('#addNewAddressBtn').removeClass('d-none');
+            })
+            
             // Enable the save button on load
             $("#save_user").find('button').attr('disabled', false);
 

@@ -94,11 +94,7 @@
                                                         <strong>{{ $message }}</strong>
                                                     </span>
                                                 @enderror
-                                                @error('images')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
+                                              
                                                 {{-- <span><img src="http://192.168.0.59:8000/img/upload-multi.svg"
                                                     alt="upload-multi">
                                             </span> --}}
@@ -415,49 +411,60 @@
         // });
     </script>
     <script>
-        $(document).ready(function() {
-            const rules = {
-                'images[]': {
-                    required: true,
-                    accept: "image/*",
-                    minfiles: 1,
-                    maxfiles: 5,
-                },
-            };
-            const messages = {
-                'images[]': {
-                    required: "Please upload at least one image",
-                    accept: "Please upload only image files",
-                    minfiles: "You can upload a maximum of 5 images",
-                    maxfiles: "You can upload a maximum of 5 images",
-                },
-            };
+      $(document).ready(function() {
+    // Custom validation methods
+    $.validator.addMethod("minfiles", function(value, element, param) {
+        const fileCount = $(element).get(0).files.length;
+        return fileCount >= param;
+    }, "Please select at least {0} files.");
 
-            handleValidation('orderDetail', rules, messages);
+    $.validator.addMethod("maxfiles", function(value, element, param) {
+        const fileCount = $(element).get(0).files.length;
+        return fileCount <= param;
+    }, "Please select no more than {0} files.");
 
-            $('#orderDetail').submit(function(e) {
-                e.preventDefault(); // Prevent form submission
+    const rules = {
+        'images[]': {
+            required: true,
+            accept: "image/*",
+            minfiles: 1,  // Minimum number of files required
+            maxfiles: 5,  // Maximum number of files allowed
+        },
+    };
+    const messages = {
+        'images[]': {
+            required: "Please upload at least one image",
+            accept: "Please upload only image files",
+            minfiles: "You can upload a minimum of 1 image",
+            maxfiles: "You can upload a maximum of 5 images",
+        },
+    };
 
-                // Perform form validation
+    handleValidation('orderDetail', rules, messages);
+    handleValidation('orderReturn', rules, messages);
 
-                // Check if the form is valid
-                if ($('#orderDetail').valid()) {
-                    $('#orderDetail').submit(); // Submit form
-                }
-            });
+   
+    $('#orderDetail').submit(function(e) {
+        e.preventDefault(); 
 
-            handleValidation('orderReturn', rules, messages);
-            $('#orderReturn').submit(function(e) {
-                e.preventDefault(); // Prevent form submission
+        const submitButton = $(this).find('button[type="submit"]');
+    
+        if ($('#orderDetail').valid()) {
+            submitButton.prop('disabled', true); // Disable the button   
+            this.submit(); 
+        }
+    });
 
-                // Perform form validation
+    $('#orderReturn').submit(function(e) {
+        e.preventDefault(); 
+        const submitButton = $(this).find('button[type="submit"]');
+       
+        if ($('#orderReturn').valid()) {
+            submitButton.prop('disabled', true); // Disable the button     
+            this.submit();
+        }
+    });
+});
 
-                // Check if the form is valid
-                if ($('#orderReturn').valid()) {
-                    $('#orderReturn').submit(); // Submit form
-                }
-            });
-
-        })
     </script>
 @endpush

@@ -2587,3 +2587,24 @@ table.inquiry-table {
     width: 70px !important;
     height: 70px !important;
 }
+
+.testCheck {
+    z-index: 3 !important;
+}
+.cust-header.header {
+    position: relative;
+    z-index: 5;
+}
+.navbar {
+
+    background-color: #fff;
+}
+body:has(.edit-product-main){
+    overflow: hidden;
+}
+
+
+
+
+
+

@@ -486,7 +486,7 @@ a.navbar-brand {
 }
 
 .bottom-nav {
-    background-color: var(--primary-color);
+    background-color: var(--primary-color) !important;
 }
 
 .search-pro-header {
@@ -3312,3 +3312,22 @@ button#addNewAddressBtn {
     padding: 20px 10px 0;
     height: 100% !important;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
