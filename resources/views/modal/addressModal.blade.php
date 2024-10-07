@@ -28,6 +28,7 @@
                                 <p>{{ $address->country }}</p>
                                 <p>{{ $address->zipcode }}</p>
                                 <div class="edit-delete-address-btn">
+                                    @if(Route::currentRouteName() =='change-Profile')
                                     <a href="javascript:void(0)" class="edit-address"
                                     data-index="{{ $index }}">
                                     <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,9 +41,13 @@
                                     data-id="{{ $address->id }}">
                                     <svg fill="#000000" width="20px" height="20px" viewBox="0 0 24 24" id="delete" xmlns="http://www.w3.org/2000/svg" class="icon multi-color"><rect id="secondary-fill" x="6" y="7" width="9" height="14" style="fill: rgb(44, 169, 188); stroke-width: 2;"></rect><path id="primary-stroke" d="M4,7H20M16,7V4a1,1,0,0,0-1-1H9A1,1,0,0,0,8,4V7M18,20V7H6V20a1,1,0,0,0,1,1H17A1,1,0,0,0,18,20Z" style="fill: none; stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></svg>
                                 </a>
+                                @endif
+                                @if(Route::currentRouteName() !='change-Profile')
+
                                 <button type="button" class="btn btn-primary btn-sm"
                                     onclick="selectAddress('{{ $address->id }}', '{{ $address->complete_address }}')"
                                     data-bs-dismiss="modal">Select</button>
+                                    @endif
                                 </div>
                             </div>
                         </div>

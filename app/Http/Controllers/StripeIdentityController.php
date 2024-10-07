@@ -69,6 +69,12 @@ class StripeIdentityController extends Controller
             return redirect()->route('index')->with('success', 'Your identity verification has been failed please try again.');
 
         }
+        elseif(auth()->user()->identity_verified == 'pending')
+        {
+            // session()->flash('showModal4', true);
+            return redirect()->route('index')->with('success', 'Your identity verification is under process.');
+
+        }
         else{
             return redirect()->route('index')->with('success', 'Your identity verification is under process.');
         }
