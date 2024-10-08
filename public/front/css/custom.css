@@ -2596,6 +2596,11 @@ table.inquiry-table {
 .cust-header.header {
     position: relative;
     z-index: 99;
+    position: sticky;
+    top: 0;
+}
+.header.cust-header.header.fixed .bottom-nav{
+    display: none;
 }
 .navbar {
 
@@ -2633,5 +2638,35 @@ body:has(.edit-product-main){
 .item-pickup-loc-main label{
     cursor: pointer;
 }
+.delivery-opion-box > h3 {
+    font-size: 20px;
+    line-height: 26px;
+    margin-bottom: 10px;
+}
+.delivery-badge {
+    padding: 5px 10px 5px 30px;
+    background-color: #3A3A3A;
+    position: relative;
+    overflow: hidden;
+}
 
+.delivery-badge p {
+    color: #fff;
+    font-size: 13px;
+}
 
+.delivery-badge-box {
+    display: flex;
+    gap: 10px;
+}
+
+.delivery-badge::after {
+    content: "";
+    height: 34px;
+    width: 34px;
+    background-color: #fff;
+    position: absolute;
+    top: -1px;
+    left: -23px;
+    transform: rotate(44deg);
+}

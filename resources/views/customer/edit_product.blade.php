@@ -12,13 +12,17 @@
                         $userBankInfo = auth()->user()->userBankInfo;
                     @endphp
                     @if (is_null($userBankInfo))
+                    <div class="modal-opener-box">
                         <div data-bs-toggle="modal" class="button primary-btn" data-bs-target="#addbank-Modal">
                             Add Your Product
                         </div>
+                    </div>
                     @elseif (is_null($user->userDetail->complete_address))
+                    <div class="modal-opener-box">
                         <div data-bs-toggle="modal" class="button primary-btn" data-bs-target="#accountSetting">
                             Add Your Product
                         </div>
+                    </div>
                     @else
                         <div class="modal-opener-box">
                             <div data-bs-toggle="modal" class="button primary-btn" data-bs-target="#addproduct-Modal">

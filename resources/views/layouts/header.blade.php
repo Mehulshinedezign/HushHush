@@ -2,7 +2,7 @@
 
 
 {{-- NEW HTML CODE --}}
-<header class="cust-header header ">
+<header class="cust-header header">
     <nav class="navbar sticky-nav">
         <div class="container">
             <div class="cust-nav-header-sec">

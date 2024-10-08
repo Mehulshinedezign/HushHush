@@ -123,6 +123,7 @@
                 newUrl.searchParams.set('status', selectedStatus);
                 window.history.pushState({}, '', newUrl);
 
+                $('.page-loader').removeClass('d-none');
 
                 loadDataBasedOnTab(selectedStatus);
             });
@@ -136,10 +137,13 @@
                         status: status
                     },
                     success: function(response) {
+                        $('.page-loader').addClass('d-none');
 
                         $('#data-table').html(response);
                     },
                     error: function(xhr, status, error) {
+                        $('.page-loader').addClass('d-none');
+
                         console.error('Error loading data:', error);
                     }
                 });
