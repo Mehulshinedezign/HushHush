@@ -579,7 +579,7 @@
                                 <input type="hidden" name="for_user"
                                     value="{{ jsencode_userdata($product->user_id) }}">
                                 <input type="hidden" name="product_id" value="{{ jsencode_userdata($product->id) }}">
-                                <input type="hidden" id="address_id" name="address_id"
+                                <input type="hidden" id="address_id1" name="address_id1"
                                     value="{{ @$authUser->userDetail->id }}">
                                 <div class="book-item-date">
                                     <div class="form-group">
@@ -659,7 +659,7 @@
                                             <input type="text" id="selected_value" readonly class="form-control"
                                                 value="{{ @$authUser->userDetail->complete_address }}">
                                             <input type="hidden" value="{{ @$authUser->userDetail->id }}"
-                                                name='address_id'>
+                                                name='address_id1'>
 
                                             <a href="javascript:void(0);" id="manage_address_link"
                                                 class="manage-address-link">Change Address</a>
@@ -738,9 +738,24 @@
     <script>
         document.getElementById('manage_address_link').addEventListener('click', function() {
             // Open the modal when clicking on "Change Address"
-            var myModal = new bootstrap.Modal(document.getElementById('addressModal'));
-            myModal.show();
+            var modalElement = document.getElementById('addressModal');
+            var modal = new bootstrap.Modal(modalElement);
+            modal.show();
 
+            // Wait for the modal to be fully shown before triggering the button click
+            modalElement.addEventListener('shown.bs.modal', function() {
+                let btn = document.getElementById('addNewAddressBtn');
+                
+
+                // Check if the button exists in the modal
+                if (btn) {
+                    console.log('Button exists, triggering click programmatically...');
+                    // Programmatically trigger the click event
+                    btn.click();
+                } else {
+                    console.log('Button not found');
+                }
+            });
         });
 
         // Function to handle address selection from the modal
@@ -748,8 +763,8 @@
             // Update selected address in the form
             document.getElementById('selected_value').value = fullAddress;
 
-            // Update hidden address_id field
-            document.getElementById('address_id').value = id;
+            // Update hidden address_id1 field
+            document.getElementById('address_id1').value = id;
         }
     </script>
     <script>
@@ -874,10 +889,10 @@
                         hasErrors = true;
                     }
 
-                    // Determine selected delivery option and get the associated address_id
+                    // Determine selected delivery option and get the associated address_id1
                     if ($('#ship_to_me').is(':checked')) {
                         // Use the existing address ID for "Ship to Me" option
-                        let addressId = $('#address_id').val();
+                        let addressId = $('#address_id1').val();
                         formData.append('address_id', addressId);
                         if (!addressId) {
                             iziToast.error({
@@ -888,7 +903,7 @@
                             hasErrors = true;
                         }
                     } else if ($('#pick_up').is(':checked')) {
-                        // If "Pick Up" is selected, clear the address_id as it's not needed
+                        // If "Pick Up" is selected, clear the address_id1 as it's not needed
                         formData.delete('address_id');
                     }
 

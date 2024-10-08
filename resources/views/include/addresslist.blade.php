@@ -69,7 +69,7 @@
                     class="form-control" type="text">
 
             </div>
-            <input type="hidden" id="address_id" name="address_id">
+            <input type="hidden" id="address_id" name="address_id" value="">
             <div class="col-lg-6">
                 <label for="street_number">Address Line 1*</label>
                 <input id="street_number" name="address1" class="form-control" placeholder="Street number"
