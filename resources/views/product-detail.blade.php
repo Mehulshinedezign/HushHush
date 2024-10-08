@@ -60,6 +60,25 @@
 @php
     $user = auth()->user();
 @endphp
+@php
+    $city = @$product->productCompleteLocation->city;
+    $state = @$product->productCompleteLocation->state;
+    $country = @$product->productCompleteLocation->country;
+
+    $locationParts = [];
+
+    if ($city) {
+        $locationParts[] = $city;
+    }
+    if ($state) {
+        $locationParts[] = $state;
+    }
+    if ($country) {
+        $locationParts[] = $country;
+    }
+
+    $selectedValue = implode(', ', $locationParts);
+@endphp
 @section('content')
 
 
@@ -118,42 +137,40 @@
                                     </div>
                                 </div>
                                 <div class="prev-prodec-btn {{ count($productImages) > 1 ? '' : 'd-none' }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="18"
-                                        viewBox="0 0 26 18" fill="none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="15"
+                                        viewBox="0 0 13 18" fill="none">
                                         <path
-                                            d="M24.8854 9.15808L17.2806 16.763C17.0074 17.082 16.5273 17.1192 16.2083 16.8459C15.8893 16.5727 15.8521 16.0926 16.1254 15.7736C16.1509 15.7439 16.1786 15.7161 16.2083 15.6907L22.5127 9.37865H0.901088C0.481121 9.37865 0.140625 9.03815 0.140625 8.61812C0.140625 8.19809 0.481121 7.85766 0.901088 7.85766H22.5127L16.2083 1.55325C15.8893 1.28007 15.8521 0.799974 16.1254 0.48098C16.3986 0.161985 16.8787 0.1248 17.1977 0.398046C17.2274 0.423534 17.2552 0.451242 17.2806 0.48098L24.8855 8.08587C25.1803 8.38239 25.1803 8.86143 24.8854 9.15808Z"
-                                            fill="#1B1B1B"></path>
+                                            d="M2.31092 0.000310067C2.04488 -0.00554124 1.78363 0.0715788 1.56349 0.221067C1.34335 0.370556 1.17525 0.585024 1.08257 0.834463C0.989895 1.0839 0.977237 1.35598 1.04636 1.61295C1.11548 1.86991 1.26295 2.09885 1.46827 2.26813L9.30214 8.9793L1.46827 15.6881C1.32624 15.7925 1.2073 15.925 1.11889 16.0775C1.03047 16.23 0.974498 16.3991 0.954463 16.5742C0.934429 16.7494 0.950767 16.9267 1.00246 17.0952C1.05414 17.2637 1.14007 17.4198 1.25485 17.5535C1.36963 17.6873 1.51079 17.7958 1.66949 17.8725C1.8282 17.9492 2.00103 17.9922 2.17716 17.999C2.35328 18.0058 2.52892 17.9763 2.69306 17.9121C2.8572 17.8478 3.00631 17.7504 3.13106 17.6259L12.1001 9.95196C12.241 9.83176 12.3541 9.68257 12.4316 9.51443C12.5092 9.34629 12.5494 9.16328 12.5494 8.97812C12.5494 8.79295 12.5092 8.60995 12.4316 8.4418C12.3541 8.27366 12.241 8.12433 12.1001 8.00413L3.13106 0.322808C2.90449 0.121559 2.61388 0.00744003 2.31092 0.000310067Z"
+                                            fill="#272643" />
                                     </svg>
                                 </div>
                                 <div class="next-prodec-btn {{ count($productImages) > 1 ? '' : 'd-none' }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="18"
-                                        viewBox="0 0 26 18" fill="none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="15"
+                                        viewBox="0 0 13 18" fill="none">
                                         <path
-                                            d="M24.8854 9.15808L17.2806 16.763C17.0074 17.082 16.5273 17.1192 16.2083 16.8459C15.8893 16.5727 15.8521 16.0926 16.1254 15.7736C16.1509 15.7439 16.1786 15.7161 16.2083 15.6907L22.5127 9.37865H0.901088C0.481121 9.37865 0.140625 9.03815 0.140625 8.61812C0.140625 8.19809 0.481121 7.85766 0.901088 7.85766H22.5127L16.2083 1.55325C15.8893 1.28007 15.8521 0.799974 16.1254 0.48098C16.3986 0.161985 16.8787 0.1248 17.1977 0.398046C17.2274 0.423534 17.2552 0.451242 17.2806 0.48098L24.8855 8.08587C25.1803 8.38239 25.1803 8.86143 24.8854 9.15808Z"
-                                            fill="#1B1B1B"></path>
+                                            d="M2.31092 0.000310067C2.04488 -0.00554124 1.78363 0.0715788 1.56349 0.221067C1.34335 0.370556 1.17525 0.585024 1.08257 0.834463C0.989895 1.0839 0.977237 1.35598 1.04636 1.61295C1.11548 1.86991 1.26295 2.09885 1.46827 2.26813L9.30214 8.9793L1.46827 15.6881C1.32624 15.7925 1.2073 15.925 1.11889 16.0775C1.03047 16.23 0.974498 16.3991 0.954463 16.5742C0.934429 16.7494 0.950767 16.9267 1.00246 17.0952C1.05414 17.2637 1.14007 17.4198 1.25485 17.5535C1.36963 17.6873 1.51079 17.7958 1.66949 17.8725C1.8282 17.9492 2.00103 17.9922 2.17716 17.999C2.35328 18.0058 2.52892 17.9763 2.69306 17.9121C2.8572 17.8478 3.00631 17.7504 3.13106 17.6259L12.1001 9.95196C12.241 9.83176 12.3541 9.68257 12.4316 9.51443C12.5092 9.34629 12.5494 9.16328 12.5494 8.97812C12.5494 8.79295 12.5092 8.60995 12.4316 8.4418C12.3541 8.27366 12.241 8.12433 12.1001 8.00413L3.13106 0.322808C2.90449 0.121559 2.61388 0.00744003 2.31092 0.000310067Z"
+                                            fill="#272643" />
                                     </svg>
                                 </div>
 
                             </div>
                             <div class="product-review-main">
                                 @if ($product->ratings->contains('user_id', auth()->id()))
-                                    @if (count($product->ratings) > 0)
-                                        <div class="product-review-heading">
-                                            <p>{{ $product->ratings_count }} Ratings & Reviews</p>
-                                            <div class="form-group">
-                                                <div class="formfield">
-                                                    <p>Most Recent</p>
-                                                    {{-- <select name="" id="" readonly>
+                                    <div class="product-review-heading">
+                                        <p>{{ $product->ratings_count }} Ratings & Reviews</p>
+                                        <div class="form-group">
+                                            <div class="formfield">
+                                                <p>Most Recent</p>
+                                                {{-- <select name="" id="" readonly>
                                                 <option value="">Most Recent</option>
 
                                             </select> --}}
-                                                    {{-- <span class="form-icon">
+                                                {{-- <span class="form-icon">
                                                 <img src="{{ asset('front/images/dorpdown-icon.svg') }}" alt="img">
                                             </span> --}}
-                                                </div>
                                             </div>
                                         </div>
-                                    @endif
+                                    </div>
 
                                     @if (count($product->ratings) > 0)
                                         @php $count = 0; @endphp
@@ -264,9 +281,9 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                                                                        <h4>Size :</h4>
-                                                                                        <p>{{ $product->size ?? 'N/A' }}</p>
-                                                                                    </div> -->
+                                                                                                <h4>Size :</h4>
+                                                                                                <p>{{ $product->size ?? 'N/A' }}</p>
+                                                                                            </div> -->
 
 
                             </div>
@@ -276,17 +293,16 @@
                                         {{-- <div data-bs-toggle="modal" data-bs-target="#addaddress-Modal">
                                         Send Request
                                     </div> --}}
-                                        <a href="#" class="button primary-btn full-btn mt-3 sendQuery"
-                                            data-bs-toggle="modal" data-bs-target="#accountSetting"
-                                            aria-controls="offcanvasRight">Send Request</a>
+                                        <a href="#" class="button primary-btn full-btn sendQuery" data-bs-toggle="modal"
+                                            data-bs-target="#accountSetting" aria-controls="offcanvasRight">Send Request</a>
                                     @else
-                                        <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
+                                        <a href="#" class="button primary-btn full-btn " data-bs-toggle="offcanvas"
                                             data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Send Request</a>
                                     @endif
                                 @endif
                             @endauth
                             @guest
-                                {{-- <a href="{{ route('login') }}" class="button primary-btn full-btn mt-3">Send Request</a> --}}
+                                {{-- <a href="{{ route('login') }}" class="button primary-btn full-btn ">Send Request</a> --}}
                                 <a href="{{ route('login', ['redirect_url' => url()->current()]) }}"
                                     class="button primary-btn full-btn mt-3">Send Request</a>
 
@@ -304,7 +320,7 @@
                                         <div id="collapseOne" class="accordion-collapse collapse show"
                                             aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
-                                                {{ $product->description }}
+                                                {{ $product->description ?? 'N/A' }}
                                             </div>
                                         </div>
                                     </div>
@@ -323,13 +339,14 @@
                                             <div id="collapseTwo" class="accordion-collapse collapse show"
                                                 aria-labelledby="headingtwo" data-bs-parent="#accordionExample1">
                                                 <div class="accordion-body">
-                                                    @if (isset($product->productCompleteLocation->city) &&
-                                                            isset($product->productCompleteLocation->state) &&
-                                                            isset($product->productCompleteLocation->country))
-                                                        {{ @$product->productCompleteLocation->city . ' , ' . @$product->productCompleteLocation->state . ' , ' . @$product->productCompleteLocation->country }}
+                                                    {{ @$selectedValue }}
+                                                    {{-- @if (isset($product->productCompleteLocation->pick_up_location))
+                                                        {{ @$product->productCompleteLocation->pick_up_location }}
                                                     @else
-                                                        {{ @$product->productCompleteLocation->city . '  ' . @$product->productCompleteLocation->state . '  ' . @$product->productCompleteLocation->country }}
-                                                    @endif
+                                                        {{ @$product->productCompleteLocation->pick_up_location ?? 'N/A' }} --}}
+
+                                                        {{-- {{ @$product->productCompleteLocation->city . '  ' . @$product->productCompleteLocation->state . '  ' . @$product->productCompleteLocation->country }} --}}
+                                                    {{-- @endif --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -404,73 +421,83 @@
                                         @endauth
                                     </div>
                                 </div>
-                                <div class="pro-dec-rating-main mb-0">
-                                    <div class="pro-rating-head">
-                                        <h4>Ratings & Reviews</h4>
+                                @if ($product->ratings->contains('user_id', auth()->id()))
+                                    @if (count($product->ratings) > 0)
+                                        <div class="pro-dec-rating-main mb-0">
+                                            <div class="pro-rating-head">
+                                                <h4>Ratings & Reviews</h4>
 
-                                    </div>
-                                    <div class="pro-rating-body">
-                                        <div class="pro-rating-left">
-                                            <h3>{{ $product->average_rating }}</h3>
-                                            <p>{{ $product->ratings()->count() }} & {{ $product->ratings()->count() }}
-                                                Reviews</p>
+                                            </div>
+                                            <div class="pro-rating-body">
+                                                <div class="pro-rating-left">
+                                                    <h3>{{ $product->average_rating }}</h3>
+                                                    <p>{{ $product->ratings()->count() }} &
+                                                        {{ $product->ratings()->count() }}
+                                                        Reviews</p>
+                                                </div>
+                                                <div class="pro-rating-right">
+                                                    <ul>
+                                                        <li>
+                                                            <p>5</p>
+                                                            <i class="fa-solid fa-star"></i>
+                                                            <div class="progress">
+                                                                <div class="progress-bar " role="progressbar"
+                                                                    style="background-color: #517B5D; width:{{ $rating_progress['fivestar'] }}%"
+                                                                    aria-valuenow="100" aria-valuemin="0"
+                                                                    aria-valuemax="100">
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <p>4</p>
+                                                            <i class="fa-solid fa-star"></i>
+                                                            <div class="progress">
+                                                                <div class="progress-bar" role="progressbar"
+                                                                    style="background-color: #517B5D; width:{{ $rating_progress['fourstar'] }}%"
+                                                                    aria-valuenow="100" aria-valuemin="0"
+                                                                    aria-valuemax="100">
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <p>3</p>
+                                                            <i class="fa-solid fa-star"></i>
+                                                            <div class="progress">
+                                                                <div class="progress-bar" role="progressbar"
+                                                                    style="background-color: #517B5D; width:{{ $rating_progress['threestar'] }}%"
+                                                                    aria-valuenow="100" aria-valuemin="0"
+                                                                    aria-valuemax="100">
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <p>2</p>
+                                                            <i class="fa-solid fa-star"></i>
+                                                            <div class="progress">
+                                                                <div class="progress-bar" role="progressbar"
+                                                                    style="background-color: #517B5D; width:{{ $rating_progress['twostar'] }}%"
+                                                                    aria-valuenow="100" aria-valuemin="0"
+                                                                    aria-valuemax="100">
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <p>1</p>
+                                                            <i class="fa-solid fa-star"></i>
+                                                            <div class="progress">
+                                                                <div class="progress-bar" role="progressbar"
+                                                                    style="background-color: #517B5D; width:{{ $rating_progress['onestar'] }}%"
+                                                                    aria-valuenow="100" aria-valuemin="0"
+                                                                    aria-valuemax="100">
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="pro-rating-right">
-                                            <ul>
-                                                <li>
-                                                    <p>5</p>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <div class="progress">
-                                                        <div class="progress-bar " role="progressbar"
-                                                            style="background-color: #517B5D; width:{{ $rating_progress['fivestar'] }}%"
-                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <p>4</p>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar"
-                                                            style="background-color: #517B5D; width:{{ $rating_progress['fourstar'] }}%"
-                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <p>3</p>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar"
-                                                            style="background-color: #517B5D; width:{{ $rating_progress['threestar'] }}%"
-                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <p>2</p>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar"
-                                                            style="background-color: #517B5D; width:{{ $rating_progress['twostar'] }}%"
-                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <p>1</p>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <div class="progress">
-                                                        <div class="progress-bar" role="progressbar"
-                                                            style="background-color: #517B5D; width:{{ $rating_progress['onestar'] }}%"
-                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+                                    @endif
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -627,7 +654,6 @@
                                             <input type="radio" id="ship_to_me" name="delivery_option"
                                                 value="ship_to_me" checked>
                                             <label for="ship_to_me">Ship it to me</label><br>
-
                                             <input type="text" id="selected_value" readonly class="form-control"
                                                 value="{{ @$authUser->userDetail->complete_address }}">
                                             <input type="hidden" value="{{ @$authUser->userDetail->id }}"
@@ -738,50 +764,87 @@
             })
         })
 
+        // $('.slider-content').slick({
+        //     slidesToShow: 1,
+        //     slidesToScroll: 1,
+        //     arrows: false,
+        //     fade: false,
+        //     swiping: false;
+        //     infinite: true,
+        //     speed: 1000,
+        //     asNavFor: '.slider-thumb',
+        //     prevArrow: $('.prev-prodec-btn'),
+        //     nextArrow: $('.next-prodec-btn'),
+        //     arrows: true,
+        //     responsive: [{
+        //             breakpoint: 1400,
+        //             settings: {
+        //                 slidesToShow: 1,
+        //                 slidesToScroll: 1,
+        //             }
+        //         },
+        //         {
+        //             breakpoint: 992,
+        //             settings: {
+        //                 slidesToShow: 1,
+        //                 slidesToScroll: 1,
+        //             }
+        //         },
+        //         {
+        //             breakpoint: 575,
+        //             settings: {
+        //                 slidesToShow: 1,
+        //                 slidesToScroll: 1,
+        //             }
+        //         }
+
+        //     ]
+        // });
+        // $('.slider-thumb').slick({
+        //                 slidesToShow: 10,
+        //                 slidesToScroll: 1,
+        //                 vertical: true,
+        //                 asNavFor: '.slider-content',
+        //                 dots: false,
+        //                 focusOnSelect: true,
+        //                 arrows: false,
+        // });
+
+
+
+        // $('.slider-content').slick({
+        //                 slidesToShow: 1,
+        //                 slidesToScroll: 1,
+        //                 swipe: true,
+        //                 arrows: true,
+        //                 fade: true,
+        //                 asNavFor: '.slider-thumb'
+        // });
+        // $('.slider-thumb').slick({
+        //                 slidesToShow: 10,
+        //                 slidesToScroll: 1,
+        //                 vertical: true,
+        //                 swipe: false,
+        //                 asNavFor: '.slider-content',
+        //                 dots: false,
+        //                 focusOnSelect: true,
+        //                 arrows: false,
+        //                 verticalSwiping: true
+
+        // });
+
         $('.slider-content').slick({
             slidesToShow: 1,
             slidesToScroll: 1,
             arrows: true,
             fade: false,
-            infinite: true,
-            speed: 1000,
             asNavFor: '.slider-thumb',
+            autoplay: false,
             prevArrow: $('.prev-prodec-btn'),
             nextArrow: $('.next-prodec-btn'),
-            arrows: true,
-            responsive: [{
-                    breakpoint: 1400,
-                    settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1,
-                    }
-                },
-                {
-                    breakpoint: 992,
-                    settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1,
-                    }
-                },
-                {
-                    breakpoint: 575,
-                    settings: {
-                        slidesToShow: 1,
-                        slidesToScroll: 1,
-                    }
-                }
-
-            ]
+            autoplaySpeed: 2000,
         });
         $('.slider-thumb').slick({
-            slidesToShow: 10,
-            slidesToScroll: 1,
-            vertical: true,
-            asNavFor: '.slider-content',
-            dots: false,
-            focusOnSelect: true,
-            arrows: false,
-            verticalSwiping: true
             slidesToShow: 5,
             slidesToScroll: 1,
             asNavFor: '.slider-content',
@@ -789,7 +852,6 @@
             focusOnSelect: true,
             vertical: true,
         });
-
 
 
 
@@ -965,6 +1027,7 @@
         });
 
 
+
         document.addEventListener('DOMContentLoaded', function() {
             const radioButtons = document.querySelectorAll('input[name="delivery_option"]');
             const selectedValueInput = document.getElementById('selected_value');
@@ -974,8 +1037,8 @@
                 const checkedRadio = document.querySelector('input[name="delivery_option"]:checked');
                 if (checkedRadio) {
                     if (checkedRadio.id === 'pick_up') {
-                        selectedValueInput.value =
-                            "{{ @$product->productCompleteLocation->city . ' ' . @$product->productCompleteLocation->state }}";
+                        selectedValueInput.value = '{{ $selectedValue }}';
+                        // "{{ @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state . ', ' . @$product->productCompleteLocation->country }}";
                         manageAddressLink.style.display =
                             'none';
                     } else if (checkedRadio.id === 'ship_to_me') {
