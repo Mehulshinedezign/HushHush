@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="{{ asset('front/css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}?ver={{ now() }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+    <script src="{{ asset('front/js/jquery.min.js') }}"></script>
     <!-- <script>
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
@@ -871,7 +872,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ asset('front/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('front/js/jquery.min.js') }}"></script>
+    
     <script src="{{ asset('front/js/slick.js') }}"></script>
     <script src="{{ asset('front/js/slick.min.js') }}"></script>
     <script src="{{ asset('js/iziToast.min.js') }}"></script>

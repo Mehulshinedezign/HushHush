@@ -137,6 +137,7 @@
                             </div>
                             <div class="product-review-main">
                                 @if ($product->ratings->contains('user_id', auth()->id()))
+                                    @if (count($product->ratings) > 0)
                                         <div class="product-review-heading">
                                             <p>{{ $product->ratings_count }} Ratings & Reviews</p>
                                             <div class="form-group">
@@ -152,6 +153,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    @endif
 
                                     @if (count($product->ratings) > 0)
                                         @php $count = 0; @endphp
@@ -201,9 +203,9 @@
                                             @endif --}}
                                             @endforeach
                                         </div>
-                                 @endif
+                                    @endif
                                 @endif
-                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-12">
@@ -262,9 +264,9 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                                                                            <h4>Size :</h4>
-                                                                                            <p>{{ $product->size ?? 'N/A' }}</p>
-                                                                                        </div> -->
+                                                                                        <h4>Size :</h4>
+                                                                                        <p>{{ $product->size ?? 'N/A' }}</p>
+                                                                                    </div> -->
 
 
                             </div>
@@ -274,17 +276,17 @@
                                         {{-- <div data-bs-toggle="modal" data-bs-target="#addaddress-Modal">
                                         Send Request
                                     </div> --}}
-                                        <a href="#" class="button primary-btn full-btn sendQuery"
+                                        <a href="#" class="button primary-btn full-btn mt-3 sendQuery"
                                             data-bs-toggle="modal" data-bs-target="#accountSetting"
                                             aria-controls="offcanvasRight">Send Request</a>
                                     @else
-                                        <a href="#" class="button primary-btn full-btn " data-bs-toggle="offcanvas"
+                                        <a href="#" class="button primary-btn full-btn mt-3" data-bs-toggle="offcanvas"
                                             data-bs-target="#inquiry-sidebar" aria-controls="offcanvasRight">Send Request</a>
                                     @endif
                                 @endif
                             @endauth
                             @guest
-                                {{-- <a href="{{ route('login') }}" class="button primary-btn full-btn ">Send Request</a> --}}
+                                {{-- <a href="{{ route('login') }}" class="button primary-btn full-btn mt-3">Send Request</a> --}}
                                 <a href="{{ route('login', ['redirect_url' => url()->current()]) }}"
                                     class="button primary-btn full-btn mt-3">Send Request</a>
 
@@ -302,7 +304,7 @@
                                         <div id="collapseOne" class="accordion-collapse collapse show"
                                             aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                             <div class="accordion-body">
-                                                {{ $product->description ?? 'N/A' }}
+                                                {{ $product->description }}
                                             </div>
                                         </div>
                                     </div>
@@ -321,12 +323,12 @@
                                             <div id="collapseTwo" class="accordion-collapse collapse show"
                                                 aria-labelledby="headingtwo" data-bs-parent="#accordionExample1">
                                                 <div class="accordion-body">
-                                                    @if (isset($product->productCompleteLocation->pick_up_location))
-                                                        {{ @$product->productCompleteLocation->pick_up_location }}
+                                                    @if (isset($product->productCompleteLocation->city) &&
+                                                            isset($product->productCompleteLocation->state) &&
+                                                            isset($product->productCompleteLocation->country))
+                                                        {{ @$product->productCompleteLocation->city . ' , ' . @$product->productCompleteLocation->state . ' , ' . @$product->productCompleteLocation->country }}
                                                     @else
-                                                        {{ @$product->productCompleteLocation->pick_up_location ?? 'N/A'}}
-
-                                                        {{-- {{ @$product->productCompleteLocation->city . '  ' . @$product->productCompleteLocation->state . '  ' . @$product->productCompleteLocation->country }} --}}
+                                                        {{ @$product->productCompleteLocation->city . '  ' . @$product->productCompleteLocation->state . '  ' . @$product->productCompleteLocation->country }}
                                                     @endif
                                                 </div>
                                             </div>
@@ -402,83 +404,73 @@
                                         @endauth
                                     </div>
                                 </div>
-                                @if ($product->ratings->contains('user_id', auth()->id()))
-                                    @if (count($product->ratings) > 0)
-                                        <div class="pro-dec-rating-main mb-0">
-                                            <div class="pro-rating-head">
-                                                <h4>Ratings & Reviews</h4>
+                                <div class="pro-dec-rating-main mb-0">
+                                    <div class="pro-rating-head">
+                                        <h4>Ratings & Reviews</h4>
 
-                                            </div>
-                                            <div class="pro-rating-body">
-                                                <div class="pro-rating-left">
-                                                    <h3>{{ $product->average_rating }}</h3>
-                                                    <p>{{ $product->ratings()->count() }} &
-                                                        {{ $product->ratings()->count() }}
-                                                        Reviews</p>
-                                                </div>
-                                                <div class="pro-rating-right">
-                                                    <ul>
-                                                        <li>
-                                                            <p>5</p>
-                                                            <i class="fa-solid fa-star"></i>
-                                                            <div class="progress">
-                                                                <div class="progress-bar " role="progressbar"
-                                                                    style="background-color: #517B5D; width:{{ $rating_progress['fivestar'] }}%"
-                                                                    aria-valuenow="100" aria-valuemin="0"
-                                                                    aria-valuemax="100">
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <p>4</p>
-                                                            <i class="fa-solid fa-star"></i>
-                                                            <div class="progress">
-                                                                <div class="progress-bar" role="progressbar"
-                                                                    style="background-color: #517B5D; width:{{ $rating_progress['fourstar'] }}%"
-                                                                    aria-valuenow="100" aria-valuemin="0"
-                                                                    aria-valuemax="100">
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <p>3</p>
-                                                            <i class="fa-solid fa-star"></i>
-                                                            <div class="progress">
-                                                                <div class="progress-bar" role="progressbar"
-                                                                    style="background-color: #517B5D; width:{{ $rating_progress['threestar'] }}%"
-                                                                    aria-valuenow="100" aria-valuemin="0"
-                                                                    aria-valuemax="100">
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <p>2</p>
-                                                            <i class="fa-solid fa-star"></i>
-                                                            <div class="progress">
-                                                                <div class="progress-bar" role="progressbar"
-                                                                    style="background-color: #517B5D; width:{{ $rating_progress['twostar'] }}%"
-                                                                    aria-valuenow="100" aria-valuemin="0"
-                                                                    aria-valuemax="100">
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <p>1</p>
-                                                            <i class="fa-solid fa-star"></i>
-                                                            <div class="progress">
-                                                                <div class="progress-bar" role="progressbar"
-                                                                    style="background-color: #517B5D; width:{{ $rating_progress['onestar'] }}%"
-                                                                    aria-valuenow="100" aria-valuemin="0"
-                                                                    aria-valuemax="100">
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
+                                    </div>
+                                    <div class="pro-rating-body">
+                                        <div class="pro-rating-left">
+                                            <h3>{{ $product->average_rating }}</h3>
+                                            <p>{{ $product->ratings()->count() }} & {{ $product->ratings()->count() }}
+                                                Reviews</p>
                                         </div>
-                                    @endif
-                                @endif
+                                        <div class="pro-rating-right">
+                                            <ul>
+                                                <li>
+                                                    <p>5</p>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <div class="progress">
+                                                        <div class="progress-bar " role="progressbar"
+                                                            style="background-color: #517B5D; width:{{ $rating_progress['fivestar'] }}%"
+                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <p>4</p>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar"
+                                                            style="background-color: #517B5D; width:{{ $rating_progress['fourstar'] }}%"
+                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <p>3</p>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar"
+                                                            style="background-color: #517B5D; width:{{ $rating_progress['threestar'] }}%"
+                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <p>2</p>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar"
+                                                            style="background-color: #517B5D; width:{{ $rating_progress['twostar'] }}%"
+                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <p>1</p>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar"
+                                                            style="background-color: #517B5D; width:{{ $rating_progress['onestar'] }}%"
+                                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -635,6 +627,7 @@
                                             <input type="radio" id="ship_to_me" name="delivery_option"
                                                 value="ship_to_me" checked>
                                             <label for="ship_to_me">Ship it to me</label><br>
+
                                             <input type="text" id="selected_value" readonly class="form-control"
                                                 value="{{ @$authUser->userDetail->complete_address }}">
                                             <input type="hidden" value="{{ @$authUser->userDetail->id }}"
@@ -717,23 +710,9 @@
     <script>
         document.getElementById('manage_address_link').addEventListener('click', function() {
             // Open the modal when clicking on "Change Address"
-            var modalElement = document.getElementById('addressModal');
-            var modal = new bootstrap.Modal(modalElement);
-            modal.show();
+            var myModal = new bootstrap.Modal(document.getElementById('addressModal'));
+            myModal.show();
 
-            // Wait for the modal to be fully shown before triggering the button click
-            modalElement.addEventListener('shown.bs.modal', function() {
-                let btn = document.getElementById('addNewAddressBtn');
-
-                // Check if the button exists in the modal
-                if (btn) {
-                    console.log('Button exists, triggering click programmatically...');
-                    // Programmatically trigger the click event
-                    btn.click();
-                } else {
-                    console.log('Button not found');
-                }
-            });
         });
 
         // Function to handle address selection from the modal
@@ -759,87 +738,50 @@
             })
         })
 
-        // $('.slider-content').slick({
-        //     slidesToShow: 1,
-        //     slidesToScroll: 1,
-        //     arrows: false,
-        //     fade: false,
-        //     swiping: false;
-        //     infinite: true,
-        //     speed: 1000,
-        //     asNavFor: '.slider-thumb',
-        //     prevArrow: $('.prev-prodec-btn'),
-        //     nextArrow: $('.next-prodec-btn'),
-        //     arrows: true,
-        //     responsive: [{
-        //             breakpoint: 1400,
-        //             settings: {
-        //                 slidesToShow: 1,
-        //                 slidesToScroll: 1,
-        //             }
-        //         },
-        //         {
-        //             breakpoint: 992,
-        //             settings: {
-        //                 slidesToShow: 1,
-        //                 slidesToScroll: 1,
-        //             }
-        //         },
-        //         {
-        //             breakpoint: 575,
-        //             settings: {
-        //                 slidesToShow: 1,
-        //                 slidesToScroll: 1,
-        //             }
-        //         }
-
-        //     ]
-        // });
-        // $('.slider-thumb').slick({
-        //                 slidesToShow: 10,
-        //                 slidesToScroll: 1,
-        //                 vertical: true,
-        //                 asNavFor: '.slider-content',
-        //                 dots: false,
-        //                 focusOnSelect: true,
-        //                 arrows: false,
-        // });
-
-
-
-        // $('.slider-content').slick({
-        //                 slidesToShow: 1,
-        //                 slidesToScroll: 1,
-        //                 swipe: true,
-        //                 arrows: true,
-        //                 fade: true,
-        //                 asNavFor: '.slider-thumb'
-        // });
-        // $('.slider-thumb').slick({
-        //                 slidesToShow: 10,
-        //                 slidesToScroll: 1,
-        //                 vertical: true,
-        //                 swipe: false,
-        //                 asNavFor: '.slider-content',
-        //                 dots: false,
-        //                 focusOnSelect: true,
-        //                 arrows: false,
-        //                 verticalSwiping: true
-
-        // });
-
         $('.slider-content').slick({
             slidesToShow: 1,
             slidesToScroll: 1,
             arrows: true,
             fade: false,
+            infinite: true,
+            speed: 1000,
             asNavFor: '.slider-thumb',
-            autoplay: false,
             prevArrow: $('.prev-prodec-btn'),
             nextArrow: $('.next-prodec-btn'),
-            autoplaySpeed: 2000,
+            arrows: true,
+            responsive: [{
+                    breakpoint: 1400,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    }
+                },
+                {
+                    breakpoint: 992,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    }
+                },
+                {
+                    breakpoint: 575,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
+                    }
+                }
+
+            ]
         });
         $('.slider-thumb').slick({
+            slidesToShow: 10,
+            slidesToScroll: 1,
+            vertical: true,
+            asNavFor: '.slider-content',
+            dots: false,
+            focusOnSelect: true,
+            arrows: false,
+            verticalSwiping: true
             slidesToShow: 5,
             slidesToScroll: 1,
             asNavFor: '.slider-content',
@@ -847,6 +789,7 @@
             focusOnSelect: true,
             vertical: true,
         });
+
 
 
 
@@ -1032,7 +975,7 @@
                 if (checkedRadio) {
                     if (checkedRadio.id === 'pick_up') {
                         selectedValueInput.value =
-                            "{{ @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state . ', ' . @$product->productCompleteLocation->state }}";
+                            "{{ @$product->productCompleteLocation->city . ' ' . @$product->productCompleteLocation->state }}";
                         manageAddressLink.style.display =
                             'none';
                     } else if (checkedRadio.id === 'ship_to_me') {

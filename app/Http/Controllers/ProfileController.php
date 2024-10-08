@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\{Auth, Session};
 
 class ProfileController extends Controller
 {
+    
     public function handle()
     {
         return view('edit_prodcut');
@@ -502,7 +503,11 @@ class ProfileController extends Controller
     public function changeProfile(User $user, Request $request)
     {
         $bank = $request->input('bank') ?? null;
-        return view('customer.change_profile', compact('user', 'bank'));
+        if (auth()->id()) {
+            $addresses = UserDetail::where('user_id', auth()->id())->orderBy('updated_at', 'desc')->get();
+        }
+        $flag = "profile";
+        return view('customer.change_profile', compact('user', 'bank', 'addresses','flag'));
     }
 
     public function saveUserprofile(UpdateUserProfile $request)
@@ -650,7 +655,7 @@ class ProfileController extends Controller
     public function addressStore(Request $request)
     {
         $validated = $request->validate([
-            'city' => 'required',
+            // 'city' => 'required',
             'state' => 'required',
             'country' => 'required',
             // 'zipcode' => 'required',
@@ -671,16 +676,19 @@ class ProfileController extends Controller
 
         if ($request->is_default == '1') {
             UserDetail::where('user_id', auth()->id())
-            ->where('is_default', '1')
-            ->update(['is_default' => '0']);
+                ->where('is_default', '1')
+                ->update(['is_default' => '0']);
 
             UserDetail::where('id',  $address->id)->update(['is_default' => '1']);
         }
 
+        $addresses = UserDetail::where('user_id', auth()->id())->orderBy('updated_at', 'desc')->get();
+        $flag = $request->flag;
+        $html = view('include.addresslist', compact('addresses','flag'))->render();
         return response()->json([
             'status' => 'success',
             'message' => 'Address saved successfully',
-            'data' => $address,
+            'data' => ['list' => $html],
         ]);
     }
 
@@ -712,10 +720,23 @@ class ProfileController extends Controller
         }
 
         $address->delete();
+        $addresses = UserDetail::where('user_id', auth()->id())->orderBy('updated_at', 'desc')->get();
+        $flag = request()->has('flag') ? request()->flag : 'query';
+        $html = view('include.addresslist', compact('addresses','flag'))->render();
 
         return response()->json([
             'status' => 'success',
             'message' => 'Address deleted successfully, and a new default address has been assigned if necessary.',
+            'data' => ['list' => $html],
         ]);
+    }
+
+    public function fetchAddress()
+    {
+        $addresses = userDetail::where('user_id', auth()->id())->get();
+
+        $html = view('include.addresslist', compact('addresses'))->render();
+
+        return response()->json(['status' => true, 'message' => "address fetched", 'data' => $html], 200);
     }
 }

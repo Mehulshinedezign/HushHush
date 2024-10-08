@@ -8,7 +8,7 @@ use App\Notifications\ItemYouLike;
 use Illuminate\Http\Request;
 use App\Http\Requests\Customer\FavoriteRequest;
 use App\Http\Traits\ProductTrait;
-use App\Models\{User, Product, ProductFavorite, Category, NeighborhoodCity, Order, Query};
+use App\Models\{User, Product, ProductFavorite, Category, NeighborhoodCity, Order, Query, UserDetail};
 use Illuminate\Support\Facades\Cookie;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -175,8 +175,15 @@ class ProductController extends Controller
         sort($disable_dates);
 
         $productImages = $product->allImages;
+        $addresses = null;
+        $flag = null;
+        if(auth()->id()){
+            $addresses = UserDetail::where('user_id', auth()->id())->orderBy('updated_at','desc')->get();
+            $flag = "query";
 
-        return view('product-detail', compact('product', 'productImages', 'querydates', 'relatedProducts', 'rating_progress', 'disable_dates'));
+        }
+
+        return view('product-detail', compact('product', 'productImages', 'querydates', 'relatedProducts', 'rating_progress', 'disable_dates','addresses','flag'));
     }
 
 
