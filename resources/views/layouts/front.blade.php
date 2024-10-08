@@ -700,6 +700,24 @@
             </div>
         </div>
     </div>
+    <div class="modal fade addbank-Modal" id="pending" tabindex="-1" data-bs-backdrop="static"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                
+                <div class="modal-body">
+                    <img src="{{ asset('front/images/file.png') }}" alt="" style="height: 250px; display: block; margin-left: auto; margin-right: auto;">
+
+
+                    <h3>
+                        Your Verification is under process wait until we were update your status.
+                    </h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
     <div class="modal fade addbank-Modal" id="identity" tabindex="-1" data-bs-backdrop="static"
         aria-labelledby="exampleModalLabel" aria-hidden="true">

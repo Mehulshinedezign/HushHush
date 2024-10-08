@@ -26,10 +26,16 @@
                         @endphp
                         <ul>
                             <li>
-                                @if (($user->identity_verified) != 'verified')
+                                @if (($user->identity_verified) == 'pending')
+                                    <div data-bs-toggle="modal" data-bs-target="#pending">
+                                        Rent your Closet
+                                    </div>
+                                @elseif (($user->identity_verified) != 'verified' )
                                     <div data-bs-toggle="modal" data-bs-target="#identity">
                                         Rent your Closet
                                     </div>
+                             
+                                   
 
                                 @elseif(is_null($userBankInfo))
                                     <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
