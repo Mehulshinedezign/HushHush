@@ -169,10 +169,26 @@ function onlinePresence(user, created) {
     });
 }
 
-if( window.location.href == chat_page_url){
+document.addEventListener("DOMContentLoaded", function() {
+    // Debugging: Check if the page URL matches
+    const currentPath = window.location.pathname; // This will give you the path part of the URL
+  
 
-    document.getElementById("chatForm").addEventListener("submit", submitForm);
-}
+    // Ensure you are on the correct chat page
+    if (window.location.pathname === chat_page_url)  {
+
+        const chatForm = document.getElementById("chatForm");
+
+        // Check if the form exists
+        if (chatForm) {
+            chatForm.addEventListener("submit", submitForm);
+        } else {
+            console.error('Form with id "chatForm" not found.');
+        }
+    // } else {
+    //     console.log('URL did not match');
+    }
+});
 
 function submitForm(e) {
     e.preventDefault();
@@ -323,7 +339,9 @@ function getMessages(element) {
 }
 
 // Global object to store Firebase listeners
+// Global object to store Firebase listeners and message IDs to avoid duplicates
 const fireBaseListeners = {};
+const messageIds = {}; // Store message IDs to check for duplicates
 
 function loadMessages(sender, receiver, userImage) {
     if (!sender) {
@@ -339,20 +357,42 @@ function loadMessages(sender, receiver, userImage) {
         chatRef.off("child_added", fireBaseListeners[listenerKey]); // Detach existing listener
     }
 
-    // Fetch existing messages first and display them
+    messageIds[listenerKey] = {}; // Reset message tracking for this chat
+
+    // Array to store messages temporarily
+    const messages = [];
+
+    // Fetch existing messages and store them in an array
     chatRef.once('value', (snapshot) => {
         snapshot.forEach((messageSnapshot) => {
-            appendMessageToChatWindow(messageSnapshot, userImage);  // Display each message
+            messages.push(messageSnapshot); // Store the message snapshot
+        });
+
+        // Sort messages by the 'created' timestamp in ascending order
+        messages.sort((a, b) => {
+            return a.val().created - b.val().created;
+        });
+
+        // Append each message in the correct order
+        messages.forEach((messageSnapshot) => {
+            appendMessageToChatWindow(messageSnapshot, userImage);
+            messageIds[listenerKey][messageSnapshot.key] = true; // Mark message as displayed
         });
     }).then(() => {
-        // Now attach the listener for new messages
+        // Attach listener for new messages
         fireBaseListeners[listenerKey] = chatRef.on("child_added", (messageSnapshot) => {
-            appendMessageToChatWindow(messageSnapshot, userImage);
+            const messageId = messageSnapshot.key;
+
+            // Check if the message has already been displayed
+            if (!messageIds[listenerKey][messageId]) {
+                appendMessageToChatWindow(messageSnapshot, userImage);
+                messageIds[listenerKey][messageId] = true; // Mark message as displayed
+            }
         });
     });
 }
 
-// Function to append a message to the chat window
+
 function appendMessageToChatWindow(messageSnapshot, userImage) {
     var messageList = '';
     let date = moment(new Date()).format('YYYY-MM-DD');
@@ -393,6 +433,7 @@ function appendMessageToChatWindow(messageSnapshot, userImage) {
     // Append the message in ascending order
     jQuery('#chatWindow').append(messageList);
 }
+
 
 
 function disableOtherListeners(except) {

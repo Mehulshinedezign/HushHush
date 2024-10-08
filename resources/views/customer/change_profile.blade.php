@@ -23,7 +23,7 @@
                                             <img id="preview-img" src="{{ asset('storage/' . $user->profile_file) }}"
                                                 alt="Profile Picture">
                                         @else
-                                            <img id="preview-img" src="{{ asset('front/images/pro3.png') }}"
+                                            <img id="preview-img" src="{{ asset('img/avatar-small.png') }}"
                                                 alt="Default Image">
                                         @endif
                                     </div>

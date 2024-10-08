@@ -911,7 +911,7 @@
 
         $(document).ready(function() {
             $(window).scroll(function() {
-                if ($(this).scrollTop() > 120) {
+                if ($(this).scrollTop() > 100) {
                     $('.header').addClass('fixed');
                 } else {
                     $('.header').removeClass('fixed');
@@ -1582,7 +1582,7 @@
             var last_msg_update_url = APP_URL + '/retailer/lastchat/update';
             var search_url = APP_URL + '/retailer/chat/search/';
             var chat_image_store_url = APP_URL + '/retailer/chat/image';
-            var chat_page_url = APP_URL + '/chat';
+            var chat_page_url = '/chat';
 
             firebase.initializeApp(firebaseConfig);
             const db = firebase.database();

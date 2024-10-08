@@ -10,7 +10,6 @@ let response = new Promise((resolve, reject) => {
             }else{
                 activeClass = sel_reciever != "" ? '' :(first ? 'activecht' : '');
             }
-
             $('.chatlist').append(`<li>
                 <div class="chat-list ${activeClass}"
                     data-receiverId=${message.key}

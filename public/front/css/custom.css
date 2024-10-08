@@ -705,11 +705,14 @@ span.left-form-icon {
 }
 
 .lender-profile, .pro-dec-rating-main {
-    padding-bottom: 15px;
-    border-bottom: 1px solid #DEE0E3;
+    /* padding-bottom: 15px; */
+    /* border-bottom: 1px solid #DEE0E3; */
     margin: 10px 0 15px;
 }
-
+.pro-dec-rating-main{
+    padding-top: 10px;
+    border-top: 1px solid #DEE0E3;
+}
 .pro-rating-body {
     display: grid;
     grid-template-columns: 0.7fr 1fr;
@@ -919,6 +922,7 @@ border-color: #000;
     margin: 10px 0px 0px 0px;
     border: 2px solid transparent;
     overflow: hidden;
+    border-radius: 8px;
 }
 
 .slider.slider-thumb .slick-slide img {
@@ -953,8 +957,8 @@ border-color: #000;
 }
 
 .prev-prodec-btn.slick-arrow {
-    width: 57px;
-    height: 57px;
+    width: 40px;
+    height: 40px;
     background-color: #F1F2F3;
     border-radius: 50px;
     z-index: 98;
@@ -969,8 +973,8 @@ border-color: #000;
     cursor: pointer;
 }
 .next-prodec-btn.slick-arrow {
-    width: 57px;
-    height: 57px;
+    width: 40px;
+    height: 40px;
     background-color: #F1F2F3;
     border-radius: 50px;
     z-index: 98;
