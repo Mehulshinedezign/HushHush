@@ -30,7 +30,7 @@
                 @endif
             </div>
         </div>
-        <div class="col-md-12">
+        {{-- <div class="col-md-12">
             <div class="query-detail-info">
                 <h3>Actual Price</h3>
                 @if ($query)
@@ -45,9 +45,25 @@
                     <p>{{ @$query->negotiate_price ?? '' }}</p>
                 </div>
             </div>
+        @endif --}}
+
+        @if(@$query->negotiate_price)
+            <div class="col-md-12">
+                <div class="query-detail-info">
+                    <h3>Total Price</h3>
+                    <p>{{ @$query->negotiate_price + @$query->cleaning_charges + @$query->shipping_charges ?? '' }}</p>
+                </div>
+            </div>
+            @else
+            <div class="col-md-12">
+                <div class="query-detail-info">
+                    <h3>Total Price</h3>
+                    <p>{{ @$query->getCalculatedPrice($query->date_range) + @$query->cleaning_charges + @$query->shipping_charges ?? '' }}</p>
+                </div>
+            </div>
         @endif
 
-        @if (isset($query->cleaning_charges))
+        {{-- @if (isset($query->cleaning_charges))
             <div class="col-md-12">
                 <div class="query-detail-info">
                     <h3>Cleaning Price</h3>
@@ -63,7 +79,7 @@
                     <p>{{ @$query->shipping_charges ?? '' }}</p>
                 </div>
             </div>
-        @endif
+        @endif --}}
 
         @if (@$query->user_id != auth()->user()->id)
             <div class="col-md-12">

@@ -421,4 +421,3 @@
 
     </script>
 @endpush
-Picked Up' && $order->dispute_status == 'Yes

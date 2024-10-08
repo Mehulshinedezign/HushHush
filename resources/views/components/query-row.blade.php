@@ -89,7 +89,7 @@ COMPLETED
                 <a href="{{ route('card.details', ['query' => jsencode_userdata($query->id), 'price' => jsencode_userdata($price)]) }}"
                     class="" data-bs-toggle="tooltip" data-bs-placement="top" title="offer for
                     {{ $price }}$" data-price="{{ $price }}">
-                    <i class="fa-solid fa-sack-dollar"></i></a>
+                    <i style="color: #517B5D;" class="fa-solid fa-circle-check"></i></a>
 
 
                 <a href="javascript:void(0)" class="reject-btn"

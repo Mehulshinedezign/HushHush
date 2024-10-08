@@ -16,7 +16,7 @@
                             <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
                                 data-bs-target="#recover-by-email" type="button" role="tab" aria-controls="pills-home"
                                 aria-selected="true">
-                                <p>Recover By Mail</p>
+                                <p>Recover By Email</p>
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">

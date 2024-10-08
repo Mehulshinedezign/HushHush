@@ -515,7 +515,7 @@ span.left-form-icon {
 
 /* ========================== product description page ====================== */
 .product-desc-sec {
-    padding: 20px 0px 60px;
+    padding: 20px 0px 30px;
     overflow: hidden;
 }
 
@@ -585,7 +585,7 @@ span.left-form-icon {
     display: flex;
     gap: 10px;
     align-items: center;
-    margin: 0 0 17px;
+    margin: 0 0 10px;
 }
 
 .badge {
@@ -616,12 +616,11 @@ span.left-form-icon {
     align-items: center;
     gap: 10px;
 }
-
 .pro-desc-info {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0px;
-    margin: 0 0 28px;
+    margin: 0 0 20px;
 }
 /*
 .pro-desc-info-box:first-child {
@@ -658,7 +657,7 @@ span.left-form-icon {
 }
 
 .pro-info-accordian {
-    padding: 35px 0px;
+    padding: 15px 0px;
 }
 
 .pro-info-accordian .accordion-button:not(.collapsed) {
@@ -697,6 +696,7 @@ span.left-form-icon {
     display: flex;
     align-items: center;
     gap: 11px;
+    flex-wrap: wrap;
 }
 
 .lender-profile-box h4 {
@@ -704,11 +704,10 @@ span.left-form-icon {
     font-weight: 500;
 }
 
-.lender-profile,
-.pro-dec-rating-main {
-    padding-bottom: 35px;
+.lender-profile, .pro-dec-rating-main {
+    padding-bottom: 15px;
     border-bottom: 1px solid #DEE0E3;
-    margin: 0 0 35px;
+    margin: 10px 0 15px;
 }
 
 .pro-rating-body {
@@ -917,7 +916,7 @@ border-color: #000;
 .slider.slider-thumb .slick-slide {
     /* max-width: 180px; */
     height: 174px;
-    margin: 0px 15px;
+    margin: 10px 0px 0px 0px;
     border: 2px solid transparent;
     overflow: hidden;
 }
@@ -958,10 +957,10 @@ border-color: #000;
     height: 57px;
     background-color: #F1F2F3;
     border-radius: 50px;
-    z-index: 99;
+    z-index: 98;
     position: absolute;
     top: 50%;
-    left: -12px;
+    left: 100px;
     border: 1px solid #fff;
     display: flex;
     align-items: center;
@@ -969,17 +968,16 @@ border-color: #000;
     transform: rotate(180deg);
     cursor: pointer;
 }
-
 .next-prodec-btn.slick-arrow {
     width: 57px;
     height: 57px;
     background-color: #F1F2F3;
     border-radius: 50px;
-    z-index: 99;
+    z-index: 98;
     position: absolute;
     top: 50%;
     left: auto;
-    right: -12px;
+    right: 20px;
     border: 1px solid #fff;
     display: flex;
     align-items: center;
@@ -2593,7 +2591,7 @@ table.inquiry-table {
 }
 .cust-header.header {
     position: relative;
-    z-index: 5;
+    z-index: 99;
 }
 .navbar {
 
@@ -2604,7 +2602,32 @@ body:has(.edit-product-main){
 }
 
 
+.slider.slider-thumb.slick-initialized.slick-slider.slick-vertical .slick-track {
+    transform: translate3d(0px, 0px, 0px) !IMPORTANT;
+}
 
+.pro-info-accordian .accordion-button, .pro-info-accordian .accordion-body {
+    padding: .5rem 1rem;
+    min-height: 50px;
+}
 
+.slider-thumb .slick-list.draggable {
+    padding: 0px 0px 0;
+}
+.book-item-date #rental_dates{
+    background-color: #fff;
+}
+.item-pickup-loc-main input[type="radio"]{
+    color: #000000;
+    background-color: #000000;
+    accent-color: #000000;
+}
+.manage-address-link{
+    margin-top: 10px;
+    text-decoration: underline;
+}
+.item-pickup-loc-main label{
+    cursor: pointer;
+}
 
 

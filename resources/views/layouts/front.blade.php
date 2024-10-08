@@ -563,7 +563,7 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="">Minimum number of rental days*</label>
+                                            <label for="">Minimum rental day (must be 5 or more)</label>
                                             <div class="formfield ">
                                                 {{-- <select
                                                     class="produt_input form-control form-class @error('min_rent_days') is-invalid @enderror"

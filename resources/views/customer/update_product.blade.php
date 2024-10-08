@@ -539,7 +539,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="right-btn-box">
-                                            <button class="button primary-btn " id="addProduct">Update</button>
+                                            <button class="button primary-btn updateProduct" id="addProduct">Update</button>
                                         </div>
                                     </div>
                                     <!-- <img id="image123" src="" alt="asfdsfd"> -->
@@ -596,8 +596,6 @@
         var newFiles = new Set();
         let fileInput = document.getElementById('update-upload-image-five');
         let uploadedFiles = new Set();
-
-
 
 
         function updateFileInput() {

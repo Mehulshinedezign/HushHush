@@ -144,7 +144,7 @@
                             <div><a href="{{ route('login') }}">Rent your Closet</a></div>
                         </li>
                         <li>
-                            <div><a href="{{ route('login') }}">login</a></div>
+                            <div><a href="{{ route('login') }}">login</a> / <a href="{{ route('register')}}">sign up</a></div>
                         </li>
                     </ul>
 

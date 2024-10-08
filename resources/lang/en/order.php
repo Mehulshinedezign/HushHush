@@ -56,7 +56,7 @@ return [
         'minPickUpUploadImage' => 'Please upload atleast 2 images.',
         'minDisputeUploadImage' => 'Please upload atleast 2 images.',
         'cancel' => [
-            'success' => 'Order cancelled successfully. The amount will be refunded with 5-7 business days to original payment method.',
+            'success' => 'Order cancelled successfully. The amount (if any) will be refunded with 5-7 business days to original payment method.',
             'error' => 'Order cancelled failed. Please try again.',
             'notAllowed' => 'Cancellation of this order is not allowed.',
             'paymentIncomplete' => 'Payment of order is not completed. Please complete the payment to cancel this order.'

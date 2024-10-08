@@ -9,10 +9,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <button id="addNewAddressBtn" class="adress-btm d-none"><i class="fa-solid fa-plus"></i> Add New
+                    Address</button>
                 <div class="address-list-main">
                 <div class="address-list">
-                    <button id="addNewAddressBtn" class="adress-btm d-none"><i class="fa-solid fa-plus"></i> Add New
-                        Address</button>
                     @foreach ($user->addresses as $index => $address)
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div class="address-card col-md-12">

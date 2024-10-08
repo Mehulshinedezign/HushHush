@@ -12,11 +12,11 @@
                         $userBankInfo = auth()->user()->userBankInfo;
                     @endphp
                     @if (is_null($userBankInfo))
-                        <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
+                        <div data-bs-toggle="modal" class="button primary-btn" data-bs-target="#addbank-Modal">
                             Add Your Product
                         </div>
                     @elseif (is_null($user->userDetail->complete_address))
-                        <div data-bs-toggle="modal" data-bs-target="#accountSetting">
+                        <div data-bs-toggle="modal" class="button primary-btn" data-bs-target="#accountSetting">
                             Add Your Product
                         </div>
                     @else

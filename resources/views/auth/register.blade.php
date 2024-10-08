@@ -80,7 +80,7 @@
 
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="gov_id">Gov Id</label>
                     <div class="formfield upload-id-field">
                         <input type="file" class="form-control form-class @error('gov_id') is-invalid @enderror"
@@ -93,7 +93,7 @@
                         </span>
                     @enderror
 
-                </div>
+                </div> -->
 
                 <div class="form-group">
                     <label for="password_confirmation">Password</label>

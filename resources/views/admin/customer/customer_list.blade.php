@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <section class="section">
-        <div><a href="{{ url()->previous() }}"><i class="fa-solid fa-angle-left"></i></a></div>
+        {{-- <div><a href="{{ url()->previous() }}"><i class="fa-solid fa-angle-left"></i></a></div> --}}
         <div class="section-body">
             <x-admin_alert />
             <div class="row">
@@ -24,7 +24,7 @@
                                         <th>{{ __('user.product') }}</th>
                                         <th>{{ __('user.products rented') }}</th>
                                         <th>{{ __('user.email') }}</th>
-                                        <th>Gov Id</th>
+                                        {{-- <th>Gov Id</th> --}}
                                         <th>{{ __('user.active') }}</th>
                                         <th>{{ __('Date Joined') }}</th>
                                         <th>{{ __('common.action') }}</th>
@@ -48,7 +48,7 @@
                                             <td>{{ count($customer->orders) }}</td>
                                             <td>{{ $customer->email }}</td>
 
-                                            <td>
+                                            {{-- <td>
                                                 @if (@$customer->document)
                                                     <img id="customer-img"
                                                         src="{{ asset('storage/' . $customer->document->url) }}"
@@ -57,7 +57,7 @@
                                                     <img id="customer-img" src="{{ asset('front/images/pro3.png') }}"
                                                         alt="Default Image">
                                                 @endif
-                                            </td>
+                                            </td> --}}
                                             <td>
                                                 <label>
                                                     <input type="checkbox" class="custom-switch-input"

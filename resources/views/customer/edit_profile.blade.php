@@ -30,7 +30,7 @@
                                 @if ($user->profile_file)
                                     <img src="{{ asset('storage/' . $user->profile_file) }}" alt="Profile Picture">
                                 @else
-                                    <img src="{{ asset('front/images/pro3.png') }}" alt="Default Image">
+                                    <img src="{{ asset('img/avatar-small.png') }}" alt="Default Image">
                                 @endif
 
                                 {{-- <img src="{{asset('front/images/pro3.png')}}" alt="img"> --}}
@@ -77,7 +77,7 @@
                                 <div class="my-pro-detail">
                                     <div class="my-pro-detail-left">
                                         <div class="my-pro-detail-para">
-                                            <h4>Your bank account details is not stored please submit your bank details. <a
+                                            <h4>Your bank account details are not stored please submit your bank details. <a
                                                     href="{{ route('stripe.onboarding.redirect') }}">Submit</a> </h4>
 
                                         </div>
