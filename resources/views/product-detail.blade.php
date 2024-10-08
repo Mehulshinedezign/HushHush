@@ -293,10 +293,10 @@
                                 </h3>
                                 <div class="delivery-badge-box">
                                     <div class="delivery-badge">
-                                         <p>Shipment availability</p>           
+                                         <p>Shipment</p>           
                                     </div>
                                     <div class="delivery-badge">
-                                         <p>Manual pickup availability</p>           
+                                         <p>Manual pickup</p>           
                                     </div>
                                 </div>
                             </div>
