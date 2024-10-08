@@ -287,6 +287,19 @@
 
 
                             </div>
+                            <div class="delivery-opion-box">
+                                <h3>
+                                    Availability
+                                </h3>
+                                <div class="delivery-badge-box">
+                                    <div class="delivery-badge">
+                                         <p>Shipment availability</p>           
+                                    </div>
+                                    <div class="delivery-badge">
+                                         <p>Manual pickup availability</p>           
+                                    </div>
+                                </div>
+                            </div>
                             @auth
                                 @if (@$product->user_id != auth()->user()->id)
                                     @if (is_null($user->userDetail->complete_address))
@@ -326,7 +339,7 @@
                                     </div>
 
                                 </div>
-                                @if(isset($product->productCompleteLocation->pick_up_location))
+                                @if(@$product->productCompleteLocation->manul_pickup_location=='1')
                                 <div class="pro-info-accordian">
                                     <div class="accordion" id="accordionExample1">
                                         <div class="accordion-item">
