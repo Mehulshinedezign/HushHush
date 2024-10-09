@@ -282,4 +282,9 @@ class User extends Authenticatable implements ShouldQueue
     }
 
 
+    public function reportedUser(){
+        return $this->hasMany(ReportedProfile::class);
+    }
+    
+
 }

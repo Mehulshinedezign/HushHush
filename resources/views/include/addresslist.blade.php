@@ -115,8 +115,7 @@
     $(document).ready(function() {
         $('#addNewAddressBtn').click(function() {
             $('#formTitle').text('Add Address');
-            document.getElementById('submitAddressBtn').textContent =
-                'Add Address';
+            $('#submitAddressBtn').text('Add Address');
             $('#addEditAddressForm').find(
                     'input[type="text"], input[type="file"], input[type="email"],input[type="hidden"],select, textarea'
                 )

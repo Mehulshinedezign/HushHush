@@ -11,6 +11,7 @@ use App\Models\Country;
 use App\Models\NotificationSetting;
 use App\Models\Product;
 use App\Models\ReportedProduct;
+use App\Models\ReportedProfile;
 use App\Models\State;
 use App\Models\UserDetail;
 use App\Notifications\CustomerImageUpload;
@@ -354,13 +355,22 @@ class UserController extends Controller
 
 
     public function ReportedProducts()
-{
-    $products = ReportedProduct::select('product_id', DB::raw('count(*) as occurrences'))
-        ->groupBy('product_id')
-        ->with('product')
-        ->get();
+    {
+        $products = ReportedProduct::select('product_id', DB::raw('count(*) as occurrences'))
+            ->groupBy('product_id')
+            ->with('product')
+            ->get();
 
-    return view('admin.reportedProducts', compact('products'));
-}
+        return view('admin.reportedProducts', compact('products'));
+    }
 
+    public function reportedUser()
+    {
+        $users = ReportedProfile::select('reported_id', DB::raw('count(*) as occurrences'))
+            ->groupBy('reported_id')
+            ->with('user')
+            ->get();
+
+        return view('admin.reportedUser', compact('users'));
+    }
 }

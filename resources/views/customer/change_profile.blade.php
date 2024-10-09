@@ -384,8 +384,9 @@
 
             // Initialize Google Places Autocomplete
             function initAutocomplete() {
-                var input = document.getElementById('address');
-                var autocomplete = new google.maps.places.Autocomplete(input);
+                $('#address').on('keyup', function() {
+                // var input = document.getElementById('address');
+                var autocomplete = new google.maps.places.Autocomplete(this);
 
                 $('#addressline1, #addressline2, #country, #state, #city, #zipcode').prop('readonly', true);
 
@@ -433,6 +434,7 @@
                     setReadonly('#addressline2');
                     $(".address_data").slideDown("slow");
                 });
+            });
             }
 
             // Initialize autocomplete for the address field

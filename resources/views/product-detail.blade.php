@@ -305,7 +305,7 @@
                             </div>
                             @auth
                                 @if (@$product->user_id != auth()->user()->id)
-                                    @if (is_null($user->userDetail->complete_address))
+                                    @if (is_null(@$user->userDetail->complete_address))
                                         {{-- <div data-bs-toggle="modal" data-bs-target="#addaddress-Modal">
                                         Send Request
                                     </div> --}}
@@ -432,7 +432,7 @@
                                                     </div>
                                                 @else
                                                     <div>
-                                                        <button class="btn btn-danger">Already Reported Product</button>
+                                                        <button class="btn btn-danger" id="already-reported">Already Reported Product</button>
                                                     </div>
                                                 @endif
                                             @endif
@@ -731,7 +731,10 @@
                                     data.message,
                                     'success'
                                 );
-                                // location.reload();
+                                if($('#report-btn').length >= 0 ){
+                                    $('#report-btn').replaceWith('<button class="btn btn-danger" id="already-reported">Already Reported Product</button>');
+
+                                }
                             } else {
                                 Swal.fire(
                                     'Oops!',

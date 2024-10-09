@@ -75,6 +75,8 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
 
         Route::post('/report-product/{id}', [App\Http\Controllers\Customer\ProductController::class, 'reportProduct']);
 
+        Route::post('/report/profile', [App\Http\Controllers\ProfileController::class, 'reportProfile']);
+
 
         // add product
         Route::get('/lend', [App\Http\Controllers\Customer\ProductController::class, 'openModel'])->name('open.model');

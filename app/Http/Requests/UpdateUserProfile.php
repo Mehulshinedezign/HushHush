@@ -21,18 +21,19 @@ class UpdateUserProfile extends FormRequest
      */
     public function rules(): array
     {
+        // dd('here');
         return [
             'name' => ['required', 'regex:/^[a-zA-Z\s]+$/'],
-            'complete_address' => 'required',
+            // 'complete_address' => 'required',
             // 'addressline1' => 'required',
             // 'addressline2' => 'required',
-            'country' => 'required',
-            'state' => 'required',
-            'city' => 'required',
-            'about' => 'required',
+            // 'country' => 'required',
+            // 'state' => 'required',
+            // 'city' => 'required',
+            // 'about' => 'required',
         ];
     }
-
+    
     public function messages()
     {
         return [

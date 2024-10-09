@@ -8,6 +8,8 @@ use App\Models\Query;
 use App\Models\User;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
@@ -153,6 +155,52 @@ class LenderController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
+    }
+
+
+    public function reportedProfile(Request $request,$id)
+    {
+        $user = User::where('id',$id)->first();
+
+        if ($user == null) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'This User Id is not available',
+            ], 422);
+        }
+        try{
+        $alreadyReported = DB::table('reported_profiles')
+                ->where('reported_id', $user->id)
+                ->where('user_id', auth()->id())
+                ->exists();
+
+            if ($alreadyReported) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'You have already reported this User.'
+                ], 400);
+            }
+            DB::table('reported_profiles')->insert([
+                'reported_id' => $user->id,
+                'product_id' => auth()->id(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'User has been reported successfully!'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error reporting User: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while reporting the user. Please try again later.'
+            ], 500);
+        }
+
+
     }
 
     

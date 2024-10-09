@@ -112,6 +112,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get("reported/products", [App\Http\Controllers\Admin\UserController::class, 'ReportedProducts'])->name("reportedProducts");
 
+    Route::get("reported/user", [App\Http\Controllers\Admin\UserController::class, 'reportedUser'])->name("reportedUser");
+
 
 
 });

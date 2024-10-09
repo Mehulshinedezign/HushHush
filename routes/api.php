@@ -56,6 +56,7 @@ Route::middleware(['auth:sanctum', 'prevent.admin'])->group(function () {
     Route::get('/product/checkout/{id}', [App\Http\Controllers\Api\ProductController::class, 'checkout']);
 
     Route::get('/lender-profile/{id}', [App\Http\Controllers\Api\LenderController::class, 'index']);
+    Route::post('/reported/user/{id}', [App\Http\Controllers\Api\LenderController::class, 'reportedProfile']);
 
     //Query
     Route::post('/queries', [App\Http\Controllers\Api\QueryController::class, 'store']);
@@ -99,6 +100,7 @@ Route::middleware(['auth:sanctum', 'prevent.admin'])->group(function () {
     Route::post('pushToken/add', [App\Http\Controllers\Api\ProfileController::class, 'addFcm']);
 
     Route::post('/report/product/{id}', [App\Http\Controllers\Api\ProductController::class, 'reportProduct']);
+   
     Route::post('/add-brand', [App\Http\Controllers\Api\ProductController::class, 'addBrand']);
 
     //Bank Deatils APIs

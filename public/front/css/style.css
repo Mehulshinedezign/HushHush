@@ -3319,8 +3319,14 @@ button#addNewAddressBtn {
 }
 .desc-slider-main:has(.single-thumb-slide) .slider.slider-content {
     width: 100%;
+}.user-reported-bx {
+    text-align: center;
+    margin-top: 5px;
 }
-
+.user-reported-bx .btn {
+    min-height: 31px;
+    font-size: 13px;
+}
 
 
 

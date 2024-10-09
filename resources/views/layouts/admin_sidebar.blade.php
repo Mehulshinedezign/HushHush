@@ -116,6 +116,12 @@
             </li>
 
 
+            <li class="dropdown @if (Route::current()->getName() == 'admin.reportedUser') active @endif">
+                <a href="{{ route('admin.reportedUser') }}" class="nav-link"><i
+                        data-feather="file"></i><span>{{ 'Reported User'}}</span></a>
+            </li>
+
+
 
         </ul>
     </aside>

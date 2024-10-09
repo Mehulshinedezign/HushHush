@@ -28,6 +28,16 @@
                             <h3>{{ $retailer->name }}</h3>
                             {{-- <p><img src="{{asset('front/images/us-flag.svg')}}" alt="img"> Los Angeles , USA</p> --}}
                         </div>
+                        <div class="user-reported-bx">
+                            @if (is_null($reported))
+                            <button type="button" class="btn btn-outline-danger" id="reportUserButton"
+                                data-reported-id="{{ $retailer->id }}">
+                                Report User
+                            </button>
+                            @else
+                                      <button class="btn btn-danger" id="already-reported">Already Reported </button>
+                            @endif
+                        </div>
                     </div>
                     <div class="col-md-5">
 
@@ -71,6 +81,10 @@
                             </div>
                         @endif
                     </div>
+                    @php
+                        
+                    @endphp
+                   
                 </div>
             </div>
             <div class="product-slider-wrapper">
@@ -246,4 +260,53 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            $('#reportUserButton').click(function() {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You are about to report this user.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, report!',
+                    cancelButtonText: 'No, cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var reportButton = $('#reportUserButton');
+                        reportButton.attr('disabled', true); 
+    
+                        $.ajax({
+                            type: 'POST',
+                            url: '/report/profile',
+                            data: JSON.stringify({
+                                reported_id: "{{ $retailer->id }}"
+                            }),
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                reportButton.removeAttr('disabled');
+    
+                                if (response.status === 'success') {
+                                    Swal.fire('Success', response.message, 'success');
+                                    reportButton.replaceWith(
+                                        '<button class="btn btn-danger" id="already-reported">Already Reported</button>'
+                                    );
+                                }
+                            },
+                            error: function(xhr) {
+                                reportButton.removeAttr('disabled');
+                                Swal.fire('Error', xhr.responseJSON.message || 'Something went wrong.', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    
 @endpush

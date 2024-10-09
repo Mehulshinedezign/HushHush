@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Country, State, City, Notification, NotificationSetting, Product, RetailerBankInformation, UserDocuments, User, UserCard, UserNotification, UserDetail};
+use App\Models\{Country, State, City, Notification, NotificationSetting, Product, RetailerBankInformation, UserDocuments, User, UserCard, UserNotification, UserDetail, ReportedProfile};
 use Hash, Stripe, Exception, DateTime;
 use App\Http\Requests\{ProfileRequest, UpdateUserProfile, UserDetailRequest, AccountSettingRequest};
 use Illuminate\Support\Facades\Storage;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\{Auth, Session};
 
 class ProfileController extends Controller
 {
-    
+
     public function handle()
     {
         return view('edit_prodcut');
@@ -507,11 +507,12 @@ class ProfileController extends Controller
             $addresses = UserDetail::where('user_id', auth()->id())->orderBy('updated_at', 'desc')->get();
         }
         $flag = "profile";
-        return view('customer.change_profile', compact('user', 'bank', 'addresses','flag'));
+        return view('customer.change_profile', compact('user', 'bank', 'addresses', 'flag'));
     }
 
     public function saveUserprofile(UpdateUserProfile $request)
     {
+        // dd('here',$request->all());
 
         try {
             $user = auth()->user();
@@ -684,7 +685,7 @@ class ProfileController extends Controller
 
         $addresses = UserDetail::where('user_id', auth()->id())->orderBy('updated_at', 'desc')->get();
         $flag = $request->flag;
-        $html = view('include.addresslist', compact('addresses','flag'))->render();
+        $html = view('include.addresslist', compact('addresses', 'flag'))->render();
         return response()->json([
             'status' => 'success',
             'message' => 'Address saved successfully',
@@ -722,7 +723,7 @@ class ProfileController extends Controller
         $address->delete();
         $addresses = UserDetail::where('user_id', auth()->id())->orderBy('updated_at', 'desc')->get();
         $flag = request()->has('flag') ? request()->flag : 'query';
-        $html = view('include.addresslist', compact('addresses','flag'))->render();
+        $html = view('include.addresslist', compact('addresses', 'flag'))->render();
 
         return response()->json([
             'status' => 'success',
@@ -738,5 +739,25 @@ class ProfileController extends Controller
         $html = view('include.addresslist', compact('addresses'))->render();
 
         return response()->json(['status' => true, 'message' => "address fetched", 'data' => $html], 200);
+    }
+
+    public function reportProfile(Request $request)
+    {
+        // dd('here',$request->all());
+        // Validate the incoming request
+        $request->validate([
+            'reported_id' => 'required|exists:users,id', // Ensure the reported user exists
+        ]);
+
+        // Create a new report entry
+        ReportedProfile::create([
+            'reported_id' => $request->reported_id,
+            'user_id' => auth()->id(), // Authenticated user (reporting user)
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'User reported successfully',
+        ], 200);
     }
 }

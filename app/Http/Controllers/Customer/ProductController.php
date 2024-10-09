@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookRequest;
+use App\Models\ReportedProfile;
 use App\Notifications\ItemYouLike;
 use Illuminate\Http\Request;
 use App\Http\Requests\Customer\FavoriteRequest;
@@ -60,7 +61,10 @@ class ProductController extends Controller
             $authUserId = auth()->user()->id;
             $query = Product::with('disableDates', 'ratings')
                 ->where('user_id', '!=', $authUserId)
-                ->where('status', '1');
+                ->where('status', '1')
+                ->whereHas('retailer', function ($q) {
+                    $q->where('status', '1'); // Assuming 'active' is the status value for active users
+                });
         } else {
             $query = Product::with('disableDates', 'ratings')
                 ->where('status', '1');
@@ -177,13 +181,12 @@ class ProductController extends Controller
         $productImages = $product->allImages;
         $addresses = null;
         $flag = null;
-        if(auth()->id()){
-            $addresses = UserDetail::where('user_id', auth()->id())->orderBy('updated_at','desc')->get();
+        if (auth()->id()) {
+            $addresses = UserDetail::where('user_id', auth()->id())->orderBy('updated_at', 'desc')->get();
             $flag = "query";
-
         }
 
-        return view('product-detail', compact('product', 'productImages', 'querydates', 'relatedProducts', 'rating_progress', 'disable_dates','addresses','flag'));
+        return view('product-detail', compact('product', 'productImages', 'querydates', 'relatedProducts', 'rating_progress', 'disable_dates', 'addresses', 'flag'));
     }
 
 
@@ -353,6 +356,11 @@ class ProductController extends Controller
 
 
         $retailer = User::whereId(jsdecode_userdata($id))->first();
+        $reported = ReportedProfile::where('reported_id', $retailer->id)
+            ->where('user_id', auth()->id())
+            ->first();
+        // dd($reported ,auth()->id(),$retailer);
+
         // dd($retailer);
         $products = Product::with('ratings', 'thumbnailImage')->where('user_id', $retailer->id)->paginate($request->global_pagination);
         $ratedProducts = $products->where('average_rating', '>', '0');
@@ -362,13 +370,13 @@ class ProductController extends Controller
             $averageRating = $ratedProducts->sum('average_rating') / count($ratedProducts);
         }
 
-        return view('customer.profile', compact('products', 'retailer'));
+        return view('customer.profile', compact('products', 'retailer', 'reported'));
     }
 
 
     public function reportProduct(Request $request, $id)
     {
-        $userId = auth()->id();  
+        $userId = auth()->id();
         $productId = $id;
 
         $alreadyReported = DB::table('reported_products')
