@@ -20,6 +20,9 @@ class ProfileController extends Controller
     {
         // dd("HERE PPPPPPPPPPPPPPPP");
         $retailer = auth()->user();
+        $reported = ReportedProfile::where('reported_id', $retailer->id)
+            ->where('user_id', auth()->id())
+            ->first();
 
         if (auth()->user()->role->name == 'customer') {
             $file = 'customer.profile';
@@ -30,7 +33,7 @@ class ProfileController extends Controller
         }
 
         $products = Product::where('user_id', $retailer->id)->get();
-        return view($file, compact('products', 'retailer'));
+        return view($file, compact('products', 'retailer','reported'));
     }
 
     public function edit_profile()

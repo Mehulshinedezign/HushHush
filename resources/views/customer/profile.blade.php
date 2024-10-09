@@ -28,6 +28,7 @@
                             <h3>{{ $retailer->name }}</h3>
                             {{-- <p><img src="{{asset('front/images/us-flag.svg')}}" alt="img"> Los Angeles , USA</p> --}}
                         </div>
+                        @if($retailer->id != auth()->id())
                         <div class="user-reported-bx">
                             @if (is_null($reported))
                             <button type="button" class="btn btn-outline-danger" id="reportUserButton"
@@ -38,6 +39,7 @@
                                       <button class="btn btn-danger" id="already-reported">Already Reported </button>
                             @endif
                         </div>
+                        @endif
                     </div>
                     <div class="col-md-5">
 
