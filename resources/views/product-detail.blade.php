@@ -703,7 +703,7 @@
 
 @push('scripts')
     <script>
-        if($('#report-btn').length >= 0 ){
+        if($('#report-btn').length > 0 ){
 
             document.getElementById('report-btn').addEventListener('click', function() {
                 var productId = this.getAttribute('data-product-id');
@@ -733,7 +733,7 @@
                                         data.message,
                                         'success'
                                     );
-                                    if($('#report-btn').length >= 0 ){
+                                    if($('#report-btn').length > 0 ){
                                         $('#report-btn').replaceWith('<button class="btn btn-danger" id="already-reported">Already Reported Product</button>');
     
                                     }

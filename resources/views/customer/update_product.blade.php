@@ -34,11 +34,15 @@
                                                 accept="image/*"
                                                 class="d-none form-control form-class @error('new_images') is-invalid @enderror"
                                                 multiple>
-                                            @error('new_images')
-                                                {{-- <span class="invalid-feedback" role="alert"> --}}
-                                                <span class="text-danger" style="font-size: 14px;">{{ $message }}</span>
-                                                {{-- </span> --}}
-                                            @enderror
+                                            <div class="error-images-div">
+
+                                                @error('new_images')
+                                                    {{-- <span class="invalid-feedback" role="alert"> --}}
+                                                    <span class="text-danger"
+                                                        style="font-size: 14px;">{{ $message }}</span>
+                                                    {{-- </span> --}}
+                                                @enderror
+                                            </div>
                                             <div class="upload-img-preview-box">
                                                 <div class="update-upload-img-preview sortable-images1234"
                                                     data-images="{{ json_encode($product->allImages->pluck('file_path')->toArray()) }}">
@@ -374,7 +378,10 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-6">
                                         <div class="form-group">
-                                            <label for="" class="info-label">Choose cancellation Policy* <a href="#"data-bs-toggle="modal" data-bs-target="#cancellationModal" ><i class="fa-solid fa-circle-info"></i></a></label>
+                                            <label for="" class="info-label">Choose cancellation Policy* <a
+                                                    href="#"data-bs-toggle="modal"
+                                                    data-bs-target="#cancellationModal"><i
+                                                        class="fa-solid fa-circle-info"></i></a></label>
                                             <div class="formfield">
                                                 <select
                                                     class="produt_input form-control form-class @error('cancellation_policy') is-invalid @enderror"
@@ -539,12 +546,9 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="right-btn-box">
-                                            <button class="button primary-btn" id="productBtn"> 
-                                                Update
-                                                <div class="spinner-border updateProduct d-none" role="status">
-                                                    <span class="sr-only"></span>
-                                                  </div>
-                                            </button>
+                                            <button class="button primary-btn" id="productBtn"> <div class="spinner-border updateProduct d-none" role="status">
+                                                <span class="sr-only"></span>
+                                              </div>Update</button>
                                         </div>
                                     </div>
                                     <!-- <img id="image123" src="" alt="asfdsfd"> -->
@@ -564,7 +568,7 @@
         $(document).on('click', '.non-availability', function() {
             $('.daterangepicker, .ltr, .show-calendar, .opensright').last().addClass('testCheck')
         })
-       
+
         // The same script as in Blade 1
         $(document).ready(function() {
             var subcategorySelect = $('#subcategory');
@@ -675,7 +679,9 @@
 
         $(document).ready(function() {
             const maxFiles = 5;
+           // To keep track of uploaded files
 
+            // Fetch and load previous images
             let prev_images = @json($product->allImages->pluck('file_path')->toArray());
             console.log(prev_images);
             async function loadPreviousImages(prev_images) {
@@ -683,21 +689,33 @@
                     await fetchAndDisplayImage(imageUrl, true);
                 }
             }
-
-// Call the function for previous images
-                loadPreviousImages(prev_images);
-            // prev_images.forEach(imageUrl => await fetchAndDisplayImage(imageUrl, true));
+            loadPreviousImages(prev_images); // Load previous images on page load
 
             $('#update-upload-image-five').on('change', function(e) {
                 let files = e.target.files;
-                let remainingSlots = maxFiles - newFiles.size;
+                let remainingSlots = maxFiles - newFiles.size; // Remaining slots for files
+                const closestDiv = document.querySelector('.error-images-div'); // Error div for messages
 
+                // Check if the selected files exceed the allowed limit
                 if (files.length > remainingSlots) {
-                    alert(`You can upload only ${maxFiles} images in total.`);
-                    return;
+                    if (closestDiv) {
+                        const errorMessage = document.createElement('span');
+                        errorMessage.innerText =
+                        `You can upload up to ${maxFiles} images.`; // Adjusted message
+                        errorMessage.classList.add('text-danger');
+                        errorMessage.style.fontSize = '14px';
+
+                        // Remove existing error message
+                        const existingErrorMessage = closestDiv.querySelector('span.text-danger');
+                        if (existingErrorMessage) {
+                            closestDiv.removeChild(existingErrorMessage);
+                        }
+                        closestDiv.appendChild(errorMessage);
+                    }
+                    return; // Stop further processing if limit exceeded
                 }
 
-                processFiles(Array.from(files));
+                processFiles(Array.from(files)); // Process valid files
             });
 
             function processFiles(files) {
@@ -707,20 +725,28 @@
                 }
 
                 let file = files.shift();
+                const closestDiv = document.querySelector('.error-images-div');
 
-                // Check if the file extension is 'jfif'
+                // Check for JFIF file type
                 if (file.name.toLowerCase().endsWith('.jfif')) {
-                    alert(
-                        'Only images in JPG, JPEG, SVG, and PNG formats are allowed for upload. Please upload a different image format.'
-                    );
+                    if (closestDiv) {
+                        const errorMessage = document.createElement('span');
+                        errorMessage.innerText = "JFIF files are not allowed.";
+                        errorMessage.classList.add('text-danger');
+                        errorMessage.style.fontSize = '14px';
 
-                    processFiles(files); // Continue processing the next file
-                    return;
+                        // Remove existing error message
+                        const existingErrorMessage = closestDiv.querySelector('span.text-danger');
+                        if (existingErrorMessage) {
+                            closestDiv.removeChild(existingErrorMessage);
+                        }
+                        closestDiv.appendChild(errorMessage);
+                    }
+                    return false; // Exclude the jfif file
                 }
 
                 if (!uploadedFiles.has(file.name)) {
                     let reader = new FileReader();
-
                     reader.onload = function(e) {
                         let imgWrapper = $('<div>').addClass('image-wrapper');
                         let img = $('<img>').attr({
@@ -734,22 +760,20 @@
                             name: 'new_images[]'
                         }).val(file.name);
                         imgWrapper.append(img, removeBtn, hiddenInput);
-                        console.log('here');
+                        console.log('Image processed.');
 
                         $('.update-upload-img-preview').append(imgWrapper);
-
                         newFiles.add({
                             file,
                             existing: false
                         });
                         uploadedFiles.add(file.name);
                         updateRemoveButtons();
-                        processFiles(files);
+                        processFiles(files); // Process the remaining files
                     };
-
                     reader.readAsDataURL(file);
                 } else {
-                    processFiles(files);
+                    processFiles(files); // Continue to next file if already uploaded
                 }
             }
 
@@ -781,35 +805,25 @@
             });
 
             $('.img-upload-box').on('dragover', function(e) {
-                console.log('here');
-
                 e.preventDefault();
                 e.stopPropagation();
                 $(this).addClass('drag-over');
             });
 
             $('.img-upload-box').on('dragleave', function(e) {
-                console.log('here1');
-
                 e.preventDefault();
                 e.stopPropagation();
                 $(this).removeClass('drag-over');
             });
 
             $('.img-upload-box').on('drop', function(e) {
-                console.log('here2');
-
                 e.preventDefault();
                 e.stopPropagation();
                 $(this).removeClass('drag-over');
 
                 const files = e.originalEvent.dataTransfer.files;
-
-                // Set the files to the input and trigger the change event
                 $('#update-upload-image-five').prop('files', files);
                 $('#update-upload-image-five').trigger('change');
-                console.log('done');
-
             });
 
             $('form').on('submit', function(e) {
@@ -819,11 +833,11 @@
                 } else if (newFiles.size > maxFiles) {
                     e.preventDefault();
                     alert(
-                        `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`
-                    );
+                        `You can only have a maximum of ${maxFiles} images. Please remove some images before submitting.`);
                 }
             });
 
+            // Dynamically populate sizes based on category
             var sizes = @json(config('size'));
             var category_size = $('select[name="category"]').find('option:selected').data('fetchsize');
             var size = "{{ $product->size }}";
@@ -831,16 +845,14 @@
             selectedOption.empty();
 
             var sizeOptions = sizes[category_size] || [];
-          
-
             var defaultSizes = Object.keys(sizeOptions).length === 0 ? sizes['bydefault'] : sizeOptions;
-            if(Object.keys(sizeOptions).length === 0){
 
-                defaultSizes.forEach(confSize => {  
+            if (Object.keys(sizeOptions).length === 0) {
+                defaultSizes.forEach(confSize => {
                     var isSelected = confSize === size ? ' selected' : '';
                     selectedOption.append(`<option value="${confSize}"${isSelected}>${confSize}</option>`);
                 });
-            }else{
+            } else {
                 Object.keys(sizeOptions).forEach(category => {
                     sizeOptions[category].forEach(confSize => {
                         const isSelected = confSize === size ? ' selected' : '';

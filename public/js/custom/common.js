@@ -355,8 +355,10 @@ function handleValidation(form, rules, messages = {}, submitHandler = false) {
         }
     };
 
-    if (submitHandler)
+    if (submitHandler){
+
         validationConfiguration.submitHandler = submitHandler;
+    }
 
     form.validate(validationConfiguration);
 }

@@ -90,7 +90,7 @@ class LenderController extends Controller
                 'data' => [
                     'user' => $userDetails,
                     'products' => $transformedProducts,
-                    'reprted' =>$is_reported,
+                    'reported' =>$is_reported,
                 ],
             ], 200);
         } catch (\Throwable $e) {
@@ -171,7 +171,7 @@ class LenderController extends Controller
     public function reportedProfile(Request $request,$id)
     {
         $user = User::where('id',$id)->first();
-
+        
         if ($user == null) {
             return response()->json([
                 'status' => 'error',
@@ -179,20 +179,21 @@ class LenderController extends Controller
             ], 422);
         }
         try{
-        $alreadyReported = DB::table('reported_profiles')
-                ->where('reported_id', $user->id)
-                ->where('user_id', auth()->id())
-                ->exists();
-
+            $alreadyReported = DB::table('reported_profiles')
+            ->where('reported_id', $user->id)
+            ->where('user_id', auth()->id())
+            ->exists();
+            
             if ($alreadyReported) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'You have already reported this User.'
                 ], 400);
             }
+            // dd('here',$user,$alreadyReported);
             DB::table('reported_profiles')->insert([
                 'reported_id' => $user->id,
-                'product_id' => auth()->id(),
+                'user_id' => auth()->id(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -200,7 +201,7 @@ class LenderController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'User has been reported successfully!'
-            ]);
+            ],200);
         } catch (\Exception $e) {
             Log::error('Error reporting User: ' . $e->getMessage());
 

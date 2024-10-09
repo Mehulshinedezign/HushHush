@@ -1131,7 +1131,9 @@ class ProductController extends Controller
             $addresAdded = $hasCompleteAddress ? true : false;
             $fcm_token = is_null($authUser->pushToken->fcm_token) ? false : true;
 
-            $query = Product::where('user_id', '!=', $authUser->id);
+            $query = Product::where('user_id', '!=', $authUser->id)->whereHas('retailer', function ($q) {
+                $q->where('status', '1'); // Assuming 'active' is the status value for active users
+            });
             $filterApplied = false;
 
             // Category Filter
