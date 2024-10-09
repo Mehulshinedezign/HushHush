@@ -127,7 +127,6 @@ class StripeController extends Controller
 
     public function billing(Request $request, $token)
     {
-        //dd($token);
         $billingDetail = $this->validateBillingToken($token);
 
         $product = Product::find($billingDetail->product_id);
@@ -269,10 +268,8 @@ class StripeController extends Controller
                 'token_id' => $validateToken->id,
             ];
 
-            // dd($customer_billing_details);
             // store the billing details
             $customerBillingDetail = CustomerBillingDetails::create($customer_billing_details);
-            //dd('hello');
 
             $securityOption = $validateToken->security_option;
             $securityOptionType = $validateToken->security_option_type;
@@ -633,7 +630,6 @@ class StripeController extends Controller
                 //         'order_commission_amount' => $metaData->orderCommissionAmount,
                 //     ];
                 // }
-                // //dd($orderData);
                 // $order = Order::create($orderData);
 
                 // if (!is_null($order)) {
@@ -750,7 +746,6 @@ class StripeController extends Controller
                 'billing_detail' => $customerBillingDetail,
                 'order_item' => $orderItem
             ];
-            //dd($user);
             // check the payment status before sending the notification
             if (isset($user->notification) && @$user->notification->order_placed == 'on') {
                 $user->notify(new OrderPlaced($emailData));

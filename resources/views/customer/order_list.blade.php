@@ -2,7 +2,6 @@
 @section('title', 'My Orders')
 @section('content')
     <section>
-        {{-- @dd($orders); --}}
         <div class="payment-transaction-history-section order-history-section section-space">
             <div class="container">
                 <div class="payment-transaction-history-title">

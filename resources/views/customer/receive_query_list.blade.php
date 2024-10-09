@@ -11,7 +11,6 @@
         <div class="container">
             <div class="rental-request-wrapper">
                 <div class="rental-header">
-                    {{-- @dd($user); --}}
                     <h2>Received Inquiry List</h2>
                     <div class="form-group">
                         {{-- <div class="formfield">

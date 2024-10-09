@@ -19,7 +19,6 @@
     <span class="add-more-daterangepicker addlocation adddate float-left button outline-btn">
         <span><i class="fas fa-plus"></i></span> Add
     </span>
-    {{-- @dd(count($product)); --}}
     <div class="append-non-available-dates col-md-12">
         @for ($i = 1; $i < old('non_available_date_count', count($product)); $i++)
             <div class="cp-unavailabilities">

@@ -34,7 +34,6 @@ class PayoutsHistoryExport implements WithCustomCsvSettings ,WithHeadings , With
 
     public function map($transactions): array
     {
-        // dd($transactions->toArray());
         return [
             implode(" ", $transactions->order_id),
             $transactions->transaction_id,
@@ -48,7 +47,6 @@ class PayoutsHistoryExport implements WithCustomCsvSettings ,WithHeadings , With
     public function query()
     {
         $transactions = RetailerPayout::where('retailer_id', auth()->user()->id);
-        //dd($transactions);
         return $transactions;
     }
 

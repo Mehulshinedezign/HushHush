@@ -179,7 +179,6 @@ class ChatController extends Controller
             $type = "retailer";
             // dd("herere", $role_relation, $chatlist);
 
-            //dd($chatlist->toArray());
 
             return response()->json([
                 'status'    =>  true,

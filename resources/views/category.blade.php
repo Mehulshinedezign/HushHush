@@ -294,7 +294,6 @@
 
                 {{-- Product listing here --}}
 
-                {{-- @dd($products); --}}
                 <div class="home-product-main">
                     <div class="home-product-box" id="home-product-box">
                         @if ($products && $products->count() > 0)

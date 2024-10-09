@@ -4,7 +4,6 @@
 @section('greet', "Hello, $customer->name ")
 
 @section('message')
-    {{-- @dd($product); --}}
 
     <p>Oh no! We are sorry to share that {{ $data['product']['retailer']['name'] }} has cancelled their request for
         {{ Str::lower($data['product']['name']) }}.</p>

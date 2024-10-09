@@ -82,7 +82,6 @@ if (!function_exists('getParentCategory')) {
 if (!function_exists('getChild')) {
     function getChild($id)
     {
-        // dd('here' ,$id);
         return Category::where('status', '1')->where('parent_id', $id)->get();
     }
 }
@@ -216,7 +215,6 @@ if (!function_exists('leaveReview')) {
         $orders = Order::select('id', 'user_id', 'status', 'from_date')->with(['item' => function ($q) use ($id) {
             $q->whereProductId($id)->whereStatus('Completed');
         }])->whereUserId(auth()->user()->id)->whereStatus('Completed')->get();
-        // dd($orders->toArray());
         $orderData = [];
         foreach ($orders as $order) {
             if ($order->item) {
@@ -385,7 +383,6 @@ if (!function_exists('check_order_list_paginate_retailer')) {
     // if (!function_exists('sendPushNotifications')) {
     //     function sendPushNotifications($token, $payload)
     //     {
-    //         // dd($token);
     //         if (!is_null($token)) {
     //             // Initialize Google Client
     //             $client = new Google_Client();
@@ -438,7 +435,6 @@ if (!function_exists('check_order_list_paginate_retailer')) {
     //             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fcmNotification));
     //             $result = curl_exec($ch);
     //             curl_close($ch);
-    //             // dd($result);
     //             return $result;
     //         }
     //         return false;
@@ -509,7 +505,6 @@ if (!function_exists('check_order_list_paginate_retailer')) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fcmNotification));
             $result = curl_exec($ch);
             curl_close($ch);
-            // dd($result);
             return $result;
         }
 

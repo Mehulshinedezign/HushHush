@@ -1,7 +1,6 @@
 <tr class="user_query-{{ $query->id }}">
     <td>
         <a href="#" class="user-table-profile">
-            {{-- @dd($query); --}}
             <div class="table-profile">
                 @if ($query->product)
                     <a href="{{ route('viewproduct', jsencode_userdata($query->product->id)) }}">
@@ -75,7 +74,6 @@
             @endif
         </td>
     @endif
-    {{-- @dd($query->id ); --}}
     <td class="user-active">
         {{-- <div class="inquiry-actions ">
             <div class="btn-group dropstart">

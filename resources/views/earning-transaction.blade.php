@@ -17,7 +17,6 @@
                 <div id="query-list-container">
                     <div class="inquiry-list-main mt-4">
                         <div class="db-table">
-                            {{-- @dd($orders); --}}
                             @if($orders->isEmpty())
                             <div class="list-empty-box">
                                 <img src="{{ asset('front/images/Empty 1.svg') }}">
@@ -56,7 +55,6 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    {{-- @dd($order->retailePayout); --}}
 
                                                     <div class="user-table-head">
                                                         <h5 class="plus-earning">

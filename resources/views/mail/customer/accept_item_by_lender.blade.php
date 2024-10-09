@@ -4,7 +4,6 @@
 @section('greet', "Hello, $retaileruser->name ")
 
 @section('message')
-    {{-- @dd($product); --}}
     <p>Congratulations! You have confirmed your lease of {{ $data['product']['name'] }} and will be earning
         price : {{ $data['order_item']['total'] }},
     </p>

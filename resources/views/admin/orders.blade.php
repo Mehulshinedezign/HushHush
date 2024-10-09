@@ -24,9 +24,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- @dd($orders); --}}
                                     @foreach ($orders as $order)
-                                    {{-- @dd($order->disputeDetails,$order->status); --}}
                                         <tr>
                                             <td scope="row">
                                                 @if($title=='Disputed Orders')

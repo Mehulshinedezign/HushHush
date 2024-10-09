@@ -4,7 +4,6 @@
 @section('greet', "Hello, $name")
 
 @section('message')
-    {{-- @dd($product); --}}
     <p>We hope you are loving your rental!</p>
     <p>Just a gentle reminder that you are scheduled to @if ($number == 1)
             dropoff

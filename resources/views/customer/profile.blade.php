@@ -81,7 +81,6 @@
                     <div class="product-slider-main">
                         <div class="product-slider">
                             @foreach ($products as $product)
-                                {{-- @dd($product); --}}
                                 <div class="product-card">
                                     <div class="product-img-box">
                                         <a href="{{ route('viewproduct', ['id' => jsencode_userdata($product->id)]) }}">

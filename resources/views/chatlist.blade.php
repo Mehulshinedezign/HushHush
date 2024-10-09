@@ -11,7 +11,6 @@
                         <img src="{{ asset('front/img/avatar-small.png') }}">
                     @endif
                 </div>
-                {{-- @dd($chat->toArray()) --}}
                 <div class="d-flex pprofile_text w-100 justify-content-between">
                     <div class="chat-title">
                         <p>{{ @$chat->customer->name }}</p>

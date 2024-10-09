@@ -66,7 +66,6 @@
                         </span>
                     @enderror
                 </div>
-                {{-- @dd($user) --}}
                 <div class="d-flex justify-content-end">
                     <a href="{{ route('resend.otp', ['type' => 'phone_number']) }}" class="text-dark">Resend Phone OTP</a>
                 </div>

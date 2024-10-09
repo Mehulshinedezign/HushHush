@@ -120,7 +120,6 @@
                                             <h4 class="m-0">Customer Inquiry accepted</h4>
                                         </div>
                                     </div>
-                                    {{-- @dd(@$user->usernotification); --}}
                                     <div class="my-pro-detail-right">
                                         <div class="toggle-btn">
                                             <input type="checkbox" id="switch1" name="accept_item"

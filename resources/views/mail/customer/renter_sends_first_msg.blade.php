@@ -4,7 +4,6 @@
 @section('greet', "Hello, $user->name")
 
 @section('message')
-    {{-- @dd($product); --}}
     <p>{{ $data['renter']['name'] }} has sent you a message.</p>
     <p><a href="{{ route('retalerorderchat', [$data['chats']['order_id']]) }}" style="color:black">Click here to access the
             chat.</a></p>

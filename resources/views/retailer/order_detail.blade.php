@@ -83,7 +83,6 @@
                             data-value="{{ $order->id }}" data-bs-toggle="modal"
                             data-bs-target="#cancellation-note">Cancel
                             order</button> --}}
-                        {{-- @dd($billing_token) --}}
                         {{-- accept rejected button --}}
 
                         @if (is_null($transaction) && $order->status == 'Pending')

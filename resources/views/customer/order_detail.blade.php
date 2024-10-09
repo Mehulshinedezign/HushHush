@@ -216,7 +216,6 @@
                             @endif
                         @endif
                         <!-- Retailer uploaded picked up images -->
-                        {{-- @dd($order); --}}
                         @if ($order->retailerPickedUpImages->isNotEmpty())
                             <div class="col-12 col-sm-12 col-md-6">
                                 <h6 class="largeFont w-600 mb-3">Picked Up Attached Files by

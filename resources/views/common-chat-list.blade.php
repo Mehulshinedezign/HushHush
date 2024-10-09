@@ -21,7 +21,6 @@
                     @endif
                 @endif
             </div>
-            {{-- @dd($chat->toArray()) --}}
             <div class="d-flex pprofile_text w-100 justify-content-between">
                 <div class="chat-title">
                     <p>

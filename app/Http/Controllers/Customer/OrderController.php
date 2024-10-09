@@ -599,7 +599,6 @@ class OrderController extends Controller
     //             'url'       =>   $url
     //         ], 201);
     //     }
-    //     //dd('hhsadsaa');
     //     /*REFUND PAYMENT*/
     //     // dd($paymentIntentData->latest_charge);
 

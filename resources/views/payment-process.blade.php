@@ -8,7 +8,6 @@
         <div class="select-method">
             <label for="">Select added payment method</label>
             <ul>
-                {{-- @dd($cardlist) --}}
                 @foreach ($cardlist as $list)
                     <li>
                         <p class="radio_holder">

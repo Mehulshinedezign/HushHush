@@ -20,8 +20,8 @@
 
     //password
     const passwordRegex = {{ config('validation.password_regex') }};
-    const passwordMinLength = parseInt(`${passwordRegex}`.match(/(?<={)\d+/)[0]);
-    const passwordMaxLength = parseInt(`${passwordRegex}`.match(/\d+(?=})/)[0]);
+    const passwordMinLength = 8;
+    const passwordMaxLength = 32;
 
     //profile
     const profilePicMimes = "{{ config('validation.js_profile_pic_mimes') }}";
@@ -33,8 +33,8 @@
 
     //name
     const packageRegex = {{ config('validation.package_regex') }};
-    const packageMinLength = parseInt(`${packageRegex}`.match(/(?<={)\d+/)[0]);
-    const packageMaxLength = parseInt(`${packageRegex}`.match(/\d+(?=})/)[0]);
+    const packageMinLength = 3;
+    const packageMaxLength = 200;
 
     const accountMinLength = {{ config('validation.account_minlength') }};
     const accountMaxLength = {{ config('validation.account_maxlength') }};
