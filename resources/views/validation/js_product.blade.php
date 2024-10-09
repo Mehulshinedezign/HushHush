@@ -261,6 +261,9 @@
                 setTimeout(function() {
                     e.currentTarget.submit();
                 }, 1000); // Adjust delay as needed
+            }else{
+            $('.updateProduct').addClass('d-none');  
+
             }
         });
 

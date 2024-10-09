@@ -539,9 +539,12 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="right-btn-box">
-                                            <button class="button primary-btn" id="productBtn"> <div class="spinner-border updateProduct d-none" role="status">
-                                                <span class="sr-only"></span>
-                                              </div>Update</button>
+                                            <button class="button primary-btn" id="productBtn"> 
+                                                Update
+                                                <div class="spinner-border updateProduct d-none" role="status">
+                                                    <span class="sr-only"></span>
+                                                  </div>
+                                            </button>
                                         </div>
                                     </div>
                                     <!-- <img id="image123" src="" alt="asfdsfd"> -->

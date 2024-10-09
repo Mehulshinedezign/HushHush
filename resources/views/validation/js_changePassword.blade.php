@@ -48,6 +48,8 @@
             if ($('#changePassword').valid()) {
                 $('#updatePassword').attr('disabled', true);
                 this.submit(); 
+            }else{
+            $('.passwordUpdate').addClass('d-none');  
             }
         });
         

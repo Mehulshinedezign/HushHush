@@ -665,9 +665,9 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="right-btn-box">
-                                            <button class="button primary-btn " id="productBtn"><div class="spinner-border updateProduct d-none" role="status">
+                                            <button class="button primary-btn " id="productBtn">Add<div class="spinner-border updateProduct d-none" role="status">
                                                 <span class="sr-only"></span>
-                                              </div>Add</button>
+                                              </div></button>
                                         </div>
                                     </div>
                                 </div>

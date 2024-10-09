@@ -1234,12 +1234,21 @@ border-color: #000;
     display: flex;
     justify-content: end;
 }
-
 .right-btn-box button {
-    max-width: 107px;
+    max-width: fit-content;
     width: 100%;
 }
-
+.right-btn-box button .spinner-border {
+    display: inline-block;
+    width: 19px;
+    height: 19px;
+    vertical-align: -.125em;
+    border: .25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    -webkit-animation: .75s linear infinite spinner-border;
+    animation: .75s linear infinite spinner-border;
+}
 
 
 
