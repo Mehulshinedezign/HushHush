@@ -886,7 +886,7 @@
     <script src="{{ asset('js/jquery-validation.min.js') }}"></script>
     <script src="{{ asset('js/additional-methods.min.js') }}"></script>
     <script
-        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places">
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places" async defer>
     </script>
     </script>
     <!-- Include DateRangePicker JS -->
