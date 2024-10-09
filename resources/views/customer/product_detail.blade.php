@@ -421,7 +421,7 @@
 
     <script src="{{ asset('js/owl-carousal.js') }}"></script>
     <script src="{{ asset('js/slick.min.js') }}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOyw9TNt8YzANQjJMjjijfr8MC2DV_f1s&libraries=places">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOyw9TNt8YzANQjJMjjijfr8MC2DV_f1s&libraries=places" async defer>
     </script>
     <script>
         @if (
