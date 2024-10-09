@@ -115,7 +115,7 @@
     $(document).ready(function() {
         $('#addNewAddressBtn').click(function() {
             $('#addEditAddressForm').find(
-                    'input[type="text"], input[type="file"], input[type="email"],select, textarea'
+                    'input[type="text"], input[type="file"], input[type="email"],input[type="hidden"],select, textarea'
                 )
                 .val('');
         });
