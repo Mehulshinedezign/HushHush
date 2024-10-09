@@ -702,6 +702,27 @@
 @endsection
 
 @push('scripts')
+<script>
+          $('.slider-content').slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: true,
+            fade: false,
+            asNavFor: '.slider-thumb',
+            autoplay: false,
+            prevArrow: $('.prev-prodec-btn'),
+            nextArrow: $('.next-prodec-btn'),
+            autoplaySpeed: 2000,
+        });
+        $('.slider-thumb').slick({
+            slidesToShow: 5,
+            slidesToScroll: 1,
+            asNavFor: '.slider-content',
+
+            focusOnSelect: true,
+            vertical: true,
+        });
+</script>
     <script>
         if($('#report-btn').length > 0 ){
 
@@ -872,25 +893,7 @@
 
         // });
 
-        $('.slider-content').slick({
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            arrows: true,
-            fade: false,
-            asNavFor: '.slider-thumb',
-            autoplay: false,
-            prevArrow: $('.prev-prodec-btn'),
-            nextArrow: $('.next-prodec-btn'),
-            autoplaySpeed: 2000,
-        });
-        $('.slider-thumb').slick({
-            slidesToShow: 5,
-            slidesToScroll: 1,
-            asNavFor: '.slider-content',
-
-            focusOnSelect: true,
-            vertical: true,
-        });
+  
 
 
 
