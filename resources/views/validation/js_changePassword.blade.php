@@ -37,7 +37,19 @@
             },
 
         };
+        
+        $('#changePassword').submit(function(e) {
+            e.preventDefault(); // Prevent form submission
+            $('.passwordUpdate').removeClass('d-none');  
+            handleValidation('changePassword', rules, messages);
+            // Perform form validation
 
-        handleValidation('changePassword', rules, messages);
+            // Check if the form is valid
+            if ($('#changePassword').valid()) {
+                $('#updatePassword').attr('disabled', true);
+                this.submit(); 
+            }
+        });
+        
     });
 </script>

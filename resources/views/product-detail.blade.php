@@ -103,13 +103,17 @@
                                 <div class="container">
                                     <div class="desc-slider-main">
                                         <div class="slider slider-thumb">
+                                    
                                             @if ($productImages->isNotEmpty() && count($productImages) > 1)
                                                 @foreach ($productImages as $image)
                                                     <div class="thumb-slide"><img src="{{ $image->file_path }}"
                                                             alt="" loading="lazy">
                                                     </div>
                                                 @endforeach
-
+                                            @else
+                                                    <div class="thumb-slide single-thumb-slide"><img src="{{ @$productImages[0]->file_path }}"
+                                                        alt="" loading="lazy">
+                                                </div>
                                             @endif
 
                                         </div>

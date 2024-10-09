@@ -539,7 +539,9 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="right-btn-box">
-                                            <button class="button primary-btn updateProduct" id="addProduct">Update</button>
+                                            <button class="button primary-btn" id="productBtn"> <div class="spinner-border updateProduct d-none" role="status">
+                                                <span class="sr-only"></span>
+                                              </div>Update</button>
                                         </div>
                                     </div>
                                     <!-- <img id="image123" src="" alt="asfdsfd"> -->
@@ -822,7 +824,6 @@
             var sizes = @json(config('size'));
             var category_size = $('select[name="category"]').find('option:selected').data('fetchsize');
             var size = "{{ $product->size }}";
-
             var selectedOption = $('select[name="size"]');
             selectedOption.empty();
 
@@ -830,18 +831,21 @@
           
 
             var defaultSizes = Object.keys(sizeOptions).length === 0 ? sizes['bydefault'] : sizeOptions;
-            // defaultSizes.forEach(confSize => {  
-            //     var isSelected = confSize === size ? ' selected' : '';
-            //     selectedOption.append(`<option value="${confSize}"${isSelected}>${confSize}</option>`);
-            // });
+            if(Object.keys(sizeOptions).length === 0){
 
-            Object.keys(sizeOptions).forEach(category => {
-                sizeOptions[category].forEach(confSize => {
-                    const isSelected = confSize === size ? ' selected' : '';
-                    selectedOption.append(
-                        `<option value="${confSize}"${isSelected}>${confSize}</option>`);
+                defaultSizes.forEach(confSize => {  
+                    var isSelected = confSize === size ? ' selected' : '';
+                    selectedOption.append(`<option value="${confSize}"${isSelected}>${confSize}</option>`);
                 });
-            });
+            }else{
+                Object.keys(sizeOptions).forEach(category => {
+                    sizeOptions[category].forEach(confSize => {
+                        const isSelected = confSize === size ? ' selected' : '';
+                        selectedOption.append(
+                            `<option value="${confSize}"${isSelected}>${confSize}</option>`);
+                    });
+                });
+            }
         });
     </script>
 @endpush

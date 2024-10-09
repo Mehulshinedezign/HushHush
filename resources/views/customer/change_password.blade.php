@@ -39,7 +39,9 @@
                         </span>
                     </div>
                 </div>
-                <button class="button primary-btn full-btn">Done</button>
+                <button type="submit" id="updatePassword" class="button primary-btn full-btn"><div class="spinner-border passwordUpdate d-none" role="status">
+                    <span class="sr-only"></span>
+                  </div>Done</button>
             </form>
             
         </div>
@@ -47,10 +49,10 @@
 @endsection
 
 @push('scripts')
-{{-- @includeFirst(['validation']) --}}
+@includeFirst(['validation'])
 @includeFirst(['validation.js_changePassword'])
 @includeFirst(['validation.js_show_password'])
     <script src="{{ asset('js/custom/profile.js') }}"></script>
     <script src="{{ asset('js/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('js/custom/card.js') }}"></script>
+    {{-- <script src="{{ asset('js/custom/card.js') }}"></script> --}}
 @endpush

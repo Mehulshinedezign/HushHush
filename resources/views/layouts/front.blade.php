@@ -174,6 +174,8 @@
                                             <div class="upload-img-preview">
                                             </div>
                                         </div> --}}
+
+
                                         <div class="upload-img-preview-box">
                                             <div class="upload-img-preview sortable-images">
                                             </div>
@@ -663,7 +665,9 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="right-btn-box">
-                                            <button class="button primary-btn " id="addProduct">Add</button>
+                                            <button class="button primary-btn " id="productBtn"><div class="spinner-border updateProduct d-none" role="status">
+                                                <span class="sr-only"></span>
+                                              </div>Add</button>
                                         </div>
                                     </div>
                                 </div>
@@ -1252,7 +1256,7 @@
                 var sizeSelect = $('select[name="size"]');
                 sizeSelect.empty();
                 sizeSelect.append('<option value="">Size</option>');
-
+                console.log(sizeOptions ,'hererer');
                 if (sizeOptions.length === 0) {
                     var bydefaultSizes = sizes['bydefault'];
                     $.each(bydefaultSizes, function(index, size) {

@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Debugging: Check if the page URL matches
     const currentPath = window.location.pathname; // This will give you the path part of the URL
   
-
+        console.log(currentPath , chat_page_url , 'match url')
     // Ensure you are on the correct chat page
     if (window.location.pathname === chat_page_url)  {
 

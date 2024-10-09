@@ -3317,7 +3317,9 @@ button#addNewAddressBtn {
 .delivery-opion-box {
     margin-bottom: 15px;
 }
-
+.desc-slider-main:has(.single-thumb-slide) .slider.slider-content {
+    width: 100%;
+}
 
 
 

@@ -259,7 +259,9 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="profile-edit-btn">
-                                    <button type="submit" class="button primary-btn">Update</button>
+                                    <button type="submit" id="submitBtn" class="button primary-btn"><div class="spinner-border updateProfile d-none" role="status">
+                                        <span class="sr-only"></span>
+                                      </div>Update</button>
                                 </div>
                             </div>
                         </div>
@@ -334,8 +336,13 @@
 
             // Form validation
             handleValidation('save_user', rules, messages, function(form) {
-                $('body').addClass('loading');
-                form.submit();
+                $('.updateProfile').removeClass('d-none')
+                if($(form).valid()) {
+                    // Disable the submit button
+                    $('#submitBtn').attr('disabled', true);
+                    $('body').addClass('loading');
+                    form.submit();
+                }
             });
 
             // Trigger validation when address fields change

@@ -249,12 +249,14 @@
 
         $('#addProduct').submit(function(e) {
             e.preventDefault(); // Prevent form submission
-
+            $('.updateProduct').removeClass('d-none');  
             // Perform form validation
             handleValidation('addProduct', rules, messages);
 
             // Check if the form is valid
             if ($('#addProduct').valid()) {
+                $('#productBtn').attr('disabled', true);
+              
                 $('body').addClass('loading');
                 setTimeout(function() {
                     e.currentTarget.submit();
