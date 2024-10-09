@@ -14,6 +14,8 @@ class SizeSeeder extends Seeder
     public function run(): void
     {
         $size = [
+            ['type' => 'type1', 'name' => 'one size'],
+            ['type' => 'type1', 'name' => 'no size'],
             ['type' => 'type1', 'name' => 'XS/P'],
             ['type' => 'type1', 'name' => 'S'],
             ['type' => 'type1', 'name' => 'M'],
