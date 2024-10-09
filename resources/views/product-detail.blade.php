@@ -703,56 +703,59 @@
 
 @push('scripts')
     <script>
-        document.getElementById('report-btn').addEventListener('click', function() {
-            var productId = this.getAttribute('data-product-id');
+        if($('#report-btn').length >= 0 ){
 
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "Do you really want to report this product?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, report it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch(`/report-product/${productId}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Add CSRF token
-                            },
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 'success') {
-                                Swal.fire(
-                                    'Reported!',
-                                    data.message,
-                                    'success'
-                                );
-                                if($('#report-btn').length >= 0 ){
-                                    $('#report-btn').replaceWith('<button class="btn btn-danger" id="already-reported">Already Reported Product</button>');
-
+            document.getElementById('report-btn').addEventListener('click', function() {
+                var productId = this.getAttribute('data-product-id');
+    
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you really want to report this product?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, report it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`/report-product/${productId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Add CSRF token
+                                },
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    Swal.fire(
+                                        'Reported!',
+                                        data.message,
+                                        'success'
+                                    );
+                                    if($('#report-btn').length >= 0 ){
+                                        $('#report-btn').replaceWith('<button class="btn btn-danger" id="already-reported">Already Reported Product</button>');
+    
+                                    }
+                                } else {
+                                    Swal.fire(
+                                        'Oops!',
+                                        data.message,
+                                        'error'
+                                    );
                                 }
-                            } else {
+                            })
+                            .catch(error => {
                                 Swal.fire(
-                                    'Oops!',
-                                    data.message,
+                                    'Error!',
+                                    'Something went wrong, please try again later.',
                                     'error'
                                 );
-                            }
-                        })
-                        .catch(error => {
-                            Swal.fire(
-                                'Error!',
-                                'Something went wrong, please try again later.',
-                                'error'
-                            );
-                        });
-                }
+                            });
+                    }
+                });
             });
-        });
+        }
     </script>
     <script>
         document.getElementById('manage_address_link').addEventListener('click', function() {

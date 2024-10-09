@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Query;
+use App\Models\ReportedProfile;
 use App\Models\User;
 
 use Illuminate\Http\Request;
@@ -21,6 +22,14 @@ class LenderController extends Controller
         try {
 
             $userDetails = User::with(['userDetail'])->whereId($id)->firstOrFail();
+            $reported = ReportedProfile::where('reported_id',$id)->where('user_id',auth()->id())->first();
+            if(is_null($reported))
+            {
+                $is_reported =false;
+            }
+            else{
+                $is_reported =true;
+            }
 
             $products = Product::with(['locations', 'allImages', 'thumbnailImage', 'get_size', 'favorites', 'category', 'disableDates', 'get_brand', 'get_color'])
                 ->where('user_id', $id)
@@ -80,7 +89,8 @@ class LenderController extends Controller
                 'message' => 'Products fetched successfully!',
                 'data' => [
                     'user' => $userDetails,
-                    'products' => $transformedProducts
+                    'products' => $transformedProducts,
+                    'reprted' =>$is_reported,
                 ],
             ], 200);
         } catch (\Throwable $e) {
