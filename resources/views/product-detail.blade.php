@@ -285,9 +285,9 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                                                                                    <h4>Size :</h4>
-                                                                                                    <p>{{ $product->size ?? 'N/A' }}</p>
-                                                                                                </div> -->
+                                                                                                                        <h4>Size :</h4>
+                                                                                                                        <p>{{ $product->size ?? 'N/A' }}</p>
+                                                                                                                    </div> -->
 
 
                             </div>
@@ -724,93 +724,88 @@
             focusOnSelect: true,
             vertical: true,
         });
-</script>
-<script>
-    $(document).ready(function() {
-        if ($('#report-btn').length > 0) {
-            $('#report-btn').click(function() {
-                var productId = $(this).data('product-id');
+    </script>
+    <script>
+        $(document).ready(function() {
+            if ($('#report-btn').length > 0) {
+                $('#report-btn').click(function() {
+                    var productId = $(this).data('product-id');
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "Do you really want to report this product?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, report it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: `/report-product/${productId}`,
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            success: function(data) {
-                                if (data.status === 'success') {
-                                    Swal.fire(
-                                        'Reported!',
-                                        data.message,
-                                        'success'
-                                    );
-                                    if ($('#report-btn').length > 0) {
-                                        $('#report-btn').replaceWith('<button class="btn btn-danger" id="already-reported">Already Reported Product</button>');
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "Do you really want to report this product?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, report it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: `/report-product/${productId}`,
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                success: function(data) {
+                                    if (data.status === 'success') {
+                                        Swal.fire(
+                                            'Reported!',
+                                            data.message,
+                                            'success'
+                                        );
+                                        if ($('#report-btn').length > 0) {
+                                            $('#report-btn').replaceWith(
+                                                '<button class="btn btn-danger" id="already-reported">Already Reported Product</button>'
+                                            );
+                                        }
+                                    } else {
+                                        Swal.fire(
+                                            'Oops!',
+                                            data.message,
+                                            'error'
+                                        );
                                     }
-                                } else {
+                                },
+                                error: function() {
                                     Swal.fire(
-                                        'Oops!',
-                                        data.message,
+                                        'Error!',
+                                        'Something went wrong, please try again later.',
                                         'error'
                                     );
                                 }
-                            },
-                            error: function() {
-                                Swal.fire(
-                                    'Error!',
-                                    'Something went wrong, please try again later.',
-                                    'error'
-                                );
-                            }
-                        });
-                    }
+                            });
+                        }
+                    });
                 });
-            });
-        }
-    });
-</script>
+            }
+        });
+    </script>
 
     <script>
-        document.getElementById('manage_address_link').addEventListener('click', function() {
-            // Open the modal when clicking on "Change Address"
-            var modalElement = document.getElementById('addressModal');
-            var modal = new bootstrap.Modal(modalElement);
+        $('#manage_address_link').on('click', function() {
+            var $modalElement = $('#addressModal');
+            var modal = new bootstrap.Modal($modalElement[0]); // Initialize the modal
             modal.show();
 
-            // Wait for the modal to be fully shown before triggering the button click
-            modalElement.addEventListener('shown.bs.modal', function() {
-                let btn = document.getElementById('addNewAddressBtn');
+            $modalElement.on('shown.bs.modal', function() {
+                var $btn = $('#addNewAddressBtn');
 
-
-                // Check if the button exists in the modal
-                if (btn) {
+                if ($btn.length) {
                     console.log('Button exists, triggering click programmatically...');
-                    // Programmatically trigger the click event
-                    btn.click();
+                    $btn.trigger('click');
                 } else {
                     console.log('Button not found');
                 }
             });
         });
 
-        // Function to handle address selection from the modal
-        function selectAddress(id, fullAddress) {
-            // Update selected address in the form
-            document.getElementById('selected_value').value = fullAddress;
 
-            // Update hidden address_id1 field
-            document.getElementById('address_id1').value = id;
+        function selectAddress(id, fullAddress) {
+            $('#selected_value').val(fullAddress);
+
+            $('#address_id1').val(id);
         }
     </script>
     <script>
@@ -998,53 +993,47 @@
 
 
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const radioButtons = document.querySelectorAll('input[name="delivery_option"]');
-            const selectedValueInput = document.getElementById('selected_value');
-            const manageAddressLink = document.getElementById('manage_address_link');
+        $(document).ready(function() {
+            const $radioButtons = $('input[name="delivery_option"]');
+            const $selectedValueInput = $('#selected_value');
+            const $manageAddressLink = $('#manage_address_link');
 
             const updateSelectedValue = () => {
-                const checkedRadio = document.querySelector('input[name="delivery_option"]:checked');
-                if (checkedRadio) {
-                    if (checkedRadio.id === 'pick_up') {
-                        selectedValueInput.value = '{{ $selectedValue }}';
+                const $checkedRadio = $('input[name="delivery_option"]:checked');
+
+                if ($checkedRadio.length) {
+                    if ($checkedRadio.attr('id') === 'pick_up') {
+                        $selectedValueInput.val('{{ $selectedValue }}');
                         // "{{ @$product->productCompleteLocation->city . ', ' . @$product->productCompleteLocation->state . ', ' . @$product->productCompleteLocation->country }}";
-                        manageAddressLink.style.display =
-                            'none';
-                    } else if (checkedRadio.id === 'ship_to_me') {
-                        selectedValueInput.value =
-                            "{{ @$authUser->userDetail->complete_address }}";
-                        manageAddressLink.style.display =
-                            'block';
+                        $manageAddressLink.hide();
+                    } else if ($checkedRadio.attr('id') === 'ship_to_me') {
+                        $selectedValueInput.val("{{ @$authUser->userDetail->complete_address }}");
+                        $manageAddressLink.show();
                     }
                 } else {
-                    selectedValueInput.value = "Please select one of the above options";
-                    manageAddressLink.style.display = 'none';
+                    $selectedValueInput.val('Please select one of the above options');
+                    $manageAddressLink.hide();
                 }
             };
 
+            // Initial call to set the default state
             updateSelectedValue();
 
-            radioButtons.forEach(radio => {
-                radio.addEventListener('change', updateSelectedValue);
-            });
+            // Listen for changes in delivery options (radio buttons)
+            $radioButtons.on('change', updateSelectedValue);
 
-            manageAddressLink.addEventListener('click', function() {
+            // Open the modal when clicking the manage address link
+            $manageAddressLink.on('click', function() {
                 $('#addressModal').modal('show');
             });
 
-            document.querySelectorAll('input[name="selected_address"]').forEach(addressRadio => {
-                addressRadio.addEventListener('change', function() {
-                    const selectedAddress = this.nextElementSibling.textContent;
-                    selectedValueInput.value = selectedAddress;
-                    $('#addressModal').modal('hide');
-                });
+            // Update the selected address when choosing a different one in the modal
+            $('input[name="selected_address"]').on('change', function() {
+                const selectedAddress = $(this).next().text(); // Get the sibling label's text
+                $selectedValueInput.val(selectedAddress);
+                $('#addressModal').modal('hide'); // Close modal after selection
             });
         });
-
-
-
-
 
 
         function openModal(src) {

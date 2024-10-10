@@ -26,24 +26,21 @@
                         @endphp
                         <ul>
                             <li>
-                                @if (($user->identity_verified) == 'pending')
+                                @if ($user->identity_verified == 'pending')
                                     <div data-bs-toggle="modal" data-bs-target="#pending">
                                         Rent your Closet
                                     </div>
-                                @elseif (($user->identity_verified) != 'verified' )
+                                @elseif ($user->identity_verified != 'verified')
                                     <div data-bs-toggle="modal" data-bs-target="#identity">
                                         Rent your Closet
                                     </div>
-                             
-                                   
-
                                 @elseif(is_null($userBankInfo))
                                     <div data-bs-toggle="modal" data-bs-target="#addbank-Modal">
                                         Rent your Closet
                                     </div>
                                 @elseif (is_null($user->userDetail->complete_address))
                                     <div data-bs-toggle="modal" data-bs-target="#accountSetting">
-                                        Rent your Closet    
+                                        Rent your Closet
                                     </div>
                                 @else
                                     <div data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
@@ -140,9 +137,9 @@
                         </ul>
                     </div>
                     <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                                                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                                                <span class="navbar-toggler-icon"></span>
-                                            </button> -->
+                                                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                                                    <span class="navbar-toggler-icon"></span>
+                                                </button> -->
                 </div>
             @endauth
             @guest
@@ -152,7 +149,8 @@
                             <div><a href="{{ route('login') }}">Rent your Closet</a></div>
                         </li>
                         <li>
-                            <div><a href="{{ route('login') }}">login</a> / <a href="{{ route('register')}}">sign up</a></div>
+                            <div><a href="{{ route('login') }}">login</a> / <a href="{{ route('register') }}">sign
+                                    up</a></div>
                         </li>
                     </ul>
 
@@ -275,83 +273,52 @@
 {{-- @include('common.alert') --}}
 @push('scripts')
     <script>
-        function clearForm() {
-            document.getElementById('searchForm').reset();
-        }
+        $(document).ready(function() {
+            var today = new Date().toISOString().split('T')[0];
+            $('input[name="filter_date"]').attr('min', today);
 
-        document.getElementById('searchForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const filterForm = document.getElementById('filters');
-            const searchForm = document.getElementById('searchForm');
-            const filterInputs = filterForm.querySelectorAll('input[name]');
-
-            const searchInput = document.querySelector('input[name="search"]').value.trim();
-            const dateInput = document.querySelector('input[name="filter_date"]').value.trim();
-
-            // Validation: Check if both fields are filled
-            if (searchInput === '' && dateInput === '') {
-                return; // Prevent form submission if both are empty
-            }
-
-            filterInputs.forEach(function(input) {
-                const clone = input.cloneNode(true);
-                clone.style.display = 'none';
-                searchForm.appendChild(clone);
+            $('#clearFormBtn').on('click', function() {
+                $('#searchForm')[0].reset();
             });
-            searchForm.submit();
-        });
-    </script>
-    <script>
-        document.getElementById('searchForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
 
-            const currentRouteName = document.getElementById('currentRoute') ? document.getElementById(
-                'currentRoute').value : document.body.getAttribute('data-route-name');
+            $('#searchForm').on('submit', function(event) {
+                event.preventDefault(); 
 
-            const searchInput = document.querySelector('input[name="search"]').value.trim();
-            const dateInput = document.querySelector('input[name="filter_date"]').value.trim();
+                const searchInput = $('input[name="search"]').val().trim();
+                const dateInput = $('input[name="filter_date"]').val().trim();
+                const currentRouteName = $('#currentRoute').val() || $('body').data('route-name');
 
-            // Validation: Check if both fields are filled
-            if (searchInput === '' && dateInput === '') {
-                return; // Prevent form submission if both are empty
-            }
-            // If the route is 'index', submit the form with all fields
-            if (currentRouteName === 'index') {
-                this.submit();
-            } else {
-                // Handle submission for other routes: submit only specific fields
-                const formData = new FormData(this);
-                const filteredData = new URLSearchParams();
-
-                // Add only the fields you want to include
-                filteredData.append('search', formData.get('search'));
-                // Add other fields you want to include
-
-                // Create a new form with filtered data
-                const filteredForm = document.createElement('form');
-                filteredForm.method = 'GET';
-                filteredForm.action = this.action;
-
-                // Add the filtered data to the new form
-                for (const [key, value] of filteredData) {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = key;
-                    input.value = value;
-                    filteredForm.appendChild(input);
+                if (searchInput === '' && dateInput === '') {
+                    return;
                 }
 
-                // Append the new form to the document and submit it
-                document.body.appendChild(filteredForm);
-                filteredForm.submit();
-            }
-        });
+                if (currentRouteName === 'index') {
+                    this.submit(); 
+                } else {
+                    const filteredForm = $('<form>', {
+                        method: 'GET',
+                        action: $(this).attr('action')
+                    });
 
-        function clearForm() {
-            document.getElementById('searchForm').reset();
-        }
-        // jQuery(this).daterangepicker({
-        //     minDate: moment(),
-        // });
+                    if (searchInput) {
+                        filteredForm.append($('<input>', {
+                            type: 'hidden',
+                            name: 'search',
+                            value: searchInput
+                        }));
+                    }
+                    if (dateInput) {
+                        filteredForm.append($('<input>', {
+                            type: 'hidden',
+                            name: 'filter_date',
+                            value: dateInput
+                        }));
+                    }
+
+                    $('body').append(filteredForm);
+                    filteredForm.submit();
+                }
+            });
+        });
     </script>
 @endpush
