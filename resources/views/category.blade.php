@@ -809,10 +809,11 @@
         });
     </script>
     <script>
+        $(document).ready(function() {
+
         function initAutocomplete() {
 
-            var input = document.getElementById('filter_address');
-            var autocomplete = new google.maps.places.Autocomplete(input);
+            var autocomplete = new google.maps.places.Autocomplete($('#filter_address')[0]);
 
             autocomplete.addListener('place_changed', function() {
                 var place = autocomplete.getPlace();
@@ -837,7 +838,6 @@
         initAutocomplete();
 
         // disable the enter keyword
-        $(document).ready(function() {
             $(document).on('keypress', 'input', function(e) {
                 var form = $(this).closest('form');
                 if (form.attr('id') !== 'searchForm' && e.which === 13) {

@@ -26,7 +26,7 @@
                         @endphp
                         <ul>
                             <li>
-                                @if (($user->identity_verified) == 'pending')
+                                {{-- @if (($user->identity_verified) == 'pending')
                                     <div data-bs-toggle="modal" data-bs-target="#pending">
                                         Rent your Closet
                                     </div>
@@ -49,8 +49,10 @@
                                     <div data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
                                         Rent your Closet
                                     </div>
-                                @endif
-
+                                @endif --}}
+                                <div data-bs-toggle="modal" data-bs-target="#addproduct-Modal">
+                                    Rent your Closet
+                                </div>
                             </li>
                             <li>
                                 <a class="header-chat-icon" href="{{ route('common.chat') }}">
