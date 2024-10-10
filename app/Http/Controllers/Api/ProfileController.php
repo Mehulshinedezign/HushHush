@@ -639,13 +639,19 @@ class ProfileController extends Controller
 
     public function saveAddress(Request $request)
     {
-        // dd('here', $request->all());
         Log::info($request->all());
         $user = auth()->user();
 
         try {
-            // Validate input data
-           
+            // Validate input data (assuming you have validation logic elsewhere)
+            // Example validation (replace as needed)
+            $validator = \Validator::make($request->all(), [
+                'address1' => 'required',
+                'city' => 'required',
+                'state' => 'required',
+                'country' => 'required',
+                'zipcode' => 'required',
+            ]);
 
             // Validation fails
             if ($validator->fails()) {
@@ -655,6 +661,9 @@ class ProfileController extends Controller
                     'errors' => $validator->errors(),
                 ], 422);
             }
+
+            // Check if the user has any existing addresses
+            $existingAddressCount = UserDetail::where('user_id', auth()->id())->count();
 
             // Create or update the address
             $address = UserDetail::updateOrCreate(
@@ -673,19 +682,16 @@ class ProfileController extends Controller
             );
 
             // Handle the default address logic
-            if ($request->is_default == '1') {
-                // Reset other default addresses for the user
+            if ($existingAddressCount == 0) {
+                // If this is the user's first address, automatically set it as default
+                $address->update(['is_default' => '1']);
+            } elseif ($request->is_default == '1') {
+                // If the address is marked as default, reset other default addresses
                 UserDetail::where('user_id', auth()->id())
                     ->where('is_default', '1')
                     ->update(['is_default' => '0']);
 
-                UserDetail::where('user_id', $address->user_id)->update(['is_default' => '0']);
-
-                // Then, set the selected address as the default
-                $is_default = UserDetail::where('id', $address->id)->update(['is_default' => '1']);
-
-                // Set the newly created/updated address as default
-
+                $address->update(['is_default' => '1']);
             }
 
             return response()->json([
@@ -700,6 +706,7 @@ class ProfileController extends Controller
             ], 500);
         }
     }
+
 
 
     public function addressDestroy($id)
