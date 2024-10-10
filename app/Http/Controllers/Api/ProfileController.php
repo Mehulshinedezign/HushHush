@@ -645,14 +645,7 @@ class ProfileController extends Controller
 
         try {
             // Validate input data
-            $validator = Validator::make($request->all(), [
-                'zipcode' => 'required',
-                'address1' => 'required',
-                // 'address2' => 'required',
-                'country' => 'required',
-                'state' => 'required',
-                'city' => 'required',
-            ]);
+           
 
             // Validation fails
             if ($validator->fails()) {
