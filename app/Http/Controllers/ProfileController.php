@@ -591,6 +591,7 @@ class ProfileController extends Controller
             'city' => $request->city,
             'about' => $request->about ?? null,
             'zipcode' => $request->zipcode ?? null,
+            'is_default' => '1',
         ];
         $user->userDetail()->updateOrCreate(
             ['user_id' => $user->id],
