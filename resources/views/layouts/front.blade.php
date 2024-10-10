@@ -1208,6 +1208,57 @@
 
     {{-- Search the country and state  and GOogle place Api --}}
     <script>
+         function initAutocomplete() {
+                var autocomplete = new google.maps.places.Autocomplete($('#product_address'));
+
+                $('#product_address1,#product_address2,#product_country, #product_state, #product_city').prop(
+                    'readonly', true);
+
+                autocomplete.addListener('place_changed', function() {
+                    var place = autocomplete.getPlace();
+
+                    $(' #product_address1,#product_address2,#product_country, #product_state, #product_city',
+                            '#zipcode')
+                        .val('');
+                    var zipcode = null;
+
+                    for (var i = 0; i < place.address_components.length; i++) {
+                        var addressType = place.address_components[i].types[0];
+                        if (addressType === 'street_number') {
+                            $('#product_address1').val(place.address_components[i].long_name);
+                        }
+                        if (addressType === 'route') {
+                            $('#product_address2').val(place.address_components[i].long_name);
+                        }
+                        if (addressType === 'country') {
+                            $('#product_country').val(place.address_components[i].long_name);
+                        }
+                        if (addressType === 'administrative_area_level_1') {
+                            $('#product_state').val(place.address_components[i].long_name);
+                        }
+                        if (addressType === 'locality') {
+                            $('#product_city').val(place.address_components[i].long_name);
+                        }
+                        if (addressType === 'postal_code') {
+                            $('#zipcode').val(place.address_components[i]
+                                .long_name); // Assign zipcode if available
+                        }
+                    }
+
+                    function setReadonly(selector) {
+                        if ($(selector).val()) {
+                            $(selector).prop('readonly', true);
+                        } else {
+                            $(selector).prop('readonly', false);
+                        }
+                    }
+
+                    setReadonly('#product_address1');
+                    setReadonly('#product_address2');
+
+                    $(".product_sub_data").slideDown("slow");
+                });
+            }
         $(document).ready(function() {
 
             $('.parent_category').change(function() {
@@ -1291,57 +1342,7 @@
                 }
             });
 
-            function initAutocomplete() {
-                var autocomplete = new google.maps.places.Autocomplete($('#product_address'));
-
-                $('#product_address1,#product_address2,#product_country, #product_state, #product_city').prop(
-                    'readonly', true);
-
-                autocomplete.addListener('place_changed', function() {
-                    var place = autocomplete.getPlace();
-
-                    $(' #product_address1,#product_address2,#product_country, #product_state, #product_city',
-                            '#zipcode')
-                        .val('');
-                    var zipcode = null;
-
-                    for (var i = 0; i < place.address_components.length; i++) {
-                        var addressType = place.address_components[i].types[0];
-                        if (addressType === 'street_number') {
-                            $('#product_address1').val(place.address_components[i].long_name);
-                        }
-                        if (addressType === 'route') {
-                            $('#product_address2').val(place.address_components[i].long_name);
-                        }
-                        if (addressType === 'country') {
-                            $('#product_country').val(place.address_components[i].long_name);
-                        }
-                        if (addressType === 'administrative_area_level_1') {
-                            $('#product_state').val(place.address_components[i].long_name);
-                        }
-                        if (addressType === 'locality') {
-                            $('#product_city').val(place.address_components[i].long_name);
-                        }
-                        if (addressType === 'postal_code') {
-                            $('#zipcode').val(place.address_components[i]
-                                .long_name); // Assign zipcode if available
-                        }
-                    }
-
-                    function setReadonly(selector) {
-                        if ($(selector).val()) {
-                            $(selector).prop('readonly', true);
-                        } else {
-                            $(selector).prop('readonly', false);
-                        }
-                    }
-
-                    setReadonly('#product_address1');
-                    setReadonly('#product_address2');
-
-                    $(".product_sub_data").slideDown("slow");
-                });
-            }
+           
 
 
             @if (session('showModal1'))
