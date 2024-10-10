@@ -69,6 +69,7 @@
                     startDate: start,
                     endDate: end,
                     autoUpdateInput: false,
+                    minDate: moment().startOf('day()'), 
                     locale: {
                         format: customDateFormat,
                         separator: ' - ',
