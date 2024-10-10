@@ -1292,8 +1292,7 @@
             });
 
             function initAutocomplete() {
-                var input = $(document).find('#product_address');
-                var autocomplete = new google.maps.places.Autocomplete(input);
+                var autocomplete = new google.maps.places.Autocomplete($('#product_address'););
 
                 $('#product_address1,#product_address2,#product_country, #product_state, #product_city').prop(
                     'readonly', true);
