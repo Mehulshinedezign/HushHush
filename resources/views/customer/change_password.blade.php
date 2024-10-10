@@ -39,9 +39,9 @@
                         </span>
                     </div>
                 </div>
-                <button type="submit" id="updatePassword" class="button primary-btn full-btn"><div class="spinner-border passwordUpdate d-none" role="status">
+                <button type="submit" id="updatePassword" class="button primary-btn full-btn">Done <div class="spinner-border passwordUpdate d-none" role="status">
                     <span class="sr-only"></span>
-                  </div>Done</button>
+                  </div></button>
             </form>
             
         </div>

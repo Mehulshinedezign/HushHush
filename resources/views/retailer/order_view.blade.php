@@ -312,63 +312,66 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
-            // const MAX_IMAGES = 5;
-            let selectedFiles = [];
+       $(document).ready(function() {
+    let selectedFiles = [];
 
-            function previewImages(input, imgPreviewPlaceholder) {
-                const files = Array.from(input.files);
-                const currentCount = selectedFiles.length;
+    function previewImages(input, imgPreviewPlaceholder) {
+        const files = Array.from(input.files);
 
-                // if (currentCount + files.length > MAX_IMAGES) {
-                //     alert(`You can upload up to ${MAX_IMAGES} images.`);
-                //     return;
-                // }
-
-                files.forEach((file) => {
-                    selectedFiles.push(file);
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        const element = `
-                <div class="upload-img-box">
-                    <img src="${event.target.result}" alt="img">
-                    <div class="upload-img-cross">
-                        <i class="fa-regular fa-circle-xmark remove_uploaded"></i>
-                    </div>
-                </div>`;
-                        $(imgPreviewPlaceholder).append(element);
-                    };
-                    reader.readAsDataURL(file);
-                });
-
-                updateFileInput();
-            }
-
-            function updateFileInput() {
-                const dataTransfer = new DataTransfer();
-                selectedFiles.forEach((file) => dataTransfer.items.add(file));
-                $('#upload-image')[0].files = dataTransfer.files;
-            }
-
-            function updateImageCount(change) {
-                const $uploadImage = $('#upload-image');
-                let currentCount = parseInt($uploadImage.attr('upload-image-count') || 0);
-                currentCount += change;
-                $uploadImage.attr('upload-image-count', currentCount);
-            }
-
-            $('#upload-image').on('change', function() {
-                previewImages(this, 'div.upload-img-preview');
-            });
-
-            $(document).on('click', '.remove_uploaded', function() {
-                const index = $(this).closest('.upload-img-box').index();
-                selectedFiles.splice(index, 1);
-                $(this).closest('.upload-img-box').remove();
-                updateFileInput();
-                updateImageCount(-1);
-            });
+        files.forEach((file, index) => {
+            selectedFiles.push(file);
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const element = `
+                    <div class="upload-img-box" data-index="${selectedFiles.length - 1}">
+                        <img src="${event.target.result}" alt="img">
+                        <div class="upload-img-cross">
+                            <i class="fa-regular fa-circle-xmark remove_uploadedd"></i>
+                        </div>
+                    </div>`;
+                $(imgPreviewPlaceholder).append(element);
+            };
+            reader.readAsDataURL(file);
         });
+
+        updateFileInput();
+    }
+
+    function updateFileInput() {
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach((file) => dataTransfer.items.add(file));
+        $('#upload-image')[0].files = dataTransfer.files;
+    }
+
+    function updateImageCount(change) {
+        const $uploadImage = $('#upload-image');
+        let currentCount = parseInt($uploadImage.attr('upload-image-count') || 0);
+        currentCount += change;
+        $uploadImage.attr('upload-image-count', currentCount);
+    }
+
+    $('#upload-image').on('change', function() {
+        previewImages(this, 'div.upload-img-preview');
+    });
+
+    $(document).on('click', '.remove_uploadedd', function() {
+        const $imgBox = $(this).closest('.upload-img-box');
+        const index = $imgBox.data('index');  // Get the index from data attribute
+
+        selectedFiles.splice(index, 1);  // Remove the correct file
+        $imgBox.remove();  // Remove the image preview
+
+        updateFileInput();  // Update the input field with the remaining files
+
+        // Update the index of remaining previews
+        $('div.upload-img-box').each(function(i, elem) {
+            $(elem).attr('data-index', i);
+        });
+
+        updateImageCount(-1);
+    });
+});
+
     </script>
     <script>
         // $(function() {
