@@ -1229,13 +1229,13 @@ class ProductController extends Controller
                         'isSelect' => false,
                     ];
                 })->toArray()],
-                ['id' => '3', 'name' => 'Color', 'subItems' => $colors->map(function ($color) {
-                    return [
-                        'id' => $color->id,
-                        'name' => $color->name,
-                        'isSelect' => false,
-                    ];
-                })->toArray()],
+                // ['id' => '3', 'name' => 'Color', 'subItems' => $colors->map(function ($color) {
+                //     return [
+                //         'id' => $color->id,
+                //         'name' => $color->name,
+                //         'isSelect' => false,
+                //     ];
+                // })->toArray()],
                 ['id' => '4', 'name' => 'Brand', 'subItems' => $brands->map(function ($brand) {
                     return [
                         'id' => $brand->id,
@@ -1246,11 +1246,11 @@ class ProductController extends Controller
                 ['id' => '5', 'name' => 'Price'],
                 ['id' => '8', 'name' => 'Date'],
                 ['id' => '9', 'name' => 'Location'],
-                ['id' => '6', 'name' => 'Condition', 'subItems' => [
-                    ['id' => '1', 'name' => 'Excellent', 'isSelect' => false],
-                    ['id' => '2', 'name' => 'Good', 'isSelect' => false],
-                    ['id' => '3', 'name' => 'Fair', 'isSelect' => false],
-                ]],
+                // ['id' => '6', 'name' => 'Condition', 'subItems' => [
+                //     ['id' => '1', 'name' => 'Excellent', 'isSelect' => false],
+                //     ['id' => '2', 'name' => 'Good', 'isSelect' => false],
+                //     ['id' => '3', 'name' => 'Fair', 'isSelect' => false],
+                // ]],
                 ['id' => '7', 'name' => 'Ratings', 'subItems' => [
                     ['id' => '1', 'name' => '1 Star', 'isSelect' => false],
                     ['id' => '2', 'name' => '2 Stars', 'isSelect' => false],
