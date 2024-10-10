@@ -102,7 +102,7 @@
                                 <div class="container">
                                     <div class="desc-slider-main">
                                         <div class="slider slider-thumb">
-                                    
+
                                             @if ($productImages->isNotEmpty() && count($productImages) > 1)
                                                 @foreach ($productImages as $image)
                                                     <div class="thumb-slide"><img src="{{ $image->file_path }}"
@@ -110,8 +110,9 @@
                                                     </div>
                                                 @endforeach
                                             @else
-                                                    <div class="thumb-slide single-thumb-slide"><img src="{{ @$productImages[0]->file_path }}"
-                                                        alt="" loading="lazy">
+                                                <div class="thumb-slide single-thumb-slide"><img
+                                                        src="{{ @$productImages[0]->file_path }}" alt=""
+                                                        loading="lazy">
                                                 </div>
                                             @endif
 
@@ -146,7 +147,7 @@
                                             d="M24.8854 9.15808L17.2806 16.763C17.0074 17.082 16.5273 17.1192 16.2083 16.8459C15.8893 16.5727 15.8521 16.0926 16.1254 15.7736C16.1509 15.7439 16.1786 15.7161 16.2083 15.6907L22.5127 9.37865H0.901088C0.481121 9.37865 0.140625 9.03815 0.140625 8.61812C0.140625 8.19809 0.481121 7.85766 0.901088 7.85766H22.5127L16.2083 1.55325C15.8893 1.28007 15.8521 0.799974 16.1254 0.48098C16.3986 0.161985 16.8787 0.1248 17.1977 0.398046C17.2274 0.423534 17.2552 0.451242 17.2806 0.48098L24.8855 8.08587C25.1803 8.38239 25.1803 8.86143 24.8854 9.15808Z"
                                             fill="#1B1B1B"></path>
                                     </svg>
-                                                                </div>
+                                </div>
                                 <div class="next-prodec-btn {{ count($productImages) > 1 ? '' : 'd-none' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="18"
                                         viewBox="0 0 26 18" fill="none">
@@ -284,9 +285,9 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                                                                                <h4>Size :</h4>
-                                                                                                <p>{{ $product->size ?? 'N/A' }}</p>
-                                                                                            </div> -->
+                                                                                                    <h4>Size :</h4>
+                                                                                                    <p>{{ $product->size ?? 'N/A' }}</p>
+                                                                                                </div> -->
 
 
                             </div>
@@ -296,10 +297,10 @@
                                 </h3>
                                 <div class="delivery-badge-box">
                                     <div class="delivery-badge">
-                                         <p>Shipment</p>           
+                                        <p>Shipment</p>
                                     </div>
                                     <div class="delivery-badge">
-                                         <p>Manual pickup</p>           
+                                        <p>Manual pickup</p>
                                     </div>
                                 </div>
                             </div>
@@ -342,34 +343,34 @@
                                     </div>
 
                                 </div>
-                                @if(@$product->productCompleteLocation->manul_pickup_location=='1')
-                                <div class="pro-info-accordian">
-                                    <div class="accordion" id="accordionExample1">
-                                        <div class="accordion-item">
-                                            <h2 class="accordion-header" id="headingtwo">
-                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                                    data-bs-target="#collapseTwo" aria-expanded="true"
-                                                    aria-controls="collapseTwo">
-                                                    Pickup Location
-                                                </button>
-                                            </h2>
-                                            <div id="collapseTwo" class="accordion-collapse collapse show"
-                                                aria-labelledby="headingtwo" data-bs-parent="#accordionExample1">
-                                                <div class="accordion-body">
-                                                    {{ @$selectedValue }}
-                                                    {{-- @if (isset($product->productCompleteLocation->pick_up_location))
+                                @if (@$product->productCompleteLocation->manul_pickup_location == '1')
+                                    <div class="pro-info-accordian">
+                                        <div class="accordion" id="accordionExample1">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="headingtwo">
+                                                    <button class="accordion-button" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                        aria-expanded="true" aria-controls="collapseTwo">
+                                                        Pickup Location
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseTwo" class="accordion-collapse collapse show"
+                                                    aria-labelledby="headingtwo" data-bs-parent="#accordionExample1">
+                                                    <div class="accordion-body">
+                                                        {{ @$selectedValue }}
+                                                        {{-- @if (isset($product->productCompleteLocation->pick_up_location))
                                                         {{ @$product->productCompleteLocation->pick_up_location }}
                                                     @else
                                                         {{ @$product->productCompleteLocation->pick_up_location ?? 'N/A' }} --}}
 
                                                         {{-- {{ @$product->productCompleteLocation->city . '  ' . @$product->productCompleteLocation->state . '  ' . @$product->productCompleteLocation->country }} --}}
-                                                    {{-- @endif --}}
+                                                        {{-- @endif --}}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
+                                        </div>
                                     </div>
-                                </div>
                                 @endif
 
                                 <div class="lender-profile">
@@ -432,7 +433,8 @@
                                                     </div>
                                                 @else
                                                     <div>
-                                                        <button class="btn btn-danger" id="already-reported">Already Reported Product</button>
+                                                        <button class="btn btn-danger" id="already-reported">Already Reported
+                                                            Product</button>
                                                     </div>
                                                 @endif
                                             @endif
@@ -702,8 +704,8 @@
 @endsection
 
 @push('scripts')
-<script>
-          $('.slider-content').slick({
+    <script>
+        $('.slider-content').slick({
             slidesToShow: 1,
             slidesToScroll: 1,
             arrows: true,
@@ -722,13 +724,13 @@
             focusOnSelect: true,
             vertical: true,
         });
-</script>
+    </script>
     <script>
-        if($('#report-btn').length > 0 ){
+        if ($('#report-btn').length > 0) {
 
             document.getElementById('report-btn').addEventListener('click', function() {
                 var productId = this.getAttribute('data-product-id');
-    
+
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "Do you really want to report this product?",
@@ -754,9 +756,11 @@
                                         data.message,
                                         'success'
                                     );
-                                    if($('#report-btn').length > 0 ){
-                                        $('#report-btn').replaceWith('<button class="btn btn-danger" id="already-reported">Already Reported Product</button>');
-    
+                                    if ($('#report-btn').length > 0) {
+                                        $('#report-btn').replaceWith(
+                                            '<button class="btn btn-danger" id="already-reported">Already Reported Product</button>'
+                                            );
+
                                     }
                                 } else {
                                     Swal.fire(
@@ -788,7 +792,7 @@
             // Wait for the modal to be fully shown before triggering the button click
             modalElement.addEventListener('shown.bs.modal', function() {
                 let btn = document.getElementById('addNewAddressBtn');
-                
+
 
                 // Check if the button exists in the modal
                 if (btn) {
@@ -824,184 +828,109 @@
             })
         })
 
-        // $('.slider-content').slick({
-        //     slidesToShow: 1,
-        //     slidesToScroll: 1,
-        //     arrows: false,
-        //     fade: false,
-        //     swiping: false;
-        //     infinite: true,
-        //     speed: 1000,
-        //     asNavFor: '.slider-thumb',
-        //     prevArrow: $('.prev-prodec-btn'),
-        //     nextArrow: $('.next-prodec-btn'),
-        //     arrows: true,
-        //     responsive: [{
-        //             breakpoint: 1400,
-        //             settings: {
-        //                 slidesToShow: 1,
-        //                 slidesToScroll: 1,
-        //             }
-        //         },
-        //         {
-        //             breakpoint: 992,
-        //             settings: {
-        //                 slidesToShow: 1,
-        //                 slidesToScroll: 1,
-        //             }
-        //         },
-        //         {
-        //             breakpoint: 575,
-        //             settings: {
-        //                 slidesToShow: 1,
-        //                 slidesToScroll: 1,
-        //             }
-        //         }
-
-        //     ]
-        // });
-        // $('.slider-thumb').slick({
-        //                 slidesToShow: 10,
-        //                 slidesToScroll: 1,
-        //                 vertical: true,
-        //                 asNavFor: '.slider-content',
-        //                 dots: false,
-        //                 focusOnSelect: true,
-        //                 arrows: false,
-        // });
-
-
-
-        // $('.slider-content').slick({
-        //                 slidesToShow: 1,
-        //                 slidesToScroll: 1,
-        //                 swipe: true,
-        //                 arrows: true,
-        //                 fade: true,
-        //                 asNavFor: '.slider-thumb'
-        // });
-        // $('.slider-thumb').slick({
-        //                 slidesToShow: 10,
-        //                 slidesToScroll: 1,
-        //                 vertical: true,
-        //                 swipe: false,
-        //                 asNavFor: '.slider-content',
-        //                 dots: false,
-        //                 focusOnSelect: true,
-        //                 arrows: false,
-        //                 verticalSwiping: true
-
-        // });
-
-  
-
-
-
         $(document).ready(function() {
-            $(document).ready(function() {
-                $('#Askquery').on('click', function(e) {
-                    let form = $('form#Sendquery')[0];
-                    let formData = new FormData(form);
-                    let hasErrors = false;
+            $('#Askquery').on('click', function(e) {
+                let form = $('form#Sendquery')[0];
+                let formData = new FormData(form);
+                let hasErrors = false;
 
-                    // Check if rental dates are selected
-                    if (!$('#rental_dates').val()) {
+                // Check if rental dates are selected
+                if (!$('#rental_dates').val()) {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Please select a rental date.',
+                        position: 'topRight',
+                    });
+                    hasErrors = true;
+                }
+
+                // Determine selected delivery option and get the associated address_id1
+                if ($('#ship_to_me').is(':checked')) {
+                    // Use the existing address ID for "Ship to Me" option
+                    let addressId = $('#address_id1').val();
+                    formData.append('address_id', addressId);
+                    if (!addressId) {
                         iziToast.error({
                             title: 'Error',
-                            message: 'Please select a rental date.',
+                            message: 'Please select an address for shipping.',
                             position: 'topRight',
                         });
                         hasErrors = true;
                     }
+                } else if ($('#pick_up').is(':checked')) {
+                    // If "Pick Up" is selected, clear the address_id1 as it's not needed
+                    formData.delete('address_id');
+                }
 
-                    // Determine selected delivery option and get the associated address_id1
-                    if ($('#ship_to_me').is(':checked')) {
-                        // Use the existing address ID for "Ship to Me" option
-                        let addressId = $('#address_id1').val();
-                        formData.append('address_id', addressId);
-                        if (!addressId) {
-                            iziToast.error({
-                                title: 'Error',
-                                message: 'Please select an address for shipping.',
-                                position: 'topRight',
-                            });
-                            hasErrors = true;
-                        }
-                    } else if ($('#pick_up').is(':checked')) {
-                        // If "Pick Up" is selected, clear the address_id1 as it's not needed
-                        formData.delete('address_id');
-                    }
+                // If there are errors, prevent form submission
+                if (hasErrors) {
+                    e.preventDefault();
+                    return;
+                }
 
-                    // If there are errors, prevent form submission
-                    if (hasErrors) {
-                        e.preventDefault();
-                        return;
-                    }
-
-                    // Proceed if form is valid
-                    if ($('#Sendquery').valid()) {
-                        var url = `{{ route('query') }}`;
-                        $.ajax({
-                            type: "post",
-                            url: url,
-                            data: formData,
-                            processData: false,
-                            contentType: false,
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            beforeSend: function() {
-                                $('body').addClass('loading');
-                            },
-                            complete: function() {
-                                $('body').removeClass('loading');
-                            },
-                            success: function(response) {
-                                var modalContent = '';
-                                if (response.success) {
-                                    modalContent = `<div class="success-text" role="alert">
+                // Proceed if form is valid
+                if ($('#Sendquery').valid()) {
+                    var url = `{{ route('query') }}`;
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        beforeSend: function() {
+                            $('body').addClass('loading');
+                        },
+                        complete: function() {
+                            $('body').removeClass('loading');
+                        },
+                        success: function(response) {
+                            var modalContent = '';
+                            if (response.success) {
+                                modalContent = `<div class="success-text" role="alert">
                                             <img src="{{ asset('front/images/query1.png') }}" style="max-width: 180px;">
                                             ${response.message}
                                         </div>`;
-                                } else {
-                                    iziToast.error({
-                                        title: 'Error',
-                                        message: response.message,
-                                        position: 'topRight',
-                                    });
-                                    return;
-                                }
-
-                                $('#query_msg .modal-body').html(
-                                    `<button type="button" class="btn-close" id="closeModalBtn">&times;</button>` +
-                                    modalContent
-                                );
-
-                                $('#query_msg').modal('show');
-                                $('#Askquery').prop('disabled', false);
-                                $("#Sendquery")[0].reset();
-                                $('#closeModalBtn').on('click', function() {
-                                    $('#query_msg').modal('hide');
-                                    location.reload();
+                            } else {
+                                iziToast.error({
+                                    title: 'Error',
+                                    message: response.message,
+                                    position: 'topRight',
                                 });
-                            },
-                            error: function(response) {
-                                $('#Askquery').prop('disabled', false);
-                                $('#query_msg .modal-body').html(
-                                    `<button type="button" class="close" id="closeModalBtn">&times;</button>
-                         <div class="alert alert-danger" role="alert">${response.message}</div>`
-                                );
-                                $('#query_msg').modal('show');
-                                $('#closeModalBtn').on('click', function() {
-                                    $('#query_msg').modal('hide');
-                                    location.reload();
-                                });
+                                return;
                             }
-                        });
-                    } else {
-                        e.preventDefault();
-                    }
-                });
+
+                            $('#query_msg .modal-body').html(
+                                `<button type="button" class="btn-close" id="closeModalBtn">&times;</button>` +
+                                modalContent
+                            );
+
+                            $('#query_msg').modal('show');
+                            $('#Askquery').prop('disabled', false);
+                            $("#Sendquery")[0].reset();
+                            $('#closeModalBtn').on('click', function() {
+                                $('#query_msg').modal('hide');
+                                location.reload();
+                            });
+                        },
+                        error: function(response) {
+                            $('#Askquery').prop('disabled', false);
+                            $('#query_msg .modal-body').html(
+                                `<button type="button" class="close" id="closeModalBtn">&times;</button>
+                         <div class="alert alert-danger" role="alert">${response.message}</div>`
+                            );
+                            $('#query_msg').modal('show');
+                            $('#closeModalBtn').on('click', function() {
+                                $('#query_msg').modal('hide');
+                                location.reload();
+                            });
+                        }
+                    });
+                } else {
+                    e.preventDefault();
+                }
             });
 
 

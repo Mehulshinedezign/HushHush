@@ -57,8 +57,7 @@
             /* Adjust opacity as needed */
         }
     </style>
-
-
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places&loading=async"></script>
     <script>
         const APP_URL = "{{ url('') }}";
         const login_url = '{{ route('login') }}';
@@ -885,9 +884,6 @@
     <script src="{{ asset('js/daterangepicker.js') }}"></script>
     <script src="{{ asset('js/jquery-validation.min.js') }}"></script>
     <script src="{{ asset('js/additional-methods.min.js') }}"></script>
-    <script
-        src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places" async defer>
-    </script>
     </script>
     <!-- Include DateRangePicker JS -->
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -1297,7 +1293,7 @@
             });
 
             function initAutocomplete() {
-                var input = document.getElementById('product_address');
+                var input = $('#product_address');
                 var autocomplete = new google.maps.places.Autocomplete(input);
 
                 $('#product_address1,#product_address2,#product_country, #product_state, #product_city').prop(
