@@ -146,8 +146,8 @@ class QueryController extends Controller
 
         $user = auth()->user();
         $status = $request->query('status', 'PENDING');
-        $querydatas = Query::where(['for_user' => $user->id, 'status' => $status])->orderBy('created_at', 'desc')->get();
-        $accept = true;
+        $querydatas = Query::where(['for_user' => $user->id, 'status' => $status])->orderBy('id', 'desc')->get();
+        $accept = false;
         return view('customer.receive_query_list', compact('querydatas', 'accept'));
     }
 
