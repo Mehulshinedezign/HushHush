@@ -57,7 +57,6 @@
             /* Adjust opacity as needed */
         }
     </style>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places&loading=async"></script>
     <script>
         const APP_URL = "{{ url('') }}";
         const login_url = '{{ route('login') }}';
@@ -875,7 +874,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="{{ asset('front/js/bootstrap.bundle.min.js') }}"></script>
-    
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places&loading=async"></script>
     <script src="{{ asset('front/js/slick.js') }}"></script>
     <script src="{{ asset('front/js/slick.min.js') }}"></script>
     <script src="{{ asset('js/iziToast.min.js') }}"></script>
