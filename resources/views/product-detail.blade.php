@@ -13,7 +13,7 @@
     }
 
     /* The Modal (background) */
-    .modal {
+    #imageModal.modal {
         display: none;
         /* Hidden by default */
         position: fixed;
@@ -31,7 +31,7 @@
     }
 
     /* Modal Content (Image) */
-    .modal-content {
+    #imageModal .modal-content {
         margin: auto;
         display: block;
         width: 80%;
@@ -39,7 +39,7 @@
     }
 
     /* The Close Button */
-    .close {
+    #imageModal .close {
         position: absolute;
         top: 15px;
         right: 35px;
@@ -49,8 +49,8 @@
         transition: 0.3s;
     }
 
-    .close:hover,
-    .close:focus {
+    #imageModal .close:hover,
+    #imageModal .close:focus {
         color: #bbb;
         text-decoration: none;
         cursor: pointer;
