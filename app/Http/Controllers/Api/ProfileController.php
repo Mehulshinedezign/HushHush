@@ -13,6 +13,7 @@ use App\Models\UserDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -622,6 +623,7 @@ class ProfileController extends Controller
     {
         try {
             $address = UserDetail::where('user_id', auth()->id())->get();
+            // dd($address);
             return response()->json([
                 'status' => true,
                 'data' => $address,
@@ -638,6 +640,7 @@ class ProfileController extends Controller
     public function saveAddress(Request $request)
     {
         // dd('here', $request->all());
+        Log::info($request->all());
         $user = auth()->user();
 
         try {
@@ -671,7 +674,7 @@ class ProfileController extends Controller
                     'state' => $request->state,
                     'country' => $request->country,
                     'zipcode' => $request->zipcode ?? 'N/A',
-                    'complete_address' => "{$request->address1}, {$request->address2}, {$request->city}, {$request->state}, {$request->country} - {$request->zipcode}",
+                    'complete_address' => $request->complete_address,
                     'is_default' => $request->has('is_default') ? $request->is_default : '0', // Ensure a default value is set if not provided
                 ]
             );

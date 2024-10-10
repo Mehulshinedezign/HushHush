@@ -181,12 +181,8 @@
                             <div class="filter-categories">
                                 <div class="filter-location-box">
                                     <div class="form-group">
-                                        <label for=""><img src="{{ asset('front/images/aim-icon.svg') }}"
-                                                alt="img"> Use current
-                                            Location</label>
+                                       
                                         <div class="formfield">
-                                            {{-- <input type="text" placeholder="Your Location" class="form-control"
-                                                id="filter_address" name="complete_address" value="{{request()->country request()->state request()->city}}"> --}}
                                             <input type="text" placeholder="Your Location" class="form-control"
                                                 id="filter_address" name="complete_address"
                                                 value="{{ request()->country ? request()->country . ' ' : '' }}{{ request()->state ? request()->state . ' ' : '' }}{{ request()->city ? request()->city : '' }}">

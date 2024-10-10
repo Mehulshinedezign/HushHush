@@ -724,12 +724,12 @@
             focusOnSelect: true,
             vertical: true,
         });
-    </script>
-    <script>
+</script>
+<script>
+    $(document).ready(function() {
         if ($('#report-btn').length > 0) {
-
-            document.getElementById('report-btn').addEventListener('click', function() {
-                var productId = this.getAttribute('data-product-id');
+            $('#report-btn').click(function() {
+                var productId = $(this).data('product-id');
 
                 Swal.fire({
                     title: 'Are you sure?',
@@ -741,15 +741,14 @@
                     confirmButtonText: 'Yes, report it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        fetch(`/report-product/${productId}`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Add CSRF token
-                                },
-                            })
-                            .then(response => response.json())
-                            .then(data => {
+                        $.ajax({
+                            url: `/report-product/${productId}`,
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            success: function(data) {
                                 if (data.status === 'success') {
                                     Swal.fire(
                                         'Reported!',
@@ -757,10 +756,7 @@
                                         'success'
                                     );
                                     if ($('#report-btn').length > 0) {
-                                        $('#report-btn').replaceWith(
-                                            '<button class="btn btn-danger" id="already-reported">Already Reported Product</button>'
-                                            );
-
+                                        $('#report-btn').replaceWith('<button class="btn btn-danger" id="already-reported">Already Reported Product</button>');
                                     }
                                 } else {
                                     Swal.fire(
@@ -769,19 +765,22 @@
                                         'error'
                                     );
                                 }
-                            })
-                            .catch(error => {
+                            },
+                            error: function() {
                                 Swal.fire(
                                     'Error!',
                                     'Something went wrong, please try again later.',
                                     'error'
                                 );
-                            });
+                            }
+                        });
                     }
                 });
             });
         }
-    </script>
+    });
+</script>
+
     <script>
         document.getElementById('manage_address_link').addEventListener('click', function() {
             // Open the modal when clicking on "Change Address"
