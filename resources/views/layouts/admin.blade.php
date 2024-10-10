@@ -133,6 +133,8 @@
     <script src="{{ asset('js/jquery-validation.min.js') }}"></script>
     <script src="{{ asset('js/additional-methods.min.js') }}"></script>
     <script src="{{ asset('js/custom/common.js') }}"></script>
+    <script src="{{ asset('js/sweetalert.min.js') }}"></script>
+
     <script>
         const menuUrl = "{{ route('admin.menusetup') }}"
         jQuery(document).ready(function() {

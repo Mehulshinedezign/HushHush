@@ -350,8 +350,8 @@
         function clearForm() {
             document.getElementById('searchForm').reset();
         }
-        jQuery(this).daterangepicker({
-            minDate: moment(),
-        });
+        // jQuery(this).daterangepicker({
+        //     minDate: moment(),
+        // });
     </script>
 @endpush

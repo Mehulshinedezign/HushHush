@@ -319,7 +319,6 @@ class UserController extends Controller
     {
         try {
             DB::beginTransaction();
-
             $user = User::findOrFail($id);
 
             $products = Product::where('user_id', $id)->get();
@@ -333,10 +332,10 @@ class UserController extends Controller
 
                 $product->delete();
             }
-
             UserDetail::where('user_id', $id)->delete();
+            // dd($user);
 
-            $user->notify(new DeleteUser($user));
+            // $user->notify(new DeleteUser($user));
 
             $user->delete();
 

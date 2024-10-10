@@ -103,8 +103,9 @@
         </div>
     </section>
 @endsection
-@section('scripts')
+@push('scripts')
     <script>
+
         var currentUrl = new URL(window.location.href);
         jQuery(document).ready(function() {
             jQuery('#status').change(function() {
@@ -148,11 +149,7 @@
                     })
                 }
             })
-        })
-    </script>
-    <script src="{{ asset('js/sweetalert.min.js') }}"></script>
-    <script>
-        jQuery(document).ready(function() {
+            
             jQuery(".delete-user").click(function(e) {
                 e.preventDefault();
                 jQuery('body').addClass('modal-open');
@@ -173,6 +170,6 @@
                         }
                     });
             });
-        });
+        })
     </script>
-@stop
+@endpush
