@@ -1209,6 +1209,9 @@
     {{-- Search the country and state  and GOogle place Api --}}
     <script>
          function initAutocomplete() {
+                var script = document.createElement('script');
+                script.src = "https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places&loading=async";
+                document.head.appendChild(script);
                 var autocomplete = new google.maps.places.Autocomplete($('#product_address'));
 
                 $('#product_address1,#product_address2,#product_country, #product_state, #product_city').prop(
