@@ -274,8 +274,10 @@
         });
 
         function initAutocomplete() {
-            var input = document.getElementById('address');
-            var autocomplete = new google.maps.places.Autocomplete(input);
+            var script = document.createElement('script');
+            script.src = "https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places&loading=async";
+            document.head.appendChild(script);
+            var autocomplete = new google.maps.places.Autocomplete($('#address'));
 
             $('#selectCountry, #selectState, #selectCity, #zip-code').prop('readonly',
                 true);
