@@ -264,15 +264,72 @@
 
         $('#address').on('focus', function() {
             $(".address_data").slideDown("slow");
-            initAutocomplete();
+            function initAutocompleteAddressAdd() {
+                $('#address').on('keyup', function() {
+                    var autocomplete = new google.maps.places.Autocomplete($('#address')[0]);
+
+                    // Set address fields to readonly
+                    $('#addressline12, #addressline21, #selectCountry, #selectState, #selectCity, #zip-code').prop('readonly',
+                        true);
+
+                    autocomplete.addListener('place_changed', function() {
+                        var place = autocomplete.getPlace();
+
+                        // Clear address fields
+                        $('#addressline12, #addressline21, #selectCountry, #selectState, #selectCity, #zip-code').val(
+                        '');
+
+                        // Populate address fields based on the selected place
+                        place.address_components.forEach(function(component) {
+                            var addressType = component.types[0];
+                            switch (addressType) {
+                                case 'street_number':
+                                    $('#addressline12').val(component.long_name);
+                                    break;
+                                case 'route':
+                                    $('#addressline21').val(component.long_name || '');
+                                    break;
+                                case 'country':
+                                    $('#selectCountry').val(component.long_name);
+                                    break;
+                                case 'administrative_area_level_1':
+                                    $('#selectState').val(component.long_name);
+                                    break;
+                                case 'locality':
+                                    $('#selectCity').val(component.long_name || '');
+                                    break;
+                                case 'postal_code':
+                                    $('#zip-code').val(component.long_name ||
+                                    ''); // Zipcode is optional
+                                    break;
+                            }
+                        });
+
+                        // Enable or disable readonly state based on field values
+                        function setReadonly(selector) {
+                            if ($(selector).val()) {
+                                $(selector).prop('readonly', true);
+                            } else {
+                                $(selector).prop('readonly', false);
+                            }
+                        }
+
+                        setReadonly('#addressline12');
+                        setReadonly('#addressline21');
+                        $(".address_data").slideDown("slow");
+                    });
+                });
+            }
+
+            initAutocompleteAddressAdd();
         });
 
-        $('#address').on('input', function() {
-            if ($(this).val() === '') {
-                $(".address_data").slideUp("slow");
-                $('#addressline12, #addressline21, #selectCountry, #selectState, ').val('');
-            }
-        });
+        // $('#address').on('input', function() {
+        //     if ($(this).val() === '') {
+        //         $(".address_data").slideUp("slow");
+        //         $('#addressline12, #addressline21, #selectCountry, #selectState, ').val('');
+        //     }
+        // });
 
         
     </script>
