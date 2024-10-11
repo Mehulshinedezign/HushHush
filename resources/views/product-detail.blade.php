@@ -378,7 +378,7 @@
                                     <div class="lender-profile-box">
                                         <div class="lender-dp-box">
                                             @auth
-                                                <a href="{{ route('lenderProfile', jsencode_userdata($product->user_id)) }}">
+                                                <a href="{{ route('lenderProfile', jsencode_userdata($product->user_id)) }}" id="profile-button">
                                                     @if ($product->retailer->profile_file)
                                                         <img src="{{ asset('storage/' . $product->retailer->profile_file) }}"
                                                             alt="Profile Picture">
@@ -1035,7 +1035,7 @@
             });
         });
 
-
+        
         function openModal(src) {
             const modal = document.getElementById("imageModal");
             const modalImg = document.getElementById("modalImage");

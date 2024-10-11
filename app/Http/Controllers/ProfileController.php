@@ -33,7 +33,7 @@ class ProfileController extends Controller
         }
 
         $products = Product::where('user_id', $retailer->id)->get();
-        return view($file, compact('products', 'retailer','reported'));
+        return view($file, compact('products', 'retailer', 'reported'));
     }
 
     public function edit_profile()
@@ -659,12 +659,15 @@ class ProfileController extends Controller
     }
     public function addressStore(Request $request)
     {
-        $validated = $request->validate([
-            // 'city' => 'required',
-            'state' => 'required',
-            'country' => 'required',
-            // 'zipcode' => 'required',
-        ]);
+        // $validated = $request->validate([
+        //     // 'city' => 'required',
+        //     'state' => 'required',
+        //     'country' => 'required',
+        //     // 'zipcode' => 'required',
+        // ]);
+
+        $isUpdate = !empty($request->address_id);
+
         $address = UserDetail::updateOrCreate(
             ['id' => $request->address_id],
             [
@@ -684,18 +687,22 @@ class ProfileController extends Controller
                 ->where('is_default', '1')
                 ->update(['is_default' => '0']);
 
-            UserDetail::where('id',  $address->id)->update(['is_default' => '1']);
+            UserDetail::where('id', $address->id)->update(['is_default' => '1']);
         }
 
         $addresses = UserDetail::where('user_id', auth()->id())->orderBy('updated_at', 'desc')->get();
         $flag = $request->flag;
         $html = view('include.addresslist', compact('addresses', 'flag'))->render();
+
+        $message = $isUpdate ? 'Address updated successfully' : 'Address added successfully';
+
         return response()->json([
             'status' => 'success',
-            'message' => 'Address saved successfully',
+            'message' => $message,
             'data' => ['list' => $html],
         ]);
     }
+
 
 
     // Delete Address
