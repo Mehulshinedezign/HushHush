@@ -725,13 +725,15 @@ class OrderController extends Controller
         $order->load(["transaction", "retailer", "queryOf"]);
         $order_commission = AdminSetting::where('key', 'order_commission')->first();
         $url = route('orders', ['tab' => 'cancelled']);
+        $urlconditionfalse = route('retailercustomer', ['tab' => 'active']);
+
         $product = Product::where('id', $order->product_id)->first();
 
         if (in_array($order->dispute_status, ['Yes', 'Resolved'])) {
             session()->flash('warning', "You cannot cancel a disputed order.");
             return response()->json([
                 'success' => false,
-                'url' => $url,
+                'url' => $urlconditionfalse,
             ], 201);
         }
 
@@ -739,7 +741,7 @@ class OrderController extends Controller
             session()->flash('warning', __("order.messages.cancel.notAllowed"));
             return response()->json([
                 'success' => false,
-                'url' => $url,
+                'url' => $urlconditionfalse,
             ], 201);
         }
 
@@ -747,7 +749,7 @@ class OrderController extends Controller
             session()->flash('warning', __("order.messages.cancel.paymentIncomplete"));
             return response()->json([
                 'success' => false,
-                'url' => $url,
+                'url' => $urlconditionfalse,
             ], 201);
         }
 
@@ -755,7 +757,7 @@ class OrderController extends Controller
             session()->flash('warning', 'Your cancellation time period has passed.');
             return response()->json([
                 'success' => false,
-                'url' => $url,
+                'url' => $urlconditionfalse,
             ], 201);
         }
 

@@ -159,7 +159,9 @@
 
                             </div>
                             <div class="product-review-main">
-                                @if ($product->ratings->contains('user_id', auth()->id()))
+                                {{-- @if ($product->ratings->contains('user_id', auth()->id())) --}}
+                                @if (count($product->ratings) > 0)
+
                                     <div class="product-review-heading">
                                         <p>{{ $product->ratings_count }} Ratings & Reviews</p>
                                         <div class="form-group">
@@ -176,7 +178,6 @@
                                         </div>
                                     </div>
 
-                                    @if (count($product->ratings) > 0)
                                         @php $count = 0; @endphp
                                         <div class="review-row-box">
                                             @foreach ($product->ratings as $rating)
@@ -225,7 +226,7 @@
                                             @endforeach
                                         </div>
                                     @endif
-                                @endif
+                                {{-- @endif --}}
                             </div>
                         </div>
                     </div>
@@ -285,9 +286,9 @@
                                     <p>{{ $product->min_days_rent_item }}</p>
                                 </div>
                                 <!-- <div class="pro-desc-info-box">
-                                                                                                                        <h4>Size :</h4>
-                                                                                                                        <p>{{ $product->size ?? 'N/A' }}</p>
-                                                                                                                    </div> -->
+                                   <h4>Size :</h4>
+                                       <p>{{ $product->size ?? 'N/A' }}</p>
+                                            </div> -->
 
 
                             </div>
@@ -296,13 +297,25 @@
                                     Availability
                                 </h3>
                                 <div class="delivery-badge-box">
+                                    @if($product->productCompleteLocation->manul_pickup_location=='1' && $product->productCompleteLocation->shipment=='1' )
                                     <div class="delivery-badge">
                                         <p>Shipment</p>
                                     </div>
                                     <div class="delivery-badge">
-                                        <p>Manual pickup</p>
+                                        <p>Local Pick up</p>
                                     </div>
+                                    @elseif($product->productCompleteLocation->manul_pickup_location=='1')
+                                    <div class="delivery-badge">
+                                        <p>Local Pick up</p>
+                                    </div>
+                                    @elseif($product->productCompleteLocation->shipment=='1' )
+                                    <div class="delivery-badge">
+                                        <p>Shipment</p>
+                                    </div>
+    
+                                    @endif
                                 </div>
+                               
                             </div>
                             @auth
                                 @if (@$product->user_id != auth()->user()->id)
@@ -441,7 +454,7 @@
                                         @endauth
                                     </div>
                                 </div>
-                                @if ($product->ratings->contains('user_id', auth()->id()))
+                                {{-- @if ($product->ratings->contains('user_id', auth()->id())) --}}
                                     @if (count($product->ratings) > 0)
                                         <div class="pro-dec-rating-main mb-0">
                                             <div class="pro-rating-head">
@@ -517,7 +530,7 @@
                                             </div>
                                         </div>
                                     @endif
-                                @endif
+                                {{-- @endif --}}
                             </div>
                         </div>
                     </div>

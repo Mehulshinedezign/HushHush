@@ -63,7 +63,7 @@ class ProductController extends Controller
         if (auth()->check()) {
             $authUserId = auth()->user()->id;
             $query = Product::with('disableDates', 'ratings')
-                ->where('user_id', '!=', $authUserId)
+                // ->where('user_id', '!=', $authUserId)
                 ->where('status', '1')
                 ->whereHas('retailer', function ($q) {
                     $q->where('status', '1'); // Assuming 'active' is the status value for active users
@@ -162,10 +162,9 @@ class ProductController extends Controller
 
         $querydates = [];
         if (auth()->check()) {  // Only execute if the user is authenticated
-            $querydates = Query::where(['product_id' => $id, 'user_id' => auth()->user()->id])
+            $querydates = Query::where(['product_id' => $id, 'user_id' => auth()->user()->id])->where('status','!=','REJECTED')
                 ->select('date_range')
                 ->get();
-
             $userDisableDates = [];
             foreach ($querydates as $query) {
                 [$startDate, $endDate] = explode(' - ', $query->date_range);

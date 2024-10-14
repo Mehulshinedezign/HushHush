@@ -195,7 +195,7 @@
 
                                                 <div class="form-check form-switch">
                                                     <label class="form-check-label"
-                                                        for="flexSwitchCheckChecked">Pickup</label>
+                                                        for="flexSwitchCheckChecked">Local Pick up</label>
                                                     <input class="form-check-input" type="checkbox" role="switch"
                                                         name="manual_location" id="flexSwitchCheckChecked"
                                                         {{ $product->productCompleteLocation->manul_pickup_location ? 'checked' : '' }}>

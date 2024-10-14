@@ -200,7 +200,17 @@ class Product extends Model
      */
     public function ratings()
     {
-        return $this->hasMany(ProductRating::class)->orderBy('id','desc');
+        $currentUserId = auth()->id(); // Get the current user's ID
+        $fourteenDaysAgo = now()->subDays(14);
+        return $this->hasMany(ProductRating::class)->where(function ($query) use ($currentUserId, $fourteenDaysAgo) {
+            // If the current user is the creator of the rating
+            $query->where('user_id', $currentUserId)
+                  // Or if the rating is older than 14 days for other users
+                  ->orWhere(function ($q) use ($fourteenDaysAgo, $currentUserId) {
+                      $q->where('created_at', '<=', $fourteenDaysAgo)
+                        ->where('user_id', '<>', $currentUserId); // Not the current user
+                  });
+        })->orderBy('id','desc');
     }
 
     public function orders()

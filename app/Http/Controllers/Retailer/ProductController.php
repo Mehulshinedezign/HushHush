@@ -555,7 +555,7 @@ class ProductController extends Controller
             return redirect()->route('product')->with('success', 'Product updated successfully.');
             // return redirect()->back()->with('success', 'Product updated successfully.');
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            // dd($e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
@@ -615,7 +615,7 @@ class ProductController extends Controller
 
             return redirect()->back()->with('success', "Product and associated data have been deleted successfully.");
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            // dd($e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }
     }

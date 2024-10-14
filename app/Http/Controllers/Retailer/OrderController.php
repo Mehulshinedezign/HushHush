@@ -606,13 +606,14 @@ class OrderController extends Controller
     {
         $order->load(["transaction"]);
         $url = route('retailercustomer', ['tab' => 'cancelled']);
+        $urlconditionfalse = route('retailercustomer', ['tab' => 'active']);
 
         // Check if the order is disputed
         if (in_array($order->dispute_status, ['Yes', 'Resolved'])) {
             session()->flash('warning', "You cannot cancel a disputed order.");
             return response()->json([
                 'success' => false,
-                'url'     => $url
+                'url'     => $urlconditionfalse
             ], 201);
         }
 
@@ -621,7 +622,7 @@ class OrderController extends Controller
             session()->flash('warning', __("order.messages.cancel.notAllowed"));
             return response()->json([
                 'success' => false,
-                'url'     => $url
+                'url'     => $urlconditionfalse
             ], 201);
         }
 
@@ -630,7 +631,7 @@ class OrderController extends Controller
             session()->flash('warning', __("order.messages.cancel.paymentIncomplete"));
             return response()->json([
                 'success' => false,
-                'url'     => $url
+                'url'     => $urlconditionfalse
             ], 201);
         }
 
@@ -639,7 +640,7 @@ class OrderController extends Controller
             session()->flash('warning', 'Your cancellation time period has passed.');
             return response()->json([
                 'success' => false,
-                'url'     => $url
+                'url'     => $urlconditionfalse
             ], 201);
         }
 
