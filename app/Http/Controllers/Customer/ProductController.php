@@ -40,6 +40,7 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
+        // dd($request->all());
         $categories = Category::where('status', 'Active')->get();
         $selectedCategories = $request->input('category', []);
         $selectedSubcategories = $request->input('Subcategory', []);
@@ -49,6 +50,8 @@ class ProductController extends Controller
         $selectedsize = $request->input('size', []);
         $searchKeyword = $request->input('search', '');
         $disabledate = $request->input('filter_date');
+
+        // dd($request->all(),$searchKeyword);
 
         $startDate = null;
         $endDate = null;

@@ -355,7 +355,7 @@ function handleValidation(form, rules, messages = {}, submitHandler = false) {
         }
     };
 
-    if (submitHandler){
+    if (submitHandler) {
 
         validationConfiguration.submitHandler = submitHandler;
     }
@@ -570,16 +570,16 @@ $('#cancel-order').submit(function (e) {
                         position: 'topRight'
                     });
                 }
-            }, 
-            function () {
-                // iziToast.error({
-                //     title: 'Error',
-                //     message: 'Something went wrong!',
-                //     position: 'topRight'
-                // });
-            }).finally(function () {
-                console.log("error");
-            });
+            },
+                function () {
+                    // iziToast.error({
+                    //     title: 'Error',
+                    //     message: 'Something went wrong!',
+                    //     position: 'topRight'
+                    // });
+                }).finally(function () {
+                    console.log("error");
+                });
     }
 });
 // End
@@ -759,3 +759,21 @@ $('.tab-item').on('click', function (e) {
 
     fetchQueries(status, user);
 });
+
+// for loader
+
+$(document).ready(function() {
+    // Show the loader overlay when a link is clicked
+      
+
+       $(window).on('beforeunload', function() {
+           $('#fullPageLoader').removeClass('d-none'); // Show the loader
+       });
+
+       // Hide the loader overlay when the page is fully loaded
+       $(window).on('load', function() {
+           console.log("hide loader on load");
+           $('#fullPageLoader').addClass('d-none'); // Hide the loader
+       });
+   });
+

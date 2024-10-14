@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LocationHelper;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
@@ -33,5 +36,15 @@ class HomeController extends Controller
         $imageData = @file_get_contents($test);
         dd($request,$test,$imageData , 'hererer');
         return view('home');
+    }
+
+    public function getLocationInfo(): JsonResponse
+    {
+        
+        $locationData = LocationHelper::getLocationInfo();
+        Log::info('dghsfdhsd',$locationData);
+        return response()->json($locationData);
+
+       
     }
 }

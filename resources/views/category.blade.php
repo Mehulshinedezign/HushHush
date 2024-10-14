@@ -181,17 +181,18 @@
                             <div class="filter-categories">
                                 <div class="filter-location-box">
                                     <div class="form-group">
-                                       
+                                        <label for="use-current-location" id="use-current-location">
+                                            <img src="{{ asset('front/images/aim-icon.svg') }}" alt="img"> Use
+                                            current Location
+                                        </label>
                                         <div class="formfield">
-                                            <input type="text" placeholder="Your Location" class="form-control"
+                                            <input type="text" placeholder="Enter Location" class="form-control"
                                                 id="filter_address" name="complete_address"
                                                 value="{{ request()->country ? request()->country . ' ' : '' }}{{ request()->state ? request()->state . ' ' : '' }}{{ request()->city ? request()->city : '' }}">
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <div class="home-filter-fotter">
                             <div class="filter-fotter-btns">
@@ -307,7 +308,7 @@
                                             @endif
                                         </a>
                                         <div class="product-card-like"
-                                            onclick="addToWishlist(this, {{ $product->id }})">
+                                            onclick="addToWishlist(this, {{ $product->id }}, {{ Auth::check() ? 'true' : 'false' }})">
                                             @if ($product->favorites && $product->favorites->count() > 0)
                                                 <i class="fa-solid fa-heart active"></i>
                                             @else
@@ -368,11 +369,46 @@
 
 @push('scripts')
     <script>
+        $('#use-current-location').on('click', function() {
+            console.log('Use current location clicked');
+
+            $.ajax({
+                url: '/get-location-info',
+                method: 'GET',
+                success: function(data) {
+                    console.log('Response data:', data);
+
+                    if (data.status === 'success') {
+                        const location = data.data;
+                        const country = location.country || '';
+                        const state = location.region || '';
+                        const city = location.city || '';
+
+                        // Set the country, state, and city values in the input fields
+                        $('#country').val(country);
+                        $('#state').val(state);
+                        $('#city').val(city);
+
+                        // Update the input field with the location
+                        $('#filter_address').val(`${country} ${state} ${city}`);
+                    } else {
+                        alert('Unable to retrieve location');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching location:', error);
+                    alert('An error occurred while retrieving location.');
+                }
+            });
+        });
+    </script>
+
+
+    <script>
         function getQueryParameters() {
             let params = new URLSearchParams(window.location.search);
             let queryStr = '';
 
-            // Loop through all parameters and append them if they are not empty
             params.forEach((value, key) => {
                 if (value) {
                     queryStr += `&${key}=${encodeURIComponent(value)}`;
@@ -807,33 +843,33 @@
     <script>
         $(document).ready(function() {
 
-        function initAutocomplete() {
+            function initAutocomplete() {
 
-            var autocomplete = new google.maps.places.Autocomplete($('#filter_address')[0]);
+                var autocomplete = new google.maps.places.Autocomplete($('#filter_address')[0]);
 
-            autocomplete.addListener('place_changed', function() {
-                var place = autocomplete.getPlace();
+                autocomplete.addListener('place_changed', function() {
+                    var place = autocomplete.getPlace();
 
 
-                for (var i = 0; i < place.address_components.length; i++) {
-                    var addressType = place.address_components[i].types[0];
+                    for (var i = 0; i < place.address_components.length; i++) {
+                        var addressType = place.address_components[i].types[0];
 
-                    if (addressType === 'country') {
-                        $('#country').val(place.address_components[i].long_name);
+                        if (addressType === 'country') {
+                            $('#country').val(place.address_components[i].long_name);
+                        }
+                        if (addressType === 'administrative_area_level_1') {
+                            $('#state').val(place.address_components[i].long_name);
+                        }
+                        if (addressType === 'locality') {
+                            $('#city').val(place.address_components[i].long_name);
+                        }
                     }
-                    if (addressType === 'administrative_area_level_1') {
-                        $('#state').val(place.address_components[i].long_name);
-                    }
-                    if (addressType === 'locality') {
-                        $('#city').val(place.address_components[i].long_name);
-                    }
-                }
-            });
-        }
+                });
+            }
 
-        initAutocomplete();
+            initAutocomplete();
 
-        // disable the enter keyword
+            // disable the enter keyword
             $(document).on('keypress', 'input', function(e) {
                 var form = $(this).closest('form');
                 if (form.attr('id') !== 'searchForm' && e.which === 13) {

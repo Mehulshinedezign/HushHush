@@ -264,6 +264,9 @@ Route::middleware('localization', 'prevent-back-history')->group(function () {
             Route::delete('/address/{id}', [App\Http\Controllers\ProfileController::class, 'addressDestroy'])->name('address.destroy');
             Route::get('/fetch-address', [App\Http\Controllers\ProfileController::class, 'fetchAddress'])->name('fetch.address');
 
+            Route::get('/get-location-info', [App\Http\Controllers\HomeController::class, 'getLocationInfo']);
+
+
         });
     });
 });
